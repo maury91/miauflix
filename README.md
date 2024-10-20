@@ -32,6 +32,18 @@ To setup the discovery service you can copy the `apps/backend/.env.example` file
 - *TMDB_API_ACCESS_TOKEN* This is the access token for the TMDB service. You can get one by registering at https://developer.themoviedb.org/docs/getting-started
 - *JACKETT_API_KEY* This is the api key for the jackett service. You can get one by setting up a jackett instance and getting the api key from the settings page.
 
+## Running the upstream services
+
+Miauflix uses Jackett, Postgres and Redis.
+
+You can start postgres and redis by running:
+
+```bash
+docker-compose up -d
+```
+
+To start Jackett it is platform specific, for the time being I recommend to follow the official instructions at https://github.com/Jackett/Jackett
+
 ## Running the project
 
 You can start everything by running:
