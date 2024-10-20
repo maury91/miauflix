@@ -1,0 +1,10 @@
+{
+  "name": "miauflix-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/miauflix-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["miauflix"],
+  "// targets": "to see all targets run: nx show project miauflix-e2e --web",
+  "targets": {}
+}

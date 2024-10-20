@@ -1,0 +1,9 @@
+{
+  "name": "miauflix",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/miauflix/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project miauflix --web",
+  "targets": {}
+}
