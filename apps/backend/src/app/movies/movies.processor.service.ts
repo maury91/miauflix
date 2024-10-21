@@ -10,7 +10,10 @@ export class MovieProcessorService {
     private readonly movieData: MoviesData
   ) {}
 
-  public async getMovieExtendedData(movieSlug: string, images?: MoviesImages) {
+  public getMovieExtendedData = async (
+    movieSlug: string,
+    images?: MoviesImages
+  ) => {
     const movieExists = await this.movieData.findMovie(movieSlug);
     if (movieExists) {
       if (images && images.poster && !movieExists.poster) {
@@ -32,9 +35,10 @@ export class MovieProcessorService {
       traktId: movie.ids.trakt,
       imdbId: movie.ids.imdb,
       tmdbId: movie.ids.tmdb,
-      poster: images?.poster ?? '',
-      backdrop: images?.backdrop ?? '',
-      logo: images?.logo ?? '',
+      poster: images?.poster,
+      backdrop: images?.backdrop,
+      backdrops: images?.backdrops,
+      logos: images?.logos,
     });
-  }
+  };
 }

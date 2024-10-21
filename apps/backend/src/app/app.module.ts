@@ -12,6 +12,9 @@ import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { MoviesModule } from './movies/movies.module';
 import { JackettModule } from './jackett/jackett.module';
 import { TorrentModule } from './torrent/torrent.module';
+import { CategoriesController } from './categories/categories.controller';
+import { CategoriesModule } from './categories/categories.module';
+import { ListsModule } from './lists/lists.module';
 
 @Module({
   imports: [
@@ -71,6 +74,8 @@ import { TorrentModule } from './torrent/torrent.module';
     MoviesModule,
     JackettModule,
     TorrentModule,
+    CategoriesModule,
+    ListsModule,
   ],
   controllers: [],
 })

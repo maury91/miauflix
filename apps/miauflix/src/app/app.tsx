@@ -1,8 +1,5 @@
-import styled from 'styled-components';
-import { ProfileSelection } from './pages/welcome';
-import { useEffect } from 'react';
-// import { animate } from 'framer-motion/dom';
-import { useGetTrendingMoviesQuery } from '../store/api/movies';
+import { ProfileSelection, ProfileSelectionContainer } from './pages/welcome';
+import { useEffect, useMemo } from 'react';
 import { useAppSelector } from '../store/store';
 import { gsap } from 'gsap';
 import { ExpoScaleEase } from 'gsap/EasePack';
@@ -12,13 +9,21 @@ import {
   pause as pauseSpatialNavigation,
   resume as resumeSpatialNavigation,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { Background } from './components/background';
-import { StyledLogo } from './pages/welcome/components/various';
-import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
+import {
+  Background,
+  BackgroundContainer,
+  SimpleBackground,
+} from './components/background';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { Home, HomeContainer } from './pages/home';
+import { Logo } from './components/logo';
+import { useGetCategoriesQuery } from '../store/api/categories';
+import { usePrefetchList } from './hooks/usePrefetchList';
+import { usePrefetch } from '../store/api/movies';
 
 init({
-  debug: true,
-  visualDebug: true,
+  // debug: true,
+  // visualDebug: true,
 });
 
 pauseSpatialNavigation();
@@ -26,9 +31,17 @@ pauseSpatialNavigation();
 gsap.registerPlugin(ExpoScaleEase);
 
 export function App() {
-  useGetTrendingMoviesQuery();
+  const { data: categories } = useGetCategoriesQuery();
+  const firstCategory = useMemo(() => categories?.[0], [categories]);
+  const prefetchList = usePrefetch('getList');
   const backgrounds = useAppSelector((state) => state.app.backgrounds);
   const currentPage = useAppSelector((state) => state.app.currentPage);
+
+  useEffect(() => {
+    if (firstCategory) {
+      prefetchList(firstCategory.id);
+    }
+  }, [firstCategory, prefetchList]);
 
   useEffect(() => {
     if (backgrounds.length) {
@@ -39,25 +52,51 @@ export function App() {
   }, [backgrounds]);
 
   return (
-    <>
-      <Background />
-      <StyledLogo />
+    <MotionConfig transition={{ duration: 1 }}>
       <AnimatePresence initial={false}>
         {currentPage === 'profile-selection' && (
-          <MotionConfig transition={{ duration: 1 }}>
-            <motion.div
-              key="profile-selection"
-              style={{ position: 'absolute', top: 0, left: 0, bottom: 0 }}
-              initial={{ x: '-120%' }}
-              animate={{ x: '0' }}
-              exit={{ x: '-120%' }}
-            >
-              <ProfileSelection />
-            </motion.div>
-          </MotionConfig>
+          <BackgroundContainer
+            key="background"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Background />
+          </BackgroundContainer>
+        )}
+        {currentPage === 'home' && (
+          <SimpleBackground
+            key="simple-background"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          />
         )}
       </AnimatePresence>
-    </>
+      <Logo />
+      <AnimatePresence initial={false}>
+        {currentPage === 'profile-selection' && (
+          <ProfileSelectionContainer
+            key="profile-selection"
+            initial={{ x: '-120%' }}
+            animate={{ x: '0' }}
+            exit={{ x: '-120%' }}
+          >
+            <ProfileSelection />
+          </ProfileSelectionContainer>
+        )}
+        {currentPage === 'home' && (
+          <HomeContainer
+            key="home"
+            initial={{ transform: 'scale(0.8)' }}
+            animate={{ transform: 'scale(1)' }}
+            exit={{ transform: 'scale(0.8)' }}
+          >
+            <Home />
+          </HomeContainer>
+        )}
+      </AnimatePresence>
+    </MotionConfig>
   );
 }
 

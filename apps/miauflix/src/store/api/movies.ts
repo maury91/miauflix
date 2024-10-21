@@ -1,35 +1,34 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '../../consts';
 
-interface Movie {
+// ToDo: create lib project with common types
+export interface Movie {
   watchers: number;
-  movie: {
-    title: string;
-    year: number;
-    ids: {
-      trakt: number;
-      slug: string;
-      imdb: string;
-      tmdb: number;
-    };
+  title: string;
+  year: number;
+  ids: {
+    trakt: number;
+    slug: string;
+    imdb: string;
+    tmdb: number;
   };
-  fanart: {
+  images: {
     poster: string;
     backdrop: string;
-    logo: string;
+    backdrops: string[];
+    logos: string[];
   };
 }
 
-export const moviesApi = createApi({
-  reducerPath: 'moviesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/movies/` }),
+// ToDo: Rename into lists
+export const listsApi = createApi({
+  reducerPath: 'listsApi',
+  baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/lists/` }),
   endpoints: (builder) => ({
-    getTrendingMovies: builder.query<Movie[], void>({
-      query: () => 'trending',
+    getList: builder.query<Movie[], string>({
+      query: (category) => category,
     }),
   }),
 });
 
-console.log(moviesApi);
-
-export const { useGetTrendingMoviesQuery } = moviesApi;
+export const { useGetListQuery, usePrefetch } = listsApi;

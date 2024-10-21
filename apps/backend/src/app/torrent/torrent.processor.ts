@@ -69,7 +69,7 @@ export class TorrentProcessor extends WorkerHost {
       this.consecutiveErrors += 1;
       throw err;
     } finally {
-      this.worker.rateLimit(this.consecutiveErrors * 3000 + 1);
+      await this.worker.rateLimit(this.consecutiveErrors * 3000 + 1);
     }
   }
 

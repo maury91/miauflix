@@ -29,7 +29,8 @@ export interface MovieAttributes {
   tmdbId: number;
   poster: string;
   backdrop: string;
-  logo: string;
+  backdrops: string[];
+  logos: string[];
   allTorrents: Torrent[];
   createdAt: Date;
   updatedAt: Date;
@@ -85,8 +86,11 @@ export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
   @Column
   backdrop!: string;
 
-  @Column
-  logo!: string;
+  @Column(DataType.ARRAY(DataType.STRING))
+  backdrops!: string[];
+
+  @Column(DataType.ARRAY(DataType.STRING))
+  logos!: string[];
 
   @Default(false)
   @Column

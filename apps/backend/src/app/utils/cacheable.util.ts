@@ -9,7 +9,7 @@ export function Cacheable<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Args extends any[],
   Return
->(ttlMs: number) {
+>(ttlMs: number, reset = false) {
   return function (
     target: This,
     _key: string | symbol,
@@ -22,7 +22,7 @@ export function Cacheable<
         descriptor.value.name
       }.${JSON.stringify(args)}`;
       const cached = await this.cacheManager.get<Return>(cacheKey);
-      if (cached) {
+      if (cached && !reset) {
         return cached;
       }
 

@@ -29,7 +29,7 @@ export class MoviesData {
   }
 
   async createMovie(movie: MovieCreationAttributes): Promise<Movie> {
-    return this.movieModel.create(movie);
+    return (await this.movieModel.upsert(movie))[0];
   }
 
   async setTorrentSearched(id: number): Promise<void> {

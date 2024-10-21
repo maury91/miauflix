@@ -15,7 +15,9 @@ import { Cache } from 'cache-manager';
 import {
   getCategoriesByType,
   getInnerSearchType,
+  getVideoCodec,
   getVideoQuality,
+  getVideoSource,
   simplifyTracker,
   simplifyXMLObject,
 } from './jackett.utils';
@@ -208,6 +210,8 @@ export class JackettService {
             category: asArray(item.category),
             url: item.enclosure.url,
             urlType: item.enclosure.type,
+            codec: getVideoCodec(item.title),
+            source: getVideoSource(item.title),
             quality: getVideoQuality(item.title),
             seeders,
             peers,

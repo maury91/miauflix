@@ -1,14 +1,18 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { moviesApi } from './api/movies';
+import { listsApi } from './api/movies';
 import { useDispatch, useSelector } from 'react-redux';
 import { usersApi } from './api/users';
 import app from './slices/app';
+import home from './slices/home';
+import { categoriesApi } from './api/categories';
 
 export const store = configureStore({
   reducer: {
     app,
-    [moviesApi.reducerPath]: moviesApi.reducer,
+    home,
+    [listsApi.reducerPath]: listsApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
+    [categoriesApi.reducerPath]: categoriesApi.reducer,
     // movies: moviesSlice.reducer,
     // profiles: profilesSlice.reducer,
     // user: userSlice.reducer,
@@ -22,7 +26,11 @@ export const store = configureStore({
     // playerSettings: playerSettingsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(moviesApi.middleware, usersApi.middleware),
+    getDefaultMiddleware().concat(
+      listsApi.middleware,
+      usersApi.middleware,
+      categoriesApi.middleware
+    ),
 });
 
 export type AppDispatch = typeof store.dispatch;

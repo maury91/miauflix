@@ -8,7 +8,11 @@ import {
   Unique,
 } from 'sequelize-typescript';
 import { Movie } from './movie.entity';
-import { VideoQuality } from '../../jackett/jackett.types';
+import {
+  VideoCodec,
+  VideoQuality,
+  VideoSource,
+} from '../../jackett/jackett.types';
 
 export interface TorrentAttributes {
   id: number;
@@ -24,6 +28,8 @@ export interface TorrentAttributes {
   seeders: number;
   peers: number;
   quality: VideoQuality;
+  codec: VideoCodec;
+  source: VideoSource;
   processed: boolean;
   skip: boolean;
   rejected: boolean;
@@ -74,6 +80,12 @@ export class Torrent extends Model {
 
   @Column(DataType.SMALLINT)
   quality!: VideoQuality;
+
+  @Column(DataType.STRING)
+  codec!: VideoCodec;
+
+  @Column(DataType.STRING)
+  source!: VideoSource;
 
   @Default(false)
   @Column

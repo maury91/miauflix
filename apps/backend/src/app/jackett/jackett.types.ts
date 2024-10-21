@@ -57,6 +57,24 @@ export interface JackettIndexersResponse {
 
 export type VideoQuality = 2160 | 1440 | 1080 | 720 | 480 | 360;
 
+export type VideoCodec =
+  | 'x264'
+  | 'x264 10bit'
+  | 'x265'
+  | 'x265 10bit'
+  | 'AV1'
+  | 'AV1 10bit'
+  | 'XVid'
+  | 'unknown';
+export type VideoSource =
+  | 'Blu-ray'
+  | 'WEB'
+  | 'HDTV'
+  | 'DVD'
+  | 'TS'
+  | 'Cam'
+  | 'unknown';
+
 export interface JackettQueryResponse {
   rss: {
     version: string;
@@ -112,6 +130,8 @@ export interface Torrent {
   category: number[];
   url: string;
   urlType: string;
+  codec: VideoCodec;
+  source: VideoSource;
   seeders: number; // Users that has part of it
   peers: number; // Users that has all the torrent
   quality: VideoQuality;

@@ -74,13 +74,16 @@ export class MovieService {
       moviesWithoutImages.map((movieTmdb) =>
         this.tmdbService
           .getMovieImages(`${movieTmdb}`)
-          .then((fanart) => ({
-            poster: fanart.posters[0]?.file_path ?? '',
-            backdrop: fanart.backdrops[0]?.file_path ?? '',
-            logo: fanart.logos[0]?.file_path ?? '',
+          .then((images) => ({
+            poster: images.posters[0]?.file_path ?? '',
+            backdrop: images.backdrops[0]?.file_path ?? '',
+            backdrops: images.backdropsWithoutText.map(
+              ({ file_path }) => file_path
+            ),
+            logos: images.logos.map(({ file_path }) => file_path),
           }))
           .catch((err) => {
-            console.error('Failed to fetch fanart', err);
+            console.error('Failed to fetch images', err);
             return null;
           })
       )
@@ -89,27 +92,29 @@ export class MovieService {
       if (moviesWithoutImages.includes(movie.ids.tmdb)) {
         return {
           ...movie,
-          fanart: movieImages[moviesWithoutImages.indexOf(movie.ids.tmdb)],
+          images: movieImages[moviesWithoutImages.indexOf(movie.ids.tmdb)],
         };
       }
       if (movie.ids.slug in storedMovies) {
         const storedMovie = storedMovies[movie.ids.slug];
         return {
           ...movie,
-          fanart: {
+          images: {
             poster: storedMovie.poster,
             backdrop: storedMovie.backdrop,
-            logo: storedMovie.logo,
+            backdrops: storedMovie.backdrops,
+            logos: storedMovie.logos,
           },
         };
       }
       // This should never happen, but just in case
       return {
         ...movie,
-        fanart: {
+        images: {
           poster: '',
           backdrop: '',
-          logo: '',
+          backdrops: [],
+          logos: [],
         },
       };
     });
@@ -133,8 +138,9 @@ export class MovieService {
           images: moviesWithoutImages.includes(movie.ids.tmdb)
             ? movieImages[moviesWithoutImages.indexOf(movie.ids.tmdb)]
             : {
-                logo: '',
+                logos: [],
                 backdrop: '',
+                backdrops: [],
                 poster: '',
               },
         },

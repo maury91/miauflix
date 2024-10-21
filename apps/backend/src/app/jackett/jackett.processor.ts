@@ -101,6 +101,8 @@ export class JackettProcessor extends WorkerHost {
               urlType: torrent.urlType,
               tracker: tracker.id,
               seeders: torrent.seeders,
+              codec: torrent.codec,
+              source: torrent.source,
               peers: torrent.peers,
               quality: torrent.quality,
             });

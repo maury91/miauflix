@@ -1,5 +1,6 @@
 export interface MoviesImages {
   poster: string;
   backdrop: string;
-  logo: string;
+  backdrops: string[];
+  logos: string[];
 }

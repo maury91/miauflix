@@ -5,7 +5,9 @@ import {
   JackettSimplifiedTracker,
   JackettTracker,
   SearchType,
+  VideoCodec,
   VideoQuality,
+  VideoSource,
 } from './jackett.types';
 import { monoIndexers } from './jackett.const';
 
@@ -140,6 +142,121 @@ export function getInnerSearchType(
       break;
   }
   return 'search';
+}
+
+function tokenize(title: string): string[] {
+  return title
+    .replace(/[\W_]+/g, ' ')
+    .split(' ')
+    .filter((word) => word.length >= 2);
+}
+
+type Not10Bit<T> = T extends `${string} 10bit` ? never : T;
+
+export function getVideoCodec(title: string): VideoCodec {
+  const checkFor10Bit = (
+    foundCodec: Exclude<Not10Bit<VideoCodec>, 'XVid' | 'unknown'>
+  ): VideoCodec => {
+    const is10Bit = title.match(/10.?bit/i) !== null;
+    if (is10Bit) {
+      return `${foundCodec} 10bit`;
+    }
+    return foundCodec;
+  };
+  if (title.match(/[HX][ .]?264/i) || title.match(/mpeg-4/i)) {
+    return checkFor10Bit('x264');
+  }
+  if (title.match(/[HX][ .]?265/i)) {
+    return checkFor10Bit('x265');
+  }
+  const tokens = tokenize(title.toLowerCase());
+  if (tokens.includes('hevc')) {
+    return checkFor10Bit('x265');
+  }
+  if (tokens.includes('avc')) {
+    return checkFor10Bit('x264');
+  }
+  // Deadpool.and.Wolverine.2024.1080p.WEBRip.AAC5.1.10bits.AV1-Rapta
+  if (tokens.includes('av1')) {
+    return checkFor10Bit('AV1');
+  }
+  if (tokens.includes('xvid')) {
+    return 'XVid';
+  }
+  return 'unknown';
+}
+
+function arraysIntersect(arr1: string[], arr2: string[]) {
+  return arr2.some((item) => arr1.includes(item));
+}
+
+const BluRayTermsCaseInsensitive = [
+  'bdrip',
+  'bluray',
+  'bdremux',
+  'bdmux',
+  'brrip',
+  'bdscr',
+  'bdr',
+];
+
+const BlurayTermsCaseSensitive = ['BR'];
+const HDTVTermsCaseInsensitive = ['hdtv', 'hdrip'];
+const DVDTermsCaseInsensitive = ['dvdrip', 'dvdr', 'dvdscr', 'dvd'];
+const TeleSyncTermsCaseInsensitive = ['tsrip', 'telesync', 'hdts'];
+const TeleSyncTermsCaseSensitive = ['TS'];
+const WebTermsCaseInsensitive = [
+  'webrip',
+  'webdl',
+  'itunes',
+  'netflix',
+  'appletv',
+];
+const WebTermsCaseSensitive = ['WEB', 'AMZN'];
+const CamCaseInsensitive = ['cam', 'hdcam'];
+const FallbackTermsCaseInsensitive = ['hdr', '6ch', 'hdr10', 'dd71', 'dd51'];
+
+export function getVideoSource(title: string): VideoSource {
+  const tokens = tokenize(title);
+  const tokensLC = tokenize(title.toLowerCase());
+  if (
+    arraysIntersect(tokensLC, BluRayTermsCaseInsensitive) ||
+    arraysIntersect(tokens, BlurayTermsCaseSensitive) ||
+    title.match(/\bblu.?ray\b/i) ||
+    title.match(/\bbr.?rip\b/i)
+  ) {
+    return 'Blu-ray';
+  }
+  if (arraysIntersect(tokensLC, HDTVTermsCaseInsensitive)) {
+    return 'HDTV';
+  }
+  if (arraysIntersect(tokensLC, DVDTermsCaseInsensitive)) {
+    return 'DVD';
+  }
+  if (
+    arraysIntersect(tokensLC, TeleSyncTermsCaseInsensitive) ||
+    arraysIntersect(tokens, TeleSyncTermsCaseSensitive) ||
+    title.match(/\bhd.?ts\b/i)
+  ) {
+    return 'TS';
+  }
+  if (
+    arraysIntersect(tokensLC, WebTermsCaseInsensitive) ||
+    arraysIntersect(tokens, WebTermsCaseSensitive)
+  ) {
+    return 'WEB';
+  }
+  if (arraysIntersect(tokensLC, CamCaseInsensitive)) {
+    return 'Cam';
+  }
+  // Last fallback, terms that suggest it's a Blu-ray ( without being sure of it )
+  if (
+    arraysIntersect(tokensLC, FallbackTermsCaseInsensitive) ||
+    title.match(/\b[57].1\b/i)
+  ) {
+    return 'Blu-ray';
+  }
+  return 'unknown';
 }
 
 export function getVideoQuality(title: string): VideoQuality {

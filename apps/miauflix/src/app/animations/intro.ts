@@ -35,7 +35,6 @@ export async function introAnimation(callback: () => void) {
     const screenWidth = window.innerWidth;
     const { width: uWidth } = u.getBoundingClientRect();
     const mPos = m.getBoundingClientRect();
-    console.log(mPos);
     tl.fromTo(
       m,
       {
@@ -132,7 +131,6 @@ export async function introAnimation(callback: () => void) {
       },
       0
     );
-    console.log(screenWidth / (uWidth * 5));
     tl.call(
       () => {
         gsap.killTweensOf([m, x]);
