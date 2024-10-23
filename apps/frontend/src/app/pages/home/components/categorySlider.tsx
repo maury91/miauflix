@@ -1,24 +1,25 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useGetListQuery } from '../../../../store/api/lists';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import { motion, MotionConfig } from 'framer-motion';
 import styled from 'styled-components';
 import { scaleImage } from '../utils/scaleImage';
-import { useWindowSize } from '../../../hooks/useWindowSize';
 import { CategoryDto } from '@miauflix/types';
+import { useAppDispatch } from '../../../../store/store';
+import { setSelectedMedia } from '../../../../store/slices/home';
+import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 
 const CategorySliderContainer = styled.div<{
-  marginLeft: number;
-  width: number;
+  margin: number;
 }>`
   position: absolute;
-  left: ${(props) => props.marginLeft}px;
-  width: ${(props) => props.width}px;
+  left: ${(props) => props.margin}px;
+  right: ${(props) => props.margin}px;
   height: 20vh;
 `;
 
-const CategoryTitle = styled.h2`
-  margin-bottom: 5vh;
+const CategoryTitle = styled.h3`
+  margin: 0 0 3vh;
 `;
 
 const CategoryContent = styled.div`
@@ -49,64 +50,41 @@ const MediaHighlight = styled.div`
 
 export const CategorySlider: FC<{ category: CategoryDto }> = ({ category }) => {
   const { data } = useGetListQuery(category.id);
+  const dispatch = useAppDispatch();
   const [selected, setSelected] = useState(0);
-  const { width, height } = useWindowSize();
-  const {
-    mediaWidth,
-    mediaPerPage,
-    mediaGap,
-    mediaLeftMargin,
-    totalMediaWidth,
-  } = useMemo(() => {
-    const mediaWidth = 0.352 * height;
-    const mediaGap = 0.02 * height;
-    const mediaPerPage = Math.floor(width / mediaWidth);
-    const totalMediaWidth =
-      mediaWidth * mediaPerPage + mediaGap * (mediaPerPage - 1);
-    const mediaLeftMargin = (width - totalMediaWidth) / 2;
-    return {
-      mediaWidth,
-      mediaPerPage,
-      mediaGap,
-      mediaLeftMargin,
-      totalMediaWidth,
-    };
-  }, [width, height]);
+  const { mediaWidth, mediaPerPage, gap, margin } = useMediaBoxSizes();
+  const move = (direction: 'left' | 'right') => {
+    const next = direction === 'left' ? selected - 1 : selected + 1;
+    if (next < 0 || next >= (data?.length ?? 0)) {
+      return true;
+    }
+    setSelected(next);
+    return false;
+  };
 
   const { ref, focused } = useFocusable({
     focusKey: `slider-${category.id}`,
     onArrowPress: (direction) => {
-      if (direction === 'left') {
-        if (selected < 1) {
-          return true;
-        }
-        setSelected(selected - 1);
-        // move('left');
-        return false;
-      }
-      if (direction === 'right') {
-        if (selected >= (data?.length ?? 0) - 1) {
-          return true;
-        }
-        // move('right');
-        setSelected(selected + 1);
-        return false;
+      if (direction === 'left' || direction === 'right') {
+        return move(direction);
       }
       return true;
     },
   });
 
+  useEffect(() => {
+    if (data) {
+      dispatch(setSelectedMedia(data[selected]));
+    }
+  }, [data, selected]);
+
   return (
-    <CategorySliderContainer
-      marginLeft={mediaLeftMargin}
-      width={totalMediaWidth}
-      ref={ref}
-    >
+    <CategorySliderContainer margin={margin} ref={ref}>
       <CategoryTitle>{category.name}</CategoryTitle>
       <CategoryContent>
         {focused && <MediaHighlight />}
-        <MotionConfig transition={{ duration: 0.4 }}>
-          <motion.div animate={{ x: -(mediaWidth + mediaGap) * selected }}>
+        <MotionConfig transition={{ duration: 0.3 }}>
+          <motion.div animate={{ x: -(mediaWidth + gap) * selected }}>
             {data &&
               data.map((media, index) => {
                 if (

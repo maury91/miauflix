@@ -14,7 +14,7 @@
     "types": ["vite/client"],
     "paths": {
       "@miauflix/types": ["libs/types/src/index.ts"],
-      "@frontend/*": ["apps/miauflix/src/*"],
+      "@frontend/*": ["apps/frontend/src/*"],
     }
   },
   "files": [],

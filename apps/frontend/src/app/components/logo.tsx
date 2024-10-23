@@ -1,8 +1,8 @@
 import { Logo as SVGLogo } from '../ui-elements/logo';
 import { useAppSelector } from '../../store/store';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
-import styled from 'styled-components';
 import { Page } from '../../types';
+import styled from 'styled-components';
 
 const profileSelectionLogo = {
   top: '5vh',
@@ -18,6 +18,11 @@ const homeLogo = {
   width: '14.5vh',
 };
 
+const LogoContainer = styled(motion.div)`
+  position: fixed;
+  z-index: 100;
+`;
+
 const getLogoStyle = (currentPage: Page) => {
   switch (currentPage) {
     case 'profile-selection':
@@ -32,13 +37,9 @@ export const Logo = () => {
   return (
     <MotionConfig transition={{ duration: 0.4 }}>
       <AnimatePresence initial={false}>
-        <motion.div
-          key="logoLeft"
-          style={{ position: 'fixed' }}
-          animate={getLogoStyle(currentPage)}
-        >
+        <LogoContainer key="logoLeft" animate={getLogoStyle(currentPage)}>
           <SVGLogo />
-        </motion.div>
+        </LogoContainer>
       </AnimatePresence>
     </MotionConfig>
   );
