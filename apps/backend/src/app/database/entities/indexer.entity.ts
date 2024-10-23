@@ -28,7 +28,7 @@ export interface IndexerAttributes {
 @Table
 export class Indexer extends Model<IndexerAttributes> {
   @PrimaryKey
-  id!: string;
+  override id!: string;
 
   @Column
   configured!: boolean;

@@ -15,6 +15,7 @@ export class MoviesData {
       where: {
         slug,
       },
+      raw: true,
     });
   }
 
@@ -25,6 +26,7 @@ export class MoviesData {
           [Op.in]: slugs,
         },
       },
+      raw: true,
     });
   }
 

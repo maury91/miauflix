@@ -12,7 +12,6 @@ import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { MoviesModule } from './movies/movies.module';
 import { JackettModule } from './jackett/jackett.module';
 import { TorrentModule } from './torrent/torrent.module';
-import { CategoriesController } from './categories/categories.controller';
 import { CategoriesModule } from './categories/categories.module';
 import { ListsModule } from './lists/lists.module';
 
@@ -47,7 +46,7 @@ import { ListsModule } from './lists/lists.module';
         database: configService.getOrThrow('POSTGRES_DB'),
         autoLoadModels: true,
         synchronize: true,
-        // logging: false,
+        logging: false,
       }),
       inject: [ConfigService],
     }),

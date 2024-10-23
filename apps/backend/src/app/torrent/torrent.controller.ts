@@ -6,7 +6,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { TorrentService } from './torrent.service';
-import { VideoQuality } from '../jackett/jackett.types';
+import { VideoQuality } from '@miauflix/types';
 import { allVideoQualities } from './torrent.const';
 
 @Controller('stream')

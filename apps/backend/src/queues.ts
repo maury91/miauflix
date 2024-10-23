@@ -1,5 +1,6 @@
-import { VideoQuality } from './app/jackett/jackett.types';
+import { VideoSource } from './app/jackett/jackett.types';
 import { MoviesImages } from './app/movies/movies.types';
+import { VideoCodec, VideoQuality } from '@miauflix/types';
 
 export const enum queues {
   deviceCode = 'deviceCode',
@@ -23,6 +24,7 @@ export const enum movieJobs {
 }
 
 export type GetMovieExtendedDataData = {
+  index: number; // index of the title in the list ( the UI will display the first 5 titles before the user has to scroll to see more, so those are more important )
   slug: string;
   images: MoviesImages;
 };
@@ -35,6 +37,7 @@ export const enum jackettJobs {
 }
 
 export interface SearchMovieData {
+  index: number; // index of the title in the list
   movieId: number;
   params: {
     q: string;
@@ -46,6 +49,7 @@ export interface SearchMovieData {
 }
 
 export interface PopulateTorrentQForMovieData {
+  index: number; // index of the title in the list
   movieId: number;
 }
 
@@ -56,9 +60,13 @@ export const enum torrentJobs {
 }
 
 export interface GetTorrentFileData {
+  index: number; // index of the title in the list
+  count: number; // count of the torrent for the title, we want to find at least 1 torrent for each title as fast as possible, so the count is important
   id: number;
   movieId: number;
   quality: VideoQuality;
+  codec: VideoCodec;
+  source: VideoSource;
   runtime: number;
   url: string;
 }

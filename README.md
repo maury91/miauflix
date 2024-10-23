@@ -25,7 +25,7 @@ yarn install
 
 Miauflix comes with a default discovery service named "Trakt + TMDB". And a default streaming service named "P2P".
 
-To setup the discovery service you can copy the `apps/backend/.env.example` file to `apps/backend/.env` and set the following variables:
+To setup the discovery service you can copy the `.env.example` file to `.env` and set the following variables:
 
 - *TRAKT_CLIENT_ID* This is the client id for the trakt service. You can get one by registering at https://trakt.tv/oauth/applications/new
 - *TRAKT_CLIENT_SECRET* This is the client secret for the trakt service. You will get one together with the client id.

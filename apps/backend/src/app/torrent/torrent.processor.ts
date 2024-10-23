@@ -10,7 +10,7 @@ import { TorrentService } from './torrent.service';
 import { isValidVideoFile } from './torrent.utils';
 import { JackettData } from '../jackett/jackett.data';
 import { MoviesData } from '../movies/movies.data';
-import { VideoQuality } from '../jackett/jackett.types';
+import { VideoCodec, VideoQuality } from '@miauflix/types';
 
 @Processor(queues.torrent)
 export class TorrentProcessor extends WorkerHost {
@@ -30,7 +30,7 @@ export class TorrentProcessor extends WorkerHost {
   }
 
   onApplicationBootstrap() {
-    this.worker.concurrency = 5;
+    this.worker.concurrency = 16;
   }
 
   @OnWorkerEvent('error')
@@ -42,9 +42,14 @@ export class TorrentProcessor extends WorkerHost {
     console.error(`Failed processing job ${job.id}`, job.failedReason);
   }
 
-  private async skipRelatedTorrents(movieId: number, quality: VideoQuality) {
+  private async skipRelatedTorrents(
+    movieId: number,
+    quality: VideoQuality,
+    codec: VideoCodec
+  ) {
     const [, skippedTorrents] = await this.jackettData.skipTorrentsForMovie(
       movieId,
+      codec,
       quality
     );
     const waitingJobs = await this.torrentQueue.getJobs(['waiting']);
@@ -76,24 +81,26 @@ export class TorrentProcessor extends WorkerHost {
   private async getTorrentFile({
     id,
     movieId,
+    codec,
     quality,
     runtime,
     url,
+    count,
   }: GetTorrentFileData) {
     console.log(
-      `Getting torrent data for torrent id ${id} (quality: ${quality}, movieId: ${movieId})`
+      `Getting torrent data for torrent id ${id} (quality: ${quality}, codec: ${codec}, movieId: ${movieId}, count: ${count})`
     );
     const torrent = await this.getTorrentFileByUrl(url);
     if (torrent.files.length) {
       try {
         const videoFiles = torrent.files.filter(
-          isValidVideoFile(runtime, quality)
+          isValidVideoFile(runtime, quality, codec)
         );
 
         if (videoFiles.length) {
           await this.jackettData.updateTorrentData(id, torrent.torrentFile);
           await this.movieData.setTorrentFound(movieId, id);
-          await this.skipRelatedTorrents(movieId, quality);
+          await this.skipRelatedTorrents(movieId, quality, codec);
           console.log(`Torrent ${id} marked as valid`);
           return;
         }

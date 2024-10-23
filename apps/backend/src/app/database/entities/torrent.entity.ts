@@ -8,11 +8,8 @@ import {
   Unique,
 } from 'sequelize-typescript';
 import { Movie } from './movie.entity';
-import {
-  VideoCodec,
-  VideoQuality,
-  VideoSource,
-} from '../../jackett/jackett.types';
+import { VideoSource } from '../../jackett/jackett.types';
+import { VideoCodec, VideoQuality } from '@miauflix/types';
 
 export interface TorrentAttributes {
   id: number;

@@ -38,6 +38,7 @@ export class MovieProcessor extends WorkerHost {
           jackettJobs.searchMovie,
           {
             movieId: extendedMovie.id,
+            index: job.data.index,
             params: {
               // q: `${extendedMovie.title} (${extendedMovie.year})`,
               q: extendedMovie.slug,
@@ -49,6 +50,7 @@ export class MovieProcessor extends WorkerHost {
           },
           {
             jobId: `${extendedMovie.slug}`,
+            priority: job.data.index < 10 ? 1000 : 2000,
           }
         );
       }

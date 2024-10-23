@@ -1,4 +1,4 @@
-import { VideoQuality } from '../jackett/jackett.types';
+import { VideoQuality } from '@miauflix/types';
 import { Torrent } from '../database/entities/torrent.entity';
 import { Op } from 'sequelize';
 import { Movie } from '../database/entities/movie.entity';
@@ -46,7 +46,7 @@ export const getMovieTorrents = async ({
     include: {
       model: Torrent,
       as: 'allTorrents',
-      attributes: ['data', 'quality'],
+      attributes: ['data', 'quality', 'codec'],
       where: {
         processed: true,
         data: {

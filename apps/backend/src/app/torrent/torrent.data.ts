@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Torrent } from '../database/entities/torrent.entity';
-import { VideoQuality } from '../jackett/jackett.types';
+import { VideoQuality } from '@miauflix/types';
 import { Movie } from '../database/entities/movie.entity';
 import { MovieProcessorService } from '../movies/movies.processor.service';
 import { getMovieTorrents } from '../flow/flow';

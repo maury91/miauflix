@@ -55,5 +55,5 @@ export class AccessToken extends Model<
 
   @CreatedAt
   @Column
-  createdAt!: Date;
+  override createdAt!: Date;
 }

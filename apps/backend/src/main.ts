@@ -22,7 +22,7 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
-  const port = process.env.PORT || 808;
+  const port = process.env['PORT'] || 808;
   await app.listen(port);
 
   Logger.log(

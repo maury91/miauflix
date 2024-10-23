@@ -12,5 +12,6 @@ export class ListsController {
       case StaticCategories.TrendingMovies:
         return this.movieService.getTrendingMovies();
     }
+    return [];
   }
 }

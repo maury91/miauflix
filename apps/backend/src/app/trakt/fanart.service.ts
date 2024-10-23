@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { MovieFanartResponse } from './fanart.types';
+import { Cacheable } from '@backend/app/utils/cacheable.util';
 
 @Injectable()
 export class FanartService {
@@ -19,12 +20,8 @@ export class FanartService {
     this.apiKey = this.configService.getOrThrow('FANART_API_KEY');
   }
 
+  @Cacheable(864e5)
   public async getMovieImages(tmdb: string) {
-    const cacheKey = `fanart:movie:${tmdb}`;
-    const cached = await this.cacheManager.get<MovieFanartResponse>(cacheKey);
-    if (cached) {
-      return cached;
-    }
     const { data } = await this.httpService.axiosRef.get<MovieFanartResponse>(
       `${this.apiUrl}/movies/${tmdb}`,
       {
@@ -33,6 +30,6 @@ export class FanartService {
         },
       }
     );
-    await this.cacheManager.set(cacheKey, data, 864e5);
+    return data;
   }
 }

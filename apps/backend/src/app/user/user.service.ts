@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import {
-  User,
-  UserCreationAttributes,
-} from '../../app/database/entities/user.entity';
+import { UserDto } from '@miauflix/types';
+import { User, UserCreationAttributes } from '../database/entities/user.entity';
 import { AccessToken } from '../database/entities/accessToken.entity';
 
 @Injectable()
@@ -46,12 +44,15 @@ export class UserService {
           },
         },
       ],
+      raw: true,
+      nest: true,
     });
   }
 
-  public getUsers(): Promise<User[]> {
+  public getUsers(): Promise<UserDto[]> {
     return this.userModel.findAll({
       attributes: ['name', 'slug'],
+      raw: true,
     });
   }
 }

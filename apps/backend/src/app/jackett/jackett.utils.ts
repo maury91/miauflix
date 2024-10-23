@@ -5,11 +5,10 @@ import {
   JackettSimplifiedTracker,
   JackettTracker,
   SearchType,
-  VideoCodec,
-  VideoQuality,
   VideoSource,
 } from './jackett.types';
 import { monoIndexers } from './jackett.const';
+import { VideoCodec, VideoQuality } from '@miauflix/types';
 
 export const simplifyXMLObject = (obj: ElementCompact) => {
   const keys = Object.keys(obj);

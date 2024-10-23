@@ -1,10 +1,12 @@
 {
-  "name": "@miauflix/source",
+  "name": "miauflix",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "services/*",
+    "libs/*"
   ],
   "scripts": {
     "build:tizen": "nx build miauflix --env.VITE_TIZEN=true"
@@ -23,7 +25,7 @@
     "@noriginmedia/norigin-spatial-navigation": "2.2.1",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.6.0",
-    "bullmq": "5.15.0",
+    "bullmq": "^5.21.2",
     "cache-manager": "^5.7.6",
     "cache-manager-redis-store": "^3.0.1",
     "dotenv": "16.4.5",

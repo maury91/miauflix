@@ -3,14 +3,14 @@ import { getMovieTorrents } from '../flow/flow';
 import { InjectModel } from '@nestjs/sequelize';
 import { Movie } from '../database/entities/movie.entity';
 import { MovieProcessorService } from './movies.processor.service';
-import { VideoQuality } from '../jackett/jackett.types';
-import { omit } from '../utils/object';
+import { ExtendedMovieDto, VideoQuality } from '@miauflix/types';
 import { TraktService } from '../trakt/trakt.service';
 import { TMDBService } from '../tmdb/tmdb.service';
 import { GetMovieExtendedDataData, movieJobs, queues } from '../../queues';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import { MoviesData } from './movies.data';
+import { MovieDto, MovieImages } from '@miauflix/types';
 
 @Injectable()
 export class MovieService {
@@ -24,7 +24,7 @@ export class MovieService {
     private readonly movieQueue: Queue<GetMovieExtendedDataData>
   ) {}
 
-  public async getMovie(slug: string) {
+  public async getMovie(slug: string): Promise<ExtendedMovieDto> {
     const { movie, torrents } = await getMovieTorrents({
       slug,
       movieModel: this.movieModel,
@@ -32,13 +32,28 @@ export class MovieService {
     });
 
     return {
-      ...omit(movie.get({ plain: true }), [
-        'createdAt',
-        'updatedAt',
-        'allTorrents',
-        'torrentId',
-      ]),
-      availableQualities: Object.keys(torrents) as unknown as VideoQuality[],
+      id: movie.slug,
+      title: movie.title,
+      year: movie.year,
+      ids: {
+        trakt: movie.traktId,
+        slug: movie.slug,
+        imdb: movie.imdbId,
+        tmdb: movie.tmdbId,
+      },
+      images: {
+        backdrop: movie.backdrop,
+        backdrops: movie.backdrops,
+        logos: movie.logos,
+        poster: movie.poster,
+      },
+      overview: movie.overview,
+      runtime: movie.runtime,
+      trailer: movie.trailer,
+      rating: Number(movie.rating),
+      streamable: movie.torrentFound,
+      genres: movie.genres,
+      qualities: Object.keys(torrents) as unknown as VideoQuality[],
     };
   }
 
@@ -71,7 +86,7 @@ export class MovieService {
       )
       .map((movie) => movie.ids.tmdb);
     const movieImages = await Promise.all(
-      moviesWithoutImages.map((movieTmdb) =>
+      moviesWithoutImages.map<Promise<MovieImages>>((movieTmdb) =>
         this.tmdbService
           .getMovieImages(`${movieTmdb}`)
           .then((images) => ({
@@ -88,10 +103,11 @@ export class MovieService {
           })
       )
     );
-    const trendingMovies = movies.map((movie) => {
+    const trendingMovies = movies.map<MovieDto>((movie) => {
       if (moviesWithoutImages.includes(movie.ids.tmdb)) {
         return {
           ...movie,
+          id: movie.ids.slug,
           images: movieImages[moviesWithoutImages.indexOf(movie.ids.tmdb)],
         };
       }
@@ -99,6 +115,7 @@ export class MovieService {
         const storedMovie = storedMovies[movie.ids.slug];
         return {
           ...movie,
+          id: movie.ids.slug,
           images: {
             poster: storedMovie.poster,
             backdrop: storedMovie.backdrop,
@@ -110,6 +127,7 @@ export class MovieService {
       // This should never happen, but just in case
       return {
         ...movie,
+        id: movie.ids.slug,
         images: {
           poster: '',
           backdrop: '',
@@ -135,6 +153,7 @@ export class MovieService {
         },
         data: {
           slug: movie.ids.slug,
+          index,
           images: moviesWithoutImages.includes(movie.ids.tmdb)
             ? movieImages[moviesWithoutImages.indexOf(movie.ids.tmdb)]
             : {

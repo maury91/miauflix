@@ -40,5 +40,5 @@ export class User extends Model<UserAttributes, UserCreationAttributes> {
 
   @CreatedAt
   @Column
-  createdAt!: Date;
+  override createdAt!: Date;
 }

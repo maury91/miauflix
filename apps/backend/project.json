@@ -5,47 +5,6 @@
   "projectType": "application",
   "tags": [],
   "targets": {
-    "build-old": {
-      "executor": "@nx/esbuild:esbuild",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "defaultConfiguration": "production",
-      "options": {
-        "platform": "node",
-        "outputPath": "dist/apps/backend",
-        "format": [
-          "cjs"
-        ],
-        "bundle": false,
-        "declaration": true,
-        "minify": false,
-        "main": "apps/backend/src/main.ts",
-        "tsConfig": "apps/backend/tsconfig.app.json",
-        "assets": [
-          "apps/backend/src/assets"
-        ],
-        "generatePackageJson": true,
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
-      },
-      "configurations": {
-        "development": {},
-        "production": {
-          "generateLockfile": true,
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
-        }
-      }
-    },
     "build": {
       "executor": "@nx/js:tsc",
       "options": {
@@ -89,5 +48,6 @@
       ],
       "command": "docker build -f apps/backend/Dockerfile . -t backend"
     }
-  }
+  },
+  "implicitDependencies": ["libs/types"]
 }

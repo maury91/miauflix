@@ -1,14 +1,20 @@
-import { VideoQuality } from '../jackett/jackett.types';
+import { VideoCodec, VideoQuality } from '@miauflix/types';
 import { MIN_MB_MN } from './torrent.const';
+import { getVideoCodec } from '../jackett/jackett.utils';
 
-const supportedVideoExtensions = ['mkv', 'mp4', 'avi'];
+const supportedVideoExtensions = ['mkv', 'mp4', 'avi', 'ts', 'mov', 'webm'];
 export const isValidVideoFile =
-  (runtime: number, quality: VideoQuality) =>
+  (runtime: number, quality: VideoQuality, codecFromTorrentName: VideoCodec) =>
   <F extends { name: string; length: number }>({ name, length }: F) => {
     const ext = name.split('.').pop();
     if (!supportedVideoExtensions.includes(ext)) {
       return false;
     }
-    console.log(MIN_MB_MN[quality][ext], length / (runtime * 1024 * 1024));
-    return length > MIN_MB_MN[quality][ext] * runtime * 1024 * 1024;
+    const codecFromVideoName = getVideoCodec(name);
+    const codec =
+      codecFromVideoName !== 'unknown'
+        ? codecFromVideoName
+        : codecFromTorrentName;
+    console.log(MIN_MB_MN[quality][codec], length / (runtime * 1024 * 1024));
+    return length > MIN_MB_MN[quality][codec] * runtime * 1024 * 1024;
   };

@@ -4,7 +4,7 @@ import { WebTorrent, Instance, TorrentFile, NodeServer } from 'webtorrent';
 import { ParsedFile } from 'parse-torrent-file';
 import { HttpService } from '@nestjs/axios';
 import { ParseTorrentImport } from '../app.async.provider';
-import { VideoQuality } from '../jackett/jackett.types';
+import { VideoQuality } from '@miauflix/types';
 import { TorrentData } from './torrent.data';
 import { isValidVideoFile } from './torrent.utils';
 
@@ -66,7 +66,6 @@ export class TorrentService {
       if (typeof data === 'string' && data.startsWith('magnet')) {
         try {
           this.client.add(data, { deselect: true }, (torrent) => {
-            console.log(torrent);
             resolve({
               files: torrent.files,
               torrentFile: Buffer.from(torrent.torrentFile),
@@ -112,6 +111,7 @@ export class TorrentService {
     return this.getTorrentInformation(data);
   }
 
+  // ToDo: Implement getStream by codec
   public async getStream(slug: string, quality: VideoQuality) {
     const { torrentFile, runtime } =
       await this.torrentData.getTorrentByMovieAndQuality(slug, quality);
@@ -121,7 +121,7 @@ export class TorrentService {
         { path: '/tmp', deselect: true },
         (torrent) => {
           const videoFiles = torrent.files.filter(
-            isValidVideoFile(runtime, quality)
+            isValidVideoFile(runtime, quality, 'unknown')
           );
           if (videoFiles.length === 0) {
             reject(new Error('No video file found'));
