@@ -19,7 +19,7 @@ const CategorySliderContainer = styled.div<{
 `;
 
 const CategoryTitle = styled.h3`
-  margin: 0 0 3vh;
+  margin: 0 0 1vh;
 `;
 
 const CategoryContent = styled.div`
@@ -27,7 +27,7 @@ const CategoryContent = styled.div`
 `;
 
 const MediaBox = styled.div<{ src: string; index: number }>`
-  border-radius: 0.6vh;
+  border-radius: 0.7vh;
   background: url(${(props) => props.src}) center no-repeat;
   background-size: cover;
   height: 20vh;
@@ -39,11 +39,11 @@ const MediaBox = styled.div<{ src: string; index: number }>`
 
 const MediaHighlight = styled.div`
   position: absolute;
-  top: -3px;
-  left: -3px;
+  top: -0.3vh;
+  left: -0.45vh;
   width: 35.2vh;
-  height: 20vh;
-  border: 3px solid #d81f27;
+  height: 19.8vh;
+  border: 0.5vh solid #d81f27;
   border-radius: 1vh;
   z-index: 2;
 `;

@@ -20,7 +20,7 @@ export const BackgroundContainer = styled(motion.div)`
 `;
 
 export const SimpleBackground = styled(BackgroundContainer)`
-  background-color: #111;
+  background-color: #000;
 `;
 
 const BackgroundShadow = styled.div<{ direction: BackgroundDirections }>`
