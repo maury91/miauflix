@@ -1,2 +1,18 @@
 export const API_URL = window.API_URL;
-export const runningInTizen = import.meta.env.VITE_TIZEN === 'true';
+export const builtForTizen = import.meta.env['VITE_TIZEN'] === 'true';
+export const IS_TIZEN = 'tizen' in window;
+export const IS_TV = builtForTizen || IS_TIZEN;
+export const IS_SLOW_DEVICE = IS_TV;
+
+export const PALETTE = {
+  background: {
+    primary: '#d81f27',
+    secondary: '#cdcdcd',
+    disabled: '#a0a0a0',
+  },
+  text: {
+    primary: '#f7f7f7',
+    secondary: '#000',
+    disabled: '#222',
+  },
+};

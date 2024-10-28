@@ -2,8 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { getMovieTorrents } from '../flow/flow';
 import { InjectModel } from '@nestjs/sequelize';
 import { Movie } from '../database/entities/movie.entity';
+import { Movie as TraktMovie } from '../trakt/trakt.types';
 import { MovieProcessorService } from './movies.processor.service';
-import { ExtendedMovieDto, VideoQuality } from '@miauflix/types';
+import {
+  ExtendedMovieDto,
+  VideoQuality,
+  VideoQualityStr,
+} from '@miauflix/types';
 import { TraktService } from '../trakt/trakt.service';
 import { TMDBService } from '../tmdb/tmdb.service';
 import { GetMovieExtendedDataData, movieJobs, queues } from '../../queues';
@@ -53,7 +58,7 @@ export class MovieService {
       rating: Number(movie.rating),
       streamable: movie.torrentFound,
       genres: movie.genres,
-      qualities: Object.keys(torrents) as unknown as VideoQuality[],
+      qualities: Object.keys(torrents) as unknown as VideoQualityStr[],
     };
   }
 
@@ -68,10 +73,7 @@ export class MovieService {
     );
   }
 
-  public async getTrendingMovies() {
-    const movies = (await this.traktService.getTrendingMovies()).map(
-      ({ movie }) => movie
-    );
+  private async addExtendedDataToMovies(movies: TraktMovie[]) {
     const storedMovies = await this.getStoredMovies(
       movies.map((movie) => movie.ids.slug)
     );
@@ -85,6 +87,7 @@ export class MovieService {
           )
       )
       .map((movie) => movie.ids.tmdb);
+
     const movieImages = await Promise.all(
       moviesWithoutImages.map<Promise<MovieImages>>((movieTmdb) =>
         this.tmdbService
@@ -103,7 +106,8 @@ export class MovieService {
           })
       )
     );
-    const trendingMovies = movies.map<MovieDto>((movie) => {
+
+    const extendedMovies = movies.map<MovieDto>((movie) => {
       if (moviesWithoutImages.includes(movie.ids.tmdb)) {
         return {
           ...movie,
@@ -137,7 +141,7 @@ export class MovieService {
       };
     });
 
-    const moviesWithoutSource = trendingMovies.filter(
+    const moviesWithoutSource = extendedMovies.filter(
       (movie) =>
         !(
           movie.ids.slug in storedMovies &&
@@ -166,11 +170,23 @@ export class MovieService {
       }))
     );
 
-    return trendingMovies.filter((movie) => {
+    return extendedMovies.filter((movie) => {
       if (movie.ids.slug in storedMovies) {
         return !storedMovies[movie.ids.slug].noTorrentFound;
       }
       return true;
     });
+  }
+
+  public async getTrendingMovies() {
+    const movies = (await this.traktService.getTrendingMovies()).data.map(
+      ({ movie }) => movie
+    );
+    return await this.addExtendedDataToMovies(movies);
+  }
+
+  public async getPopularMovies() {
+    const movies = (await this.traktService.getPopularMovies()).data;
+    return await this.addExtendedDataToMovies(movies);
   }
 }

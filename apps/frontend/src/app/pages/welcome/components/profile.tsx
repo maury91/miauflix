@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import { UserCircleIcon } from '../../../ui-elements/icons/user_circle.icon';
 import { AddIcon } from '../../../ui-elements/icons/add.icon';
+import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from '../consts';
 
 const StyledProfile = styled.div<{
   index: number;
@@ -15,6 +16,7 @@ const StyledProfile = styled.div<{
   top: ${({ index }) => 35 + index * 15}vh;
   left: 3vh;
   transform: translate3d(${({ selected }) => (selected ? 3 : 0)}vh, 0, 0);
+  cursor: pointer;
 
   transition: transform 0.4s;
 
@@ -53,12 +55,20 @@ export const Profile: FC<{
   name: string;
   color: string;
   index: number;
-}> = ({ name, color, index }) => {
-  const { ref, focused } = useFocusable({
-    focusKey: `profile-${index}`,
+  onClick: () => void;
+}> = ({ name, color, index, onClick }) => {
+  const { ref, focused, focusSelf } = useFocusable({
+    focusKey: `${PROFILE_ITEM_PREFIX}${index}`,
   });
   return (
-    <StyledProfile index={index} selected={focused} color={color} ref={ref}>
+    <StyledProfile
+      index={index}
+      selected={focused}
+      color={color}
+      ref={ref}
+      onMouseEnter={() => focusSelf()}
+      onClick={onClick}
+    >
       <div>
         <UserCircleIcon size="100%" />
       </div>
@@ -70,12 +80,20 @@ export const Profile: FC<{
 export const NewProfile: FC<{
   color: string;
   index: number;
-}> = ({ color, index }) => {
-  const { ref, focused } = useFocusable({
-    focusKey: 'profile-new',
+  onClick: () => void;
+}> = ({ color, index, onClick }) => {
+  const { ref, focused, focusSelf } = useFocusable({
+    focusKey: NEW_PROFILE_ITEM,
   });
   return (
-    <StyledProfile index={index} selected={focused} color={color} ref={ref}>
+    <StyledProfile
+      index={index}
+      selected={focused}
+      color={color}
+      ref={ref}
+      onMouseEnter={() => focusSelf()}
+      onClick={onClick}
+    >
       <div>
         <AddIcon size="100%" />
       </div>

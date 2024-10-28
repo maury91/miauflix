@@ -4,32 +4,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { usersApi } from './api/users';
 import app from './slices/app';
 import home from './slices/home';
+import stream from './slices/stream';
 import { categoriesApi } from './api/categories';
+import { mediasApi } from './api/medias';
 
 export const store = configureStore({
   reducer: {
     app,
     home,
+    stream,
     [listsApi.reducerPath]: listsApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
-    // movies: moviesSlice.reducer,
-    // profiles: profilesSlice.reducer,
-    // user: userSlice.reducer,
-    // theme: themeSlice.reducer,
-    // search: searchSlice.reducer,
-    // player: playerSlice.reducer,
-    // toast: toastSlice.reducer,
-    // modal: modalSlice.reducer,
-    // notifications: notificationsSlice.reducer,
-    // settings: settingsSlice.reducer,
-    // playerSettings: playerSettingsSlice.reducer,
+    [mediasApi.reducerPath]: mediasApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       listsApi.middleware,
       usersApi.middleware,
-      categoriesApi.middleware
+      categoriesApi.middleware,
+      mediasApi.middleware
     ),
 });
 

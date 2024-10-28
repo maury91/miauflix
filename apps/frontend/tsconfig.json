@@ -11,10 +11,12 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "strict": true,
-    "types": ["vite/client"],
+    "types": [
+      "vite/client",
+      "unplugin-icons/types/react"
+    ],
     "paths": {
       "@miauflix/types": ["libs/types/src/index.ts"],
-      "@frontend/*": ["apps/frontend/src/*"],
     }
   },
   "files": [],

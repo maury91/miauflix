@@ -20,6 +20,7 @@ import { Logo } from './components/logo';
 import { useGetCategoriesQuery } from '../store/api/categories';
 import { usePrefetch } from '../store/api/lists';
 import { usePreloadHomeImages } from './pages/home/hooks/usePreloadHomeImages';
+import { Player } from './pages/player';
 
 init({
   // debug: true,
@@ -54,7 +55,7 @@ export function App() {
           preloadHomeImages();
         });
     }
-  }, [backgrounds]);
+  }, [backgrounds, preloadHomeImages]);
 
   return (
     <MotionConfig transition={{ duration: 1 }}>
@@ -90,16 +91,17 @@ export function App() {
             <ProfileSelection />
           </ProfileSelectionContainer>
         )}
-        {currentPage === 'home' && (
+        {(currentPage === 'home' || currentPage === 'player') && (
           <HomeContainer
             key="home"
-            initial={{ transform: 'scale(0.8)' }}
-            animate={{ transform: 'scale(1)' }}
-            exit={{ transform: 'scale(0.8)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: currentPage === 'player' ? 0 : 1 }}
+            exit={{ opacity: 0 }}
           >
             <Home />
           </HomeContainer>
         )}
+        {currentPage === 'player' && <Player />}
       </AnimatePresence>
     </MotionConfig>
   );

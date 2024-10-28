@@ -1,24 +1,35 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { useGetListQuery } from '../../../../store/api/lists';
-import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { motion, MotionConfig } from 'framer-motion';
 import styled from 'styled-components';
 import { scaleImage } from '../utils/scaleImage';
-import { CategoryDto } from '@miauflix/types';
-import { useAppDispatch } from '../../../../store/store';
-import { setSelectedMedia } from '../../../../store/slices/home';
+import { CategoryDto, MovieDto } from '@miauflix/types';
+import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import {
+  changeCategory,
+  setSelectedMedia,
+} from '../../../../store/slices/home';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
+import { SLIDER_PREFIX } from '../consts';
+import { MEDIA_BOX_HEIGHT, MediaBox, MediaHighlight } from './mediaBox';
+import { useCategoryNavigation } from '../hooks/useCategoryNavigation';
+import { IS_TV } from '../../../../consts';
+
+export const SLIDER_MARGIN = 10;
 
 const CategorySliderContainer = styled.div<{
   margin: number;
+  index: number;
 }>`
   position: absolute;
   left: ${(props) => props.margin}px;
   right: ${(props) => props.margin}px;
-  height: 20vh;
+  top: ${(props) => props.index * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN)}vh;
+  height: ${MEDIA_BOX_HEIGHT}vh;
 `;
 
 const CategoryTitle = styled.h3`
+  height: 5vh;
   margin: 0 0 1vh;
 `;
 
@@ -26,83 +37,118 @@ const CategoryContent = styled.div`
   position: relative;
 `;
 
-const MediaBox = styled.div<{ src: string; index: number }>`
-  border-radius: 0.7vh;
-  background: url(${(props) => props.src}) center no-repeat;
-  background-size: cover;
-  height: 20vh;
-  width: 35.2vh;
-  position: absolute;
-  top: 0;
-  left: ${(props) => props.index * 37.2}vh;
-`;
-
-const MediaHighlight = styled.div`
-  position: absolute;
-  top: -0.3vh;
-  left: -0.45vh;
-  width: 35.2vh;
-  height: 19.8vh;
-  border: 0.5vh solid #d81f27;
-  border-radius: 1vh;
-  z-index: 2;
-`;
-
-export const CategorySlider: FC<{ category: CategoryDto }> = ({ category }) => {
+export const CategorySlider: FC<{
+  category: CategoryDto;
+  index: number;
+  scrollTo: (to: number) => void;
+  onSelect: (media: MovieDto) => void;
+}> = ({ category, index, onSelect, scrollTo }) => {
   const { data } = useGetListQuery(category.id);
-  const dispatch = useAppDispatch();
-  const [selected, setSelected] = useState(0);
-  const { mediaWidth, mediaPerPage, gap, margin } = useMediaBoxSizes();
-  const move = (direction: 'left' | 'right') => {
-    const next = direction === 'left' ? selected - 1 : selected + 1;
-    if (next < 0 || next >= (data?.length ?? 0)) {
-      return true;
-    }
-    setSelected(next);
-    return false;
-  };
+  const mediaCount = data?.length ?? 0;
 
-  const { ref, focused } = useFocusable({
-    focusKey: `slider-${category.id}`,
-    onArrowPress: (direction) => {
-      if (direction === 'left' || direction === 'right') {
-        return move(direction);
+  const mediaBoxesWrapperRef = useRef<HTMLDivElement>(null);
+  const categorySliderAnimationRef = useRef<gsap.QuickToFunc | null>(null);
+  const mediaHighlightRef = useRef<HTMLDivElement>(null);
+  const mediaHighlightAnimationRef = useRef<gsap.QuickToFunc | null>(null);
+  const dispatch = useAppDispatch();
+  const { mediaWidth, mediaPerPage, gap, margin } = useMediaBoxSizes();
+
+  const onMediaSelect = useCallback(
+    (index: number) => {
+      if (data) {
+        onSelect(data[index]);
       }
-      return true;
     },
-  });
+    [data, onSelect]
+  );
+
+  const { selected, handleHover, ref, focused, hovered } =
+    useCategoryNavigation({
+      categoryId: category.id,
+      mediaCount,
+      onMediaSelect,
+    });
+
+  const categoryTranslateX = -(mediaWidth + gap) * selected;
+  const highlightTranslateX = IS_TV
+    ? mediaWidth + gap
+    : (mediaWidth + gap) * (hovered - selected);
 
   useEffect(() => {
-    if (data) {
-      dispatch(setSelectedMedia(data[selected]));
+    if (data && focused) {
+      dispatch(setSelectedMedia(data[hovered]));
     }
-  }, [data, selected]);
+  }, [focused, data, hovered, dispatch]);
+
+  useEffect(() => {
+    if (focused) {
+      scrollTo(index * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN));
+      dispatch(changeCategory(category));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focused]);
+
+  useEffect(() => {
+    categorySliderAnimationRef.current = gsap.quickTo(
+      mediaBoxesWrapperRef.current,
+      'x',
+      {
+        duration: 0.2,
+        ease: 'none',
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    if (focused) {
+      mediaHighlightAnimationRef.current = gsap.quickTo(
+        mediaHighlightRef.current,
+        'x',
+        {
+          duration: 0.2,
+          ease: 'none',
+        }
+      );
+    }
+  }, [focused]);
+
+  useEffect(() => {
+    categorySliderAnimationRef.current?.(categoryTranslateX);
+  }, [categoryTranslateX]);
+
+  useEffect(() => {
+    mediaHighlightAnimationRef.current?.(highlightTranslateX);
+  }, [highlightTranslateX]);
+
+  // ToDo: Add arrows to navigate through the media
 
   return (
-    <CategorySliderContainer margin={margin} ref={ref}>
+    <CategorySliderContainer margin={margin} index={index} ref={ref}>
       <CategoryTitle>{category.name}</CategoryTitle>
       <CategoryContent>
-        {focused && <MediaHighlight />}
-        <MotionConfig transition={{ duration: 0.3 }}>
-          <motion.div animate={{ x: -(mediaWidth + gap) * selected }}>
-            {data &&
-              data.map((media, index) => {
-                if (
-                  index < selected - 4 ||
-                  index > selected + 4 + mediaPerPage
-                ) {
-                  return null;
-                }
-                return (
-                  <MediaBox
-                    key={media.ids.slug}
-                    src={scaleImage(media.images.backdrop)}
-                    index={index}
-                  />
-                );
-              })}
-          </motion.div>
-        </MotionConfig>
+        {focused && <MediaHighlight ref={mediaHighlightRef} />}
+        <div ref={mediaBoxesWrapperRef}>
+          {data &&
+            data.map((media, index) => {
+              if (index < selected - 4 || index > selected + 4 + mediaPerPage) {
+                return null;
+              }
+              return (
+                <MediaBox
+                  key={media.ids.slug}
+                  src={scaleImage(
+                    media.images.backdrop || media.images.backdrops[0]
+                  )}
+                  logoSrc={
+                    media.images.backdrop ? undefined : media.images.logos[0]
+                  }
+                  index={index}
+                  onMouseEnter={handleHover(index)}
+                  onClick={() => onMediaSelect(index)}
+                />
+              );
+            })}
+        </div>
       </CategoryContent>
     </CategorySliderContainer>
   );

@@ -1,9 +1,6 @@
 import { gsap } from 'gsap';
 
 export async function introAnimation(callback: () => void) {
-  if ('tizen' in window) {
-    gsap.ticker.fps(24);
-  }
   const logo = document.getElementById('logo');
   const backdrop = document.getElementById('backdrop');
   const h1 = logo?.querySelector('h1');
@@ -32,9 +29,7 @@ export async function introAnimation(callback: () => void) {
         callback();
       },
     });
-    const screenWidth = window.innerWidth;
     const { width: uWidth } = u.getBoundingClientRect();
-    const mPos = m.getBoundingClientRect();
     tl.fromTo(
       m,
       {

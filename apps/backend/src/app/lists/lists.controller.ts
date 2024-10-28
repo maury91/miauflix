@@ -11,6 +11,8 @@ export class ListsController {
     switch (listId) {
       case StaticCategories.TrendingMovies:
         return this.movieService.getTrendingMovies();
+      case StaticCategories.PopularMovies:
+        return this.movieService.getPopularMovies();
     }
     return [];
   }

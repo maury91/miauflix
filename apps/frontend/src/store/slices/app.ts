@@ -26,6 +26,9 @@ export const appSlice = createSlice({
       state.currentPage = 'home';
       state.currentProfile = action.payload;
     },
+    navigateTo: (state, actions: PayloadAction<string>) => {
+      state.currentPage = actions.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -50,5 +53,5 @@ export const appSlice = createSlice({
   },
 });
 
-export const { chooseProfile } = appSlice.actions;
+export const { chooseProfile, navigateTo } = appSlice.actions;
 export default appSlice.reducer;

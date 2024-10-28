@@ -19,7 +19,7 @@ export function Cacheable<
 
     async function cacheMethod(this: This, ...args: Args): Promise<Return> {
       const cacheKey = `cache.${this.constructor.name}.${
-        descriptor.value.name
+        originalMethod.name
       }.${JSON.stringify(args)}`;
       const cached = await this.cacheManager.get<Return>(cacheKey);
       if (cached && !reset) {

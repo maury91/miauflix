@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import { SettingsIcon } from '../../../ui-elements/icons/settings.icon';
 import styled from 'styled-components';
+import { SETTINGS_ITEM } from '../consts';
 
 export const StyledSettings = styled.div<{
   selected: boolean;
@@ -12,6 +13,7 @@ export const StyledSettings = styled.div<{
   bottom: 4vh;
   left: 3vh;
   transform: translate3d(${({ selected }) => (selected ? 3 : 0)}vh, 0, 0);
+  cursor: pointer;
 
   transition: transform 0.4s;
 
@@ -40,11 +42,15 @@ export const StyledSettings = styled.div<{
   }
 `;
 export const Settings: FC = () => {
-  const { ref, focused } = useFocusable({
-    focusKey: 'settings',
+  const { ref, focused, focusSelf } = useFocusable({
+    focusKey: SETTINGS_ITEM,
   });
   return (
-    <StyledSettings selected={focused} ref={ref}>
+    <StyledSettings
+      selected={focused}
+      ref={ref}
+      onMouseEnter={() => focusSelf()}
+    >
       <SettingsIcon size="100%" color="white" />
       <h2>Settings</h2>
     </StyledSettings>

@@ -61,3 +61,19 @@ export type TrendingMoviesResponse = {
   watchers: number;
   movie: Movie;
 }[];
+
+export type MostFavoritedMoviesResponse = {
+  user_count: number;
+  movie: Movie;
+}[];
+
+export type MostPlayedMoviesResponse = {
+  watcher_count: number;
+  play_count: number;
+  collected_count: number;
+  movie: Movie;
+}[];
+
+export type MostWatchedMoviesResponse = MostPlayedMoviesResponse;
+export type MostCollectedMoviesResponse = MostPlayedMoviesResponse;
+export type PopularMoviesResponse = Movie[];

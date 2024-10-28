@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const profileSelectionLogo = {
   top: '5vh',
-  left: '10vh',
+  left: '8vw',
   height: '5vh',
   width: '18.2vh',
 };
@@ -16,6 +16,10 @@ const homeLogo = {
   left: '3vh',
   height: '4vh',
   width: '14.5vh',
+};
+
+const playerLogo = {
+  opacity: 0,
 };
 
 const LogoContainer = styled(motion.div)`
@@ -29,7 +33,10 @@ const getLogoStyle = (currentPage: Page) => {
       return profileSelectionLogo;
     case 'home':
       return homeLogo;
+    case 'player':
+      return playerLogo;
   }
+  return {};
 };
 
 export const Logo = () => {

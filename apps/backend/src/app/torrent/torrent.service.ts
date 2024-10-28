@@ -1,6 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { asyncProviders } from '../app.types';
-import { WebTorrent, Instance, TorrentFile, NodeServer } from 'webtorrent';
+import {
+  WebTorrent,
+  Instance,
+  TorrentFile,
+  NodeServer,
+  Torrent,
+} from 'webtorrent';
 import { ParsedFile } from 'parse-torrent-file';
 import { HttpService } from '@nestjs/axios';
 import { ParseTorrentImport } from '../app.async.provider';
@@ -12,6 +18,7 @@ import { isValidVideoFile } from './torrent.utils';
 export class TorrentService {
   private client: Instance;
   private webTorrentServer: NodeServer;
+  private streams: Record<string, [Torrent, string]> = {};
   constructor(
     private readonly httpService: HttpService,
     private readonly torrentData: TorrentData,
@@ -22,6 +29,9 @@ export class TorrentService {
   ) {
     this.client = new this.WebTorrent();
     console.log(this.client.torrents);
+    this.client.on('torrent', (torrent: Torrent) => {
+      console.log('New torrent', torrent.name);
+    });
     this.client.on('error', (err) => {
       console.error('WebTorrent error', err);
     });
@@ -111,14 +121,46 @@ export class TorrentService {
     return this.getTorrentInformation(data);
   }
 
+  public async stopStream(
+    slug: string,
+    quality: VideoQuality
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const streamTorrent = this.streams[`${slug}/${quality}`];
+      if (streamTorrent) {
+        this.client.remove(
+          streamTorrent[0],
+          {
+            destroyStore: true,
+          },
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(true);
+              delete this.streams[`${slug}/${quality}`];
+            }
+          }
+        );
+      }
+    });
+  }
+
   // ToDo: Implement getStream by codec
-  public async getStream(slug: string, quality: VideoQuality) {
+  public async getStream(slug: string, quality: VideoQuality): Promise<string> {
+    console.log(this.streams);
+    if (this.streams[`${slug}/${quality}`]) {
+      return this.streams[`${slug}/${quality}`][1];
+    }
+    console.log('Searching DB');
     const { torrentFile, runtime } =
       await this.torrentData.getTorrentByMovieAndQuality(slug, quality);
+    console.log('Got torrent from DB');
+    console.log('torrents', this.client.torrents);
     return new Promise((resolve, reject) => {
       this.client.add(
         torrentFile,
-        { path: '/tmp', deselect: true },
+        { path: '/tmp', deselect: true, skipVerify: true },
         (torrent) => {
           const videoFiles = torrent.files.filter(
             isValidVideoFile(runtime, quality, 'unknown')
@@ -128,11 +170,11 @@ export class TorrentService {
           } else {
             const file = videoFiles[0];
             file.select();
-            resolve(
-              `http://localhost:${this.webTorrentServer.address().port}${
-                file.streamURL
-              }`
-            );
+            const streamURL = `http://localhost:${
+              this.webTorrentServer.address().port
+            }${file.streamURL}`;
+            resolve(streamURL);
+            this.streams[`${slug}/${quality}`] = [torrent, streamURL];
           }
         }
       );

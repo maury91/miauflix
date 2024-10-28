@@ -1,4 +1,5 @@
 export type VideoQuality = 2160 | 1440 | 1080 | 720 | 480 | 360;
+export type VideoQualityStr = '2160' | '1440' | '1080' | '720' | '480' | '360';
 
 export type VideoCodec =
   | 'x264'
@@ -37,5 +38,5 @@ export interface ExtendedMovieDto extends MovieDto {
   rating: number;
   streamable: boolean;
   genres: string[];
-  qualities: VideoQuality[];
+  qualities: VideoQualityStr[];
 }

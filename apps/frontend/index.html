@@ -11,7 +11,9 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script type="module">
     import '/src/assets/logo.scss';
     import '/src/assets/app.scss'
@@ -57,77 +59,6 @@
 <script defer type="module" src="/src/main.tsx"></script>
 <script type="text/javascript">
   document.getElementById('logo').style.display = '';
-  if ('tizen' in window) {
-    const port = '%VITE_API_PORT%';
-    const base_path = '%VITE_API_BASE_PATH%';
-
-    if (typeof window.queueMicrotask !== 'function') {
-      window.queueMicrotask = cb => requestAnimationFrame(cb);
-    }
-
-    function getIpAddress () {
-      return new Promise((resolve, reject) => {
-        tizen.systeminfo.getPropertyValue('NETWORK', function({ networkType }) {
-          switch (networkType) {
-            case 'ETHERNET':
-              tizen.systeminfo.getPropertyValue('ETHERNET_NETWORK', function({ ipAddress }) {
-                resolve(ipAddress);
-              });
-              break;
-            case 'WIFI':
-              tizen.systeminfo.getPropertyValue('WIFI_NETWORK', function({ ipAddress }) {
-                resolve(ipAddress);
-              });
-              break;
-            default:
-              reject('No network connection');
-          }
-        });
-      });
-    }
-
-    function querySubNet (subNet) {
-      return new Promise(function(resolve, reject) {
-        Promise.all(Array.from({ length: 256 }, (_, i) => i).map(i => {
-          const ip = `${subNet}.${i}`;
-          return fetch(`http://${ip}:${port}/${base_path}/ping`)
-            .then(res => res.json())
-            .then(({ status }) => {
-              if (status === 'OK') {
-                resolve(ip);
-              }
-            }).catch(() => '');
-        })).then(() => {
-          reject('Server not found');
-        });
-      });
-    }
-
-    function loadReactScript (script) {
-      return new Promise(resolve => {
-        const newScript = document.createElement('script');
-        newScript.type = 'text/javascript';
-        newScript.src = script.src;
-        newScript.onload = resolve;
-        document.body.append(newScript);
-        script.remove();
-      });
-    }
-
-    function loadReactScripts () {
-      const reactScripts = document.querySelectorAll('script[type=module]');
-      return Promise.all(Array.from(reactScripts).map(loadReactScript));
-    }
-
-    getIpAddress().then(ipAddress => {
-      const subNet = ipAddress.split('.').slice(0, 3).join('.');
-      return querySubNet(subNet);
-    }).then((ip) => {
-      console.log('server found', ip);
-      window.API_URL = `http://${ip}:${port}/${base_path}`;
-      return loadReactScripts();
-    });
-  }
 </script>
 </body>
 </html>

@@ -28,6 +28,12 @@ export const homeSlice = createSlice({
       state.category = action.payload;
       state.selectedByCategory[action.payload.id] = 0;
     },
+    setSelectedIndexForCategory: (
+      state,
+      action: PayloadAction<{ category: string; index: number }>
+    ) => {
+      state.selectedByCategory[action.payload.category] = action.payload.index;
+    },
     setSelectedMedia: (state, action: PayloadAction<MovieDto>) => {
       state.selectedMedia = action.payload;
     },
@@ -51,5 +57,6 @@ export const homeSlice = createSlice({
   },
 });
 
-export const { changeCategory, setSelectedMedia } = homeSlice.actions;
+export const { changeCategory, setSelectedMedia, setSelectedIndexForCategory } =
+  homeSlice.actions;
 export default homeSlice.reducer;

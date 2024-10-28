@@ -10,10 +10,10 @@ export class CategoriesController {
         id: StaticCategories.TrendingMovies,
         name: 'Trending movies',
       },
-      // {
-      //   id: StaticCategories.PopularMovies,
-      //   name: 'Popular movies',
-      // },
+      {
+        id: StaticCategories.PopularMovies,
+        name: 'Popular movies',
+      },
     ];
   }
 }

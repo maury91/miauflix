@@ -33,7 +33,7 @@ export const MIN_MB_MN: Record<VideoQuality, Record<VideoCodec, number>> = {
     'x264 10bit': 2.5,
     AV1: 2.5,
     'AV1 10bit': 2,
-    XVid: 9,
+    XVid: 4,
     unknown: 2.5,
   },
   '1080': {

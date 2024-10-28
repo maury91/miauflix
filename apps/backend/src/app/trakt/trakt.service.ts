@@ -4,7 +4,9 @@ import {
   DeviceCodeResponse,
   DeviceTokenResponse,
   ExtendedMovie,
+  MostFavoritedMoviesResponse,
   Movie,
+  PopularMoviesResponse,
   TrendingMoviesResponse,
   UserProfileResponse,
 } from './trakt.types';
@@ -86,14 +88,61 @@ export class TraktService {
     ).data;
   }
 
-  @Cacheable(3e5 /* 5 minutes */)
+  @Cacheable(3e5 /* 5 minutes */, true)
   public async getTrendingMovies(page = 1, limit = 30) {
-    const result = (
-      await this.get<TrendingMoviesResponse>(`${this.apiUrl}/movies/trending`, {
+    const result = await this.get<TrendingMoviesResponse>(
+      `${this.apiUrl}/movies/trending`,
+      {
         params: { page, limit },
-      })
-    ).data;
-    return result;
+      }
+    );
+    return {
+      data: result.data,
+      pagination: {
+        page: Number(result.headers['X-Pagination-Page']),
+        limit: Number(result.headers['X-Pagination-Limit']),
+        pageCount: Number(result.headers['X-Pagination-Page-Count']),
+        itemCount: Number(result.headers['X-Pagination-Item-Count']),
+      },
+    };
+  }
+
+  @Cacheable(3e5 /* 5 minutes */)
+  public async getPopularMovies(page = 1, limit = 30) {
+    const result = await this.get<PopularMoviesResponse>(
+      `${this.apiUrl}/movies/popular`,
+      {
+        params: { page, limit },
+      }
+    );
+    return {
+      data: result.data,
+      pagination: {
+        page: Number(result.headers['X-Pagination-Page']),
+        limit: Number(result.headers['X-Pagination-Limit']),
+        pageCount: Number(result.headers['X-Pagination-Page-Count']),
+        itemCount: Number(result.headers['X-Pagination-Item-Count']),
+      },
+    };
+  }
+
+  @Cacheable(3e5 /* 5 minutes */)
+  public async getMostFavoritedMovies(period = 'weekly', page = 1, limit = 30) {
+    const result = await this.get<MostFavoritedMoviesResponse>(
+      `${this.apiUrl}/movies/favorited/${period}`,
+      {
+        params: { page, limit },
+      }
+    );
+    return {
+      data: result.data,
+      pagination: {
+        page: Number(result.headers['X-Pagination-Page']),
+        limit: Number(result.headers['X-Pagination-Limit']),
+        pageCount: Number(result.headers['X-Pagination-Page-Count']),
+        itemCount: Number(result.headers['X-Pagination-Item-Count']),
+      },
+    };
   }
 
   @Cacheable(144e6 /* 1 day */)

@@ -49,7 +49,6 @@ export class AuthService {
 
   async checkUserLogin(deviceCode: string) {
     const user = await this.userService.findUserByDeviceCode(deviceCode);
-    console.log(user);
     return !!user;
   }
 }

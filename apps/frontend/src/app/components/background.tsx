@@ -80,7 +80,6 @@ export const Background = () => {
   const currentPage = useAppSelector((state) => state.app.currentPage);
   const previousPage = usePrevious(currentPage);
   const [currentBackground, setCurrentBackground] = useState(0);
-  const selectedEntity = useAppSelector((state) => state.home.selected);
   const transitionConfig = useMemo<MotionConfigContext['transition']>(() => {
     if (currentPage !== previousPage) {
       return {
@@ -111,6 +110,7 @@ export const Background = () => {
       }, 6e4 /* 1 minute */);
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [backgrounds.length, currentPage]);
 
   useEffect(() => {
@@ -141,15 +141,6 @@ export const Background = () => {
             url={shuffledBackgrounds[currentBackground]}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
-        )}
-        {currentPage === 'home' && (
-          <BackgroundImage
-            key={`background-${selectedEntity}`}
-            url={backgrounds[selectedEntity]}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, filter: 'blur(7px)' }}
             exit={{ opacity: 0 }}
           />
         )}

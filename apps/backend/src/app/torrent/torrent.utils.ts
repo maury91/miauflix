@@ -15,6 +15,10 @@ export const isValidVideoFile =
       codecFromVideoName !== 'unknown'
         ? codecFromVideoName
         : codecFromTorrentName;
-    console.log(MIN_MB_MN[quality][codec], length / (runtime * 1024 * 1024));
+    console.log(
+      `[${codecFromVideoName}, ${codecFromTorrentName}][${quality}]`,
+      MIN_MB_MN[quality][codec],
+      length / (runtime * 1024 * 1024)
+    );
     return length > MIN_MB_MN[quality][codec] * runtime * 1024 * 1024;
   };

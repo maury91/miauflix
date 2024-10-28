@@ -1,1 +1,1 @@
-export type Page = 'profile-selection' | 'home';
+export type Page = 'profile-selection' | 'home' | 'player';
