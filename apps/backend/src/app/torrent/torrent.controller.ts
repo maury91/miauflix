@@ -1,63 +1,39 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-  Req,
-} from '@nestjs/common';
+import { Controller, Delete, Get, Param, Req } from '@nestjs/common';
 import { TorrentService } from './torrent.service';
-import { GetStreamDto, VideoQuality } from '@miauflix/types';
-import { allVideoQualities } from './torrent.const';
+import { GetStreamDto } from '@miauflix/types';
 import { Request } from 'express';
 
 @Controller('stream')
 export class TorrentController {
   constructor(private readonly torrentService: TorrentService) {}
 
-  @Get('movie/:slug/:quality')
+  // ToDo: Move to Source Controller
+  @Get('movie/:slug/:useHvec')
   async getMovieTorrent(
     @Param('slug') slug: string,
-    @Param('quality') qualityR: string,
+    @Param('useHvec') useHvecR: string,
     @Req() req: Request
   ): Promise<GetStreamDto> {
     const host = req.headers.host;
-    const quality = parseInt(qualityR) as VideoQuality;
-    console.log('Searching for movie', slug, quality);
-    if (!allVideoQualities.includes(quality)) {
-      throw new HttpException(
-        `Invalid quality ${quality} must be one of ${allVideoQualities.join(
-          ', '
-        )}`,
-        HttpStatus.BAD_REQUEST
-      );
-    }
-    const stream = await this.torrentService.getStream(slug, quality);
-    console.log('Got movie', slug, quality);
-    if (typeof host == 'string') {
-      const [hostName] = host.split(':');
-      return {
-        stream: stream.replace('localhost', hostName),
-      };
-    }
-    return { stream };
+    const useHvec = useHvecR === 'true';
+    console.log('Searching for movie', slug, { useHvec });
+    const { stream, streamKey } = await this.torrentService.getStream(
+      slug,
+      useHvec,
+      false
+    );
+    console.log('Got movie', slug, { useHvec });
+    return {
+      stream:
+        typeof host === 'string'
+          ? stream.replace('localhost', host.split(':')[0])
+          : stream,
+      streamId: streamKey,
+    };
   }
 
-  @Delete('movie/:slug/:quality')
-  async stopMovieTorrent(
-    @Param('slug') slug: string,
-    @Param('quality') qualityR: string
-  ) {
-    const quality = parseInt(qualityR) as VideoQuality;
-    if (!allVideoQualities.includes(quality)) {
-      throw new HttpException(
-        `Invalid quality ${quality} must be one of ${allVideoQualities.join(
-          ', '
-        )}`,
-        HttpStatus.BAD_REQUEST
-      );
-    }
-    return this.torrentService.stopStream(slug, quality);
+  @Delete(':streamId')
+  async stopMovieTorrent(@Param('streamId') streamId: string) {
+    return this.torrentService.stopStream(streamId);
   }
 }

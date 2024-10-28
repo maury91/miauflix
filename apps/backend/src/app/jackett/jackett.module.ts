@@ -6,32 +6,25 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Torrent } from '../database/entities/torrent.entity';
 import { BullModule } from '@nestjs/bullmq';
 import { queues } from '../../queues';
-import { JackettData } from './jackett.data';
 import { JackettProcessor } from './jackett.processor';
 import { MoviesData } from '../movies/movies.data';
 import { Movie } from '../database/entities/movie.entity';
+import { TorrentData } from '../torrent/torrent.data';
+import { Source } from '../database/entities/source.entity';
 
 @Module({
   imports: [
-    BullModule.registerQueue(
-      {
-        name: queues.jackett,
-        defaultJobOptions: {
-          removeOnComplete: true,
-        },
+    BullModule.registerQueue({
+      name: queues.torrentOrchestrator,
+      defaultJobOptions: {
+        removeOnComplete: true,
       },
-      {
-        name: queues.torrent,
-        defaultJobOptions: {
-          removeOnComplete: true,
-        },
-      }
-    ),
+    }),
     HttpModule,
-    SequelizeModule.forFeature([Torrent, Movie]),
+    SequelizeModule.forFeature([Torrent, Movie, Source]),
   ],
   controllers: [JackettController],
-  providers: [JackettService, JackettData, MoviesData, JackettProcessor],
+  providers: [JackettService, TorrentData, MoviesData, JackettProcessor],
   exports: [SequelizeModule],
 })
 export class JackettModule {}

@@ -2,6 +2,7 @@ import { VideoQuality } from '@miauflix/types';
 import { Torrent } from '../database/entities/torrent.entity';
 import { Op } from 'sequelize';
 import { Movie } from '../database/entities/movie.entity';
+import { Source } from '../database/entities/source.entity';
 
 const groupTorrentsByQuality = (torrents: Torrent[]) => {
   return torrents.reduce<Partial<Record<VideoQuality, Torrent[]>>>(
@@ -30,7 +31,7 @@ interface GetMovieTorrentsArgs {
 
 interface GetMovieTorrentsResponse {
   movie: Movie;
-  torrents: Partial<Record<VideoQuality, Torrent[]>>;
+  sources: Source[];
 }
 
 export const getMovieTorrents = async ({
@@ -44,28 +45,22 @@ export const getMovieTorrents = async ({
       slug,
     },
     include: {
-      model: Torrent,
-      as: 'allTorrents',
+      model: Source,
+      as: 'allSources',
       attributes: ['data', 'quality', 'codec'],
-      where: {
-        processed: true,
-        data: {
-          [Op.not]: null,
-        },
-      },
     },
   });
 
   if (!movie) {
     const movie = await getMovieExtendedData(slug);
     console.log(movie);
-    throw new Error(
-      'To be implemented: got the movie, but not the torrent yet'
-    );
+    // throw new Error(
+    //   'To be implemented: got the movie, but not the torrent yet'
+    // );
   }
 
   return {
     movie,
-    torrents: groupTorrentsByQuality(movie.allTorrents),
+    sources: movie.allSources,
   };
 };

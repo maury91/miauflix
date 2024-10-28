@@ -8,12 +8,7 @@ import React, {
   useState,
 } from 'react';
 import { MediaDetails } from './components/mediaDetails';
-import {
-  ExtendedMediaDto,
-  MediaDto,
-  VideoQuality,
-  VideoQualityStr,
-} from '@miauflix/types';
+import { ExtendedMediaDto, MediaDto } from '@miauflix/types';
 import { Categories } from './components/categories';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop';
@@ -23,7 +18,7 @@ import {
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { PALETTE } from '../../../consts';
+import { IS_TIZEN, PALETTE } from '../../../consts';
 import { MEDIA_PAGE } from './consts';
 import {
   useGetExtendedInfoQuery,
@@ -154,9 +149,7 @@ const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
       ? {
           type: 'movie',
           id: media.id,
-          quality: getHighestValue(
-            media.qualities.map(Number as (v: VideoQualityStr) => VideoQuality)
-          ),
+          supportsHvec: IS_TIZEN, // Only Tizen supports HVEC, that may change in the future
         }
       : skipToken
   );
@@ -195,9 +188,6 @@ const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
     </FocusContext.Provider>
   );
 };
-
-const getHighestValue = <T extends number>(arr: T[]): T =>
-  Math.max(...arr) as T;
 
 export const Home = () => {
   const [showCategories, setShowCategories] = useState(true);

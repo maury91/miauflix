@@ -8,16 +8,17 @@ import { GetTorrentFileData, queues, torrentJobs } from '../../queues';
 import { Job, Queue } from 'bullmq';
 import { TorrentService } from './torrent.service';
 import { isValidVideoFile } from './torrent.utils';
-import { JackettData } from '../jackett/jackett.data';
+import { TorrentData } from './torrent.data';
+import { SourceData } from '../sources/sources.data';
 import { MoviesData } from '../movies/movies.data';
-import { VideoCodec, VideoQuality } from '@miauflix/types';
 
 @Processor(queues.torrent)
 export class TorrentProcessor extends WorkerHost {
   private consecutiveErrors = 0;
   constructor(
-    private readonly jackettData: JackettData,
+    private readonly sourceData: SourceData,
     private readonly movieData: MoviesData,
+    private readonly torrentData: TorrentData,
     private readonly torrentService: TorrentService,
     @InjectQueue(queues.torrent)
     private readonly torrentQueue: Queue<
@@ -42,28 +43,6 @@ export class TorrentProcessor extends WorkerHost {
     console.error(`Failed processing job ${job.id}`, job.failedReason);
   }
 
-  private async skipRelatedTorrents(
-    movieId: number,
-    quality: VideoQuality,
-    codec: VideoCodec
-  ) {
-    const [, skippedTorrents] = await this.jackettData.skipTorrentsForMovie(
-      movieId,
-      codec,
-      quality
-    );
-    const waitingJobs = await this.torrentQueue.getJobs(['waiting']);
-    skippedTorrents.forEach((torrent) => {
-      console.log(`Removing ${torrent.id}`);
-      waitingJobs
-        .find((job) => job.data.id === torrent.id)
-        ?.remove()
-        .catch(() => {
-          console.error(`Failed to remove job ${torrent.id}`);
-        });
-    });
-  }
-
   private async getTorrentFileByUrl(url: string) {
     try {
       const torrentFile = await this.torrentService.downloadByUrl(url);
@@ -79,41 +58,66 @@ export class TorrentProcessor extends WorkerHost {
   }
 
   private async getTorrentFile({
-    id,
     movieId,
-    codec,
-    quality,
-    runtime,
-    url,
-    count,
+    hevc,
+    highQuality,
   }: GetTorrentFileData) {
     console.log(
-      `Getting torrent data for torrent id ${id} (quality: ${quality}, codec: ${codec}, movieId: ${movieId}, count: ${count})`
+      `Searching for a torrent for movieId: ${movieId}, [high quality: ${highQuality}, hevc: ${hevc}])`
     );
-    const torrent = await this.getTorrentFileByUrl(url);
-    if (torrent.files.length) {
-      try {
-        const videoFiles = torrent.files.filter(
-          isValidVideoFile(runtime, quality, codec)
-        );
+    const torrentCandidates = await this.torrentData.findTorrentToProcess({
+      movieId,
+      highQuality,
+      hevc,
+    });
+    if (torrentCandidates.length) {
+      const { id, url, quality, codec, movie, source, size } =
+        torrentCandidates[0];
+      const torrent = await this.getTorrentFileByUrl(url);
+      if (torrent.files.length) {
+        try {
+          const videoFiles = torrent.files.filter(
+            isValidVideoFile(movie.runtime, quality, codec)
+          );
 
-        if (videoFiles.length) {
-          await this.jackettData.updateTorrentData(id, torrent.torrentFile);
-          await this.movieData.setTorrentFound(movieId, id);
-          await this.skipRelatedTorrents(movieId, quality, codec);
-          console.log(`Torrent ${id} marked as valid`);
-          return;
+          if (videoFiles.length) {
+            await torrentCandidates[0].update({
+              // data: torrent.torrentFile,
+              processed: true,
+            });
+            await this.sourceData.createSource({
+              data: torrent.torrentFile,
+              codec,
+              quality,
+              source,
+              movieId,
+              movieSlug: movie.slug,
+              videos: videoFiles.map((file) => file.name),
+              size,
+              originalSource: `torrent::${id}`,
+            });
+            await this.movieData.setTorrentFound(movieId, id);
+            console.log(`Torrent ${id} marked as valid`);
+            return;
+          }
+        } catch (err) {
+          console.error('Error processing torrent', err);
+          throw err;
         }
-      } catch (err) {
-        console.error('Error processing torrent', err);
-        throw err;
-      }
 
-      console.error('No video files found in torrent', torrent.files);
-      throw new Error('No video files found in torrent');
-    } else {
-      console.error(torrent);
-      throw new Error('Torrent contains no files');
+        await torrentCandidates[0].update({
+          processed: true,
+          rejected: true,
+        });
+        console.error('No video files found in torrent', torrent.files);
+        throw new Error('No video files found in torrent');
+      } else {
+        await torrentCandidates[0].update({
+          processed: true,
+          rejected: true,
+        });
+        throw new Error('Torrent contains no files');
+      }
     }
   }
 

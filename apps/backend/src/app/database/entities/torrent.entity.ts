@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -13,7 +14,7 @@ import { VideoCodec, VideoQuality } from '@miauflix/types';
 
 export interface TorrentAttributes {
   id: number;
-  movieId?: number;
+  movieId: number;
   title: string;
   uuid: string;
   pubDate: Date;
@@ -21,14 +22,12 @@ export interface TorrentAttributes {
   url: string;
   urlType: string;
   tracker: string;
-  data?: Buffer;
   seeders: number;
   peers: number;
   quality: VideoQuality;
   codec: VideoCodec;
   source: VideoSource;
   processed: boolean;
-  skip: boolean;
   rejected: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -36,13 +35,16 @@ export interface TorrentAttributes {
 
 export type TorrentCreationAttributes = Omit<
   TorrentAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'processed' | 'skip' | 'rejected'
+  'id' | 'createdAt' | 'updatedAt' | 'processed' | 'rejected'
 >;
 
 @Table
 export class Torrent extends Model {
   @ForeignKey(() => Movie)
   movieId?: number;
+
+  @BelongsTo(() => Movie)
+  movie!: Movie;
 
   @Column
   title!: string;
@@ -66,9 +68,6 @@ export class Torrent extends Model {
   @Column
   tracker!: string;
 
-  @Column(DataType.BLOB)
-  data?: Buffer;
-
   @Column
   seeders!: number;
 
@@ -87,10 +86,6 @@ export class Torrent extends Model {
   @Default(false)
   @Column
   processed!: boolean;
-
-  @Default(false)
-  @Column
-  skip!: boolean;
 
   @Default(false)
   @Column

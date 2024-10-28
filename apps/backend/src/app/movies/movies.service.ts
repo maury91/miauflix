@@ -4,11 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Movie } from '../database/entities/movie.entity';
 import { Movie as TraktMovie } from '../trakt/trakt.types';
 import { MovieProcessorService } from './movies.processor.service';
-import {
-  ExtendedMovieDto,
-  VideoQuality,
-  VideoQualityStr,
-} from '@miauflix/types';
+import { ExtendedMovieDto, VideoQualityStr } from '@miauflix/types';
 import { TraktService } from '../trakt/trakt.service';
 import { TMDBService } from '../tmdb/tmdb.service';
 import { GetMovieExtendedDataData, movieJobs, queues } from '../../queues';
@@ -30,7 +26,7 @@ export class MovieService {
   ) {}
 
   public async getMovie(slug: string): Promise<ExtendedMovieDto> {
-    const { movie, torrents } = await getMovieTorrents({
+    const { movie, sources } = await getMovieTorrents({
       slug,
       movieModel: this.movieModel,
       getMovieExtendedData: this.movieProcessorService.getMovieExtendedData,
@@ -58,7 +54,9 @@ export class MovieService {
       rating: Number(movie.rating),
       streamable: movie.torrentFound,
       genres: movie.genres,
-      qualities: Object.keys(torrents) as unknown as VideoQualityStr[],
+      qualities: sources.map(
+        ({ quality }) => String(quality) as VideoQualityStr
+      ),
     };
   }
 

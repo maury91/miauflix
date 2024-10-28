@@ -26,7 +26,7 @@ export const appSlice = createSlice({
       state.currentPage = 'home';
       state.currentProfile = action.payload;
     },
-    navigateTo: (state, actions: PayloadAction<string>) => {
+    navigateTo: (state, actions: PayloadAction<Page>) => {
       state.currentPage = actions.payload;
     },
   },

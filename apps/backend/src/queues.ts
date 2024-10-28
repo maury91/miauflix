@@ -6,6 +6,7 @@ export const enum queues {
   deviceCode = 'deviceCode',
   movie = 'movie',
   jackett = 'jackett',
+  torrentOrchestrator = 'torrentOrchestrator',
   torrent = 'torrent',
 }
 
@@ -33,7 +34,6 @@ export type GetMovieExtendedDataData = {
 
 export const enum jackettJobs {
   searchMovie = 'searchMovie',
-  populateTorrentQForMovie = 'populateTorrentQForMovie',
 }
 
 export interface SearchMovieData {
@@ -48,6 +48,12 @@ export interface SearchMovieData {
   };
 }
 
+/** Torrent OQ */
+
+export const enum torrentOrchestratorJobs {
+  populateTorrentQForMovie = 'populateTorrentQForMovie',
+}
+
 export interface PopulateTorrentQForMovieData {
   index: number; // index of the title in the list
   movieId: number;
@@ -60,13 +66,8 @@ export const enum torrentJobs {
 }
 
 export interface GetTorrentFileData {
-  index: number; // index of the title in the list
-  count: number; // count of the torrent for the title, we want to find at least 1 torrent for each title as fast as possible, so the count is important
-  id: number;
   movieId: number;
-  quality: VideoQuality;
-  codec: VideoCodec;
-  source: VideoSource;
   runtime: number;
-  url: string;
+  highQuality: boolean;
+  hevc: boolean;
 }

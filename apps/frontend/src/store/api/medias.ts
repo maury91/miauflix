@@ -1,9 +1,4 @@
-import {
-  ExtendedMovieDto,
-  GetStreamDto,
-  VideoQuality,
-  VideoQualityStr,
-} from '@miauflix/types';
+import { ExtendedMovieDto, GetStreamDto } from '@miauflix/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '../../consts';
 
@@ -19,16 +14,14 @@ export const mediasApi = createApi({
     }),
     getStreamUrl: builder.query<
       GetStreamDto,
-      { type: 'movie'; id: string; quality: VideoQuality | VideoQualityStr }
+      { type: 'movie'; id: string; supportsHvec: boolean }
     >({
-      query: ({ type, id, quality }) => `stream/${type}/${id}/${quality}`,
+      query: ({ type, id, supportsHvec }) =>
+        `stream/${type}/${id}/${supportsHvec ? 'true' : 'false'}`,
     }),
-    stopStream: builder.mutation<
-      void,
-      { type: 'movie'; id: string; quality: VideoQuality | VideoQualityStr }
-    >({
-      query: ({ type, id, quality }) => ({
-        url: `stream/${type}/${id}/${quality}`,
+    stopStream: builder.mutation<void, string>({
+      query: (streamId) => ({
+        url: `stream/${streamId}`,
         method: 'DELETE',
       }),
     }),

@@ -259,10 +259,10 @@ export function getVideoSource(title: string): VideoSource {
 }
 
 export function getVideoQuality(title: string): VideoQuality {
-  if (title.match(/2160p|4k/i)) {
+  if (title.match(/2160p|(\b4k\b)/i)) {
     return 2160;
   }
-  if (title.match(/1440p|2k/i)) {
+  if (title.match(/1440p|(\b2k\b)/i)) {
     return 1440;
   }
   if (title.match(/1080p/i)) {

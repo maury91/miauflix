@@ -5,72 +5,33 @@ import {
   WorkerHost,
 } from '@nestjs/bullmq';
 import {
-  GetTorrentFileData,
   jackettJobs,
   PopulateTorrentQForMovieData,
   queues,
   SearchMovieData,
-  torrentJobs,
+  torrentOrchestratorJobs,
 } from '../../queues';
 import { Job, Queue } from 'bullmq';
 import { JackettService } from './jackett.service';
-import { JackettData } from './jackett.data';
 import { MoviesData } from '../movies/movies.data';
-import { BulkJobOptions } from 'bullmq/dist/esm/interfaces';
-import { VideoSource } from './jackett.types';
-import {
-  CODEC_PRIORITY,
-  EXCLUDED_QUALITIES,
-  QUALITY_PRIORITY,
-} from '../torrent/torrent.const';
-import { VideoCodec, VideoQuality } from '@miauflix/types';
+import { TorrentData } from '../torrent/torrent.data';
 
 const MIN_TORRENTS = 10;
 
-function calculatePriority({
-  codec,
-  quality,
-  count,
-  index,
-}: {
-  codec: VideoCodec;
-  quality: VideoQuality;
-  source: VideoSource;
-  count: number;
-  index: number;
-}) {
-  const codecPriority = CODEC_PRIORITY.indexOf(codec);
-  const qualityPriority = QUALITY_PRIORITY.indexOf(quality);
-  return (
-    qualityPriority * 1000 +
-    codecPriority * 100 +
-    count * 10000 +
-    Math.floor(index / 10) * 3300
-  );
-}
-
 @Processor(queues.jackett)
 export class JackettProcessor extends WorkerHost {
-  private consecutiveErrors = 0;
   constructor(
     private readonly jackettService: JackettService,
-    private readonly jackettData: JackettData,
+    private readonly torrentData: TorrentData,
     private readonly movieData: MoviesData,
-    @InjectQueue(queues.jackett)
-    private readonly jackettQueue: Queue<
+    @InjectQueue(queues.torrentOrchestrator)
+    private readonly torrentOrchestratorQueue: Queue<
       PopulateTorrentQForMovieData,
       void,
-      jackettJobs.populateTorrentQForMovie
-    >,
-    @InjectQueue(queues.torrent)
-    private readonly torrentQueue: Queue<
-      GetTorrentFileData,
-      void,
-      torrentJobs.getTorrentFile
+      torrentOrchestratorJobs.populateTorrentQForMovie
     >
   ) {
     super();
-    this.addTorrentsToProcessToQueue();
   }
 
   @OnWorkerEvent('error')
@@ -83,43 +44,7 @@ export class JackettProcessor extends WorkerHost {
   }
 
   onApplicationBootstrap() {
-    this.worker.concurrency = 2;
-  }
-
-  private addToTorrentQueue(torrents: GetTorrentFileData[]) {
-    const filteredTorrents = torrents.filter(
-      ({ quality }) => !EXCLUDED_QUALITIES.includes(quality)
-    );
-    const jobs = filteredTorrents.length === 0 ? torrents : filteredTorrents;
-    return this.torrentQueue.addBulk(
-      jobs.map<{
-        name: torrentJobs.getTorrentFile;
-        data: GetTorrentFileData;
-        opts?: BulkJobOptions;
-      }>((jobData) => ({
-        name: torrentJobs.getTorrentFile,
-        data: jobData,
-        opts: {
-          jobId: `gtf_${jobData.id}`,
-          priority: calculatePriority(jobData),
-        },
-      }))
-    );
-  }
-
-  async addTorrentsToProcessToQueue() {
-    const torrents = await this.jackettData.getTorrentsToProcess();
-    const failedJobs = await this.torrentQueue.getJobs(['failed']);
-
-    await Promise.all(
-      failedJobs.map(async (job) => {
-        await job.remove();
-      })
-    );
-    // index is unknown cause it's not from a list
-    await this.addToTorrentQueue(
-      torrents.map((torrent) => ({ ...torrent, index: 11 }))
-    );
+    this.worker.concurrency = 5;
   }
 
   private async searchTorrentsForMovie({
@@ -142,7 +67,7 @@ export class JackettProcessor extends WorkerHost {
 
         if (torrents.length) {
           for (const torrent of torrents) {
-            await this.jackettData.createTorrent({
+            await this.torrentData.createTorrent({
               movieId: movieId,
               title: torrent.title,
               pubDate: torrent.pubDate,
@@ -179,36 +104,17 @@ export class JackettProcessor extends WorkerHost {
     if (torrentsFound === 0) {
       await this.movieData.setNoTorrentFound(movieId);
     } else {
-      await this.populateTorrentQForMovie({ index, movieId });
+      await this.torrentOrchestratorQueue.add(
+        torrentOrchestratorJobs.populateTorrentQForMovie,
+        { index, movieId }
+      );
     }
   }
 
-  private async populateTorrentQForMovie({
-    index,
-    movieId,
-  }: PopulateTorrentQForMovieData) {
-    const torrents = await this.jackettData.getTorrentsToProcessForMovie(
-      movieId
-    );
-    await this.addToTorrentQueue(
-      torrents.map((torrent) => ({ ...torrent, index }))
-    );
-  }
-
-  async process(
-    job:
-      | Job<SearchMovieData, void, jackettJobs.searchMovie>
-      | Job<
-          PopulateTorrentQForMovieData,
-          void,
-          jackettJobs.populateTorrentQForMovie
-        >
-  ) {
+  async process(job: Job<SearchMovieData, void, jackettJobs.searchMovie>) {
     switch (job.name) {
       case jackettJobs.searchMovie:
         return await this.searchTorrentsForMovie(job.data);
-      case jackettJobs.populateTorrentQForMovie:
-        return await this.populateTorrentQForMovie(job.data);
     }
   }
 }

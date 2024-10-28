@@ -9,7 +9,6 @@ import {
   parseTorrentProvider,
   webTorrentProvider,
 } from '../app.async.provider';
-import { JackettData } from '../jackett/jackett.data';
 import { MoviesData } from '../movies/movies.data';
 import { TorrentProcessor } from './torrent.processor';
 import { TorrentService } from './torrent.service';
@@ -17,29 +16,41 @@ import { TorrentController } from './torrent.controller';
 import { TorrentData } from './torrent.data';
 import { MovieProcessorService } from '../movies/movies.processor.service';
 import { TraktService } from '../trakt/trakt.service';
+import { Source } from '../database/entities/source.entity';
+import { SourceData } from '../sources/sources.data';
+import { TorrentOrchestratorProcessor } from './torrent.orchestrator.processor';
 
 @Module({
   imports: [
-    BullModule.registerQueue({
-      name: queues.torrent,
-      defaultJobOptions: {
-        removeOnComplete: true,
-        removeOnFail: 10,
+    BullModule.registerQueue(
+      {
+        name: queues.torrent,
+        defaultJobOptions: {
+          removeOnComplete: true,
+          removeOnFail: 10,
+        },
       },
-    }),
+      {
+        name: queues.torrentOrchestrator,
+        defaultJobOptions: {
+          removeOnComplete: true,
+        },
+      }
+    ),
     HttpModule,
-    SequelizeModule.forFeature([Torrent, Movie]),
+    SequelizeModule.forFeature([Torrent, Movie, Source]),
   ],
   controllers: [TorrentController],
   providers: [
     parseTorrentProvider,
     webTorrentProvider,
-    JackettData,
     MovieProcessorService,
     TraktService,
     MoviesData,
+    SourceData,
     TorrentData,
     TorrentService,
+    TorrentOrchestratorProcessor,
     TorrentProcessor,
   ],
   exports: [SequelizeModule, parseTorrentProvider, webTorrentProvider],

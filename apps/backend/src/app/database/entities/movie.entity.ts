@@ -1,14 +1,14 @@
 import {
-  BelongsTo,
   Column,
   DataType,
   Default,
   HasMany,
+  Index,
   Model,
   Table,
-  Unique,
 } from 'sequelize-typescript';
 import { Torrent } from './torrent.entity';
+import { Source } from './source.entity';
 
 export interface MovieAttributes {
   id: number;
@@ -49,7 +49,7 @@ export type MovieCreationAttributes = Omit<
 
 @Table
 export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
-  @Unique
+  @Index('slug_index')
   @Column
   slug!: string;
 
@@ -92,24 +92,23 @@ export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
   @Column(DataType.ARRAY(DataType.STRING))
   logos!: string[];
 
+  // ToDo: Rename into searchSourcesRequested
   @Default(false)
   @Column
   torrentsSearched: boolean;
 
+  // ToDo: Rename into noSourceFound
   @Default(false)
   @Column
   noTorrentFound: boolean;
 
+  // ToDo: Rename into sourceFound
   @Default(false)
   @Column
   torrentFound: boolean;
 
-  // ToDo: Candidate for removal
-  @BelongsTo(() => Torrent, 'torrentId')
-  torrent?: Torrent;
-
-  @HasMany(() => Torrent)
-  allTorrents: Torrent[];
+  @HasMany(() => Source)
+  allSources: Source[];
 
   @Column(DataType.ARRAY(DataType.STRING))
   genres!: string[];

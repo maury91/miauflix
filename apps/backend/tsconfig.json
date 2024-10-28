@@ -10,8 +10,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@miauflix/types": ["libs/types/src/index.ts"],
-      "@backend/*": ["apps/backend/src/*"]
+      "@miauflix/types": ["libs/types/src/index.ts"]
     }
   },
   "files": [],

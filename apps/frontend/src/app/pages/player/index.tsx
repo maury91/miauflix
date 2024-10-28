@@ -6,7 +6,6 @@ import { IS_TIZEN, PALETTE } from '../../../consts';
 import styled from 'styled-components';
 import { TVInputDeviceKeyName } from '../../../tizen';
 import LineMdPlayFilled from '~icons/line-md/play-filled';
-import { colors } from '../welcome/consts';
 
 /*
 window.webapis.avplay.setListener({

@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { MovieFanartResponse } from './fanart.types';
-import { Cacheable } from '@backend/app/utils/cacheable.util';
+import { Cacheable } from '../utils/cacheable.util';
 
 @Injectable()
 export class FanartService {

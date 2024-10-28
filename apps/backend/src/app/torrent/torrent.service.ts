@@ -10,7 +10,6 @@ import {
 import { ParsedFile } from 'parse-torrent-file';
 import { HttpService } from '@nestjs/axios';
 import { ParseTorrentImport } from '../app.async.provider';
-import { VideoQuality } from '@miauflix/types';
 import { TorrentData } from './torrent.data';
 import { isValidVideoFile } from './torrent.utils';
 
@@ -121,12 +120,9 @@ export class TorrentService {
     return this.getTorrentInformation(data);
   }
 
-  public async stopStream(
-    slug: string,
-    quality: VideoQuality
-  ): Promise<boolean> {
+  public async stopStream(streamKey: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      const streamTorrent = this.streams[`${slug}/${quality}`];
+      const streamTorrent = this.streams[streamKey];
       if (streamTorrent) {
         this.client.remove(
           streamTorrent[0],
@@ -138,7 +134,7 @@ export class TorrentService {
               reject(err);
             } else {
               resolve(true);
-              delete this.streams[`${slug}/${quality}`];
+              delete this.streams[streamKey];
             }
           }
         );
@@ -146,15 +142,28 @@ export class TorrentService {
     });
   }
 
-  // ToDo: Implement getStream by codec
-  public async getStream(slug: string, quality: VideoQuality): Promise<string> {
+  public async getStream(
+    slug: string,
+    useHevc: boolean,
+    useLowQuality: boolean
+  ): Promise<{ stream: string; streamKey: string }> {
     console.log(this.streams);
-    if (this.streams[`${slug}/${quality}`]) {
-      return this.streams[`${slug}/${quality}`][1];
+    const streamKey = `${slug}_${useHevc ? 'H' : 'x'}${
+      useLowQuality ? 'L' : 'x'
+    }`;
+    if (this.streams[streamKey]) {
+      return {
+        stream: this.streams[streamKey][1],
+        streamKey,
+      };
     }
     console.log('Searching DB');
-    const { torrentFile, runtime } =
-      await this.torrentData.getTorrentByMovieAndQuality(slug, quality);
+    const { torrentFile, videos } =
+      await this.torrentData.getTorrentByMovieAndQuality(
+        slug,
+        useHevc,
+        useLowQuality
+      );
     console.log('Got torrent from DB');
     console.log('torrents', this.client.torrents);
     return new Promise((resolve, reject) => {
@@ -162,8 +171,8 @@ export class TorrentService {
         torrentFile,
         { path: '/tmp', deselect: true, skipVerify: true },
         (torrent) => {
-          const videoFiles = torrent.files.filter(
-            isValidVideoFile(runtime, quality, 'unknown')
+          const videoFiles = torrent.files.filter((file) =>
+            videos.includes(file.name)
           );
           if (videoFiles.length === 0) {
             reject(new Error('No video file found'));
@@ -173,8 +182,8 @@ export class TorrentService {
             const streamURL = `http://localhost:${
               this.webTorrentServer.address().port
             }${file.streamURL}`;
-            resolve(streamURL);
-            this.streams[`${slug}/${quality}`] = [torrent, streamURL];
+            this.streams[streamKey] = [torrent, streamURL];
+            resolve({ stream: streamURL, streamKey });
           }
         }
       );
