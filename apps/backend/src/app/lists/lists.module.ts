@@ -13,7 +13,6 @@ import {
   webTorrentProvider,
 } from '../app.async.provider';
 import { MovieProcessor } from '../movies/movies.processor';
-import { MovieProcessorService } from '../movies/movies.processor.service';
 import { MovieService } from '../movies/movies.service';
 import { MoviesData } from '../movies/movies.data';
 import { ListsController } from './lists.controller';
@@ -32,6 +31,12 @@ import { ListsController } from './lists.controller';
         defaultJobOptions: {
           removeOnComplete: true,
         },
+      },
+      {
+        name: queues.torrentOrchestrator,
+        defaultJobOptions: {
+          removeOnComplete: true,
+        },
       }
     ),
     HttpModule,
@@ -40,7 +45,6 @@ import { ListsController } from './lists.controller';
   controllers: [ListsController],
   providers: [
     MovieProcessor,
-    MovieProcessorService,
     MovieService,
     TraktService,
     TMDBService,

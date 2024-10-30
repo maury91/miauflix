@@ -36,7 +36,6 @@ export interface ExtendedMovieDto extends MovieDto {
   runtime: number;
   trailer: string;
   rating: number;
-  streamable: boolean;
   genres: string[];
   qualities: VideoQualityStr[];
 }

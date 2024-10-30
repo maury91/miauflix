@@ -17210,6 +17210,7 @@ __metadata:
     axios: "npm:^1.6.0"
     babel-jest: "npm:^29.7.0"
     babel-plugin-styled-components: "npm:1.10.7"
+    bitfield: "npm:^4.2.0"
     bullmq: "npm:^5.21.2"
     cache-manager: "npm:^5.7.6"
     cache-manager-redis-store: "npm:^3.0.1"

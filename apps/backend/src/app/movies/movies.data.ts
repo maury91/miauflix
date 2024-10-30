@@ -45,7 +45,7 @@ export class MoviesData {
     );
   }
 
-  async setNoTorrentFound(id: number): Promise<void> {
-    await this.movieModel.update({ noTorrentFound: true }, { where: { id } });
+  async setnoSourceFound(id: number): Promise<void> {
+    await this.movieModel.update({ noSourceFound: true }, { where: { id } });
   }
 }

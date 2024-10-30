@@ -5,6 +5,7 @@ import {
   WorkerHost,
 } from '@nestjs/bullmq';
 import {
+  ChangePriorityForMovieData,
   GetTorrentFileData,
   PopulateTorrentQForMovieData,
   queues,
@@ -19,32 +20,35 @@ type GetTorrentFileDataWithIndex = GetTorrentFileData & { index: number };
 
 const FROM_LIST_BASE_PRIORITY = 1000;
 
-function calculatePriority({
-  hevc,
-  highQuality,
-  index,
-}: GetTorrentFileDataWithIndex) {
+function calculatePriority(
+  {
+    hevc,
+    highQuality,
+    index,
+  }: Omit<GetTorrentFileDataWithIndex, 'movieId' | 'runtime'>,
+  basePriority = FROM_LIST_BASE_PRIORITY
+) {
   if (hevc) {
     if (highQuality) {
-      // This one has highest importance
-      return FROM_LIST_BASE_PRIORITY + index * 2;
+      // This one has the highest importance
+      return basePriority + index * 2;
     }
     // Lowest importance
-    return FROM_LIST_BASE_PRIORITY + index * 2 + 500;
+    return basePriority + index * 2 + Math.floor(basePriority * 0.5);
   }
   if (!highQuality) {
     // We still prioritize high quality even if it's potentially slow
-    return FROM_LIST_BASE_PRIORITY + index * 2 + 20;
+    return basePriority + index * 2 + Math.floor(basePriority * 0.1);
   }
-  return FROM_LIST_BASE_PRIORITY + index * 2 + 40;
+  return basePriority + index * 2 + Math.floor(basePriority * 0.2);
 }
 
 function calculateJobId({
   hevc,
   highQuality,
-  index,
-}: GetTorrentFileDataWithIndex) {
-  return `gtf_${hevc ? 'H' : 'x'}${highQuality ? 'Q' : 'x'}_${index}`;
+  movieId,
+}: Omit<GetTorrentFileData, 'runtime'>) {
+  return `gtf_${hevc ? 'H' : 'x'}${highQuality ? 'Q' : 'x'}_${movieId}`;
 }
 
 @Processor(queues.torrentOrchestrator)
@@ -69,10 +73,6 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
   @OnWorkerEvent('failed')
   onFailed(job: Job) {
     console.error(`Failed processing job ${job.id}`, job.failedReason);
-  }
-
-  onApplicationBootstrap() {
-    this.worker.concurrency = 32;
   }
 
   private addToTorrentQueue(torrents: GetTorrentFileDataWithIndex[]) {
@@ -119,16 +119,58 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
     );
   }
 
+  private async changePriorityForMovie({
+    movieId,
+    priority,
+  }: ChangePriorityForMovieData) {
+    return Promise.all(
+      [
+        [true, true],
+        [true, false],
+        [false, true],
+        [false, false],
+      ].map(async ([hevc, highQuality]) => {
+        const job = await this.torrentQueue.getJob(
+          calculateJobId({
+            hevc,
+            highQuality,
+            movieId,
+          })
+        );
+        if (job) {
+          job.changePriority({
+            priority: calculatePriority(
+              {
+                hevc,
+                highQuality,
+                index: 0,
+              },
+              priority
+            ),
+          });
+        }
+      })
+    );
+  }
+
   async process(
-    job: Job<
-      PopulateTorrentQForMovieData,
-      void,
-      torrentOrchestratorJobs.populateTorrentQForMovie
-    >
+    job:
+      | Job<
+          PopulateTorrentQForMovieData,
+          void,
+          torrentOrchestratorJobs.populateTorrentQForMovie
+        >
+      | Job<
+          ChangePriorityForMovieData,
+          void,
+          torrentOrchestratorJobs.changePriorityForMovie
+        >
   ) {
     switch (job.name) {
       case torrentOrchestratorJobs.populateTorrentQForMovie:
         return await this.populateTorrentQForMovie(job.data);
+      case torrentOrchestratorJobs.changePriorityForMovie:
+        return await this.changePriorityForMovie(job.data);
     }
   }
 }

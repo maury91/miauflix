@@ -22,7 +22,7 @@ export interface MovieAttributes {
   genres: string[];
   torrentFound: boolean;
   torrentsSearched: boolean;
-  noTorrentFound: boolean;
+  noSourceFound: boolean;
   torrentId?: number; // ToDo: Candidate for removal
   traktId: number;
   imdbId: string;
@@ -43,7 +43,7 @@ export type MovieCreationAttributes = Omit<
   | 'updatedAt'
   | 'torrentFound'
   | 'torrentsSearched'
-  | 'noTorrentFound'
+  | 'noSourceFound'
   | 'allTorrents'
 >;
 
@@ -97,10 +97,9 @@ export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
   @Column
   torrentsSearched: boolean;
 
-  // ToDo: Rename into noSourceFound
   @Default(false)
   @Column
-  noTorrentFound: boolean;
+  noSourceFound: boolean;
 
   // ToDo: Rename into sourceFound
   @Default(false)

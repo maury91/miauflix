@@ -68,7 +68,7 @@ export class JackettProcessor extends WorkerHost {
         if (torrents.length) {
           for (const torrent of torrents) {
             await this.torrentData.createTorrent({
-              movieId: movieId,
+              movieId,
               title: torrent.title,
               pubDate: torrent.pubDate,
               size: torrent.size,
@@ -102,7 +102,7 @@ export class JackettProcessor extends WorkerHost {
       `Processed movie ${params.q}, searched on ${processTrackers} ( of ${trackers.length}) trackers, found ${torrentsFound} torrents`
     );
     if (torrentsFound === 0) {
-      await this.movieData.setNoTorrentFound(movieId);
+      await this.movieData.setnoSourceFound(movieId);
     } else {
       await this.torrentOrchestratorQueue.add(
         torrentOrchestratorJobs.populateTorrentQForMovie,

@@ -15,7 +15,6 @@ import {
   parseTorrentProvider,
   webTorrentProvider,
 } from '../app.async.provider';
-import { MovieProcessorService } from './movies.processor.service';
 import { MovieService } from './movies.service';
 
 @Module({
@@ -32,6 +31,12 @@ import { MovieService } from './movies.service';
         defaultJobOptions: {
           removeOnComplete: true,
         },
+      },
+      {
+        name: queues.torrentOrchestrator,
+        defaultJobOptions: {
+          removeOnComplete: true,
+        },
       }
     ),
     HttpModule,
@@ -40,7 +45,6 @@ import { MovieService } from './movies.service';
   controllers: [MoviesController],
   providers: [
     MovieProcessor,
-    MovieProcessorService,
     MovieService,
     TraktService,
     TMDBService,

@@ -6,12 +6,15 @@ import {
   TorrentFile,
   NodeServer,
   Torrent,
+  TorrentOptions,
 } from 'webtorrent';
 import { ParsedFile } from 'parse-torrent-file';
 import { HttpService } from '@nestjs/axios';
 import { ParseTorrentImport } from '../app.async.provider';
 import { TorrentData } from './torrent.data';
-import { isValidVideoFile } from './torrent.utils';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import BitField from 'bitfield';
 
 @Injectable()
 export class TorrentService {
@@ -19,6 +22,7 @@ export class TorrentService {
   private webTorrentServer: NodeServer;
   private streams: Record<string, [Torrent, string]> = {};
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly httpService: HttpService,
     private readonly torrentData: TorrentData,
     @Inject(asyncProviders.parseTorrent)
@@ -166,25 +170,58 @@ export class TorrentService {
       );
     console.log('Got torrent from DB');
     console.log('torrents', this.client.torrents);
+    const bitfieldBuffer = await this.cacheManager.get<string>(
+      `torrent:${streamKey}:bitfield`
+    );
+    console.log(bitfieldBuffer);
+    console.log(new Uint8Array(Buffer.from(bitfieldBuffer, 'base64')));
     return new Promise((resolve, reject) => {
       this.client.add(
         torrentFile,
-        { path: '/tmp', deselect: true, skipVerify: true },
+        {
+          path: '/tmp',
+          deselect: true,
+          skipVerify: false,
+          bitfield: bitfieldBuffer
+            ? new BitField(
+                new Uint8Array(Buffer.from(bitfieldBuffer, 'base64'))
+              )
+            : undefined,
+        } as unknown as TorrentOptions,
         (torrent) => {
           const videoFiles = torrent.files.filter((file) =>
             videos.includes(file.name)
           );
           if (videoFiles.length === 0) {
             reject(new Error('No video file found'));
+            torrent.destroy({
+              destroyStore: true,
+            });
           } else {
             const file = videoFiles[0];
             file.select();
+            file.on('error', (err) => {
+              console.error('File error', err);
+            });
+            file.on('stream', (data) => {
+              console.log('File stream', data);
+            });
             const streamURL = `http://localhost:${
               this.webTorrentServer.address().port
             }${file.streamURL}`;
             this.streams[streamKey] = [torrent, streamURL];
             resolve({ stream: streamURL, streamKey });
           }
+          torrent.on('verified', (index, isStartup) => {
+            console.log('Verified', index, isStartup);
+            if (!isStartup) {
+              this.cacheManager.set(
+                `torrent:${streamKey}:bitfield`,
+                Buffer.from(torrent.bitfield.buffer).toString('base64'),
+                1000 * 60 * 60 * 24 * 7
+              );
+            }
+          });
         }
       );
     });

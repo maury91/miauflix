@@ -1,6 +1,4 @@
-import { VideoSource } from './app/jackett/jackett.types';
 import { MoviesImages } from './app/movies/movies.types';
-import { VideoCodec, VideoQuality } from '@miauflix/types';
 
 export const enum queues {
   deviceCode = 'deviceCode',
@@ -28,6 +26,7 @@ export type GetMovieExtendedDataData = {
   index: number; // index of the title in the list ( the UI will display the first 5 titles before the user has to scroll to see more, so those are more important )
   slug: string;
   images: MoviesImages;
+  priority?: number;
 };
 
 /** Jackett Q */
@@ -52,10 +51,15 @@ export interface SearchMovieData {
 
 export const enum torrentOrchestratorJobs {
   populateTorrentQForMovie = 'populateTorrentQForMovie',
+  changePriorityForMovie = 'changePriorityForMovie',
 }
 
 export interface PopulateTorrentQForMovieData {
   index: number; // index of the title in the list
+  movieId: number;
+}
+export interface ChangePriorityForMovieData {
+  priority: number;
   movieId: number;
 }
 

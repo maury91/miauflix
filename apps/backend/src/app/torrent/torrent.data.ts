@@ -143,7 +143,7 @@ export class TorrentData {
       attributes: ['id'],
       where: {
         torrentsSearched: false,
-        noTorrentFound: false,
+        noSourceFound: false,
       },
       raw: true,
     });
