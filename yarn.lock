@@ -6506,15 +6506,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bittorrent-protocol@npm:*":
-  version: 3.1.6
-  resolution: "@types/bittorrent-protocol@npm:3.1.6"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/89f95f6d2a0aae7183689dfd0d7f6eab458f7c40561fab06faeba1819a3ea7db6c2f91f84625f893ed7ff4e773dffd594cb7cc3b8a93f9305ccdec7fc31481a7
-  languageName: node
-  linkType: hard
-
 "@types/bluebird@npm:*":
   version: 3.5.42
   resolution: "@types/bluebird@npm:3.5.42"
@@ -6859,7 +6850,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/parse-torrent@npm:*, @types/parse-torrent@npm:5.8.7":
+"@types/parse-torrent@npm:5.8.7":
   version: 5.8.7
   resolution: "@types/parse-torrent@npm:5.8.7"
   dependencies:
@@ -7008,15 +6999,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/simple-peer@npm:*":
-  version: 9.11.8
-  resolution: "@types/simple-peer@npm:9.11.8"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/ef55b05fb2d12ed790d8e3b46d96bb84224c67bbcdfb6a867d14129ffc77f7b3edbf66b1eb5e737953d1f1b2ce9928f3505fe29061bfb048016616beaf866ef8
-  languageName: node
-  linkType: hard
-
 "@types/sinonjs__fake-timers@npm:8.1.1":
   version: 8.1.1
   resolution: "@types/sinonjs__fake-timers@npm:8.1.1"
@@ -7090,18 +7072,6 @@ __metadata:
   version: 13.12.2
   resolution: "@types/validator@npm:13.12.2"
   checksum: 10c0/64f1326c768947d756ab5bcd73f3f11a6f07dc76292aea83890d0390a9b9acb374f8df6b24af2c783271f276d3d613b78fc79491fe87edee62108d54be2e3c31
-  languageName: node
-  linkType: hard
-
-"@types/webtorrent@npm:0.109.8":
-  version: 0.109.8
-  resolution: "@types/webtorrent@npm:0.109.8"
-  dependencies:
-    "@types/bittorrent-protocol": "npm:*"
-    "@types/node": "npm:*"
-    "@types/parse-torrent": "npm:*"
-    "@types/simple-peer": "npm:*"
-  checksum: 10c0/89ac0fcc48e5c971c333473c90f2080f69b44977df54d220aebcf5f8e72049fe4697b4719fb19fd5a423a8a5cfdd69d00cba0f8fea22e8fcbff0b864ff3f23b4
   languageName: node
   linkType: hard
 
@@ -17202,7 +17172,6 @@ __metadata:
     "@types/sequelize": "npm:4.28.20"
     "@types/styled-components": "npm:5.1.26"
     "@types/uuid": "npm:10.0.0"
-    "@types/webtorrent": "npm:0.109.8"
     "@vitejs/plugin-legacy": "npm:^5.4.2"
     "@vitejs/plugin-react": "npm:^4.2.0"
     "@vitest/ui": "npm:^1.3.1"

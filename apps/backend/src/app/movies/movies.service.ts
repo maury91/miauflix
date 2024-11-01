@@ -6,6 +6,7 @@ import {
   ExtendedMovieDto,
   MovieDto,
   MovieImages,
+  Paginated,
   VideoQualityStr,
 } from '@miauflix/types';
 import { TraktService } from '../trakt/trakt.service';
@@ -207,7 +208,8 @@ export class MovieService {
     );
 
     const moviesWithoutImages = movies.filter(
-      (movie) => !(movie.ids.slug in storedMovies)
+      (movie) =>
+        !(movie.ids.slug in storedMovies && storedMovies[movie.ids.slug].poster)
     );
 
     const movieImages = await Promise.all(
@@ -220,7 +222,7 @@ export class MovieService {
     );
 
     const extendedMovies = movies.map<MovieDto>((movie) => {
-      if (moviesWithoutImages.includes(movie)) {
+      if (moviesWithoutImages.indexOf(movie) !== -1) {
         return {
           ...movie,
           id: movie.ids.slug,
@@ -253,15 +255,16 @@ export class MovieService {
       };
     });
 
-    const moviesWithoutSource = extendedMovies.filter(
+    const moviesWithIncompleteInformation = extendedMovies.filter(
       (movie) =>
         !(
           movie.ids.slug in storedMovies &&
-          storedMovies[movie.ids.slug].torrentFound
+          storedMovies[movie.ids.slug].torrentFound &&
+          storedMovies[movie.ids.slug].poster
         )
     );
 
-    moviesWithoutSource.forEach((movie, index) => {
+    moviesWithIncompleteInformation.forEach((movie, index) => {
       this.requestMovieExtendedData(
         movie.id,
         index,
@@ -279,15 +282,25 @@ export class MovieService {
     });
   }
 
-  public async getTrendingMovies() {
-    const movies = (await this.traktService.getTrendingMovies()).data.map(
-      ({ movie }) => movie
+  public async getTrendingMovies(page = 1): Promise<Paginated<MovieDto>> {
+    const { data, ...pagination } = await this.traktService.getTrendingMovies(
+      page
     );
-    return await this.addExtendedDataToMovies(movies);
+    const movies = data.map((movie) => movie.movie);
+
+    return {
+      data: await this.addExtendedDataToMovies(movies),
+      ...pagination,
+    };
   }
 
-  public async getPopularMovies() {
-    const movies = (await this.traktService.getPopularMovies()).data;
-    return await this.addExtendedDataToMovies(movies);
+  public async getPopularMovies(page = 1): Promise<Paginated<MovieDto>> {
+    const { data: movies, ...pagination } =
+      await this.traktService.getPopularMovies(page);
+
+    return {
+      data: await this.addExtendedDataToMovies(movies),
+      ...pagination,
+    };
   }
 }

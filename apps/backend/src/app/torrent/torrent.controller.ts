@@ -34,6 +34,7 @@ export class TorrentController {
 
   @Delete(':streamId')
   async stopMovieTorrent(@Param('streamId') streamId: string) {
+    console.log('got stop stream request', streamId);
     return this.torrentService.stopStream(streamId);
   }
 }

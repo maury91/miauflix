@@ -6,18 +6,23 @@ import { scaleImage } from '../utils/scaleImage';
 
 export const usePreloadHomeImages = () => {
   const { data: categories } = useGetCategoriesQuery();
-  const { data: medias } = useGetListQuery(
-    categories ? categories[0].id : skipToken
+  const { data } = useGetListQuery(
+    categories
+      ? {
+          category: categories[0].id,
+          page: 0,
+        }
+      : skipToken
   );
   const [load, setLoad] = useState(false);
   useEffect(() => {
-    if (medias && load) {
-      medias.forEach((media) => {
+    if (data && data.data && load) {
+      data.data.forEach((media) => {
         const img = new Image();
         img.src = scaleImage(media.images.backdrop);
       });
     }
-  }, [medias, load]);
+  }, [data, load]);
 
   return useCallback(() => {
     setLoad(true);

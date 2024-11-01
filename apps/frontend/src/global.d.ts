@@ -4,7 +4,7 @@ declare global {
   interface Window {
     API_URL: string;
     AVAILABLE_CODECS: string[];
-    REMOTE_KEY_MAP: Record<TVInputDeviceKeyName, number>;
+    REMOTE_KEY_MAP: Partial<Record<TVInputDeviceKeyName, number>>;
     INVERTED_REMOTE_KEY_MAP: Record<number, TVInputDeviceKeyName>;
   }
 }

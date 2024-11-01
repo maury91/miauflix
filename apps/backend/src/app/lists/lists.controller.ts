@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { StaticCategories } from '../categories/categories.const';
 import { MovieService } from '../movies/movies.service';
 
@@ -7,12 +7,15 @@ export class ListsController {
   constructor(private readonly movieService: MovieService) {}
 
   @Get(':listId')
-  async getList(@Param('listId') listId: StaticCategories | string) {
+  async getList(
+    @Param('listId') listId: StaticCategories | string,
+    @Query('page', ParseIntPipe) page: number
+  ) {
     switch (listId) {
       case StaticCategories.TrendingMovies:
-        return this.movieService.getTrendingMovies();
+        return this.movieService.getTrendingMovies(page);
       case StaticCategories.PopularMovies:
-        return this.movieService.getPopularMovies();
+        return this.movieService.getPopularMovies(page);
     }
     return [];
   }

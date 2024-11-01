@@ -12,8 +12,7 @@
     "noFallthroughCasesInSwitch": true,
     "strict": true,
     "types": [
-      "vite/client",
-      "unplugin-icons/types/react"
+      "vite/client"
     ],
     "paths": {
       "@miauflix/types": ["libs/types/src/index.ts"],

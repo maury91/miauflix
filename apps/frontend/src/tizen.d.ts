@@ -51,7 +51,11 @@ export type TVInputDeviceKeyName =
   | 'Caption'
   | 'Teletext'
   | 'Extra'
-  | 'Minus';
+  | 'Minus'
+  | 'ArrowRight'
+  | 'ArrowLeft'
+  | 'ArrowUp'
+  | 'ArrowDown';
 
 export interface TVInputDeviceKey {
   name: TVInputDeviceKeyName;
@@ -89,9 +93,15 @@ declare global {
         getState: () => PlayerState;
         getDuration: () => number; // in milliseconds
         getCurrentTime: () => number; // in milliseconds
-        prepareAsync: (successCb: () => void, errorCb: () => void) => void;
+        prepareAsync: (successCb?: () => void, errorCb?: () => void) => void;
         setDisplayMethod: (method: string) => 'success' | string;
         getTotalTrackInfo: () => TrackInfo[];
+        seekTo: (
+          ms: number,
+          successCb?: () => void,
+          errorCb?: () => void
+        ) => void;
+        close: () => void;
         setSelectTrack: (
           type: 'AUDIO' | 'VIDEO' | 'TEXT',
           index: number

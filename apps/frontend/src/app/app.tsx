@@ -41,7 +41,10 @@ export function App() {
 
   useEffect(() => {
     if (firstCategory) {
-      prefetchList(firstCategory.id);
+      prefetchList({
+        category: firstCategory.id,
+        page: 0,
+      });
     }
   }, [firstCategory, prefetchList]);
 

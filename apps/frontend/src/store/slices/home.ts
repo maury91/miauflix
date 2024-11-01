@@ -1,13 +1,11 @@
 import { CategoryDto, MovieDto } from '@miauflix/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { listsApi } from '../api/lists';
 import { categoriesApi } from '../api/categories';
 
 export interface HomeState {
   category: CategoryDto;
   selectedMedia: MovieDto | null;
   selectedByCategory: Record<string, number>;
-  countsByCategory: Record<string, number>;
 }
 
 const initialState: HomeState = {
@@ -17,7 +15,6 @@ const initialState: HomeState = {
   },
   selectedMedia: null,
   selectedByCategory: {},
-  countsByCategory: {},
 };
 
 export const homeSlice = createSlice({
@@ -39,13 +36,6 @@ export const homeSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      listsApi.endpoints.getList.matchFulfilled,
-      (state, action) => {
-        state.countsByCategory[action.meta.arg.originalArgs] =
-          action.payload.length;
-      }
-    );
     builder.addMatcher(
       categoriesApi.endpoints.getCategories.matchFulfilled,
       (state, action) => {

@@ -28,5 +28,9 @@ export const mediasApi = createApi({
   }),
 });
 
-export const { useGetExtendedInfoQuery, useGetStreamUrlQuery, usePrefetch } =
-  mediasApi;
+export const {
+  useGetExtendedInfoQuery,
+  useGetStreamUrlQuery,
+  useStopStreamMutation,
+  usePrefetch,
+} = mediasApi;

@@ -46,7 +46,7 @@ import { ListsModule } from './lists/lists.module';
         database: configService.getOrThrow('POSTGRES_DB'),
         autoLoadModels: true,
         synchronize: true,
-        // logging: false,
+        logging: false,
       }),
       inject: [ConfigService],
     }),

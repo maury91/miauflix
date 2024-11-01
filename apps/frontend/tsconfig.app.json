@@ -6,6 +6,7 @@
       "node",
       "@nx/react/typings/cssmodule.d.ts",
       "@nx/react/typings/image.d.ts",
+      "unplugin-icons/types/react",
       "vite/client"
     ]
   },

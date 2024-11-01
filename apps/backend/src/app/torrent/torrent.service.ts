@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { asyncProviders } from '../app.types';
-import {
+import type {
   WebTorrent,
   Instance,
   TorrentFile,
@@ -14,7 +14,7 @@ import { ParseTorrentImport } from '../app.async.provider';
 import { TorrentData } from './torrent.data';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import BitField from 'bitfield';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TorrentService {
@@ -22,6 +22,7 @@ export class TorrentService {
   private webTorrentServer: NodeServer;
   private streams: Record<string, [Torrent, string]> = {};
   constructor(
+    private configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly httpService: HttpService,
     private readonly torrentData: TorrentData,
@@ -30,7 +31,17 @@ export class TorrentService {
     @Inject(asyncProviders.webTorrent)
     private WebTorrent: WebTorrent
   ) {
-    this.client = new this.WebTorrent();
+    this.client = new this.WebTorrent({
+      maxConns: this.configService.getOrThrow('MAX_CONNS', { infer: true }),
+      downloadLimit:
+        this.configService.getOrThrow<number>('TORRENT_SPEED', {
+          infer: true,
+        }) << 20,
+      uploadLimit:
+        this.configService.getOrThrow<number>('TORRENT_SPEED', {
+          infer: true,
+        }) << 19,
+    });
     console.log(this.client.torrents);
     this.client.on('torrent', (torrent: Torrent) => {
       console.log('New torrent', torrent.name);
@@ -39,6 +50,7 @@ export class TorrentService {
       console.error('WebTorrent error', err);
     });
     this.webTorrentServer = this.client.createServer({}, 'node') as NodeServer;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.webTorrentServer.listen(818, () => {
       console.log(
@@ -127,22 +139,34 @@ export class TorrentService {
   public async stopStream(streamKey: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const streamTorrent = this.streams[streamKey];
+      console.log('Stopping stream', streamKey, streamTorrent);
       if (streamTorrent) {
-        this.client.remove(
-          streamTorrent[0],
-          {
-            destroyStore: true,
-          },
-          (err) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(true);
+        this.client
+          .get(streamTorrent[0])
+          .then((torrent) => {
+            if (!torrent) {
               delete this.streams[streamKey];
+              return resolve(true);
             }
-          }
-        );
+
+            console.log('Torrent progress', torrent.progress);
+            torrent.destroy(
+              {
+                destroyStore: torrent.progress < 0.5,
+              },
+              (err) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(true);
+                  delete this.streams[streamKey];
+                }
+              }
+            );
+          })
+          .catch(reject);
       }
+      resolve(true);
     });
   }
 
@@ -173,8 +197,6 @@ export class TorrentService {
     const bitfieldBuffer = await this.cacheManager.get<string>(
       `torrent:${streamKey}:bitfield`
     );
-    console.log(bitfieldBuffer);
-    console.log(new Uint8Array(Buffer.from(bitfieldBuffer, 'base64')));
     return new Promise((resolve, reject) => {
       this.client.add(
         torrentFile,
@@ -183,9 +205,7 @@ export class TorrentService {
           deselect: true,
           skipVerify: false,
           bitfield: bitfieldBuffer
-            ? new BitField(
-                new Uint8Array(Buffer.from(bitfieldBuffer, 'base64'))
-              )
+            ? Buffer.from(bitfieldBuffer, 'base64')
             : undefined,
         } as unknown as TorrentOptions,
         (torrent) => {

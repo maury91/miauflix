@@ -8,7 +8,9 @@ import MaterialSymbolsLightHdOutline from '~icons/material-symbols-light/hd-outl
 export const MediaQuality: FC<{ qualities?: VideoQualityStr[] }> = ({
   qualities,
 }) => {
-  const highestQuality = [...(qualities ?? [])].sort((a, b) => b - a)[0];
+  const highestQuality = [...(qualities ?? [])].sort(
+    (a, b) => Number(b) - Number(a)
+  )[0];
   switch (highestQuality) {
     case '2160':
       return <MaterialSymbolsLight4kOutline />;

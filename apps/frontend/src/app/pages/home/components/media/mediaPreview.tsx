@@ -6,13 +6,14 @@ export const MediaPreviewContainer = styled.div<{ margin: number }>`
   height: 65vh;
   left: 0;
   right: 0;
-  padding: 0 ${({ margin }) => margin}px;
+  padding: 0 ${({ margin }) => margin}px 0
+    ${({ margin }) => margin + window.innerWidth * 0.05}px;
 `;
 export const MediaPreviewShadow = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 45vw;
+  left: 50vw;
   width: 15vw;
   background: radial-gradient(
     ellipse at 100% 0%,
@@ -33,7 +34,7 @@ export const MediaPreviewShadow2nd = styled.div`
   position: absolute;
   height: 27.5vh;
   bottom: 0;
-  left: 60vw;
+  left: 65vw;
   right: 0;
   background: linear-gradient(
     180deg,

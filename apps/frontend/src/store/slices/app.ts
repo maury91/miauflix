@@ -34,7 +34,7 @@ export const appSlice = createSlice({
     builder.addMatcher(
       listsApi.endpoints.getList.matchFulfilled,
       (state, action) => {
-        const backgroundsAndLogos = action.payload.map((movie) => ({
+        const backgroundsAndLogos = action.payload.data.map((movie) => ({
           backdrop: movie.images.backdrops.length
             ? movie.images.backdrops[0]
             : movie.images.backdrop,

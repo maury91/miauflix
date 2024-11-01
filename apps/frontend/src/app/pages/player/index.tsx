@@ -1,11 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
-import OcticonPlay16 from '~icons/octicon/play-16';
-import MdiPaw from '~icons/mdi/paw';
-import { useAppSelector } from '../../../store/store';
-import { IS_TIZEN, PALETTE } from '../../../consts';
-import styled from 'styled-components';
-import { TVInputDeviceKeyName } from '../../../tizen';
-import LineMdPlayFilled from '~icons/line-md/play-filled';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { IS_TIZEN } from '../../../consts';
+import {
+  OverlayPlayIcon,
+  PauseIcon,
+  PauseOverlay,
+  PlayedTime,
+  PlayedTimeContainer,
+  PlayerProgressBar,
+  PlayerProgressBarContainer,
+  PlayerProgressBubble,
+  TotalTime,
+} from './ui/common';
+import { TizenPlayerContainer } from './ui/tizen';
+import { useTizenRemote } from './hooks/tizen/useTizenRemote';
+import { useTizenPlayer } from './hooks/tizen/useTizenPlayer';
+import { useBackNavigation } from '../../hooks/useBackNavigation';
+import { navigateTo } from '../../../store/slices/app';
 
 /*
 window.webapis.avplay.setListener({
@@ -46,122 +57,6 @@ window.webapis.avplay.setListener({
 })
 */
 
-const TizenPlayerContainer = styled.object`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10000;
-`;
-
-const PauseOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-`;
-
-const PauseIcon = styled(OcticonPlay16)`
-  font-size: 10vh;
-  color: #aaa;
-`;
-
-const PlayerProgressBarContainer = styled.div`
-  position: absolute;
-  left: 8vw;
-  right: 8vw;
-  background: #aaa;
-  height: 0.5vh;
-  bottom: 8vh;
-`;
-const OverlayPlayIcon = styled(LineMdPlayFilled)`
-  position: absolute;
-  left: 3vw;
-  bottom: 4vh;
-  font-size: 4vh;
-  color: #aaa;
-  transform: translate(0, -50%);
-`;
-
-const PlayerProgressBar = styled.div<{ percent: number }>`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: ${({ percent }) => percent}%;
-  height: 100%;
-  background: ${PALETTE.background.primary};
-`;
-
-const PlayerProgressBubble = styled(MdiPaw)<{ percent: number }>`
-  position: absolute;
-  left: ${({ percent }) => percent}%;
-  top: 50%;
-  font-size: 3.5vh;
-  color: ${PALETTE.background.primary};
-  transform: translate(-50%, -63%);
-`;
-
-const PlayedTimeContainer = styled.div`
-  position: absolute;
-  left: 8vw;
-  bottom: 2vh;
-  font-size: 2.5vh;
-  color: ${PALETTE.text.primary};
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-`;
-
-const PlayedTime = styled.span`
-  color: ${PALETTE.background.primary};
-  margin-right: 0.5em;
-`;
-const TotalTime = styled.span`
-  color: ${PALETTE.background.disabled};
-  margin-left: 0.5em;
-`;
-
-const autoSelectAudioTrack = () => {
-  const tracks = window.webapis.avplay.getTotalTrackInfo();
-  const audioTracks = tracks.filter((track) => track.type === 'AUDIO');
-  if (audioTracks.length > 1) {
-    const englishTrack = audioTracks.find(({ extra_info }) =>
-      extra_info.match(/lang[^:]*:[^:]*en/)
-    );
-    if (englishTrack) {
-      window.webapis.avplay.setSelectTrack('AUDIO', englishTrack.index);
-    }
-  }
-};
-
-const openVideo = (url: string): Promise<void> => {
-  return new Promise<void>((resolve, reject) => {
-    window.webapis.avplay.open(url);
-    window.webapis.avplay.setDisplayRect(
-      0,
-      0,
-      window.innerWidth,
-      window.innerHeight
-    );
-    window.webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX');
-    window.webapis.avplay.prepareAsync(resolve, reject);
-  }).then(autoSelectAudioTrack);
-};
-
-const playVideo = () => {
-  window.webapis.avplay.play();
-};
-
-const getPlayerStatus = () => {
-  return window.webapis.avplay.getState();
-};
-
 const formatTime = (time: number) => {
   const hours = Math.floor(time / 3600);
   const minutes = Math.floor(time / 60) % 60;
@@ -171,121 +66,174 @@ const formatTime = (time: number) => {
   return parts.map((part) => part.toString().padStart(2, '0')).join(':');
 };
 
-const useTizenRemote = () => {
-  const mappedKeys = new Map<TVInputDeviceKeyName, () => void>();
-  useEffect(() => {
-    if (!IS_TIZEN) {
-      return;
-    }
-    function keyboardListener(event: KeyboardEvent) {
-      if (event.keyCode in window.INVERTED_REMOTE_KEY_MAP) {
-        const keyName = window.INVERTED_REMOTE_KEY_MAP[event.keyCode];
-        mappedKeys.get(keyName)?.();
-      }
-    }
-
-    document.body.addEventListener('keydown', keyboardListener);
-    return () => {
-      document.body.removeEventListener('keydown', keyboardListener);
-    };
-  }, [mappedKeys]);
-  return useCallback(
-    (key: TVInputDeviceKeyName, cb: () => void) => {
-      mappedKeys.set(key, cb);
-    },
-    [mappedKeys]
-  );
-};
-
-export const Player = () => {
-  const streamUrl = useAppSelector((state) => state.stream.url);
-  const [playerStatus, setPlayerStatus] = useState<
-    'PLAYING' | 'READY' | 'IDLE' | 'PAUSED'
-  >('IDLE');
-  const [buffered, setBuffered] = useState(0);
-  const [played, setPlayed] = useState(0);
-  const [videoLength, setVideoLength] = useState(0);
-
-  const addRemoteListener = useTizenRemote();
-  addRemoteListener('MediaPlayPause', () => {
-    const status = getPlayerStatus();
-    if (status === 'PLAYING') {
-      window.webapis.avplay.pause();
-      setPlayerStatus('PAUSED');
-    } else if (status === 'PAUSED') {
-      playVideo();
-      setPlayerStatus('PLAYING');
-    }
-  });
-  addRemoteListener('MediaPlay', () => {
-    if (getPlayerStatus() !== 'IDLE') {
-      playVideo();
-      setPlayerStatus('PLAYING');
-    }
-  });
-  addRemoteListener('MediaPause', () => {
-    if (getPlayerStatus() !== 'IDLE') {
-      window.webapis.avplay.pause();
-      setPlayerStatus('PAUSED');
-    }
-  });
-
-  useEffect(() => {
-    if (streamUrl) {
-      // Create player
-      if (IS_TIZEN) {
-        openVideo(streamUrl)
-          .then(() => {
-            playVideo();
-            setVideoLength(window.webapis.avplay.getDuration());
-          })
-          .catch((err) => {
-            console.error('Failed to open video', err);
-          });
-        window.webapis.avplay.setListener({
-          onbufferingstart: function () {
-            setPlayerStatus((prevStatus) => {
-              if (prevStatus === 'IDLE') {
-                return 'READY';
-              }
-              return prevStatus;
-            });
-          },
-          onbufferingprogress: function (percent) {
-            setBuffered(percent);
-          },
-          onbufferingcomplete: function () {
-            console.log('Buffering complete.');
-          },
-          oncurrentplaytime: function (currentTime) {
-            setPlayed(currentTime);
-          },
-        });
-      }
-    }
-  }, [streamUrl]);
-
-  if (IS_TIZEN) {
-    return (
-      <>
-        <TizenPlayerContainer type={'application/avplayer'} />
-        {playerStatus === 'PAUSED' && (
-          <PauseOverlay>
-            <PauseIcon />
-            {playerStatus === 'PAUSED' && <OverlayPlayIcon />}
-            <PlayerProgressBarContainer>
-              <PlayerProgressBar percent={(played / videoLength) * 100} />
-              <PlayerProgressBubble percent={(played / videoLength) * 100} />
-            </PlayerProgressBarContainer>
-            <PlayedTimeContainer>
-              <PlayedTime>{formatTime(played / 1000)}</PlayedTime>|
-              <TotalTime>{formatTime(videoLength / 1000)}</TotalTime>
-            </PlayedTimeContainer>
-          </PauseOverlay>
-        )}
-      </>
+function calculatePosition(
+  startingPosition: number,
+  currentPosition: number,
+  videoLength: number,
+  action: 'FF' | 'REW' | null,
+  actionMultiplier: number
+) {
+  if (action === 'FF') {
+    return Math.min(
+      startingPosition + actionMultiplier * 10000,
+      videoLength - 10000
     );
   }
+  if (action === 'REW') {
+    return Math.max(startingPosition - actionMultiplier * 10000, 0);
+  }
+  return currentPosition;
+}
 
-  return null;
+export const Player = () => {
+  const dispatch = useAppDispatch();
+  const streamUrl = useAppSelector((state) => state.stream.url);
+  const [showPlayerControls, setShowPlayerControls] = useState(false);
+  const [lastSeekTo, setLastSeekTo] = useState(0);
+  // const [buffered, setBuffered] = useState(0);
+  const [playedAtActionBegin, setPlayedAtActionBegin] = useState(0);
+  const [action, setAction] = useState<'FF' | 'REW' | null>(null);
+  const [actionMultiplier, setActionMultiplier] = useState(0);
+  const {
+    playerStatus,
+    pause,
+    play,
+    videoLength,
+    seekTo,
+    played,
+    togglePlay,
+    closePlayer,
+  } = useTizenPlayer({ streamUrl });
+
+  const virtualPlayed = calculatePosition(
+    playedAtActionBegin,
+    played,
+    videoLength,
+    action,
+    actionMultiplier
+  );
+
+  const onActionStart = useCallback(
+    (type: 'FF' | 'REW') => {
+      setAction(type);
+      setActionMultiplier(0);
+      setPlayedAtActionBegin(virtualPlayed);
+      pause();
+    },
+    [pause, virtualPlayed]
+  );
+
+  const onActionEnd = useCallback(() => {
+    setAction(null);
+    play();
+    if (actionMultiplier === 0) {
+      seekTo(calculatePosition(playedAtActionBegin, 0, videoLength, action, 1));
+    } else {
+      seekTo(virtualPlayed);
+      setActionMultiplier(0);
+    }
+  }, [
+    action,
+    actionMultiplier,
+    play,
+    playedAtActionBegin,
+    seekTo,
+    videoLength,
+    virtualPlayed,
+  ]);
+
+  const navigateBack = useCallback(() => {
+    dispatch(navigateTo('home'));
+    closePlayer();
+  }, []);
+
+  const addRemoteListener = useTizenRemote();
+  addRemoteListener('MediaPlayPause', togglePlay);
+  addRemoteListener('MediaPlay', play);
+  addRemoteListener('MediaPause', pause);
+  addRemoteListener(
+    'ArrowRight',
+    (type) => {
+      if (type === 'down') {
+        if (action !== 'FF') {
+          onActionStart('FF');
+        }
+      } else {
+        onActionEnd();
+      }
+    },
+    true
+  );
+  addRemoteListener(
+    'ArrowLeft',
+    (type) => {
+      if (type === 'down') {
+        if (action !== 'REW') {
+          onActionStart('REW');
+        }
+      } else {
+        onActionEnd();
+      }
+    },
+    true
+  );
+  addRemoteListener('ArrowUp', () => {
+    setShowPlayerControls(true);
+    setTimeout(() => {
+      setShowPlayerControls(false);
+    }, 5000);
+  });
+  addRemoteListener('ArrowDown', () => {
+    setShowPlayerControls(false);
+  });
+  useBackNavigation('player', navigateBack);
+
+  useEffect(() => {
+    if (action === 'FF') {
+      const handle = setInterval(() => {
+        setActionMultiplier((prev) => {
+          return prev + Math.ceil(Math.log10(prev + 1)) + 1;
+        });
+      }, 100);
+      return () => clearTimeout(handle);
+    }
+    return;
+  }, [action]);
+
+  useEffect(() => {
+    if (lastSeekTo < Date.now() - 500) {
+      if (action === 'FF' || action === 'REW') {
+        seekTo(virtualPlayed);
+        setLastSeekTo(Date.now());
+      }
+    }
+  }, [lastSeekTo, action, virtualPlayed, seekTo]);
+
+  useEffect(() => {
+    if (played > 0 && played >= videoLength - 500) {
+      closePlayer();
+    }
+  }, [closePlayer, played, videoLength]);
+
+  return (
+    <>
+      {IS_TIZEN && <TizenPlayerContainer type={'application/avplayer'} />}
+      {(playerStatus === 'PAUSED' || showPlayerControls) && (
+        <PauseOverlay>
+          <PauseIcon />
+          {playerStatus === 'PAUSED' && <OverlayPlayIcon />}
+          <PlayerProgressBarContainer>
+            <PlayerProgressBar percent={(virtualPlayed / videoLength) * 100} />
+            <PlayerProgressBubble
+              percent={(virtualPlayed / videoLength) * 100}
+            />
+          </PlayerProgressBarContainer>
+          <PlayedTimeContainer>
+            <PlayedTime>{formatTime(virtualPlayed / 1000)}</PlayedTime>|
+            <TotalTime>{formatTime(videoLength / 1000)}</TotalTime>
+          </PlayedTimeContainer>
+        </PauseOverlay>
+      )}
+    </>
+  );
 };

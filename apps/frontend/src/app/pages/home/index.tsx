@@ -23,11 +23,13 @@ import { MEDIA_PAGE } from './consts';
 import {
   useGetExtendedInfoQuery,
   useGetStreamUrlQuery,
+  useStopStreamMutation,
 } from '../../../store/api/medias';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useAppDispatch } from '../../../store/store';
 import { setStreamUrl } from '../../../store/slices/stream';
 import { navigateTo } from '../../../store/slices/app';
+import { useBackNavigation } from '../../hooks/useBackNavigation';
 
 export const HomeContainer = styled(motion.div)`
   position: fixed;
@@ -40,7 +42,7 @@ export const HomeContainer = styled(motion.div)`
 const MediaPageContainer = styled.div<{ margin: number; visible: boolean }>`
   position: absolute;
   top: 50vh;
-  left: ${({ margin }) => margin}px;
+  left: ${({ margin }) => margin + window.innerWidth * 0.05}px;
   right: ${({ margin }) => margin}px;
   bottom: 0;
   opacity: ${({ visible }) => (visible ? 1 : 0)};
@@ -153,6 +155,7 @@ const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
         }
       : skipToken
   );
+  const [stopStream] = useStopStreamMutation();
   const hasStreamUrl = !!streamInfo;
 
   const goToStream = useCallback(() => {
@@ -161,6 +164,14 @@ const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
       dispatch(navigateTo('player'));
     }
   }, [dispatch, streamInfo]);
+
+  useEffect(() => {
+    return () => {
+      if (streamInfo) {
+        stopStream(streamInfo.streamId);
+      }
+    };
+  }, [stopStream, streamInfo]);
 
   useEffect(() => {
     focusSelf();
@@ -196,7 +207,7 @@ export const Home = () => {
     selectedMedia ? { type: 'movie', id: selectedMedia.id } : skipToken
   );
 
-  const onMediaSelect = useCallback((media: MediaDto) => {
+  const navigateToMedia = useCallback((media: MediaDto) => {
     setSelectedMedia(media);
     // Wait for previous animation to end before starting the next one
     setTimeout(() => {
@@ -204,30 +215,18 @@ export const Home = () => {
     }, 300);
   }, []);
 
-  useEffect(() => {
-    function handleBack(ev: KeyboardEvent) {
-      console.log(ev);
-      if (
-        ev.code === 'Backspace' ||
-        ev.code === 'Back' ||
-        ev.code === 'Escape'
-      ) {
-        setShowCategories(true);
-        setTimeout(() => {
-          setSelectedMedia(null);
-        }, 300);
-      }
-    }
-
-    console.log('adding event listener');
-    window.addEventListener('keydown', handleBack, { passive: false });
-    return () => window.removeEventListener('keydown', handleBack);
+  const navigateToCategoryList = useCallback(() => {
+    setShowCategories(true);
+    setTimeout(() => {
+      setSelectedMedia(null);
+    }, 300);
   }, []);
+  useBackNavigation('home', navigateToCategoryList);
 
   return (
     <>
       <MediaDetails expanded={!!selectedMedia} />
-      <Categories visible={!selectedMedia} onMediaSelect={onMediaSelect} />
+      <Categories visible={!selectedMedia} onMediaSelect={navigateToMedia} />
       {selectedMedia && extendedMedia && (
         <MediaPage media={extendedMedia} visible={!showCategories} />
       )}

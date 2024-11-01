@@ -18,7 +18,7 @@ const MediaImage = styled(motion.div)<{ src: string }>`
   background: url(${({ src }) => src}) center right no-repeat;
   background-size: cover;
   position: absolute;
-  left: 45vw;
+  left: 50vw;
   right: 0;
   top: 0;
   bottom: 0;
@@ -112,7 +112,7 @@ export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
       </MotionConfig>
       <MediaPreviewShadow />
       <MediaPreviewShadow2nd />
-      <MediaInformationContainer width={window.innerWidth * 0.5 - margin / 2}>
+      <MediaInformationContainer width={window.innerWidth * 0.47 - margin / 2}>
         <MediaTitle>{selectedMedia?.title}</MediaTitle>
         <MediaSubTitle>
           <span>{extendedInfo ? `${extendedInfo.runtime} min` : ''}</span>

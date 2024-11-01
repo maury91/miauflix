@@ -15,6 +15,18 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { AxiosRequestConfig } from 'axios';
 import { Cacheable } from '../utils/cacheable.util';
+import { Paginated } from '@miauflix/types';
+
+const parsePagination = <T>(
+  data: T[],
+  headers: Record<string, string>
+): Paginated<T> => ({
+  data,
+  page: Number(headers['x-pagination-page']) - 1,
+  pageSize: Number(headers['x-pagination-limit']),
+  totalPages: Number(headers['x-pagination-page-count']) - 1,
+  total: Number(headers['x-pagination-item-count']),
+});
 
 @Injectable()
 export class TraktService {
@@ -88,26 +100,21 @@ export class TraktService {
     ).data;
   }
 
-  @Cacheable(3e5 /* 5 minutes */, true)
-  public async getTrendingMovies(page = 1, limit = 30) {
+  @Cacheable(9e5 /* 15 minutes */)
+  public async getTrendingMovies(page = 1, limit = 20) {
     const result = await this.get<TrendingMoviesResponse>(
       `${this.apiUrl}/movies/trending`,
       {
         params: { page, limit },
       }
     );
-    return {
-      data: result.data,
-      pagination: {
-        page: Number(result.headers['X-Pagination-Page']),
-        limit: Number(result.headers['X-Pagination-Limit']),
-        pageCount: Number(result.headers['X-Pagination-Page-Count']),
-        itemCount: Number(result.headers['X-Pagination-Item-Count']),
-      },
-    };
+    return parsePagination(
+      result.data,
+      result.headers as Record<string, string>
+    );
   }
 
-  @Cacheable(3e5 /* 5 minutes */)
+  @Cacheable(9e5 /* 15 minutes */, true)
   public async getPopularMovies(page = 1, limit = 30) {
     const result = await this.get<PopularMoviesResponse>(
       `${this.apiUrl}/movies/popular`,
@@ -115,15 +122,10 @@ export class TraktService {
         params: { page, limit },
       }
     );
-    return {
-      data: result.data,
-      pagination: {
-        page: Number(result.headers['X-Pagination-Page']),
-        limit: Number(result.headers['X-Pagination-Limit']),
-        pageCount: Number(result.headers['X-Pagination-Page-Count']),
-        itemCount: Number(result.headers['X-Pagination-Item-Count']),
-      },
-    };
+    return parsePagination(
+      result.data,
+      result.headers as Record<string, string>
+    );
   }
 
   @Cacheable(3e5 /* 5 minutes */)
@@ -150,13 +152,12 @@ export class TraktService {
     E extends boolean,
     T = E extends true ? ExtendedMovie : Movie
   >(movieId: string, extended?: E): Promise<T> {
-    const result = (
+    return (
       await this.get<T>(`${this.apiUrl}/movies/${movieId}`, {
         params: {
           extended: extended ? 'full' : 'metadata',
         },
       })
     ).data;
-    return result;
   }
 }
