@@ -17,6 +17,9 @@ import { useTizenRemote } from './hooks/tizen/useTizenRemote';
 import { useTizenPlayer } from './hooks/tizen/useTizenPlayer';
 import { useBackNavigation } from '../../hooks/useBackNavigation';
 import { navigateTo } from '../../../store/slices/app';
+import { useTrackMovieProgressMutation } from '../../../store/api/progress';
+import { TrackMoviePlaybackRequest } from '@miauflix/types';
+import styled from 'styled-components';
 
 /*
 window.webapis.avplay.setListener({
@@ -57,6 +60,18 @@ window.webapis.avplay.setListener({
 })
 */
 
+const SubtitleDisplay = styled.p<{ index: number }>`
+  position: fixed;
+  text-align: center;
+  font-size: 3vh;
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  bottom: ${({ index }) => 10 - index * 4}vh;
+  z-index: 10002;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
 const formatTime = (time: number) => {
   const hours = Math.floor(time / 3600);
   const minutes = Math.floor(time / 60) % 60;
@@ -87,7 +102,11 @@ function calculatePosition(
 
 export const Player = () => {
   const dispatch = useAppDispatch();
+  const [updateMovieProgress] = useTrackMovieProgressMutation();
+  const userId = useAppSelector((state) => state.app.currentUserId);
   const streamUrl = useAppSelector((state) => state.stream.url);
+  const mediaId = useAppSelector((state) => state.stream.id);
+  const mediaType = useAppSelector((state) => state.stream.type);
   const [showPlayerControls, setShowPlayerControls] = useState(false);
   const [lastSeekTo, setLastSeekTo] = useState(0);
   // const [buffered, setBuffered] = useState(0);
@@ -103,7 +122,36 @@ export const Player = () => {
     played,
     togglePlay,
     closePlayer,
+    subtitle,
   } = useTizenPlayer({ streamUrl });
+
+  const updateProgress = useCallback(
+    (args: TrackMoviePlaybackRequest) => {
+      if (mediaType === 'movie') {
+        updateMovieProgress({
+          id: mediaId,
+          userId,
+          ...args,
+        });
+      }
+    },
+    [mediaId, mediaType, updateMovieProgress, userId]
+  );
+
+  const close = useCallback(() => {
+    closePlayer();
+    updateProgress({ action: 'stop', progress: played });
+  }, [closePlayer, played, updateProgress]);
+
+  useEffect(() => {
+    if (playerStatus === 'PLAYING') {
+      updateProgress({ action: 'start', progress: played });
+    }
+    if (playerStatus === 'PAUSED') {
+      updateProgress({ action: 'pause', progress: played });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerStatus, updateProgress]);
 
   const virtualPlayed = calculatePosition(
     playedAtActionBegin,
@@ -144,8 +192,8 @@ export const Player = () => {
 
   const navigateBack = useCallback(() => {
     dispatch(navigateTo('home'));
-    closePlayer();
-  }, []);
+    close();
+  }, [close, dispatch]);
 
   const addRemoteListener = useTizenRemote();
   addRemoteListener('MediaPlayPause', togglePlay);
@@ -211,9 +259,9 @@ export const Player = () => {
 
   useEffect(() => {
     if (played > 0 && played >= videoLength - 500) {
-      closePlayer();
+      close();
     }
-  }, [closePlayer, played, videoLength]);
+  }, [close, played, videoLength]);
 
   return (
     <>
@@ -234,6 +282,15 @@ export const Player = () => {
           </PlayedTimeContainer>
         </PauseOverlay>
       )}
+      {subtitle.length > 0 &&
+        subtitle.split('<br>').map((line, index, arr) => (
+          <SubtitleDisplay
+            key={index}
+            index={index - Math.max(arr.length - 2, 0)}
+          >
+            {line}
+          </SubtitleDisplay>
+        ))}
     </>
   );
 };

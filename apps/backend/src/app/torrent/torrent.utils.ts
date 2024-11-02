@@ -1,4 +1,4 @@
-import { VideoCodec, VideoQuality } from '@miauflix/types';
+import { GetTorrentFileData, VideoCodec, VideoQuality } from '@miauflix/types';
 import { MIN_MB_MN } from './torrent.const';
 import { getVideoCodec } from '../jackett/jackett.utils';
 
@@ -22,3 +22,38 @@ export const isValidVideoFile =
     );
     return length > MIN_MB_MN[quality][codec] * runtime * 1024 * 1024;
   };
+export type GetTorrentFileDataWithIndex = GetTorrentFileData & {
+  index: number;
+};
+const FROM_LIST_BASE_PRIORITY = 1000;
+
+export function calculatePriority(
+  {
+    hevc,
+    highQuality,
+    index,
+  }: Omit<GetTorrentFileDataWithIndex, 'movieId' | 'runtime'>,
+  basePriority = FROM_LIST_BASE_PRIORITY
+) {
+  if (hevc) {
+    if (highQuality) {
+      // This one has the highest importance
+      return basePriority + index * 2;
+    }
+    // Lowest importance
+    return basePriority + index * 2 + Math.floor(basePriority * 0.5);
+  }
+  if (!highQuality) {
+    // We still prioritize high quality even if it's potentially slow
+    return basePriority + index * 2 + Math.floor(basePriority * 0.1);
+  }
+  return basePriority + index * 2 + Math.floor(basePriority * 0.2);
+}
+
+export function calculateJobId({
+  hevc,
+  highQuality,
+  movieId,
+}: Omit<GetTorrentFileData, 'runtime'>) {
+  return `gtf_${hevc ? 'H' : 'x'}${highQuality ? 'Q' : 'x'}_${movieId}`;
+}

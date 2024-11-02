@@ -17234,7 +17234,7 @@ __metadata:
     vite-plugin-webfont-dl: "npm:^3.9.5"
     vitest: "npm:^1.3.1"
     webpack-cli: "npm:^5.1.4"
-    webtorrent: "npm:2.5.1"
+    webtorrent: "https://github.com/maury91/webtorrent.git"
     xml-js: "npm:1.6.11"
   languageName: unknown
   linkType: soft
@@ -23890,9 +23890,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webtorrent@npm:2.5.1":
+"webtorrent@https://github.com/maury91/webtorrent.git":
   version: 2.5.1
-  resolution: "webtorrent@npm:2.5.1"
+  resolution: "webtorrent@https://github.com/maury91/webtorrent.git#commit=1b631cd226ef66202fbfbbc695019e6c6183a22f"
   dependencies:
     "@silentbot1/nat-api": "npm:^0.4.7"
     "@thaunknown/simple-peer": "npm:^10.0.10"
@@ -23937,7 +23937,7 @@ __metadata:
   dependenciesMeta:
     utp-native:
       optional: true
-  checksum: 10c0/10e4c0cd9df739b1c145a51ebab4b787dc70bca0b7278c42cf8c4cdb0509fefe1ead1756863dfa90aefd2ea6b5e2d5ec8b933e1fe45a914b80922114a15bc713
+  checksum: 10c0/e79f4736fdebf1a25757c6753d3b3506e74caf7482997d71e45c41d7a51431ffa9103563d70219e1131d835ead30feeb40904bf87d5ff559eb76d97dac6e410f
   languageName: node
   linkType: hard
 

@@ -7,6 +7,7 @@ import home from './slices/home';
 import stream from './slices/stream';
 import { categoriesApi } from './api/categories';
 import { mediasApi } from './api/medias';
+import { progressApi } from './api/progress';
 
 export const store = configureStore({
   reducer: {
@@ -17,13 +18,15 @@ export const store = configureStore({
     [usersApi.reducerPath]: usersApi.reducer,
     [categoriesApi.reducerPath]: categoriesApi.reducer,
     [mediasApi.reducerPath]: mediasApi.reducer,
+    [progressApi.reducerPath]: progressApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       listsApi.middleware,
       usersApi.middleware,
       categoriesApi.middleware,
-      mediasApi.middleware
+      mediasApi.middleware,
+      progressApi.middleware
     ),
 });
 

@@ -50,7 +50,7 @@
     "sequelize-typescript": "2.1.6",
     "styled-components": "5.3.6",
     "uuid": "10.0.0",
-    "webtorrent": "2.5.1",
+    "webtorrent": "https://github.com/maury91/webtorrent.git",
     "xml-js": "1.6.11"
   },
   "devDependencies": {

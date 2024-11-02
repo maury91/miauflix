@@ -15,6 +15,13 @@ import { TorrentData } from './torrent.data';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
+import { MoviesData } from '../movies/movies.data';
+import { calculateJobId } from './torrent.utils';
+import { JackettQueues } from '../jackett/jackett.queues';
+import { TorrentOrchestratorQueues } from './torrent.orchestrator.queues';
+import { TorrentQueues } from './torrent.queues';
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 @Injectable()
 export class TorrentService {
@@ -22,10 +29,14 @@ export class TorrentService {
   private webTorrentServer: NodeServer;
   private streams: Record<string, [Torrent, string]> = {};
   constructor(
+    private readonly jackettQueuesService: JackettQueues,
+    private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
+    private readonly torrentQueuesService: TorrentQueues,
     private configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly httpService: HttpService,
     private readonly torrentData: TorrentData,
+    private readonly moviesData: MoviesData,
     @Inject(asyncProviders.parseTorrent)
     private parseTorrent: ParseTorrentImport,
     @Inject(asyncProviders.webTorrent)
@@ -170,6 +181,80 @@ export class TorrentService {
     });
   }
 
+  private async getTorrent(
+    slug: string,
+    useHevc: boolean,
+    useLowQuality: boolean
+  ) {
+    const torrentData = await this.torrentData.getTorrentByMovieAndQuality(
+      slug,
+      useHevc,
+      useLowQuality
+    );
+
+    if (torrentData) {
+      return torrentData;
+    }
+
+    // Fallback
+    // We assume it has a movie because we are at the streaming point
+    const movie = await this.moviesData.findMovie(slug);
+    if (!movie.torrentsSearched) {
+      console.log('No torrent has been searched, searching...');
+      const jackettJob =
+        (await this.jackettQueuesService.prioritizeTorrentSearch(slug, 1)) ||
+        (await this.jackettQueuesService.requestTorrentSearch(movie, 0, 1));
+
+      console.log('Waiting for search job');
+      await this.jackettQueuesService.waitForJob(jackettJob);
+      console.log('Search job finished');
+    } else {
+      // Create torrent orchestrator job
+      const requestScanJob =
+        await this.torrentOrchestratorQueuesService.requestScanTorrents(
+          movie.id,
+          0,
+          0
+        );
+      // Wait to know what jobs have been added
+      const createdJobs =
+        await this.torrentOrchestratorQueuesService.waitForJob(requestScanJob);
+      const wantedJob = calculateJobId({
+        movieId: movie.id,
+        hevc: useHevc,
+        highQuality: !useLowQuality,
+      });
+      // FixMe: Use the same logic as in getTorrentByMovieAndQuality
+      // Change priority of the job
+      if (createdJobs.includes(wantedJob)) {
+        while (true) {
+          const job = await this.torrentQueuesService.getJob(wantedJob);
+          if (job) {
+            await job.changePriority({
+              priority: 1,
+            });
+            break;
+          }
+          await sleep(100);
+        }
+      }
+    }
+
+    while (true) {
+      console.log('Checking again for torrent data');
+      const torrentData = await this.torrentData.getTorrentByMovieAndQuality(
+        slug,
+        useHevc,
+        useLowQuality
+      );
+      if (torrentData) {
+        console.log('torrent data found');
+        return torrentData;
+      }
+      await sleep(100);
+    }
+  }
+
   public async getStream(
     slug: string,
     useHevc: boolean,
@@ -186,12 +271,11 @@ export class TorrentService {
       };
     }
     console.log('Searching DB');
-    const { torrentFile, videos } =
-      await this.torrentData.getTorrentByMovieAndQuality(
-        slug,
-        useHevc,
-        useLowQuality
-      );
+    const { data: torrentFile, videos } = await this.getTorrent(
+      slug,
+      useHevc,
+      useLowQuality
+    );
     console.log('Got torrent from DB');
     console.log('torrents', this.client.torrents);
     const bitfieldBuffer = await this.cacheManager.get<string>(

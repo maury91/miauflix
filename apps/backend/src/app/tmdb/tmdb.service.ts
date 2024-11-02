@@ -6,9 +6,7 @@ import { Cache } from 'cache-manager';
 import { ConfigurationResponse, MovieImagesResponse } from './tmdb.types';
 import { AxiosRequestConfig } from 'axios';
 import { Cacheable } from '../utils/cacheable.util';
-import getPixels from 'get-pixels';
-import { extractColors } from 'extract-colors';
-import { FinalColor } from 'extract-colors/lib/types/Color';
+import { MovieDto, MovieImages } from '@miauflix/types';
 
 @Injectable()
 export class TMDBService {
@@ -41,21 +39,6 @@ export class TMDBService {
       `${this.apiUrl}/configuration`
     );
     return data;
-  }
-
-  private async getImageColor(imageUrl: string): Promise<FinalColor[]> {
-    return new Promise((resolve, reject) => {
-      getPixels(imageUrl, (err, pixels) => {
-        if (err) {
-          return reject(err);
-        }
-        extractColors({
-          data: [...pixels.data],
-          width: pixels.shape.width,
-          height: pixels.shape.height,
-        }).then(resolve, reject);
-      });
-    });
   }
 
   private async getMovieImagesRaw(movieId: string) {
@@ -97,10 +80,6 @@ export class TMDBService {
             file_path: `${config.images.secure_base_url}original${backdrop.file_path}`,
           }))
           .slice(0, 10)
-        // .map(async (backdrop) => ({
-        //   ...backdrop,
-        //   colors: await this.getImageColor(backdrop.file_path),
-        // }))
       ),
       Promise.all(
         data.logos
@@ -109,10 +88,6 @@ export class TMDBService {
             file_path: `${config.images.secure_base_url}original${logo.file_path}`,
           }))
           .slice(0, 5)
-        // .map(async (backdrop) => ({
-        //   ...backdrop,
-        //   colors: await this.getImageColor(backdrop.file_path),
-        // }))
       ),
     ]);
 
@@ -132,5 +107,41 @@ export class TMDBService {
       backdropsWithoutText,
       logos,
     };
+  }
+
+  public async getSimpleMovieImages(movieId: string): Promise<MovieImages> {
+    const movieImages = await this.getMovieImages(movieId);
+    return {
+      poster: movieImages.posters[0]?.file_path ?? '',
+      backdrop: movieImages.backdrops[0]?.file_path ?? '',
+      backdrops: movieImages.backdropsWithoutText.map(
+        ({ file_path }) => file_path
+      ),
+      logos: movieImages.logos.map(({ file_path }) => file_path),
+    };
+  }
+
+  public async addImagesToMovies(
+    movies: MovieDto[]
+  ): Promise<[MovieDto[], string[]]> {
+    const moviesWithoutImages: string[] = [];
+
+    return [
+      await Promise.all(
+        movies.map(async (movie) => {
+          if (!movie.images.poster) {
+            const images = await this.getSimpleMovieImages(`${movie.ids.tmdb}`);
+            const newMovie: MovieDto = {
+              ...movie,
+              images,
+            };
+            moviesWithoutImages.push(newMovie.id);
+            return newMovie;
+          }
+          return movie;
+        })
+      ),
+      moviesWithoutImages,
+    ];
   }
 }

@@ -1,6 +1,9 @@
 import { MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import { useMediaBoxSizes } from './useMediaBoxSizes';
-import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import {
+  ArrowPressHandler,
+  useFocusable,
+} from '@noriginmedia/norigin-spatial-navigation';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { IS_TV } from '../../../../consts';
 import { SLIDER_PREFIX } from '../consts';
@@ -42,8 +45,8 @@ export const useCategoryNavigation = ({
     [mediaCount, selected]
   );
 
-  const onArrowPress = useCallback(
-    (direction: string) => {
+  const onArrowPress: ArrowPressHandler = useCallback(
+    (direction: string, props, details) => {
       if (direction === 'left' || direction === 'right') {
         return move(direction);
       }

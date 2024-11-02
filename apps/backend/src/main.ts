@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { HttpStatus, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
@@ -13,14 +13,7 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
-  app.enableCors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    credentials: true,
-    preflightContinue: true,
-    optionsSuccessStatus: HttpStatus.OK,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-  });
+  app.enableCors();
 
   const port = process.env['PORT'] || 808;
   await app.listen(port);

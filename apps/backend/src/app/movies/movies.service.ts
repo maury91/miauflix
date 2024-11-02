@@ -11,19 +11,11 @@ import {
 } from '@miauflix/types';
 import { TraktService } from '../trakt/trakt.service';
 import { TMDBService } from '../tmdb/tmdb.service';
-import {
-  ChangePriorityForMovieData,
-  GetMovieExtendedDataData,
-  jackettJobs,
-  movieJobs,
-  queues,
-  SearchMovieData,
-  torrentOrchestratorJobs,
-} from '../../queues';
-import { InjectQueue } from '@nestjs/bullmq';
-import { Queue, QueueEvents } from 'bullmq';
 import { MoviesData } from './movies.data';
 import { Source } from '../database/entities/source.entity';
+import { JackettQueues } from '../jackett/jackett.queues';
+import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
+import { MoviesQueues } from './movies.queues';
 
 const NO_IMAGES: MovieImages = {
   logos: [],
@@ -34,30 +26,15 @@ const NO_IMAGES: MovieImages = {
 
 @Injectable()
 export class MovieService {
-  private movieEventsQueue: QueueEvents;
   constructor(
     private readonly traktService: TraktService,
     private readonly tmdbService: TMDBService,
     private readonly movieData: MoviesData,
-    @InjectModel(Movie) private readonly movieModel: typeof Movie,
-    @InjectQueue(queues.movie)
-    private readonly movieQueue: Queue<GetMovieExtendedDataData>,
-    @InjectQueue(queues.jackett)
-    private readonly jackettQueue: Queue<
-      SearchMovieData,
-      void,
-      jackettJobs.searchMovie
-    >,
-    @InjectQueue(queues.torrentOrchestrator)
-    private readonly torrentOrchestratorQueue: Queue<
-      ChangePriorityForMovieData,
-      void,
-      torrentOrchestratorJobs.changePriorityForMovie
-    >
-  ) {
-    // ToDo: Use configuration for redis connection
-    this.movieEventsQueue = new QueueEvents(queues.movie);
-  }
+    private readonly jackettQueuesService: JackettQueues,
+    private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
+    private readonly moviesQueuesService: MoviesQueues,
+    @InjectModel(Movie) private readonly movieModel: typeof Movie
+  ) {}
 
   private async getExtendedMovie(slug: string) {
     const movie = await this.movieModel.findOne({
@@ -75,41 +52,36 @@ export class MovieService {
       console.log('Movie not in DB');
       const traktMovie = await this.traktService.getMovie(slug);
       const images = await this.getMovieImages(traktMovie);
-      const job = await this.requestMovieExtendedData(slug, 0, images, 0);
-      await job.waitUntilFinished(this.movieEventsQueue);
+      const job = await this.moviesQueuesService.requestMovieExtendedData(
+        slug,
+        0,
+        images,
+        0
+      );
+      await this.moviesQueuesService.waitForJob(job);
       return this.getExtendedMovie(slug);
     }
 
     if (!movie.torrentsSearched) {
       console.log('Torrents not searched');
-      this.prioritizeTorrentSearch(slug, 10);
+      if (
+        !(await this.jackettQueuesService.prioritizeTorrentSearch(slug, 10))
+      ) {
+        console.log('Requesting search');
+        await this.jackettQueuesService.requestTorrentSearch(movie, 0, 10);
+      }
     } else if (!movie.torrentFound) {
       console.log('Torrents not scanned');
-      this.prioritizeScanTorrents(movie.id, 100);
+      this.torrentOrchestratorQueuesService.prioritizeScanTorrents(
+        movie.id,
+        100
+      );
     }
 
     return {
       movie,
       sources: movie.allSources,
     };
-  }
-
-  private async prioritizeTorrentSearch(slug: string, priority: number) {
-    const jobId = `search_torrents_${slug}`;
-    const job = await this.jackettQueue.getJob(jobId);
-    if (job) {
-      job.changePriority({ priority });
-    }
-  }
-
-  private async prioritizeScanTorrents(movieId: number, priority: number) {
-    this.torrentOrchestratorQueue.add(
-      torrentOrchestratorJobs.changePriorityForMovie,
-      {
-        movieId,
-        priority,
-      }
-    );
   }
 
   public async getMovie(slug: string): Promise<ExtendedMovieDto> {
@@ -136,6 +108,8 @@ export class MovieService {
       trailer: movie.trailer,
       rating: Number(movie.rating),
       genres: movie.genres,
+      sourceFound: sources.length > 0,
+      noSourceFound: movie.noSourceFound,
       qualities: [
         ...new Set<VideoQualityStr>(
           sources.map(({ quality }) => `${quality}` as const)
@@ -144,142 +118,53 @@ export class MovieService {
     };
   }
 
-  private async getStoredMovies(slugs: string[]) {
-    const storedMovies = await this.movieData.findMovies(slugs);
-    return storedMovies.reduce<Record<string, Movie>>(
-      (acc, movie) => ({
-        ...acc,
-        [movie.slug]: movie,
-      }),
-      {}
-    );
-  }
-
   private async getMovieImages(movie: TraktMovie) {
-    const movieImages = await this.tmdbService.getMovieImages(
-      `${movie.ids.tmdb}`
-    );
-    return {
-      poster: movieImages.posters[0]?.file_path ?? '',
-      backdrop: movieImages.backdrops[0]?.file_path ?? '',
-      backdrops: movieImages.backdropsWithoutText.map(
-        ({ file_path }) => file_path
-      ),
-      logos: movieImages.logos.map(({ file_path }) => file_path),
-    };
+    return await this.tmdbService.getSimpleMovieImages(`${movie.ids.tmdb}`);
   }
 
-  private async requestMovieExtendedData(
-    slug: string,
-    index: number,
-    images = NO_IMAGES,
-    priority = 10000 + index
-  ) {
-    const jobId = `get_extended_data_${slug}`;
-    const existingJob = await this.movieQueue.getJob(jobId);
-    if (existingJob) {
-      // Update priority ( it may have changed to a lower one )
-      if (existingJob.priority > priority) {
-        // Optimistic change, we don't need to wait for it
-        existingJob.changePriority({
-          priority,
-        });
-      }
-      return existingJob;
-    }
-    return this.movieQueue.add(
-      movieJobs.getMovieExtendedData,
-      {
-        slug,
-        index,
-        images,
-        priority: priority < 10000 ? 100 : undefined,
-      },
-      {
-        jobId,
-        priority,
-      }
-    );
-  }
-
-  private async addExtendedDataToMovies(movies: TraktMovie[]) {
-    const storedMovies = await this.getStoredMovies(
+  public async addExtendedDataToMovies(movies: TraktMovie[]) {
+    const storedMovies = await this.movieData.findMoviesMap(
       movies.map((movie) => movie.ids.slug)
     );
 
-    const moviesWithoutImages = movies.filter(
-      (movie) =>
-        !(movie.ids.slug in storedMovies && storedMovies[movie.ids.slug].poster)
-    );
-
-    const movieImages = await Promise.all(
-      moviesWithoutImages.map<Promise<MovieImages>>((movie) =>
-        this.getMovieImages(movie).catch((err) => {
-          console.error('Failed to fetch images', err);
-          return null;
+    const moviesWithoutSource: string[] = [];
+    const [moviesWithImages, moviesWithIncompleteInformation] =
+      await this.tmdbService.addImagesToMovies(
+        movies.map((movie) => {
+          if (movie.ids.slug in storedMovies) {
+            if (!storedMovies[movie.ids.slug].sourceFound) {
+              moviesWithoutSource.push(movie.ids.slug);
+            }
+            return storedMovies[movie.ids.slug];
+          }
+          return {
+            ...movie,
+            sourceFound: false,
+            noSourceFound: false,
+            id: movie.ids.slug,
+            images: NO_IMAGES,
+          };
         })
-      )
-    );
-
-    const extendedMovies = movies.map<MovieDto>((movie) => {
-      if (moviesWithoutImages.indexOf(movie) !== -1) {
-        return {
-          ...movie,
-          id: movie.ids.slug,
-          images: movieImages[moviesWithoutImages.indexOf(movie)],
-        };
-      }
-      if (movie.ids.slug in storedMovies) {
-        const storedMovie = storedMovies[movie.ids.slug];
-        return {
-          ...movie,
-          id: movie.ids.slug,
-          images: {
-            poster: storedMovie.poster,
-            backdrop: storedMovie.backdrop,
-            backdrops: storedMovie.backdrops,
-            logos: storedMovie.logos,
-          },
-        };
-      }
-      // This should never happen, but just in case
-      return {
-        ...movie,
-        id: movie.ids.slug,
-        images: {
-          poster: '',
-          backdrop: '',
-          backdrops: [],
-          logos: [],
-        },
-      };
-    });
-
-    const moviesWithIncompleteInformation = extendedMovies.filter(
-      (movie) =>
-        !(
-          movie.ids.slug in storedMovies &&
-          storedMovies[movie.ids.slug].torrentFound &&
-          storedMovies[movie.ids.slug].poster
-        )
-    );
-
-    moviesWithIncompleteInformation.forEach((movie, index) => {
-      this.requestMovieExtendedData(
-        movie.id,
-        index,
-        moviesWithoutImages.includes(movie)
-          ? movieImages[moviesWithoutImages.indexOf(movie)]
-          : undefined
       );
-    });
 
-    return extendedMovies.filter((movie) => {
-      if (movie.ids.slug in storedMovies) {
-        return !storedMovies[movie.ids.slug].noSourceFound;
+    new Set(...moviesWithIncompleteInformation, ...moviesWithoutSource).forEach(
+      (movieId) => {
+        const index = moviesWithImages.findIndex(
+          (movieWithImage) => movieWithImage.id === movieId
+        );
+        if (index !== -1) {
+          this.moviesQueuesService.requestMovieExtendedData(
+            movieId,
+            index,
+            moviesWithImages[index].images
+          );
+        } else {
+          console.error('Movie not found in moviesWithImages', movieId);
+        }
       }
-      return true;
-    });
+    );
+
+    return moviesWithImages.filter((movie) => !movie.noSourceFound);
   }
 
   public async getTrendingMovies(page = 1): Promise<Paginated<MovieDto>> {

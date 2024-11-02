@@ -4,7 +4,9 @@ import {
   Movie,
   MovieCreationAttributes,
 } from '../database/entities/movie.entity';
+import { Movie as TraktMovie } from '../trakt/trakt.types';
 import { Op } from 'sequelize';
+import { MovieDto, MovieImages } from '@miauflix/types';
 
 @Injectable()
 export class MoviesData {
@@ -19,6 +21,31 @@ export class MoviesData {
     });
   }
 
+  async findTraktMovie(slug: string): Promise<TraktMovie | null> {
+    const movie = await this.movieModel.findOne({
+      attributes: ['slug', 'traktId', 'imdbId', 'tmdbId', 'title', 'year'],
+      where: {
+        slug,
+      },
+      raw: true,
+    });
+
+    if (!movie) {
+      return null;
+    }
+
+    return {
+      ids: {
+        slug: movie.slug,
+        trakt: movie.traktId,
+        imdb: movie.imdbId,
+        tmdb: movie.tmdbId,
+      },
+      title: movie.title,
+      year: movie.year,
+    };
+  }
+
   async findMovies(slugs: string[]): Promise<Movie[]> {
     return await this.movieModel.findAll({
       where: {
@@ -28,6 +55,36 @@ export class MoviesData {
       },
       raw: true,
     });
+  }
+
+  async findMoviesMap(slugs: string[]): Promise<Record<string, MovieDto>> {
+    const storedMovies = await this.findMovies(slugs);
+    return storedMovies.reduce<Record<string, MovieDto>>(
+      (acc, movie) => ({
+        ...acc,
+        [movie.slug]: {
+          // ...movie,
+          id: movie.slug,
+          title: movie.title,
+          year: movie.year,
+          ids: {
+            trakt: movie.traktId,
+            slug: movie.slug,
+            imdb: movie.imdbId,
+            tmdb: movie.tmdbId,
+          },
+          noSourceFound: movie.noSourceFound,
+          sourceFound: movie.torrentFound,
+          images: {
+            poster: movie.poster,
+            backdrop: movie.backdrop,
+            backdrops: movie.backdrops,
+            logos: movie.logos,
+          },
+        },
+      }),
+      {}
+    );
   }
 
   async createMovie(movie: MovieCreationAttributes): Promise<Movie> {

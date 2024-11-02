@@ -77,3 +77,24 @@ export type MostPlayedMoviesResponse = {
 export type MostWatchedMoviesResponse = MostPlayedMoviesResponse;
 export type MostCollectedMoviesResponse = MostPlayedMoviesResponse;
 export type PopularMoviesResponse = Movie[];
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Episode {}
+
+export type MovieProgress = {
+  progress: number;
+  paused_at: string;
+  id: number;
+  type: 'movie';
+  movie: Movie;
+};
+
+export type EpisodeProgress = {
+  progress: number;
+  paused_at: string;
+  id: number;
+  type: 'episode';
+  episode: Episode;
+};
+
+export type ProgressResponse = (MovieProgress | EpisodeProgress)[];

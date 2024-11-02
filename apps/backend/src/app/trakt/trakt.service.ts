@@ -5,8 +5,10 @@ import {
   DeviceTokenResponse,
   ExtendedMovie,
   MostFavoritedMoviesResponse,
+  Movie as TraktMovie,
   Movie,
   PopularMoviesResponse,
+  ProgressResponse,
   TrendingMoviesResponse,
   UserProfileResponse,
 } from './trakt.types';
@@ -16,6 +18,7 @@ import { Cache } from 'cache-manager';
 import { AxiosRequestConfig } from 'axios';
 import { Cacheable } from '../utils/cacheable.util';
 import { Paginated } from '@miauflix/types';
+import { MoviesData } from '../movies/movies.data';
 
 const parsePagination = <T>(
   data: T[],
@@ -37,7 +40,8 @@ export class TraktService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly configService: ConfigService,
-    private readonly httpService: HttpService
+    private readonly httpService: HttpService,
+    private readonly movieData: MoviesData
   ) {
     this.apiUrl = this.configService.getOrThrow('TRAKT_API_URL');
     this.clientId = this.configService.getOrThrow('TRAKT_CLIENT_ID');
@@ -91,6 +95,77 @@ export class TraktService {
     return (
       await this.httpService.axiosRef.get<UserProfileResponse>(
         `${this.apiUrl}/users/${slug}`,
+        {
+          headers: {
+            Authorization: `bearer ${accessToken}`,
+          },
+        }
+      )
+    ).data;
+  }
+
+  public async getMovieFromDB(slug: string): Promise<TraktMovie> {
+    const movieFromDB = await this.movieData.findTraktMovie(slug);
+
+    if (!movieFromDB) {
+      console.log('Movie not in DB');
+      const movieFromApi = await this.getMovie(slug);
+      // FixMe: Trigger extend movie job
+      return movieFromApi;
+    }
+
+    return movieFromDB;
+  }
+
+  public async refreshToken(refreshToken: string) {
+    return (
+      await this.httpService.axiosRef.post<DeviceTokenResponse>(
+        `${this.apiUrl}/oauth/token`,
+        {
+          refresh_token: refreshToken,
+          client_id: this.clientId,
+          client_secret: this.clientSecret,
+          grant_type: 'refresh_token',
+        }
+      )
+    ).data;
+  }
+
+  public async playbackTracking(
+    media: Movie,
+    type: 'movie' | 'show',
+    action: 'start' | 'pause' | 'stop',
+    progress: number,
+    accessToken: string
+  ) {
+    return this.httpService.axiosRef.post(
+      `${this.apiUrl}/scrobble/${action}`,
+      {
+        [type === 'show' ? 'episode' : 'movie']: media,
+        progress,
+      },
+      {
+        headers: {
+          Authorization: `bearer ${accessToken}`,
+        },
+      }
+    );
+  }
+
+  public async trackPlayback(
+    slug: string,
+    accessToken: string,
+    action: 'start' | 'pause' | 'stop'
+  ) {
+    const movie = await this.getMovieFromDB(slug);
+
+    return this.playbackTracking(movie, 'movie', action, 0, accessToken);
+  }
+
+  public async getProgress(accessToken: string) {
+    return (
+      await this.httpService.axiosRef.get<ProgressResponse>(
+        `${this.apiUrl}/sync/playback`,
         {
           headers: {
             Authorization: `bearer ${accessToken}`,

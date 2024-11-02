@@ -1,31 +1,21 @@
-import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq';
-import {
-  GetMovieExtendedDataData,
-  jackettJobs,
-  queues,
-  SearchMovieData,
-} from '../../queues';
-import { Job, Queue } from 'bullmq';
-import { MoviesImages } from './movies.types';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { Job } from 'bullmq';
 import { TraktService } from '../trakt/trakt.service';
 import { MoviesData } from './movies.data';
+import { MovieImages, GetMovieExtendedDataData, queues } from '@miauflix/types';
+import { JackettQueues } from '../jackett/jackett.queues';
 
 @Processor(queues.movie)
 export class MovieProcessor extends WorkerHost {
   constructor(
     private readonly traktService: TraktService,
     private readonly movieData: MoviesData,
-    @InjectQueue(queues.jackett)
-    private readonly jackettQueue: Queue<
-      SearchMovieData,
-      void,
-      jackettJobs.searchMovie
-    >
+    private readonly jackettQueuesService: JackettQueues
   ) {
     super();
   }
 
-  private async getMovieExtendedData(movieSlug: string, images?: MoviesImages) {
+  private async getMovieExtendedData(movieSlug: string, images?: MovieImages) {
     const movieExists = await this.movieData.findMovie(movieSlug);
     if (movieExists) {
       if (images && images.poster && !movieExists.poster) {
@@ -62,33 +52,12 @@ export class MovieProcessor extends WorkerHost {
         job.data.images
       );
       if (!extendedMovie.torrentsSearched) {
-        const jobId = `search_torrents_${extendedMovie.slug}`;
-        await this.jackettQueue.add(
-          jackettJobs.searchMovie,
-          {
-            movieId: extendedMovie.id,
-            index: job.data.index,
-            params: {
-              // q: `${extendedMovie.title} (${extendedMovie.year})`,
-              q: extendedMovie.slug,
-              year: `${extendedMovie.year}`,
-              traktid: `${extendedMovie.traktId}`,
-              imdbid: extendedMovie.imdbId,
-              tmdbid: `${extendedMovie.tmdbId}`,
-            },
-          },
-          {
-            jobId,
-            priority: job.data.priority ?? (job.data.index < 10 ? 1000 : 2000),
-          }
+        await this.jackettQueuesService.requestTorrentSearch(
+          extendedMovie,
+          job.data.index,
+          job.data.priority
         );
-        return {
-          nextJobId: jobId,
-        };
       }
-      return {
-        nextJobId: null,
-      };
     } catch (error) {
       console.error('Failed to get movie', job.data, error);
       throw error;

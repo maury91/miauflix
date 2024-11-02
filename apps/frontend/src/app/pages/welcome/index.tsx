@@ -39,7 +39,12 @@ export const ProfileSelection = () => {
   const openProfile = useCallback(
     (profileIndex: number) => {
       if (users) {
-        dispatch(chooseProfile(users[profileIndex].slug));
+        dispatch(
+          chooseProfile({
+            id: users[profileIndex].id,
+            slug: users[profileIndex].slug,
+          })
+        );
       }
     },
     [users]

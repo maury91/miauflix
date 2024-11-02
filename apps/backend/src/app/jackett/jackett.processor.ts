@@ -10,7 +10,7 @@ import {
   queues,
   SearchMovieData,
   torrentOrchestratorJobs,
-} from '../../queues';
+} from '@miauflix/types';
 import { Job, Queue } from 'bullmq';
 import { JackettService } from './jackett.service';
 import { MoviesData } from '../movies/movies.data';

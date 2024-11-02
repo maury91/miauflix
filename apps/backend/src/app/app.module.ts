@@ -14,6 +14,11 @@ import { JackettModule } from './jackett/jackett.module';
 import { TorrentModule } from './torrent/torrent.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ListsModule } from './lists/lists.module';
+import { TraktModule } from './trakt/trakt.module';
+import { JackettQueuesModule } from './jackett/jackett.queues';
+import { MoviesQueuesModule } from './movies/movies.queues';
+import { TorrentOrchestratorQueuesModule } from './torrent/torrent.orchestrator.queues';
+import { TorrentQueuesModule } from './torrent/torrent.queues';
 
 @Module({
   imports: [
@@ -75,6 +80,11 @@ import { ListsModule } from './lists/lists.module';
     TorrentModule,
     CategoriesModule,
     ListsModule,
+    TraktModule,
+    JackettQueuesModule,
+    MoviesQueuesModule,
+    TorrentOrchestratorQueuesModule,
+    TorrentQueuesModule,
   ],
   controllers: [],
 })

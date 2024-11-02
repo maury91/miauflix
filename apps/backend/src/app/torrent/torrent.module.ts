@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { BullModule } from '@nestjs/bullmq';
-import { queues } from '../../queues';
 import { HttpModule } from '@nestjs/axios';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Torrent } from '../database/entities/torrent.entity';
@@ -20,25 +18,7 @@ import { SourceData } from '../sources/sources.data';
 import { TorrentOrchestratorProcessor } from './torrent.orchestrator.processor';
 
 @Module({
-  imports: [
-    BullModule.registerQueue(
-      {
-        name: queues.torrent,
-        defaultJobOptions: {
-          removeOnComplete: true,
-          removeOnFail: 10,
-        },
-      },
-      {
-        name: queues.torrentOrchestrator,
-        defaultJobOptions: {
-          removeOnComplete: true,
-        },
-      }
-    ),
-    HttpModule,
-    SequelizeModule.forFeature([Torrent, Movie, Source]),
-  ],
+  imports: [HttpModule, SequelizeModule.forFeature([Torrent, Movie, Source])],
   controllers: [TorrentController],
   providers: [
     parseTorrentProvider,

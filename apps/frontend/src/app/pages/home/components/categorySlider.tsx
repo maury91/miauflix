@@ -22,7 +22,7 @@ const CategorySliderContainer = styled.div<{
   index: number;
 }>`
   position: absolute;
-  left: ${(props) => props.margin + window.innerWidth * 0.05}px;
+  left: ${(props) => props.margin - window.innerWidth * 0.05}px;
   right: ${(props) => props.margin}px;
   top: ${(props) => props.index * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN)}vh;
   height: ${MEDIA_BOX_HEIGHT}vh;

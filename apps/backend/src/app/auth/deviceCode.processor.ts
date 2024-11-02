@@ -1,5 +1,5 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { CheckForAccessTokenData, queues } from '../../queues';
+import { CheckForAccessTokenData, queues } from '@miauflix/types';
 import { Job } from 'bullmq';
 import { TraktService } from '../trakt/trakt.service';
 import { UserService } from '../user/user.service';

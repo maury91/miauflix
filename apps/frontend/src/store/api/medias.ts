@@ -1,4 +1,8 @@
-import { ExtendedMovieDto, GetStreamDto } from '@miauflix/types';
+import {
+  ExtendedMovieDto,
+  GetStreamDto,
+  TrackMoviePlaybackRequest,
+} from '@miauflix/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '../../consts';
 

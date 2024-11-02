@@ -4,6 +4,7 @@ import { Page } from '../../types';
 
 export interface AppState {
   currentPage: Page;
+  currentUserId: number;
   currentProfile: string | null;
   backgrounds: string[];
   shuffledBackgrounds: string[];
@@ -12,6 +13,7 @@ export interface AppState {
 
 const initialState: AppState = {
   currentPage: 'profile-selection',
+  currentUserId: 0,
   currentProfile: null,
   backgrounds: [],
   shuffledBackgrounds: [],
@@ -22,9 +24,13 @@ export const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    chooseProfile: (state, action: PayloadAction<string>) => {
+    chooseProfile: (
+      state,
+      action: PayloadAction<{ id: number; slug: string }>
+    ) => {
       state.currentPage = 'home';
-      state.currentProfile = action.payload;
+      state.currentUserId = action.payload.id;
+      state.currentProfile = action.payload.slug;
     },
     navigateTo: (state, actions: PayloadAction<Page>) => {
       state.currentPage = actions.payload;

@@ -1,11 +1,6 @@
-import {
-  InjectQueue,
-  OnWorkerEvent,
-  Processor,
-  WorkerHost,
-} from '@nestjs/bullmq';
-import { GetTorrentFileData, queues, torrentJobs } from '../../queues';
-import { Job, Queue } from 'bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
+import { GetTorrentFileData, queues, torrentJobs } from '@miauflix/types';
+import { Job } from 'bullmq';
 import { TorrentService } from './torrent.service';
 import { isValidVideoFile } from './torrent.utils';
 import { TorrentData } from './torrent.data';
@@ -19,13 +14,7 @@ export class TorrentProcessor extends WorkerHost {
     private readonly sourceData: SourceData,
     private readonly movieData: MoviesData,
     private readonly torrentData: TorrentData,
-    private readonly torrentService: TorrentService,
-    @InjectQueue(queues.torrent)
-    private readonly torrentQueue: Queue<
-      GetTorrentFileData,
-      void,
-      torrentJobs.getTorrentFile
-    >
+    private readonly torrentService: TorrentService
   ) {
     super();
   }

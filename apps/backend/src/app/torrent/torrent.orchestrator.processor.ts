@@ -1,66 +1,19 @@
-import {
-  InjectQueue,
-  OnWorkerEvent,
-  Processor,
-  WorkerHost,
-} from '@nestjs/bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import {
   ChangePriorityForMovieData,
-  GetTorrentFileData,
   PopulateTorrentQForMovieData,
   queues,
-  torrentJobs,
   torrentOrchestratorJobs,
-} from '../../queues';
-import { Job, Queue } from 'bullmq';
-import { BulkJobOptions } from 'bullmq/dist/esm/interfaces';
+} from '@miauflix/types';
+import { Job } from 'bullmq';
 import { TorrentData } from './torrent.data';
-
-type GetTorrentFileDataWithIndex = GetTorrentFileData & { index: number };
-
-const FROM_LIST_BASE_PRIORITY = 1000;
-
-function calculatePriority(
-  {
-    hevc,
-    highQuality,
-    index,
-  }: Omit<GetTorrentFileDataWithIndex, 'movieId' | 'runtime'>,
-  basePriority = FROM_LIST_BASE_PRIORITY
-) {
-  if (hevc) {
-    if (highQuality) {
-      // This one has the highest importance
-      return basePriority + index * 2;
-    }
-    // Lowest importance
-    return basePriority + index * 2 + Math.floor(basePriority * 0.5);
-  }
-  if (!highQuality) {
-    // We still prioritize high quality even if it's potentially slow
-    return basePriority + index * 2 + Math.floor(basePriority * 0.1);
-  }
-  return basePriority + index * 2 + Math.floor(basePriority * 0.2);
-}
-
-function calculateJobId({
-  hevc,
-  highQuality,
-  movieId,
-}: Omit<GetTorrentFileData, 'runtime'>) {
-  return `gtf_${hevc ? 'H' : 'x'}${highQuality ? 'Q' : 'x'}_${movieId}`;
-}
+import { TorrentQueues } from './torrent.queues';
 
 @Processor(queues.torrentOrchestrator)
 export class TorrentOrchestratorProcessor extends WorkerHost {
   constructor(
     private readonly torrentData: TorrentData,
-    @InjectQueue(queues.torrent)
-    private readonly torrentQueue: Queue<
-      GetTorrentFileData,
-      void,
-      torrentJobs.getTorrentFile
-    >
+    private readonly torrentQueuesService: TorrentQueues
   ) {
     super();
     this.addTorrentsToProcessToQueue();
@@ -75,34 +28,11 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
     console.error(`Failed processing job ${job.id}`, job.failedReason);
   }
 
-  private addToTorrentQueue(torrents: GetTorrentFileDataWithIndex[]) {
-    return this.torrentQueue.addBulk(
-      torrents.map<{
-        name: torrentJobs.getTorrentFile;
-        data: GetTorrentFileData;
-        opts?: BulkJobOptions;
-      }>((jobData) => ({
-        name: torrentJobs.getTorrentFile,
-        data: jobData,
-        opts: {
-          jobId: calculateJobId(jobData),
-          priority: calculatePriority(jobData),
-        },
-      }))
-    );
-  }
-
   async addTorrentsToProcessToQueue() {
     const torrents = await this.torrentData.getTorrentsToProcess();
-    const failedJobs = await this.torrentQueue.getJobs(['failed']);
-
-    await Promise.all(
-      failedJobs.map(async (job) => {
-        await job.remove();
-      })
-    );
+    await this.torrentQueuesService.clearFailedJobs();
     // index is unknown because it's not from a list
-    await this.addToTorrentQueue(
+    await this.torrentQueuesService.getTorrentFile(
       torrents.map((torrent) => ({ ...torrent, index: 11 }))
     );
   }
@@ -110,13 +40,16 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
   private async populateTorrentQForMovie({
     index,
     movieId,
+    priority,
   }: PopulateTorrentQForMovieData) {
     const torrents = await this.torrentData.getTorrentsToProcessForMovie(
       movieId
     );
-    await this.addToTorrentQueue(
-      torrents.map((torrent) => ({ ...torrent, index }))
+    const jobs = await this.torrentQueuesService.getTorrentFile(
+      torrents.map((torrent) => ({ ...torrent, index })),
+      priority
     );
+    return jobs.map((job) => job.id);
   }
 
   private async changePriorityForMovie({
@@ -130,25 +63,14 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
         [false, true],
         [false, false],
       ].map(async ([hevc, highQuality]) => {
-        const job = await this.torrentQueue.getJob(
-          calculateJobId({
+        return this.torrentQueuesService.changePriority(
+          {
             hevc,
             highQuality,
             movieId,
-          })
+          },
+          priority
         );
-        if (job) {
-          job.changePriority({
-            priority: calculatePriority(
-              {
-                hevc,
-                highQuality,
-                index: 0,
-              },
-              priority
-            ),
-          });
-        }
       })
     );
   }

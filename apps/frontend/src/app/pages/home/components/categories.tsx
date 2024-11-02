@@ -7,7 +7,7 @@ import {
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { SLIDER_PREFIX } from '../consts';
+import { CATEGORIES_FOCUS_KEY, SLIDER_PREFIX } from '../consts';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { CategoriesContainer } from './categoriesContainer';
 import { CategorySlider } from './categorySlider';
@@ -25,6 +25,7 @@ export const Categories: FC<CategoriesProps> = ({ onMediaSelect, visible }) => {
   const { data: categories } = useGetCategoriesQuery();
   const { focusKey, ref, focusSelf } = useFocusable({
     saveLastFocusedChild: true,
+    focusKey: CATEGORIES_FOCUS_KEY,
   });
   const categoriesWrapperRef = useRef<HTMLDivElement | null>(null);
   const scrollAnimationRef = useRef<gsap.QuickToFunc | null>(null);

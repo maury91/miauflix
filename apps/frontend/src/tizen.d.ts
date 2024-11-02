@@ -118,8 +118,9 @@ declare global {
           onsubtitlechange?: (
             duration: number,
             text: string,
-            data3: string,
-            data4: string
+            type,
+            attriCount,
+            attributes
           ) => void;
           ondrmevent?: (drmEvent: string, drmData: string) => void;
         }) => void;

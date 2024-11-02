@@ -1,4 +1,4 @@
-import { MoviesImages } from './app/movies/movies.types';
+import { MovieImages } from './movies';
 
 export const enum queues {
   deviceCode = 'deviceCode',
@@ -25,7 +25,7 @@ export const enum movieJobs {
 export type GetMovieExtendedDataData = {
   index: number; // index of the title in the list ( the UI will display the first 5 titles before the user has to scroll to see more, so those are more important )
   slug: string;
-  images: MoviesImages;
+  images: MovieImages;
   priority?: number;
 };
 
@@ -57,6 +57,7 @@ export const enum torrentOrchestratorJobs {
 export interface PopulateTorrentQForMovieData {
   index: number; // index of the title in the list
   movieId: number;
+  priority?: number;
 }
 export interface ChangePriorityForMovieData {
   priority: number;

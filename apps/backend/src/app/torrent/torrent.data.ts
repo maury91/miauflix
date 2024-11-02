@@ -4,12 +4,11 @@ import {
   Torrent,
   TorrentCreationAttributes,
 } from '../database/entities/torrent.entity';
-import { VideoQuality } from '@miauflix/types';
+import { GetTorrentFileData, VideoQuality } from '@miauflix/types';
 import { Movie } from '../database/entities/movie.entity';
 import sequelize, { Op, Sequelize, WhereOptions } from 'sequelize';
 import { Source } from '../database/entities/source.entity';
 import { createHmac } from 'node:crypto';
-import { GetTorrentFileData } from '../../queues';
 
 @Injectable()
 export class TorrentData {
@@ -111,7 +110,7 @@ export class TorrentData {
     useHevc: boolean,
     useLowQuality: boolean
   ) {
-    const source = await this.sourceModel.findOne({
+    const bestSource = await this.sourceModel.findOne({
       attributes: ['data', 'videos'],
       where: {
         movieSlug: slug,
@@ -130,12 +129,40 @@ export class TorrentData {
       raw: true,
     });
 
-    // Todo: If no source has been found do the entire process to create one
+    if (bestSource) {
+      return bestSource;
+    }
 
-    return {
-      torrentFile: source.data,
-      videos: source.videos,
-    };
+    const sameCodec = await this.sourceModel.findOne({
+      attributes: ['data', 'videos'],
+      where: {
+        movieSlug: slug,
+        codec: {
+          [useHevc ? Op.like : Op.notLike]: '%x265%',
+        },
+      },
+      order: [['quality', 'DESC']],
+      raw: true,
+    });
+
+    if (sameCodec) {
+      return sameCodec;
+    }
+
+    const highestQuality = await this.sourceModel.findOne({
+      attributes: ['data', 'videos'],
+      where: {
+        movieSlug: slug,
+      },
+      order: [['quality', 'DESC']],
+      raw: true,
+    });
+
+    if (highestQuality) {
+      return highestQuality;
+    }
+
+    return null;
   }
 
   async getTorrentsToProcess() {

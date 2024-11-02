@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import { queues } from '@miauflix/types';
 import { TraktService } from '../trakt/trakt.service';
 import { MoviesController } from './movies.controller';
-import { HttpModule } from '@nestjs/axios';
 import { TMDBService } from '../tmdb/tmdb.service';
 import { JackettService } from '../jackett/jackett.service';
 import { BullModule } from '@nestjs/bullmq';
-import { queues } from '../../queues';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Movie } from '../database/entities/movie.entity';
 import { MovieProcessor } from './movies.processor';
@@ -16,31 +16,14 @@ import {
   webTorrentProvider,
 } from '../app.async.provider';
 import { MovieService } from './movies.service';
+import { AccessToken } from '../database/entities/accessToken.entity';
+import { UserService } from '../user/user.service';
+import { User } from '../database/entities/user.entity';
 
 @Module({
   imports: [
-    BullModule.registerQueue(
-      {
-        name: queues.movie,
-        defaultJobOptions: {
-          removeOnComplete: true,
-        },
-      },
-      {
-        name: queues.jackett,
-        defaultJobOptions: {
-          removeOnComplete: true,
-        },
-      },
-      {
-        name: queues.torrentOrchestrator,
-        defaultJobOptions: {
-          removeOnComplete: true,
-        },
-      }
-    ),
     HttpModule,
-    SequelizeModule.forFeature([Movie, Torrent]),
+    SequelizeModule.forFeature([Movie, Torrent, User, AccessToken]),
   ],
   controllers: [MoviesController],
   providers: [
@@ -48,6 +31,7 @@ import { MovieService } from './movies.service';
     MovieService,
     TraktService,
     TMDBService,
+    UserService,
     JackettService,
     MoviesData,
     parseTorrentProvider,

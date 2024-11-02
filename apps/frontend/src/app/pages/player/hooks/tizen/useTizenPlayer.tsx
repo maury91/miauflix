@@ -14,6 +14,19 @@ const autoSelectAudioTrack = () => {
   }
 };
 
+const autoSelectSubtitleTrack = () => {
+  const tracks = window.webapis.avplay.getTotalTrackInfo();
+  const textTracks = tracks.filter((track) => track.type === 'TEXT');
+  if (textTracks.length >= 1) {
+    const englishTrack = textTracks.find(({ extra_info }) =>
+      extra_info.match(/lang[^:]*:[^:]*en/)
+    );
+    if (englishTrack) {
+      window.webapis.avplay.setSelectTrack('TEXT', englishTrack.index);
+    }
+  }
+};
+
 const openVideo = (url: string): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     window.webapis.avplay.open(url);
@@ -42,6 +55,7 @@ interface UseTizenPlayerArgs {
 
 export const useTizenPlayer = ({ streamUrl }: UseTizenPlayerArgs) => {
   const [played, setPlayed] = useState(0);
+  const [subtitle, setSubtitle] = useState('');
   const [videoLength, setVideoLength] = useState(0);
   const [playerStatus, setPlayerStatus] = useState<
     'PLAYING' | 'READY' | 'IDLE' | 'PAUSED'
@@ -86,6 +100,8 @@ export const useTizenPlayer = ({ streamUrl }: UseTizenPlayerArgs) => {
         .then(() => {
           playVideo();
           setVideoLength(window.webapis.avplay.getDuration());
+          console.log('Selecting subtitles');
+          autoSelectSubtitleTrack();
         })
         .catch((err) => {
           console.error('Failed to open video', err);
@@ -108,6 +124,9 @@ export const useTizenPlayer = ({ streamUrl }: UseTizenPlayerArgs) => {
         oncurrentplaytime: function (currentTime) {
           setPlayed(currentTime);
         },
+        onsubtitlechange: function (_duration, text) {
+          setSubtitle(text);
+        },
       });
     }
   }, [streamUrl]);
@@ -121,5 +140,6 @@ export const useTizenPlayer = ({ streamUrl }: UseTizenPlayerArgs) => {
     seekTo,
     togglePlay,
     closePlayer,
+    subtitle,
   };
 };

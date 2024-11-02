@@ -28,6 +28,8 @@ export interface MovieDto {
     imdb: string;
     tmdb: number;
   };
+  sourceFound: boolean | null;
+  noSourceFound: boolean | null;
   images: MovieImages;
 }
 
@@ -38,4 +40,9 @@ export interface ExtendedMovieDto extends MovieDto {
   rating: number;
   genres: string[];
   qualities: VideoQualityStr[];
+}
+
+export interface TrackMoviePlaybackRequest {
+  action: 'start' | 'pause' | 'stop';
+  progress: number;
 }

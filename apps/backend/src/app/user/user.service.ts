@@ -49,10 +49,39 @@ export class UserService {
     });
   }
 
-  public getUsers(): Promise<UserDto[]> {
-    return this.userModel.findAll({
-      attributes: ['name', 'slug'],
+  public async getUsers(): Promise<UserDto[]> {
+    return (await this.userModel.findAll({
+      attributes: ['id', 'name', 'slug'],
       raw: true,
+    })) as UserDto[];
+  }
+
+  public async getUserAccessToken(userId: number) {
+    const accessTokenData = await this.accessTokenModel.findOne({
+      attributes: ['accessToken'],
+      where: {
+        userId,
+      },
+      raw: true,
+    });
+
+    if (!accessTokenData) {
+      throw new Error('User has no access token');
+    }
+
+    return accessTokenData.accessToken;
+  }
+
+  public async getExpiringTokens(): Promise<AccessToken[]> {
+    const accessTokens = await this.accessTokenModel.findAll();
+    return accessTokens.filter(async (accessToken) => {
+      // If expires in less than 5 days
+      return (
+        accessToken.createdAt.getTime() +
+          accessToken.expiresIn * 1000 -
+          Date.now() <
+        1000 * 60 * 60 * 24 * 5
+      );
     });
   }
 }

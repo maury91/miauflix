@@ -5,7 +5,7 @@ import { JackettService } from './jackett.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Torrent } from '../database/entities/torrent.entity';
 import { BullModule } from '@nestjs/bullmq';
-import { queues } from '../../queues';
+import { queues } from '@miauflix/types';
 import { JackettProcessor } from './jackett.processor';
 import { MoviesData } from '../movies/movies.data';
 import { Movie } from '../database/entities/movie.entity';
