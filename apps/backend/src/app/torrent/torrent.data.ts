@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Global, Injectable, Module } from '@nestjs/common';
+import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import {
   Torrent,
   TorrentCreationAttributes,
@@ -242,3 +242,11 @@ export class TorrentData {
     }));
   }
 }
+
+@Global()
+@Module({
+  imports: [SequelizeModule.forFeature([Torrent, Movie, Source])],
+  providers: [TorrentData],
+  exports: [TorrentData, SequelizeModule],
+})
+export class TorrentDataModule {}

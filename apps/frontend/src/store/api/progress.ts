@@ -6,29 +6,32 @@ export const progressApi = createApi({
   reducerPath: 'progressApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/progress` }),
   endpoints: (builder) => ({
-    getProgress: builder.query<ProgressDto, void>({
-      query: () => '',
+    getProgress: builder.query<ProgressDto, number>({
+      query: (userId) => ({
+        url: '',
+        headers: {
+          'x-user-id': `${userId}`,
+        },
+      }),
     }),
     trackMovieProgress: builder.mutation<
       void,
       TrackMoviePlaybackRequest & { id: string; userId: number }
     >({
       query: (body) => ({
-        url: `movies/${body.id}/watch`,
+        url: body.id,
         method: 'POST',
         headers: {
           'x-user-id': body.userId.toString(),
         },
         body: {
           action: body.action,
+          progress: body.progress,
         },
       }),
     }),
   }),
 });
 
-export const {
-  useGetProgressQuery,
-  useTrackMovieProgressMutation,
-  usePrefetch,
-} = progressApi;
+export const { useGetProgressQuery, useTrackMovieProgressMutation } =
+  progressApi;

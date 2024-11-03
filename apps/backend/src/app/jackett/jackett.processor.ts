@@ -1,20 +1,15 @@
-import {
-  InjectQueue,
-  OnWorkerEvent,
-  Processor,
-  WorkerHost,
-} from '@nestjs/bullmq';
+import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import {
   jackettJobs,
-  PopulateTorrentQForMovieData,
   queues,
   SearchMovieData,
   torrentOrchestratorJobs,
 } from '@miauflix/types';
-import { Job, Queue } from 'bullmq';
+import { Job } from 'bullmq';
 import { JackettService } from './jackett.service';
 import { MoviesData } from '../movies/movies.data';
 import { TorrentData } from '../torrent/torrent.data';
+import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
 
 const MIN_TORRENTS = 10;
 
@@ -24,12 +19,7 @@ export class JackettProcessor extends WorkerHost {
     private readonly jackettService: JackettService,
     private readonly torrentData: TorrentData,
     private readonly movieData: MoviesData,
-    @InjectQueue(queues.torrentOrchestrator)
-    private readonly torrentOrchestratorQueue: Queue<
-      PopulateTorrentQForMovieData,
-      void,
-      torrentOrchestratorJobs.populateTorrentQForMovie
-    >
+    private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues
   ) {
     super();
   }
@@ -104,9 +94,9 @@ export class JackettProcessor extends WorkerHost {
     if (torrentsFound === 0) {
       await this.movieData.setnoSourceFound(movieId);
     } else {
-      await this.torrentOrchestratorQueue.add(
-        torrentOrchestratorJobs.populateTorrentQForMovie,
-        { index, movieId }
+      await this.torrentOrchestratorQueuesService.requestScanTorrents(
+        movieId,
+        index
       );
     }
   }

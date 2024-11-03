@@ -20,6 +20,7 @@ import { navigateTo } from '../../../store/slices/app';
 import { useTrackMovieProgressMutation } from '../../../store/api/progress';
 import { TrackMoviePlaybackRequest } from '@miauflix/types';
 import styled from 'styled-components';
+import { setMediaProgress } from '../../../store/slices/resume';
 
 /*
 window.webapis.avplay.setListener({
@@ -107,6 +108,9 @@ export const Player = () => {
   const streamUrl = useAppSelector((state) => state.stream.url);
   const mediaId = useAppSelector((state) => state.stream.id);
   const mediaType = useAppSelector((state) => state.stream.type);
+  const initialPosition = useAppSelector(
+    (state) => state.resume.mediaProgress[mediaId] ?? 0
+  );
   const [showPlayerControls, setShowPlayerControls] = useState(false);
   const [lastSeekTo, setLastSeekTo] = useState(0);
   // const [buffered, setBuffered] = useState(0);
@@ -123,7 +127,7 @@ export const Player = () => {
     togglePlay,
     closePlayer,
     subtitle,
-  } = useTizenPlayer({ streamUrl });
+  } = useTizenPlayer({ initialPosition, streamUrl });
 
   const updateProgress = useCallback(
     (args: TrackMoviePlaybackRequest) => {
@@ -133,22 +137,29 @@ export const Player = () => {
           userId,
           ...args,
         });
+        dispatch(setMediaProgress({ mediaId, progress: args.progress }));
       }
     },
-    [mediaId, mediaType, updateMovieProgress, userId]
+    [dispatch, mediaId, mediaType, updateMovieProgress, userId]
   );
 
   const close = useCallback(() => {
     closePlayer();
-    updateProgress({ action: 'stop', progress: played });
-  }, [closePlayer, played, updateProgress]);
+    updateProgress({ action: 'stop', progress: (played / videoLength) * 100 });
+  }, [closePlayer, played, videoLength, updateProgress]);
 
   useEffect(() => {
     if (playerStatus === 'PLAYING') {
-      updateProgress({ action: 'start', progress: played });
+      updateProgress({
+        action: 'start',
+        progress: (played / videoLength) * 100,
+      });
     }
     if (playerStatus === 'PAUSED') {
-      updateProgress({ action: 'pause', progress: played });
+      updateProgress({
+        action: 'pause',
+        progress: (played / videoLength) * 100,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerStatus, updateProgress]);
@@ -237,19 +248,22 @@ export const Player = () => {
   useBackNavigation('player', navigateBack);
 
   useEffect(() => {
-    if (action === 'FF') {
+    if (action === 'FF' || action === 'REW') {
       const handle = setInterval(() => {
         setActionMultiplier((prev) => {
           return prev + Math.ceil(Math.log10(prev + 1)) + 1;
         });
       }, 100);
-      return () => clearTimeout(handle);
+      return () => {
+        clearTimeout(handle);
+      };
     }
     return;
   }, [action]);
 
+  // Seeking often has bad effect on the tv
   useEffect(() => {
-    if (lastSeekTo < Date.now() - 500) {
+    if (lastSeekTo < Date.now() - 2000) {
       if (action === 'FF' || action === 'REW') {
         seekTo(virtualPlayed);
         setLastSeekTo(Date.now());
@@ -259,9 +273,9 @@ export const Player = () => {
 
   useEffect(() => {
     if (played > 0 && played >= videoLength - 500) {
-      close();
+      navigateBack();
     }
-  }, [close, played, videoLength]);
+  }, [navigateBack, played, videoLength]);
 
   return (
     <>

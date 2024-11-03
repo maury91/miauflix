@@ -7,14 +7,14 @@ import {
   deviceCodeJobs,
   CheckForAccessTokenData,
 } from '@miauflix/types';
-import { UserService } from '../user/user.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { UserData } from '../user/user.data';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly traktService: TraktService,
-    private readonly userService: UserService,
+    private readonly userData: UserData,
     @InjectQueue(queues.deviceCode)
     private deviceCodeQueue: Queue<CheckForAccessTokenData>
   ) {}
@@ -39,17 +39,19 @@ export class AuthService {
   }
 
   async checkUserLogin(deviceCode: string) {
-    const user = await this.userService.findUserByDeviceCode(deviceCode);
+    const user = await this.userData.findUserByDeviceCode(deviceCode);
     return !!user;
   }
 
-  @Cron(CronExpression.EVERY_30_MINUTES)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async renewTokensAboutToExpire() {
-    const expiringTokens = await this.userService.getExpiringTokens();
+    const expiringTokens = await this.userData.getExpiringTokens();
     for (const token of expiringTokens) {
+      console.log('Renewing token for user', token.userId);
       const newToken = await this.traktService.refreshToken(token.refreshToken);
+      console.log('Got new token', newToken);
       await token.update({
-        createdAt: new Date(),
+        createdAt: new Date(newToken.created_at * 1000),
         accessToken: newToken.access_token,
         refreshToken: newToken.refresh_token,
         expiresIn: newToken.expires_in,

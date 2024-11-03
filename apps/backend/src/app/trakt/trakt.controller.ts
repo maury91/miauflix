@@ -1,27 +1,36 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { TraktService } from './trakt.service';
 import { Request } from 'express';
-import { UserService } from '../user/user.service';
 import { ProgressDto, TrackMoviePlaybackRequest } from '@miauflix/types';
 import { MovieService } from '../movies/movies.service';
+import { UserData } from '../user/user.data';
 
 @Controller('progress')
 export class TraktController {
   constructor(
-    private readonly userService: UserService,
+    private readonly userData: UserData,
     private readonly movieService: MovieService,
     private readonly traktService: TraktService
   ) {}
 
-  @Get(':slug')
+  @Get('')
   async getProgress(@Req() req: Request): Promise<ProgressDto> {
     const userId = req.headers['x-user-id'];
     if (typeof userId !== 'string' || !userId) {
-      throw new Error('User id missing');
+      throw new BadRequestException('User id missing');
     }
-    const accessToken = await this.userService.getUserAccessToken(
+    const accessToken = await this.userData.getUserAccessToken(
       parseInt(userId, 10)
     );
+    console.log('Getting progress for user ', userId);
     const rawProgress = await this.traktService.getProgress(accessToken);
     const extendedMovies = await this.movieService.addExtendedDataToMovies(
       rawProgress
@@ -44,15 +53,17 @@ export class TraktController {
   async watchMovie(
     @Param('slug') slug: string,
     @Req() req: Request,
-    @Body() { action }: TrackMoviePlaybackRequest
+    @Body() { action, progress }: TrackMoviePlaybackRequest
   ) {
     const userId = req.headers['x-user-id'];
     if (typeof userId !== 'string' || !userId) {
-      throw new Error('User id missing');
+      throw new BadRequestException('User id missing');
     }
-    const accessToken = await this.userService.getUserAccessToken(
+    const accessToken = await this.userData.getUserAccessToken(
       parseInt(userId, 10)
     );
-    return this.traktService.trackPlayback(slug, accessToken, action);
+    console.log('Got access token for user', userId);
+    await this.traktService.trackPlayback(slug, accessToken, action, progress);
+    return { success: true };
   }
 }

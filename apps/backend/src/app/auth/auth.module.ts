@@ -7,12 +7,7 @@ import { TraktService } from '../trakt/trakt.service';
 import { AuthService } from './auth.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { User } from '../database/entities/user.entity';
 import { UserService } from '../user/user.service';
-import { AccessToken } from '../database/entities/accessToken.entity';
-import { MoviesData } from '../movies/movies.data';
-import { Movie } from '../database/entities/movie.entity';
 
 @Module({
   imports: [
@@ -20,7 +15,6 @@ import { Movie } from '../database/entities/movie.entity';
       name: queues.deviceCode,
     }),
     HttpModule,
-    SequelizeModule.forFeature([User, AccessToken, Movie]),
   ],
   controllers: [AuthController],
   providers: [
@@ -29,8 +23,7 @@ import { Movie } from '../database/entities/movie.entity';
     AuthService,
     UserService,
     ConfigService,
-    MoviesData,
   ],
-  exports: [SequelizeModule],
+  exports: [],
 })
 export class AuthModule {}

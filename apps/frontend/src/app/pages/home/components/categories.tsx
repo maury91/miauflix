@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useGetCategoriesQuery } from '../../../../store/api/categories';
 import { gsap } from 'gsap';
 import {
@@ -7,12 +7,18 @@ import {
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { CATEGORIES_FOCUS_KEY, SLIDER_PREFIX } from '../consts';
+import {
+  CATEGORIES_FOCUS_KEY,
+  CONTINUE_WATCHING_CATEGORY,
+  SLIDER_PREFIX,
+} from '../consts';
 import { useSwipe } from '../../../hooks/useSwipe';
 import { CategoriesContainer } from './categoriesContainer';
 import { CategorySlider } from './categorySlider';
 import { IS_SLOW_DEVICE } from '../../../../consts';
-import { MovieDto } from '@miauflix/types';
+import { CategoryDto, MovieDto } from '@miauflix/types';
+import { useGetProgressQuery } from '../../../../store/api/progress';
+import { useAppSelector } from '../../../../store/store';
 
 const OFFSET = IS_SLOW_DEVICE ? 0 : 5;
 
@@ -21,8 +27,38 @@ interface CategoriesProps {
   visible: boolean;
 }
 
+const useCategories = () => {
+  const userId = useAppSelector((state) => state.app.currentUserId);
+  const { data: progressCategory, isLoading: isProgressCategoryLoading } =
+    useGetProgressQuery(userId, {
+      pollingInterval: 30000,
+    });
+  const { data: normalCategories, isLoading: areNormalCategoriesLoading } =
+    useGetCategoriesQuery();
+
+  return useMemo<CategoryDto[]>(() => {
+    const categories: CategoryDto[] = [];
+    if (isProgressCategoryLoading || areNormalCategoriesLoading) {
+      return [];
+    }
+    if (progressCategory && progressCategory.length) {
+      categories.push({
+        id: CONTINUE_WATCHING_CATEGORY,
+        name: 'Continue Watching',
+      });
+    }
+    return [...categories, ...(normalCategories ?? [])];
+  }, [
+    areNormalCategoriesLoading,
+    isProgressCategoryLoading,
+    normalCategories,
+    progressCategory,
+  ]);
+};
+
 export const Categories: FC<CategoriesProps> = ({ onMediaSelect, visible }) => {
-  const { data: categories } = useGetCategoriesQuery();
+  const categories = useCategories();
+
   const { focusKey, ref, focusSelf } = useFocusable({
     saveLastFocusedChild: true,
     focusKey: CATEGORIES_FOCUS_KEY,
@@ -63,7 +99,7 @@ export const Categories: FC<CategoriesProps> = ({ onMediaSelect, visible }) => {
   }, [focusSelf, visible]);
 
   useEffect(() => {
-    if (categories) {
+    if (categories.length) {
       const firstCategory = categories[0];
       if (
         !(
@@ -89,10 +125,6 @@ export const Categories: FC<CategoriesProps> = ({ onMediaSelect, visible }) => {
     }
     scrollAnimationRef.current?.(((-to + OFFSET) / 100) * window.innerHeight);
   }, []);
-
-  if (!categories) {
-    return null;
-  }
 
   return (
     <FocusContext.Provider value={focusKey}>

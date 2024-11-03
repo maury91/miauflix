@@ -4,7 +4,7 @@ import { useGetListQuery } from '../../../../store/api/lists';
 import styled from 'styled-components';
 import { scaleImage } from '../utils/scaleImage';
 import { CategoryDto, MediaDto, MovieDto } from '@miauflix/types';
-import { useAppDispatch } from '../../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import {
   changeCategory,
   setSelectedMedia,
@@ -14,6 +14,8 @@ import { MEDIA_BOX_HEIGHT, MediaBox, MediaHighlight } from './mediaBox';
 import { useCategoryNavigation } from '../hooks/useCategoryNavigation';
 import { IS_TV } from '../../../../consts';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { CONTINUE_WATCHING_CATEGORY } from '../consts';
+import { useGetProgressQuery } from '../../../../store/api/progress';
 
 export const SLIDER_MARGIN = 10;
 
@@ -37,22 +39,22 @@ const CategoryContent = styled.div`
   position: relative;
 `;
 
-export const CategorySlider: FC<{
-  category: CategoryDto;
-  index: number;
-  scrollTo: (to: number) => void;
-  onSelect: (media: MovieDto) => void;
-}> = ({ category, index, onSelect, scrollTo }) => {
+interface ListHookReturn {
+  data: (MediaDto | null)[];
+  updateSelected: (selected: number) => void;
+  mediaCount: number;
+}
+
+const useInfiniteList = (category: string, skip = false): ListHookReturn => {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+
   const previousList = useGetListQuery(
-    page > 0 ? { category: category.id, page: page - 1 } : skipToken
+    page > 0 && !skip ? { category, page: page - 1 } : skipToken
   );
-  const currentList = useGetListQuery({ category: category.id, page });
+  const currentList = useGetListQuery(!skip ? { category, page } : skipToken);
   const nextList = useGetListQuery(
-    page + 1 < totalPages
-      ? { category: category.id, page: page + 1 }
-      : skipToken
+    page + 1 < totalPages && !skip ? { category, page: page + 1 } : skipToken
   );
 
   const mediaCount = currentList.data?.total ?? 0;
@@ -74,6 +76,69 @@ export const CategorySlider: FC<{
     }
     return combinedData;
   }, [pageSize, page, previousList.data, currentList.data, nextList.data]);
+
+  const updateSelected = useCallback(
+    (selected: number) => {
+      setPage(Math.round(selected / pageSize));
+    },
+    [pageSize]
+  );
+
+  return {
+    data,
+    updateSelected,
+    mediaCount,
+  };
+};
+
+const SPECIAL_CATEGORIES = [CONTINUE_WATCHING_CATEGORY];
+
+const useSpecialList = (category: string): ListHookReturn => {
+  const userId = useAppSelector((state) => state.app.currentUserId);
+  const { data: progressCategory } = useGetProgressQuery(
+    category === CONTINUE_WATCHING_CATEGORY ? userId : skipToken
+  );
+
+  if (progressCategory) {
+    return {
+      data: progressCategory.map(({ movie }) => movie),
+      updateSelected: () => {
+        // nothing
+      },
+      mediaCount: progressCategory.length,
+    };
+  }
+
+  return {
+    data: [],
+    updateSelected: () => {
+      // nothing
+    },
+    mediaCount: 0,
+  };
+};
+
+const useSpecialCategories = (category: string) => {
+  const skipNormalCategory = SPECIAL_CATEGORIES.includes(category);
+  const normalListResult = useInfiniteList(category, skipNormalCategory);
+  const specialListResult = useSpecialList(CONTINUE_WATCHING_CATEGORY);
+
+  if (SPECIAL_CATEGORIES.includes(category)) {
+    return specialListResult;
+  }
+  return normalListResult;
+};
+
+export const CategorySlider: FC<{
+  category: CategoryDto;
+  index: number;
+  scrollTo: (to: number) => void;
+  onSelect: (media: MovieDto) => void;
+}> = ({ category, index, onSelect, scrollTo }) => {
+  const { data, updateSelected, mediaCount } = useSpecialCategories(
+    category.id
+  );
+  const mediasProgress = useAppSelector((state) => state.resume.mediaProgress);
 
   const mediaBoxesWrapperRef = useRef<HTMLDivElement>(null);
   const categorySliderAnimationRef = useRef<gsap.QuickToFunc | null>(null);
@@ -104,8 +169,8 @@ export const CategorySlider: FC<{
     : (mediaWidth + gap) * (hovered - selected);
 
   useEffect(() => {
-    setPage(Math.round(selected / pageSize));
-  }, [pageSize, selected]);
+    updateSelected(selected);
+  }, [selected, updateSelected]);
 
   useEffect(() => {
     if (data[hovered] && focused) {
@@ -181,6 +246,7 @@ export const CategorySlider: FC<{
                 index={index}
                 onMouseEnter={handleHover(index)}
                 onClick={() => onMediaSelect(index)}
+                progress={mediasProgress[media.id] ?? 0}
               />
             );
           })}

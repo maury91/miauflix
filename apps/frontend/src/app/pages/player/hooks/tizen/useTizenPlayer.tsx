@@ -2,14 +2,22 @@ import { useCallback, useEffect, useState } from 'react';
 import { IS_TIZEN } from '../../../../../consts';
 
 const autoSelectAudioTrack = () => {
+  console.log('Getting tracks');
   const tracks = window.webapis.avplay.getTotalTrackInfo();
   const audioTracks = tracks.filter((track) => track.type === 'AUDIO');
+  console.log('Audio tracks', audioTracks);
+  console.log(window.webapis.avplay.getState());
   if (audioTracks.length > 1) {
+    console.log('Choosing english track');
     const englishTrack = audioTracks.find(({ extra_info }) =>
       extra_info.match(/lang[^:]*:[^:]*en/)
     );
     if (englishTrack) {
-      window.webapis.avplay.setSelectTrack('AUDIO', englishTrack.index);
+      try {
+        window.webapis.avplay.setSelectTrack('AUDIO', englishTrack.index);
+      } catch (err) {
+        console.error('Could not change audio track');
+      }
     }
   }
 };
@@ -22,26 +30,39 @@ const autoSelectSubtitleTrack = () => {
       extra_info.match(/lang[^:]*:[^:]*en/)
     );
     if (englishTrack) {
-      window.webapis.avplay.setSelectTrack('TEXT', englishTrack.index);
+      try {
+        window.webapis.avplay.setSelectTrack('TEXT', englishTrack.index);
+      } catch (err) {
+        console.error('Could not change subtitle track');
+      }
     }
   }
 };
 
 const openVideo = (url: string): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
-    window.webapis.avplay.open(url);
-    window.webapis.avplay.setDisplayRect(
-      0,
-      0,
-      window.innerWidth,
-      window.innerHeight
+    console.log('Opening video', url);
+    console.log(window.webapis.avplay.open(url));
+    console.log('Setting display rect');
+    console.log(
+      window.webapis.avplay.setDisplayRect(
+        0,
+        0,
+        window.innerWidth,
+        window.innerHeight
+      )
     );
-    window.webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX');
-    window.webapis.avplay.prepareAsync(resolve, reject);
-  }).then(autoSelectAudioTrack);
+    console.log('Setting display method');
+    console.log(
+      window.webapis.avplay.setDisplayMethod('PLAYER_DISPLAY_MODE_LETTER_BOX')
+    );
+    console.log('Preparing');
+    console.log(window.webapis.avplay.prepareAsync(resolve, reject));
+  });
 };
 
 const playVideo = () => {
+  console.log('Playing...');
   window.webapis.avplay.play();
 };
 
@@ -50,10 +71,14 @@ const getPlayerStatus = () => {
 };
 
 interface UseTizenPlayerArgs {
+  initialPosition: number;
   streamUrl: string;
 }
 
-export const useTizenPlayer = ({ streamUrl }: UseTizenPlayerArgs) => {
+export const useTizenPlayer = ({
+  initialPosition,
+  streamUrl,
+}: UseTizenPlayerArgs) => {
   const [played, setPlayed] = useState(0);
   const [subtitle, setSubtitle] = useState('');
   const [videoLength, setVideoLength] = useState(0);
@@ -99,9 +124,14 @@ export const useTizenPlayer = ({ streamUrl }: UseTizenPlayerArgs) => {
       openVideo(streamUrl)
         .then(() => {
           playVideo();
-          setVideoLength(window.webapis.avplay.getDuration());
+          console.log('Getting and setting video length');
+          const videoDuration = window.webapis.avplay.getDuration();
+          setVideoLength(videoDuration);
+          console.log('Selecting audio');
+          autoSelectAudioTrack();
           console.log('Selecting subtitles');
           autoSelectSubtitleTrack();
+          seekTo(videoDuration * (initialPosition / 100));
         })
         .catch((err) => {
           console.error('Failed to open video', err);

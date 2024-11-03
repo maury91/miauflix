@@ -53,7 +53,6 @@ export class TorrentService {
           infer: true,
         }) << 19,
     });
-    console.log(this.client.torrents);
     this.client.on('torrent', (torrent: Torrent) => {
       console.log('New torrent', torrent.name);
     });
@@ -150,7 +149,7 @@ export class TorrentService {
   public async stopStream(streamKey: string): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const streamTorrent = this.streams[streamKey];
-      console.log('Stopping stream', streamKey, streamTorrent);
+      console.log('Stopping stream', streamKey);
       if (streamTorrent) {
         this.client
           .get(streamTorrent[0])
@@ -260,7 +259,6 @@ export class TorrentService {
     useHevc: boolean,
     useLowQuality: boolean
   ): Promise<{ stream: string; streamKey: string }> {
-    console.log(this.streams);
     const streamKey = `${slug}_${useHevc ? 'H' : 'x'}${
       useLowQuality ? 'L' : 'x'
     }`;
@@ -277,7 +275,6 @@ export class TorrentService {
       useLowQuality
     );
     console.log('Got torrent from DB');
-    console.log('torrents', this.client.torrents);
     const bitfieldBuffer = await this.cacheManager.get<string>(
       `torrent:${streamKey}:bitfield`
     );
@@ -302,13 +299,11 @@ export class TorrentService {
               destroyStore: true,
             });
           } else {
+            console.log('Torrent progress', torrent.progress);
             const file = videoFiles[0];
             file.select();
             file.on('error', (err) => {
               console.error('File error', err);
-            });
-            file.on('stream', (data) => {
-              console.log('File stream', data);
             });
             const streamURL = `http://localhost:${
               this.webTorrentServer.address().port
@@ -316,15 +311,14 @@ export class TorrentService {
             this.streams[streamKey] = [torrent, streamURL];
             resolve({ stream: streamURL, streamKey });
           }
-          torrent.on('verified', (index, isStartup) => {
-            console.log('Verified', index, isStartup);
-            if (!isStartup) {
-              this.cacheManager.set(
-                `torrent:${streamKey}:bitfield`,
-                Buffer.from(torrent.bitfield.buffer).toString('base64'),
-                1000 * 60 * 60 * 24 * 7
-              );
-            }
+          torrent.on('verified', (index) => {
+            console.log('Torrent progress', torrent.progress);
+            console.log('Verified', index);
+            this.cacheManager.set(
+              `torrent:${streamKey}:bitfield`,
+              Buffer.from(torrent.bitfield.buffer).toString('base64'),
+              1000 * 60 * 60 * 24 * 7
+            );
           });
         }
       );

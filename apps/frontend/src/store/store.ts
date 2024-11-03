@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { usersApi } from './api/users';
 import app from './slices/app';
 import home from './slices/home';
+import resume from './slices/resume';
 import stream from './slices/stream';
 import { categoriesApi } from './api/categories';
 import { mediasApi } from './api/medias';
@@ -13,6 +14,7 @@ export const store = configureStore({
   reducer: {
     app,
     home,
+    resume,
     stream,
     [listsApi.reducerPath]: listsApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,

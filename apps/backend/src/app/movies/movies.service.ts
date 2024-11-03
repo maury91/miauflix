@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Movie } from '../database/entities/movie.entity';
 import { Movie as TraktMovie } from '../trakt/trakt.types';
 import {
   ExtendedMovieDto,
@@ -12,7 +10,6 @@ import {
 import { TraktService } from '../trakt/trakt.service';
 import { TMDBService } from '../tmdb/tmdb.service';
 import { MoviesData } from './movies.data';
-import { Source } from '../database/entities/source.entity';
 import { JackettQueues } from '../jackett/jackett.queues';
 import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
 import { MoviesQueues } from './movies.queues';
@@ -32,21 +29,11 @@ export class MovieService {
     private readonly movieData: MoviesData,
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
-    private readonly moviesQueuesService: MoviesQueues,
-    @InjectModel(Movie) private readonly movieModel: typeof Movie
+    private readonly moviesQueuesService: MoviesQueues
   ) {}
 
   private async getExtendedMovie(slug: string) {
-    const movie = await this.movieModel.findOne({
-      where: {
-        slug,
-      },
-      include: {
-        model: Source,
-        as: 'allSources',
-        attributes: ['data', 'quality', 'codec'],
-      },
-    });
+    const movie = await this.movieData.findMovieWithSources(slug);
 
     if (!movie) {
       console.log('Movie not in DB');
@@ -147,22 +134,23 @@ export class MovieService {
         })
       );
 
-    new Set(...moviesWithIncompleteInformation, ...moviesWithoutSource).forEach(
-      (movieId) => {
-        const index = moviesWithImages.findIndex(
-          (movieWithImage) => movieWithImage.id === movieId
+    new Set([
+      ...moviesWithIncompleteInformation,
+      ...moviesWithoutSource,
+    ]).forEach((movieId) => {
+      const index = moviesWithImages.findIndex(
+        (movieWithImage) => movieWithImage.id === movieId
+      );
+      if (index !== -1) {
+        this.moviesQueuesService.requestMovieExtendedData(
+          movieId,
+          index,
+          moviesWithImages[index].images
         );
-        if (index !== -1) {
-          this.moviesQueuesService.requestMovieExtendedData(
-            movieId,
-            index,
-            moviesWithImages[index].images
-          );
-        } else {
-          console.error('Movie not found in moviesWithImages', movieId);
-        }
+      } else {
+        console.error('Movie not found in moviesWithImages', movieId);
       }
-    );
+    });
 
     return moviesWithImages.filter((movie) => !movie.noSourceFound);
   }

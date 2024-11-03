@@ -7,14 +7,11 @@ import {
   parseTorrentProvider,
   webTorrentProvider,
 } from '../app.async.provider';
-import { MoviesData } from '../movies/movies.data';
 import { TorrentProcessor } from './torrent.processor';
 import { TorrentService } from './torrent.service';
 import { TorrentController } from './torrent.controller';
-import { TorrentData } from './torrent.data';
 import { TraktService } from '../trakt/trakt.service';
 import { Source } from '../database/entities/source.entity';
-import { SourceData } from '../sources/sources.data';
 import { TorrentOrchestratorProcessor } from './torrent.orchestrator.processor';
 
 @Module({
@@ -24,9 +21,6 @@ import { TorrentOrchestratorProcessor } from './torrent.orchestrator.processor';
     parseTorrentProvider,
     webTorrentProvider,
     TraktService,
-    MoviesData,
-    SourceData,
-    TorrentData,
     TorrentService,
     TorrentOrchestratorProcessor,
     TorrentProcessor,

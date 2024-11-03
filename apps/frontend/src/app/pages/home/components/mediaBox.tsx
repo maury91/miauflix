@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { IS_TV } from '../../../../consts';
+import { IS_TV, PALETTE } from '../../../../consts';
 
 export const MEDIA_BOX_HEIGHT = 20;
 export const MEDIA_BOX_WIDTH = MEDIA_BOX_HEIGHT * (16 / 9);
@@ -8,6 +8,7 @@ export const MediaBox = styled.div<{
   src: string;
   index: number;
   logoSrc?: string;
+  progress?: number;
 }>`
   border-radius: 0.7vh;
   background: ${({ logoSrc, src }) =>
@@ -22,6 +23,19 @@ export const MediaBox = styled.div<{
   top: 0;
   left: ${(props) => props.index * 37.2}vh;
   cursor: pointer;
+
+  ${({ progress }) =>
+    progress &&
+    `&:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: ${progress}%;
+    opacity: 0.7;
+    height: 4%;
+    background: ${PALETTE.background.primary};
+  }`}
 `;
 
 export const MediaHighlight = styled.div`

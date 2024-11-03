@@ -3,22 +3,16 @@ import { TraktService } from '../trakt/trakt.service';
 import { HttpModule } from '@nestjs/axios';
 import { TMDBService } from '../tmdb/tmdb.service';
 import { JackettService } from '../jackett/jackett.service';
-import { BullModule } from '@nestjs/bullmq';
-import { queues } from '@miauflix/types';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { Movie } from '../database/entities/movie.entity';
-import { Torrent } from '../database/entities/torrent.entity';
 import {
   parseTorrentProvider,
   webTorrentProvider,
 } from '../app.async.provider';
 import { MovieProcessor } from '../movies/movies.processor';
 import { MovieService } from '../movies/movies.service';
-import { MoviesData } from '../movies/movies.data';
 import { ListsController } from './lists.controller';
 
 @Module({
-  imports: [HttpModule, SequelizeModule.forFeature([Movie, Torrent])],
+  imports: [HttpModule],
   controllers: [ListsController],
   providers: [
     MovieProcessor,
@@ -26,10 +20,9 @@ import { ListsController } from './lists.controller';
     TraktService,
     TMDBService,
     JackettService,
-    MoviesData,
     parseTorrentProvider,
     webTorrentProvider,
   ],
-  exports: [SequelizeModule, parseTorrentProvider, webTorrentProvider],
+  exports: [parseTorrentProvider, webTorrentProvider],
 })
 export class ListsModule {}

@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Global, Injectable, Module } from '@nestjs/common';
+import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import {
   Movie,
   MovieCreationAttributes,
 } from '../database/entities/movie.entity';
 import { Movie as TraktMovie } from '../trakt/trakt.types';
 import { Op } from 'sequelize';
-import { MovieDto, MovieImages } from '@miauflix/types';
+import { MovieDto } from '@miauflix/types';
+import { Torrent } from '../database/entities/torrent.entity';
+import { Source } from '../database/entities/source.entity';
 
 @Injectable()
 export class MoviesData {
@@ -17,7 +19,19 @@ export class MoviesData {
       where: {
         slug,
       },
-      raw: true,
+    });
+  }
+
+  async findMovieWithSources(slug: string): Promise<Movie | null> {
+    return await this.movieModel.findOne({
+      where: {
+        slug,
+      },
+      include: {
+        model: Source,
+        as: 'allSources',
+        attributes: ['data', 'quality', 'codec'],
+      },
     });
   }
 
@@ -106,3 +120,11 @@ export class MoviesData {
     await this.movieModel.update({ noSourceFound: true }, { where: { id } });
   }
 }
+
+@Global()
+@Module({
+  imports: [SequelizeModule.forFeature([Movie, Torrent, Source])],
+  providers: [MoviesData],
+  exports: [MoviesData, SequelizeModule],
+})
+export class MoviesDataModule {}

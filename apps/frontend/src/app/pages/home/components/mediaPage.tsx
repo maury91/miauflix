@@ -50,7 +50,10 @@ export const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
           id: media.id,
           supportsHvec: IS_TIZEN, // Only Tizen supports HVEC, that may change in the future
         }
-      : skipToken
+      : skipToken,
+    {
+      refetchOnMountOrArgChange: true,
+    }
   );
   const [stopStream] = useStopStreamMutation();
   const hasStreamUrl = !!streamInfo;

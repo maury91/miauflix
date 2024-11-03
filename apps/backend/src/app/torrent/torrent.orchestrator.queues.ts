@@ -44,7 +44,7 @@ export class TorrentOrchestratorQueues {
   public async requestScanTorrents(
     movieId: number,
     index: number,
-    priority: number
+    priority?: number
   ) {
     return (await this.torrentOrchestratorQueue.add(
       torrentOrchestratorJobs.populateTorrentQForMovie,

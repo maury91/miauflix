@@ -50,7 +50,30 @@ export class TraktService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private get<T, D = any>(url: string, config?: AxiosRequestConfig<D>) {
+    console.log(url, {
+      ...(config ?? {}),
+      headers: {
+        ...(config?.headers ?? {}),
+        'trakt-api-version': '2',
+        'trakt-api-key': this.clientId,
+      },
+    });
     return this.httpService.axiosRef.get<T>(url, {
+      ...(config ?? {}),
+      headers: {
+        ...(config?.headers ?? {}),
+        'trakt-api-version': '2',
+        'trakt-api-key': this.clientId,
+      },
+    });
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private post<T, D = any>(
+    url: string,
+    data: D,
+    config?: AxiosRequestConfig<D>
+  ) {
+    return this.httpService.axiosRef.post<T>(url, data, {
       ...(config ?? {}),
       headers: {
         ...(config?.headers ?? {}),
@@ -93,14 +116,11 @@ export class TraktService {
 
   public async getProfile(accessToken: string, slug = 'me') {
     return (
-      await this.httpService.axiosRef.get<UserProfileResponse>(
-        `${this.apiUrl}/users/${slug}`,
-        {
-          headers: {
-            Authorization: `bearer ${accessToken}`,
-          },
-        }
-      )
+      await this.get<UserProfileResponse>(`${this.apiUrl}/users/${slug}`, {
+        headers: {
+          Authorization: `bearer ${accessToken}`,
+        },
+      })
     ).data;
   }
 
@@ -119,15 +139,12 @@ export class TraktService {
 
   public async refreshToken(refreshToken: string) {
     return (
-      await this.httpService.axiosRef.post<DeviceTokenResponse>(
-        `${this.apiUrl}/oauth/token`,
-        {
-          refresh_token: refreshToken,
-          client_id: this.clientId,
-          client_secret: this.clientSecret,
-          grant_type: 'refresh_token',
-        }
-      )
+      await this.post<DeviceTokenResponse>(`${this.apiUrl}/oauth/token`, {
+        refresh_token: refreshToken,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        grant_type: 'refresh_token',
+      })
     ).data;
   }
 
@@ -138,7 +155,7 @@ export class TraktService {
     progress: number,
     accessToken: string
   ) {
-    return this.httpService.axiosRef.post(
+    return this.post(
       `${this.apiUrl}/scrobble/${action}`,
       {
         [type === 'show' ? 'episode' : 'movie']: media,
@@ -155,23 +172,22 @@ export class TraktService {
   public async trackPlayback(
     slug: string,
     accessToken: string,
-    action: 'start' | 'pause' | 'stop'
+    action: 'start' | 'pause' | 'stop',
+    progress: number
   ) {
     const movie = await this.getMovieFromDB(slug);
-
-    return this.playbackTracking(movie, 'movie', action, 0, accessToken);
+    console.log('Tracking playback', slug, action, progress);
+    return this.playbackTracking(movie, 'movie', action, progress, accessToken);
   }
 
+  @Cacheable(3e4 /* 30 seconds */)
   public async getProgress(accessToken: string) {
     return (
-      await this.httpService.axiosRef.get<ProgressResponse>(
-        `${this.apiUrl}/sync/playback`,
-        {
-          headers: {
-            Authorization: `bearer ${accessToken}`,
-          },
-        }
-      )
+      await this.get<ProgressResponse>(`${this.apiUrl}/sync/playback`, {
+        headers: {
+          Authorization: `bearer ${accessToken}`,
+        },
+      })
     ).data;
   }
 
