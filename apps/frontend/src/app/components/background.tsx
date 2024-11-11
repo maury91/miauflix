@@ -94,7 +94,7 @@ export const Background = () => {
 
   const backgroundDirection = useMemo(() => {
     if (currentPage === 'profile-selection') {
-      return 'left';
+      return 'full';
     }
     if (currentPage === 'home') {
       return 'full';

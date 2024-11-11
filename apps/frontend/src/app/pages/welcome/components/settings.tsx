@@ -21,8 +21,8 @@ export const StyledSettings = styled.div<{
     position: relative;
     left: 0;
     top: 0;
-    height: min(${({ selected }) => (selected ? '6vh, 6vw' : '4vh, 4vw')});
-    width: min(${({ selected }) => (selected ? '6vh, 6vw' : '4vh, 4vw')});
+    height: ${({ selected }) => (selected ? '6vh' : '4vh')};
+    width: ${({ selected }) => (selected ? '6vh' : '4vh')};
     aspect-ratio: 1/1; // Not supported in Tizen
 
     transition: all 0.4s;
@@ -31,11 +31,11 @@ export const StyledSettings = styled.div<{
 
   h2 {
     position: absolute;
-    left: min(5vh, 5vw);
+    left: 5vh;
     top: 50%;
     transform: translate3d(${({ selected }) => (selected ? 2 : 0)}vw, -50%, 0);
     opacity: ${({ selected }) => (selected ? 1 : 0)};
-    font-size: min(3vh, 3vw);
+    font-size: 3vh;
     transition: all 0.4s;
     width: 25vw;
     margin: 0;

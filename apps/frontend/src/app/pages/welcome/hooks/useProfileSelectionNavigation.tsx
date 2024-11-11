@@ -10,7 +10,13 @@ import {
 import { getCurrentFocusKey } from '@noriginmedia/norigin-spatial-navigation';
 import { useNavigation } from '../../../hooks/useNavigation';
 
-export const useProfileSelectionNavigation = () => {
+interface UseProfileSelectionNavigationProps {
+  openNewProfile: () => void;
+}
+
+export const useProfileSelectionNavigation = ({
+  openNewProfile,
+}: UseProfileSelectionNavigationProps) => {
   const { data: users } = useGetUsersQuery();
   const dispatch = useAppDispatch();
 
@@ -27,10 +33,6 @@ export const useProfileSelectionNavigation = () => {
     },
     [dispatch, users]
   );
-
-  const openNewProfile = useCallback(() => {
-    console.log('ToDo');
-  }, []);
 
   const openSettings = useCallback(() => {
     console.log('ToDo');
