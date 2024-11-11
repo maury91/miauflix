@@ -98,3 +98,9 @@ export type EpisodeProgress = {
 };
 
 export type ProgressResponse = (MovieProgress | EpisodeProgress)[];
+
+export type SearchMoviesResponse = {
+  type: 'movie';
+  score: number;
+  movie: Movie;
+}[];

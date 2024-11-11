@@ -16,6 +16,7 @@ import { IS_TV } from '../../../../consts';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { CONTINUE_WATCHING_CATEGORY } from '../consts';
 import { useGetProgressQuery } from '../../../../store/api/progress';
+import { CATEGORY_CONTAINER_TOP_MASK } from './categoriesContainer';
 
 export const SLIDER_MARGIN = 10;
 
@@ -24,9 +25,11 @@ const CategorySliderContainer = styled.div<{
   index: number;
 }>`
   position: absolute;
-  left: ${(props) => props.margin - window.innerWidth * 0.05}px;
+  left: ${(props) => props.margin}px;
   right: ${(props) => props.margin}px;
-  top: ${(props) => props.index * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN)}vh;
+  top: ${(props) =>
+    props.index * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN) +
+    CATEGORY_CONTAINER_TOP_MASK}vh;
   height: ${MEDIA_BOX_HEIGHT}vh;
 `;
 
@@ -133,8 +136,9 @@ export const CategorySlider: FC<{
   category: CategoryDto;
   index: number;
   scrollTo: (to: number) => void;
+  onLeft: () => void;
   onSelect: (media: MovieDto) => void;
-}> = ({ category, index, onSelect, scrollTo }) => {
+}> = ({ category, index, onLeft, onSelect, scrollTo }) => {
   const { data, updateSelected, mediaCount } = useSpecialCategories(
     category.id
   );
@@ -160,6 +164,7 @@ export const CategorySlider: FC<{
     useCategoryNavigation({
       categoryId: category.id,
       mediaCount,
+      onLeft,
       onMediaSelect,
     });
 

@@ -9,9 +9,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "@miauflix/types": ["libs/types/src/index.ts"]
-    },
     "typeRoots": [
       "./node_modules/@types",
       "./types/"

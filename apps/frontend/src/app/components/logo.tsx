@@ -7,7 +7,7 @@ import { useMediaBoxSizes } from '../pages/home/hooks/useMediaBoxSizes';
 
 const profileSelectionLogo = {
   top: '5vh',
-  left: '8vw',
+  left: 'calc(15vw - 9.1vh)',
   height: '5vh',
   width: '18.2vh',
 };

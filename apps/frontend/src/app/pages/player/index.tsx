@@ -15,7 +15,7 @@ import {
 import { TizenPlayerContainer } from './ui/tizen';
 import { useTizenRemote } from './hooks/tizen/useTizenRemote';
 import { useTizenPlayer } from './hooks/tizen/useTizenPlayer';
-import { useBackNavigation } from '../../hooks/useBackNavigation';
+import { useNavigation } from '../../hooks/useNavigation';
 import { navigateTo } from '../../../store/slices/app';
 import { useTrackMovieProgressMutation } from '../../../store/api/progress';
 import { TrackMoviePlaybackRequest } from '@miauflix/types';
@@ -245,7 +245,7 @@ export const Player = () => {
   addRemoteListener('ArrowDown', () => {
     setShowPlayerControls(false);
   });
-  useBackNavigation('player', navigateBack);
+  useNavigation({ page: 'player', onBack: navigateBack });
 
   useEffect(() => {
     if (action === 'FF' || action === 'REW') {

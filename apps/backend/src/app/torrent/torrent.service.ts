@@ -288,7 +288,7 @@ export class TorrentService {
           bitfield: bitfieldBuffer
             ? Buffer.from(bitfieldBuffer, 'base64')
             : undefined,
-        } as unknown as TorrentOptions,
+        },
         (torrent) => {
           const videoFiles = torrent.files.filter((file) =>
             videos.includes(file.name)

@@ -36,7 +36,7 @@ const BackgroundShadow = styled.div<{ direction: BackgroundDirections }>`
       return `linear-gradient( 180deg, rgb(0 0 0) 0%, rgba(0, 0, 0, 1) calc(20px + 5vh), rgba(0, 0, 0, 0.7) calc(20px + 13vh), rgba(0, 0, 0, 0.2) 40%, rgba(0, 0, 0, 0) 100%)`;
     }
     if (props.direction === 'left') {
-      return `linear-gradient( 90deg,rgba(0,0,0, 1) 0%,rgba(0,0,0,0.6) calc(20px + 35vh),rgba(0,0,0,0.5) calc(20px + 40vh),rgba(0,0,0,0.2) 40%,rgba(0,0,0,0) 100%)`;
+      return `linear-gradient( 90deg,rgba(0,0,0,1) 0%,rgba(0,0,0,0.6) 30vw,rgba(0,0,0,0.5) 33vw,rgba(0,0,0,0.2) 40%,rgba(0,0,0,0) 100%)`;
     }
     if (props.direction === 'full') {
       return 'rgba(0,0,0,0.5)';

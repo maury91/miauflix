@@ -6,7 +6,7 @@ import { MediaDto } from '@miauflix/types';
 import { Categories } from './components/categories';
 import { useGetExtendedInfoQuery } from '../../../store/api/medias';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useBackNavigation } from '../../hooks/useBackNavigation';
+import { useNavigation } from '../../hooks/useNavigation';
 import { MediaPage } from './components/mediaPage';
 import MdiSearch from '~icons/mdi/search';
 import {
@@ -15,7 +15,8 @@ import {
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { CATEGORIES_FOCUS_KEY } from './consts';
+import { CATEGORIES_FOCUS_KEY, SIDEBAR_FOCUS_KEY } from './consts';
+import { PALETTE } from '../../../consts';
 
 export const HomeContainer = styled(motion.div)`
   position: fixed;
@@ -33,6 +34,7 @@ const HomeSidebarContainer = styled.div<{ opened: boolean }>`
   transition: width 0.3s;
   bottom: 0;
   z-index: 101;
+  background: rgba(0, 0, 0, 0.7);
 
   &:before {
     content: '';
@@ -41,7 +43,6 @@ const HomeSidebarContainer = styled.div<{ opened: boolean }>`
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.7);
   }
 
   &:after {
@@ -59,39 +60,51 @@ const HomeSidebarContainer = styled.div<{ opened: boolean }>`
   }
 `;
 
-const SearchContainer = styled.div`
+const SearchContainer = styled.div<{ focused: boolean }>`
   position: absolute;
-  font-size: 2vw;
-  width: 2vw;
+  font-size: 1.8vw;
+  width: 15vw;
   height: 2vw;
   top: calc(50% - 1vw);
   left: 1vw;
+  display: flex;
+  align-items: center;
+  color: ${({ focused }) => (focused ? PALETTE.background.primary : 'white')};
+
+  svg {
+    margin-right: 1vw;
+    font-size: 2vw;
+  }
 `;
 
 const Search: FC<{ opened: boolean }> = ({ opened }) => {
-  const { ref } = useFocusable({
+  const { ref, focused } = useFocusable({
     focusKey: 'sidebar-search',
   });
   return (
-    <SearchContainer ref={ref}>
-      <MdiSearch />
+    <SearchContainer ref={ref} focused={focused}>
+      <MdiSearch /> {opened && 'Search'}
     </SearchContainer>
   );
 };
 
 const HomeSidebar = () => {
-  const { focusKey, ref, focused, hasFocusedChild } = useFocusable({
+  const { focusKey, ref, focused, hasFocusedChild, focusSelf } = useFocusable({
     saveLastFocusedChild: true,
     trackChildren: true,
-    focusKey: 'home-sidebar',
+    focusKey: SIDEBAR_FOCUS_KEY,
   });
   const expand = focused || getCurrentFocusKey() === 'sidebar-search';
+
+  const focusCategories = useCallback(() => {
+    setFocus(CATEGORIES_FOCUS_KEY);
+  }, []);
 
   useEffect(() => {
     if (expand) {
       function handleKeyDown(event: KeyboardEvent) {
         if (event.key === 'ArrowRight') {
-          setFocus(CATEGORIES_FOCUS_KEY);
+          focusCategories();
           event.stopPropagation();
           event.preventDefault();
         }
@@ -107,7 +120,12 @@ const HomeSidebar = () => {
   console.log({ focused, hasFocusedChild });
   return (
     <FocusContext.Provider value={focusKey}>
-      <HomeSidebarContainer ref={ref} opened={expand}>
+      <HomeSidebarContainer
+        ref={ref}
+        opened={expand}
+        onMouseEnter={focusSelf}
+        onMouseLeave={focusCategories}
+      >
         <Search opened={expand} />
       </HomeSidebarContainer>
     </FocusContext.Provider>
@@ -120,6 +138,10 @@ export const Home = () => {
   const { data: extendedMedia } = useGetExtendedInfoQuery(
     selectedMedia ? { type: 'movie', id: selectedMedia.id } : skipToken
   );
+
+  const openSidebar = useCallback(() => {
+    setFocus(SIDEBAR_FOCUS_KEY);
+  }, []);
 
   const navigateToMedia = useCallback((media: MediaDto) => {
     setSelectedMedia(media);
@@ -135,12 +157,16 @@ export const Home = () => {
       setSelectedMedia(null);
     }, 300);
   }, []);
-  useBackNavigation('home', navigateToCategoryList);
+  useNavigation({ page: 'home', onBack: navigateToCategoryList });
 
   return (
     <>
       <MediaDetails expanded={!!selectedMedia} />
-      <Categories visible={!selectedMedia} onMediaSelect={navigateToMedia} />
+      <Categories
+        visible={!selectedMedia}
+        onLeft={openSidebar}
+        onMediaSelect={navigateToMedia}
+      />
       {selectedMedia && extendedMedia && (
         <MediaPage media={extendedMedia} visible={!showCategories} />
       )}

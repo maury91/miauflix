@@ -18,10 +18,10 @@ const MediaImage = styled(motion.div)<{ src: string }>`
   background: url(${({ src }) => src}) center right no-repeat;
   background-size: cover;
   position: absolute;
+  height: 65vh;
   left: 50vw;
   right: 0;
   top: 0;
-  bottom: 0;
 `;
 
 const MediaInformationContainer = styled.div<{ width: number }>`

@@ -14,6 +14,7 @@ interface UseCategoryNavigationArgs {
   categoryId: string;
   mediaCount: number;
   onMediaSelect: (index: number) => void;
+  onLeft: () => void;
 }
 
 const noop = () => undefined;
@@ -21,6 +22,7 @@ const noop = () => undefined;
 export const useCategoryNavigation = ({
   categoryId,
   mediaCount,
+  onLeft,
   onMediaSelect,
 }: UseCategoryNavigationArgs) => {
   const selectedFromStore = useAppSelector(
@@ -48,7 +50,12 @@ export const useCategoryNavigation = ({
   const onArrowPress: ArrowPressHandler = useCallback(
     (direction: string, props, details) => {
       if (direction === 'left' || direction === 'right') {
-        return move(direction);
+        const isEnd = move(direction);
+        if (isEnd && direction === 'left') {
+          onLeft();
+          return false;
+        }
+        return isEnd;
       }
       return true;
     },

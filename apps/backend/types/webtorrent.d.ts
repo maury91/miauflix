@@ -89,6 +89,7 @@ declare module 'webtorrent' {
       destroyStoreOnDestroy?: boolean | undefined;
       storeCacheSlots?: number | undefined;
       skipVerify?: boolean | undefined;
+      bitfield?: ArrayLike<number> | undefined;
 
       preloadedStore?(): void;
 

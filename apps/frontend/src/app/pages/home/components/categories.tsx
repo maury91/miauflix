@@ -23,6 +23,7 @@ import { useAppSelector } from '../../../../store/store';
 const OFFSET = IS_SLOW_DEVICE ? 0 : 5;
 
 interface CategoriesProps {
+  onLeft: () => void;
   onMediaSelect: (media: MovieDto) => void;
   visible: boolean;
 }
@@ -56,7 +57,11 @@ const useCategories = () => {
   ]);
 };
 
-export const Categories: FC<CategoriesProps> = ({ onMediaSelect, visible }) => {
+export const Categories: FC<CategoriesProps> = ({
+  onLeft,
+  onMediaSelect,
+  visible,
+}) => {
   const categories = useCategories();
 
   const { focusKey, ref, focusSelf } = useFocusable({
@@ -137,6 +142,7 @@ export const Categories: FC<CategoriesProps> = ({ onMediaSelect, visible }) => {
                 category={category}
                 index={index}
                 scrollTo={scrollTo}
+                onLeft={onLeft}
                 onSelect={onMediaSelect}
               />
             ))}

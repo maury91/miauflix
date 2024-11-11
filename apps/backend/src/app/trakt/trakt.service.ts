@@ -9,6 +9,7 @@ import {
   Movie,
   PopularMoviesResponse,
   ProgressResponse,
+  SearchMoviesResponse,
   TrendingMoviesResponse,
   UserProfileResponse,
 } from './trakt.types';
@@ -219,12 +220,34 @@ export class TraktService {
     );
   }
 
-  @Cacheable(3e5 /* 5 minutes */)
+  @Cacheable(9e5 /* 15 minutes */)
   public async getMostFavoritedMovies(period = 'weekly', page = 1, limit = 30) {
     const result = await this.get<MostFavoritedMoviesResponse>(
       `${this.apiUrl}/movies/favorited/${period}`,
       {
         params: { page, limit },
+      }
+    );
+    return {
+      data: result.data,
+      pagination: {
+        page: Number(result.headers['X-Pagination-Page']),
+        limit: Number(result.headers['X-Pagination-Limit']),
+        pageCount: Number(result.headers['X-Pagination-Page-Count']),
+        itemCount: Number(result.headers['X-Pagination-Item-Count']),
+      },
+    };
+  }
+
+  @Cacheable(144e6 /* 1 day */)
+  public async searchMovies(query: string, limit = 30) {
+    const result = await this.get<SearchMoviesResponse>(
+      `${this.apiUrl}/search/movie`,
+      {
+        params: {
+          limit,
+          query,
+        },
       }
     );
     return {

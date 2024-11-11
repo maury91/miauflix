@@ -11,8 +11,8 @@ export const StyledSettings = styled.div<{
   align-items: center;
   position: fixed;
   bottom: 4vh;
-  left: 3vh;
-  transform: translate3d(${({ selected }) => (selected ? 3 : 0)}vh, 0, 0);
+  left: 2vw;
+  transform: translate3d(${({ selected }) => (selected ? 2 : 0)}vw, 0, 0);
   cursor: pointer;
 
   transition: transform 0.4s;
@@ -21,8 +21,8 @@ export const StyledSettings = styled.div<{
     position: relative;
     left: 0;
     top: 0;
-    height: 6vh;
-    width: 6vh;
+    height: min(${({ selected }) => (selected ? '6vh, 6vw' : '4vh, 4vw')});
+    width: min(${({ selected }) => (selected ? '6vh, 6vw' : '4vh, 4vw')});
     aspect-ratio: 1/1; // Not supported in Tizen
 
     transition: all 0.4s;
@@ -31,13 +31,13 @@ export const StyledSettings = styled.div<{
 
   h2 {
     position: absolute;
-    left: 8vh;
+    left: min(5vh, 5vw);
     top: 50%;
-    transform: translate3d(${({ selected }) => (selected ? 3 : 0)}vh, -50%, 0);
+    transform: translate3d(${({ selected }) => (selected ? 2 : 0)}vw, -50%, 0);
     opacity: ${({ selected }) => (selected ? 1 : 0)};
-    font-size: 3vh;
+    font-size: min(3vh, 3vw);
     transition: all 0.4s;
-    width: 25vh;
+    width: 25vw;
     margin: 0;
   }
 `;

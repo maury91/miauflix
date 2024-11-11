@@ -21,6 +21,8 @@ const NO_IMAGES: MovieImages = {
   poster: '',
 };
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 @Injectable()
 export class MovieService {
   constructor(
@@ -155,10 +157,26 @@ export class MovieService {
     return moviesWithImages.filter((movie) => !movie.noSourceFound);
   }
 
+  private async preCacheNextPages(
+    page: number,
+    totalPages: number,
+    method: 'getTrendingMovies' | 'getPopularMovies'
+  ) {
+    for (
+      let nextPage = page + 1;
+      nextPage <= Math.min(page + 5, totalPages);
+      nextPage++
+    ) {
+      await sleep(500);
+      await this.traktService[method](page);
+    }
+  }
+
   public async getTrendingMovies(page = 1): Promise<Paginated<MovieDto>> {
     const { data, ...pagination } = await this.traktService.getTrendingMovies(
       page
     );
+    this.preCacheNextPages(page, pagination.totalPages, 'getTrendingMovies');
     const movies = data.map((movie) => movie.movie);
 
     return {
@@ -170,6 +188,7 @@ export class MovieService {
   public async getPopularMovies(page = 1): Promise<Paginated<MovieDto>> {
     const { data: movies, ...pagination } =
       await this.traktService.getPopularMovies(page);
+    this.preCacheNextPages(page, pagination.totalPages, 'getPopularMovies');
 
     return {
       data: await this.addExtendedDataToMovies(movies),
