@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { TraktService } from '../trakt/trakt.service';
+import { TraktApi } from '../trakt/trakt.api';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import {
@@ -13,7 +13,7 @@ import { UserData } from '../user/user.data';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly traktService: TraktService,
+    private readonly traktService: TraktApi,
     private readonly userData: UserData,
     @InjectQueue(queues.deviceCode)
     private deviceCodeQueue: Queue<CheckForAccessTokenData>

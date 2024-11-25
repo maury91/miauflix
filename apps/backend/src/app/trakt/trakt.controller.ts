@@ -7,18 +7,18 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { TraktService } from './trakt.service';
+import { TraktApi } from './trakt.api';
 import { Request } from 'express';
 import { ProgressDto, TrackMoviePlaybackRequest } from '@miauflix/types';
-import { MovieService } from '../movies/movies.service';
+import { MoviesService } from '../movies/movies.service';
 import { UserData } from '../user/user.data';
 
 @Controller('progress')
 export class TraktController {
   constructor(
     private readonly userData: UserData,
-    private readonly movieService: MovieService,
-    private readonly traktService: TraktService
+    private readonly moviesService: MoviesService,
+    private readonly traktService: TraktApi
   ) {}
 
   @Get('')
@@ -30,9 +30,8 @@ export class TraktController {
     const accessToken = await this.userData.getUserAccessToken(
       parseInt(userId, 10)
     );
-    console.log('Getting progress for user ', userId);
     const rawProgress = await this.traktService.getProgress(accessToken);
-    const extendedMovies = await this.movieService.addExtendedDataToMovies(
+    const extendedMovies = await this.moviesService.addExtendedDataToMovies(
       rawProgress
         .filter((progress) => progress.type === 'movie')
         .map((progress) => progress.movie)
@@ -62,7 +61,6 @@ export class TraktController {
     const accessToken = await this.userData.getUserAccessToken(
       parseInt(userId, 10)
     );
-    console.log('Got access token for user', userId);
     await this.traktService.trackPlayback(slug, accessToken, action, progress);
     return { success: true };
   }

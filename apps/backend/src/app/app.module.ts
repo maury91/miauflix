@@ -23,6 +23,11 @@ import { MoviesDataModule } from './movies/movies.data';
 import { TorrentDataModule } from './torrent/torrent.data';
 import { SourceDataModule } from './sources/sources.data';
 import { UserDataModule } from './user/user.data';
+import { TMDBApiModule } from './tmdb/tmdb.api';
+import { ShowsDataModule } from './shows/shows.data';
+import { TraktApiModule } from './trakt/trakt.api';
+import { ShowsQueuesModule } from './shows/shows.queues';
+import { ShowsModule } from './shows/shows.module';
 
 @Module({
   imports: [
@@ -55,7 +60,7 @@ import { UserDataModule } from './user/user.data';
         database: configService.getOrThrow('POSTGRES_DB'),
         autoLoadModels: true,
         synchronize: true,
-        logging: false,
+        // logging: false,
       }),
       inject: [ConfigService],
     }),
@@ -85,14 +90,23 @@ import { UserDataModule } from './user/user.data';
     CategoriesModule,
     ListsModule,
     TraktModule,
+    ShowsModule,
+    // Queues
     JackettQueuesModule,
     MoviesQueuesModule,
     TorrentOrchestratorQueuesModule,
     TorrentQueuesModule,
+    ShowsQueuesModule,
+    // Data
     MoviesDataModule,
     SourceDataModule,
     TorrentDataModule,
     UserDataModule,
+    ShowsDataModule,
+    // APIs
+    TMDBApiModule,
+    // TVDBApiModule,
+    TraktApiModule,
   ],
   controllers: [],
 })

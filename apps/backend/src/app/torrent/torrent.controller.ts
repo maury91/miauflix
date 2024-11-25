@@ -32,6 +32,15 @@ export class TorrentController {
     };
   }
 
+  @Get(':streamId')
+  async getInfo(@Param('streamId') streamId: string) {
+    const info = await this.torrentService.getInfo(streamId);
+    return {
+      progress: info.progress.toString('base64'),
+      // decode: new Uint8Array(atob(progress).split("").map(c => c.charCodeAt(0)))
+    };
+  }
+
   @Delete(':streamId')
   async stopMovieTorrent(@Param('streamId') streamId: string) {
     console.log('got stop stream request', streamId);

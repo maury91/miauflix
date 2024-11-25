@@ -1,4 +1,4 @@
-import { ProfileSelection, ProfileSelectionContainer } from './pages/welcome';
+import { ProfileSelection } from './pages/welcome';
 import { useEffect, useMemo } from 'react';
 import { useAppSelector } from '../store/store';
 import { gsap } from 'gsap';
@@ -15,7 +15,7 @@ import {
   SimpleBackground,
 } from './components/background';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { Home, HomeContainer } from './pages/home';
+import { Home } from './pages/home';
 import { Logo } from './components/logo';
 import { useGetCategoriesQuery } from '../store/api/categories';
 import { usePrefetch } from '../store/api/lists';
@@ -83,29 +83,13 @@ export function App() {
         )}
       </AnimatePresence>
       <Logo />
-      <AnimatePresence initial={false}>
-        {currentPage === 'profile-selection' && (
-          <ProfileSelectionContainer
-            key="profile-selection"
-            initial={{ x: '-120%' }}
-            animate={{ x: '0' }}
-            exit={{ x: '-120%' }}
-          >
-            <ProfileSelection />
-          </ProfileSelectionContainer>
-        )}
-        {(currentPage === 'home' || currentPage === 'player') && (
-          <HomeContainer
-            key="home"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: currentPage === 'player' ? 0 : 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Home />
-          </HomeContainer>
-        )}
-        {currentPage === 'player' && <Player />}
-      </AnimatePresence>
+      <MotionConfig transition={{ duration: 0.5 }}>
+        <AnimatePresence initial={false} mode="wait">
+          {currentPage === 'profile-selection' && <ProfileSelection />}
+          {(currentPage === 'home' || currentPage === 'player') && <Home />}
+          {currentPage === 'player' && <Player />}
+        </AnimatePresence>
+      </MotionConfig>
     </MotionConfig>
   );
 }

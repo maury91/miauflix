@@ -1,15 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
+import { Global, Inject, Injectable, Module } from '@nestjs/common';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { ConfigurationResponse, MovieImagesResponse } from './tmdb.types';
+import { ConfigurationResponse, ImagesResponse, MediaType } from './tmdb.types';
 import { AxiosRequestConfig } from 'axios';
 import { Cacheable } from '../utils/cacheable.util';
-import { MovieDto, MovieImages } from '@miauflix/types';
+import { MediaImages } from '@miauflix/types';
+
+export const NO_IMAGES: MediaImages = {
+  logos: [],
+  backdrop: '',
+  backdrops: [],
+  poster: '',
+};
 
 @Injectable()
-export class TMDBService {
+export class TMDBApi {
   private readonly apiUrl: string;
   private readonly apiKey: string;
 
@@ -41,9 +48,10 @@ export class TMDBService {
     return data;
   }
 
-  private async getMovieImagesRaw(movieId: string) {
-    const { data } = await this.get<MovieImagesResponse>(
-      `${this.apiUrl}/movie/${movieId}/images`,
+  @Cacheable(864e5 /* 1 day */, true)
+  private async getMediaImagesRaw(type: MediaType, mediaId: number | string) {
+    const { data } = await this.get<ImagesResponse>(
+      `${this.apiUrl}/${type}/${mediaId}/images`,
       {
         params: {
           include_image_language: 'en,null',
@@ -56,8 +64,8 @@ export class TMDBService {
       data.backdrops.length + data.logos.length + data.posters.length === 0
     ) {
       return (
-        await this.get<MovieImagesResponse>(
-          `${this.apiUrl}/movie/${movieId}/images`
+        await this.get<ImagesResponse>(
+          `${this.apiUrl}/${type}/${mediaId}/images`
         )
       ).data;
     }
@@ -65,10 +73,10 @@ export class TMDBService {
   }
 
   @Cacheable(864e5 /* 1 day */, true)
-  public async getMovieImages(movieId: string) {
+  public async getMediaImages(type: MediaType, mediaId: number | string) {
     const [config, data] = await Promise.all([
       this.getConfiguration(),
-      this.getMovieImagesRaw(movieId),
+      this.getMediaImagesRaw(type, mediaId),
     ]);
 
     const [backdropsWithoutText, logos] = await Promise.all([
@@ -109,39 +117,53 @@ export class TMDBService {
     };
   }
 
-  public async getSimpleMovieImages(movieId: string): Promise<MovieImages> {
-    const movieImages = await this.getMovieImages(movieId);
+  public async getSimpleMediaImages(
+    type: MediaType,
+    mediaId: number | string
+  ): Promise<MediaImages> {
+    const mediaImages = await this.getMediaImages(type, mediaId);
     return {
-      poster: movieImages.posters[0]?.file_path ?? '',
-      backdrop: movieImages.backdrops[0]?.file_path ?? '',
-      backdrops: movieImages.backdropsWithoutText.map(
+      poster: mediaImages.posters[0]?.file_path ?? '',
+      backdrop: mediaImages.backdrops[0]?.file_path ?? '',
+      backdrops: mediaImages.backdropsWithoutText.map(
         ({ file_path }) => file_path
       ),
-      logos: movieImages.logos.map(({ file_path }) => file_path),
+      logos: mediaImages.logos.map(({ file_path }) => file_path),
     };
   }
 
-  public async addImagesToMovies(
-    movies: MovieDto[]
-  ): Promise<[MovieDto[], string[]]> {
-    const moviesWithoutImages: string[] = [];
+  public async addImagesToMedias<
+    T extends { images: MediaImages; id: string; ids: { tmdb: number } }
+  >(type: MediaType, medias: T[]): Promise<[T[], string[]]> {
+    const mediasWithoutImages: string[] = [];
 
     return [
       await Promise.all(
-        movies.map(async (movie) => {
-          if (!movie.images.poster) {
-            const images = await this.getSimpleMovieImages(`${movie.ids.tmdb}`);
-            const newMovie: MovieDto = {
-              ...movie,
+        medias.map(async (media) => {
+          if (!media.images.poster) {
+            const images = await this.getSimpleMediaImages(
+              type,
+              media.ids.tmdb
+            );
+            const newMedia: T = {
+              ...media,
               images,
             };
-            moviesWithoutImages.push(newMovie.id);
-            return newMovie;
+            mediasWithoutImages.push(newMedia.id);
+            return newMedia;
           }
-          return movie;
+          return media;
         })
       ),
-      moviesWithoutImages,
+      mediasWithoutImages,
     ];
   }
 }
+
+@Global()
+@Module({
+  imports: [HttpModule],
+  providers: [TMDBApi],
+  exports: [TMDBApi],
+})
+export class TMDBApiModule {}

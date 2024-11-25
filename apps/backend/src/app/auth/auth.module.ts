@@ -3,7 +3,6 @@ import { BullModule } from '@nestjs/bullmq';
 import { queues } from '@miauflix/types';
 import { AuthController } from './auth.controller';
 import { DeviceCodeProcessor } from './deviceCode.processor';
-import { TraktService } from '../trakt/trakt.service';
 import { AuthService } from './auth.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
@@ -17,13 +16,7 @@ import { UserService } from '../user/user.service';
     HttpModule,
   ],
   controllers: [AuthController],
-  providers: [
-    DeviceCodeProcessor,
-    TraktService,
-    AuthService,
-    UserService,
-    ConfigService,
-  ],
+  providers: [DeviceCodeProcessor, AuthService, UserService, ConfigService],
   exports: [],
 })
 export class AuthModule {}

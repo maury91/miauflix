@@ -71,7 +71,9 @@ export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
     : '';
   const [displayedSrc, setDisplayedSrc] = useState(imageSrc);
   const { data: extendedInfo } = useGetExtendedInfoQuery(
-    selectedMedia ? { type: 'movie', id: selectedMedia.id } : skipToken
+    selectedMedia
+      ? { type: selectedMedia.type, id: selectedMedia.id }
+      : skipToken
   );
 
   useEffect(() => {
@@ -117,7 +119,9 @@ export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
         <MediaSubTitle>
           <span>{extendedInfo ? `${extendedInfo.runtime} min` : ''}</span>
           <span>{extendedInfo?.year}</span>
-          <MediaQuality qualities={extendedInfo?.qualities} />
+          {extendedInfo && 'qualities' in extendedInfo && (
+            <MediaQuality qualities={extendedInfo.qualities} />
+          )}
         </MediaSubTitle>
         <MediaDescription expanded={expanded}>
           {extendedInfo?.overview}

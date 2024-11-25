@@ -5,21 +5,13 @@ import {
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
 import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from './consts';
-import styled from 'styled-components';
-import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useProfileSelectionNavigation } from './hooks/useProfileSelectionNavigation';
 import { useGetUsersQuery } from '../../../store/api/users';
 import { useNavigation } from '../../hooks/useNavigation';
 import { ProfileSelectionScreen } from './screens/profileSelectionScreen';
 import { NewProfileScreen } from './screens/newProfileScreen';
-
-export const ProfileSelectionContainer = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  bottom: 0;
-`;
+import { FullScreenDiv } from '../../components/fullScreenDiv';
 
 export const ProfileSelection = () => {
   const [newProfileOpen, setNewProfileOpen] = useState(false);
@@ -53,16 +45,23 @@ export const ProfileSelection = () => {
   });
 
   return (
-    <FocusContext.Provider value={focusKey}>
-      <MotionConfig transition={{ duration: 0.3 }}>
-        <AnimatePresence initial={false} mode="wait">
-          {newProfileOpen ? (
-            <NewProfileScreen onClose={closeNewProfile} />
-          ) : (
-            <ProfileSelectionScreen navigateTo={navigateTo} users={users} />
-          )}
-        </AnimatePresence>
-      </MotionConfig>
-    </FocusContext.Provider>
+    <FullScreenDiv
+      key="profile-selection"
+      initial={{ x: '-120%' }}
+      animate={{ x: '0' }}
+      exit={{ x: '-120%' }}
+    >
+      <FocusContext.Provider value={focusKey}>
+        <MotionConfig transition={{ duration: 0.3 }}>
+          <AnimatePresence initial={false} mode="wait">
+            {newProfileOpen ? (
+              <NewProfileScreen onClose={closeNewProfile} />
+            ) : (
+              <ProfileSelectionScreen navigateTo={navigateTo} users={users} />
+            )}
+          </AnimatePresence>
+        </MotionConfig>
+      </FocusContext.Provider>
+    </FullScreenDiv>
   );
 };

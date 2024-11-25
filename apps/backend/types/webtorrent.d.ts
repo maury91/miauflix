@@ -299,6 +299,8 @@ declare module 'webtorrent' {
 
       select(): void;
 
+      includes(piece: number): boolean;
+
       deselect(): void;
 
       createReadStream(opts?: {

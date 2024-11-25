@@ -169,7 +169,7 @@ export class TorrentData {
     const notProcessedMovies = await this.movieModel.findAll({
       attributes: ['id'],
       where: {
-        torrentsSearched: false,
+        sourcesSearched: false,
         noSourceFound: false,
       },
       raw: true,

@@ -21,9 +21,11 @@ interface Image {
   width: number;
 }
 
-export interface MovieImagesResponse {
+export interface ImagesResponse {
   id: number;
   backdrops: Image[];
   logos: Image[];
   posters: Image[];
 }
+
+export type MediaType = 'movie' | 'tv';

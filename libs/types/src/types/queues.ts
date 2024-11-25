@@ -1,4 +1,4 @@
-import { MovieImages } from './movies';
+import { MediaImages } from './media';
 
 export const enum queues {
   deviceCode = 'deviceCode',
@@ -6,6 +6,7 @@ export const enum queues {
   jackett = 'jackett',
   torrentOrchestrator = 'torrentOrchestrator',
   torrent = 'torrent',
+  show = 'show',
 }
 
 /** Device Code Q */
@@ -20,13 +21,36 @@ export type CheckForAccessTokenData = string;
 
 export const enum movieJobs {
   getMovieExtendedData = 'getMovieExtendedData',
+  searchImagesForMovie = 'searchImagesForMovie',
 }
 
 export type GetMovieExtendedDataData = {
   index: number; // index of the title in the list ( the UI will display the first 5 titles before the user has to scroll to see more, so those are more important )
   slug: string;
-  images: MovieImages;
+  images: MediaImages;
   priority?: number;
+};
+
+export type SearchImagesForMovieData = {
+  slug: string;
+};
+
+/** TV Q */
+
+export const enum showJobs {
+  getShowExtendedData = 'getShowExtendedData',
+  searchImagesForShow = 'searchImagesForShow',
+}
+
+export type GetShowExtendedDataData = {
+  index: number; // index of the title in the list ( the UI will display the first 5 titles before the user has to scroll to see more, so those are more important )
+  slug: string;
+  images: MediaImages;
+  priority?: number;
+};
+
+export type SearchImagesForShowData = {
+  slug: string;
 };
 
 /** Jackett Q */

@@ -1,13 +1,13 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { CheckForAccessTokenData, queues } from '@miauflix/types';
 import { Job } from 'bullmq';
-import { TraktService } from '../trakt/trakt.service';
+import { TraktApi } from '../trakt/trakt.api';
 import { UserData } from '../user/user.data';
 
 @Processor(queues.deviceCode)
 export class DeviceCodeProcessor extends WorkerHost {
   constructor(
-    private readonly traktService: TraktService,
+    private readonly traktService: TraktApi,
     private readonly userData: UserData
   ) {
     super();

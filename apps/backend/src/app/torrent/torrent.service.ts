@@ -6,10 +6,10 @@ import type {
   TorrentFile,
   NodeServer,
   Torrent,
-  TorrentOptions,
 } from 'webtorrent';
 import { ParsedFile } from 'parse-torrent-file';
 import { HttpService } from '@nestjs/axios';
+import ffmpeg from 'fluent-ffmpeg';
 import { ParseTorrentImport } from '../app.async.provider';
 import { TorrentData } from './torrent.data';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -20,14 +20,39 @@ import { calculateJobId } from './torrent.utils';
 import { JackettQueues } from '../jackett/jackett.queues';
 import { TorrentOrchestratorQueues } from './torrent.orchestrator.queues';
 import { TorrentQueues } from './torrent.queues';
+import path from 'node:path';
+import BitField from 'bitfield';
+
+const TORRENT_PATH = '/tmp';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const retryPromise = <T>(
+  fn: () => Promise<T>,
+  retries = 100,
+  delay = 3000
+): Promise<T> => {
+  return fn().catch((err) => {
+    console.error('Error in promise', err);
+    if (retries > 0) {
+      return sleep(delay).then(() => retryPromise(fn, retries - 1, delay));
+    }
+    return Promise.reject(err);
+  });
+};
+
+interface TorrentInfo {
+  torrent: Torrent;
+  url: string;
+  start: number;
+  end: number;
+}
 
 @Injectable()
 export class TorrentService {
   private client: Instance;
   private webTorrentServer: NodeServer;
-  private streams: Record<string, [Torrent, string]> = {};
+  private streams: Record<string, TorrentInfo> = {};
   constructor(
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
@@ -42,6 +67,7 @@ export class TorrentService {
     @Inject(asyncProviders.webTorrent)
     private WebTorrent: WebTorrent
   ) {
+    console.log('Starting torrent service');
     this.client = new this.WebTorrent({
       maxConns: this.configService.getOrThrow('MAX_CONNS', { infer: true }),
       downloadLimit:
@@ -91,6 +117,57 @@ export class TorrentService {
         throw err;
       });
     return data;
+  }
+
+  public async *subscribeToProgress(streamKey: string) {
+    const streamTorrent = this.streams[streamKey];
+    if (streamTorrent) {
+      const { torrent, start, end } = streamTorrent;
+      let results: number[] = [];
+      let resolve: () => void;
+      let promise = new Promise<void>((r) => (resolve = r));
+      torrent.on('verified', (pieceNumber) => {
+        results.push(pieceNumber);
+        resolve();
+        promise = new Promise((r) => (resolve = r));
+      });
+      while (true) {
+        let isComplete = true;
+        for (let i = start; i < end; i++) {
+          if (!torrent.bitfield.get(i)) {
+            isComplete = false;
+            break;
+          }
+        }
+        if (isComplete) {
+          break;
+        }
+        await promise;
+        yield* results;
+        results = [];
+      }
+    }
+  }
+
+  public async getInfo(streamKey: string) {
+    const streamTorrent = this.streams[streamKey];
+    console.log('Getting info of stream', streamKey);
+    if (streamTorrent) {
+      const torrent = await this.client.get(streamTorrent.torrent);
+      if (torrent) {
+        const progress = new BitField(
+          streamTorrent.end - streamTorrent.start + 1
+        );
+        for (let i = streamTorrent.start; i <= streamTorrent.end; i++) {
+          progress.set(i, torrent.bitfield.get(i + streamTorrent.start));
+        }
+        console.log(progress);
+        return {
+          progress: Buffer.from(progress.buffer),
+        };
+      }
+    }
+    throw new Error('Torrent not found');
   }
 
   private getTorrentInformation(data: Buffer | string): Promise<{
@@ -152,7 +229,7 @@ export class TorrentService {
       console.log('Stopping stream', streamKey);
       if (streamTorrent) {
         this.client
-          .get(streamTorrent[0])
+          .get(streamTorrent.torrent)
           .then((torrent) => {
             if (!torrent) {
               delete this.streams[streamKey];
@@ -180,6 +257,20 @@ export class TorrentService {
     });
   }
 
+  private getVideoInformation(file: TorrentFile) {
+    console.log(path.join(file.path, file.name));
+    return new Promise((resolve, reject) => {
+      ffmpeg.ffprobe(path.join(TORRENT_PATH, file.path), (err, metadata) => {
+        if (err) {
+          reject(err);
+        } else {
+          console.log(metadata);
+          resolve(metadata);
+        }
+      });
+    });
+  }
+
   private async getTorrent(
     slug: string,
     useHevc: boolean,
@@ -198,8 +289,8 @@ export class TorrentService {
     // Fallback
     // We assume it has a movie because we are at the streaming point
     const movie = await this.moviesData.findMovie(slug);
-    if (!movie.torrentsSearched) {
-      console.log('No torrent has been searched, searching...');
+    if (!movie.sourcesSearched) {
+      console.log('No source has been searched, searching...');
       const jackettJob =
         (await this.jackettQueuesService.prioritizeTorrentSearch(slug, 1)) ||
         (await this.jackettQueuesService.requestTorrentSearch(movie, 0, 1));
@@ -264,7 +355,7 @@ export class TorrentService {
     }`;
     if (this.streams[streamKey]) {
       return {
-        stream: this.streams[streamKey][1],
+        stream: this.streams[streamKey].url,
         streamKey,
       };
     }
@@ -282,9 +373,8 @@ export class TorrentService {
       this.client.add(
         torrentFile,
         {
-          path: '/tmp',
+          path: TORRENT_PATH,
           deselect: true,
-          skipVerify: false,
           bitfield: bitfieldBuffer
             ? Buffer.from(bitfieldBuffer, 'base64')
             : undefined,
@@ -302,13 +392,29 @@ export class TorrentService {
             console.log('Torrent progress', torrent.progress);
             const file = videoFiles[0];
             file.select();
+            let start = -1,
+              end = -1;
+            for (let i = 0; i < torrent.pieces.length; i++) {
+              if (file.includes(i)) {
+                if (start === -1) {
+                  start = i;
+                }
+                end = i;
+              }
+            }
+            retryPromise(() => this.getVideoInformation(file));
             file.on('error', (err) => {
               console.error('File error', err);
             });
             const streamURL = `http://localhost:${
               this.webTorrentServer.address().port
             }${file.streamURL}`;
-            this.streams[streamKey] = [torrent, streamURL];
+            this.streams[streamKey] = {
+              torrent,
+              url: streamURL,
+              start,
+              end,
+            };
             resolve({ stream: streamURL, streamKey });
           }
           torrent.on('verified', (index) => {

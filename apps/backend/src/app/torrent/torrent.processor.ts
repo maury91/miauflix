@@ -85,7 +85,7 @@ export class TorrentProcessor extends WorkerHost {
               size,
               originalSource: `torrent::${id}`,
             });
-            await this.movieData.setTorrentFound(movieId, id);
+            await this.movieData.setTorrentFound(movieId);
             console.log(`Torrent ${id} marked as valid`);
             return;
           }

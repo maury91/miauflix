@@ -1,17 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
+import { Global, Inject, Injectable, Module } from '@nestjs/common';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import {
   DeviceCodeResponse,
   DeviceTokenResponse,
   ExtendedMovie,
+  ExtendedShow,
   MostFavoritedMoviesResponse,
   Movie as TraktMovie,
   Movie,
   PopularMoviesResponse,
   ProgressResponse,
   SearchMoviesResponse,
+  ShowSimple,
+  ShowSeason,
   TrendingMoviesResponse,
+  TrendingShowsResponse,
   UserProfileResponse,
+  Show,
 } from './trakt.types';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -20,6 +25,7 @@ import { AxiosRequestConfig } from 'axios';
 import { Cacheable } from '../utils/cacheable.util';
 import { Paginated } from '@miauflix/types';
 import { MoviesData } from '../movies/movies.data';
+import { sleep } from '../utils/sleep';
 
 const parsePagination = <T>(
   data: T[],
@@ -33,7 +39,7 @@ const parsePagination = <T>(
 });
 
 @Injectable()
-export class TraktService {
+export class TraktApi {
   private readonly apiUrl: string;
   private readonly clientId: string;
   private readonly clientSecret: string;
@@ -206,6 +212,20 @@ export class TraktService {
     );
   }
 
+  @Cacheable(9e5 /* 15 minutes */)
+  public async getTrendingShows(page = 1, limit = 20) {
+    const result = await this.get<TrendingShowsResponse>(
+      `${this.apiUrl}/shows/trending`,
+      {
+        params: { page, limit },
+      }
+    );
+    return parsePagination(
+      result.data,
+      result.headers as Record<string, string>
+    );
+  }
+
   @Cacheable(9e5 /* 15 minutes */, true)
   public async getPopularMovies(page = 1, limit = 30) {
     const result = await this.get<PopularMoviesResponse>(
@@ -274,4 +294,58 @@ export class TraktService {
       })
     ).data;
   }
+
+  @Cacheable(144e6 /* 1 day */)
+  public async getShow<E extends boolean>(
+    showId: string,
+    extended?: E
+  ): Promise<Show<E>> {
+    return (
+      await this.get<Show<E>>(`${this.apiUrl}/shows/${showId}`, {
+        params: {
+          extended: extended ? 'full' : 'metadata',
+        },
+      })
+    ).data;
+  }
+
+  @Cacheable(144e6 /* 1 day */)
+  public async getShowSeasons<E extends boolean>(
+    showId: string,
+    extended?: E
+  ): Promise<ShowSeason<E>[]> {
+    return (
+      await this.get<ShowSeason<E>[]>(
+        `${this.apiUrl}/shows/${showId}/seasons`,
+        {
+          params: {
+            extended: extended ? 'full' : 'metadata',
+          },
+        }
+      )
+    ).data;
+  }
+
+  public async preCacheNextPages(
+    page: number,
+    totalPages: number,
+    method: 'getTrendingMovies' | 'getPopularMovies' | 'getTrendingShows'
+  ) {
+    for (
+      let nextPage = page + 1;
+      nextPage <= Math.min(page + 5, totalPages);
+      nextPage++
+    ) {
+      await sleep(500);
+      await this[method](page);
+    }
+  }
 }
+
+@Global()
+@Module({
+  imports: [HttpModule],
+  providers: [TraktApi],
+  exports: [TraktApi],
+})
+export class TraktApiModule {}

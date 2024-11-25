@@ -5,7 +5,7 @@ import {
   MovieCreationAttributes,
 } from '../database/entities/movie.entity';
 import { Movie as TraktMovie } from '../trakt/trakt.types';
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import { MovieDto } from '@miauflix/types';
 import { Torrent } from '../database/entities/torrent.entity';
 import { Source } from '../database/entities/source.entity';
@@ -18,6 +18,22 @@ export class MoviesData {
     return await this.movieModel.findOne({
       where: {
         slug,
+      },
+    });
+  }
+
+  async findMoviesWithoutImages(): Promise<Movie[]> {
+    return await this.movieModel.findAll({
+      where: {
+        [Op.or]: [
+          {
+            poster: '',
+          },
+          Sequelize.where(
+            Sequelize.fn('cardinality', Sequelize.col('backdrops')),
+            0
+          ),
+        ],
       },
     });
   }
@@ -77,7 +93,7 @@ export class MoviesData {
       (acc, movie) => ({
         ...acc,
         [movie.slug]: {
-          // ...movie,
+          type: 'movie',
           id: movie.slug,
           title: movie.title,
           year: movie.year,
@@ -88,7 +104,7 @@ export class MoviesData {
             tmdb: movie.tmdbId,
           },
           noSourceFound: movie.noSourceFound,
-          sourceFound: movie.torrentFound,
+          sourceFound: movie.sourceFound,
           images: {
             poster: movie.poster,
             backdrop: movie.backdrop,
@@ -106,14 +122,11 @@ export class MoviesData {
   }
 
   async setTorrentSearched(id: number): Promise<void> {
-    await this.movieModel.update({ torrentsSearched: true }, { where: { id } });
+    await this.movieModel.update({ sourcesSearched: true }, { where: { id } });
   }
 
-  async setTorrentFound(id: number, torrentId: number): Promise<void> {
-    await this.movieModel.update(
-      { torrentFound: true, torrentId },
-      { where: { id } }
-    );
+  async setTorrentFound(id: number): Promise<void> {
+    await this.movieModel.update({ sourceFound: true }, { where: { id } });
   }
 
   async setnoSourceFound(id: number): Promise<void> {

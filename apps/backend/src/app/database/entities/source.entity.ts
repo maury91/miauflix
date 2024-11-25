@@ -9,12 +9,15 @@ import {
 import { Movie } from './movie.entity';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
+import { Episode } from './episode.entity';
 
 export interface SourceAttributes {
   id: number;
-  movieId: number;
+  movieId?: number;
+  episodeId?: number;
   movieSlug: string;
-  movie: Movie;
+  movie?: Movie;
+  episode?: Episode;
   originalSource: string;
   size: number;
   data: Buffer;
@@ -28,19 +31,25 @@ export interface SourceAttributes {
 
 export type SourceCreationAttributes = Omit<
   SourceAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'movie'
+  'id' | 'createdAt' | 'updatedAt' | 'movie' | 'episode'
 >;
 
 @Table
 export class Source extends Model<SourceAttributes, SourceCreationAttributes> {
   @ForeignKey(() => Movie)
-  movieId!: number;
+  movieId?: number;
+
+  @ForeignKey(() => Episode)
+  episodeId?: number;
 
   @Column
   movieSlug: string;
 
   @BelongsTo(() => Movie)
-  movie!: Movie;
+  movie?: Movie;
+
+  @BelongsTo(() => Episode)
+  episode?: Episode;
 
   @Column
   originalSource!: string;

@@ -1,12 +1,12 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { MovieService } from './movies.service';
-import { TraktService } from '../trakt/trakt.service';
+import { MoviesService } from './movies.service';
+import { TraktApi } from '../trakt/trakt.api';
 
 @Controller('movies')
 export class MoviesController {
   constructor(
-    private readonly movieService: MovieService,
-    private readonly traktService: TraktService
+    private readonly moviesService: MoviesService,
+    private readonly traktService: TraktApi
   ) {}
 
   @Get('search/')
@@ -30,6 +30,6 @@ export class MoviesController {
 
   @Get(':slug')
   async getMovie(@Param('slug') slug: string) {
-    return this.movieService.getMovie(slug);
+    return this.moviesService.getMovie(slug);
   }
 }

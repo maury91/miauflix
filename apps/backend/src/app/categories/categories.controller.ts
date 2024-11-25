@@ -11,6 +11,10 @@ export class CategoriesController {
         name: 'Trending movies',
       },
       {
+        id: StaticCategories.TrendingShows,
+        name: 'Trending TV shows',
+      },
+      {
         id: StaticCategories.PopularMovies,
         name: 'Popular movies',
       },

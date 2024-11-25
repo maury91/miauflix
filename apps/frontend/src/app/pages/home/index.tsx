@@ -17,14 +17,8 @@ import {
 } from '@noriginmedia/norigin-spatial-navigation';
 import { CATEGORIES_FOCUS_KEY, SIDEBAR_FOCUS_KEY } from './consts';
 import { PALETTE } from '../../../consts';
-
-export const HomeContainer = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-`;
+import { FullScreenDiv } from '../../components/fullScreenDiv';
+import { useAppSelector } from '../../../store/store';
 
 const HomeSidebarContainer = styled.div<{ opened: boolean }>`
   position: fixed;
@@ -136,8 +130,11 @@ export const Home = () => {
   const [showCategories, setShowCategories] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
   const { data: extendedMedia } = useGetExtendedInfoQuery(
-    selectedMedia ? { type: 'movie', id: selectedMedia.id } : skipToken
+    selectedMedia
+      ? { type: selectedMedia.type, id: selectedMedia.id }
+      : skipToken
   );
+  const currentPage = useAppSelector((state) => state.app.currentPage);
 
   const openSidebar = useCallback(() => {
     setFocus(SIDEBAR_FOCUS_KEY);
@@ -160,7 +157,12 @@ export const Home = () => {
   useNavigation({ page: 'home', onBack: navigateToCategoryList });
 
   return (
-    <>
+    <FullScreenDiv
+      key="home"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: currentPage === 'player' ? 0 : 1 }}
+      exit={{ opacity: 0 }}
+    >
       <MediaDetails expanded={!!selectedMedia} />
       <Categories
         visible={!selectedMedia}
@@ -171,6 +173,6 @@ export const Home = () => {
         <MediaPage media={extendedMedia} visible={!showCategories} />
       )}
       <HomeSidebar />
-    </>
+    </FullScreenDiv>
   );
 };

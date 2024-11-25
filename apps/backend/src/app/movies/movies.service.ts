@@ -3,31 +3,21 @@ import { Movie as TraktMovie } from '../trakt/trakt.types';
 import {
   ExtendedMovieDto,
   MovieDto,
-  MovieImages,
   Paginated,
   VideoQualityStr,
 } from '@miauflix/types';
-import { TraktService } from '../trakt/trakt.service';
-import { TMDBService } from '../tmdb/tmdb.service';
+import { NO_IMAGES, TMDBApi } from '../tmdb/tmdb.api';
 import { MoviesData } from './movies.data';
 import { JackettQueues } from '../jackett/jackett.queues';
 import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
 import { MoviesQueues } from './movies.queues';
-
-const NO_IMAGES: MovieImages = {
-  logos: [],
-  backdrop: '',
-  backdrops: [],
-  poster: '',
-};
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { TraktApi } from '../trakt/trakt.api';
 
 @Injectable()
-export class MovieService {
+export class MoviesService {
   constructor(
-    private readonly traktService: TraktService,
-    private readonly tmdbService: TMDBService,
+    private readonly traktService: TraktApi,
+    private readonly tmdbApi: TMDBApi,
     private readonly movieData: MoviesData,
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
@@ -40,7 +30,10 @@ export class MovieService {
     if (!movie) {
       console.log('Movie not in DB');
       const traktMovie = await this.traktService.getMovie(slug);
-      const images = await this.getMovieImages(traktMovie);
+      const images = await this.tmdbApi.getSimpleMediaImages(
+        'movie',
+        `${traktMovie.ids.tmdb}`
+      );
       const job = await this.moviesQueuesService.requestMovieExtendedData(
         slug,
         0,
@@ -51,7 +44,7 @@ export class MovieService {
       return this.getExtendedMovie(slug);
     }
 
-    if (!movie.torrentsSearched) {
+    if (!movie.sourcesSearched) {
       console.log('Torrents not searched');
       if (
         !(await this.jackettQueuesService.prioritizeTorrentSearch(slug, 10))
@@ -59,7 +52,7 @@ export class MovieService {
         console.log('Requesting search');
         await this.jackettQueuesService.requestTorrentSearch(movie, 0, 10);
       }
-    } else if (!movie.torrentFound) {
+    } else if (!movie.sourceFound) {
       console.log('Torrents not scanned');
       this.torrentOrchestratorQueuesService.prioritizeScanTorrents(
         movie.id,
@@ -77,6 +70,7 @@ export class MovieService {
     const { movie, sources } = await this.getExtendedMovie(slug);
 
     return {
+      type: 'movie',
       id: movie.slug,
       title: movie.title,
       year: movie.year,
@@ -107,18 +101,17 @@ export class MovieService {
     };
   }
 
-  private async getMovieImages(movie: TraktMovie) {
-    return await this.tmdbService.getSimpleMovieImages(`${movie.ids.tmdb}`);
-  }
-
-  public async addExtendedDataToMovies(movies: TraktMovie[]) {
+  public async addExtendedDataToMovies(
+    movies: TraktMovie[]
+  ): Promise<MovieDto[]> {
     const storedMovies = await this.movieData.findMoviesMap(
       movies.map((movie) => movie.ids.slug)
     );
 
     const moviesWithoutSource: string[] = [];
     const [moviesWithImages, moviesWithIncompleteInformation] =
-      await this.tmdbService.addImagesToMovies(
+      await this.tmdbApi.addImagesToMedias(
+        'movie',
         movies.map((movie) => {
           if (movie.ids.slug in storedMovies) {
             if (!storedMovies[movie.ids.slug].sourceFound) {
@@ -128,6 +121,7 @@ export class MovieService {
           }
           return {
             ...movie,
+            type: 'movie' as const,
             sourceFound: false,
             noSourceFound: false,
             id: movie.ids.slug,
@@ -157,26 +151,15 @@ export class MovieService {
     return moviesWithImages.filter((movie) => !movie.noSourceFound);
   }
 
-  private async preCacheNextPages(
-    page: number,
-    totalPages: number,
-    method: 'getTrendingMovies' | 'getPopularMovies'
-  ) {
-    for (
-      let nextPage = page + 1;
-      nextPage <= Math.min(page + 5, totalPages);
-      nextPage++
-    ) {
-      await sleep(500);
-      await this.traktService[method](page);
-    }
-  }
-
   public async getTrendingMovies(page = 1): Promise<Paginated<MovieDto>> {
     const { data, ...pagination } = await this.traktService.getTrendingMovies(
       page
     );
-    this.preCacheNextPages(page, pagination.totalPages, 'getTrendingMovies');
+    this.traktService.preCacheNextPages(
+      page,
+      pagination.totalPages,
+      'getTrendingMovies'
+    );
     const movies = data.map((movie) => movie.movie);
 
     return {
@@ -188,7 +171,11 @@ export class MovieService {
   public async getPopularMovies(page = 1): Promise<Paginated<MovieDto>> {
     const { data: movies, ...pagination } =
       await this.traktService.getPopularMovies(page);
-    this.preCacheNextPages(page, pagination.totalPages, 'getPopularMovies');
+    this.traktService.preCacheNextPages(
+      page,
+      pagination.totalPages,
+      'getPopularMovies'
+    );
 
     return {
       data: await this.addExtendedDataToMovies(movies),

@@ -7,7 +7,6 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Torrent } from './torrent.entity';
 import { Source } from './source.entity';
 
 export interface MovieAttributes {
@@ -20,10 +19,9 @@ export interface MovieAttributes {
   trailer: string;
   rating: number;
   genres: string[];
-  torrentFound: boolean;
-  torrentsSearched: boolean;
+  sourceFound: boolean;
+  sourcesSearched: boolean;
   noSourceFound: boolean;
-  torrentId?: number; // ToDo: Candidate for removal
   traktId: number;
   imdbId: string;
   tmdbId: number;
@@ -31,7 +29,6 @@ export interface MovieAttributes {
   backdrop: string;
   backdrops: string[];
   logos: string[];
-  allTorrents: Torrent[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,15 +38,14 @@ export type MovieCreationAttributes = Omit<
   | 'id'
   | 'createdAt'
   | 'updatedAt'
-  | 'torrentFound'
-  | 'torrentsSearched'
+  | 'sourceFound'
+  | 'sourcesSearched'
   | 'noSourceFound'
-  | 'allTorrents'
 >;
 
 @Table
 export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
-  @Index('slug_index')
+  @Index('movie_slug_index')
   @Column
   slug!: string;
 
@@ -92,19 +88,17 @@ export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
   @Column(DataType.ARRAY(DataType.STRING))
   logos!: string[];
 
-  // ToDo: Rename into searchSourcesRequested
   @Default(false)
   @Column
-  torrentsSearched: boolean;
+  sourcesSearched: boolean;
 
   @Default(false)
   @Column
   noSourceFound: boolean;
 
-  // ToDo: Rename into sourceFound
   @Default(false)
   @Column
-  torrentFound: boolean;
+  sourceFound: boolean;
 
   @HasMany(() => Source)
   allSources: Source[];
