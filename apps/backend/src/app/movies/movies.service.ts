@@ -151,14 +151,9 @@ export class MoviesService {
     return moviesWithImages.filter((movie) => !movie.noSourceFound);
   }
 
-  public async getTrendingMovies(page = 1): Promise<Paginated<MovieDto>> {
+  public async getTrendingMovies(page = 0): Promise<Paginated<MovieDto>> {
     const { data, ...pagination } = await this.traktService.getTrendingMovies(
       page
-    );
-    this.traktService.preCacheNextPages(
-      page,
-      pagination.totalPages,
-      'getTrendingMovies'
     );
     const movies = data.map((movie) => movie.movie);
 
@@ -168,14 +163,9 @@ export class MoviesService {
     };
   }
 
-  public async getPopularMovies(page = 1): Promise<Paginated<MovieDto>> {
+  public async getPopularMovies(page = 0): Promise<Paginated<MovieDto>> {
     const { data: movies, ...pagination } =
       await this.traktService.getPopularMovies(page);
-    this.traktService.preCacheNextPages(
-      page,
-      pagination.totalPages,
-      'getPopularMovies'
-    );
 
     return {
       data: await this.addExtendedDataToMovies(movies),

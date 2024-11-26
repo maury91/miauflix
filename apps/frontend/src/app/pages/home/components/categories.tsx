@@ -16,7 +16,7 @@ import { useSwipe } from '../../../hooks/useSwipe';
 import { CategoriesContainer } from './categoriesContainer';
 import { CategorySlider } from './categorySlider';
 import { IS_SLOW_DEVICE } from '../../../../consts';
-import { CategoryDto, MovieDto } from '@miauflix/types';
+import { CategoryDto, MediaDto } from '@miauflix/types';
 import { useGetProgressQuery } from '../../../../store/api/progress';
 import { useAppSelector } from '../../../../store/store';
 
@@ -24,7 +24,7 @@ const OFFSET = IS_SLOW_DEVICE ? 0 : 5;
 
 interface CategoriesProps {
   onLeft: () => void;
-  onMediaSelect: (media: MovieDto) => void;
+  onMediaSelect: (media: MediaDto) => void;
   visible: boolean;
 }
 

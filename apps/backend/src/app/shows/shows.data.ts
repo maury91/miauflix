@@ -4,19 +4,37 @@ import { Show, ShowCreationAttributes } from '../database/entities/show.entity';
 import { ShowSimple as TraktShow } from '../trakt/trakt.types';
 import { Op, Sequelize } from 'sequelize';
 import { ShowDto } from '@miauflix/types';
-import { Season } from '../database/entities/season.entity';
-import { Episode } from '../database/entities/episode.entity';
+import {
+  Season,
+  SeasonCreationAttributes,
+} from '../database/entities/season.entity';
+import {
+  Episode,
+  EpisodeCreationAttributes,
+} from '../database/entities/episode.entity';
 import { Source } from '../database/entities/source.entity';
 
 @Injectable()
 export class ShowsData {
-  constructor(@InjectModel(Show) private readonly showModel: typeof Show) {}
+  constructor(
+    @InjectModel(Show) private readonly showModel: typeof Show,
+    @InjectModel(Season) private readonly seasonModel: typeof Season,
+    @InjectModel(Episode) private readonly episodeModel: typeof Episode
+  ) {}
 
   async findShow(slug: string): Promise<Show | null> {
     return await this.showModel.findOne({
       where: {
         slug,
       },
+      include: [
+        {
+          model: Season,
+        },
+        {
+          model: Episode,
+        },
+      ],
     });
   }
 
@@ -112,6 +130,39 @@ export class ShowsData {
 
   async createShow(show: ShowCreationAttributes): Promise<Show> {
     return (await this.showModel.upsert(show))[0];
+  }
+
+  async updateLastCheckedAt(slug: string): Promise<void> {
+    await this.showModel.update(
+      {
+        lastCheckedAt: new Date(),
+      },
+      {
+        where: {
+          slug,
+        },
+      }
+    );
+  }
+
+  async addSeason(
+    show: Show,
+    season: Omit<SeasonCreationAttributes, 'showId'>
+  ): Promise<Season> {
+    return (await this.seasonModel.upsert({ ...season, showId: show.id }))[0];
+  }
+
+  async addEpisode(
+    season: Season,
+    episode: Omit<EpisodeCreationAttributes, 'seasonId' | 'showId'>
+  ): Promise<Episode> {
+    return (
+      await this.episodeModel.upsert({
+        ...episode,
+        seasonId: season.id,
+        showId: season.showId,
+      })
+    )[0];
   }
 }
 

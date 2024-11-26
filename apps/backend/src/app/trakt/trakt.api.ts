@@ -4,19 +4,18 @@ import {
   DeviceCodeResponse,
   DeviceTokenResponse,
   ExtendedMovie,
-  ExtendedShow,
   MostFavoritedMoviesResponse,
   Movie as TraktMovie,
   Movie,
   PopularMoviesResponse,
   ProgressResponse,
   SearchMoviesResponse,
-  ShowSimple,
   ShowSeason,
   TrendingMoviesResponse,
   TrendingShowsResponse,
   UserProfileResponse,
   Show,
+  ShowEpisode,
 } from './trakt.types';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -198,12 +197,51 @@ export class TraktApi {
     ).data;
   }
 
-  @Cacheable(9e5 /* 15 minutes */)
-  public async getTrendingMovies(page = 1, limit = 20) {
+  private async getMethodSubset(
+    method: 'getTrendingMoviesBig',
+    page?: number,
+    limit?: number
+  ): Promise<ReturnType<TraktApi['getTrendingMoviesBig']>>;
+  private async getMethodSubset(
+    method: 'getTrendingShowsBig',
+    page?: number,
+    limit?: number
+  ): Promise<ReturnType<TraktApi['getTrendingShowsBig']>>;
+  private async getMethodSubset(
+    method: 'getPopularMoviesBig',
+    page?: number,
+    limit?: number
+  ): Promise<ReturnType<TraktApi['getPopularMoviesBig']>>;
+  private async getMethodSubset(
+    method:
+      | 'getTrendingMoviesBig'
+      | 'getTrendingShowsBig'
+      | 'getPopularMoviesBig',
+    page = 0,
+    limit = 30
+  ): Promise<ReturnType<TraktApi[typeof method]>> {
+    const bigPage = Math.floor(page / 5);
+    const subPage = page % 5;
+    const { data, total } = (await this[method](
+      bigPage,
+      limit
+    )) satisfies Awaited<ReturnType<TraktApi[typeof method]>>;
+
+    return {
+      data: data.slice(subPage * limit, (subPage + 1) * limit),
+      page: page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      pageSize: limit,
+    } as Awaited<ReturnType<TraktApi[typeof method]>>;
+  }
+
+  @Cacheable(216e5 /* 6 hours */)
+  private async getTrendingMoviesBig(page = 0, limit = 100) {
     const result = await this.get<TrendingMoviesResponse>(
       `${this.apiUrl}/movies/trending`,
       {
-        params: { page, limit },
+        params: { page: page + 1, limit: limit * 5 },
       }
     );
     return parsePagination(
@@ -212,8 +250,12 @@ export class TraktApi {
     );
   }
 
-  @Cacheable(9e5 /* 15 minutes */)
-  public async getTrendingShows(page = 1, limit = 20) {
+  public async getTrendingMovies(page = 0, limit = 20) {
+    return this.getMethodSubset('getTrendingMoviesBig', page, limit);
+  }
+
+  @Cacheable(216e5 /* 6 hours */)
+  private async getTrendingShowsBig(page = 0, limit = 100) {
     const result = await this.get<TrendingShowsResponse>(
       `${this.apiUrl}/shows/trending`,
       {
@@ -226,8 +268,12 @@ export class TraktApi {
     );
   }
 
-  @Cacheable(9e5 /* 15 minutes */, true)
-  public async getPopularMovies(page = 1, limit = 30) {
+  public async getTrendingShows(page = 0, limit = 20) {
+    return this.getMethodSubset('getTrendingShowsBig', page, limit);
+  }
+
+  @Cacheable(216e5 /* 6 hours */)
+  private async getPopularMoviesBig(page = 0, limit = 120) {
     const result = await this.get<PopularMoviesResponse>(
       `${this.apiUrl}/movies/popular`,
       {
@@ -240,8 +286,12 @@ export class TraktApi {
     );
   }
 
+  public async getPopularMovies(page = 0, limit = 30) {
+    return this.getMethodSubset('getPopularMoviesBig', page, limit);
+  }
+
   @Cacheable(9e5 /* 15 minutes */)
-  public async getMostFavoritedMovies(period = 'weekly', page = 1, limit = 30) {
+  public async getMostFavoritedMovies(period = 'weekly', page = 0, limit = 30) {
     const result = await this.get<MostFavoritedMoviesResponse>(
       `${this.apiUrl}/movies/favorited/${period}`,
       {
@@ -283,9 +333,9 @@ export class TraktApi {
 
   @Cacheable(144e6 /* 1 day */)
   public async getMovie<
-    E extends boolean,
+    E extends boolean = false,
     T = E extends true ? ExtendedMovie : Movie
-  >(movieId: string, extended?: E): Promise<T> {
+  >(movieId: string, extended = false as E): Promise<T> {
     return (
       await this.get<T>(`${this.apiUrl}/movies/${movieId}`, {
         params: {
@@ -296,9 +346,9 @@ export class TraktApi {
   }
 
   @Cacheable(144e6 /* 1 day */)
-  public async getShow<E extends boolean>(
+  public async getShow<E extends boolean = false>(
     showId: string,
-    extended?: E
+    extended = false as E
   ): Promise<Show<E>> {
     return (
       await this.get<Show<E>>(`${this.apiUrl}/shows/${showId}`, {
@@ -310,13 +360,30 @@ export class TraktApi {
   }
 
   @Cacheable(144e6 /* 1 day */)
-  public async getShowSeasons<E extends boolean>(
+  public async getShowSeasons<E extends boolean = false>(
     showId: string,
-    extended?: E
+    extended = false as E
   ): Promise<ShowSeason<E>[]> {
     return (
       await this.get<ShowSeason<E>[]>(
         `${this.apiUrl}/shows/${showId}/seasons`,
+        {
+          params: {
+            extended: extended ? 'full' : 'metadata',
+          },
+        }
+      )
+    ).data;
+  }
+
+  public async getShowSeasonEpisodes<E extends boolean = false>(
+    showId: string,
+    season: number,
+    extended = false as E
+  ) {
+    return (
+      await this.get<ShowEpisode<E>[]>(
+        `${this.apiUrl}/shows/${showId}/seasons/${season}`,
         {
           params: {
             extended: extended ? 'full' : 'metadata',

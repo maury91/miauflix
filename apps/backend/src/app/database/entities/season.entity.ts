@@ -10,7 +10,7 @@ import {
 import { Show } from './show.entity';
 import { Episode } from './episode.entity';
 
-interface SeasonAttributes {
+export interface SeasonAttributes {
   id: number;
   show: Show;
   showId: number;
@@ -29,7 +29,7 @@ interface SeasonAttributes {
   updatedAt: Date;
 }
 
-type SeasonCreationAttributes = Omit<
+export type SeasonCreationAttributes = Omit<
   SeasonAttributes,
   'id' | 'episodes' | 'createdAt' | 'updatedAt' | 'show'
 >;

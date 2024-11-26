@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { useGetListQuery } from '../../../../store/api/lists';
 import styled from 'styled-components';
 import { scaleImage } from '../utils/scaleImage';
-import { CategoryDto, MediaDto, MovieDto } from '@miauflix/types';
+import { CategoryDto, MediaDto } from '@miauflix/types';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import {
   changeCategory,
@@ -53,7 +53,7 @@ const useInfiniteList = (category: string, skip = false): ListHookReturn => {
   const [totalPages, setTotalPages] = useState(1);
 
   const previousList = useGetListQuery(
-    page > 0 && !skip ? { category, page: page - 1 } : skipToken
+    page > 1 && !skip ? { category, page: page - 1 } : skipToken
   );
   const currentList = useGetListQuery(!skip ? { category, page } : skipToken);
   const nextList = useGetListQuery(
@@ -137,7 +137,7 @@ export const CategorySlider: FC<{
   index: number;
   scrollTo: (to: number) => void;
   onLeft: () => void;
-  onSelect: (media: MovieDto) => void;
+  onSelect: (media: MediaDto) => void;
 }> = ({ category, index, onLeft, onSelect, scrollTo }) => {
   const { data, updateSelected, mediaCount } = useSpecialCategories(
     category.id

@@ -9,6 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { Season } from './season.entity';
 import { Episode } from './episode.entity';
+import { NOW } from 'sequelize';
 
 export interface ShowAttributes {
   id: number;
@@ -34,13 +35,20 @@ export interface ShowAttributes {
   seasonsCount: number;
   seasons: Season[];
   episodes: Episode[];
+  lastCheckedAt: Date;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export type ShowCreationAttributes = Omit<
   ShowAttributes,
-  'id' | 'seasons' | 'episodes' | 'seasonsCount' | 'createdAt' | 'updatedAt'
+  | 'id'
+  | 'seasons'
+  | 'episodes'
+  | 'seasonsCount'
+  | 'lastCheckedAt'
+  | 'createdAt'
+  | 'updatedAt'
 >;
 
 @Table
@@ -106,6 +114,10 @@ export class Show extends Model<ShowAttributes, ShowCreationAttributes> {
   @Default(0)
   @Column(DataType.SMALLINT)
   seasonsCount!: number;
+
+  @Default(NOW)
+  @Column
+  lastCheckedAt!: Date;
 
   @HasMany(() => Season)
   seasons!: Season[];

@@ -35,6 +35,12 @@ export class ShowsQueues {
     }
   }
 
+  public async requestEpisodesForShow(slug: string) {
+    return this.showQueue.add(showJobs.getShowEpisodes, {
+      slug,
+    });
+  }
+
   public async requestSearchImagesForShow(slug: string) {
     return this.showQueue.add(showJobs.searchImagesForShow, {
       slug,

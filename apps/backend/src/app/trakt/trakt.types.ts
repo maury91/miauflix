@@ -190,9 +190,6 @@ export type TrendingShowsResponse = {
   show: ShowSimple;
 }[];
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Episode {}
-
 export type MovieProgress = {
   progress: number;
   paused_at: string;
@@ -206,7 +203,7 @@ export type EpisodeProgress = {
   paused_at: string;
   id: number;
   type: 'episode';
-  episode: Episode;
+  episode: ShowEpisode<false>;
 };
 
 export type ProgressResponse = (MovieProgress | EpisodeProgress)[];

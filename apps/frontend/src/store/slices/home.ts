@@ -1,10 +1,10 @@
-import { CategoryDto, MovieDto } from '@miauflix/types';
+import { CategoryDto, MediaDto } from '@miauflix/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { categoriesApi } from '../api/categories';
 
 export interface HomeState {
   category: CategoryDto;
-  selectedMedia: MovieDto | null;
+  selectedMedia: MediaDto | null;
   selectedByCategory: Record<string, number>;
 }
 
@@ -31,7 +31,7 @@ export const homeSlice = createSlice({
     ) => {
       state.selectedByCategory[action.payload.category] = action.payload.index;
     },
-    setSelectedMedia: (state, action: PayloadAction<MovieDto>) => {
+    setSelectedMedia: (state, action: PayloadAction<MediaDto>) => {
       state.selectedMedia = action.payload;
     },
   },

@@ -35,10 +35,11 @@ export type SearchImagesForMovieData = {
   slug: string;
 };
 
-/** TV Q */
+/** Show Q */
 
 export const enum showJobs {
   getShowExtendedData = 'getShowExtendedData',
+  getShowEpisodes = 'getShowEpisodes',
   searchImagesForShow = 'searchImagesForShow',
 }
 
@@ -50,6 +51,10 @@ export type GetShowExtendedDataData = {
 };
 
 export type SearchImagesForShowData = {
+  slug: string;
+};
+
+export type GetShowEpisodesData = {
   slug: string;
 };
 

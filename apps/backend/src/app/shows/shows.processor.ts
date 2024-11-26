@@ -8,15 +8,18 @@ import {
   queues,
   SearchImagesForShowData,
   showJobs,
+  GetShowEpisodesData,
 } from '@miauflix/types';
 import { TMDBApi } from '../tmdb/tmdb.api';
+import { ShowsQueues } from './shows.queues';
 
 @Processor(queues.show)
 export class ShowsProcessor extends WorkerHost {
   constructor(
     private readonly traktService: TraktApi,
     private readonly tmdbApi: TMDBApi,
-    private readonly showData: ShowsData
+    private readonly showData: ShowsData,
+    private readonly queues: ShowsQueues
   ) {
     super();
   }
@@ -31,7 +34,7 @@ export class ShowsProcessor extends WorkerHost {
     }
     const show = await this.traktService.getShow(showSlug, true);
 
-    return await this.showData.createShow({
+    const createdShow = await this.showData.createShow({
       slug: show.ids.slug,
       title: show.title,
       year: show.year,
@@ -52,9 +55,57 @@ export class ShowsProcessor extends WorkerHost {
       network: show.network,
       status: show.status,
     });
+
+    await this.queues.requestEpisodesForShow(showSlug);
+    return createdShow;
   }
 
-  async processGetShowExtendedData(
+  private async getShowEpisodes(showSlug: string) {
+    const show = await this.showData.findShow(showSlug);
+    if (!show) {
+      throw new Error('Show not found');
+    }
+    const seasons = await this.traktService.getShowSeasons(showSlug, true);
+    for (const rawSeason of seasons) {
+      const season = await this.showData.addSeason(show, {
+        number: rawSeason.number,
+        title: rawSeason.title,
+        overview:
+          typeof rawSeason.overview === 'string' ? rawSeason.overview : '',
+        episodesCount: rawSeason.episode_count,
+        airedEpisodes: rawSeason.aired_episodes,
+        rating: rawSeason.rating,
+        network: rawSeason.network,
+        traktId: rawSeason.ids.trakt,
+        tvdbId: rawSeason.ids.tvdb,
+        tmdbId: rawSeason.ids.tmdb,
+      });
+      const episodes = await this.traktService.getShowSeasonEpisodes(
+        showSlug,
+        rawSeason.number,
+        true
+      );
+      for (const episode of episodes) {
+        await this.showData.addEpisode(season, {
+          number: episode.number,
+          title: episode.title,
+          overview: episode.overview,
+          rating: episode.rating,
+          firstAired: new Date(episode.first_aired),
+          traktId: episode.ids.trakt,
+          imdbId: episode.ids.imdb,
+          tmdbId: episode.ids.tmdb,
+          tvdbId: episode.ids.tvdb,
+          runtime: episode.runtime,
+          order: episode.number_abs,
+          episodeType: episode.episode_type,
+        });
+      }
+    }
+    await this.showData.updateLastCheckedAt(showSlug);
+  }
+
+  private async processGetShowExtendedData(
     job: Job<GetShowExtendedDataData, void, showJobs.getShowExtendedData>
   ) {
     // Double check if the show is in the database
@@ -66,7 +117,7 @@ export class ShowsProcessor extends WorkerHost {
     }
   }
 
-  async processSearchImagesForShow(
+  private async processSearchImagesForShow(
     job: Job<SearchImagesForShowData, void, showJobs.searchImagesForShow>
   ) {
     try {
@@ -83,16 +134,30 @@ export class ShowsProcessor extends WorkerHost {
     }
   }
 
+  private async processGetShowEpisodes(
+    job: Job<GetShowEpisodesData, void, showJobs.getShowEpisodes>
+  ) {
+    try {
+      await this.getShowEpisodes(job.data.slug);
+    } catch (error) {
+      console.error('Failed to get show episodes', job.data, error);
+      throw error;
+    }
+  }
+
   async process(
     job:
       | Job<GetShowExtendedDataData, void, showJobs.getShowExtendedData>
       | Job<SearchImagesForShowData, void, showJobs.searchImagesForShow>
+      | Job<GetShowEpisodesData, void, showJobs.getShowEpisodes>
   ) {
     switch (job.name) {
       case showJobs.getShowExtendedData:
         return this.processGetShowExtendedData(job);
       case showJobs.searchImagesForShow:
         return this.processSearchImagesForShow(job);
+      case showJobs.getShowEpisodes:
+        return this.processGetShowEpisodes(job);
       default:
         throw new Error(`No processor for job ${job}`);
     }
