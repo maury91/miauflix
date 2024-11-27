@@ -3,7 +3,12 @@ import { HttpModule, HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { ConfigurationResponse, ImagesResponse, MediaType } from './tmdb.types';
+import {
+  ConfigurationResponse,
+  ImagesResponse,
+  MediaType,
+  ShowSeason,
+} from './tmdb.types';
 import { AxiosRequestConfig } from 'axios';
 import { Cacheable } from '../utils/cacheable.util';
 import { MediaImages } from '@miauflix/types';
@@ -48,7 +53,7 @@ export class TMDBApi {
     return data;
   }
 
-  @Cacheable(864e5 /* 1 day */, true)
+  @Cacheable(864e5 /* 1 day */)
   private async getMediaImagesRaw(type: MediaType, mediaId: number | string) {
     const { data } = await this.get<ImagesResponse>(
       `${this.apiUrl}/${type}/${mediaId}/images`,
@@ -72,7 +77,7 @@ export class TMDBApi {
     return data;
   }
 
-  @Cacheable(864e5 /* 1 day */, true)
+  @Cacheable(864e5 /* 1 day */)
   public async getMediaImages(type: MediaType, mediaId: number | string) {
     const [config, data] = await Promise.all([
       this.getConfiguration(),
@@ -114,6 +119,40 @@ export class TMDBApi {
         .slice(0, 5),
       backdropsWithoutText,
       logos,
+    };
+  }
+
+  @Cacheable(864e5 /* 1 day */)
+  public async getSeasonRaw(showId: number, season: number) {
+    const { data } = await this.get<ShowSeason>(
+      `${this.apiUrl}/tv/${showId}/season/${season}`,
+      {
+        params: {
+          language: 'en',
+        },
+      }
+    );
+    return data;
+  }
+
+  @Cacheable(864e5 /* 1 day */)
+  public async getSeason(showId: number, season: number) {
+    const [config, data] = await Promise.all([
+      this.getConfiguration(),
+      this.getSeasonRaw(showId, season),
+    ]);
+
+    return {
+      ...data,
+      poster_path: data.poster_path
+        ? `${config.images.secure_base_url}original${data.poster_path}`
+        : null,
+      episodes: data.episodes.map((episode) => ({
+        ...episode,
+        still_path: episode.still_path
+          ? `${config.images.secure_base_url}original${episode.still_path}`
+          : null,
+      })),
     };
   }
 

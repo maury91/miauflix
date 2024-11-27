@@ -43,7 +43,7 @@ export class TraktController {
         pausedAt: progress.paused_at,
         type: progress.type,
         movie: extendedMovies.find(
-          (movie) => movie.ids.trakt === progress.movie.ids.trakt
+          (movie) => movie.id === progress.movie.ids.slug
         ),
       }));
   }

@@ -60,7 +60,7 @@ export class Season extends Model<SeasonAttributes, SeasonCreationAttributes> {
   @Column
   airedEpisodes!: number;
 
-  @Column(DataType.DECIMAL(3, 2))
+  @Column(DataType.DECIMAL(4, 2))
   rating!: number;
 
   @Column

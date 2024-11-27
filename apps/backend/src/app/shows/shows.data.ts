@@ -22,19 +22,28 @@ export class ShowsData {
     @InjectModel(Episode) private readonly episodeModel: typeof Episode
   ) {}
 
-  async findShow(slug: string): Promise<Show | null> {
+  async findShow(slug: string, withSeasons = false): Promise<Show | null> {
+    if (withSeasons) {
+      return await this.showModel.findOne({
+        where: {
+          slug,
+        },
+        include: [
+          {
+            model: Season,
+            include: [
+              {
+                model: Episode,
+              },
+            ],
+          },
+        ],
+      });
+    }
     return await this.showModel.findOne({
       where: {
         slug,
       },
-      include: [
-        {
-          model: Season,
-        },
-        {
-          model: Episode,
-        },
-      ],
     });
   }
 

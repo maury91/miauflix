@@ -227,6 +227,16 @@ export class TraktApi {
       limit
     )) satisfies Awaited<ReturnType<TraktApi[typeof method]>>;
 
+    console.log(
+      data.length,
+      total,
+      bigPage,
+      subPage,
+      limit,
+      subPage * limit,
+      (subPage + 1) * limit
+    );
+
     return {
       data: data.slice(subPage * limit, (subPage + 1) * limit),
       page: page,
@@ -237,7 +247,7 @@ export class TraktApi {
   }
 
   @Cacheable(216e5 /* 6 hours */)
-  private async getTrendingMoviesBig(page = 0, limit = 100) {
+  private async getTrendingMoviesBig(page = 0, limit = 20) {
     const result = await this.get<TrendingMoviesResponse>(
       `${this.apiUrl}/movies/trending`,
       {
@@ -255,11 +265,11 @@ export class TraktApi {
   }
 
   @Cacheable(216e5 /* 6 hours */)
-  private async getTrendingShowsBig(page = 0, limit = 100) {
+  private async getTrendingShowsBig(page = 0, limit = 20) {
     const result = await this.get<TrendingShowsResponse>(
       `${this.apiUrl}/shows/trending`,
       {
-        params: { page, limit },
+        params: { page, limit: limit * 5 },
       }
     );
     return parsePagination(
@@ -273,11 +283,11 @@ export class TraktApi {
   }
 
   @Cacheable(216e5 /* 6 hours */)
-  private async getPopularMoviesBig(page = 0, limit = 120) {
+  private async getPopularMoviesBig(page = 0, limit = 20) {
     const result = await this.get<PopularMoviesResponse>(
       `${this.apiUrl}/movies/popular`,
       {
-        params: { page, limit },
+        params: { page, limit: limit * 5 },
       }
     );
     return parsePagination(
@@ -286,7 +296,7 @@ export class TraktApi {
     );
   }
 
-  public async getPopularMovies(page = 0, limit = 30) {
+  public async getPopularMovies(page = 0, limit = 20) {
     return this.getMethodSubset('getPopularMoviesBig', page, limit);
   }
 

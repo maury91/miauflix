@@ -4,7 +4,6 @@ import {
   Default,
   ForeignKey,
   HasMany,
-  Index,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -27,6 +26,7 @@ export interface EpisodeAttributes {
   sourceFound: boolean;
   sourcesSearched: boolean;
   noSourceFound: boolean;
+  image: string;
   traktId: number;
   tmdbId: number;
   tvdbId: number;
@@ -74,7 +74,7 @@ export class Episode extends Model<
   @Column(DataType.TEXT)
   overview!: string;
 
-  @Column(DataType.DECIMAL(3, 2))
+  @Column(DataType.DECIMAL(4, 2))
   rating!: number;
 
   @Column
@@ -85,6 +85,9 @@ export class Episode extends Model<
 
   @Column(DataType.STRING(30))
   episodeType!: string;
+
+  @Column
+  image!: string;
 
   @Default(false)
   @Column

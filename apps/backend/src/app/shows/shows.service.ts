@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { TraktApi } from '../trakt/trakt.api';
-import { ExtendedShowDto, Paginated, ShowDto } from '@miauflix/types';
+import {
+  ExtendedShowDto,
+  Paginated,
+  SeasonDto,
+  ShowDto,
+} from '@miauflix/types';
 import { ShowSimple as TraktShow } from '../trakt/trakt.types';
 import { NO_IMAGES, TMDBApi } from '../tmdb/tmdb.api';
 import { ShowsData } from './shows.data';
@@ -16,14 +21,17 @@ export class ShowsService {
     private readonly showQueuesService: ShowsQueues
   ) {}
 
-  private async getExtendedShow(slug: string): Promise<Show> {
-    const show = await this.showData.findShow(slug);
+  private async getExtendedShow(
+    slug: string,
+    withSeasons = false
+  ): Promise<Show> {
+    const show = await this.showData.findShow(slug, withSeasons);
 
     if (!show) {
       console.log('Show not in DB');
       const traktShow = await this.traktService.getShow(slug);
       const images = await this.tmdbApi.getSimpleMediaImages(
-        'movie',
+        'tv',
         `${traktShow.ids.tmdb}`
       );
       const job = await this.showQueuesService.requestShowExtendedData(
@@ -48,8 +56,6 @@ export class ShowsService {
       title: show.title,
       year: show.year,
       ids: {
-        trakt: show.traktId,
-        slug: show.slug,
         imdb: show.imdbId,
         tmdb: show.tmdbId,
         tvdb: show.tvdbId,
@@ -68,6 +74,29 @@ export class ShowsService {
       airedEpisodes: show.airedEpisodes,
       network: show.network,
     };
+  }
+
+  public async getShowSeasons(slug: string): Promise<SeasonDto[]> {
+    const show = await this.getExtendedShow(slug, true);
+    return show.seasons.map((season) => ({
+      number: season.number,
+      title: season.title,
+      overview: season.overview,
+      episodesCount: season.episodesCount,
+      airedEpisodes: season.airedEpisodes,
+      rating: Number(season.rating),
+      network: season.network,
+      episodes: season.episodes.map((episode) => ({
+        number: episode.number,
+        order: episode.order,
+        title: episode.title,
+        overview: episode.overview,
+        rating: Number(episode.rating),
+        firstAired: episode.firstAired,
+        runtime: episode.runtime,
+        image: episode.image,
+      })),
+    }));
   }
 
   public async addExtendedDataToShows(shows: TraktShow[]): Promise<ShowDto[]> {
@@ -109,7 +138,7 @@ export class ShowsService {
     return showsWithImages;
   }
 
-  public async getTrendingShows(page = 1): Promise<Paginated<ShowDto>> {
+  public async getTrendingShows(page = 0): Promise<Paginated<ShowDto>> {
     const { data, ...pagination } = await this.traktService.getTrendingShows(
       page
     );

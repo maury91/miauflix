@@ -241,7 +241,7 @@ export const CategorySlider: FC<{
             }
             return (
               <MediaBox
-                key={media.ids.slug}
+                key={media.id}
                 src={scaleImage(
                   media.images.backdrop || media.images.backdrops[0]
                 )}

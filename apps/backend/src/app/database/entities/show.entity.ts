@@ -78,7 +78,7 @@ export class Show extends Model<ShowAttributes, ShowCreationAttributes> {
   @Column(DataType.STRING(500))
   trailer!: string;
 
-  @Column(DataType.DECIMAL(3, 2))
+  @Column(DataType.DECIMAL(4, 2))
   rating!: number;
 
   @Column(DataType.SMALLINT)

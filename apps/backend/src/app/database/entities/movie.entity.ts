@@ -64,7 +64,7 @@ export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
   @Column(DataType.STRING(500))
   trailer!: string;
 
-  @Column(DataType.DECIMAL(3, 2))
+  @Column(DataType.DECIMAL(4, 2))
   rating!: number;
 
   @Column

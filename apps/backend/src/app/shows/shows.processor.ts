@@ -80,12 +80,20 @@ export class ShowsProcessor extends WorkerHost {
         tvdbId: rawSeason.ids.tvdb,
         tmdbId: rawSeason.ids.tmdb,
       });
+      const tmdbSeason = await this.tmdbApi.getSeason(
+        show.tmdbId,
+        rawSeason.number
+      );
       const episodes = await this.traktService.getShowSeasonEpisodes(
         showSlug,
         rawSeason.number,
         true
       );
       for (const episode of episodes) {
+        const episodeImage =
+          tmdbSeason.episodes.find(
+            ({ episode_number }) => episode_number === episode.number
+          )?.still_path ?? '';
         await this.showData.addEpisode(season, {
           number: episode.number,
           title: episode.title,
@@ -99,6 +107,7 @@ export class ShowsProcessor extends WorkerHost {
           runtime: episode.runtime,
           order: episode.number_abs,
           episodeType: episode.episode_type,
+          image: episodeImage,
         });
       }
     }
