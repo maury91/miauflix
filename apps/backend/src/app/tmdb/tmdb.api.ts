@@ -136,7 +136,7 @@ export class TMDBApi {
   }
 
   @Cacheable(864e5 /* 1 day */)
-  public async getSeason(showId: number, season: number) {
+  public async getSeason(showId: number, season: number): Promise<ShowSeason> {
     const [config, data] = await Promise.all([
       this.getConfiguration(),
       this.getSeasonRaw(showId, season),

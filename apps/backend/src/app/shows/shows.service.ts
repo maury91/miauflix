@@ -73,12 +73,13 @@ export class ShowsService {
       genres: show.genres,
       airedEpisodes: show.airedEpisodes,
       network: show.network,
+      seasons: show.seasonsCount,
     };
   }
 
   public async getShowSeasons(slug: string): Promise<SeasonDto[]> {
     const show = await this.getExtendedShow(slug, true);
-    return show.seasons.map((season) => ({
+    return show.seasons?.map((season) => ({
       number: season.number,
       title: season.title,
       overview: season.overview,

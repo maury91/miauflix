@@ -60,7 +60,7 @@ import { ShowsModule } from './shows/shows.module';
         database: configService.getOrThrow('POSTGRES_DB'),
         autoLoadModels: true,
         synchronize: true,
-        // logging: false,
+        logging: false,
       }),
       inject: [ConfigService],
     }),

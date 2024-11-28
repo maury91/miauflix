@@ -12,6 +12,10 @@ import {
 } from '@miauflix/types';
 import { TMDBApi } from '../tmdb/tmdb.api';
 import { ShowsQueues } from './shows.queues';
+import { ShowEpisodeExtended, ShowSeasonExtended } from '../trakt/trakt.types';
+import { ShowSeason } from '../tmdb/tmdb.types';
+import { Season } from '../database/entities/season.entity';
+import { Show } from '../database/entities/show.entity';
 
 @Processor(queues.show)
 export class ShowsProcessor extends WorkerHost {
@@ -60,14 +64,35 @@ export class ShowsProcessor extends WorkerHost {
     return createdShow;
   }
 
-  private async getShowEpisodes(showSlug: string) {
-    const show = await this.showData.findShow(showSlug);
-    if (!show) {
-      throw new Error('Show not found');
-    }
-    const seasons = await this.traktService.getShowSeasons(showSlug, true);
-    for (const rawSeason of seasons) {
-      const season = await this.showData.addSeason(show, {
+  private async addEpisodeToDatabase(
+    season: Season,
+    episode: ShowEpisodeExtended,
+    seasonWithImages: ShowSeason
+  ) {
+    const episodeImage =
+      seasonWithImages.episodes.find(
+        ({ episode_number }) => episode_number === episode.number
+      )?.still_path ?? '';
+    return this.showData.addEpisode(season, {
+      number: episode.number,
+      title: episode.title,
+      overview: episode.overview,
+      rating: episode.rating,
+      firstAired: new Date(episode.first_aired),
+      traktId: episode.ids.trakt,
+      imdbId: episode.ids.imdb,
+      tmdbId: episode.ids.tmdb,
+      tvdbId: episode.ids.tvdb,
+      runtime: episode.runtime,
+      order: episode.number_abs,
+      episodeType: episode.episode_type,
+      image: episodeImage,
+    });
+  }
+
+  private async getShowSeason(show: Show, rawSeason: ShowSeasonExtended) {
+    const [season, tmdbSeason, episodes] = await Promise.all([
+      this.showData.addSeason(show, {
         number: rawSeason.number,
         title: rawSeason.title,
         overview:
@@ -79,38 +104,37 @@ export class ShowsProcessor extends WorkerHost {
         traktId: rawSeason.ids.trakt,
         tvdbId: rawSeason.ids.tvdb,
         tmdbId: rawSeason.ids.tmdb,
-      });
-      const tmdbSeason = await this.tmdbApi.getSeason(
-        show.tmdbId,
-        rawSeason.number
-      );
-      const episodes = await this.traktService.getShowSeasonEpisodes(
-        showSlug,
+      }),
+      this.tmdbApi.getSeason(show.tmdbId, rawSeason.number),
+      this.traktService.getShowSeasonEpisodes(
+        show.slug,
         rawSeason.number,
         true
-      );
-      for (const episode of episodes) {
-        const episodeImage =
-          tmdbSeason.episodes.find(
-            ({ episode_number }) => episode_number === episode.number
-          )?.still_path ?? '';
-        await this.showData.addEpisode(season, {
-          number: episode.number,
-          title: episode.title,
-          overview: episode.overview,
-          rating: episode.rating,
-          firstAired: new Date(episode.first_aired),
-          traktId: episode.ids.trakt,
-          imdbId: episode.ids.imdb,
-          tmdbId: episode.ids.tmdb,
-          tvdbId: episode.ids.tvdb,
-          runtime: episode.runtime,
-          order: episode.number_abs,
-          episodeType: episode.episode_type,
-          image: episodeImage,
-        });
-      }
+      ),
+    ]);
+    await Promise.all(
+      episodes.map((episode) =>
+        this.addEpisodeToDatabase(season, episode, tmdbSeason)
+      )
+    );
+  }
+
+  private async getShowEpisodes(showSlug: string) {
+    const show = await this.showData.findShow(showSlug);
+    if (!show) {
+      throw new Error('Show not found');
     }
+    const seasons = await this.traktService.getShowSeasons(showSlug, true);
+    const latestSeason = seasons.reduce(
+      (max, season) => (season.number > max ? season.number : max),
+      0
+    );
+    await show.update({
+      seasonsCount: latestSeason,
+    });
+    await Promise.all(
+      seasons.map((season) => this.getShowSeason(show, season))
+    );
     await this.showData.updateLastCheckedAt(showSlug);
   }
 

@@ -21,6 +21,7 @@ export interface ExtendedShowDto extends ShowDto {
   genres: string[];
   airedEpisodes: number;
   network: string;
+  seasons: number;
 }
 
 export interface EpisodeDto {
