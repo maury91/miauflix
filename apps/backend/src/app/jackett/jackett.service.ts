@@ -150,7 +150,7 @@ export class JackettService {
       const { data } = await this.get<JackettQueryResponse>(
         `indexers/${trackerId}/results/torznab/api`,
         {
-          t: searchType.toLowerCase(),
+          t: innerSearchType.toLowerCase(),
           ...params,
           cat: tracker.categories[searchType].map(({ id }) => id).join(','),
           ...(typeof limit === 'number' ? { limit: `${limit}` } : {}),
@@ -201,6 +201,10 @@ export class JackettService {
             item['torznab:attr'].find(({ name }) => name === 'peers')?.value ??
               '0'
           );
+          const [season, episode] = item.title
+            .match(/\bS(\d+)E(\d+)\b/)
+            ?.slice(1)
+            .map(Number) ?? [0, 0];
           return {
             title: item.title,
             guid: item.guid,
@@ -213,6 +217,8 @@ export class JackettService {
             codec: getVideoCodec(item.title),
             source: getVideoSource(item.title),
             quality: getVideoQuality(item.title),
+            season,
+            episode,
             seeders,
             peers,
           };

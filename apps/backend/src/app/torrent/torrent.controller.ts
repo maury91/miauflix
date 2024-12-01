@@ -16,13 +16,11 @@ export class TorrentController {
   ): Promise<GetStreamDto> {
     const host = req.headers.host;
     const useHvec = useHvecR === 'true';
-    console.log('Searching for movie', slug, { useHvec });
     const { stream, streamKey } = await this.torrentService.getStream(
       slug,
       useHvec,
       false
     );
-    console.log('Got movie', slug, { useHvec });
     return {
       stream:
         typeof host === 'string'
@@ -43,7 +41,6 @@ export class TorrentController {
 
   @Delete(':streamId')
   async stopMovieTorrent(@Param('streamId') streamId: string) {
-    console.log('got stop stream request', streamId);
     return this.torrentService.stopStream(streamId);
   }
 }

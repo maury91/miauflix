@@ -1,4 +1,4 @@
-import { Global, Injectable, Module } from '@nestjs/common';
+import { Global, Injectable, Logger, Module } from '@nestjs/common';
 import { BullModule, InjectQueue } from '@nestjs/bullmq';
 import {
   GetMovieExtendedDataData,
@@ -13,6 +13,8 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class MoviesQueues {
+  private readonly logger = new Logger(MoviesQueues.name);
+
   private readonly movieEventsQueue: QueueEvents;
   constructor(
     @InjectQueue(queues.movie)
@@ -29,7 +31,7 @@ export class MoviesQueues {
   @Cron(CronExpression.EVERY_3_HOURS)
   private async startProcessingMoviesWithoutImages() {
     const movies = await this.movieData.findMoviesWithoutImages();
-    console.log(`Found ${movies.length} movies without images`);
+    this.logger.log(`Found ${movies.length} movies without images`);
     for (const movie of movies) {
       this.requestSearchImagesForMovie(movie.slug);
     }

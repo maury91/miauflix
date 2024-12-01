@@ -62,7 +62,7 @@ export class MovieProcessor extends WorkerHost {
         job.data.images
       );
       if (!extendedMovie.sourcesSearched) {
-        await this.jackettQueuesService.requestTorrentSearch(
+        await this.jackettQueuesService.requestTorrentMovieSearch(
           extendedMovie,
           job.data.index,
           job.data.priority

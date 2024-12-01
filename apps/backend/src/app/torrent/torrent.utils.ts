@@ -32,7 +32,7 @@ export function calculatePriority(
     hevc,
     highQuality,
     index,
-  }: Omit<GetTorrentFileDataWithIndex, 'movieId' | 'runtime'>,
+  }: Omit<GetTorrentFileDataWithIndex, 'mediaId' | 'mediaType' | 'runtime'>,
   basePriority = FROM_LIST_BASE_PRIORITY
 ) {
   if (hevc) {
@@ -53,7 +53,10 @@ export function calculatePriority(
 export function calculateJobId({
   hevc,
   highQuality,
-  movieId,
+  mediaId,
+  mediaType,
 }: Omit<GetTorrentFileData, 'runtime'>) {
-  return `gtf_${hevc ? 'H' : 'x'}${highQuality ? 'Q' : 'x'}_${movieId}`;
+  return `gtf_${hevc ? 'H' : 'x'}${
+    highQuality ? 'Q' : 'x'
+  }_${mediaId}_${mediaType}`;
 }

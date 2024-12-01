@@ -29,7 +29,6 @@ export class UserData {
       },
     });
     if (maybeUser) {
-      console.log('User already exists, updating access token');
       const existingToken = await this.accessTokenModel.findAll({
         where: {
           userId: maybeUser.id,

@@ -28,6 +28,8 @@ import { ShowsDataModule } from './shows/shows.data';
 import { TraktApiModule } from './trakt/trakt.api';
 import { ShowsQueuesModule } from './shows/shows.queues';
 import { ShowsModule } from './shows/shows.module';
+import winston from 'winston';
+import { logger } from '../logger';
 
 @Module({
   imports: [
@@ -60,7 +62,9 @@ import { ShowsModule } from './shows/shows.module';
         database: configService.getOrThrow('POSTGRES_DB'),
         autoLoadModels: true,
         synchronize: true,
-        logging: false,
+        logging: (sql) => {
+          return logger.debug(sql);
+        },
       }),
       inject: [ConfigService],
     }),

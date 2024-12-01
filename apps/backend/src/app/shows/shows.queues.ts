@@ -1,4 +1,4 @@
-import { Global, Injectable, Module } from '@nestjs/common';
+import { Global, Injectable, Logger, Module } from '@nestjs/common';
 import { BullModule, InjectQueue } from '@nestjs/bullmq';
 import {
   GetShowExtendedDataData,
@@ -14,6 +14,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 @Injectable()
 export class ShowsQueues {
   private readonly showsEventsQueue: QueueEvents;
+  private readonly logger = new Logger(ShowsQueues.name);
   constructor(
     @InjectQueue(queues.show)
     private readonly showQueue: Queue<
@@ -29,7 +30,7 @@ export class ShowsQueues {
   @Cron(CronExpression.EVERY_3_HOURS)
   private async startProcessingShowsWithoutImages() {
     const shows = await this.showsData.findShowsWithoutImages();
-    console.log(`Found ${shows.length} shows without images`);
+    this.logger.log(`Found ${shows.length} shows without images`);
     for (const show of shows) {
       this.requestSearchImagesForShow(show.slug);
     }

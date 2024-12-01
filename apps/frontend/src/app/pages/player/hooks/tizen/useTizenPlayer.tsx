@@ -2,13 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { IS_TIZEN } from '../../../../../consts';
 
 const autoSelectAudioTrack = () => {
-  console.log('Getting tracks');
   const tracks = window.webapis.avplay.getTotalTrackInfo();
   const audioTracks = tracks.filter((track) => track.type === 'AUDIO');
-  console.log('Audio tracks', audioTracks);
-  console.log(window.webapis.avplay.getState());
   if (audioTracks.length > 1) {
-    console.log('Choosing english track');
     const englishTrack = audioTracks.find(({ extra_info }) =>
       extra_info.match(/lang[^:]*:[^:]*en/)
     );

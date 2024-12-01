@@ -7,7 +7,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Source } from './source.entity';
+import { MovieSource } from './movie.source.entity';
 
 export interface MovieAttributes {
   id: number;
@@ -100,8 +100,8 @@ export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
   @Column
   sourceFound: boolean;
 
-  @HasMany(() => Source)
-  allSources: Source[];
+  @HasMany(() => MovieSource)
+  allSources: MovieSource[];
 
   @Column(DataType.ARRAY(DataType.STRING))
   genres!: string[];

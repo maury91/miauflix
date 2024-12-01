@@ -126,6 +126,8 @@ export interface Torrent {
   seeders: number; // Users that has part of it
   peers: number; // Users that has all the torrent
   quality: VideoQuality;
+  episode: number;
+  season: number;
 }
 
 export interface JackettTracker {

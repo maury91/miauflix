@@ -7,9 +7,9 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Source } from './source.entity';
 import { Season } from './season.entity';
 import { Show } from './show.entity';
+import { EpisodeSource } from './episode.source.entity';
 
 export interface EpisodeAttributes {
   id: number;
@@ -31,7 +31,7 @@ export interface EpisodeAttributes {
   tmdbId: number;
   tvdbId: number;
   imdbId: string;
-  sources: Source[];
+  sources: EpisodeSource[];
   season: Season;
   show: Show;
   createdAt: Date;
@@ -101,6 +101,6 @@ export class Episode extends Model<
   @Column
   noSourceFound!: boolean;
 
-  @HasMany(() => Source)
-  sources!: Source[];
+  @HasMany(() => EpisodeSource)
+  sources!: EpisodeSource[];
 }

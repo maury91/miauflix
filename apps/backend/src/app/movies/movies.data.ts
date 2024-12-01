@@ -8,7 +8,7 @@ import { Movie as TraktMovie } from '../trakt/trakt.types';
 import { Op, Sequelize } from 'sequelize';
 import { MovieDto } from '@miauflix/types';
 import { Torrent } from '../database/entities/torrent.entity';
-import { Source } from '../database/entities/source.entity';
+import { MovieSource } from '../database/entities/movie.source.entity';
 
 @Injectable()
 export class MoviesData {
@@ -19,6 +19,12 @@ export class MoviesData {
       where: {
         slug,
       },
+    });
+  }
+
+  async findMovieById(id: number): Promise<Movie | null> {
+    return await this.movieModel.findByPk(id, {
+      raw: true,
     });
   }
 
@@ -44,7 +50,7 @@ export class MoviesData {
         slug,
       },
       include: {
-        model: Source,
+        model: MovieSource,
         as: 'allSources',
         attributes: ['data', 'quality', 'codec'],
       },
@@ -121,22 +127,25 @@ export class MoviesData {
     return (await this.movieModel.upsert(movie))[0];
   }
 
-  async setTorrentSearched(id: number): Promise<void> {
-    await this.movieModel.update({ sourcesSearched: true }, { where: { id } });
+  async setTorrentSearched(slug: string): Promise<void> {
+    await this.movieModel.update(
+      { sourcesSearched: true },
+      { where: { slug } }
+    );
   }
 
-  async setTorrentFound(id: number): Promise<void> {
-    await this.movieModel.update({ sourceFound: true }, { where: { id } });
+  async setSourceFound(slug: string): Promise<void> {
+    await this.movieModel.update({ sourceFound: true }, { where: { slug } });
   }
 
-  async setnoSourceFound(id: number): Promise<void> {
-    await this.movieModel.update({ noSourceFound: true }, { where: { id } });
+  async setNoSourceFound(slug: string): Promise<void> {
+    await this.movieModel.update({ noSourceFound: true }, { where: { slug } });
   }
 }
 
 @Global()
 @Module({
-  imports: [SequelizeModule.forFeature([Movie, Torrent, Source])],
+  imports: [SequelizeModule.forFeature([Movie, Torrent, MovieSource])],
   providers: [MoviesData],
   exports: [MoviesData, SequelizeModule],
 })

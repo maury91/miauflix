@@ -11,10 +11,22 @@ import {
 import { Movie } from './movie.entity';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
+import { Show } from './show.entity';
+import { Season } from './season.entity';
+import { Episode } from './episode.entity';
 
 export interface TorrentAttributes {
   id: number;
-  movieId: number;
+  movieId?: number;
+  movie?: Movie;
+  showId?: number;
+  seasonId?: number;
+  episodeId?: number;
+  seasonNum?: number;
+  episodeNum?: number;
+  episode?: Episode;
+  runtime: number;
+  mediaSlug: string;
   title: string;
   uuid: string;
   pubDate: Date;
@@ -35,7 +47,13 @@ export interface TorrentAttributes {
 
 export type TorrentCreationAttributes = Omit<
   TorrentAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'processed' | 'rejected'
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'processed'
+  | 'rejected'
+  | 'movie'
+  | 'episode'
 >;
 
 @Table
@@ -44,7 +62,31 @@ export class Torrent extends Model {
   movieId?: number;
 
   @BelongsTo(() => Movie)
-  movie!: Movie;
+  movie?: Movie;
+
+  @ForeignKey(() => Show)
+  showId?: number;
+
+  @ForeignKey(() => Season)
+  seasonId?: number;
+
+  @ForeignKey(() => Episode)
+  episodeId?: number;
+
+  @BelongsTo(() => Episode)
+  episode?: Episode;
+
+  @Column
+  seasonNum?: number;
+
+  @Column
+  episodeNum?: number;
+
+  @Column
+  runtime!: number;
+
+  @Column
+  mediaSlug!: string;
 
   @Column
   title!: string;

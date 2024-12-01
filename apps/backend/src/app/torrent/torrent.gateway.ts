@@ -32,9 +32,7 @@ export class TorrentGateway {
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly torrentService: TorrentService) {
-    console.log('Torrent Gateway created');
-  }
+  constructor(private readonly torrentService: TorrentService) {}
 
   @SubscribeMessage('prioritize')
   handlePrioritize(@MessageBody() { medias }: SetPriorityDto): void {

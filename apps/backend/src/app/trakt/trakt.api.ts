@@ -56,14 +56,6 @@ export class TraktApi {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private get<T, D = any>(url: string, config?: AxiosRequestConfig<D>) {
-    console.log(url, {
-      ...(config ?? {}),
-      headers: {
-        ...(config?.headers ?? {}),
-        'trakt-api-version': '2',
-        'trakt-api-key': this.clientId,
-      },
-    });
     return this.httpService.axiosRef.get<T>(url, {
       ...(config ?? {}),
       headers: {
@@ -182,7 +174,6 @@ export class TraktApi {
     progress: number
   ) {
     const movie = await this.getMovieFromDB(slug);
-    console.log('Tracking playback', slug, action, progress);
     return this.playbackTracking(movie, 'movie', action, progress, accessToken);
   }
 
@@ -226,16 +217,6 @@ export class TraktApi {
       bigPage,
       limit
     )) satisfies Awaited<ReturnType<TraktApi[typeof method]>>;
-
-    console.log(
-      data.length,
-      total,
-      bigPage,
-      subPage,
-      limit,
-      subPage * limit,
-      (subPage + 1) * limit
-    );
 
     return {
       data: data.slice(subPage * limit, (subPage + 1) * limit),

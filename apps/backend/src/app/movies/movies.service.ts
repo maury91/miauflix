@@ -28,7 +28,6 @@ export class MoviesService {
     const movie = await this.movieData.findMovieWithSources(slug);
 
     if (!movie) {
-      console.log('Movie not in DB');
       const traktMovie = await this.traktService.getMovie(slug);
       const images = await this.tmdbApi.getSimpleMediaImages(
         'movie',
@@ -45,17 +44,15 @@ export class MoviesService {
     }
 
     if (!movie.sourcesSearched) {
-      console.log('Torrents not searched');
       if (
         !(await this.jackettQueuesService.prioritizeTorrentSearch(slug, 10))
       ) {
-        console.log('Requesting search');
-        await this.jackettQueuesService.requestTorrentSearch(movie, 0, 10);
+        await this.jackettQueuesService.requestTorrentMovieSearch(movie, 0, 10);
       }
     } else if (!movie.sourceFound) {
-      console.log('Torrents not scanned');
       this.torrentOrchestratorQueuesService.prioritizeScanTorrents(
         movie.id,
+        'movie',
         100
       );
     }

@@ -6,18 +6,17 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Movie } from './movie.entity';
+import { Episode } from './episode.entity';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
-import { Episode } from './episode.entity';
 
-export interface SourceAttributes {
+export interface EpisodeSourceAttributes {
   id: number;
-  movieId?: number;
-  episodeId?: number;
-  movieSlug: string;
-  movie?: Movie;
-  episode?: Episode;
+  episodeId: number;
+  episode: Episode;
+  showSlug: string;
+  seasonNum: number;
+  episodeNum: number;
   originalSource: string;
   size: number;
   data: Buffer;
@@ -29,27 +28,30 @@ export interface SourceAttributes {
   updatedAt: Date;
 }
 
-export type SourceCreationAttributes = Omit<
-  SourceAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'movie' | 'episode'
+export type EpisodeSourceCreationAttributes = Omit<
+  EpisodeSourceAttributes,
+  'id' | 'createdAt' | 'updatedAt' | 'episode'
 >;
 
 @Table
-export class Source extends Model<SourceAttributes, SourceCreationAttributes> {
-  @ForeignKey(() => Movie)
-  movieId?: number;
-
+export class EpisodeSource extends Model<
+  EpisodeSourceAttributes,
+  EpisodeSourceCreationAttributes
+> {
   @ForeignKey(() => Episode)
-  episodeId?: number;
-
-  @Column
-  movieSlug: string;
-
-  @BelongsTo(() => Movie)
-  movie?: Movie;
+  episodeId!: number;
 
   @BelongsTo(() => Episode)
-  episode?: Episode;
+  episode: Episode;
+
+  @Column
+  showSlug!: string;
+
+  @Column(DataType.SMALLINT)
+  seasonNum!: number;
+
+  @Column(DataType.SMALLINT)
+  episodeNum!: number;
 
   @Column
   originalSource!: string;

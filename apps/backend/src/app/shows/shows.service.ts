@@ -11,6 +11,9 @@ import { NO_IMAGES, TMDBApi } from '../tmdb/tmdb.api';
 import { ShowsData } from './shows.data';
 import { ShowsQueues } from './shows.queues';
 import { Show } from '../database/entities/show.entity';
+import { Season } from '../database/entities/season.entity';
+import { JackettQueues } from '../jackett/jackett.queues';
+import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
 
 @Injectable()
 export class ShowsService {
@@ -18,7 +21,9 @@ export class ShowsService {
     private readonly traktService: TraktApi,
     private readonly tmdbApi: TMDBApi,
     private readonly showData: ShowsData,
-    private readonly showQueuesService: ShowsQueues
+    private readonly showQueuesService: ShowsQueues,
+    private readonly jackettQueuesService: JackettQueues,
+    private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues
   ) {}
 
   private async getExtendedShow(
@@ -48,7 +53,7 @@ export class ShowsService {
   }
 
   public async getShow(slug: string): Promise<ExtendedShowDto> {
-    const show = await this.getExtendedShow(slug);
+    const show = await this.getExtendedShow(slug, true);
 
     return {
       type: 'show',
@@ -73,31 +78,77 @@ export class ShowsService {
       genres: show.genres,
       airedEpisodes: show.airedEpisodes,
       network: show.network,
-      seasons: show.seasonsCount,
+      seasonsCount: show.seasonsCount,
+      seasons: show.seasons
+        .map((season) => season.number)
+        .sort((a, b) => a - b),
     };
   }
 
-  public async getShowSeasons(slug: string): Promise<SeasonDto[]> {
-    const show = await this.getExtendedShow(slug, true);
-    return show.seasons?.map((season) => ({
+  private static mapSeasonToSeasonDto(season: Season): SeasonDto {
+    return {
       number: season.number,
       title: season.title,
       overview: season.overview,
       episodesCount: season.episodesCount,
       airedEpisodes: season.airedEpisodes,
-      rating: Number(season.rating),
+      rating: season.rating,
       network: season.network,
-      episodes: season.episodes.map((episode) => ({
-        number: episode.number,
-        order: episode.order,
-        title: episode.title,
-        overview: episode.overview,
-        rating: Number(episode.rating),
-        firstAired: episode.firstAired,
-        runtime: episode.runtime,
-        image: episode.image,
-      })),
-    }));
+      episodes: season.episodes
+        .map((episode) => ({
+          number: episode.number,
+          order: episode.order,
+          title: episode.title,
+          overview: episode.overview,
+          rating: episode.rating,
+          firstAired: episode.firstAired,
+          runtime: episode.runtime,
+          image: episode.image,
+          sourceFound: episode.sourceFound,
+          noSourceFound: episode.noSourceFound,
+        }))
+        .sort((a, b) => a.number - b.number),
+    };
+  }
+
+  public async getShowSeasons(slug: string): Promise<SeasonDto[]> {
+    const show = await this.getExtendedShow(slug, true);
+    return show.seasons?.map(ShowsService.mapSeasonToSeasonDto) ?? [];
+  }
+
+  public async getShowSeason(
+    slug: string,
+    seasonNumber: number
+  ): Promise<SeasonDto> {
+    const show = await this.getExtendedShow(slug, true);
+    const season = show.seasons.find(
+      (season) => season.number === seasonNumber
+    );
+    if (!season) {
+      // ToDo: obtain the season if missing
+      throw new Error('Season not found');
+    }
+    // Request torrent search
+    Promise.all(
+      season.episodes.map((episode) => {
+        if (!episode.sourcesSearched) {
+          console.log('Search source for episode', episode.number);
+          return this.jackettQueuesService.requestTorrentEpisodeSearch(
+            show,
+            season,
+            episode
+          );
+        } else if (!episode.sourceFound) {
+          console.log('Scan episode', episode.number);
+          return this.torrentOrchestratorQueuesService.requestScanEpisodeTorrents(
+            episode.id,
+            episode.number
+          );
+        }
+        return null;
+      })
+    );
+    return ShowsService.mapSeasonToSeasonDto(season);
   }
 
   public async addExtendedDataToShows(shows: TraktShow[]): Promise<ShowDto[]> {

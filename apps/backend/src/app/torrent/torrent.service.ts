@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { asyncProviders } from '../app.types';
 import type {
   WebTorrent,
@@ -53,6 +53,7 @@ export class TorrentService {
   private client: Instance;
   private webTorrentServer: NodeServer;
   private streams: Record<string, TorrentInfo> = {};
+  private readonly logger = new Logger(TorrentService.name);
   constructor(
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
@@ -67,7 +68,6 @@ export class TorrentService {
     @Inject(asyncProviders.webTorrent)
     private WebTorrent: WebTorrent
   ) {
-    console.log('Starting torrent service');
     this.client = new this.WebTorrent({
       maxConns: this.configService.getOrThrow('MAX_CONNS', { infer: true }),
       downloadLimit:
@@ -79,11 +79,9 @@ export class TorrentService {
           infer: true,
         }) << 19,
     });
-    this.client.on('torrent', (torrent: Torrent) => {
-      console.log('New torrent', torrent.name);
-    });
+    // this.client.on('torrent', (torrent: Torrent) => { });
     this.client.on('error', (err) => {
-      console.error('WebTorrent error', err);
+      this.logger.error('WebTorrent error', err);
     });
     this.webTorrentServer = this.client.createServer({}, 'node') as NodeServer;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -151,7 +149,6 @@ export class TorrentService {
 
   public async getInfo(streamKey: string) {
     const streamTorrent = this.streams[streamKey];
-    console.log('Getting info of stream', streamKey);
     if (streamTorrent) {
       const torrent = await this.client.get(streamTorrent.torrent);
       if (torrent) {
@@ -161,7 +158,6 @@ export class TorrentService {
         for (let i = streamTorrent.start; i <= streamTorrent.end; i++) {
           progress.set(i, torrent.bitfield.get(i + streamTorrent.start));
         }
-        console.log(progress);
         return {
           progress: Buffer.from(progress.buffer),
         };
@@ -258,7 +254,6 @@ export class TorrentService {
   }
 
   private getVideoInformation(file: TorrentFile) {
-    console.log(path.join(file.path, file.name));
     return new Promise((resolve, reject) => {
       ffmpeg.ffprobe(path.join(TORRENT_PATH, file.path), (err, metadata) => {
         if (err) {
@@ -293,7 +288,11 @@ export class TorrentService {
       console.log('No source has been searched, searching...');
       const jackettJob =
         (await this.jackettQueuesService.prioritizeTorrentSearch(slug, 1)) ||
-        (await this.jackettQueuesService.requestTorrentSearch(movie, 0, 1));
+        (await this.jackettQueuesService.requestTorrentMovieSearch(
+          movie,
+          0,
+          1
+        ));
 
       console.log('Waiting for search job');
       await this.jackettQueuesService.waitForJob(jackettJob);
@@ -301,7 +300,7 @@ export class TorrentService {
     } else {
       // Create torrent orchestrator job
       const requestScanJob =
-        await this.torrentOrchestratorQueuesService.requestScanTorrents(
+        await this.torrentOrchestratorQueuesService.requestScanMovieTorrents(
           movie.id,
           0,
           0
@@ -310,7 +309,8 @@ export class TorrentService {
       const createdJobs =
         await this.torrentOrchestratorQueuesService.waitForJob(requestScanJob);
       const wantedJob = calculateJobId({
-        movieId: movie.id,
+        mediaId: movie.id,
+        mediaType: 'movie',
         hevc: useHevc,
         highQuality: !useLowQuality,
       });

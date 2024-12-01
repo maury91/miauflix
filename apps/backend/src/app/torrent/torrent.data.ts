@@ -7,16 +7,24 @@ import {
 import { GetTorrentFileData, VideoQuality } from '@miauflix/types';
 import { Movie } from '../database/entities/movie.entity';
 import sequelize, { Op, Sequelize, WhereOptions } from 'sequelize';
-import { Source } from '../database/entities/source.entity';
+import { MovieSource } from '../database/entities/movie.source.entity';
 import { createHmac } from 'node:crypto';
+import { Episode } from '../database/entities/episode.entity';
+import { EpisodeSource } from '../database/entities/episode.source.entity';
+import { Show } from '../database/entities/show.entity';
+import { Season } from '../database/entities/season.entity';
 
 @Injectable()
 export class TorrentData {
   constructor(
     // private readonly movieProcessorService: MovieProcessorService,
     @InjectModel(Movie) private readonly movieModel: typeof Movie,
+    @InjectModel(Episode) private readonly episodeModel: typeof Episode,
     @InjectModel(Torrent) private readonly torrentModel: typeof Torrent,
-    @InjectModel(Source) private readonly sourceModel: typeof Source
+    @InjectModel(MovieSource)
+    private readonly movieSourceModel: typeof MovieSource,
+    @InjectModel(EpisodeSource)
+    private readonly episodeSourceModel: typeof EpisodeSource
   ) {}
 
   async createTorrent(
@@ -40,16 +48,18 @@ export class TorrentData {
   }
 
   async findTorrentToProcess({
-    movieId,
+    mediaId,
+    mediaType,
     highQuality,
     hevc,
   }: {
-    movieId: number;
+    mediaId: number;
+    mediaType: 'movie' | 'episode';
     highQuality: boolean;
     hevc: boolean;
   }): Promise<Torrent[]> {
     const filter: WhereOptions = {
-      movieId,
+      [mediaType === 'movie' ? 'movieId' : 'episodeId']: mediaId,
       quality: {
         [highQuality ? Op.gt : Op.lte]: 1080,
       },
@@ -110,7 +120,7 @@ export class TorrentData {
     useHevc: boolean,
     useLowQuality: boolean
   ) {
-    const bestSource = await this.sourceModel.findOne({
+    const bestSource = await this.movieSourceModel.findOne({
       attributes: ['data', 'videos'],
       where: {
         movieSlug: slug,
@@ -133,7 +143,7 @@ export class TorrentData {
       return bestSource;
     }
 
-    const sameCodec = await this.sourceModel.findOne({
+    const sameCodec = await this.movieSourceModel.findOne({
       attributes: ['data', 'videos'],
       where: {
         movieSlug: slug,
@@ -149,7 +159,7 @@ export class TorrentData {
       return sameCodec;
     }
 
-    const highestQuality = await this.sourceModel.findOne({
+    const highestQuality = await this.movieSourceModel.findOne({
       attributes: ['data', 'videos'],
       where: {
         movieSlug: slug,
@@ -170,27 +180,46 @@ export class TorrentData {
       attributes: ['id'],
       where: {
         sourcesSearched: false,
-        noSourceFound: false,
+        sourceFound: false,
+      },
+      raw: true,
+    });
+    const notProcessedEpisodes = await this.episodeModel.findAll({
+      attributes: ['id'],
+      where: {
+        sourcesSearched: true, // We have a lot of episode in the database, better not search everything but only what have been requested
+        sourceFound: false,
       },
       raw: true,
     });
     const torrentGroups = (await this.torrentModel.findAll({
       attributes: [
         'movieId',
+        'episodeId',
         [sequelize.fn('COUNT', sequelize.col('*')), 'count'],
         [sequelize.literal('"quality" > 1080'), 'highQuality'],
         [sequelize.literal('"codec" LIKE \'%x265%\''), 'hevc'],
       ],
       where: {
         processed: false,
-        movieId: {
-          [Op.in]: notProcessedMovies.map(({ id }) => id),
-        },
+        [Op.or]: [
+          {
+            movieId: {
+              [Op.in]: notProcessedMovies.map(({ id }) => id),
+            },
+          },
+          {
+            episodeId: {
+              [Op.in]: notProcessedEpisodes.map(({ id }) => id),
+            },
+          },
+        ],
       },
-      group: ['highQuality', 'hevc', 'movieId'],
+      group: ['highQuality', 'hevc', 'movieId', 'episodeId'],
       raw: true,
     })) as unknown as {
-      movieId: number;
+      movieId: number | null;
+      episodeId: number | null;
       highQuality: boolean;
       hevc: boolean;
     }[];
@@ -198,7 +227,12 @@ export class TorrentData {
     if (!torrentGroups.length) {
       return [];
     }
-    const movieIds = new Set(torrentGroups.map(({ movieId }) => movieId));
+
+    const movieIds = new Set(
+      torrentGroups
+        .map(({ movieId }) => movieId)
+        .filter((id) => id !== null) satisfies number[]
+    );
     const movies = await this.movieModel.findAll({
       attributes: ['id', 'runtime'],
       where: {
@@ -208,17 +242,48 @@ export class TorrentData {
       },
       raw: true,
     });
+
+    const episodeIds = new Set(
+      torrentGroups
+        .map(({ episodeId }) => episodeId)
+        .filter((id) => id !== null) satisfies number[]
+    );
+    const episodes = await this.episodeModel.findAll({
+      attributes: ['id', 'runtime'],
+      where: {
+        id: {
+          [Op.in]: [...episodeIds],
+        },
+      },
+      raw: true,
+    });
+
     return torrentGroups.map<GetTorrentFileData>(
-      ({ highQuality, hevc, movieId }) => ({
-        movieId,
-        runtime: movies.find(({ id }) => id === movieId).runtime,
-        highQuality,
-        hevc,
-      })
+      ({ highQuality, hevc, movieId, episodeId }) => {
+        if (episodeId) {
+          return {
+            mediaId: episodeId,
+            mediaType: 'episode',
+            runtime: episodes.find(({ id }) => id === episodeId).runtime,
+            highQuality,
+            hevc,
+          };
+        }
+        return {
+          mediaId: movieId,
+          mediaType: 'movie',
+          runtime: movies.find(({ id }) => id === movieId).runtime,
+          highQuality,
+          hevc,
+        };
+      }
     );
   }
 
-  async getTorrentsToProcessForMovie(movieId: number) {
+  async getTorrentsToProcessForMedia(
+    mediaId: number,
+    mediaType: 'movie' | 'episode'
+  ) {
     const torrentGroups = (await this.torrentModel.findAll({
       attributes: [
         [sequelize.fn('COUNT', sequelize.col('*')), 'count'],
@@ -226,17 +291,20 @@ export class TorrentData {
         [sequelize.literal('"codec" LIKE \'%x265%\''), 'hevc'],
       ],
       where: {
-        movieId,
+        [mediaType === 'movie' ? 'movieId' : 'episodeId']: mediaId,
         processed: false,
       },
       group: ['highQuality', 'hevc'],
       raw: true,
     })) as unknown as { highQuality: boolean; hevc: boolean }[];
 
-    const movie = await this.movieModel.findByPk(movieId);
+    const { runtime } = await (mediaType === 'movie'
+      ? this.movieModel.findByPk(mediaId, { raw: true })
+      : this.episodeModel.findByPk(mediaId, { raw: true }));
     return torrentGroups.map<GetTorrentFileData>(({ highQuality, hevc }) => ({
-      movieId,
-      runtime: movie.runtime,
+      mediaId,
+      mediaType,
+      runtime,
       highQuality,
       hevc,
     }));
@@ -245,7 +313,17 @@ export class TorrentData {
 
 @Global()
 @Module({
-  imports: [SequelizeModule.forFeature([Torrent, Movie, Source])],
+  imports: [
+    SequelizeModule.forFeature([
+      Torrent,
+      Movie,
+      MovieSource,
+      Show,
+      Season,
+      Episode,
+      EpisodeSource,
+    ]),
+  ],
   providers: [TorrentData],
   exports: [TorrentData, SequelizeModule],
 })

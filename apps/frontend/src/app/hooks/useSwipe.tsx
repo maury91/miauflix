@@ -27,7 +27,6 @@ export const useSwipe = ({ directions, onSwipe }: useSwipeArgs) => {
 
         if (isNotInertia) {
           if (lastFiredEventTime + 150 < now) {
-            console.log(ev[deltaProp]);
             if (directions === 'horizontal') {
               onSwipe(ev[deltaProp] > 0 ? 'right' : 'left');
             } else {

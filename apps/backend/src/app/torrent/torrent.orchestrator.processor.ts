@@ -1,7 +1,7 @@
 import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import {
-  ChangePriorityForMovieData,
-  PopulateTorrentQForMovieData,
+  ChangePriorityForMediaData,
+  PopulateTorrentQForMediaData,
   queues,
   torrentOrchestratorJobs,
 } from '@miauflix/types';
@@ -30,6 +30,7 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
 
   async addTorrentsToProcessToQueue() {
     const torrents = await this.torrentData.getTorrentsToProcess();
+    console.log(`Adding ${torrents.length} torrents to process`);
     await this.torrentQueuesService.clearFailedJobs();
     // index is unknown because it's not from a list
     await this.torrentQueuesService.getTorrentFile(
@@ -37,13 +38,15 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
     );
   }
 
-  private async populateTorrentQForMovie({
+  private async populateTorrentQForMedia({
     index,
-    movieId,
+    mediaId,
+    mediaType,
     priority,
-  }: PopulateTorrentQForMovieData) {
-    const torrents = await this.torrentData.getTorrentsToProcessForMovie(
-      movieId
+  }: PopulateTorrentQForMediaData) {
+    const torrents = await this.torrentData.getTorrentsToProcessForMedia(
+      mediaId,
+      mediaType
     );
     const jobs = await this.torrentQueuesService.getTorrentFile(
       torrents.map((torrent) => ({ ...torrent, index })),
@@ -52,10 +55,11 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
     return jobs.map((job) => job.id);
   }
 
-  private async changePriorityForMovie({
-    movieId,
+  private async changePriorityForMedia({
+    mediaId,
+    mediaType,
     priority,
-  }: ChangePriorityForMovieData) {
+  }: ChangePriorityForMediaData) {
     return Promise.all(
       [
         [true, true],
@@ -67,7 +71,8 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
           {
             hevc,
             highQuality,
-            movieId,
+            mediaId,
+            mediaType,
           },
           priority
         );
@@ -78,21 +83,21 @@ export class TorrentOrchestratorProcessor extends WorkerHost {
   async process(
     job:
       | Job<
-          PopulateTorrentQForMovieData,
+          PopulateTorrentQForMediaData,
           void,
-          torrentOrchestratorJobs.populateTorrentQForMovie
+          torrentOrchestratorJobs.populateTorrentQForMedia
         >
       | Job<
-          ChangePriorityForMovieData,
+          ChangePriorityForMediaData,
           void,
-          torrentOrchestratorJobs.changePriorityForMovie
+          torrentOrchestratorJobs.changePriorityForMedia
         >
   ) {
     switch (job.name) {
-      case torrentOrchestratorJobs.populateTorrentQForMovie:
-        return await this.populateTorrentQForMovie(job.data);
-      case torrentOrchestratorJobs.changePriorityForMovie:
-        return await this.changePriorityForMovie(job.data);
+      case torrentOrchestratorJobs.populateTorrentQForMedia:
+        return await this.populateTorrentQForMedia(job.data);
+      case torrentOrchestratorJobs.changePriorityForMedia:
+        return await this.changePriorityForMedia(job.data);
     }
   }
 }

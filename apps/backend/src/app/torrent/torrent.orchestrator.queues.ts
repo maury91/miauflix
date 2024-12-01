@@ -1,8 +1,8 @@
 import { Global, Injectable, Module } from '@nestjs/common';
 import { BullModule, InjectQueue } from '@nestjs/bullmq';
 import {
-  ChangePriorityForMovieData,
-  PopulateTorrentQForMovieData,
+  ChangePriorityForMediaData,
+  PopulateTorrentQForMediaData,
   queues,
   torrentOrchestratorJobs,
 } from '@miauflix/types';
@@ -14,52 +14,81 @@ export class TorrentOrchestratorQueues {
   constructor(
     @InjectQueue(queues.torrentOrchestrator)
     private readonly torrentOrchestratorQueue: Queue<
-      PopulateTorrentQForMovieData | ChangePriorityForMovieData,
+      PopulateTorrentQForMediaData | ChangePriorityForMediaData,
       string[] | void,
-      | torrentOrchestratorJobs.populateTorrentQForMovie
-      | torrentOrchestratorJobs.changePriorityForMovie
+      | torrentOrchestratorJobs.populateTorrentQForMedia
+      | torrentOrchestratorJobs.changePriorityForMedia
     >
   ) {
     // ToDo: Use configuration for redis connection
     this.eventsQueue = new QueueEvents(queues.torrentOrchestrator);
   }
 
-  public async prioritizeScanTorrents(movieId: number, priority: number) {
+  public async prioritizeScanTorrents(
+    mediaId: number,
+    mediaType: 'movie' | 'episode',
+    priority: number
+  ) {
     return (await this.torrentOrchestratorQueue.add(
-      torrentOrchestratorJobs.changePriorityForMovie,
+      torrentOrchestratorJobs.changePriorityForMedia,
       {
-        movieId,
+        mediaId,
+        mediaType,
         priority,
-      },
+      } satisfies ChangePriorityForMediaData,
       {
-        jobId: `change_priority_${movieId}`,
+        jobId: `change_priority_${mediaId}_${mediaType}`,
       }
     )) as Job<
-      ChangePriorityForMovieData,
+      ChangePriorityForMediaData,
       void,
-      torrentOrchestratorJobs.changePriorityForMovie
+      torrentOrchestratorJobs.changePriorityForMedia
     >;
   }
 
-  public async requestScanTorrents(
+  public async requestScanMovieTorrents(
     movieId: number,
     index: number,
     priority?: number
   ) {
     return (await this.torrentOrchestratorQueue.add(
-      torrentOrchestratorJobs.populateTorrentQForMovie,
+      torrentOrchestratorJobs.populateTorrentQForMedia,
       {
-        movieId,
+        mediaId: movieId,
+        mediaType: 'movie',
         index,
         priority,
-      },
+      } satisfies PopulateTorrentQForMediaData,
       {
         jobId: `populate_torrents_${movieId}`,
       }
     )) as Job<
-      PopulateTorrentQForMovieData,
+      PopulateTorrentQForMediaData,
       string[],
-      torrentOrchestratorJobs.populateTorrentQForMovie
+      torrentOrchestratorJobs.populateTorrentQForMedia
+    >;
+  }
+
+  public async requestScanEpisodeTorrents(
+    episodeId: number,
+    index: number,
+    priority?: number
+  ) {
+    return (await this.torrentOrchestratorQueue.add(
+      torrentOrchestratorJobs.populateTorrentQForMedia,
+      {
+        mediaId: episodeId,
+        mediaType: 'episode',
+        index,
+        priority,
+      } satisfies PopulateTorrentQForMediaData,
+      {
+        jobId: `populate_torrents_${episodeId}`,
+      }
+    )) as Job<
+      PopulateTorrentQForMediaData,
+      string[],
+      torrentOrchestratorJobs.populateTorrentQForMedia
     >;
   }
 

@@ -2836,6 +2836,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@datalust/winston-seq@npm:2.0.0":
+  version: 2.0.0
+  resolution: "@datalust/winston-seq@npm:2.0.0"
+  dependencies:
+    seq-logging: "npm:^2.0.0"
+    winston-transport: "npm:^4.4.2"
+  peerDependencies:
+    winston: ^3.0.0
+  checksum: 10c0/eed56d2e0d2bd04785cc21acab5394b1e587798424fb05b5c7c4bd7a0d41f7cb56b3e1e96c4c40f9da5fb9700739fd0ae835305dc2522e705e57eaa6e3db4870
+  languageName: node
+  linkType: hard
+
 "@dicebear/adventurer-neutral@npm:9.2.2":
   version: 9.2.2
   resolution: "@dicebear/adventurer-neutral@npm:9.2.2"
@@ -13030,7 +13042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-safe-stringify@npm:2.1.1":
+"fast-safe-stringify@npm:2.1.1, fast-safe-stringify@npm:^2.1.1":
   version: 2.1.1
   resolution: "fast-safe-stringify@npm:2.1.1"
   checksum: 10c0/d90ec1c963394919828872f21edaa3ad6f1dddd288d2bd4e977027afff09f5db40f94e39536d4646f7e01761d704d72d51dce5af1b93717f3489ef808f5f4e4d
@@ -13147,6 +13159,15 @@ __metadata:
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
   checksum: 10c0/e176a57c2037ab0f78e5755dbf293a6b7f0f8392350a120bd03cc2ce2525bea017458ba28fea14ca535ff1848055e86d1a3a216bdb2561ef33395b27260a1dd3
+  languageName: node
+  linkType: hard
+
+"file-stream-rotator@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "file-stream-rotator@npm:0.6.1"
+  dependencies:
+    moment: "npm:^2.29.1"
+  checksum: 10c0/ebb53cc22a33b0b57457c49df96ac96d8f7bace5e495f19577b37c4d87712b5fbe3539724de384852f2f6221aa0f2045e81e1f09a991fcf190f8954ef83caca1
   languageName: node
   linkType: hard
 
@@ -17303,6 +17324,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"logform@npm:^2.7.0":
+  version: 2.7.0
+  resolution: "logform@npm:2.7.0"
+  dependencies:
+    "@colors/colors": "npm:1.6.0"
+    "@types/triple-beam": "npm:^1.3.2"
+    fecha: "npm:^4.2.0"
+    ms: "npm:^2.1.1"
+    safe-stable-stringify: "npm:^2.3.1"
+    triple-beam: "npm:^1.3.0"
+  checksum: 10c0/4789b4b37413c731d1835734cb799240d31b865afde6b7b3e06051d6a4127bfda9e88c99cfbf296d084a315ccbed2647796e6a56b66e725bcb268c586f57558f
+  languageName: node
+  linkType: hard
+
 "long-timeout@npm:0.1.1":
   version: 0.1.1
   resolution: "long-timeout@npm:0.1.1"
@@ -17649,6 +17684,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "miauflix@workspace:."
   dependencies:
+    "@datalust/winston-seq": "npm:2.0.0"
     "@dicebear/collection": "npm:9.2.2"
     "@dicebear/core": "npm:9.2.2"
     "@eslint/js": "npm:^9.8.0"
@@ -17738,6 +17774,7 @@ __metadata:
     jest-environment-jsdom: "npm:^29.7.0"
     jest-environment-node: "npm:^29.7.0"
     jsdom: "npm:~22.1.0"
+    nest-winston: "npm:1.9.7"
     nx: "npm:19.8.3"
     parse-torrent: "npm:11.0.17"
     pg: "npm:8.13.0"
@@ -17772,6 +17809,8 @@ __metadata:
     vitest: "npm:^1.3.1"
     webpack-cli: "npm:^5.1.4"
     webtorrent: "https://github.com/maury91/webtorrent.git"
+    winston: "npm:3.17.0"
+    winston-daily-rotate-file: "npm:5.0.0"
     xml-js: "npm:1.6.11"
   languageName: unknown
   linkType: soft
@@ -18057,7 +18096,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.29.4":
+"moment@npm:^2.29.1, moment@npm:^2.29.4":
   version: 2.30.1
   resolution: "moment@npm:2.30.1"
   checksum: 10c0/865e4279418c6de666fca7786607705fd0189d8a7b7624e2e56be99290ac846f90878a6f602e34b4e0455c549b85385b1baf9966845962b313699e7cb847543a
@@ -18231,6 +18270,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nest-winston@npm:1.9.7":
+  version: 1.9.7
+  resolution: "nest-winston@npm:1.9.7"
+  dependencies:
+    fast-safe-stringify: "npm:^2.1.1"
+  peerDependencies:
+    "@nestjs/common": ^5.0.0 || ^6.6.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
+    winston: ^3.0.0
+  checksum: 10c0/8d1da46a9baf6028c703db1e6b3ede5848ec56c92bfa26799ca4176807223dfd63831ecaf0aa77c427daee56f8d99112272f801f476a99461eebc8057bbe11d7
+  languageName: node
+  linkType: hard
+
 "netmask@npm:^2.0.1":
   version: 2.0.2
   resolution: "netmask@npm:2.0.2"
@@ -18305,7 +18356,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.1":
+"node-fetch@npm:^2.6.1, node-fetch@npm:^2.7.0":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
@@ -18759,7 +18810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-hash@npm:3.0.0":
+"object-hash@npm:3.0.0, object-hash@npm:^3.0.0":
   version: 3.0.0
   resolution: "object-hash@npm:3.0.0"
   checksum: 10c0/a06844537107b960c1c8b96cd2ac8592a265186bfa0f6ccafe0d34eabdb526f6fa81da1f37c43df7ed13b12a4ae3457a16071603bcd39d8beddb5f08c37b0f47
@@ -20552,7 +20603,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^3.0.2, readable-stream@npm:^3.0.6, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0":
+"readable-stream@npm:^3.0.2, readable-stream@npm:^3.0.6, readable-stream@npm:^3.1.1, readable-stream@npm:^3.4.0, readable-stream@npm:^3.6.0, readable-stream@npm:^3.6.2":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -21670,6 +21721,16 @@ __metadata:
     tslib: "npm:^2.0.3"
     upper-case-first: "npm:^2.0.2"
   checksum: 10c0/9a90527a51300cf5faea7fae0c037728f9ddcff23ac083883774c74d180c0a03c31aab43d5c3347512e8c1b31a0d4712512ec82beb71aa79b85149f9abeb5467
+  languageName: node
+  linkType: hard
+
+"seq-logging@npm:^2.0.0":
+  version: 2.2.0
+  resolution: "seq-logging@npm:2.2.0"
+  dependencies:
+    abort-controller: "npm:^3.0.0"
+    node-fetch: "npm:^2.7.0"
+  checksum: 10c0/381913decc73c5981c2edf9a8db74bc4d21175ec7ba29f634eae67242bc7f95c5e519240e467809a8c3e214b5b5d0fb44522b8bf5dd0784d3fa6c5894e8d4ccf
   languageName: node
   linkType: hard
 
@@ -23184,7 +23245,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"triple-beam@npm:^1.3.0":
+"triple-beam@npm:^1.3.0, triple-beam@npm:^1.4.1":
   version: 1.4.1
   resolution: "triple-beam@npm:1.4.1"
   checksum: 10c0/4bf1db71e14fe3ff1c3adbe3c302f1fdb553b74d7591a37323a7badb32dc8e9c290738996cbb64f8b10dc5a3833645b5d8c26221aaaaa12e50d1251c9aba2fea
@@ -24735,6 +24796,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"winston-daily-rotate-file@npm:5.0.0":
+  version: 5.0.0
+  resolution: "winston-daily-rotate-file@npm:5.0.0"
+  dependencies:
+    file-stream-rotator: "npm:^0.6.1"
+    object-hash: "npm:^3.0.0"
+    triple-beam: "npm:^1.4.1"
+    winston-transport: "npm:^4.7.0"
+  peerDependencies:
+    winston: ^3
+  checksum: 10c0/c6dfd8ceff8d3801ca702efabaf696bb82919a62c4fbeded8cbf7d2cb188960872eb7a412547af86f12f7257061088a25bac9e318af8932719a2ccba215d7d3f
+  languageName: node
+  linkType: hard
+
+"winston-transport@npm:^4.4.2, winston-transport@npm:^4.9.0":
+  version: 4.9.0
+  resolution: "winston-transport@npm:4.9.0"
+  dependencies:
+    logform: "npm:^2.7.0"
+    readable-stream: "npm:^3.6.2"
+    triple-beam: "npm:^1.3.0"
+  checksum: 10c0/e2990a172e754dbf27e7823772214a22dc8312f7ec9cfba831e5ef30a5d5528792e5ea8f083c7387ccfc5b2af20e3691f64738546c8869086110a26f98671095
+  languageName: node
+  linkType: hard
+
 "winston-transport@npm:^4.7.0":
   version: 4.8.0
   resolution: "winston-transport@npm:4.8.0"
@@ -24743,6 +24829,25 @@ __metadata:
     readable-stream: "npm:^4.5.2"
     triple-beam: "npm:^1.3.0"
   checksum: 10c0/e32fe791ef46f1f33a6afcfcdc03309b46e9825226c95f3560e18692cf788b72564d8ed97dc03d45796d822270dfaf862b14e72373b78186d62127903128579a
+  languageName: node
+  linkType: hard
+
+"winston@npm:3.17.0":
+  version: 3.17.0
+  resolution: "winston@npm:3.17.0"
+  dependencies:
+    "@colors/colors": "npm:^1.6.0"
+    "@dabh/diagnostics": "npm:^2.0.2"
+    async: "npm:^3.2.3"
+    is-stream: "npm:^2.0.0"
+    logform: "npm:^2.7.0"
+    one-time: "npm:^1.0.0"
+    readable-stream: "npm:^3.4.0"
+    safe-stable-stringify: "npm:^2.3.1"
+    stack-trace: "npm:0.0.x"
+    triple-beam: "npm:^1.3.0"
+    winston-transport: "npm:^4.9.0"
+  checksum: 10c0/ec8eaeac9a72b2598aedbff50b7dac82ce374a400ed92e7e705d7274426b48edcb25507d78cff318187c4fb27d642a0e2a39c57b6badc9af8e09d4a40636a5f7
   languageName: node
   linkType: hard
 

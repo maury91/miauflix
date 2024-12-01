@@ -6,6 +6,7 @@ import { isValidVideoFile } from './torrent.utils';
 import { TorrentData } from './torrent.data';
 import { SourceData } from '../sources/sources.data';
 import { MoviesData } from '../movies/movies.data';
+import { ShowsData } from '../shows/shows.data';
 
 @Processor(queues.torrent)
 export class TorrentProcessor extends WorkerHost {
@@ -13,6 +14,7 @@ export class TorrentProcessor extends WorkerHost {
   constructor(
     private readonly sourceData: SourceData,
     private readonly movieData: MoviesData,
+    private readonly showData: ShowsData,
     private readonly torrentData: TorrentData,
     private readonly torrentService: TorrentService
   ) {
@@ -47,26 +49,38 @@ export class TorrentProcessor extends WorkerHost {
   }
 
   private async getTorrentFile({
-    movieId,
+    mediaId,
+    mediaType,
     hevc,
     highQuality,
   }: GetTorrentFileData) {
     console.log(
-      `Searching for a torrent for movieId: ${movieId}, [high quality: ${highQuality}, hevc: ${hevc}])`
+      `Searching for a torrent for ${mediaType}: ${mediaId}, [high quality: ${highQuality}, hevc: ${hevc}])`
     );
     const torrentCandidates = await this.torrentData.findTorrentToProcess({
-      movieId,
+      mediaId,
+      mediaType,
       highQuality,
       hevc,
     });
     if (torrentCandidates.length) {
-      const { id, url, quality, codec, movie, source, size } =
-        torrentCandidates[0];
+      const {
+        id,
+        url,
+        quality,
+        codec,
+        mediaSlug,
+        runtime,
+        source,
+        size,
+        episodeNum,
+        seasonNum,
+      } = torrentCandidates[0];
       const torrent = await this.getTorrentFileByUrl(url);
       if (torrent.files.length) {
         try {
           const videoFiles = torrent.files.filter(
-            isValidVideoFile(movie.runtime, quality, codec)
+            isValidVideoFile(runtime, quality, codec)
           );
 
           if (videoFiles.length) {
@@ -74,18 +88,36 @@ export class TorrentProcessor extends WorkerHost {
               // data: torrent.torrentFile,
               processed: true,
             });
-            await this.sourceData.createSource({
-              data: torrent.torrentFile,
-              codec,
-              quality,
-              source,
-              movieId,
-              movieSlug: movie.slug,
-              videos: videoFiles.map((file) => file.name),
-              size,
-              originalSource: `torrent::${id}`,
-            });
-            await this.movieData.setTorrentFound(movieId);
+            if (mediaType === 'movie') {
+              const movie = await this.movieData.findMovieById(mediaId);
+              await this.sourceData.createMovieSource({
+                data: torrent.torrentFile,
+                codec,
+                quality,
+                source,
+                movieId: mediaId,
+                movieSlug: movie.slug,
+                videos: videoFiles.map((file) => file.name),
+                size,
+                originalSource: `torrent::${id}`,
+              });
+              await this.movieData.setSourceFound(mediaSlug);
+            } else {
+              await this.sourceData.createEpisodeSource({
+                data: torrent.torrentFile,
+                codec,
+                quality,
+                source,
+                episodeId: mediaId,
+                episodeNum,
+                seasonNum,
+                showSlug: mediaSlug,
+                videos: videoFiles.map((file) => file.name),
+                size,
+                originalSource: `torrent::${id}`,
+              });
+              await this.showData.setSourceFound(mediaId);
+            }
             console.log(`Torrent ${id} marked as valid`);
             return;
           }

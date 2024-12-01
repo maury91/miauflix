@@ -1,25 +1,52 @@
 import { Global, Injectable, Module } from '@nestjs/common';
 import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import {
-  Source,
-  SourceCreationAttributes,
-} from '../database/entities/source.entity';
+  MovieSource,
+  MovieSourceCreationAttributes,
+} from '../database/entities/movie.source.entity';
 import { Movie } from '../database/entities/movie.entity';
+import {
+  EpisodeSource,
+  EpisodeSourceCreationAttributes,
+} from '../database/entities/episode.source.entity';
+import { Episode } from '../database/entities/episode.entity';
+import { Show } from '../database/entities/show.entity';
+import { Season } from '../database/entities/season.entity';
 
 @Injectable()
 export class SourceData {
   constructor(
-    @InjectModel(Source) private readonly sourceModel: typeof Source
+    @InjectModel(MovieSource)
+    private readonly movieSourceModel: typeof MovieSource,
+    @InjectModel(EpisodeSource)
+    private readonly episodeSourceModel: typeof EpisodeSource
   ) {}
 
-  async createSource(source: SourceCreationAttributes): Promise<Source> {
-    return this.sourceModel.create(source);
+  async createMovieSource(
+    source: MovieSourceCreationAttributes
+  ): Promise<MovieSource> {
+    return this.movieSourceModel.create(source);
+  }
+
+  async createEpisodeSource(
+    source: EpisodeSourceCreationAttributes
+  ): Promise<EpisodeSource> {
+    return this.episodeSourceModel.create(source);
   }
 }
 
 @Global()
 @Module({
-  imports: [SequelizeModule.forFeature([Movie, Source])],
+  imports: [
+    SequelizeModule.forFeature([
+      Movie,
+      MovieSource,
+      Show,
+      Season,
+      Episode,
+      EpisodeSource,
+    ]),
+  ],
   providers: [SourceData],
   exports: [SourceData, SequelizeModule],
 })

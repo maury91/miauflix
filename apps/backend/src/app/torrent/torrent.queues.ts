@@ -46,17 +46,19 @@ export class TorrentQueues {
 
   public async changePriority(
     {
-      movieId,
+      mediaId,
+      mediaType,
       hevc,
       highQuality,
-    }: { movieId: number; hevc: boolean; highQuality: boolean },
+    }: Omit<GetTorrentFileData, 'runtime'>,
     priority: number
   ) {
     const job = await this.torrentQueue.getJob(
       calculateJobId({
         hevc,
         highQuality,
-        movieId,
+        mediaId,
+        mediaType,
       })
     );
     if (job) {

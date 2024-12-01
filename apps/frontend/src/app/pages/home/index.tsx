@@ -111,7 +111,6 @@ const HomeSidebar = () => {
     return;
   }, [expand]);
 
-  console.log({ focused, hasFocusedChild });
   return (
     <FocusContext.Provider value={focusKey}>
       <HomeSidebarContainer

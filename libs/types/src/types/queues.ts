@@ -62,11 +62,12 @@ export type GetShowEpisodesData = {
 
 export const enum jackettJobs {
   searchMovie = 'searchMovie',
+  searchShowEpisode = 'searchShowEpisode',
 }
 
 export interface SearchMovieData {
   index: number; // index of the title in the list
-  movieId: number;
+  movieSlug: string;
   params: {
     q: string;
     year: string;
@@ -76,21 +77,43 @@ export interface SearchMovieData {
   };
 }
 
+export interface SearchShowEpisodeData {
+  showSlug: string;
+  showId: number;
+  seasonId: number;
+  episodeId: number;
+  season: number;
+  episode: number;
+  params: {
+    q: string;
+    year: string;
+    season: string;
+    ep: string;
+    traktid: string;
+    imdbid: string;
+    tvdbid: string;
+    tmdbid: string;
+  };
+}
+
 /** Torrent OQ */
 
 export const enum torrentOrchestratorJobs {
-  populateTorrentQForMovie = 'populateTorrentQForMovie',
-  changePriorityForMovie = 'changePriorityForMovie',
+  populateTorrentQForMedia = 'populateTorrentQForMedia',
+  changePriorityForMedia = 'changePriorityForMedia',
 }
 
-export interface PopulateTorrentQForMovieData {
+export interface PopulateTorrentQForMediaData {
   index: number; // index of the title in the list
-  movieId: number;
+  mediaId: number;
+  mediaType: 'movie' | 'episode';
   priority?: number;
 }
-export interface ChangePriorityForMovieData {
+
+export interface ChangePriorityForMediaData {
   priority: number;
-  movieId: number;
+  mediaId: number;
+  mediaType: 'movie' | 'episode';
 }
 
 /** Torrent Q */
@@ -100,7 +123,8 @@ export const enum torrentJobs {
 }
 
 export interface GetTorrentFileData {
-  movieId: number;
+  mediaId: number;
+  mediaType: 'movie' | 'episode';
   runtime: number;
   highQuality: boolean;
   hevc: boolean;

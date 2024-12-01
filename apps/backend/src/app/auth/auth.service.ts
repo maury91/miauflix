@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { TraktApi } from '../trakt/trakt.api';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
@@ -12,6 +12,8 @@ import { UserData } from '../user/user.data';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly traktService: TraktApi,
     private readonly userData: UserData,
@@ -47,9 +49,9 @@ export class AuthService {
   async renewTokensAboutToExpire() {
     const expiringTokens = await this.userData.getExpiringTokens();
     for (const token of expiringTokens) {
-      console.log('Renewing token for user', token.userId);
+      this.logger.log('Renewing token for user', token.userId);
       const newToken = await this.traktService.refreshToken(token.refreshToken);
-      console.log('Got new token', newToken);
+      this.logger.log('Got new token');
       await token.update({
         createdAt: new Date(newToken.created_at * 1000),
         accessToken: newToken.access_token,

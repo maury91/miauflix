@@ -12,7 +12,7 @@ import {
   Episode,
   EpisodeCreationAttributes,
 } from '../database/entities/episode.entity';
-import { Source } from '../database/entities/source.entity';
+import { EpisodeSource } from '../database/entities/episode.source.entity';
 
 @Injectable()
 export class ShowsData {
@@ -44,6 +44,15 @@ export class ShowsData {
       where: {
         slug,
       },
+    });
+  }
+
+  async findEpisode(id: number): Promise<Episode | null> {
+    return await this.episodeModel.findOne({
+      where: {
+        id,
+      },
+      raw: true,
     });
   }
 
@@ -173,11 +182,50 @@ export class ShowsData {
       })
     )[0];
   }
+
+  async setEpisodeSearched(episodeId: number): Promise<void> {
+    await this.episodeModel.update(
+      {
+        sourcesSearched: true,
+      },
+      {
+        where: {
+          id: episodeId,
+        },
+      }
+    );
+  }
+
+  async setNoSourceFound(episodeId: number): Promise<void> {
+    await this.episodeModel.update(
+      {
+        noSourceFound: true,
+      },
+      {
+        where: {
+          id: episodeId,
+        },
+      }
+    );
+  }
+
+  async setSourceFound(episodeId: number): Promise<void> {
+    await this.episodeModel.update(
+      {
+        sourceFound: true,
+      },
+      {
+        where: {
+          id: episodeId,
+        },
+      }
+    );
+  }
 }
 
 @Global()
 @Module({
-  imports: [SequelizeModule.forFeature([Show, Season, Episode, Source])],
+  imports: [SequelizeModule.forFeature([Show, Season, Episode, EpisodeSource])],
   providers: [ShowsData],
   exports: [ShowsData, SequelizeModule],
 })
