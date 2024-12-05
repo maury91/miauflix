@@ -1,10 +1,13 @@
 import styled from 'styled-components';
+import pluralize from 'pluralize';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { FC, useEffect, useState } from 'react';
 import { useAppSelector } from '../../../../store/store';
 import { scaleImage } from '../utils/scaleImage';
-import { useGetExtendedInfoQuery } from '../../../../store/api/medias';
-import { skipToken } from '@reduxjs/toolkit/query';
+import {
+  useGetExtendedMovieQuery,
+  useGetExtendedShowQuery,
+} from '../../../../store/api/medias';
 import { IS_SLOW_DEVICE } from '../../../../consts';
 import { motion, MotionConfig } from 'framer-motion';
 import {
@@ -13,6 +16,7 @@ import {
   MediaPreviewShadow2nd,
 } from './media/mediaPreview';
 import { MediaQuality } from './media/mediaQuality';
+import { MovieDto, ShowDto } from '@miauflix/types';
 
 const MediaImage = styled(motion.div)<{ src: string }>`
   background: url(${({ src }) => src}) center right no-repeat;
@@ -62,6 +66,74 @@ const MediaDescription = styled.p<{ expanded: boolean }>`
   transition: -webkit-line-clamp 0.3s, line-clamp 0.3s;
 `;
 
+const MovieInformationSkeleton: FC = () => {
+  return (
+    <>
+      <MediaTitle />
+      <MediaSubTitle>
+        <span />
+        <span />
+        <MediaQuality qualities={[]} />
+      </MediaSubTitle>
+      <MediaDescription expanded={false} />
+    </>
+  );
+};
+
+const MovieInformation: FC<{ expanded: boolean; movie: MovieDto }> = ({
+  expanded,
+  movie,
+}) => {
+  const { data: extendedInfo } = useGetExtendedMovieQuery(movie.id);
+
+  if (!extendedInfo) {
+    return <MovieInformationSkeleton />;
+  }
+
+  return (
+    <>
+      <MediaTitle>{movie.title}</MediaTitle>
+      <MediaSubTitle>
+        <span>{extendedInfo.runtime} min</span>
+        <span>{extendedInfo.year}</span>
+        {'qualities' in extendedInfo && (
+          <MediaQuality qualities={extendedInfo.qualities} />
+        )}
+      </MediaSubTitle>
+      <MediaDescription expanded={expanded}>
+        {extendedInfo.overview}
+      </MediaDescription>
+    </>
+  );
+};
+
+const ShowInformation: FC<{ expanded: boolean; show: ShowDto }> = ({
+  expanded,
+  show,
+}) => {
+  const { data: extendedInfo } = useGetExtendedShowQuery(show.id);
+
+  if (!extendedInfo) {
+    return <MovieInformationSkeleton />;
+  }
+
+  return (
+    <>
+      <MediaTitle>{show.title}</MediaTitle>
+      <MediaSubTitle>
+        <span>
+          {extendedInfo.seasonsCount}{' '}
+          {pluralize('season', extendedInfo.seasonsCount)}
+        </span>
+        <span>{extendedInfo.year}</span>
+      </MediaSubTitle>
+      <MediaDescription expanded={expanded}>
+        {extendedInfo.overview}
+      </MediaDescription>
+    </>
+  );
+};
+
 export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
   const { margin } = useMediaBoxSizes();
   const [imageVisible, setImageVisible] = useState(false);
@@ -70,11 +142,6 @@ export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
     ? scaleImage(selectedMedia.images.backdrops[0])
     : '';
   const [displayedSrc, setDisplayedSrc] = useState(imageSrc);
-  const { data: extendedInfo } = useGetExtendedInfoQuery(
-    selectedMedia
-      ? { type: selectedMedia.type, id: selectedMedia.id }
-      : skipToken
-  );
 
   useEffect(() => {
     setImageVisible(false);
@@ -115,17 +182,12 @@ export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
       <MediaPreviewShadow />
       <MediaPreviewShadow2nd />
       <MediaInformationContainer width={window.innerWidth * 0.47 - margin / 2}>
-        <MediaTitle>{selectedMedia?.title}</MediaTitle>
-        <MediaSubTitle>
-          <span>{extendedInfo ? `${extendedInfo.runtime} min` : ''}</span>
-          <span>{extendedInfo?.year}</span>
-          {extendedInfo && 'qualities' in extendedInfo && (
-            <MediaQuality qualities={extendedInfo.qualities} />
-          )}
-        </MediaSubTitle>
-        <MediaDescription expanded={expanded}>
-          {extendedInfo?.overview}
-        </MediaDescription>
+        {selectedMedia.type === 'movie' && (
+          <MovieInformation expanded={expanded} movie={selectedMedia} />
+        )}
+        {selectedMedia.type === 'show' && (
+          <ShowInformation expanded={expanded} show={selectedMedia} />
+        )}
       </MediaInformationContainer>
     </MediaPreviewContainer>
   );

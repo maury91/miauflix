@@ -6,9 +6,15 @@ interface NavigationArgs {
   page: Page;
   onBack?: () => void;
   onEnter?: () => void;
+  onArrow?: (direction: 'up' | 'down') => void;
 }
 
-export const useNavigation = ({ page, onBack, onEnter }: NavigationArgs) => {
+export const useNavigation = ({
+  page,
+  onArrow,
+  onBack,
+  onEnter,
+}: NavigationArgs) => {
   const currentPage = useAppSelector((state) => state.app.currentPage);
 
   useEffect(() => {
@@ -28,11 +34,19 @@ export const useNavigation = ({ page, onBack, onEnter }: NavigationArgs) => {
             onEnter();
           }
         }
+        if (onArrow) {
+          if (ev.code === 'ArrowUp') {
+            onArrow('up');
+          }
+          if (ev.code === 'ArrowDown') {
+            onArrow('down');
+          }
+        }
       }
 
       window.addEventListener('keydown', handleKeyDown, { passive: false });
       return () => window.removeEventListener('keydown', handleKeyDown);
     }
     return;
-  }, [currentPage, onBack, onEnter, page]);
+  }, [currentPage, onArrow, onBack, onEnter, page]);
 };

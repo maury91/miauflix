@@ -1,4 +1,11 @@
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { gsap } from 'gsap';
 import { useGetListQuery } from '../../../../store/api/lists';
 import styled from 'styled-components';
@@ -10,7 +17,13 @@ import {
   setSelectedMedia,
 } from '../../../../store/slices/home';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
-import { MEDIA_BOX_HEIGHT, MediaBox, MediaHighlight } from './mediaBox';
+import {
+  MEDIA_BOX_HEIGHT,
+  MediaBox,
+  MediaHighlight,
+  OuterMediaHighlight,
+  OuterMediaHighlightBackground,
+} from './mediaBox';
 import { useCategoryNavigation } from '../hooks/useCategoryNavigation';
 import { IS_TV } from '../../../../consts';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -26,7 +39,7 @@ const CategorySliderContainer = styled.div<{
 }>`
   position: absolute;
   left: ${(props) => props.margin}px;
-  right: ${(props) => props.margin}px;
+  right: 0;
   top: ${(props) =>
     props.index * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN) +
     CATEGORY_CONTAINER_TOP_MASK}vh;
@@ -40,6 +53,12 @@ const CategoryTitle = styled.h3`
 
 const CategoryContent = styled.div`
   position: relative;
+  height: ${MEDIA_BOX_HEIGHT * 1.1}vh;
+  overflow-x: scroll;
+`;
+
+const CategoryContentWrapper = styled.div<{ mediaCount: number }>`
+  width: ${({ mediaCount }) => mediaCount * 37.2}vh;
 `;
 
 interface ListHookReturn {
@@ -53,7 +72,7 @@ const useInfiniteList = (category: string, skip = false): ListHookReturn => {
   const [totalPages, setTotalPages] = useState(1);
 
   const previousList = useGetListQuery(
-    page > 1 && !skip ? { category, page: page - 1 } : skipToken
+    page >= 1 && !skip ? { category, page: page - 1 } : skipToken
   );
   const currentList = useGetListQuery(!skip ? { category, page } : skipToken);
   const nextList = useGetListQuery(
@@ -72,7 +91,11 @@ const useInfiniteList = (category: string, skip = false): ListHookReturn => {
     const combinedData: (MediaDto | null)[] = new Array(
       Math.max(pageSize * (page - 1), 0)
     ).fill(null);
-    for (const data of [previousList.data, currentList.data, nextList.data]) {
+    for (const data of [
+      page === 0 ? { data: [] } : previousList.data,
+      currentList.data,
+      nextList.data,
+    ]) {
       if (data) {
         combinedData.push(...data.data);
       }
@@ -82,7 +105,7 @@ const useInfiniteList = (category: string, skip = false): ListHookReturn => {
 
   const updateSelected = useCallback(
     (selected: number) => {
-      setPage(Math.round(selected / pageSize));
+      setPage(Math.floor(selected / pageSize));
     },
     [pageSize]
   );
@@ -135,17 +158,14 @@ const useSpecialCategories = (category: string) => {
 export const CategorySlider: FC<{
   category: CategoryDto;
   index: number;
-  scrollTo: (to: number) => void;
   onLeft: () => void;
   onSelect: (media: MediaDto) => void;
-}> = ({ category, index, onLeft, onSelect, scrollTo }) => {
+}> = ({ category, index, onLeft, onSelect }) => {
   const { data, updateSelected, mediaCount } = useSpecialCategories(
     category.id
   );
   const mediasProgress = useAppSelector((state) => state.resume.mediaProgress);
-
-  const mediaBoxesWrapperRef = useRef<HTMLDivElement>(null);
-  const categorySliderAnimationRef = useRef<gsap.QuickToFunc | null>(null);
+  const categoryContentRef = useRef<HTMLDivElement>(null);
   const mediaHighlightRef = useRef<HTMLDivElement>(null);
   const mediaHighlightAnimationRef = useRef<gsap.QuickToFunc | null>(null);
   const dispatch = useAppDispatch();
@@ -160,47 +180,44 @@ export const CategorySlider: FC<{
     [data, onSelect]
   );
 
-  const { selected, handleHover, ref, focused, hovered } =
-    useCategoryNavigation({
-      categoryId: category.id,
-      mediaCount,
-      onLeft,
-      onMediaSelect,
-    });
+  const onHover = useCallback(
+    (index: number) => {
+      if (data[index]) {
+        dispatch(setSelectedMedia(data[index]));
+      }
+    },
+    [data, dispatch]
+  );
 
-  const categoryTranslateX = -(mediaWidth + gap) * selected;
-  const highlightTranslateX = IS_TV
-    ? mediaWidth + gap
-    : (mediaWidth + gap) * (hovered - selected);
+  const {
+    firstItemToDisplay,
+    handleHover,
+    ref,
+    focused,
+    hovered,
+    firstVisible,
+    handleScroll,
+    disableAutoScroll,
+  } = useCategoryNavigation({
+    categoryId: category.id,
+    mediaCount,
+    onLeft,
+    onMediaSelect,
+    onHover,
+  });
+
+  const highlightTranslateX = (mediaWidth + gap) * hovered;
 
   useEffect(() => {
-    updateSelected(selected);
-  }, [selected, updateSelected]);
+    console.log(firstVisible);
+    updateSelected(firstVisible);
+  }, [firstVisible, updateSelected]);
 
   useEffect(() => {
     if (data[hovered] && focused) {
       dispatch(setSelectedMedia(data[hovered]));
     }
   }, [focused, data, hovered, dispatch]);
-
-  useEffect(() => {
-    if (focused) {
-      scrollTo(index * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN));
-      dispatch(changeCategory(category));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focused]);
-
-  useEffect(() => {
-    categorySliderAnimationRef.current = gsap.quickTo(
-      mediaBoxesWrapperRef.current,
-      'x',
-      {
-        duration: 0.2,
-        ease: 'none',
-      }
-    );
-  }, []);
 
   useEffect(() => {
     if (focused) {
@@ -212,30 +229,42 @@ export const CategorySlider: FC<{
           ease: 'none',
         }
       );
+      mediaHighlightAnimationRef.current?.(highlightTranslateX);
     }
-  }, [focused]);
+  }, [focused, highlightTranslateX]);
 
   useEffect(() => {
-    categorySliderAnimationRef.current?.(categoryTranslateX);
-  }, [categoryTranslateX]);
+    gsap.fromTo(
+      categoryContentRef.current,
+      { scrollLeft: categoryContentRef.current?.scrollLeft },
+      {
+        scrollLeft: firstItemToDisplay * (mediaWidth + gap),
+        duration: 0.2,
+        ease: 'none',
+      }
+    );
+  }, [gap, mediaWidth, firstItemToDisplay]);
 
   useEffect(() => {
-    mediaHighlightAnimationRef.current?.(highlightTranslateX);
-  }, [highlightTranslateX]);
+    mediaHighlightAnimationRef.current?.(
+      highlightTranslateX,
+      disableAutoScroll ? highlightTranslateX : undefined
+    );
+  }, [disableAutoScroll, highlightTranslateX]);
 
   // ToDo: Add arrows to navigate through the media
 
   return (
     <CategorySliderContainer margin={margin} index={index} ref={ref}>
       <CategoryTitle>{category.name}</CategoryTitle>
-      <CategoryContent>
-        {focused && <MediaHighlight ref={mediaHighlightRef} />}
-        <div ref={mediaBoxesWrapperRef}>
+      <CategoryContent onScroll={handleScroll} ref={categoryContentRef}>
+        {focused && !IS_TV && <MediaHighlight ref={mediaHighlightRef} />}
+        <CategoryContentWrapper mediaCount={data.length}>
           {data.map((media, index) => {
             if (
               !media ||
-              index < selected - 4 ||
-              index > selected + 4 + mediaPerPage
+              index < firstVisible - 4 ||
+              index > firstVisible + 4 + mediaPerPage
             ) {
               return null;
             }
@@ -255,8 +284,14 @@ export const CategorySlider: FC<{
               />
             );
           })}
-        </div>
+        </CategoryContentWrapper>
       </CategoryContent>
+      {focused && IS_TV && (
+        <>
+          <OuterMediaHighlightBackground />
+          <OuterMediaHighlight />
+        </>
+      )}
     </CategorySliderContainer>
   );
 };

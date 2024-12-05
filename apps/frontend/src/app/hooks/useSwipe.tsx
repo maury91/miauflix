@@ -14,8 +14,8 @@ export const useSwipe = ({ directions, onSwipe }: useSwipeArgs) => {
     let lastDelta = 0;
     let lastFiredEventTime = 0;
     const scrollListener = (ev: WheelEvent) => {
-      ev.preventDefault();
       if (Math.abs(ev[deltaProp]) > 10) {
+        ev.preventDefault();
         const now = Date.now();
         const wasTriggeredRecently = now - lastEventTime < 100;
         const changedDirection = lastDelta <= 0 !== ev[deltaProp] <= 0;

@@ -12,6 +12,4 @@ export const categoriesApi = createApi({
   }),
 });
 
-console.log(categoriesApi);
-
 export const { useGetCategoriesQuery, usePrefetch } = categoriesApi;

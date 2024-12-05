@@ -1,4 +1,9 @@
-import { ExtendedMediaDto, GetStreamDto } from '@miauflix/types';
+import {
+  ExtendedMediaDto,
+  ExtendedMovieDto,
+  ExtendedShowDto,
+  GetStreamDto,
+} from '@miauflix/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '../../consts';
 
@@ -11,6 +16,12 @@ export const mediasApi = createApi({
       { type: 'movie' | 'show'; id: string }
     >({
       query: ({ type, id }) => `${type}s/${id}`,
+    }),
+    getExtendedMovie: builder.query<ExtendedMovieDto, string>({
+      query: (id) => `movies/${id}`,
+    }),
+    getExtendedShow: builder.query<ExtendedShowDto, string>({
+      query: (id) => `shows/${id}`,
     }),
     getStreamUrl: builder.query<
       GetStreamDto,
@@ -30,6 +41,8 @@ export const mediasApi = createApi({
 
 export const {
   useGetExtendedInfoQuery,
+  useGetExtendedMovieQuery,
+  useGetExtendedShowQuery,
   useGetStreamUrlQuery,
   useStopStreamMutation,
 } = mediasApi;

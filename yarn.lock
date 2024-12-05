@@ -7325,6 +7325,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pluralize@npm:0.0.33":
+  version: 0.0.33
+  resolution: "@types/pluralize@npm:0.0.33"
+  checksum: 10c0/24899caf85b79dd291a6b6e9b9f3b67b452b18d578d0ac0d531a705bf5ee0361d9386ea1f8532c64de9e22c6e9606c5497787bb5e31bd299c487980436c59785
+  languageName: node
+  linkType: hard
+
 "@types/prettier@npm:^2.1.5":
   version: 2.7.3
   resolution: "@types/prettier@npm:2.7.3"
@@ -17734,6 +17741,7 @@ __metadata:
     "@types/jest": "npm:^29.5.12"
     "@types/node": "npm:18.16.9"
     "@types/parse-torrent": "npm:5.8.7"
+    "@types/pluralize": "npm:0.0.33"
     "@types/react": "npm:18.3.1"
     "@types/react-dom": "npm:18.3.0"
     "@types/react-is": "npm:18.3.0"
@@ -17779,6 +17787,7 @@ __metadata:
     parse-torrent: "npm:11.0.17"
     pg: "npm:8.13.0"
     pg-hstore: "npm:2.3.4"
+    pluralize: "npm:8.0.0"
     prettier: "npm:^2.6.2"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"

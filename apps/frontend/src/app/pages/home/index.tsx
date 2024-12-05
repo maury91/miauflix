@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { MediaDetails } from './components/mediaDetails';
@@ -156,22 +155,24 @@ export const Home = () => {
   useNavigation({ page: 'home', onBack: navigateToCategoryList });
 
   return (
-    <FullScreenDiv
-      key="home"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: currentPage === 'player' ? 0 : 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <MediaDetails expanded={!!selectedMedia} />
-      <Categories
-        visible={!selectedMedia}
-        onLeft={openSidebar}
-        onMediaSelect={navigateToMedia}
-      />
-      {selectedMedia && extendedMedia && (
-        <MediaPage media={extendedMedia} visible={!showCategories} />
-      )}
+    <>
+      <FullScreenDiv
+        key="home"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: currentPage === 'player' ? 0 : 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <MediaDetails expanded={!!selectedMedia} />
+        <Categories
+          visible={!selectedMedia}
+          onLeft={openSidebar}
+          onMediaSelect={navigateToMedia}
+        />
+        {selectedMedia && extendedMedia && (
+          <MediaPage media={extendedMedia} visible={!showCategories} />
+        )}
+      </FullScreenDiv>
       <HomeSidebar />
-    </FullScreenDiv>
+    </>
   );
 };

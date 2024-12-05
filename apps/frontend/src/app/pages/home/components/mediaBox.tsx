@@ -20,8 +20,8 @@ export const MediaBox = styled.div<{
   height: ${IS_TV ? MEDIA_BOX_HEIGHT * 0.995 : MEDIA_BOX_HEIGHT}vh;
   width: ${MEDIA_BOX_WIDTH}vh;
   position: absolute;
-  top: 0;
-  left: ${(props) => props.index * 37.2}vh;
+  top: ${MEDIA_BOX_HEIGHT * 0.015}vh;
+  left: ${(props) => props.index * 37.2 + MEDIA_BOX_HEIGHT * 0.015}vh;
   cursor: pointer;
 
   ${({ progress }) =>
@@ -40,12 +40,23 @@ export const MediaBox = styled.div<{
 
 export const MediaHighlight = styled.div`
   position: absolute;
-  top: -${MEDIA_BOX_HEIGHT * 0.015}vh;
-  left: -${MEDIA_BOX_HEIGHT * 0.015}vh;
   width: ${MEDIA_BOX_WIDTH - MEDIA_BOX_HEIGHT * 0.015}vh;
   height: ${MEDIA_BOX_HEIGHT * 0.985}vh;
   border: ${MEDIA_BOX_HEIGHT * 0.03}vh solid #d81f27;
   border-radius: 1vh;
   z-index: 2;
   pointer-events: none;
+`;
+
+export const OuterMediaHighlight = styled(MediaHighlight)`
+  top: 6vh;
+`;
+
+export const OuterMediaHighlightBackground = styled.div`
+  position: absolute;
+  top: 6vh;
+  height: ${MEDIA_BOX_HEIGHT * 1.05}vh;
+  left: -${MEDIA_BOX_HEIGHT * 0.01}vh;
+  width: ${MEDIA_BOX_HEIGHT * 0.03}vh;
+  background: black;
 `;

@@ -21,15 +21,6 @@ export const MediaPreviewShadow = styled.div`
     rgba(0, 0, 0, 0) 50%,
     rgba(0, 0, 0, 1) 71%
   );
-  // IS_SLOW_DEVICE
-  //   ? 'radial-gradient(ellipse at 100% 0%, rgba(0,0,0,0) 60%,rgba(0,0,0,1) 70%);'
-  //   : \`radial-gradient(farthest-corner at 100% -20%,rgba(0,0,0,0) 65%,rgba(0,0,0,1) 82%),
-  //   linear-gradient(
-  //     0deg,
-  //     rgba(0, 0, 0, 1) 15%,
-  //     rgba(0, 0, 0, 0) 25%
-  //   ),
-  //   linear-gradient( 90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 20%)\`
 `;
 export const MediaPreviewShadow2nd = styled.div`
   position: absolute;

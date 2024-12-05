@@ -1,20 +1,20 @@
-import { MouseEventHandler, useCallback, useEffect, useState } from 'react';
-import { useMediaBoxSizes } from './useMediaBoxSizes';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ArrowPressHandler,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { useSwipe } from '../../../hooks/useSwipe';
 import { IS_TV } from '../../../../consts';
 import { SLIDER_PREFIX } from '../consts';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { setSelectedIndexForCategory } from '../../../../store/slices/home';
+import { useMediaBoxSizes } from './useMediaBoxSizes';
 
 interface UseCategoryNavigationArgs {
   categoryId: string;
   mediaCount: number;
   onMediaSelect: (index: number) => void;
   onLeft: () => void;
+  onHover: (index: number) => void;
 }
 
 const noop = () => undefined;
@@ -24,27 +24,41 @@ export const useCategoryNavigation = ({
   mediaCount,
   onLeft,
   onMediaSelect,
+  onHover,
 }: UseCategoryNavigationArgs) => {
   const selectedFromStore = useAppSelector(
     (state) => state.home.selectedByCategory[categoryId]
   );
   const dispatch = useAppDispatch();
-  const [selected, setSelected] = useState(selectedFromStore ?? 0);
+  const [firstVisible, setFirstVisible] = useState(selectedFromStore ?? 0);
+  const [firstItemToDisplay, setFirstItemToDisplay] = useState(
+    selectedFromStore ?? 0
+  );
   const [hovered, setHovered] = useState(selectedFromStore ?? 0);
   const [lastKeyboardMovement, setLastKeyboardMovement] = useState(0);
-  const { mediaPerPage } = useMediaBoxSizes();
-  const recentKeyPress = Date.now() - lastKeyboardMovement < 500;
+  const [disableAutoScroll, setDisableAutoScroll] = useState(false);
+  const { mediaWidth, gap, mediaPerPage } = useMediaBoxSizes();
 
   const move = useCallback(
     (direction: 'left' | 'right') => {
-      const next = direction === 'left' ? selected - 1 : selected + 1;
+      const next = direction === 'left' ? hovered - 1 : hovered + 1;
       if (next < 0 || next >= mediaCount) {
         return true;
       }
-      setSelected(next);
+      setHovered(next);
+      onHover(next);
+      setLastKeyboardMovement(Date.now());
+
+      // In case of TV we want the highlight to be always on the first item
+      if (IS_TV || next < firstVisible) {
+        setFirstItemToDisplay(next);
+        setFirstVisible(next);
+      } else if (next >= firstVisible + mediaPerPage) {
+        setFirstItemToDisplay(next - mediaPerPage + 1);
+      }
       return false;
     },
-    [mediaCount, selected]
+    [firstVisible, hovered, mediaCount, mediaPerPage, onHover]
   );
 
   const onArrowPress: ArrowPressHandler = useCallback(
@@ -57,16 +71,21 @@ export const useCategoryNavigation = ({
         }
         return isEnd;
       }
+      // Disable focusable for up and down
+      if (direction === 'up' || direction === 'down') {
+        return false;
+      }
+      console.log(direction);
       return true;
     },
-    [move]
+    [move, onLeft]
   );
 
   const onEnterPress = useCallback(() => {
     onMediaSelect(hovered);
   }, [hovered, onMediaSelect]);
 
-  const { focused, ref } = useFocusable({
+  const { focused, ref, focusSelf } = useFocusable({
     focusKey: `${SLIDER_PREFIX}${categoryId}`,
     onArrowPress,
     onEnterPress,
@@ -78,62 +97,50 @@ export const useCategoryNavigation = ({
     );
   }, [categoryId, dispatch, hovered]);
 
-  useEffect(() => {
-    setHovered(selected);
-    setLastKeyboardMovement(Date.now());
-  }, [selected]);
+  /** Web only **/
+  const handleScroll = IS_TV
+    ? noop
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useCallback(
+        (ev: React.UIEvent<HTMLDivElement>) => {
+          const scrollLeft = ev.currentTarget.scrollLeft;
+          const firstVisibleMediaBox = Math.round(
+            scrollLeft / (mediaWidth + gap)
+          );
+          setFirstVisible(firstVisibleMediaBox);
+        },
+        [gap, mediaWidth]
+      );
 
-  let handleHover: (index: number) => undefined | MouseEventHandler = noop;
-
-  if (!IS_TV) {
-    // Theoretically you should not have any react hooks inside a condition
-    // but in this case the condition never changes during runtime so it's safe
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const handleSwipe = useCallback(
-      (direction: 'left' | 'right') => {
-        if (focused) {
-          setSelected((selected) => {
-            const next =
-              direction === 'left'
-                ? selected - mediaPerPage
-                : selected + mediaPerPage;
-            if (next < 0) {
-              return 0;
-            }
-            if (next >= mediaCount - mediaPerPage) {
-              return mediaCount - mediaPerPage;
-            }
-            return next;
-          });
-        }
-      },
-      [mediaCount, focused, mediaPerPage]
-    );
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useSwipe({
-      directions: 'horizontal',
-      onSwipe: handleSwipe,
-    });
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    handleHover = useCallback(
-      (index: number) => () => {
-        if (index >= selected && index < selected + mediaPerPage) {
+  const handleHover = IS_TV
+    ? noop
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useCallback(
+        (index: number) => () => {
           if (Date.now() - lastKeyboardMovement > 500) {
+            if (!focused) {
+              setDisableAutoScroll(true);
+              focusSelf();
+              setTimeout(() => {
+                setDisableAutoScroll(false);
+              }, 20);
+            }
             setHovered(index);
+            onHover(index);
           }
-        }
-      },
-      [lastKeyboardMovement, mediaPerPage, selected]
-    );
-  }
+        },
+        [focusSelf, focused, lastKeyboardMovement, onHover]
+      );
+  /** end web only **/
 
   return {
-    selected,
+    firstItemToDisplay,
     handleHover,
     ref,
     focused,
-    hovered: IS_TV || recentKeyPress ? selected : hovered,
+    hovered,
+    handleScroll,
+    firstVisible,
+    disableAutoScroll,
   };
 };
