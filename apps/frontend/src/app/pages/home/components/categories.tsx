@@ -79,8 +79,10 @@ export const Categories: FC<CategoriesProps> = ({
           Math.min(index, categories.length - 1)
         );
         const top =
-          (boundedIndex * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN) + 5) *
-          (window.innerHeight / 100);
+          boundedIndex === 0
+            ? 0
+            : (boundedIndex * (MEDIA_BOX_HEIGHT + SLIDER_MARGIN) + 5) *
+              (window.innerHeight / 100);
         gsap.fromTo(
           ref.current,
           { scrollTop: ref.current.scrollTop },

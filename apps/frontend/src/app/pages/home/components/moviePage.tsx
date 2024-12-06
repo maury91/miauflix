@@ -16,11 +16,11 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { setStreamUrl } from '../../../../store/slices/stream';
 import { navigateTo } from '../../../../store/slices/app';
 import LineMdPlay from '~icons/line-md/play';
-import { ExtendedMediaDto } from '@miauflix/types';
+import { ExtendedMovieDto } from '@miauflix/types';
 import styled from 'styled-components';
 import { MediaButton } from './mediaButton';
 
-const MediaPageContainer = styled.div<{ margin: number; visible: boolean }>`
+const MoviePageContainer = styled.div<{ margin: number; visible: boolean }>`
   position: absolute;
   top: 50vh;
   left: ${({ margin }) => margin + window.innerWidth * 0.05}px;
@@ -30,12 +30,12 @@ const MediaPageContainer = styled.div<{ margin: number; visible: boolean }>`
   transition: opacity 0.3s;
 `;
 
-interface MediaPageProps {
-  media: ExtendedMediaDto;
+interface MoviePageProps {
+  media: ExtendedMovieDto;
   visible: boolean;
 }
 
-export const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
+export const MoviePage: FC<MoviePageProps> = ({ media, visible }) => {
   const { margin } = useMediaBoxSizes();
   const dispatch = useAppDispatch();
   const { focusKey, ref, focusSelf } = useFocusable({
@@ -65,7 +65,7 @@ export const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
       );
       dispatch(navigateTo('player'));
     }
-  }, [dispatch, streamInfo]);
+  }, [dispatch, media.id, streamInfo]);
 
   useEffect(() => {
     return () => {
@@ -87,7 +87,7 @@ export const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <MediaPageContainer margin={margin / 2} visible={visible} ref={ref}>
+      <MoviePageContainer margin={margin / 2} visible={visible} ref={ref}>
         <MediaButton
           disabled={!streamInfo}
           icon={<LineMdPlay />}
@@ -97,7 +97,7 @@ export const MediaPage: FC<MediaPageProps> = ({ media, visible }) => {
         >
           Watch now
         </MediaButton>
-      </MediaPageContainer>
+      </MoviePageContainer>
     </FocusContext.Provider>
   );
 };

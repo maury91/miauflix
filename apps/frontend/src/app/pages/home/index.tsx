@@ -6,7 +6,7 @@ import { Categories } from './components/categories';
 import { useGetExtendedInfoQuery } from '../../../store/api/medias';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useNavigation } from '../../hooks/useNavigation';
-import { MediaPage } from './components/mediaPage';
+import { MoviePage } from './components/moviePage';
 import MdiSearch from '~icons/mdi/search';
 import {
   FocusContext,
@@ -108,7 +108,7 @@ const HomeSidebar = () => {
       };
     }
     return;
-  }, [expand]);
+  }, [expand, focusCategories]);
 
   return (
     <FocusContext.Provider value={focusKey}>
@@ -123,6 +123,8 @@ const HomeSidebar = () => {
     </FocusContext.Provider>
   );
 };
+
+const TvShowPage = () => {};
 
 export const Home = () => {
   const [showCategories, setShowCategories] = useState(true);
@@ -168,9 +170,13 @@ export const Home = () => {
           onLeft={openSidebar}
           onMediaSelect={navigateToMedia}
         />
-        {selectedMedia && extendedMedia && (
-          <MediaPage media={extendedMedia} visible={!showCategories} />
-        )}
+        {selectedMedia &&
+          extendedMedia &&
+          (extendedMedia.type === 'movie' ? (
+            <MoviePage media={extendedMedia} visible={!showCategories} />
+          ) : (
+            <div />
+          ))}
       </FullScreenDiv>
       <HomeSidebar />
     </>

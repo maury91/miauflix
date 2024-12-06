@@ -10,31 +10,27 @@ import { setSelectedIndexForCategory } from '../../../../store/slices/home';
 import { useMediaBoxSizes } from './useMediaBoxSizes';
 
 interface UseCategoryNavigationArgs {
-  categoryId: string;
-  mediaCount: number;
+  key: string;
+  lastHovered: number;
   onMediaSelect: (index: number) => void;
   onLeft: () => void;
   onHover: (index: number) => void;
+  totalData: number;
 }
 
 const noop = () => undefined;
 
 export const useCategoryNavigation = ({
-  categoryId,
-  mediaCount,
+  key,
+  lastHovered,
   onLeft,
   onMediaSelect,
   onHover,
+  totalData,
 }: UseCategoryNavigationArgs) => {
-  const selectedFromStore = useAppSelector(
-    (state) => state.home.selectedByCategory[categoryId]
-  );
-  const dispatch = useAppDispatch();
-  const [firstVisible, setFirstVisible] = useState(selectedFromStore ?? 0);
-  const [firstItemToDisplay, setFirstItemToDisplay] = useState(
-    selectedFromStore ?? 0
-  );
-  const [hovered, setHovered] = useState(selectedFromStore ?? 0);
+  const [firstVisible, setFirstVisible] = useState(lastHovered);
+  const [firstItemToDisplay, setFirstItemToDisplay] = useState(lastHovered);
+  const [hovered, setHovered] = useState(lastHovered);
   const [lastKeyboardMovement, setLastKeyboardMovement] = useState(0);
   const [disableAutoScroll, setDisableAutoScroll] = useState(false);
   const { mediaWidth, gap, mediaPerPage } = useMediaBoxSizes();
@@ -42,7 +38,7 @@ export const useCategoryNavigation = ({
   const move = useCallback(
     (direction: 'left' | 'right') => {
       const next = direction === 'left' ? hovered - 1 : hovered + 1;
-      if (next < 0 || next >= mediaCount) {
+      if (next < 0 || next >= totalData) {
         return true;
       }
       setHovered(next);
@@ -58,7 +54,7 @@ export const useCategoryNavigation = ({
       }
       return false;
     },
-    [firstVisible, hovered, mediaCount, mediaPerPage, onHover]
+    [firstVisible, hovered, totalData, mediaPerPage, onHover]
   );
 
   const onArrowPress: ArrowPressHandler = useCallback(
@@ -75,7 +71,6 @@ export const useCategoryNavigation = ({
       if (direction === 'up' || direction === 'down') {
         return false;
       }
-      console.log(direction);
       return true;
     },
     [move, onLeft]
@@ -86,16 +81,10 @@ export const useCategoryNavigation = ({
   }, [hovered, onMediaSelect]);
 
   const { focused, ref, focusSelf } = useFocusable({
-    focusKey: `${SLIDER_PREFIX}${categoryId}`,
+    focusKey: `${SLIDER_PREFIX}${key}`,
     onArrowPress,
     onEnterPress,
   });
-
-  useEffect(() => {
-    dispatch(
-      setSelectedIndexForCategory({ category: categoryId, index: hovered })
-    );
-  }, [categoryId, dispatch, hovered]);
 
   /** Web only **/
   const handleScroll = IS_TV
