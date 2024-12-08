@@ -18,6 +18,9 @@ export const CategoriesContainer = styled.div<{ visible: boolean }>`
       : `linear-gradient(180deg, transparent 0%, black ${CATEGORY_CONTAINER_TOP_MASK}vh)`};
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   transition: opacity 0.3s;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const CategoriesWrapper = styled.div<{ categoriesCount: number }>`

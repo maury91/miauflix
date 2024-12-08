@@ -11,8 +11,11 @@ import {
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { CONTINUE_WATCHING_CATEGORY } from '../consts';
-import { useGetProgressQuery } from '../../../../store/api/progress';
+import { CONTINUE_WATCHING_CATEGORY, HOME_PREFIX } from '../consts';
+import {
+  useGetEpisodesProgressQuery,
+  useGetMoviesProgressQuery,
+} from '../../../../store/api/progress';
 import { CATEGORY_CONTAINER_TOP_MASK } from './categoriesContainer';
 import { Slider } from '../../../components/slider';
 
@@ -96,17 +99,31 @@ const SPECIAL_CATEGORIES = [CONTINUE_WATCHING_CATEGORY];
 
 const useSpecialList = (category: string): ListHookReturn => {
   const userId = useAppSelector((state) => state.app.currentUserId);
-  const { data: progressCategory } = useGetProgressQuery(
+  const { data: movieProgressCategory } = useGetMoviesProgressQuery(
+    category === CONTINUE_WATCHING_CATEGORY ? userId : skipToken
+  );
+  const { data: episodeProgressCategory } = useGetEpisodesProgressQuery(
     category === CONTINUE_WATCHING_CATEGORY ? userId : skipToken
   );
 
-  if (progressCategory) {
+  if (movieProgressCategory && episodeProgressCategory) {
+    const data = [...movieProgressCategory, ...episodeProgressCategory]
+      .sort(
+        (a, b) =>
+          new Date(a.pausedAt).getTime() - new Date(b.pausedAt).getTime()
+      )
+      .map((media) => (media.type === 'movie' ? media.movie : media.show))
+      .filter(
+        (media, index, arr) =>
+          arr.findIndex(({ id }) => id === media.id) === index
+      )
+      .sort();
     return {
-      data: progressCategory.map(({ movie }) => movie),
+      data,
       updateSelected: () => {
         // nothing
       },
-      mediaCount: progressCategory.length,
+      mediaCount: data.length,
     };
   }
 
@@ -135,12 +152,13 @@ export const CategorySlider: FC<{
   index: number;
   onLeft: () => void;
   onSelect: (media: MediaDto) => void;
-}> = ({ category, index, onLeft, onSelect }) => {
+  visible: boolean;
+}> = ({ category, index, onLeft, onSelect, visible }) => {
   const dispatch = useAppDispatch();
   const { data, updateSelected, mediaCount } = useSpecialCategories(
     category.id
   );
-  const mediasProgress = useAppSelector((state) => state.resume.mediaProgress);
+  const moviesProgress = useAppSelector((state) => state.resume.movieProgress);
   const { margin } = useMediaBoxSizes();
   const lastHovered = useAppSelector(
     (state) => state.home.selectedByCategory[category.id] || 0
@@ -156,11 +174,11 @@ export const CategorySlider: FC<{
               ),
               id: media.id,
               logo: media.images.backdrop ? undefined : media.images.logos[0],
-              progress: mediasProgress[media.id] || 0,
+              progress: moviesProgress[media.id] || 0,
             }
           : null
       ),
-    [data, mediasProgress]
+    [data, moviesProgress]
   );
 
   const onHover = useCallback(
@@ -187,13 +205,14 @@ export const CategorySlider: FC<{
       <CategoryTitle>{category.name}</CategoryTitle>
       <Slider
         data={sliderData}
+        enabled={visible}
         lastHovered={lastHovered}
         onFirstVisibleChange={updateSelected}
         onHover={onHover}
         onLeft={onLeft}
         onMediaSelect={onMediaSelect}
         totalData={mediaCount}
-        sliderKey={category.id}
+        sliderKey={HOME_PREFIX + category.id}
       />
     </CategorySliderContainer>
   );

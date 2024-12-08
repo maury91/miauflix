@@ -56,6 +56,23 @@ export class ShowsData {
     });
   }
 
+  async findSeason(id: number): Promise<Season | null> {
+    return await this.seasonModel.findOne({
+      where: {
+        id,
+      },
+      raw: true,
+    });
+  }
+
+  async findShowFromDb(id: number): Promise<Show | null> {
+    return await this.showModel.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
   async findShowsWithoutImages(): Promise<Show[]> {
     return await this.showModel.findAll({
       where: {

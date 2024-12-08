@@ -10,18 +10,23 @@ import {
 import {
   CATEGORIES_FOCUS_KEY,
   CONTINUE_WATCHING_CATEGORY,
+  HOME_PREFIX,
   SLIDER_PREFIX,
 } from '../consts';
 import { CategoriesContainer, CategoriesWrapper } from './categoriesContainer';
 import { CategorySlider, SLIDER_MARGIN } from './categorySlider';
 import { CategoryDto, MediaDto } from '@miauflix/types';
-import { useGetProgressQuery } from '../../../../store/api/progress';
+import {
+  useGetEpisodesProgressQuery,
+  useGetMoviesProgressQuery,
+} from '../../../../store/api/progress';
 import { useAppSelector } from '../../../../store/store';
-import { OFFSET } from './categories.consts';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
 import { debounce } from '../../../utils/debounce';
 import { useNavigation } from '../../../hooks/useNavigation';
 import { IS_TV } from '../../../../consts';
+
+const HOME_SLIDER_PREFIX = SLIDER_PREFIX + HOME_PREFIX;
 
 interface CategoriesProps {
   onLeft: () => void;
@@ -31,19 +36,35 @@ interface CategoriesProps {
 
 const useCategories = () => {
   const userId = useAppSelector((state) => state.app.currentUserId);
-  const { data: progressCategory, isLoading: isProgressCategoryLoading } =
-    useGetProgressQuery(userId, {
-      pollingInterval: 30000,
-    });
+  const {
+    data: moviesProgressCategory,
+    isLoading: isMoviesProgressCategoryLoading,
+  } = useGetMoviesProgressQuery(userId, {
+    pollingInterval: 30000,
+  });
+  const {
+    data: showsProgressCategory,
+    isLoading: isShowsProgressCategoryLoading,
+  } = useGetEpisodesProgressQuery(userId, {
+    pollingInterval: 30000,
+  });
   const { data: normalCategories, isLoading: areNormalCategoriesLoading } =
     useGetCategoriesQuery();
 
   return useMemo<CategoryDto[]>(() => {
     const categories: CategoryDto[] = [];
-    if (isProgressCategoryLoading || areNormalCategoriesLoading) {
+    if (
+      isMoviesProgressCategoryLoading ||
+      isShowsProgressCategoryLoading ||
+      areNormalCategoriesLoading
+    ) {
       return [];
     }
-    if (progressCategory && progressCategory.length) {
+    if (
+      moviesProgressCategory &&
+      showsProgressCategory &&
+      moviesProgressCategory.length + showsProgressCategory.length > 0
+    ) {
       categories.push({
         id: CONTINUE_WATCHING_CATEGORY,
         name: 'Continue Watching',
@@ -52,9 +73,11 @@ const useCategories = () => {
     return [...categories, ...(normalCategories ?? [])];
   }, [
     areNormalCategoriesLoading,
-    isProgressCategoryLoading,
+    isMoviesProgressCategoryLoading,
+    isShowsProgressCategoryLoading,
+    moviesProgressCategory,
     normalCategories,
-    progressCategory,
+    showsProgressCategory,
   ]);
 };
 
@@ -88,7 +111,7 @@ export const Categories: FC<CategoriesProps> = ({
           { scrollTop: ref.current.scrollTop },
           { scrollTop: top, duration: 0.2 }
         );
-        setFocus(`${SLIDER_PREFIX}${categories[boundedIndex].id}`);
+        setFocus(`${HOME_SLIDER_PREFIX}${categories[boundedIndex].id}`);
       }
     },
     [categories, ref]
@@ -98,10 +121,11 @@ export const Categories: FC<CategoriesProps> = ({
     (direction: 'up' | 'down') => {
       const currentFocusKey = getCurrentFocusKey();
       const isFocusedOnCategory =
-        currentFocusKey && currentFocusKey.startsWith(SLIDER_PREFIX);
+        currentFocusKey && currentFocusKey.startsWith(HOME_SLIDER_PREFIX);
+      console.log('isFocusedOnCategory', isFocusedOnCategory, currentFocusKey);
       if (isFocusedOnCategory) {
         const focusedCategoryId = currentFocusKey.substring(
-          SLIDER_PREFIX.length
+          HOME_SLIDER_PREFIX.length
         );
         const categoryIndex = categories.findIndex(
           (category) => category.id === focusedCategoryId
@@ -113,8 +137,9 @@ export const Categories: FC<CategoriesProps> = ({
             focusCategory(nextCategoryIndex);
           }
         }
-        return;
+        return true;
       }
+      return false;
     },
     [categories, focusCategory]
   );
@@ -155,10 +180,11 @@ export const Categories: FC<CategoriesProps> = ({
       const firstCategory = categories[0];
       if (
         !(
-          getCurrentFocusKey() && getCurrentFocusKey().startsWith(SLIDER_PREFIX)
+          getCurrentFocusKey() &&
+          getCurrentFocusKey().startsWith(HOME_SLIDER_PREFIX)
         )
       ) {
-        setFocus(`${SLIDER_PREFIX}${firstCategory.id}`);
+        setFocus(`${HOME_SLIDER_PREFIX}${firstCategory.id}`);
       }
     }
   }, [categories]);
@@ -174,16 +200,16 @@ export const Categories: FC<CategoriesProps> = ({
           categoriesCount={categories.length}
           ref={categoriesWrapperRef}
         >
-          {visible &&
-            categories.map((category, index) => (
-              <CategorySlider
-                key={category.id}
-                category={category}
-                index={index}
-                onLeft={onLeft}
-                onSelect={onMediaSelect}
-              />
-            ))}
+          {categories.map((category, index) => (
+            <CategorySlider
+              key={category.id}
+              category={category}
+              index={index}
+              onLeft={onLeft}
+              onSelect={onMediaSelect}
+              visible={visible}
+            />
+          ))}
         </CategoriesWrapper>
       </CategoriesContainer>
     </FocusContext.Provider>

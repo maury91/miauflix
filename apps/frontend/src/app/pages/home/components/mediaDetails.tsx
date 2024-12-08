@@ -1,13 +1,10 @@
 import styled from 'styled-components';
 import pluralize from 'pluralize';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from '../../../../store/store';
 import { scaleImage } from '../utils/scaleImage';
-import {
-  useGetExtendedMovieQuery,
-  useGetExtendedShowQuery,
-} from '../../../../store/api/medias';
+import { useGetExtendedInfoQuery } from '../../../../store/api/medias';
 import { IS_SLOW_DEVICE } from '../../../../consts';
 import { motion, MotionConfig } from 'framer-motion';
 import {
@@ -16,25 +13,42 @@ import {
   MediaPreviewShadow2nd,
 } from './media/mediaPreview';
 import { MediaQuality } from './media/mediaQuality';
-import { MovieDto, ShowDto } from '@miauflix/types';
+import {
+  ExtendedMovieDto,
+  ExtendedShowDto,
+  MovieDto,
+  ShowDto,
+} from '@miauflix/types';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { MoviePage } from './moviePage';
+import { TvShowPage } from './tvShowPage';
 
 const MediaImage = styled(motion.div)<{ src: string }>`
-  background: url(${({ src }) => src}) center right no-repeat;
-  background-size: cover;
   position: absolute;
-  height: 65vh;
+  height: 55vh;
   left: 50vw;
   right: 0;
   top: 0;
+  overflow: hidden;
+
+  div {
+    background: url(${({ src }) => src}) center right no-repeat;
+    background-size: cover;
+    height: 65vh;
+  }
 `;
 
 const MediaInformationContainer = styled.div<{ width: number }>`
-  position: absolute;
-  top: 10vh;
   width: ${({ width }) => width}px;
   svg {
     font-size: 4vh;
   }
+`;
+
+const MediaContainer = styled.div<{ width: number }>`
+  position: relative;
+  top: 20vh;
+  width: ${({ width }) => width}px;
 `;
 
 const MediaTitle = styled.h2`
@@ -66,6 +80,12 @@ const MediaDescription = styled.p<{ expanded: boolean }>`
   transition: -webkit-line-clamp 0.3s, line-clamp 0.3s;
 `;
 
+const MediaPageContainer = styled.div<{ visible: boolean }>`
+  margin-top: 10vh;
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  transition: opacity 0.3s;
+`;
+
 const MovieInformationSkeleton: FC = () => {
   return (
     <>
@@ -80,68 +100,75 @@ const MovieInformationSkeleton: FC = () => {
   );
 };
 
-const MovieInformation: FC<{ expanded: boolean; movie: MovieDto }> = ({
-  expanded,
-  movie,
-}) => {
-  const { data: extendedInfo } = useGetExtendedMovieQuery(movie.id);
-
-  if (!extendedInfo) {
-    return <MovieInformationSkeleton />;
-  }
-
+const MovieInformation: FC<{
+  expanded: boolean;
+  movie: ExtendedMovieDto | MovieDto;
+}> = ({ expanded, movie }) => {
   return (
     <>
       <MediaTitle>{movie.title}</MediaTitle>
       <MediaSubTitle>
-        <span>{extendedInfo.runtime} min</span>
-        <span>{extendedInfo.year}</span>
-        {'qualities' in extendedInfo && (
-          <MediaQuality qualities={extendedInfo.qualities} />
-        )}
+        {'runtime' in movie && <span>{movie.runtime} min</span>}
+        <span>{movie.year}</span>
+        {'qualities' in movie && <MediaQuality qualities={movie.qualities} />}
       </MediaSubTitle>
-      <MediaDescription expanded={expanded}>
-        {extendedInfo.overview}
-      </MediaDescription>
+      {'overview' in movie && (
+        <MediaDescription expanded={expanded}>
+          {movie.overview}
+        </MediaDescription>
+      )}
     </>
   );
 };
 
-const ShowInformation: FC<{ expanded: boolean; show: ShowDto }> = ({
-  expanded,
-  show,
-}) => {
-  const { data: extendedInfo } = useGetExtendedShowQuery(show.id);
-
-  if (!extendedInfo) {
-    return <MovieInformationSkeleton />;
-  }
-
+const ShowInformation: FC<{
+  expanded: boolean;
+  show: ExtendedShowDto | ShowDto;
+}> = ({ expanded, show }) => {
   return (
     <>
       <MediaTitle>{show.title}</MediaTitle>
       <MediaSubTitle>
-        <span>
-          {extendedInfo.seasonsCount}{' '}
-          {pluralize('season', extendedInfo.seasonsCount)}
-        </span>
-        <span>{extendedInfo.year}</span>
+        {'seasonsCount' in show && (
+          <span>
+            {show.seasonsCount} {pluralize('season', show.seasonsCount)}
+          </span>
+        )}
+        <span>{show.year}</span>
       </MediaSubTitle>
-      <MediaDescription expanded={expanded}>
-        {extendedInfo.overview}
-      </MediaDescription>
+      {'overview' in show && (
+        <MediaDescription expanded={expanded}>{show.overview}</MediaDescription>
+      )}
     </>
   );
 };
 
-export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
+export const MediaDetails: FC<{
+  expanded: boolean;
+  expandedVisible: boolean;
+}> = ({ expanded, expandedVisible }) => {
   const { margin } = useMediaBoxSizes();
   const [imageVisible, setImageVisible] = useState(false);
   const selectedMedia = useAppSelector((state) => state.home.selectedMedia);
   const imageSrc = selectedMedia
     ? scaleImage(selectedMedia.images.backdrops[0])
     : '';
+  const { data: extendedMedia } = useGetExtendedInfoQuery(
+    selectedMedia
+      ? { type: selectedMedia.type, id: selectedMedia.id }
+      : skipToken
+  );
   const [displayedSrc, setDisplayedSrc] = useState(imageSrc);
+
+  const possiblyExtendedMedia = useMemo(() => {
+    if (!selectedMedia) {
+      return null;
+    }
+    if (extendedMedia && extendedMedia.id === selectedMedia.id) {
+      return extendedMedia;
+    }
+    return selectedMedia;
+  }, [selectedMedia, extendedMedia]);
 
   useEffect(() => {
     setImageVisible(false);
@@ -164,11 +191,12 @@ export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
     };
   }, [imageSrc]);
 
-  if (!selectedMedia) {
+  if (!possiblyExtendedMedia) {
+    // Show skeleton
     return null;
   }
   return (
-    <MediaPreviewContainer margin={margin / 2}>
+    <MediaPreviewContainer margin={margin / 2} expanded={expanded}>
       <MotionConfig transition={{ duration: imageVisible ? 1 : 0.3 }}>
         {displayedSrc && (
           <MediaImage
@@ -176,19 +204,37 @@ export const MediaDetails: FC<{ expanded: boolean }> = ({ expanded }) => {
             initial={{ opacity: 1 }}
             animate={{ opacity: imageVisible ? 1 : 0 }}
             exit={{ opacity: 0 }}
-          />
+          >
+            <div />
+          </MediaImage>
         )}
       </MotionConfig>
       <MediaPreviewShadow />
       <MediaPreviewShadow2nd />
-      <MediaInformationContainer width={window.innerWidth * 0.47 - margin / 2}>
-        {selectedMedia.type === 'movie' && (
-          <MovieInformation expanded={expanded} movie={selectedMedia} />
-        )}
-        {selectedMedia.type === 'show' && (
-          <ShowInformation expanded={expanded} show={selectedMedia} />
-        )}
-      </MediaInformationContainer>
+      <MediaContainer width={window.innerWidth - margin * 2}>
+        <MediaInformationContainer
+          width={window.innerWidth * 0.47 - margin / 2}
+        >
+          {possiblyExtendedMedia.type === 'movie' && (
+            <MovieInformation
+              expanded={expanded}
+              movie={possiblyExtendedMedia}
+            />
+          )}
+          {possiblyExtendedMedia.type === 'show' && (
+            <ShowInformation expanded={expanded} show={possiblyExtendedMedia} />
+          )}
+        </MediaInformationContainer>
+        <MediaPageContainer visible={expandedVisible}>
+          {expanded &&
+            extendedMedia &&
+            (extendedMedia.type === 'movie' ? (
+              <MoviePage media={extendedMedia} />
+            ) : (
+              <TvShowPage media={extendedMedia} />
+            ))}
+        </MediaPageContainer>
+      </MediaContainer>
     </MediaPreviewContainer>
   );
 };

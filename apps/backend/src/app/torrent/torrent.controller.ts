@@ -17,7 +17,31 @@ export class TorrentController {
     const host = req.headers.host;
     const useHvec = useHvecR === 'true';
     const { stream, streamKey } = await this.torrentService.getStream(
+      'movie',
       slug,
+      useHvec,
+      false
+    );
+    return {
+      stream:
+        typeof host === 'string'
+          ? stream.replace('localhost', host.split(':')[0])
+          : stream,
+      streamId: streamKey,
+    };
+  }
+
+  @Get('episode/:episodeId/:useHvec')
+  async getEpisodeTorrent(
+    @Param('episodeId') episodeId: string,
+    @Param('useHvec') useHvecR: string,
+    @Req() req: Request
+  ): Promise<GetStreamDto> {
+    const host = req.headers.host;
+    const useHvec = useHvecR === 'true';
+    const { stream, streamKey } = await this.torrentService.getStream(
+      'episode',
+      episodeId,
       useHvec,
       false
     );

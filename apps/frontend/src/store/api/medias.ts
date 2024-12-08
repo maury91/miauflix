@@ -3,6 +3,7 @@ import {
   ExtendedMovieDto,
   ExtendedShowDto,
   GetStreamDto,
+  SeasonDto,
 } from '@miauflix/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '../../consts';
@@ -17,15 +18,14 @@ export const mediasApi = createApi({
     >({
       query: ({ type, id }) => `${type}s/${id}`,
     }),
-    getExtendedMovie: builder.query<ExtendedMovieDto, string>({
-      query: (id) => `movies/${id}`,
-    }),
-    getExtendedShow: builder.query<ExtendedShowDto, string>({
-      query: (id) => `shows/${id}`,
-    }),
+    getShowSeason: builder.query<SeasonDto, { showId: string; season: number }>(
+      {
+        query: ({ showId, season }) => `shows/${showId}/seasons/${season}`,
+      }
+    ),
     getStreamUrl: builder.query<
       GetStreamDto,
-      { type: 'movie'; id: string; supportsHvec: boolean }
+      { type: 'movie' | 'episode'; id: string; supportsHvec: boolean }
     >({
       query: ({ type, id, supportsHvec }) =>
         `stream/${type}/${id}/${supportsHvec ? 'true' : 'false'}`,
@@ -41,8 +41,7 @@ export const mediasApi = createApi({
 
 export const {
   useGetExtendedInfoQuery,
-  useGetExtendedMovieQuery,
-  useGetExtendedShowQuery,
   useGetStreamUrlQuery,
+  useGetShowSeasonQuery,
   useStopStreamMutation,
 } = mediasApi;

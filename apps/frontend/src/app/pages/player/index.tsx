@@ -18,7 +18,7 @@ import { useTizenPlayer } from './hooks/tizen/useTizenPlayer';
 import { useNavigation } from '../../hooks/useNavigation';
 import { navigateTo } from '../../../store/slices/app';
 import { useTrackMovieProgressMutation } from '../../../store/api/progress';
-import { TrackMoviePlaybackRequest } from '@miauflix/types';
+import { TrackPlaybackRequest } from '@miauflix/types';
 import styled from 'styled-components';
 import { setMediaProgress } from '../../../store/slices/resume';
 
@@ -108,8 +108,14 @@ export const Player = () => {
   const streamUrl = useAppSelector((state) => state.stream.url);
   const mediaId = useAppSelector((state) => state.stream.id);
   const mediaType = useAppSelector((state) => state.stream.type);
+  const seasonNum = useAppSelector((state) => state.stream.season);
+  const episodeNum = useAppSelector((state) => state.stream.episode);
   const initialPosition = useAppSelector(
-    (state) => state.resume.mediaProgress[mediaId] ?? 0
+    (state) =>
+      (mediaType === 'movie'
+        ? state.resume.movieProgress[mediaId]
+        : state.resume.showProgress[mediaId]?.[`${seasonNum}-${episodeNum}`]) ??
+      0
   );
   const [showPlayerControls, setShowPlayerControls] = useState(false);
   const [lastSeekTo, setLastSeekTo] = useState(0);
@@ -130,22 +136,24 @@ export const Player = () => {
   } = useTizenPlayer({ initialPosition, streamUrl });
 
   const updateProgress = useCallback(
-    (args: TrackMoviePlaybackRequest) => {
-      if (mediaType === 'movie') {
-        updateMovieProgress({
-          id: mediaId,
-          userId,
-          ...args,
-        });
-        dispatch(setMediaProgress({ mediaId, progress: args.progress }));
-      }
+    (args: TrackPlaybackRequest) => {
+      updateMovieProgress({
+        id: mediaId,
+        userId,
+        ...args,
+      });
+      dispatch(setMediaProgress({ mediaId, progress: args.progress }));
     },
     [dispatch, mediaId, mediaType, updateMovieProgress, userId]
   );
 
   const close = useCallback(() => {
     closePlayer();
-    updateProgress({ action: 'stop', progress: (played / videoLength) * 100 });
+    updateProgress({
+      action: 'stop',
+      progress: (played / videoLength) * 100,
+      type: mediaType,
+    });
   }, [closePlayer, played, videoLength, updateProgress]);
 
   useEffect(() => {
@@ -153,12 +161,14 @@ export const Player = () => {
       updateProgress({
         action: 'start',
         progress: (played / videoLength) * 100,
+        type: mediaType,
       });
     }
     if (playerStatus === 'PAUSED') {
       updateProgress({
         action: 'pause',
         progress: (played / videoLength) * 100,
+        type: mediaType,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

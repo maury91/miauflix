@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useMediaBoxSizes } from '../pages/home/hooks/useMediaBoxSizes';
 import { useCategoryNavigation } from '../pages/home/hooks/useCategoryNavigation';
-import { IS_TV } from '../../consts';
+import { IS_TV, PALETTE } from '../../consts';
 import {
   MEDIA_BOX_HEIGHT,
   MediaBox,
@@ -21,26 +21,48 @@ const CategoryContent = styled.div`
     display: none;
   }
 `;
+
 const CategoryContentWrapper = styled.div<{ mediaCount: number }>`
   width: ${({ mediaCount }) => mediaCount * 37.2}vh;
 `;
-const SliderContainer = styled.div``;
+
+const SliderContainer = styled.div`
+  position: relative;
+`;
+
+const Unavailable = styled.div`
+  position: absolute;
+  transform: rotate(-30deg) translateX(-50%) translateY(-50%);
+  top: -50%;
+  left: 50%;
+  font-size: 3vh;
+  text-align: center;
+  color: ${PALETTE.background.primary};
+  padding: 0.5vh 100%;
+  background: black;
+`;
+
 export const Slider: FC<{
   data: Array<{
     backdrop: string;
     id: string;
     logo?: string;
+    available?: boolean;
     progress: number;
+    text?: string;
   } | null>;
+  enabled?: boolean;
   lastHovered: number;
-  onFirstVisibleChange: (index: number) => void;
+  onFirstVisibleChange?: (index: number) => void;
   onHover: (index: number) => void;
-  onLeft: () => void;
-  onMediaSelect: (index: number) => void;
+  onLeft?: () => void;
+  onMediaSelect?: (index: number) => void;
   totalData: number;
   sliderKey: string;
+  restrictUpAndDown?: boolean;
 }> = ({
   data,
+  enabled = true,
   lastHovered,
   onFirstVisibleChange,
   onLeft,
@@ -48,6 +70,7 @@ export const Slider: FC<{
   onMediaSelect,
   totalData,
   sliderKey,
+  restrictUpAndDown = true,
 }) => {
   const sliderContentRef = useRef<HTMLDivElement>(null);
   const mediaHighlightRef = useRef<HTMLDivElement>(null);
@@ -65,18 +88,20 @@ export const Slider: FC<{
     disableAutoScroll,
   } = useCategoryNavigation({
     key: sliderKey,
+    enabled,
     lastHovered,
     onLeft,
     onMediaSelect,
     onHover,
     totalData,
+    restrictUpAndDown,
   });
   const previousFocused = usePrevious(focused);
 
   const highlightTranslateX = (mediaWidth + gap) * hovered;
 
   useEffect(() => {
-    onFirstVisibleChange(firstVisible);
+    onFirstVisibleChange?.(firstVisible);
   }, [firstVisible, onFirstVisibleChange]);
 
   useEffect(() => {
@@ -130,10 +155,10 @@ export const Slider: FC<{
   // ToDo: Add arrows to navigate through the media
 
   return (
-    <div ref={ref}>
+    <SliderContainer ref={ref}>
       <CategoryContent onScroll={handleScroll} ref={sliderContentRef}>
         {focused && !IS_TV && <MediaHighlight ref={mediaHighlightRef} />}
-        <CategoryContentWrapper mediaCount={data.length}>
+        <CategoryContentWrapper mediaCount={data.length + mediaPerPage}>
           {data.map((media, index) => {
             if (
               !media ||
@@ -149,9 +174,14 @@ export const Slider: FC<{
                 logoSrc={media.logo}
                 index={index}
                 onMouseEnter={handleHover(index)}
-                onClick={() => onMediaSelect(index)}
+                onClick={() => onMediaSelect?.(index)}
                 progress={media.progress}
-              />
+              >
+                {media.available === false && (
+                  <Unavailable>Not available yet</Unavailable>
+                )}
+                {media.text && <span>{media.text}</span>}
+              </MediaBox>
             );
           })}
         </CategoryContentWrapper>
@@ -162,6 +192,6 @@ export const Slider: FC<{
           <OuterMediaHighlight />
         </>
       )}
-    </div>
+    </SliderContainer>
   );
 };

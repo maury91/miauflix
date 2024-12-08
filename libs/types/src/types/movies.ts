@@ -25,7 +25,8 @@ export interface ExtendedMovieDto extends MovieDto {
   qualities: VideoQualityStr[];
 }
 
-export interface TrackMoviePlaybackRequest {
+export interface TrackPlaybackRequest {
   action: 'start' | 'pause' | 'stop';
+  type: 'movie' | 'episode';
   progress: number;
 }

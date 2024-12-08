@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { MediaDetails } from './components/mediaDetails';
-import { MediaDto } from '@miauflix/types';
+import { ExtendedMovieDto, ExtendedShowDto, MediaDto } from '@miauflix/types';
 import { Categories } from './components/categories';
 import { useGetExtendedInfoQuery } from '../../../store/api/medias';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -124,8 +124,6 @@ const HomeSidebar = () => {
   );
 };
 
-const TvShowPage = () => {};
-
 export const Home = () => {
   const [showCategories, setShowCategories] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
@@ -149,6 +147,7 @@ export const Home = () => {
   }, []);
 
   const navigateToCategoryList = useCallback(() => {
+    console.log('Navigate to category list');
     setShowCategories(true);
     setTimeout(() => {
       setSelectedMedia(null);
@@ -164,19 +163,15 @@ export const Home = () => {
         animate={{ opacity: currentPage === 'player' ? 0 : 1 }}
         exit={{ opacity: 0 }}
       >
-        <MediaDetails expanded={!!selectedMedia} />
+        <MediaDetails
+          expanded={!!selectedMedia}
+          expandedVisible={!showCategories}
+        />
         <Categories
           visible={!selectedMedia}
           onLeft={openSidebar}
           onMediaSelect={navigateToMedia}
         />
-        {selectedMedia &&
-          extendedMedia &&
-          (extendedMedia.type === 'movie' ? (
-            <MoviePage media={extendedMedia} visible={!showCategories} />
-          ) : (
-            <div />
-          ))}
       </FullScreenDiv>
       <HomeSidebar />
     </>

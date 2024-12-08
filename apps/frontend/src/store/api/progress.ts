@@ -1,4 +1,9 @@
-import { ProgressDto, TrackMoviePlaybackRequest } from '@miauflix/types';
+import {
+  MovieProgressDto,
+  ProgressDto,
+  ShowProgressDto,
+  TrackPlaybackRequest,
+} from '@miauflix/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '../../consts';
 
@@ -6,9 +11,17 @@ export const progressApi = createApi({
   reducerPath: 'progressApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/progress` }),
   endpoints: (builder) => ({
-    getProgress: builder.query<ProgressDto, number>({
+    getMoviesProgress: builder.query<MovieProgressDto[], number>({
       query: (userId) => ({
-        url: '',
+        url: 'movies',
+        headers: {
+          'x-user-id': `${userId}`,
+        },
+      }),
+    }),
+    getEpisodesProgress: builder.query<ShowProgressDto[], number>({
+      query: (userId) => ({
+        url: 'episodes',
         headers: {
           'x-user-id': `${userId}`,
         },
@@ -16,7 +29,7 @@ export const progressApi = createApi({
     }),
     trackMovieProgress: builder.mutation<
       void,
-      TrackMoviePlaybackRequest & { id: string; userId: number }
+      TrackPlaybackRequest & { id: string; userId: number }
     >({
       query: (body) => ({
         url: body.id,
@@ -27,11 +40,15 @@ export const progressApi = createApi({
         body: {
           action: body.action,
           progress: body.progress,
+          type: body.type,
         },
       }),
     }),
   }),
 });
 
-export const { useGetProgressQuery, useTrackMovieProgressMutation } =
-  progressApi;
+export const {
+  useGetMoviesProgressQuery,
+  useGetEpisodesProgressQuery,
+  useTrackMovieProgressMutation,
+} = progressApi;

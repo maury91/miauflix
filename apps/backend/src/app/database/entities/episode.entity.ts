@@ -89,6 +89,9 @@ export class Episode extends Model<
   @Column
   image!: string;
 
+  @Column
+  traktId!: number;
+
   @Default(false)
   @Column
   sourceFound!: boolean;

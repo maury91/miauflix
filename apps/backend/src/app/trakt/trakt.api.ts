@@ -16,6 +16,7 @@ import {
   UserProfileResponse,
   Show,
   ShowEpisode,
+  ShowEpisodeMinimal,
 } from './trakt.types';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -147,12 +148,16 @@ export class TraktApi {
   }
 
   public async playbackTracking(
-    media: Movie,
+    media: Movie | ShowEpisodeMinimal,
     type: 'movie' | 'show',
     action: 'start' | 'pause' | 'stop',
     progress: number,
     accessToken: string
   ) {
+    console.log({
+      [type === 'show' ? 'episode' : 'movie']: media,
+      progress,
+    });
     return this.post(
       `${this.apiUrl}/scrobble/${action}`,
       {
@@ -170,21 +175,37 @@ export class TraktApi {
   public async trackPlayback(
     slug: string,
     accessToken: string,
+    type: 'movie' | 'episode',
     action: 'start' | 'pause' | 'stop',
     progress: number
   ) {
+    if (type === 'episode') {
+      return this.playbackTracking(
+        { ids: { trakt: parseInt(slug, 10) } } as ShowEpisodeMinimal,
+        'show',
+        action,
+        progress,
+        accessToken
+      );
+    }
     const movie = await this.getMovieFromDB(slug);
     return this.playbackTracking(movie, 'movie', action, progress, accessToken);
   }
 
   @Cacheable(3e4 /* 30 seconds */)
-  public async getProgress(accessToken: string) {
+  public async getProgress<T extends 'movies' | 'episodes'>(
+    accessToken: string,
+    type: T
+  ) {
     return (
-      await this.get<ProgressResponse>(`${this.apiUrl}/sync/playback`, {
-        headers: {
-          Authorization: `bearer ${accessToken}`,
-        },
-      })
+      await this.get<ProgressResponse<T>>(
+        `${this.apiUrl}/sync/playback/${type}`,
+        {
+          headers: {
+            Authorization: `bearer ${accessToken}`,
+          },
+        }
+      )
     ).data;
   }
 

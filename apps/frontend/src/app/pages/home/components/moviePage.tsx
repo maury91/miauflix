@@ -1,12 +1,11 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { useAppDispatch } from '../../../../store/store';
 import {
   FocusContext,
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { MEDIA_PAGE } from '../consts';
+import { MOVIE_PAGE } from '../consts';
 import {
   useGetStreamUrlQuery,
   useStopStreamMutation,
@@ -17,32 +16,18 @@ import { setStreamUrl } from '../../../../store/slices/stream';
 import { navigateTo } from '../../../../store/slices/app';
 import LineMdPlay from '~icons/line-md/play';
 import { ExtendedMovieDto } from '@miauflix/types';
-import styled from 'styled-components';
 import { MediaButton } from './mediaButton';
-
-const MoviePageContainer = styled.div<{ margin: number; visible: boolean }>`
-  position: absolute;
-  top: 50vh;
-  left: ${({ margin }) => margin + window.innerWidth * 0.05}px;
-  right: ${({ margin }) => margin}px;
-  bottom: 0;
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
-  transition: opacity 0.3s;
-`;
 
 interface MoviePageProps {
   media: ExtendedMovieDto;
-  visible: boolean;
 }
 
-export const MoviePage: FC<MoviePageProps> = ({ media, visible }) => {
-  const { margin } = useMediaBoxSizes();
+export const MoviePage: FC<MoviePageProps> = ({ media }) => {
   const dispatch = useAppDispatch();
   const { focusKey, ref, focusSelf } = useFocusable({
-    focusKey: MEDIA_PAGE,
+    focusKey: MOVIE_PAGE,
     isFocusBoundary: true,
   });
-  // FixMe: Update to use the correct media type once tv shows are created
   const { data: streamInfo, isLoading } = useGetStreamUrlQuery(
     media
       ? {
@@ -87,7 +72,7 @@ export const MoviePage: FC<MoviePageProps> = ({ media, visible }) => {
 
   return (
     <FocusContext.Provider value={focusKey}>
-      <MoviePageContainer margin={margin / 2} visible={visible} ref={ref}>
+      <div ref={ref}>
         <MediaButton
           disabled={!streamInfo}
           icon={<LineMdPlay />}
@@ -97,7 +82,7 @@ export const MoviePage: FC<MoviePageProps> = ({ media, visible }) => {
         >
           Watch now
         </MediaButton>
-      </MoviePageContainer>
+      </div>
     </FocusContext.Provider>
   );
 };

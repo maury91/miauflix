@@ -37,6 +37,21 @@ export class JackettQueues {
     return false;
   }
 
+  public async prioritizeEpisodeTorrentSearch(
+    show: Show,
+    season: Season,
+    episode: Episode,
+    priority: number
+  ) {
+    const jobId = `search_torrents_${show.slug}_season_${season.number}_episode_${episode.number}`;
+    const job = await this.jackettQueue.getJob(jobId);
+    if (job) {
+      job.changePriority({ priority });
+      return job;
+    }
+    return false;
+  }
+
   public async requestTorrentMovieSearch(
     movie: Movie,
     index: number,

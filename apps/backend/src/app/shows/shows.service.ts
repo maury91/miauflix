@@ -80,8 +80,8 @@ export class ShowsService {
       network: show.network,
       seasonsCount: show.seasonsCount,
       seasons: show.seasons
-        .map((season) => season.number)
-        .sort((a, b) => a - b),
+        .sort((a, b) => a.number - b.number)
+        .map((season) => ({ number: season.number, title: season.title })),
     };
   }
 
@@ -96,6 +96,8 @@ export class ShowsService {
       network: season.network,
       episodes: season.episodes
         .map((episode) => ({
+          id: episode.id,
+          traktId: episode.traktId,
           number: episode.number,
           order: episode.order,
           title: episode.title,
@@ -148,6 +150,25 @@ export class ShowsService {
         return null;
       })
     );
+    // If an episode is missing a traktId get it
+    const missingTraktIdEpisodes = season.episodes.some(
+      (episode) => !episode.traktId
+    );
+    if (missingTraktIdEpisodes) {
+      const traktEpisodes = await this.traktService.getShowSeasonEpisodes(
+        slug,
+        seasonNumber
+      );
+      for (const traktEpisode of traktEpisodes) {
+        const episode = season.episodes.find(
+          (episode) => episode.number === traktEpisode.number
+        );
+        if (episode) {
+          await episode.update({ traktId: traktEpisode.ids.trakt });
+          episode.traktId = traktEpisode.ids.trakt;
+        }
+      }
+    }
     return ShowsService.mapSeasonToSeasonDto(season);
   }
 

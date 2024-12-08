@@ -1,32 +1,34 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   ArrowPressHandler,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
 import { IS_TV } from '../../../../consts';
 import { SLIDER_PREFIX } from '../consts';
-import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { setSelectedIndexForCategory } from '../../../../store/slices/home';
 import { useMediaBoxSizes } from './useMediaBoxSizes';
 
 interface UseCategoryNavigationArgs {
   key: string;
+  enabled: boolean;
   lastHovered: number;
-  onMediaSelect: (index: number) => void;
-  onLeft: () => void;
+  onMediaSelect?: (index: number) => void;
+  onLeft?: () => void;
   onHover: (index: number) => void;
   totalData: number;
+  restrictUpAndDown: boolean;
 }
 
 const noop = () => undefined;
 
 export const useCategoryNavigation = ({
   key,
+  enabled,
   lastHovered,
   onLeft,
   onMediaSelect,
   onHover,
   totalData,
+  restrictUpAndDown,
 }: UseCategoryNavigationArgs) => {
   const [firstVisible, setFirstVisible] = useState(lastHovered);
   const [firstItemToDisplay, setFirstItemToDisplay] = useState(lastHovered);
@@ -38,6 +40,7 @@ export const useCategoryNavigation = ({
   const move = useCallback(
     (direction: 'left' | 'right') => {
       const next = direction === 'left' ? hovered - 1 : hovered + 1;
+      console.log(next, totalData, key);
       if (next < 0 || next >= totalData) {
         return true;
       }
@@ -54,30 +57,34 @@ export const useCategoryNavigation = ({
       }
       return false;
     },
-    [firstVisible, hovered, totalData, mediaPerPage, onHover]
+    [hovered, totalData, key, onHover, firstVisible, mediaPerPage]
   );
 
   const onArrowPress: ArrowPressHandler = useCallback(
     (direction: string, props, details) => {
+      console.log('onArrowPress', direction);
       if (direction === 'left' || direction === 'right') {
         const isEnd = move(direction);
         if (isEnd && direction === 'left') {
-          onLeft();
+          onLeft?.();
           return false;
         }
         return isEnd;
       }
       // Disable focusable for up and down
       if (direction === 'up' || direction === 'down') {
-        return false;
+        console.log(restrictUpAndDown);
+        if (restrictUpAndDown) {
+          return false;
+        }
       }
       return true;
     },
-    [move, onLeft]
+    [move, onLeft, restrictUpAndDown]
   );
 
   const onEnterPress = useCallback(() => {
-    onMediaSelect(hovered);
+    onMediaSelect?.(hovered);
   }, [hovered, onMediaSelect]);
 
   const { focused, ref, focusSelf } = useFocusable({
@@ -106,7 +113,7 @@ export const useCategoryNavigation = ({
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useCallback(
         (index: number) => () => {
-          if (Date.now() - lastKeyboardMovement > 500) {
+          if (Date.now() - lastKeyboardMovement > 500 && enabled) {
             if (!focused) {
               setDisableAutoScroll(true);
               focusSelf();
@@ -118,7 +125,7 @@ export const useCategoryNavigation = ({
             onHover(index);
           }
         },
-        [focusSelf, focused, lastKeyboardMovement, onHover]
+        [enabled, focusSelf, focused, lastKeyboardMovement, onHover]
       );
   /** end web only **/
 
@@ -126,7 +133,7 @@ export const useCategoryNavigation = ({
     firstItemToDisplay,
     handleHover,
     ref,
-    focused,
+    focused: focused && enabled,
     hovered,
     handleScroll,
     firstVisible,

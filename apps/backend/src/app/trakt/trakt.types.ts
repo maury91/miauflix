@@ -128,7 +128,13 @@ export type ShowSeason<E extends boolean> = E extends true
   ? ShowSeasonExtended
   : ShowSeasonSimple;
 
-export interface ShowEpisodeSimple {
+export interface ShowEpisodeMinimal {
+  ids: {
+    trakt: number;
+  };
+}
+
+export interface ShowEpisodeSimple extends ShowEpisodeMinimal {
   season: number;
   number: number;
   title: string;
@@ -204,9 +210,12 @@ export type EpisodeProgress = {
   id: number;
   type: 'episode';
   episode: ShowEpisode<false>;
+  show: ShowSimple;
 };
 
-export type ProgressResponse = (MovieProgress | EpisodeProgress)[];
+export type ProgressResponse<T> = (T extends 'movies'
+  ? MovieProgress
+  : EpisodeProgress)[];
 
 export type SearchMoviesResponse = {
   type: 'movie';

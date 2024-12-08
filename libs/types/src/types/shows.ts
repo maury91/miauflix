@@ -22,10 +22,12 @@ export interface ExtendedShowDto extends ShowDto {
   airedEpisodes: number;
   network: string;
   seasonsCount: number;
-  seasons: number[];
+  seasons: { number: number; title: string }[];
 }
 
 export interface EpisodeDto {
+  id: number;
+  traktId: number;
   number: number;
   order: number;
   title: string;

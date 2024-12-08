@@ -76,6 +76,7 @@ export const MediaButton: FC<MediaButtonProps> = ({
     onEnterPress: handleOnClick,
   });
 
+  // ToDo: if disabled but not loading display an error icon
   return (
     <StyledMediaButton
       focused={focused}

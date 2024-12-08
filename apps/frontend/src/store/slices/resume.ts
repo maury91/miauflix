@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { progressApi } from '../api/progress';
 
 export interface ResumeState {
-  mediaProgress: Record<string, number>;
+  movieProgress: Record<string, number>;
+  showProgress: Record<string, Record<string, number>>;
 }
 
 const initialState: ResumeState = {
-  mediaProgress: {},
+  movieProgress: {},
+  showProgress: {},
 };
 
 export const resumeSlice = createSlice({
@@ -17,15 +19,28 @@ export const resumeSlice = createSlice({
       state,
       action: PayloadAction<{ mediaId: string; progress: number }>
     ) => {
-      state.mediaProgress[action.payload.mediaId] = action.payload.progress;
+      state.movieProgress[action.payload.mediaId] = action.payload.progress;
     },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      progressApi.endpoints.getProgress.matchFulfilled,
+      progressApi.endpoints.getMoviesProgress.matchFulfilled,
       (state, action) => {
-        for (const mediaProgress of action.payload) {
-          state.mediaProgress[mediaProgress.movie.id] = mediaProgress.progress;
+        for (const movieProgress of action.payload) {
+          state.movieProgress[movieProgress.movie.id] = movieProgress.progress;
+        }
+      }
+    );
+    builder.addMatcher(
+      progressApi.endpoints.getEpisodesProgress.matchFulfilled,
+      (state, action) => {
+        for (const movieProgress of action.payload) {
+          if (!state.showProgress[movieProgress.show.id]) {
+            state.showProgress[movieProgress.show.id] = {};
+          }
+          state.showProgress[movieProgress.show.id][
+            `${movieProgress.season}-${movieProgress.episode}`
+          ] = movieProgress.progress;
         }
       }
     );

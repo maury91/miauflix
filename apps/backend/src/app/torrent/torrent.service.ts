@@ -22,6 +22,8 @@ import { TorrentOrchestratorQueues } from './torrent.orchestrator.queues';
 import { TorrentQueues } from './torrent.queues';
 import path from 'node:path';
 import BitField from 'bitfield';
+import { ShowsData } from '../shows/shows.data';
+import { stat } from 'node:fs/promises';
 
 const TORRENT_PATH = '/tmp';
 
@@ -33,7 +35,6 @@ const retryPromise = <T>(
   delay = 3000
 ): Promise<T> => {
   return fn().catch((err) => {
-    console.error('Error in promise', err);
     if (retries > 0) {
       return sleep(delay).then(() => retryPromise(fn, retries - 1, delay));
     }
@@ -63,6 +64,7 @@ export class TorrentService {
     private readonly httpService: HttpService,
     private readonly torrentData: TorrentData,
     private readonly moviesData: MoviesData,
+    private readonly showsData: ShowsData,
     @Inject(asyncProviders.parseTorrent)
     private parseTorrent: ParseTorrentImport,
     @Inject(asyncProviders.webTorrent)
@@ -106,7 +108,6 @@ export class TorrentService {
           'href' in err.request._options
         ) {
           if (err.request._options.href.startsWith('magnet')) {
-            console.log('magnet redirect detected');
             return {
               data: err.request._options.href,
             };
@@ -235,7 +236,7 @@ export class TorrentService {
             console.log('Torrent progress', torrent.progress);
             torrent.destroy(
               {
-                destroyStore: torrent.progress < 0.5,
+                destroyStore: false, // torrent.progress < 0.5,
               },
               (err) => {
                 if (err) {
@@ -253,20 +254,30 @@ export class TorrentService {
     });
   }
 
-  private getVideoInformation(file: TorrentFile) {
+  private async getVideoInformation(file: TorrentFile) {
+    const filePath = path.join(TORRENT_PATH, file.path);
     return new Promise((resolve, reject) => {
-      ffmpeg.ffprobe(path.join(TORRENT_PATH, file.path), (err, metadata) => {
-        if (err) {
-          reject(err);
-        } else {
-          console.log(metadata);
-          resolve(metadata);
-        }
-      });
+      stat(filePath)
+        .then(() => {
+          try {
+            ffmpeg.ffprobe(filePath, (err, metadata) => {
+              if (err) {
+                reject(err);
+              } else {
+                console.log(metadata);
+                resolve(metadata);
+              }
+            });
+          } catch (err) {
+            console.log('Torrent file does not exists yet');
+            reject(err);
+          }
+        })
+        .catch(reject);
     });
   }
 
-  private async getTorrent(
+  private async getMovieTorrent(
     slug: string,
     useHevc: boolean,
     useLowQuality: boolean
@@ -331,7 +342,6 @@ export class TorrentService {
     }
 
     while (true) {
-      console.log('Checking again for torrent data');
       const torrentData = await this.torrentData.getTorrentByMovieAndQuality(
         slug,
         useHevc,
@@ -345,12 +355,99 @@ export class TorrentService {
     }
   }
 
+  private async getEpisodeTorrent(
+    episodeId: number,
+    useHevc: boolean,
+    useLowQuality: boolean
+  ) {
+    const torrentData = await this.torrentData.getTorrentByEpisodeAndQuality(
+      episodeId,
+      useHevc,
+      useLowQuality
+    );
+
+    if (torrentData) {
+      return torrentData;
+    }
+
+    // Fallback
+    // We assume it has an episode because we are at the streaming point
+    const episode = await this.showsData.findEpisode(episodeId);
+    if (!episode.sourcesSearched) {
+      console.log('No source has been searched, searching...');
+      const season = await this.showsData.findSeason(episode.seasonId);
+      const show = await this.showsData.findShowFromDb(season.showId);
+      const jackettJob =
+        (await this.jackettQueuesService.prioritizeEpisodeTorrentSearch(
+          show,
+          season,
+          episode,
+          1
+        )) ||
+        (await this.jackettQueuesService.requestTorrentEpisodeSearch(
+          show,
+          season,
+          episode,
+          1
+        ));
+
+      console.log('Waiting for search job');
+      await this.jackettQueuesService.waitForJob(jackettJob);
+      console.log('Search job finished');
+    } else {
+      // Create torrent orchestrator job
+      const requestScanJob =
+        await this.torrentOrchestratorQueuesService.requestScanEpisodeTorrents(
+          episode.id,
+          0,
+          0
+        );
+      // Wait to know what jobs have been added
+      const createdJobs =
+        await this.torrentOrchestratorQueuesService.waitForJob(requestScanJob);
+      const wantedJob = calculateJobId({
+        mediaId: episode.id,
+        mediaType: 'movie',
+        hevc: useHevc,
+        highQuality: !useLowQuality,
+      });
+      // FixMe: Use the same logic as in getTorrentByMovieAndQuality
+      // Change priority of the job
+      if (createdJobs.includes(wantedJob)) {
+        while (true) {
+          const job = await this.torrentQueuesService.getJob(wantedJob);
+          if (job) {
+            await job.changePriority({
+              priority: 1,
+            });
+            break;
+          }
+          await sleep(100);
+        }
+      }
+    }
+
+    while (true) {
+      const torrentData = await this.torrentData.getTorrentByEpisodeAndQuality(
+        episodeId,
+        useHevc,
+        useLowQuality
+      );
+      if (torrentData) {
+        console.log('torrent data found');
+        return torrentData;
+      }
+      await sleep(100);
+    }
+  }
+
   public async getStream(
+    type: 'movie' | 'episode',
     slug: string,
     useHevc: boolean,
     useLowQuality: boolean
   ): Promise<{ stream: string; streamKey: string }> {
-    const streamKey = `${slug}_${useHevc ? 'H' : 'x'}${
+    const streamKey = `${type}_${slug}_${useHevc ? 'H' : 'x'}${
       useLowQuality ? 'L' : 'x'
     }`;
     if (this.streams[streamKey]) {
@@ -360,11 +457,9 @@ export class TorrentService {
       };
     }
     console.log('Searching DB');
-    const { data: torrentFile, videos } = await this.getTorrent(
-      slug,
-      useHevc,
-      useLowQuality
-    );
+    const { data: torrentFile, videos } = await (type === 'movie'
+      ? this.getMovieTorrent(slug, useHevc, useLowQuality)
+      : this.getEpisodeTorrent(parseInt(slug, 10), useHevc, useLowQuality));
     console.log('Got torrent from DB');
     const bitfieldBuffer = await this.cacheManager.get<string>(
       `torrent:${streamKey}:bitfield`
@@ -402,7 +497,9 @@ export class TorrentService {
                 end = i;
               }
             }
-            retryPromise(() => this.getVideoInformation(file));
+            retryPromise(() => this.getVideoInformation(file)).catch((err) => {
+              console.error('Could not get video information', err);
+            });
             file.on('error', (err) => {
               console.error('File error', err);
             });

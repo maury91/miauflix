@@ -175,6 +175,66 @@ export class TorrentData {
     return null;
   }
 
+  async getTorrentByEpisodeAndQuality(
+    episodeId: number,
+    useHevc: boolean,
+    useLowQuality: boolean
+  ) {
+    const bestSource = await this.episodeSourceModel.findOne({
+      attributes: ['data', 'videos'],
+      where: {
+        episodeId,
+        codec: {
+          [useHevc ? Op.like : Op.notLike]: '%x265%',
+        },
+        ...(useLowQuality
+          ? {
+              quality: {
+                [Op.lte]: 180,
+              },
+            }
+          : {}),
+      },
+      order: [['quality', 'DESC']],
+      raw: true,
+    });
+
+    if (bestSource) {
+      return bestSource;
+    }
+
+    const sameCodec = await this.episodeSourceModel.findOne({
+      attributes: ['data', 'videos'],
+      where: {
+        episodeId,
+        codec: {
+          [useHevc ? Op.like : Op.notLike]: '%x265%',
+        },
+      },
+      order: [['quality', 'DESC']],
+      raw: true,
+    });
+
+    if (sameCodec) {
+      return sameCodec;
+    }
+
+    const highestQuality = await this.episodeSourceModel.findOne({
+      attributes: ['data', 'videos'],
+      where: {
+        episodeId,
+      },
+      order: [['quality', 'DESC']],
+      raw: true,
+    });
+
+    if (highestQuality) {
+      return highestQuality;
+    }
+
+    return null;
+  }
+
   async getTorrentsToProcess() {
     const notProcessedMovies = await this.movieModel.findAll({
       attributes: ['id'],

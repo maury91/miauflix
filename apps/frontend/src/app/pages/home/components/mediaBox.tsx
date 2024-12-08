@@ -5,10 +5,10 @@ export const MEDIA_BOX_HEIGHT = 20;
 export const MEDIA_BOX_WIDTH = MEDIA_BOX_HEIGHT * (16 / 9);
 
 export const MediaBox = styled.div<{
-  src: string;
   index: number;
   logoSrc?: string;
   progress?: number;
+  src: string;
 }>`
   border-radius: 0.7vh;
   background: ${({ logoSrc, src }) =>
@@ -23,6 +23,19 @@ export const MediaBox = styled.div<{
   top: ${MEDIA_BOX_HEIGHT * 0.015}vh;
   left: ${(props) => props.index * 37.2 + MEDIA_BOX_HEIGHT * 0.015}vh;
   cursor: pointer;
+  overflow: hidden;
+
+  span {
+    position: absolute;
+    bottom: 1vh;
+    left: 1vh;
+    font-size: 2vh;
+    padding: 0.2vh 0.6vh;
+    color: ${PALETTE.text.primary};
+    background: rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    z-index: 2;
+  }
 
   ${({ progress }) =>
     progress &&
@@ -49,7 +62,7 @@ export const MediaHighlight = styled.div`
 `;
 
 export const OuterMediaHighlight = styled(MediaHighlight)`
-  top: 6vh;
+  top: 0vh;
 `;
 
 export const OuterMediaHighlightBackground = styled.div`
