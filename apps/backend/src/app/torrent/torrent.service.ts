@@ -236,7 +236,7 @@ export class TorrentService {
             console.log('Torrent progress', torrent.progress);
             torrent.destroy(
               {
-                destroyStore: false, // torrent.progress < 0.5,
+                destroyStore: torrent.progress < 0.2,
               },
               (err) => {
                 if (err) {
