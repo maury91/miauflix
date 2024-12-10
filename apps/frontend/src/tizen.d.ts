@@ -5,6 +5,28 @@ export interface TrackInfo {
   type: 'AUDIO' | 'VIDEO' | 'TEXT';
 }
 
+export interface VideoTrackExtraInfo {
+  fourCC: string; // Codec, example: H264
+  Width: number;
+  height: number;
+  Bit_rate: number;
+}
+
+export interface AudioTrackExtraInfo {
+  fourCC: string; // Codec, example: AACL
+  language: string;
+  channels: number;
+  sample_rate: number;
+  bit_rate: number;
+}
+
+export interface TextTrackExtraInfo {
+  fourCC: string; // Format, example: TTML
+  track_num: number;
+  track_lang: string;
+  subtitle_type: string;
+}
+
 export type TVInputDeviceKeyName =
   | '0'
   | '1'

@@ -1,0 +1,92 @@
+import { IS_TIZEN } from '../../../../consts';
+import { TizenPlayer } from './tizen/tizenPlayer';
+import { Player, PlayerStatus, Track } from './playerClassAbstract';
+import { useEffect, useMemo, useState } from 'react';
+
+const getPlayer = (): Player | null => {
+  if (IS_TIZEN) {
+    return new TizenPlayer();
+  }
+  return null;
+};
+
+interface UsePlayerArgs {
+  initialPosition: number;
+  streamUrl: string;
+  audioLanguage?: string;
+  subtitleLanguage?: string;
+  subtitleEnabled?: boolean;
+}
+
+export const usePlayer = ({
+  initialPosition,
+  streamUrl,
+  audioLanguage = 'en',
+  subtitleEnabled = true,
+  subtitleLanguage = 'en',
+}: UsePlayerArgs) => {
+  const player = useMemo(() => getPlayer(), []);
+
+  if (!player) {
+    throw new Error('Player not supported');
+  }
+
+  const [audioTracks, setAudioTracks] = useState<Track[]>([]);
+  const [subtitleTracks, setSubtitleTracks] = useState<Track[]>([]);
+
+  useEffect(() => {
+    return player.on('ready', () => {
+      setAudioTracks(player.getAudioTracks());
+      setSubtitleTracks(player.getSubtitleTracks());
+      if (subtitleEnabled) {
+        player.enableSubtitle();
+      } else {
+        player.disableSubtitle();
+      }
+      player.play();
+    });
+  }, [player, subtitleEnabled]);
+
+  useEffect(() => {
+    const audioTrack = audioTracks.find(
+      (track) => track.language === audioLanguage
+    );
+    if (audioTrack) {
+      player.setAudioTrack(audioTrack);
+    }
+  }, [audioLanguage, audioTracks, player]);
+
+  useEffect(() => {
+    const subtitleTrack = subtitleTracks.find(
+      (track) => track.language === subtitleLanguage
+    );
+    if (subtitleTrack) {
+      player.setSubtitleTrack(subtitleTrack);
+    }
+  }, [player, subtitleLanguage, subtitleTracks]);
+
+  useEffect(() => {
+    if (player.isReady()) {
+      if (subtitleEnabled) {
+        player.enableSubtitle();
+      } else {
+        player.disableSubtitle();
+      }
+    }
+  }, [player, subtitleEnabled]);
+
+  useEffect(() => {
+    player.seekTo(player.videoLength() * (initialPosition / 100));
+  }, [initialPosition, player]);
+
+  useEffect(() => {
+    if (streamUrl) {
+      player.init(streamUrl).catch((err) => {
+        // ToDo: better handling: show the error in the screen, maybe add a button to try again
+        console.error('Failed to open video', err);
+      });
+    }
+  }, [streamUrl, player]);
+
+  return player;
+};

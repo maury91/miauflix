@@ -1,15 +1,37 @@
-import { Player, PlayerEvents, Track } from '../playerClassAbstract';
-import { AVPlayListeners } from '../../../../../tizen';
+import {
+  Player,
+  PlayerEvents,
+  PlayerLanguage,
+  PlayerStatus,
+  Track,
+} from '../playerClassAbstract';
+import {
+  AudioTrackExtraInfo,
+  AVPlayListeners,
+  TextTrackExtraInfo,
+  TrackInfo,
+} from '../../../../../tizen';
 
 type Listeners = {
   [E in keyof PlayerEvents]: ((data: PlayerEvents[E]) => void)[];
+};
+
+// ToDo: extend it
+const languageMap: Record<PlayerLanguage, RegExp> = {
+  en: /^en$|^eng|^en-/i,
+  es: /^es$|^spa|^es-|^esa/i,
+  it: /^it$|^ita|^it-/i,
+  de: /^de$|^ger|^de-/i,
+  fr: /^fr$|^fra|^fr-/i,
+  lt: /^lt$|^lit|^lt-/i,
 };
 
 export class TizenPlayer implements Player {
   private videoDuration = 0;
   private currentTime = 0;
   private currentSubtitle = '';
-  private subtitlesEnabled = true; // ToDo: Make subtitles toggleable
+  private subtitlesEnabled = true;
+  private ready = false;
   private listeners: Listeners = {
     length: [],
     currentTime: [],
@@ -19,34 +41,88 @@ export class TizenPlayer implements Player {
     ready: [],
   };
 
-  private is4KSupported() {
-    return window.webapis.productinfo.isUdPanelSupported();
+  private static standardizeLanguage(
+    rawLanguage: string
+  ): PlayerLanguage | null {
+    // Possible values: en, eng, english
+    for (const [language, regex] of Object.entries(languageMap)) {
+      if (regex.test(rawLanguage.trim())) {
+        return language as PlayerLanguage;
+      }
+    }
+    console.log(`Language not supported: "${rawLanguage}"`);
+    return null;
+  }
+  private static getTrackLanguage(track: TrackInfo) {
+    if (track.type === 'AUDIO') {
+      try {
+        const trackInfo = JSON.parse(
+          track.extra_info
+        ) satisfies AudioTrackExtraInfo;
+        return TizenPlayer.standardizeLanguage(trackInfo.language);
+      } catch {
+        //
+      }
+    }
+    if (track.type === 'TEXT') {
+      try {
+        const trackInfo = JSON.parse(
+          track.extra_info
+        ) satisfies TextTrackExtraInfo;
+        return TizenPlayer.standardizeLanguage(trackInfo.track_lang);
+      } catch {
+        //
+      }
+    }
+    const match = track.extra_info.match(/"\w*lang[^"]*"\s*:\s*"([^"]*)"/);
+    if (match) {
+      return TizenPlayer.standardizeLanguage(match[1]);
+    }
+    return null;
   }
 
+  private is4KSupported() {
+    try {
+      return window.webapis.productinfo.isUdPanelSupported();
+    } catch {
+      return false;
+    }
+  }
   private set4K() {
     if (this.is4KSupported()) {
-      window.webapis.avplay.setStreamingProperty('SET_MODE_4K', 'true');
-      return true;
+      try {
+        window.webapis.avplay.setStreamingProperty('SET_MODE_4K', 'true');
+        return true;
+      } catch {
+        //
+      }
     }
     return false;
   }
 
   private is8KSupported() {
-    return window.webapis.productinfo.is8KPanelSupported();
+    try {
+      return window.webapis.productinfo.is8KPanelSupported();
+    } catch {
+      return false;
+    }
   }
-
   private set8K() {
     if (this.is8KSupported()) {
-      window.webapis.avplay.setStreamingProperty(
-        'ADAPTIVE_INFO',
-        'FIXED_MAX_RESOLUTION=7680x4320'
-      );
-      return true;
+      try {
+        window.webapis.avplay.setStreamingProperty(
+          'ADAPTIVE_INFO',
+          'FIXED_MAX_RESOLUTION=7680x4320'
+        );
+        return true;
+      } catch {
+        //
+      }
     }
     return false;
   }
 
-  private setTrack(type: 'AUDIO' | 'VIDEO' | 'TEXT', index: number) {
+  private setTrack(type: 'AUDIO' | 'TEXT', index: number) {
     try {
       window.webapis.avplay.setSelectTrack(type, index);
       return true;
@@ -55,14 +131,14 @@ export class TizenPlayer implements Player {
       return false;
     }
   }
-
-  private getTracks(type: 'AUDIO' | 'VIDEO' | 'TEXT'): Track[] {
+  private getTracks(type: 'AUDIO' | 'TEXT'): Track[] {
     try {
-      const trackInfo = window.webapis.avplay.getTotalTrackInfo();
-      const tracks = trackInfo.filter((track) => track.type === type);
+      const tracks = window.webapis.avplay
+        .getTotalTrackInfo()
+        .filter((track) => track.type === type);
       return tracks.map((track) => ({
         index: track.index,
-        language: this.getTrackLanguage(track.extra_info),
+        language: TizenPlayer.getTrackLanguage(track),
       }));
     } catch (error) {
       this.onError(error);
@@ -71,16 +147,8 @@ export class TizenPlayer implements Player {
     return [];
   }
 
-  private getTrackLanguage(extraInfo: string) {
-    const match = extraInfo.match(/lang[^:]*:([^:]*)/);
-    if (match) {
-      return match[1];
-    }
-    return null;
-  }
-
   private getResolution(): Promise<{ width: number; height: number }> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       window.tizen.systeminfo.getPropertyValue(
         'DISPLAY',
         function successHandler(data) {
@@ -95,62 +163,14 @@ export class TizenPlayer implements Player {
       );
     });
   }
-
-  private updateDuration() {
-    const duration = window.webapis.avplay.getDuration();
-    if (duration !== this.videoDuration) {
-      this.videoDuration = duration;
-      this.listeners.length.forEach((cb) => cb(duration));
-    }
-  }
-
-  private updateTime(currentTime: number) {
-    if (this.currentTime !== currentTime) {
-      this.currentTime = currentTime;
-      this.listeners.currentTime.forEach((cb) => cb(currentTime));
-    }
-  }
-
-  private updateSubtitle(text: string) {
-    if (this.currentSubtitle !== text) {
-      this.currentSubtitle = text;
-      this.listeners.subtitle.forEach((cb) => cb(text));
-    }
-  }
-
-  private onError(error: unknown) {
-    if (error instanceof Error) {
-      this.listeners.error.forEach((cb) => cb(error));
-    } else if (typeof error === 'string') {
-      this.listeners.error.forEach((cb) => cb(new Error(error)));
-    } else {
-      this.listeners.error.forEach((cb) => cb(error));
-    }
-  }
-
-  private onReady() {
-    this.listeners.ready.forEach((cb) => cb());
-  }
-
   private getListeners(): Partial<AVPlayListeners> {
     return {
-      onbufferingcomplete: this.updateDuration,
       oncurrentplaytime: this.updateTime,
-      onstreamcompleted: () => {
-        this.stop();
-      },
+      onstreamcompleted: this.stop,
       onsubtitlechange: (_duration: number, text: string) => {
         this.updateSubtitle(text);
       },
     };
-  }
-
-  private getState() {
-    return window.webapis.avplay.getState();
-  }
-
-  private updateState(state: 'PLAYING' | 'READY' | 'IDLE' | 'PAUSED') {
-    this.listeners.status.forEach((cb) => cb(state));
   }
 
   private setSubtitlesEnabled(enabled: boolean): boolean {
@@ -163,6 +183,58 @@ export class TizenPlayer implements Player {
       return true;
     }
     return false;
+  }
+
+  private updateDuration = () => {
+    const duration = window.webapis.avplay.getDuration();
+    if (duration !== this.videoDuration) {
+      this.videoDuration = duration;
+      this.listeners.length.forEach((cb) => cb(duration));
+    }
+  };
+  private updateTime = (currentTime: number) => {
+    if (this.currentTime !== currentTime) {
+      this.currentTime = currentTime;
+      this.listeners.currentTime.forEach((cb) => cb(currentTime));
+    }
+  };
+
+  private updateSubtitle(text: string) {
+    if (this.currentSubtitle !== text) {
+      this.currentSubtitle = text;
+      this.listeners.subtitle.forEach((cb) => cb(text));
+    }
+  }
+  private onError = (error: unknown) => {
+    console.error(error);
+    if (error instanceof Error) {
+      this.listeners.error.forEach((cb) => cb(error));
+    } else if (typeof error === 'string') {
+      this.listeners.error.forEach((cb) => cb(new Error(error)));
+    } else {
+      this.listeners.error.forEach((cb) => cb(error));
+    }
+  };
+
+  private onReady() {
+    this.ready = true;
+    this.listeners.ready.forEach((cb) => cb());
+  }
+  private getState() {
+    return window.webapis.avplay.getState();
+  }
+
+  private updateState(state: PlayerStatus) {
+    this.listeners.status.forEach((cb) => cb(state));
+  }
+
+  private prepare(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      window.webapis.avplay.prepareAsync(resolve, reject);
+    });
+  }
+  private prepareAndPlay() {
+    window.webapis.avplay.prepareAsync(this.play, this.onError);
   }
 
   async init(url: string): Promise<boolean> {
@@ -183,6 +255,11 @@ export class TizenPlayer implements Player {
       if (!this.set8K()) {
         this.set4K();
       }
+
+      await this.prepare();
+      this.updateDuration();
+      this.onReady();
+
       return true;
     } catch (error) {
       this.onError(error);
@@ -190,7 +267,7 @@ export class TizenPlayer implements Player {
     }
   }
 
-  pause(): boolean {
+  pause = (): boolean => {
     const playerState = this.getState();
 
     if (playerState === 'PLAYING' || playerState === 'READY') {
@@ -200,14 +277,8 @@ export class TizenPlayer implements Player {
       this.updateState('PAUSED');
     }
     return true;
-  }
-
-  private prepareAndPlay() {
-    window.webapis.avplay.prepareAsync(this.play, this.onError);
-    this.onReady();
-  }
-
-  play(): boolean {
+  };
+  play = (): boolean => {
     try {
       switch (this.getState()) {
         case 'IDLE':
@@ -229,9 +300,8 @@ export class TizenPlayer implements Player {
       this.onError(error);
     }
     return false;
-  }
-
-  stop(): boolean {
+  };
+  stop = (): boolean => {
     const playerState = this.getState();
 
     if (playerState === 'PLAYING' || playerState === 'PAUSED') {
@@ -244,9 +314,8 @@ export class TizenPlayer implements Player {
     this.updateSubtitle('');
     this.updateState('IDLE');
     return true;
-  }
-
-  fastForward(ms: number): boolean {
+  };
+  fastForward = (ms: number): boolean => {
     const newTime = this.currentTime + ms;
 
     if (newTime > this.videoDuration) {
@@ -262,9 +331,8 @@ export class TizenPlayer implements Player {
       this.onError(error);
     }
     return false;
-  }
-
-  rewind(ms: number): boolean {
+  };
+  rewind = (ms: number): boolean => {
     const newTime = this.currentTime - ms;
 
     if (newTime < 0) {
@@ -280,54 +348,49 @@ export class TizenPlayer implements Player {
       this.onError(error);
     }
     return false;
-  }
-
-  videoLength(): number {
+  };
+  videoLength = (): number => {
     return this.videoDuration;
-  }
-  seekTo(time: number): boolean {
+  };
+  seekTo = (time: number): boolean => {
     return window.webapis.avplay.seekTo(time) === 'success';
-  }
-  played(): number {
+  };
+  played = (): number => {
     return this.currentTime;
-  }
-  togglePlay(): boolean {
+  };
+  togglePlay = (): boolean => {
     if (this.getState() === 'PLAYING') {
       return this.pause();
     }
     return this.play();
-  }
-  close(): boolean {
+  };
+  close = (): boolean => {
+    this.ready = false;
+    this.updateState('NONE');
     return window.webapis.avplay.close() === 'success';
-  }
-  getVideoTracks(): Track[] {
-    return this.getTracks('VIDEO');
-  }
-  getAudioTracks(): Track[] {
+  };
+  getAudioTracks = (): Track[] => {
     return this.getTracks('AUDIO');
-  }
-  getSubtitleTracks(): Track[] {
+  };
+  getSubtitleTracks = (): Track[] => {
     return this.getTracks('TEXT');
-  }
-  setVideoTrack(track: Track): boolean {
-    return this.setTrack('VIDEO', track.index);
-  }
-  setAudioTrack(track: Track): boolean {
+  };
+  setAudioTrack = (track: Track): boolean => {
     return this.setTrack('AUDIO', track.index);
-  }
-  setSubtitleTrack(track: Track): boolean {
+  };
+  setSubtitleTrack = (track: Track): boolean => {
     return this.setTrack('TEXT', track.index);
-  }
-  enableSubtitle(): boolean {
+  };
+  enableSubtitle = (): boolean => {
     return this.setSubtitlesEnabled(true);
-  }
-  disableSubtitle(): boolean {
+  };
+  disableSubtitle = (): boolean => {
     return this.setSubtitlesEnabled(false);
-  }
-  toggleSubtitle(): boolean {
+  };
+  toggleSubtitle = (): boolean => {
     return this.setSubtitlesEnabled(!this.subtitlesEnabled);
-  }
-  setCustomSubtitle(url: string): Promise<boolean> {
+  };
+  setCustomSubtitle = (url: string): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       const subtitleFileName = 'subtitle' + new Date().getTime();
       const download = new window.tizen.DownloadRequest(
@@ -338,7 +401,7 @@ export class TizenPlayer implements Player {
 
       // Subtitles needs to be on device to get loaded
       window.tizen.download.start(download, {
-        oncompleted: (id, fullPath) => {
+        oncompleted: (_id, fullPath) => {
           window.tizen.filesystem.resolve(
             'wgt-private-tmp',
             (dir) => {
@@ -350,7 +413,7 @@ export class TizenPlayer implements Player {
                     packageURI + '/' + subtitleFileName + '.smi'
                   ) === 'success'
                 );
-              } catch (e) {
+              } catch {
                 // On 2015 different format of the URI is needed
                 const packageURI =
                   dir.toURI().replace('file://', '') +
@@ -362,18 +425,31 @@ export class TizenPlayer implements Player {
                 );
               }
             },
-            this.onError,
+            (error) => {
+              reject(error);
+              this.onError(error);
+            },
             'r'
           );
         },
       });
     });
-  }
+  };
+
+  isReady = (): boolean => {
+    return this.ready;
+  };
 
   on<T extends keyof PlayerEvents>(
     event: T,
     callback: (data: PlayerEvents[T]) => void
-  ): void {
+  ): () => void {
     this.listeners[event].push(callback);
+    return () => {
+      const listenerIndex = this.listeners[event].indexOf(callback);
+      if (listenerIndex !== -1) {
+        this.listeners[event].splice(listenerIndex, 1);
+      }
+    };
   }
 }

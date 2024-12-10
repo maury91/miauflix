@@ -1,11 +1,15 @@
+export type PlayerLanguage = 'en' | 'es' | 'it' | 'de' | 'fr' | 'lt'; // Add more languages in the future
 export interface Track {
   index: number;
-  language: string | null;
+  language: PlayerLanguage | null;
 }
+
+export type PlayerStatus = 'NONE' | 'PLAYING' | 'READY' | 'IDLE' | 'PAUSED';
+
 export interface PlayerEvents {
   length: number;
   currentTime: number;
-  status: 'PLAYING' | 'READY' | 'IDLE' | 'PAUSED';
+  status: PlayerStatus;
   subtitle: string;
   error: Error | unknown;
   ready: void;
@@ -15,7 +19,7 @@ export abstract class Player {
   abstract on<T extends keyof PlayerEvents>(
     event: T,
     callback: (data: PlayerEvents[T]) => void
-  ): void;
+  ): () => void;
   abstract init(url: string): Promise<boolean>;
   abstract pause(): boolean;
   abstract play(): boolean;
@@ -27,14 +31,13 @@ export abstract class Player {
   abstract seekTo(time: number): boolean;
   abstract played(): number;
   abstract close(): boolean;
-  abstract getVideoTracks(): Track[];
   abstract getAudioTracks(): Track[];
   abstract getSubtitleTracks(): Track[];
-  abstract setVideoTrack(track: Track): boolean;
   abstract setAudioTrack(track: Track): boolean;
   abstract setSubtitleTrack(track: Track): boolean;
   abstract enableSubtitle(): boolean;
   abstract disableSubtitle(): boolean;
   abstract toggleSubtitle(): boolean;
   abstract setCustomSubtitle(url: string): Promise<boolean>;
+  abstract isReady(): boolean;
 }
