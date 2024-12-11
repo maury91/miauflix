@@ -12,6 +12,9 @@ import {
 } from '../pages/home/components/mediaBox';
 import styled from 'styled-components';
 import { usePrevious } from '../hooks/usePrevious';
+import { LoadingIndicator } from '../ui-elements/loadingIndicator';
+import { setFocus } from '@noriginmedia/norigin-spatial-navigation';
+import { SLIDER_PREFIX } from '../pages/home/consts';
 
 const CategoryContent = styled.div`
   position: relative;
@@ -42,14 +45,20 @@ const Unavailable = styled.div`
   background: black;
 `;
 
+export const setFocusOnSlider = (sliderKey: string | number) => {
+  setFocus(`${SLIDER_PREFIX}${sliderKey}`);
+};
+
 export const Slider: FC<{
   data: Array<{
     backdrop: string;
-    id: string;
+    id: React.Key;
     logo?: string;
     available?: boolean;
     progress: number;
     text?: string;
+    playable?: boolean;
+    loading?: boolean;
   } | null>;
   enabled?: boolean;
   lastHovered: number;
@@ -58,7 +67,7 @@ export const Slider: FC<{
   onLeft?: () => void;
   onMediaSelect?: (index: number) => void;
   totalData: number;
-  sliderKey: string;
+  sliderKey: string | number;
   restrictUpAndDown?: boolean;
 }> = ({
   data,
@@ -125,7 +134,6 @@ export const Slider: FC<{
 
   useEffect(() => {
     if (focused) {
-      console.log(previousFocused, focused, highlightTranslateX);
       mediaHighlightAnimationRef.current?.(
         highlightTranslateX,
         previousFocused ? undefined : highlightTranslateX
@@ -177,6 +185,7 @@ export const Slider: FC<{
                 onClick={() => onMediaSelect?.(index)}
                 progress={media.progress}
               >
+                {media.loading && <LoadingIndicator />}
                 {media.available === false && (
                   <Unavailable>Not available yet</Unavailable>
                 )}

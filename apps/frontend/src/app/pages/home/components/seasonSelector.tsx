@@ -32,6 +32,15 @@ const SeasonSelectorContainer = styled.div`
   width: 25vw;
 `;
 
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+`;
+
 const SeasonsList = styled.div`
   position: absolute;
   top: -1vh;
@@ -77,7 +86,6 @@ export const SeasonSelector: FC<{
   }, [onSeasonChange, open, selected, temporarySelected]);
 
   const handleClose = useCallback(() => {
-    console.log('handleClose');
     setOpen(false);
   }, []);
 
@@ -106,11 +114,15 @@ export const SeasonSelector: FC<{
     }
   }, [firstElementToDisplay]);
 
-  const { focused, ref } = useFocusable({
+  const { focused, focusSelf, ref } = useFocusable({
     focusKey: 'season-selector',
     onEnterPress: handleOpen,
     onArrowPress: handleArrowPress,
   });
+
+  const handleHover = useCallback(() => {
+    focusSelf();
+  }, [focusSelf]);
 
   useEffect(() => {
     if (focused) {
@@ -133,23 +145,28 @@ export const SeasonSelector: FC<{
         ref={ref}
         onClick={handleOpen}
         tabIndex={-1}
+        onMouseEnter={IS_TV ? undefined : handleHover}
       >
         {selectedSeason.title}
       </ClosedDropdown>
       {open && (
-        <SeasonsList ref={seasonsListRef}>
-          {seasons.map((season, index) => (
-            <SeasonsItem
-              key={season.number}
-              focused={temporarySelected === index}
-              onMouseEnter={
-                IS_TV ? undefined : () => setTemporarySelected(index)
-              }
-            >
-              {season.title}
-            </SeasonsItem>
-          ))}
-        </SeasonsList>
+        <>
+          {!IS_TV && <Backdrop onClick={handleClose} />}
+          <SeasonsList ref={seasonsListRef}>
+            {seasons.map((season, index) => (
+              <SeasonsItem
+                key={season.number}
+                focused={temporarySelected === index}
+                onClick={handleOpen}
+                onMouseEnter={
+                  IS_TV ? undefined : () => setTemporarySelected(index)
+                }
+              >
+                {season.title}
+              </SeasonsItem>
+            ))}
+          </SeasonsList>
+        </>
       )}
     </SeasonSelectorContainer>
   );

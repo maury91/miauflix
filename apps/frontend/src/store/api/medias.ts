@@ -23,9 +23,12 @@ export const mediasApi = createApi({
         query: ({ showId, season }) => `shows/${showId}/seasons/${season}`,
       }
     ),
+    getShowSeasons: builder.query<SeasonDto[], string>({
+      query: (showId) => `shows/${showId}/seasons`,
+    }),
     getStreamUrl: builder.query<
       GetStreamDto,
-      { type: 'movie' | 'episode'; id: string; supportsHvec: boolean }
+      { type: 'movie' | 'episode'; id: string | number; supportsHvec: boolean }
     >({
       query: ({ type, id, supportsHvec }) =>
         `stream/${type}/${id}/${supportsHvec ? 'true' : 'false'}`,
@@ -43,5 +46,6 @@ export const {
   useGetExtendedInfoQuery,
   useGetStreamUrlQuery,
   useGetShowSeasonQuery,
+  useGetShowSeasonsQuery,
   useStopStreamMutation,
 } = mediasApi;

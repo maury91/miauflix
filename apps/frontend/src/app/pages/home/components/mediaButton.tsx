@@ -16,6 +16,8 @@ const StyledMediaButton = styled.div<{
   padding: 1.5vh;
   font-size: 3vh;
   min-width: 10vw;
+  outline: ${({ disabled, focused }) =>
+    disabled && focused ? `0.5vh ${PALETTE.background.primary} solid` : 'none'};
   color: ${({ disabled, focused }) =>
     disabled
       ? PALETTE.text.disabled
@@ -71,7 +73,6 @@ export const MediaButton: FC<MediaButtonProps> = ({
     }
   }, [disabled, onClick]);
   const { focused, ref, focusSelf } = useFocusable({
-    focusable: !disabled,
     focusKey,
     onEnterPress: handleOnClick,
   });

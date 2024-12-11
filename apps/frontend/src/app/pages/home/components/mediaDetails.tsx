@@ -211,7 +211,7 @@ export const MediaDetails: FC<{
       </MotionConfig>
       <MediaPreviewShadow />
       <MediaPreviewShadow2nd />
-      <MediaContainer width={window.innerWidth - margin * 2}>
+      <MediaContainer width={window.innerWidth - margin}>
         <MediaInformationContainer
           width={window.innerWidth * 0.47 - margin / 2}
         >

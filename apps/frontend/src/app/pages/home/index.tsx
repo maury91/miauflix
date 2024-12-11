@@ -1,12 +1,9 @@
 import styled from 'styled-components';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { MediaDetails } from './components/mediaDetails';
-import { ExtendedMovieDto, ExtendedShowDto, MediaDto } from '@miauflix/types';
+import { MediaDto } from '@miauflix/types';
 import { Categories } from './components/categories';
-import { useGetExtendedInfoQuery } from '../../../store/api/medias';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useNavigation } from '../../hooks/useNavigation';
-import { MoviePage } from './components/moviePage';
 import MdiSearch from '~icons/mdi/search';
 import {
   FocusContext,
@@ -82,7 +79,7 @@ const Search: FC<{ opened: boolean }> = ({ opened }) => {
 };
 
 const HomeSidebar = () => {
-  const { focusKey, ref, focused, hasFocusedChild, focusSelf } = useFocusable({
+  const { focusKey, ref, focused, focusSelf } = useFocusable({
     saveLastFocusedChild: true,
     trackChildren: true,
     focusKey: SIDEBAR_FOCUS_KEY,
@@ -127,11 +124,6 @@ const HomeSidebar = () => {
 export const Home = () => {
   const [showCategories, setShowCategories] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
-  const { data: extendedMedia } = useGetExtendedInfoQuery(
-    selectedMedia
-      ? { type: selectedMedia.type, id: selectedMedia.id }
-      : skipToken
-  );
   const currentPage = useAppSelector((state) => state.app.currentPage);
 
   const openSidebar = useCallback(() => {

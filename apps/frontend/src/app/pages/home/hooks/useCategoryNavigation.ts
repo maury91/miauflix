@@ -8,7 +8,7 @@ import { SLIDER_PREFIX } from '../consts';
 import { useMediaBoxSizes } from './useMediaBoxSizes';
 
 interface UseCategoryNavigationArgs {
-  key: string;
+  key: string | number;
   enabled: boolean;
   lastHovered: number;
   onMediaSelect?: (index: number) => void;
@@ -40,7 +40,6 @@ export const useCategoryNavigation = ({
   const move = useCallback(
     (direction: 'left' | 'right') => {
       const next = direction === 'left' ? hovered - 1 : hovered + 1;
-      console.log(next, totalData, key);
       if (next < 0 || next >= totalData) {
         return true;
       }
@@ -57,12 +56,14 @@ export const useCategoryNavigation = ({
       }
       return false;
     },
-    [hovered, totalData, key, onHover, firstVisible, mediaPerPage]
+    [hovered, totalData, onHover, firstVisible, mediaPerPage]
   );
 
   const onArrowPress: ArrowPressHandler = useCallback(
     (direction: string, props, details) => {
-      console.log('onArrowPress', direction);
+      if (!enabled) {
+        return false;
+      }
       if (direction === 'left' || direction === 'right') {
         const isEnd = move(direction);
         if (isEnd && direction === 'left') {
@@ -80,12 +81,14 @@ export const useCategoryNavigation = ({
       }
       return true;
     },
-    [move, onLeft, restrictUpAndDown]
+    [enabled, move, onLeft, restrictUpAndDown]
   );
 
   const onEnterPress = useCallback(() => {
-    onMediaSelect?.(hovered);
-  }, [hovered, onMediaSelect]);
+    if (enabled) {
+      onMediaSelect?.(hovered);
+    }
+  }, [enabled, hovered, onMediaSelect]);
 
   const { focused, ref, focusSelf } = useFocusable({
     focusKey: `${SLIDER_PREFIX}${key}`,

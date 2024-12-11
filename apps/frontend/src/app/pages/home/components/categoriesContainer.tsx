@@ -5,7 +5,10 @@ import { SLIDER_MARGIN } from './categorySlider';
 
 export const CATEGORY_CONTAINER_TOP_MASK = 8;
 
-export const CategoriesContainer = styled.div<{ visible: boolean }>`
+export const CategoriesContainer = styled.div<{
+  visible: boolean;
+  sendToBack: boolean;
+}>`
   position: absolute;
   top: ${() => (IS_SLOW_DEVICE ? 50 : 45)}vh;
   left: 0;
@@ -18,6 +21,8 @@ export const CategoriesContainer = styled.div<{ visible: boolean }>`
       : `linear-gradient(180deg, transparent 0%, black ${CATEGORY_CONTAINER_TOP_MASK}vh)`};
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   transition: opacity 0.3s;
+  z-index: ${({ sendToBack }) => (sendToBack ? -1 : 1)};
+
   &::-webkit-scrollbar {
     display: none;
   }

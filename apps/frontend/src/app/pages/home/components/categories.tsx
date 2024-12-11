@@ -1,4 +1,11 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useGetCategoriesQuery } from '../../../../store/api/categories';
 import { gsap } from 'gsap';
 import {
@@ -87,6 +94,7 @@ export const Categories: FC<CategoriesProps> = ({
   visible,
 }) => {
   const categories = useCategories();
+  const [sendToBack, setSendToBack] = useState(false);
 
   const { focusKey, ref, focusSelf } = useFocusable({
     saveLastFocusedChild: true,
@@ -176,6 +184,16 @@ export const Categories: FC<CategoriesProps> = ({
   }, [focusSelf, visible]);
 
   useEffect(() => {
+    if (!visible) {
+      setTimeout(() => {
+        setSendToBack(true);
+      }, 400);
+    } else {
+      setSendToBack(false);
+    }
+  }, [visible]);
+
+  useEffect(() => {
     if (categories.length) {
       const firstCategory = categories[0];
       if (
@@ -193,6 +211,7 @@ export const Categories: FC<CategoriesProps> = ({
     <FocusContext.Provider value={focusKey}>
       <CategoriesContainer
         visible={visible}
+        sendToBack={sendToBack}
         ref={ref}
         onScroll={IS_TV ? undefined : handleCategoriesScroll}
       >

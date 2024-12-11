@@ -27,6 +27,9 @@ export const Player = () => {
 
   useEffect(() => {
     return player.on('currentTime', (played) => {
+      // at 80% of the episode ( or 2 minutes before, whatever is sooner ), if next episode is available, request a streaming url
+      // 1 minute before the end of the episode, if next episode is available, show the next episode button
+      // ToDo: Implement auto-next for TV shows
       if (played > 0 && played >= player.videoLength() - 500) {
         navigateBack();
       }
