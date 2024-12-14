@@ -1,4 +1,4 @@
-import { Player } from './hooks/playerClassAbstract';
+import { Player } from './playerClassAbstract';
 import { createContext, useContext } from 'react';
 
 interface PlayerContext {

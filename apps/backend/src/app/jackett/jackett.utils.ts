@@ -9,6 +9,7 @@ import {
 } from './jackett.types';
 import { monoIndexers } from './jackett.const';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
+import { asArray } from '../utils/array';
 
 export const simplifyXMLObject = (obj: ElementCompact) => {
   const keys = Object.keys(obj);
@@ -83,7 +84,7 @@ export function getCategoriesByType(indexer: JackettIndexer) {
       tv: [],
     };
 
-  const allCategories = indexer.caps.categories.category
+  const allCategories = asArray(indexer.caps.categories.category)
     .map((category) => {
       if ('subcat' in category) {
         return [category, category.subcat];

@@ -30,8 +30,8 @@ import {
 import { useAppSelector } from '../../../../store/store';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
 import { debounce } from '../../../utils/debounce';
-import { useNavigation } from '../../../hooks/useNavigation';
 import { IS_TV } from '../../../../consts';
+import { useControls } from '../../../hooks/useControls';
 
 const HOME_SLIDER_PREFIX = SLIDER_PREFIX + HOME_PREFIX;
 
@@ -99,6 +99,7 @@ export const Categories: FC<CategoriesProps> = ({
   const { focusKey, ref, focusSelf } = useFocusable({
     saveLastFocusedChild: true,
     focusKey: CATEGORIES_FOCUS_KEY,
+    focusable: visible,
   });
   const categoriesWrapperRef = useRef<HTMLDivElement | null>(null);
 
@@ -125,37 +126,37 @@ export const Categories: FC<CategoriesProps> = ({
     [categories, ref]
   );
 
-  const onArrow = useCallback(
-    (direction: 'up' | 'down') => {
-      const currentFocusKey = getCurrentFocusKey();
-      const isFocusedOnCategory =
-        currentFocusKey && currentFocusKey.startsWith(HOME_SLIDER_PREFIX);
-      console.log('isFocusedOnCategory', isFocusedOnCategory, currentFocusKey);
-      if (isFocusedOnCategory) {
-        const focusedCategoryId = currentFocusKey.substring(
-          HOME_SLIDER_PREFIX.length
-        );
-        const categoryIndex = categories.findIndex(
-          (category) => category.id === focusedCategoryId
-        );
-        if (categoryIndex !== -1) {
-          const nextCategoryIndex =
-            direction === 'down' ? categoryIndex + 1 : categoryIndex - 1;
-          if (nextCategoryIndex >= 0 && nextCategoryIndex < categories.length) {
-            focusCategory(nextCategoryIndex);
-          }
-        }
-        return true;
-      }
-      return false;
-    },
-    [categories, focusCategory]
-  );
+  const on = useControls();
 
-  useNavigation({
-    page: 'home',
-    onArrow,
-  });
+  useEffect(
+    () =>
+      on(['up', 'down'], (direction) => {
+        const currentFocusKey = getCurrentFocusKey();
+        const isFocusedOnCategory =
+          currentFocusKey && currentFocusKey.startsWith(HOME_SLIDER_PREFIX);
+        if (isFocusedOnCategory) {
+          const focusedCategoryId = currentFocusKey.substring(
+            HOME_SLIDER_PREFIX.length
+          );
+          const categoryIndex = categories.findIndex(
+            (category) => category.id === focusedCategoryId
+          );
+          if (categoryIndex !== -1) {
+            const nextCategoryIndex =
+              direction === 'down' ? categoryIndex + 1 : categoryIndex - 1;
+            if (
+              nextCategoryIndex >= 0 &&
+              nextCategoryIndex < categories.length
+            ) {
+              focusCategory(nextCategoryIndex);
+            }
+          }
+          return true;
+        }
+        return false;
+      }),
+    [categories, focusCategory, on]
+  );
 
   const magneticScroll = debounce(
     useCallback(
@@ -226,7 +227,6 @@ export const Categories: FC<CategoriesProps> = ({
               index={index}
               onLeft={onLeft}
               onSelect={onMediaSelect}
-              visible={visible}
             />
           ))}
         </CategoriesWrapper>

@@ -14,10 +14,7 @@ const ProfileSelectionTitle = styled.h1`
   font-size: 3.5vh;
   text-align: center;
 `;
-export const ProfileSelectionScreen: FC<ProfileSliderProps> = ({
-  navigateTo,
-  users,
-}) => {
+export const ProfileSelectionScreen: FC<ProfileSliderProps> = ({ users }) => {
   return (
     <FullScreenDiv
       key="profile-selection"
@@ -26,7 +23,7 @@ export const ProfileSelectionScreen: FC<ProfileSliderProps> = ({
       exit={{ opacity: 0 }}
     >
       <ProfileSelectionTitle>Who's watching?</ProfileSelectionTitle>
-      <ProfileSlider navigateTo={navigateTo} users={users} />
+      <ProfileSlider users={users} />
       {!builtForTizen && <Settings />}
     </FullScreenDiv>
   );

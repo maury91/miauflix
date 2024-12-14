@@ -152,9 +152,9 @@ export const CategorySlider: FC<{
   index: number;
   onLeft: () => void;
   onSelect: (media: MediaDto) => void;
-  visible: boolean;
-}> = ({ category, index, onLeft, onSelect, visible }) => {
+}> = ({ category, index, onLeft, onSelect }) => {
   const dispatch = useAppDispatch();
+  const page = useAppSelector((state) => state.app.currentPage);
   const { data, updateSelected, mediaCount } = useSpecialCategories(
     category.id
   );
@@ -205,7 +205,7 @@ export const CategorySlider: FC<{
       <CategoryTitle>{category.name}</CategoryTitle>
       <Slider
         data={sliderData}
-        enabled={visible}
+        enabled={page === 'home/categories'}
         lastHovered={lastHovered}
         onFirstVisibleChange={updateSelected}
         onHover={onHover}

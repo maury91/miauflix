@@ -10,6 +10,7 @@ import { API_URL } from '../../consts';
 
 export const mediasApi = createApi({
   reducerPath: 'mediasApi',
+  tagTypes: ['Stream'],
   baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/` }),
   endpoints: (builder) => ({
     getExtendedInfo: builder.query<
@@ -32,11 +33,25 @@ export const mediasApi = createApi({
     >({
       query: ({ type, id, supportsHvec }) =>
         `stream/${type}/${id}/${supportsHvec ? 'true' : 'false'}`,
+      providesTags: (result) => {
+        if (result) {
+          return [{ type: 'Stream', id: result.streamId }];
+        }
+        return [{ type: 'Stream' }];
+      },
+    }),
+    brokenStream: builder.mutation<GetStreamDto, string>({
+      query: (streamId) => ({
+        url: `stream/${streamId}/broken`,
+        method: 'POST',
+        invalidatesTags: [{ type: 'Stream', id: streamId }],
+      }),
     }),
     stopStream: builder.mutation<void, string>({
       query: (streamId) => ({
         url: `stream/${streamId}`,
         method: 'DELETE',
+        invalidatesTags: [{ type: 'Stream', id: streamId }],
       }),
     }),
   }),
@@ -48,4 +63,5 @@ export const {
   useGetShowSeasonQuery,
   useGetShowSeasonsQuery,
   useStopStreamMutation,
+  useBrokenStreamMutation,
 } = mediasApi;

@@ -6,43 +6,30 @@ import {
 } from '@noriginmedia/norigin-spatial-navigation';
 import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from './consts';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { useProfileSelectionNavigation } from './hooks/useProfileSelectionNavigation';
 import { useGetUsersQuery } from '../../../store/api/users';
-import { useNavigation } from '../../hooks/useNavigation';
 import { ProfileSelectionScreen } from './screens/profileSelectionScreen';
 import { NewProfileScreen } from './screens/newProfileScreen';
 import { FullScreenDiv } from '../../components/fullScreenDiv';
+import { useAppSelector } from '../../../store/store';
 
 export const ProfileSelection = () => {
-  const [newProfileOpen, setNewProfileOpen] = useState(false);
+  const screen = useAppSelector((state) => state.profileSelection.screen);
+  const [lastScreen, setLastScreen] = useState(screen);
   const { data: users } = useGetUsersQuery();
   const { focusKey } = useFocusable({
     saveLastFocusedChild: true,
   });
 
-  const closeNewProfile = useCallback(() => {
-    setNewProfileOpen(false);
-  }, []);
-
   useEffect(() => {
     setFocus(users?.length ? `${PROFILE_ITEM_PREFIX}0` : NEW_PROFILE_ITEM);
   }, [users]);
 
-  useNavigation({
-    page: 'profile-selection',
-    onBack: () => {
-      setNewProfileOpen(false);
+  useEffect(() => {
+    if (lastScreen !== screen && lastScreen === 'new-profile') {
       setFocus(NEW_PROFILE_ITEM);
-    },
-  });
-
-  const openNewProfile = useCallback(() => {
-    setNewProfileOpen(true);
-  }, []);
-
-  const navigateTo = useProfileSelectionNavigation({
-    openNewProfile,
-  });
+    }
+    setLastScreen(screen);
+  }, [lastScreen, screen]);
 
   return (
     <FullScreenDiv
@@ -54,10 +41,9 @@ export const ProfileSelection = () => {
       <FocusContext.Provider value={focusKey}>
         <MotionConfig transition={{ duration: 0.3 }}>
           <AnimatePresence initial={false} mode="wait">
-            {newProfileOpen ? (
-              <NewProfileScreen onClose={closeNewProfile} />
-            ) : (
-              <ProfileSelectionScreen navigateTo={navigateTo} users={users} />
+            {screen === 'new-profile' && <NewProfileScreen />}
+            {screen === 'profile-selection' && (
+              <ProfileSelectionScreen users={users} />
             )}
           </AnimatePresence>
         </MotionConfig>

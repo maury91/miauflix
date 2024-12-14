@@ -18,6 +18,7 @@ export interface EpisodeSourceAttributes {
   seasonNum: number;
   episodeNum: number;
   originalSource: string;
+  rejected: boolean;
   size: number;
   data: Buffer;
   quality: VideoQuality;
@@ -30,7 +31,7 @@ export interface EpisodeSourceAttributes {
 
 export type EpisodeSourceCreationAttributes = Omit<
   EpisodeSourceAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'episode'
+  'id' | 'createdAt' | 'updatedAt' | 'episode' | 'rejected'
 >;
 
 @Table
@@ -46,6 +47,9 @@ export class EpisodeSource extends Model<
 
   @Column
   showSlug!: string;
+
+  @Column(DataType.BOOLEAN)
+  rejected!: boolean;
 
   @Column(DataType.SMALLINT)
   seasonNum!: number;

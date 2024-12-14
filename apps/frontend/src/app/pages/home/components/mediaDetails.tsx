@@ -22,6 +22,12 @@ import {
 import { skipToken } from '@reduxjs/toolkit/query';
 import { MoviePage } from './moviePage';
 import { TvShowPage } from './tvShowPage';
+import { useControls } from '../../../hooks/useControls';
+import {
+  FocusContext,
+  useFocusable,
+} from '@noriginmedia/norigin-spatial-navigation';
+import { MEDIA_DETAILS_FOCUS_KEY } from '../consts';
 
 const MediaImage = styled(motion.div)<{ src: string }>`
   position: absolute;
@@ -146,7 +152,9 @@ const ShowInformation: FC<{
 export const MediaDetails: FC<{
   expanded: boolean;
   expandedVisible: boolean;
-}> = ({ expanded, expandedVisible }) => {
+  onNavigateBack: () => void;
+}> = ({ expanded, expandedVisible, onNavigateBack }) => {
+  const page = useAppSelector((state) => state.app.currentPage);
   const { margin } = useMediaBoxSizes();
   const [imageVisible, setImageVisible] = useState(false);
   const selectedMedia = useAppSelector((state) => state.home.selectedMedia);
@@ -159,6 +167,16 @@ export const MediaDetails: FC<{
       : skipToken
   );
   const [displayedSrc, setDisplayedSrc] = useState(imageSrc);
+  const on = useControls();
+
+  const { ref, focusKey } = useFocusable({
+    focusable: expandedVisible,
+    focusKey: MEDIA_DETAILS_FOCUS_KEY,
+    saveLastFocusedChild: true,
+    autoRestoreFocus: true,
+  });
+
+  useEffect(() => on(['back'], onNavigateBack), [on, onNavigateBack]);
 
   const possiblyExtendedMedia = useMemo(() => {
     if (!selectedMedia) {
@@ -196,45 +214,54 @@ export const MediaDetails: FC<{
     return null;
   }
   return (
-    <MediaPreviewContainer margin={margin / 2} expanded={expanded}>
-      <MotionConfig transition={{ duration: imageVisible ? 1 : 0.3 }}>
-        {displayedSrc && (
-          <MediaImage
-            src={displayedSrc}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: imageVisible ? 1 : 0 }}
-            exit={{ opacity: 0 }}
+    <FocusContext.Provider value={focusKey}>
+      <MediaPreviewContainer
+        margin={margin / 2}
+        expanded={expanded}
+        visible={page.startsWith('home')}
+      >
+        <MotionConfig transition={{ duration: imageVisible ? 1 : 0.3 }}>
+          {displayedSrc && (
+            <MediaImage
+              src={displayedSrc}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: imageVisible ? 1 : 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <div />
+            </MediaImage>
+          )}
+        </MotionConfig>
+        <MediaPreviewShadow />
+        <MediaPreviewShadow2nd />
+        <MediaContainer width={window.innerWidth - margin}>
+          <MediaInformationContainer
+            width={window.innerWidth * 0.47 - margin / 2}
           >
-            <div />
-          </MediaImage>
-        )}
-      </MotionConfig>
-      <MediaPreviewShadow />
-      <MediaPreviewShadow2nd />
-      <MediaContainer width={window.innerWidth - margin}>
-        <MediaInformationContainer
-          width={window.innerWidth * 0.47 - margin / 2}
-        >
-          {possiblyExtendedMedia.type === 'movie' && (
-            <MovieInformation
-              expanded={expanded}
-              movie={possiblyExtendedMedia}
-            />
-          )}
-          {possiblyExtendedMedia.type === 'show' && (
-            <ShowInformation expanded={expanded} show={possiblyExtendedMedia} />
-          )}
-        </MediaInformationContainer>
-        <MediaPageContainer visible={expandedVisible}>
-          {expanded &&
-            extendedMedia &&
-            (extendedMedia.type === 'movie' ? (
-              <MoviePage media={extendedMedia} />
-            ) : (
-              <TvShowPage media={extendedMedia} />
-            ))}
-        </MediaPageContainer>
-      </MediaContainer>
-    </MediaPreviewContainer>
+            {possiblyExtendedMedia.type === 'movie' && (
+              <MovieInformation
+                expanded={expanded}
+                movie={possiblyExtendedMedia}
+              />
+            )}
+            {possiblyExtendedMedia.type === 'show' && (
+              <ShowInformation
+                expanded={expanded}
+                show={possiblyExtendedMedia}
+              />
+            )}
+          </MediaInformationContainer>
+          <MediaPageContainer visible={expandedVisible} ref={ref}>
+            {expanded &&
+              extendedMedia &&
+              (extendedMedia.type === 'movie' ? (
+                <MoviePage media={extendedMedia} />
+              ) : (
+                <TvShowPage media={extendedMedia} />
+              ))}
+          </MediaPageContainer>
+        </MediaContainer>
+      </MediaPreviewContainer>
+    </FocusContext.Provider>
   );
 };

@@ -53,7 +53,7 @@ export class TMDBApi {
     return data;
   }
 
-  @Cacheable(864e5 /* 1 day */)
+  @Cacheable(36e5 /* 1 hour */)
   private async getMediaImagesRaw(type: MediaType, mediaId: number | string) {
     const { data } = await this.get<ImagesResponse>(
       `${this.apiUrl}/${type}/${mediaId}/images`,
@@ -77,7 +77,7 @@ export class TMDBApi {
     return data;
   }
 
-  @Cacheable(864e5 /* 1 day */)
+  @Cacheable(36e5 /* 1 hour */)
   public async getMediaImages(type: MediaType, mediaId: number | string) {
     const [config, data] = await Promise.all([
       this.getConfiguration(),
@@ -122,20 +122,15 @@ export class TMDBApi {
     };
   }
 
-  @Cacheable(864e5 /* 1 day */)
+  @Cacheable(36e5 /* 1 hour */)
   public async getSeasonRaw(showId: number, season: number) {
     const { data } = await this.get<ShowSeason>(
-      `${this.apiUrl}/tv/${showId}/season/${season}`,
-      {
-        params: {
-          language: 'en',
-        },
-      }
+      `${this.apiUrl}/tv/${showId}/season/${season}`
     );
     return data;
   }
 
-  @Cacheable(864e5 /* 1 day */)
+  @Cacheable(6e5 /* 10 minutes */)
   public async getSeason(showId: number, season: number): Promise<ShowSeason> {
     const [config, data] = await Promise.all([
       this.getConfiguration(),

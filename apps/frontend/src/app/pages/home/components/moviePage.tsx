@@ -46,7 +46,12 @@ export const MoviePage: FC<MoviePageProps> = ({ media }) => {
   const goToStream = useCallback(() => {
     if (streamInfo) {
       dispatch(
-        setStreamUrl({ url: streamInfo.stream, id: media.id, type: 'movie' })
+        setStreamUrl({
+          url: streamInfo.stream,
+          id: media.id,
+          type: 'movie',
+          streamId: streamInfo.streamId,
+        })
       );
       dispatch(navigateTo('player'));
     }

@@ -73,7 +73,7 @@ export function App() {
             <Background />
           </BackgroundContainer>
         )}
-        {currentPage === 'home' && (
+        {currentPage.startsWith('home') && (
           <SimpleBackground
             key="simple-background"
             initial={{ opacity: 0 }}
@@ -85,9 +85,13 @@ export function App() {
       <Logo />
       <MotionConfig transition={{ duration: 0.5 }}>
         <AnimatePresence initial={false} mode="wait">
-          {currentPage === 'profile-selection' && <ProfileSelection />}
-          {(currentPage === 'home' || currentPage === 'player') && <Home />}
-          {currentPage === 'player' && <Player />}
+          {currentPage === 'profile-selection' && (
+            <ProfileSelection key="profile-selection" />
+          )}
+          {(currentPage.startsWith('home') || currentPage === 'player') && (
+            <Home key="home" />
+          )}
+          {currentPage === 'player' && <Player key="player" />}
         </AnimatePresence>
       </MotionConfig>
     </MotionConfig>

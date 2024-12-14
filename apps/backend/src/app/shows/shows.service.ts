@@ -151,24 +151,49 @@ export class ShowsService {
       })
     );
     // If an episode is missing a traktId get it
-    const missingTraktIdEpisodes = season.episodes.some(
-      (episode) => !episode.traktId
+    const missingDataEpisodes = season.episodes.some(
+      (episode) => !episode.traktId || !episode.overview
     );
-    if (missingTraktIdEpisodes) {
+    if (missingDataEpisodes) {
       const traktEpisodes = await this.traktService.getShowSeasonEpisodes(
         slug,
-        seasonNumber
+        seasonNumber,
+        true
       );
       for (const traktEpisode of traktEpisodes) {
         const episode = season.episodes.find(
           (episode) => episode.number === traktEpisode.number
         );
         if (episode) {
-          await episode.update({ traktId: traktEpisode.ids.trakt });
+          await episode.update({
+            traktId: traktEpisode.ids.trakt,
+            overview: traktEpisode.overview,
+          });
           episode.traktId = traktEpisode.ids.trakt;
         }
       }
     }
+    const missingImages = season.episodes.some((episode) => !episode.image);
+    if (missingImages) {
+      console.log('Searching images');
+      const tmdbSeason = await this.tmdbApi.getSeason(
+        show.tmdbId,
+        season.number
+      );
+      console.log('found', tmdbSeason);
+      for (const episode of season.episodes) {
+        if (!episode.image) {
+          const episodeImage = tmdbSeason.episodes.find(
+            ({ episode_number }) => episode_number === episode.number
+          )?.still_path;
+          if (episodeImage) {
+            await episode.update({ image: episodeImage });
+            episode.image = episodeImage;
+          }
+        }
+      }
+    }
+
     return ShowsService.mapSeasonToSeasonDto(season);
   }
 

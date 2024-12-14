@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface StreamState {
   url: string;
   id: string;
+  streamId: string;
   season: number;
   episode: number;
   type: 'movie' | 'episode';
@@ -11,6 +12,7 @@ export interface StreamState {
 const initialState: StreamState = {
   url: '',
   id: '',
+  streamId: '',
   season: 0,
   episode: 0,
   type: 'movie',
@@ -26,11 +28,13 @@ export const streamSlice = createSlice({
         | {
             url: string;
             id: string;
+            streamId: string;
             type: 'movie';
           }
         | {
             url: string;
             id: string;
+            streamId: string;
             season: number;
             episode: number;
             type: 'episode';
@@ -39,6 +43,7 @@ export const streamSlice = createSlice({
     ) => {
       state.url = action.payload.url;
       state.id = action.payload.id;
+      state.streamId = action.payload.streamId;
       state.type = action.payload.type;
       if (action.payload.type === 'episode') {
         state.season = action.payload.season;

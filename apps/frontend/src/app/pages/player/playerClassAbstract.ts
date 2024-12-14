@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export type PlayerLanguage = 'en' | 'es' | 'it' | 'de' | 'fr' | 'lt'; // Add more languages in the future
 export interface Track {
   index: number;
@@ -16,6 +18,8 @@ export interface PlayerEvents {
 }
 
 export abstract class Player {
+  public abstract container: ReactNode;
+
   abstract on<T extends keyof PlayerEvents>(
     event: T,
     callback: (data: PlayerEvents[T]) => void

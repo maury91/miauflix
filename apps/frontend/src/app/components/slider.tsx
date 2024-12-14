@@ -60,7 +60,7 @@ export const Slider: FC<{
     playable?: boolean;
     loading?: boolean;
   } | null>;
-  enabled?: boolean;
+  enabled: boolean;
   lastHovered: number;
   onFirstVisibleChange?: (index: number) => void;
   onHover: (index: number) => void;
@@ -71,7 +71,7 @@ export const Slider: FC<{
   restrictUpAndDown?: boolean;
 }> = ({
   data,
-  enabled = true,
+  enabled,
   lastHovered,
   onFirstVisibleChange,
   onLeft,

@@ -121,7 +121,7 @@ export class TorrentData {
     useLowQuality: boolean
   ) {
     const bestSource = await this.movieSourceModel.findOne({
-      attributes: ['data', 'videos'],
+      attributes: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
         codec: {
@@ -144,7 +144,7 @@ export class TorrentData {
     }
 
     const sameCodec = await this.movieSourceModel.findOne({
-      attributes: ['data', 'videos'],
+      attributes: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
         codec: {
@@ -160,7 +160,7 @@ export class TorrentData {
     }
 
     const highestQuality = await this.movieSourceModel.findOne({
-      attributes: ['data', 'videos'],
+      attributes: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
       },
@@ -181,9 +181,10 @@ export class TorrentData {
     useLowQuality: boolean
   ) {
     const bestSource = await this.episodeSourceModel.findOne({
-      attributes: ['data', 'videos'],
+      attributes: ['data', 'videos', 'id'],
       where: {
         episodeId,
+        rejected: false,
         codec: {
           [useHevc ? Op.like : Op.notLike]: '%x265%',
         },
@@ -204,9 +205,10 @@ export class TorrentData {
     }
 
     const sameCodec = await this.episodeSourceModel.findOne({
-      attributes: ['data', 'videos'],
+      attributes: ['data', 'videos', 'id'],
       where: {
         episodeId,
+        rejected: false,
         codec: {
           [useHevc ? Op.like : Op.notLike]: '%x265%',
         },
@@ -220,9 +222,10 @@ export class TorrentData {
     }
 
     const highestQuality = await this.episodeSourceModel.findOne({
-      attributes: ['data', 'videos'],
+      attributes: ['data', 'videos', 'id'],
       where: {
         episodeId,
+        rejected: false,
       },
       order: [['quality', 'DESC']],
       raw: true,
@@ -368,6 +371,36 @@ export class TorrentData {
       highQuality,
       hevc,
     }));
+  }
+
+  async markTorrentAsBroken(type: 'movie' | 'episode', sourceId: number) {
+    if (type === 'movie') {
+      // ToDo
+    } else {
+      const source = await this.episodeSourceModel.findByPk(sourceId, {
+        include: [
+          {
+            model: Episode,
+          },
+        ],
+      });
+      if (!source) {
+        throw new Error('Source not found');
+      }
+      console.log('Updating source');
+      await source.update({ rejected: true });
+      if (source.originalSource.includes('torrent::')) {
+        console.log('Updating torrent');
+        const torrentId = parseInt(source.originalSource.split('::')[1], 10);
+        const torrent = await this.torrentModel.findByPk(torrentId);
+        if (!torrent) {
+          throw new Error('Torrent not found');
+        }
+        await torrent.update({ rejected: true });
+      }
+      console.log('Updating episode');
+      await source.episode.update({ sourceFound: false });
+    }
   }
 }
 

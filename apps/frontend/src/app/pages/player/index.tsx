@@ -1,14 +1,13 @@
 import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { useNavigation } from '../../hooks/useNavigation';
 import { navigateTo } from '../../../store/slices/app';
 import { usePlayer } from './hooks/usePlayer';
-import { PlayerContainer } from './components/container';
 import { PlayerProvider } from './context';
 import { PlayerInterface } from './components/playerInterface';
 import { useInitialProgress } from './hooks/useInitialProgress';
 import { useTrackProgress } from './hooks/useTrackProgress';
 import { PlayerSubtitles } from './components/playerSubtitles';
+import { useControls } from '../../hooks/useControls';
 
 export const Player = () => {
   const dispatch = useAppDispatch();
@@ -19,11 +18,12 @@ export const Player = () => {
   useTrackProgress(player);
 
   const navigateBack = useCallback(() => {
-    dispatch(navigateTo('home'));
+    dispatch(navigateTo('home/details'));
     player.close();
   }, [dispatch, player]);
 
-  useNavigation({ page: 'player', onBack: navigateBack });
+  const on = useControls('player');
+  useEffect(() => on(['back'], navigateBack), [navigateBack, on]);
 
   useEffect(() => {
     return player.on('currentTime', (played) => {
@@ -38,7 +38,7 @@ export const Player = () => {
 
   return (
     <PlayerProvider value={player}>
-      <PlayerContainer url={streamUrl} />
+      {player.container}
       <PlayerInterface />
       <PlayerSubtitles />
     </PlayerProvider>

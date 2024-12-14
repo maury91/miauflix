@@ -3,32 +3,37 @@ import { TVInputDeviceKeyName } from '../../tizen';
 import { useCallback } from 'react';
 import { Page } from '../../types';
 import { store } from '../../store/store';
+import { usePage } from '../contexts/page.context';
 
-type Control =
-  | 'up'
-  | 'down'
-  | 'left'
-  | 'right'
-  | 'enter'
-  | 'back'
-  | 'playPause'
-  | 'play'
-  | 'pause'
-  | 'stop';
-type Callback = { cb: () => boolean | void; deepness: number };
+const allControls = [
+  'up',
+  'down',
+  'left',
+  'right',
+  'enter',
+  'back',
+  'playPause',
+  'play',
+  'pause',
+  'stop',
+] as const;
 
-const listeners: Record<Control, Callback[]> = {
-  up: [],
-  down: [],
-  left: [],
-  right: [],
-  enter: [],
-  back: [],
-  playPause: [],
-  play: [],
-  pause: [],
-  stop: [],
+type Control = (typeof allControls)[number];
+type ControlsWithPressure = Control | `${Control}:released`;
+type Callback = {
+  cb: (key: ControlsWithPressure) => boolean | void;
+  deepness: number;
 };
+
+const listeners: Record<ControlsWithPressure, Callback[]> = allControls
+  .flatMap((control): ControlsWithPressure[] => [
+    control,
+    `${control}:released`,
+  ])
+  .reduce(
+    (acc, control) => ({ ...acc, [control]: [] }),
+    {} as Record<ControlsWithPressure, Callback[]>
+  );
 
 const keyCodesMap: Map<number, Control> = new Map();
 
@@ -59,9 +64,12 @@ if (IS_TIZEN) {
   });
 }
 
-const executeCallbacks = (callbacks: Callback[], event: KeyboardEvent) => {
+const executeCallbacks = (event: KeyboardEvent, control: Control) => {
+  const controlWithPressure =
+    event.type === 'keydown' ? control : (`${control}:released` as const);
+  const callbacks = listeners[controlWithPressure];
   for (const { cb } of callbacks) {
-    if (cb()) {
+    if (cb(controlWithPressure)) {
       event.preventDefault();
       event.stopPropagation();
       return true;
@@ -70,53 +78,63 @@ const executeCallbacks = (callbacks: Callback[], event: KeyboardEvent) => {
   return false;
 };
 
-document.body.addEventListener(
-  'keydown',
-  (event) => {
-    switch (event.code) {
-      case 'ArrowUp':
-        return executeCallbacks(listeners.up, event);
-      case 'ArrowDown':
-        return executeCallbacks(listeners.down, event);
-      case 'ArrowLeft':
-        return executeCallbacks(listeners.left, event);
-      case 'ArrowRight':
-        return executeCallbacks(listeners.right, event);
-      case 'Enter':
-        return executeCallbacks(listeners.enter, event);
-      case 'Backspace':
-      case 'Back':
-      case 'Escape':
-        return executeCallbacks(listeners.back, event);
-      case ' ':
-        return executeCallbacks(listeners.playPause, event);
-    }
-    const control = keyCodesMap.get(event.keyCode);
-    if (control) {
-      return executeCallbacks(listeners[control], event);
-    }
-    return undefined;
-  },
-  { passive: false }
-);
+const keyboardListener = (event: KeyboardEvent) => {
+  switch (event.code) {
+    case 'ArrowUp':
+      return executeCallbacks(event, 'up');
+    case 'ArrowDown':
+      return executeCallbacks(event, 'down');
+    case 'ArrowLeft':
+      return executeCallbacks(event, 'left');
+    case 'ArrowRight':
+      return executeCallbacks(event, 'right');
+    case 'Enter':
+      return executeCallbacks(event, 'enter');
+    case 'Backspace':
+    case 'Back':
+    case 'Escape':
+      return executeCallbacks(event, 'back');
+    case ' ':
+      return executeCallbacks(event, 'playPause');
+  }
+  const control = keyCodesMap.get(event.keyCode);
+  if (control) {
+    return executeCallbacks(event, control);
+  }
+  return undefined;
+};
 
-export const useControls = (page: Page) => {
+document.body.addEventListener('keydown', keyboardListener, { passive: false });
+document.body.addEventListener('keyup', keyboardListener, { passive: false });
+
+export const useControls = (defaultPage?: Page) => {
+  const page = usePage(defaultPage);
+
   return useCallback(
-    (control: Control, cb: () => boolean | void, deepness = 1) => {
-      const wrappedCb = () => {
-        if (page === store.getState().app.currentPage) {
+    <K extends ControlsWithPressure[]>(
+      controls: K,
+      cb: (key: K[number]) => boolean | void,
+      deepness = 1
+    ) => {
+      const wrappedCb = (key: ControlsWithPressure) => {
+        if (page !== store.getState().app.currentPage) {
           return false;
         }
-        return cb();
+        return cb(key);
       };
-      listeners[control].push({ cb: wrappedCb, deepness });
-      listeners[control].sort((a, b) => b.deepness - a.deepness);
+      for (const control of controls) {
+        listeners[control].push({ cb: wrappedCb, deepness });
+        // Sort in descending order
+        listeners[control].sort((a, b) => b.deepness - a.deepness);
+      }
       return () => {
-        const index = listeners[control].findIndex(
-          (item) => item.cb === wrappedCb
-        );
-        if (index !== -1) {
-          listeners[control].splice(index, 1);
+        for (const control of controls) {
+          const index = listeners[control].findIndex(
+            (item) => item.cb === wrappedCb
+          );
+          if (index !== -1) {
+            listeners[control].splice(index, 1);
+          }
         }
       };
     },

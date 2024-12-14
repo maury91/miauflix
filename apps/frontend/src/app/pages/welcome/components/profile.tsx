@@ -59,14 +59,18 @@ const StyledProfile = styled.div<{
 
 export const Profile: FC<{
   name: string;
-  color: string;
   index: number;
   left: number;
-  onClick: (focusKey: string) => void;
+  onOpen: (index: number) => void;
   onSelect: (index: number) => void;
-}> = ({ name, color, left, index, onClick, onSelect }) => {
-  const { ref, focused, focusSelf, focusKey } = useFocusable({
+}> = ({ name, left, index, onOpen, onSelect }) => {
+  const openProfile = useCallback(() => {
+    onOpen(index);
+  }, [index, onOpen]);
+
+  const { ref, focused, focusSelf } = useFocusable({
     focusKey: `${PROFILE_ITEM_PREFIX}${index}`,
+    onEnterPress: openProfile,
   });
 
   useEffect(() => {
@@ -74,10 +78,6 @@ export const Profile: FC<{
       onSelect(index);
     }
   }, [focused, index, onSelect]);
-
-  const onClickHandler = useCallback(() => {
-    onClick(focusKey);
-  }, [focusKey, onClick]);
 
   const createAvatarSvg = createAvatar(adventurer, {
     seed: name,
@@ -91,7 +91,7 @@ export const Profile: FC<{
       src={createAvatarSvg.toDataUri()}
       ref={ref}
       onMouseEnter={() => focusSelf()}
-      onClick={onClickHandler}
+      onClick={openProfile}
     >
       <h2>{name.split(' ')[0]}</h2>
       <div />
@@ -103,11 +103,16 @@ export const NewProfile: FC<{
   color: string;
   index: number;
   left: number;
-  onClick: (focusKey: string) => void;
+  onOpen: () => void;
   onSelect: (index: number) => void;
-}> = ({ color, index, left, onClick, onSelect }) => {
-  const { ref, focused, focusKey, focusSelf } = useFocusable({
+}> = ({ color, index, left, onOpen, onSelect }) => {
+  const openNewProfile = useCallback(() => {
+    onOpen();
+  }, [onOpen]);
+
+  const { ref, focused, focusSelf } = useFocusable({
     focusKey: NEW_PROFILE_ITEM,
+    onEnterPress: openNewProfile,
   });
 
   useEffect(() => {
@@ -116,10 +121,6 @@ export const NewProfile: FC<{
     }
   }, [focused, index, onSelect]);
 
-  const onClickHandler = useCallback(() => {
-    onClick(focusKey);
-  }, [focusKey, onClick]);
-
   return (
     <StyledProfile
       selected={focused}
@@ -127,7 +128,7 @@ export const NewProfile: FC<{
       color={color}
       ref={ref}
       onMouseEnter={() => focusSelf()}
-      onClick={onClickHandler}
+      onClick={openNewProfile}
     >
       <div>
         <MdiAdd width="100%" height="100%" color="black" />

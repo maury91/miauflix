@@ -33,6 +33,8 @@ const getLogoStyle = (currentPage: Page, margin: number) => {
     case 'profile-selection':
       return profileSelectionLogo;
     case 'home':
+    case 'home/details':
+    case 'home/categories':
       return homeLogo(margin);
     case 'player':
       return playerLogo;

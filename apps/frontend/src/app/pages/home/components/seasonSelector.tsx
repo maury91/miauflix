@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import { pause, resume } from '@noriginmedia/norigin-spatial-navigation';
 import { IS_TV, PALETTE } from '../../../../consts';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { ExtendedShowDto } from '@miauflix/types';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { useNavigation } from '../../../hooks/useNavigation';
+import { useControls } from '../../../hooks/useControls';
 
 const BaseSeasonItem = styled.div<{ focused: boolean }>`
   align-items: center;
@@ -74,6 +75,7 @@ export const SeasonSelector: FC<{
   const [firstElementToDisplay, setFirstElementToDisplay] = useState(0);
   const [open, setOpen] = useState(false);
   const seasonsListRef = useRef<HTMLDivElement>(null);
+  const on = useControls();
 
   const handleOpen = useCallback(() => {
     if (open) {
@@ -127,15 +129,24 @@ export const SeasonSelector: FC<{
   useEffect(() => {
     if (focused) {
       ref.current?.focus();
-      console.log(ref.current);
     }
   }, [focused, ref]);
 
-  useNavigation({
-    element: ref.current,
-    enabled: open,
-    onBack: handleClose,
-  });
+  useEffect(
+    () =>
+      on(
+        ['back'],
+        () => {
+          if (open) {
+            handleClose();
+            return true;
+          }
+          return false;
+        },
+        2
+      ),
+    [on, handleClose, open]
+  );
 
   // ToDo: Display dropdown icon
   return (

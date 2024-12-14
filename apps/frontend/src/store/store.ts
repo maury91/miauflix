@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { usersApi } from './api/users';
 import app from './slices/app';
 import home from './slices/home';
+import profileSelection from './slices/profileSelection';
 import resume from './slices/resume';
 import stream from './slices/stream';
 import { categoriesApi } from './api/categories';
@@ -14,6 +15,7 @@ export const store = configureStore({
   reducer: {
     app,
     home,
+    profileSelection,
     resume,
     stream,
     [listsApi.reducerPath]: listsApi.reducer,

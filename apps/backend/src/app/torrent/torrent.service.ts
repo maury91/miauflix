@@ -43,10 +43,15 @@ const retryPromise = <T>(
 };
 
 interface TorrentInfo {
+  id: number;
   torrent: Torrent;
   url: string;
   start: number;
   end: number;
+  type: 'movie' | 'episode';
+  slug: string;
+  useHevc: boolean;
+  useLowQuality: boolean;
 }
 
 @Injectable()
@@ -220,7 +225,10 @@ export class TorrentService {
     return this.getTorrentInformation(data);
   }
 
-  public async stopStream(streamKey: string): Promise<boolean> {
+  public async stopStream(
+    streamKey: string,
+    forceDestroy = false
+  ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const streamTorrent = this.streams[streamKey];
       console.log('Stopping stream', streamKey);
@@ -236,14 +244,19 @@ export class TorrentService {
             console.log('Torrent progress', torrent.progress);
             torrent.destroy(
               {
-                destroyStore: torrent.progress < 0.2,
+                destroyStore: torrent.progress < 0.2 || forceDestroy,
               },
               (err) => {
                 if (err) {
                   reject(err);
                 } else {
-                  resolve(true);
+                  console.log(
+                    torrent.progress < 0.2 || forceDestroy
+                      ? 'Torrent destroyed'
+                      : 'Torrent stopped'
+                  );
                   delete this.streams[streamKey];
+                  resolve(true);
                 }
               }
             );
@@ -252,6 +265,22 @@ export class TorrentService {
       }
       resolve(true);
     });
+  }
+
+  public async setBroken(streamKey: string) {
+    const streamTorrent = this.streams[streamKey];
+    console.log('Marking as broken', streamKey, streamTorrent.id);
+    await this.torrentData.markTorrentAsBroken(
+      streamTorrent.type,
+      streamTorrent.id
+    );
+    await this.stopStream(streamKey, true);
+    return this.getStream(
+      streamTorrent.type,
+      streamTorrent.slug,
+      streamTorrent.useHevc,
+      streamTorrent.useLowQuality
+    );
   }
 
   private async getVideoInformation(file: TorrentFile) {
@@ -367,8 +396,10 @@ export class TorrentService {
     );
 
     if (torrentData) {
+      console.log('torrent data found', torrentData.id);
       return torrentData;
     }
+    console.log('No torrent data for episode', episodeId);
 
     // Fallback
     // We assume it has an episode because we are at the streaming point
@@ -457,10 +488,14 @@ export class TorrentService {
       };
     }
     console.log('Searching DB');
-    const { data: torrentFile, videos } = await (type === 'movie'
+    const {
+      data: torrentFile,
+      videos,
+      id,
+    } = await (type === 'movie'
       ? this.getMovieTorrent(slug, useHevc, useLowQuality)
       : this.getEpisodeTorrent(parseInt(slug, 10), useHevc, useLowQuality));
-    console.log('Got torrent from DB');
+    console.log('Got torrent from DB', id);
     const bitfieldBuffer = await this.cacheManager.get<string>(
       `torrent:${streamKey}:bitfield`
     );
@@ -507,10 +542,15 @@ export class TorrentService {
               this.webTorrentServer.address().port
             }${file.streamURL}`;
             this.streams[streamKey] = {
+              id,
               torrent,
               url: streamURL,
               start,
               end,
+              type,
+              slug,
+              useHevc,
+              useLowQuality,
             };
             resolve({ stream: streamURL, streamKey });
           }

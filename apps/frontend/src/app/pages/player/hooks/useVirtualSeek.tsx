@@ -1,6 +1,6 @@
-import { Player } from './playerClassAbstract';
+import { Player } from '../playerClassAbstract';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTizenRemote } from './tizen/useTizenRemote';
+import { useControls } from '../../../hooks/useControls';
 
 function calculateStep(elapsed: number) {
   return (Math.pow(elapsed / 1000, 1.5) + 1) * 20000;
@@ -34,6 +34,7 @@ export const useVirtualSeek = (player: Player) => {
   const [actionStartingTime, setActionStartingTime] = useState(Date.now());
   const [virtualPosition, setVirtualPosition] = useState(0);
   const [lastSeekTo, setLastSeekTo] = useState(0);
+  const on = useControls('player');
 
   const onActionStart = useCallback(
     (type: 'FF' | 'REW') => {
@@ -48,7 +49,6 @@ export const useVirtualSeek = (player: Player) => {
 
   const onActionEnd = useCallback(() => {
     setAction(null);
-    const elapsed = Date.now() - actionStartingTime;
     player.seekTo(
       calculatePosition(startingPosition, player, action, actionStartingTime)
     );
@@ -74,32 +74,27 @@ export const useVirtualSeek = (player: Player) => {
     }
   }, [lastSeekTo, action, virtualPosition, player]);
 
-  const setRemoteListener = useTizenRemote();
-  setRemoteListener(
-    'ArrowRight',
-    (type) => {
-      if (type === 'down') {
-        if (action !== 'FF') {
-          onActionStart('FF');
+  useEffect(
+    () =>
+      on(['left', 'right', 'left:released', 'right:released'], (control) => {
+        switch (control) {
+          case 'left':
+            if (action !== 'REW') {
+              onActionStart('REW');
+            }
+            break;
+          case 'right':
+            if (action !== 'FF') {
+              onActionStart('FF');
+            }
+            break;
+          case 'left:released':
+          case 'right:released':
+            onActionEnd();
+            break;
         }
-      } else {
-        onActionEnd();
-      }
-    },
-    true
-  );
-  setRemoteListener(
-    'ArrowLeft',
-    (type) => {
-      if (type === 'down') {
-        if (action !== 'REW') {
-          onActionStart('REW');
-        }
-      } else {
-        onActionEnd();
-      }
-    },
-    true
+      }),
+    [action, on, onActionEnd, onActionStart]
   );
 
   return virtualPosition;

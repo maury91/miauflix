@@ -7,6 +7,7 @@ import {
   JackettAllTrackerResponse,
   JackettIndexersResponse,
   JackettQueryResponse,
+  JackettSimplifiedTracker,
   QueryParamsArgs,
   Torrent,
 } from './jackett.types';
@@ -23,6 +24,29 @@ import {
 } from './jackett.utils';
 import { Cacheable } from '../utils/cacheable.util';
 import { asArray } from '../utils/array';
+
+const trackerPreference: Record<CategoryType, string[]> = {
+  movie: ['1337x', 'badasstorrents', 'therarbg'],
+  tv: ['eztv', 'therarbg', 'limetorrents', '1337x'],
+  anime: ['nyaasi', 'subsplease'],
+};
+
+const compareTrackerPreference =
+  (category: CategoryType) =>
+  (a: JackettSimplifiedTracker, b: JackettSimplifiedTracker) => {
+    const aIndex = trackerPreference[category].indexOf(a.id);
+    const bIndex = trackerPreference[category].indexOf(b.id);
+    if (aIndex === -1 && bIndex === -1) {
+      return 0;
+    }
+    if (aIndex === -1) {
+      return 1;
+    }
+    if (bIndex === -1) {
+      return -1;
+    }
+    return aIndex - bIndex;
+  };
 
 @Injectable()
 export class JackettService {
@@ -111,10 +135,11 @@ export class JackettService {
     const allTrackers = await this.getAllTrackers();
     return allTrackers
       .filter((tracker) => tracker.categories[targetCategory].length > 0)
-      .map(simplifyTracker(targetCategory));
+      .map(simplifyTracker(targetCategory))
+      .sort(compareTrackerPreference(targetCategory));
   }
 
-  @Cacheable(1800 * 1000 /* 30 minutes */)
+  @Cacheable(1800 * 1000 /* 30 minutes */, true)
   private async queryTrackerRaw<ST extends CategoryType>(
     trackerId: string,
     searchType: ST,
@@ -147,6 +172,16 @@ export class JackettService {
     );
 
     try {
+      console.log(
+        'executing query',
+        `indexers/${trackerId}/results/torznab/api`,
+        {
+          t: innerSearchType.toLowerCase(),
+          ...params,
+          cat: tracker.categories[searchType].map(({ id }) => id).join(','),
+          ...(typeof limit === 'number' ? { limit: `${limit}` } : {}),
+        }
+      );
       const { data } = await this.get<JackettQueryResponse>(
         `indexers/${trackerId}/results/torznab/api`,
         {
@@ -170,12 +205,19 @@ export class JackettService {
     }
   }
 
-  public async queryTracker<ST extends CategoryType>(
-    trackerId: string,
-    searchType: ST,
-    queryParams: QueryParamsArgs[ST],
-    limit?: number
-  ) {
+  public async queryTracker<ST extends CategoryType>({
+    trackerId,
+    searchType,
+    queryParams,
+    limit,
+    airedOn,
+  }: {
+    trackerId: string;
+    searchType: ST;
+    queryParams: QueryParamsArgs[ST];
+    limit?: number;
+    airedOn?: Date;
+  }) {
     const data = await this.queryTrackerRaw(
       trackerId,
       searchType,
@@ -222,6 +264,18 @@ export class JackettService {
             seeders,
             peers,
           };
+        })
+        .filter(({ pubDate }) => {
+          console.log(
+            'pubDate',
+            pubDate,
+            airedOn,
+            pubDate.getTime() >= airedOn.getTime() - 259200000
+          );
+          return (
+            !airedOn ||
+            pubDate.getTime() >= airedOn.getTime() - 259200000 /* 3 day */
+          );
         })
         .sort((a, b) => {
           if (a.quality === b.quality) {

@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import {
   Player,
   PlayerEvents,
@@ -10,7 +11,8 @@ import {
   AVPlayListeners,
   TextTrackExtraInfo,
   TrackInfo,
-} from '../../../../../tizen';
+} from '../../../../tizen';
+import { createRef } from 'react';
 
 type Listeners = {
   [E in keyof PlayerEvents]: ((data: PlayerEvents[E]) => void)[];
@@ -26,6 +28,15 @@ const languageMap: Record<PlayerLanguage, RegExp> = {
   lt: /^lt$|^lit|^lt-/i,
 };
 
+export const TizenPlayerContainer = styled.object`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+`;
+
 export class TizenPlayer implements Player {
   private videoDuration = 0;
   private currentTime = 0;
@@ -40,6 +51,14 @@ export class TizenPlayer implements Player {
     error: [],
     ready: [],
   };
+  private containerRef = createRef<HTMLObjectElement>();
+
+  public container = (
+    <TizenPlayerContainer
+      type={'application/avplayer'}
+      ref={this.containerRef}
+    />
+  );
 
   private static standardizeLanguage(
     rawLanguage: string

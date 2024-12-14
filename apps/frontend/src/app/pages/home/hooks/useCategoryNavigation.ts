@@ -61,9 +61,6 @@ export const useCategoryNavigation = ({
 
   const onArrowPress: ArrowPressHandler = useCallback(
     (direction: string, props, details) => {
-      if (!enabled) {
-        return false;
-      }
       if (direction === 'left' || direction === 'right') {
         const isEnd = move(direction);
         if (isEnd && direction === 'left') {
@@ -74,24 +71,22 @@ export const useCategoryNavigation = ({
       }
       // Disable focusable for up and down
       if (direction === 'up' || direction === 'down') {
-        console.log(restrictUpAndDown);
         if (restrictUpAndDown) {
           return false;
         }
       }
       return true;
     },
-    [enabled, move, onLeft, restrictUpAndDown]
+    [move, onLeft, restrictUpAndDown]
   );
 
   const onEnterPress = useCallback(() => {
-    if (enabled) {
-      onMediaSelect?.(hovered);
-    }
-  }, [enabled, hovered, onMediaSelect]);
+    onMediaSelect?.(hovered);
+  }, [hovered, onMediaSelect]);
 
   const { focused, ref, focusSelf } = useFocusable({
     focusKey: `${SLIDER_PREFIX}${key}`,
+    focusable: enabled,
     onArrowPress,
     onEnterPress,
   });
@@ -116,7 +111,7 @@ export const useCategoryNavigation = ({
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useCallback(
         (index: number) => () => {
-          if (Date.now() - lastKeyboardMovement > 500 && enabled) {
+          if (Date.now() - lastKeyboardMovement > 500) {
             if (!focused) {
               setDisableAutoScroll(true);
               focusSelf();
@@ -128,7 +123,7 @@ export const useCategoryNavigation = ({
             onHover(index);
           }
         },
-        [enabled, focusSelf, focused, lastKeyboardMovement, onHover]
+        [focusSelf, focused, lastKeyboardMovement, onHover]
       );
   /** end web only **/
 
@@ -136,7 +131,7 @@ export const useCategoryNavigation = ({
     firstItemToDisplay,
     handleHover,
     ref,
-    focused: focused && enabled,
+    focused,
     hovered,
     handleScroll,
     firstVisible,

@@ -20,6 +20,7 @@ import LineMdPlay from '~icons/line-md/play';
 import { useEpisodeStreaming } from '../hooks/useEpisodeStreaming';
 import { useGetSelectedEpisode } from '../hooks/useGetSelectedEpisode';
 import { useGetSeasonEpisodes } from '../hooks/useGetSeasonEpisodes';
+import { useWhatChanged } from '@simbathesailor/use-what-changed';
 
 interface TvShowPageProps {
   media: ExtendedShowDto;
@@ -42,9 +43,9 @@ const usePreloadShowImages = (showId: string) => {
 };
 
 export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
+  const page = useAppSelector((state) => state.app.currentPage);
   const [selectedSeason, setSelectedSeason] = useState(0);
   const [selectedEpisode, setSelectedEpisode] = useState(0);
-  const page = useAppSelector((state) => state.app.currentPage);
   const { data: season } = useGetShowSeasonQuery({
     showId: media.id,
     season: media.seasons[selectedSeason].number,
@@ -74,9 +75,17 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
     setSelectedSeason(season);
   }, []);
 
-  const handleEpisodeChange = useCallback((episode: number) => {
-    setSelectedEpisode(episode);
-  }, []);
+  const handleEpisodeChange = useCallback(
+    (episode: number) => {
+      if (episode !== selectedEpisode) {
+        if (streamInfo) {
+          stopStream(streamInfo.streamId);
+        }
+        setSelectedEpisode(episode);
+      }
+    },
+    [selectedEpisode, stopStream, streamInfo]
+  );
 
   const goToStream = useCallback(() => {
     if (episode && season && streamInfo && !isLoading) {
@@ -87,19 +96,12 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
           season: season.number,
           episode: episode.number,
           type: 'episode',
+          streamId: streamInfo.streamId,
         })
       );
       dispatch(navigateTo('player'));
     }
   }, [dispatch, episode, isLoading, season, streamInfo]);
-
-  useEffect(() => {
-    return () => {
-      if (streamInfo) {
-        stopStream(streamInfo.streamId);
-      }
-    };
-  }, [stopStream, streamInfo]);
 
   useEffect(() => {
     setFocus('season-selector');
@@ -121,6 +123,18 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
   // ToDo: Auto-select correct season
   // ToDo: Display details of the episode and auto-scroll
 
+  // useWhatChanged(
+  //   [
+  //     episodes,
+  //     season?.number,
+  //     page === 'home/details',
+  //     episodes.length,
+  //     handleEpisodeChange,
+  //     goToStream,
+  //   ],
+  //   "episodes, season?.number, page === 'home/details', episodes.length, handleEpisodeChange"
+  // );
+
   return (
     <div ref={ref}>
       {season && episode && (
@@ -141,15 +155,15 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
       />
       {season && (
         <Slider
-          key={season.number}
           data={episodes}
+          key={season.number}
+          enabled={page === 'home/details'}
+          lastHovered={0}
           sliderKey={season.number}
           totalData={episodes.length}
           onHover={handleEpisodeChange}
           onMediaSelect={goToStream}
-          lastHovered={0}
           restrictUpAndDown={false}
-          enabled={page === 'home'}
         />
       )}
     </div>

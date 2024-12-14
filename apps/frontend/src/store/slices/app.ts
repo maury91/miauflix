@@ -28,7 +28,7 @@ export const appSlice = createSlice({
       state,
       action: PayloadAction<{ id: number; slug: string }>
     ) => {
-      state.currentPage = 'home';
+      state.currentPage = 'home/categories';
       state.currentUserId = action.payload.id;
       state.currentProfile = action.payload.slug;
     },

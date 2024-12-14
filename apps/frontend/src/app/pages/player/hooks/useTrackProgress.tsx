@@ -1,4 +1,4 @@
-import { Player } from './playerClassAbstract';
+import { Player } from '../playerClassAbstract';
 import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { useTrackMovieProgressMutation } from '../../../../store/api/progress';
 import { useCallback, useEffect } from 'react';

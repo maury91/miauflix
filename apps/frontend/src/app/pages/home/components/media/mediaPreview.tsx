@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const MediaPreviewContainer = styled.div<{
   margin: number;
   expanded: boolean;
+  visible: boolean;
 }>`
   position: absolute;
   top: 0;
@@ -13,6 +14,7 @@ export const MediaPreviewContainer = styled.div<{
     ${({ margin }) => margin + window.innerWidth * 0.05}px;
   overflow: hidden;
   overflow-y: scroll;
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
 
   &::-webkit-scrollbar {
     display: none;

@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Req } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { TorrentService } from './torrent.service';
 import { GetStreamDto } from '@miauflix/types';
 import { Request } from 'express';
@@ -60,6 +60,19 @@ export class TorrentController {
     return {
       progress: info.progress.toString('base64'),
       // decode: new Uint8Array(atob(progress).split("").map(c => c.charCodeAt(0)))
+    };
+  }
+
+  @Post(':streamId/broken')
+  async setBroken(@Param('streamId') streamId: string, @Req() req: Request) {
+    const host = req.headers.host;
+    const { stream, streamKey } = await this.torrentService.setBroken(streamId);
+    return {
+      stream:
+        typeof host === 'string'
+          ? stream.replace('localhost', host.split(':')[0])
+          : stream,
+      streamId: streamKey,
     };
   }
 

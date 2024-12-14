@@ -21,7 +21,7 @@ export const CategoriesContainer = styled.div<{
       : `linear-gradient(180deg, transparent 0%, black ${CATEGORY_CONTAINER_TOP_MASK}vh)`};
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   transition: opacity 0.3s;
-  z-index: ${({ sendToBack }) => (sendToBack ? -1 : 1)};
+  visibility: ${({ sendToBack }) => (sendToBack ? 'hidden' : 'visible')};
 
   &::-webkit-scrollbar {
     display: none;

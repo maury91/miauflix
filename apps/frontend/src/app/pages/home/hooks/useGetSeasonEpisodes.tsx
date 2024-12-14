@@ -1,6 +1,7 @@
 import { useAppSelector } from '../../../../store/store';
 import { useMemo } from 'react';
 import { ExtendedShowDto, SeasonDto } from '@miauflix/types';
+import { useWhatChanged } from '@simbathesailor/use-what-changed';
 
 interface GetSeasonEpisodesArgs {
   defaultBackground: string;
@@ -15,7 +16,7 @@ export const useGetSeasonEpisodes = ({
   season,
 }: GetSeasonEpisodesArgs) => {
   const episodesProgress = useAppSelector(
-    (state) => state.resume.showProgress[media.id] ?? {}
+    (state) => state.resume.showProgress[media.id]
   );
 
   return useMemo(() => {
@@ -25,7 +26,8 @@ export const useGetSeasonEpisodes = ({
         return {
           id: episode.id,
           backdrop: available ? episode.image : media.images.backdrop,
-          progress: episodesProgress[`${season.number}-${episode.number}`] ?? 0,
+          progress:
+            episodesProgress?.[`${season.number}-${episode.number}`] ?? 0,
           available,
           text: `S${season.number} E${episode.number}`,
           playable: available,

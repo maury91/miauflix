@@ -1,19 +1,38 @@
 import { UserDto } from '@miauflix/types';
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useProfilesPosition } from '../hooks/useProfilesPosition';
 import { NewProfile, Profile } from './profile';
-import { colors } from '../consts';
+import { chooseProfile } from '../../../../store/slices/app';
+import { useAppDispatch } from '../../../../store/store';
+import { navigateToNewProfile } from '../../../../store/slices/profileSelection';
 
 export interface ProfileSliderProps {
-  navigateTo: (key: string) => void;
   users?: UserDto[];
 }
 
-export const ProfileSlider: FC<ProfileSliderProps> = ({ navigateTo, users }) => {
+export const ProfileSlider: FC<ProfileSliderProps> = ({ users }) => {
   const [selected, setSelected] = useState(0);
+  const dispatch = useAppDispatch();
   const profilesCount = users?.length ?? 0;
-
   const positions = useProfilesPosition(profilesCount, selected);
+
+  const openProfile = useCallback(
+    (profileIndex: number) => {
+      if (users) {
+        dispatch(
+          chooseProfile({
+            id: users[profileIndex].id,
+            slug: users[profileIndex].slug,
+          })
+        );
+      }
+    },
+    [dispatch, users]
+  );
+
+  const openNewProfile = useCallback(() => {
+    dispatch(navigateToNewProfile());
+  }, [dispatch]);
 
   return (
     <>
@@ -23,8 +42,7 @@ export const ProfileSlider: FC<ProfileSliderProps> = ({ navigateTo, users }) => 
           index={index}
           left={positions[index]}
           name={name}
-          color={colors[index % colors.length]}
-          onClick={navigateTo}
+          onOpen={openProfile}
           onSelect={setSelected}
         />
       ))}
@@ -32,7 +50,7 @@ export const ProfileSlider: FC<ProfileSliderProps> = ({ navigateTo, users }) => 
         index={profilesCount}
         left={positions[profilesCount]}
         color="white"
-        onClick={navigateTo}
+        onOpen={openNewProfile}
         onSelect={setSelected}
       />
     </>

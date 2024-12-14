@@ -1,13 +1,14 @@
 import { IS_TIZEN } from '../../../../consts';
-import { TizenPlayer } from './tizen/tizenPlayer';
-import { Player, PlayerStatus, Track } from './playerClassAbstract';
+import { TizenPlayer } from '../platforms/tizen';
+import { WebPlayer } from '../platforms/web';
+import { Player, Track } from '../playerClassAbstract';
 import { useEffect, useMemo, useState } from 'react';
 
-const getPlayer = (): Player | null => {
+const getPlayer = (): Player => {
   if (IS_TIZEN) {
     return new TizenPlayer();
   }
-  return null;
+  return new WebPlayer();
 };
 
 interface UsePlayerArgs {
@@ -26,10 +27,6 @@ export const usePlayer = ({
   subtitleLanguage = 'en',
 }: UsePlayerArgs) => {
   const player = useMemo(() => getPlayer(), []);
-
-  if (!player) {
-    throw new Error('Player not supported');
-  }
 
   const [audioTracks, setAudioTracks] = useState<Track[]>([]);
   const [subtitleTracks, setSubtitleTracks] = useState<Track[]>([]);

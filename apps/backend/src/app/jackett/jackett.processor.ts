@@ -54,11 +54,11 @@ export class JackettProcessor extends WorkerHost {
 
     for (const tracker of trackers) {
       try {
-        const torrents = await this.jackettService.queryTracker(
-          tracker.id,
-          'movie',
-          params
-        );
+        const torrents = await this.jackettService.queryTracker({
+          trackerId: tracker.id,
+          searchType: 'movie',
+          queryParams: params,
+        });
 
         if (torrents.length) {
           for (const torrent of torrents) {
@@ -120,20 +120,28 @@ export class JackettProcessor extends WorkerHost {
     console.log(
       `Searching torrents for show ${params.q}, ${season}x${episode}`
     );
-    const trackers = (
-      await this.jackettService.getTrackersByCategory('tv')
-    ).slice(0, 1);
-    const { runtime } = await this.showData.findEpisode(episodeId);
+    const trackers = await this.jackettService.getTrackersByCategory('tv');
+    const { firstAired, runtime } = await this.showData.findEpisode(episodeId);
+
+    if (firstAired.getTime() > Date.now()) {
+      console.log('Episode not aired yet, skipping search');
+      return;
+    }
+
     let torrentsFound = 0;
     let processTrackers = 0;
 
     for (const tracker of trackers) {
+      console.log('Searching on ', tracker);
       try {
-        const torrents = await this.jackettService.queryTracker(
-          tracker.id,
-          'tv',
-          params
-        );
+        const torrents = await this.jackettService.queryTracker({
+          trackerId: tracker.id,
+          searchType: 'tv',
+          queryParams: params,
+          airedOn: firstAired,
+        });
+
+        console.log(params, torrents);
 
         if (torrents.length) {
           for (const torrent of torrents) {

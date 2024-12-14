@@ -96,9 +96,6 @@ export const Background = () => {
     if (currentPage === 'profile-selection') {
       return 'full';
     }
-    if (currentPage === 'home') {
-      return 'full';
-    }
     return 'none';
   }, [currentPage]);
 
@@ -120,11 +117,6 @@ export const Background = () => {
         shuffledBackgrounds[(currentBackground + 1) % backgrounds.length];
       const preloadLogo = new Image();
       preloadLogo.src = logos[(currentBackground + 1) % backgrounds.length];
-    }
-    if (currentPage === 'home') {
-      const preloadImg = new Image();
-      preloadImg.src =
-        backgrounds[(currentBackground + 1) % backgrounds.length];
     }
   }, [backgrounds, shuffledBackgrounds, currentBackground, logos, currentPage]);
 
