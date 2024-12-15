@@ -10,20 +10,26 @@ import {
 import { Job, Queue, QueueEvents } from 'bullmq';
 import { ShowsData } from './shows.data';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ShowsQueues {
   private readonly showsEventsQueue: QueueEvents;
   private readonly logger = new Logger(ShowsQueues.name);
   constructor(
+    configService: ConfigService,
     @InjectQueue(queues.show)
     private readonly showQueue: Queue<
       GetShowExtendedDataData | SearchImagesForShowData
     >,
     private readonly showsData: ShowsData
   ) {
-    // ToDo: Use configuration for redis connection
-    this.showsEventsQueue = new QueueEvents(queues.show);
+    this.showsEventsQueue = new QueueEvents(queues.show, {
+      connection: {
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+      }
+    });
     this.startProcessingShowsWithoutImages();
   }
 

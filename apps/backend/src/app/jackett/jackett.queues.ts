@@ -11,11 +11,13 @@ import { Movie } from '../database/entities/movie.entity';
 import { Show } from '../database/entities/show.entity';
 import { Episode } from '../database/entities/episode.entity';
 import { Season } from '../database/entities/season.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JackettQueues {
   private jackettEventsQueue: QueueEvents;
   constructor(
+    configService: ConfigService,
     @InjectQueue(queues.jackett)
     private readonly jackettQueue: Queue<
       SearchMovieData | SearchShowEpisodeData,
@@ -23,8 +25,12 @@ export class JackettQueues {
       jackettJobs.searchMovie | jackettJobs.searchShowEpisode
     >
   ) {
-    // ToDo: Use configuration for redis connection
-    this.jackettEventsQueue = new QueueEvents(queues.jackett);
+    this.jackettEventsQueue = new QueueEvents(queues.jackett, {
+      connection: {
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+      }
+    });
   }
 
   public async prioritizeTorrentSearch(slug: string, priority: number) {

@@ -28,7 +28,6 @@ import { ShowsDataModule } from './shows/shows.data';
 import { TraktApiModule } from './trakt/trakt.api';
 import { ShowsQueuesModule } from './shows/shows.queues';
 import { ShowsModule } from './shows/shows.module';
-import winston from 'winston';
 import { logger } from '../logger';
 
 @Module({

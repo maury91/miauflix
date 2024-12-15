@@ -13,36 +13,60 @@ The platform combines the output of two types of services:
 
 Miauflix is a play on words between Miau ( the sound a cat makes in latin based languages ) and Netflix.
 
-## Installation
+## Quick start
 
-To install all the required dependencies run:
+First of all we need things running:
+```shell
+docker-compose up -d --env-file .env
+```
 
-```bash
+Now that all the services are up we can start configuring them:
+
+### Jackett
+
+To configure Jackett, we are going to navigate to http://localhost:9117,
+here, we are going to start by grabbing the API key displayed on the top right.
+
+Click the copy button, and paste it in the `.env` file as the value for `JACKETT_API_KEY`.
+
+Next click on the `Add indexer` button, and search for the indexers that you want to add.
+
+If you are not sure what indexers to use, I recommend checking on Reddit for your use case.
+
+### Trakt
+
+Next we want to obtain an access key for Trakt, Trakt is the service that provides the list of movies and tv series, other than providing
+the list of movies and tv series, it also tracks what you are watching and can recommend you new content based on your watch history.
+
+To obtain an access key, navigate to https://trakt.tv/oauth/applications/new and create a new application.
+
+Copy the API key and the API secret, and paste them in the `.env` file as the values for `TRAKT_CLIENT_ID` and `TRAKT_CLIENT_SECRET`.
+
+### TMDB
+
+Next we want to obtain an access key for TMDB, TMDB is the service that provides the images for the movies and tv series.
+
+To obtain an access key, navigate to https://www.themoviedb.org/settings/api and create a new application.
+
+Copy the API key and paste it in the `.env` file as the value for `TMDB_API_ACCESS_TOKEN`.
+
+### Database
+
+The last thing is to initialize the database, run the following command to create the database ( if it does not exists )
+
+```shell
+npx sequelize-cli db:create
+```
+
+ToDo: Add migrations, wait for sequelize 7 or use TypeORM
+
+## Local development
+
+Start by installing the dependencies:
+
+```shell
 yarn install
 ```
-
-## Setup
-
-Miauflix comes with a default discovery service named "Trakt + TMDB". And a default streaming service named "P2P".
-
-To setup the discovery service you can copy the `.env.example` file to `.env` and set the following variables:
-
-- *TRAKT_CLIENT_ID* This is the client id for the trakt service. You can get one by registering at https://trakt.tv/oauth/applications/new
-- *TRAKT_CLIENT_SECRET* This is the client secret for the trakt service. You will get one together with the client id.
-- *TMDB_API_ACCESS_TOKEN* This is the access token for the TMDB service. You can get one by registering at https://developer.themoviedb.org/docs/getting-started
-- *JACKETT_API_KEY* This is the api key for the jackett service. You can get one by setting up a jackett instance and getting the api key from the settings page.
-
-## Running the upstream services
-
-Miauflix uses Jackett, Postgres and Redis.
-
-You can start postgres and redis by running:
-
-```bash
-docker-compose up -d
-```
-
-To start Jackett it is platform specific, for the time being I recommend to follow the official instructions at https://github.com/Jackett/Jackett
 
 ## Running the project
 

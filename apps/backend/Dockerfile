@@ -3,11 +3,11 @@
 # Build the docker image with `npx nx docker-build backend`.
 # Tip: Modify "docker-build" options in project.json to change docker build args.
 #
-# Run the container with `docker run -p 3000:3000 -t backend`.
+# Run the container with `docker run -p 818:818 -t backend`.
 FROM docker.io/node:lts-alpine
 
 ENV HOST=0.0.0.0
-ENV PORT=3000
+ENV PORT=808
 
 WORKDIR /app
 
@@ -19,6 +19,6 @@ RUN chown -R backend:backend .
 
 # You can remove this install step if you build with `--bundle` option.
 # The bundled output will include external dependencies.
-RUN npm --prefix backend --omit=dev -f install
+RUN npm --prefix backend --omit=dockerfiles -f install
 
 CMD [ "node", "backend" ]

@@ -10,6 +10,7 @@ import {
 import { Job, Queue, QueueEvents } from 'bullmq';
 import { MoviesData } from './movies.data';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MoviesQueues {
@@ -17,14 +18,19 @@ export class MoviesQueues {
 
   private readonly movieEventsQueue: QueueEvents;
   constructor(
+    configService: ConfigService,
     @InjectQueue(queues.movie)
     private readonly movieQueue: Queue<
       GetMovieExtendedDataData | SearchImagesForMovieData
     >,
     private readonly movieData: MoviesData
   ) {
-    // ToDo: Use configuration for redis connection
-    this.movieEventsQueue = new QueueEvents(queues.movie);
+    this.movieEventsQueue = new QueueEvents(queues.movie, {
+      connection: {
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+      }
+    });
     this.startProcessingMoviesWithoutImages();
   }
 

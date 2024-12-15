@@ -1,0 +1,42 @@
+services:
+  backend:
+    container_name: miauflix_backend
+    image: miauflix_backend
+    build:
+      context: .
+      dockerfile: dockerfiles/dev.Dockerfile
+    working_dir: /miauflix
+    command: ["npm", "run", "backend:dev", "--host=0.0.0.0"]
+    ports:
+      - "808:808"
+      - "818:818"
+    volumes:
+      - ./apps:/miauflix/apps
+      - ./libs:/miauflix/libs
+      - miauflix_node_modules:/miauflix/node_modules
+    environment:
+      - HOST=0.0.0.0
+    links:
+      - redis
+      - postgres
+      - seq
+      - jackett
+  frontend:
+    container_name: miauflix_frontend
+    image: miauflix_frontend
+    build:
+      context: .
+      dockerfile: dockerfiles/dev.Dockerfile
+    working_dir: /miauflix
+    command: ["npm", "run", "frontend:dev", "--host=0.0.0.0"]
+    ports:
+      - "1919:1919"
+    volumes:
+      - ./apps:/miauflix/apps
+      - ./libs:/miauflix/libs
+      - miauflix_node_modules:/miauflix/node_modules
+    environment:
+      - HOST=0.0.0.0
+
+volumes:
+  miauflix_node_modules:

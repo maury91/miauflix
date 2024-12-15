@@ -13,6 +13,7 @@ import { BulkJobOptions } from 'bullmq/dist/esm/interfaces';
 export class TorrentQueues {
   // private eventsQueue: QueueEvents;
   constructor(
+    // configService: ConfigService,
     @InjectQueue(queues.torrent)
     private readonly torrentQueue: Queue<
       GetTorrentFileData,
@@ -20,8 +21,12 @@ export class TorrentQueues {
       torrentJobs.getTorrentFile
     >
   ) {
-    // ToDo: Use configuration for redis connection
-    // this.eventsQueue = new QueueEvents(queues.torrent);
+    // this.eventsQueue = new QueueEvents(queues.torrent, {
+    //       connection: {
+    //         host: configService.get<string>('REDIS_HOST'),
+    //         port: configService.get<number>('REDIS_PORT'),
+    //       }
+    //     });
   }
 
   public getTorrentFile(

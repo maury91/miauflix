@@ -9,7 +9,12 @@
     "libs/*"
   ],
   "scripts": {
-    "build:tizen": "nx build frontend --env.VITE_TIZEN=true"
+    "backend:dev": "nx serve backend",
+    "frontend:dev": "nx serve frontend",
+    "build:tizen": "nx build frontend --env.VITE_TIZEN=true",
+    "migration:generate": "ts-node -P ./apps/backend/tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create ./apps/backend/src/app/database/migrations/",
+    "migrate": "ts-node -P ./apps/backend/tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./apps/backend/src/datasource.ts",
+    "migration:down": "ts-node -P ./apps/backend/tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./apps/backend/src/datasource.ts"
   },
   "dependencies": {
     "@dicebear/collection": "9.2.2",
@@ -26,6 +31,7 @@
     "@nestjs/platform-socket.io": "10.4.8",
     "@nestjs/schedule": "4.1.1",
     "@nestjs/sequelize": "10.0.1",
+    "@nestjs/typeorm": "10.0.2",
     "@nestjs/websockets": "10.4.8",
     "@noriginmedia/norigin-spatial-navigation": "2.2.1",
     "@reduxjs/toolkit": "^2.2.7",
@@ -36,7 +42,7 @@
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
-    "dotenv": "16.4.5",
+    "dotenv": "16.4.7",
     "dotenv-expand": "11.0.6",
     "express": "^4.18.1",
     "extract-colors": "4.1.0",
@@ -61,7 +67,9 @@
     "sequelize-typescript": "2.1.6",
     "socket.io": "4.8.1",
     "styled-components": "5.3.6",
+    "typeorm": "0.3.20",
     "uuid": "10.0.0",
+    "video.js": "8.21.0",
     "webtorrent": "https://github.com/maury91/webtorrent.git",
     "winston": "3.17.0",
     "winston-daily-rotate-file": "5.0.0",
@@ -131,6 +139,8 @@
     "prettier": "^2.6.2",
     "react-refresh": "^0.10.0",
     "sass-embedded": "1.79.4",
+    "sequelize-auto-migrations": "1.0.3",
+    "sequelize-cli": "6.6.2",
     "terser": "^5.34.1",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",

@@ -1,0 +1,6 @@
+.nx
+node_modules
+apps
+.idea
+dist
+libs

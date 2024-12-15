@@ -7,11 +7,13 @@ import {
   torrentOrchestratorJobs,
 } from '@miauflix/types';
 import { Job, Queue, QueueEvents } from 'bullmq';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TorrentOrchestratorQueues {
   private eventsQueue: QueueEvents;
   constructor(
+    configService: ConfigService,
     @InjectQueue(queues.torrentOrchestrator)
     private readonly torrentOrchestratorQueue: Queue<
       PopulateTorrentQForMediaData | ChangePriorityForMediaData,
@@ -20,8 +22,12 @@ export class TorrentOrchestratorQueues {
       | torrentOrchestratorJobs.changePriorityForMedia
     >
   ) {
-    // ToDo: Use configuration for redis connection
-    this.eventsQueue = new QueueEvents(queues.torrentOrchestrator);
+    this.eventsQueue = new QueueEvents(queues.torrentOrchestrator, {
+      connection: {
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+      }
+    });
   }
 
   public async prioritizeScanTorrents(
