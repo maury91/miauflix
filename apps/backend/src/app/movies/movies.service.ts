@@ -59,7 +59,7 @@ export class MoviesService {
 
     return {
       movie,
-      sources: movie.allSources,
+      sources: movie.sources,
     };
   }
 

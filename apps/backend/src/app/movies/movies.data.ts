@@ -1,18 +1,17 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import {
-  Movie,
-  MovieCreationAttributes,
+  Movie, MovieCreationAttributes
 } from '../database/entities/movie.entity';
 import { Movie as TraktMovie } from '../trakt/trakt.types';
-import { Op, Sequelize } from 'sequelize';
-import { MovieDto } from '@miauflix/types';
+import { MediaImages, MovieDto } from '@miauflix/types';
 import { Torrent } from '../database/entities/torrent.entity';
 import { MovieSource } from '../database/entities/movie.source.entity';
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
+import { In, Raw, Repository } from 'typeorm';
 
 @Injectable()
 export class MoviesData {
-  constructor(@InjectModel(Movie) private readonly movieModel: typeof Movie) {}
+  constructor(@InjectRepository(Movie) private readonly movieModel: Repository<Movie>) {}
 
   async findMovie(slug: string): Promise<Movie | null> {
     return await this.movieModel.findOne({
@@ -22,25 +21,29 @@ export class MoviesData {
     });
   }
 
+  async updateImages(movieId: number, images: MediaImages): Promise<void> {
+    await this.movieModel.update(
+      { id: movieId },
+      images,
+    );
+  }
+
   async findMovieById(id: number): Promise<Movie | null> {
-    return await this.movieModel.findByPk(id, {
-      raw: true,
-    });
+    return await this.movieModel.findOneBy(
+      { id },
+    );
   }
 
   async findMoviesWithoutImages(): Promise<Movie[]> {
-    return await this.movieModel.findAll({
-      where: {
-        [Op.or]: [
-          {
-            poster: '',
-          },
-          Sequelize.where(
-            Sequelize.fn('cardinality', Sequelize.col('backdrops')),
-            0
-          ),
-        ],
-      },
+    return await this.movieModel.find({
+      where: [
+        {
+          poster: '',
+        },
+        {
+          backdrops: Raw((alias) => `cardinality(${alias}) = 0`),
+        },
+      ]
     });
   }
 
@@ -49,21 +52,18 @@ export class MoviesData {
       where: {
         slug,
       },
-      include: {
-        model: MovieSource,
-        as: 'allSources',
-        attributes: ['data', 'quality', 'codec'],
-      },
+      relations: {
+        sources: true
+      }
     });
   }
 
   async findTraktMovie(slug: string): Promise<TraktMovie | null> {
     const movie = await this.movieModel.findOne({
-      attributes: ['slug', 'traktId', 'imdbId', 'tmdbId', 'title', 'year'],
+      select: ['slug', 'traktId', 'imdbId', 'tmdbId', 'title', 'year'],
       where: {
         slug,
       },
-      raw: true,
     });
 
     if (!movie) {
@@ -83,13 +83,10 @@ export class MoviesData {
   }
 
   async findMovies(slugs: string[]): Promise<Movie[]> {
-    return await this.movieModel.findAll({
+    return await this.movieModel.find({
       where: {
-        slug: {
-          [Op.in]: slugs,
-        },
+        slug: In(slugs),
       },
-      raw: true,
     });
   }
 
@@ -124,29 +121,29 @@ export class MoviesData {
   }
 
   async createMovie(movie: MovieCreationAttributes): Promise<Movie> {
-    return (await this.movieModel.upsert(movie))[0];
+    return await this.movieModel.save(movie);
   }
 
   async setTorrentSearched(slug: string): Promise<void> {
     await this.movieModel.update(
+      {slug},
       { sourcesSearched: true },
-      { where: { slug } }
     );
   }
 
   async setSourceFound(slug: string): Promise<void> {
-    await this.movieModel.update({ sourceFound: true }, { where: { slug } });
+    await this.movieModel.update({slug}, { sourceFound: true });
   }
 
   async setNoSourceFound(slug: string): Promise<void> {
-    await this.movieModel.update({ noSourceFound: true }, { where: { slug } });
+    await this.movieModel.update({ slug }, { noSourceFound: true });
   }
 }
 
 @Global()
 @Module({
-  imports: [SequelizeModule.forFeature([Movie, Torrent, MovieSource])],
+  imports: [TypeOrmModule.forFeature([Movie, Torrent, MovieSource])],
   providers: [MoviesData],
-  exports: [MoviesData, SequelizeModule],
+  exports: [MoviesData, TypeOrmModule],
 })
 export class MoviesDataModule {}

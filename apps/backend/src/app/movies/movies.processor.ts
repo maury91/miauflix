@@ -27,7 +27,7 @@ export class MovieProcessor extends WorkerHost {
     const movieExists = await this.movieData.findMovie(movieSlug);
     if (movieExists) {
       if (images && images.poster && !movieExists.poster) {
-        await movieExists.update(images);
+        this.movieData.updateImages(movieExists.id, images);
       }
       return movieExists;
     }
@@ -87,7 +87,7 @@ export class MovieProcessor extends WorkerHost {
         'movie',
         movie.tmdbId
       );
-      await movie.update(images);
+      await this.movieData.updateImages(movie.id, images);
     } catch (error) {
       console.error('Failed to search images for movie', job.data, error);
       throw error;

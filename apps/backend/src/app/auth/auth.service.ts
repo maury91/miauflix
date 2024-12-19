@@ -52,7 +52,8 @@ export class AuthService {
       this.logger.log('Renewing token for user', token.userId);
       const newToken = await this.traktService.refreshToken(token.refreshToken);
       this.logger.log('Got new token');
-      await token.update({
+      await this.userData.updateToken({
+        ...token,
         createdAt: new Date(newToken.created_at * 1000),
         accessToken: newToken.access_token,
         refreshToken: newToken.refresh_token,

@@ -1,68 +1,51 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Movie } from './movie.entity';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
+import { PartialKeys } from '../../../helper.types';
 
-export interface MovieSourceAttributes {
+@Entity()
+export class MovieSource {
+  @PrimaryGeneratedColumn()
   id: number;
-  movieId: number;
+
+  @Column()
   movieSlug: string;
+
+  @ManyToOne(() => Movie, (movie) => movie.sources)
   movie: Movie;
+  movieId: number;
+
+  @Column()
   originalSource: string;
-  size: number;
-  data: Buffer;
-  quality: VideoQuality;
+
+  @Column({
+    type: 'varchar',
+    array: true,
+    length: 500,
+  })
   videos: string[];
-  codec: VideoCodec;
-  source: VideoSource;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
-export type MovieSourceCreationAttributes = Omit<
-  MovieSourceAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'movie'
->;
+  @Column('bigint')
+  size: number;
 
-@Table
-export class MovieSource extends Model<
-  MovieSourceAttributes,
-  MovieSourceCreationAttributes
-> {
-  @ForeignKey(() => Movie)
-  movieId!: number;
-
-  @Column
-  movieSlug!: string;
-
-  @BelongsTo(() => Movie)
-  movie: Movie;
-
-  @Column
-  originalSource!: string;
-
-  @Column(DataType.ARRAY(DataType.STRING(500)))
-  videos!: string[];
-
-  @Column(DataType.BIGINT)
-  size!: number;
-
-  @Column(DataType.BLOB)
+  @Column('blob')
   data?: Buffer;
 
-  @Column(DataType.SMALLINT)
-  quality!: VideoQuality;
+  @Column('smallint')
+  quality: VideoQuality;
 
-  @Column(DataType.STRING)
-  codec!: VideoCodec;
+  @Column('varchar')
+  codec: VideoCodec;
 
-  @Column(DataType.STRING)
-  source!: VideoSource;
+  @Column('varchar')
+  source: VideoSource;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
+
+export type MovieSourceCreationAttributes = PartialKeys<Omit<MovieSource, 'id' | 'movie'>, 'createdAt' | 'updatedAt'>;

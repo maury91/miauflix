@@ -1,27 +1,37 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  HasMany,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Indexer } from './indexer.entity';
+import { PartialKeys } from '../../../helper.types';
 
-@Table
-export class IndexerCategory extends Model {
-  @Column
+@Entity()
+export class IndexerCategory {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   name: string;
 
-  @Column(DataType.INTEGER.UNSIGNED)
+  @Column({
+    type: 'int',
+    unsigned: true
+  })
   catId: number;
 
-  @HasMany(() => IndexerCategory)
+  @OneToMany(() => IndexerCategory, (category) => category.parentCategory)
   subCategories: IndexerCategory[];
 
-  @BelongsTo(() => IndexerCategory)
+  @ManyToOne(() => IndexerCategory, (category) => category.subCategories)
   parentCategory?: IndexerCategory;
+  parentCategoryId?: number;
 
-  @BelongsTo(() => Indexer)
-  indexer?: Indexer;
+  @OneToMany(() => Indexer, (indexer) => indexer.categories)
+  indexer: Indexer;
+  indexerId: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
+
+export type IndexerCategoryCreationAttributes = PartialKeys<Omit<IndexerCategory, 'id' | 'parentCategory' | 'indexer'>, 'createdAt' | 'updatedAt'>

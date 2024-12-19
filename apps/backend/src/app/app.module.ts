@@ -6,7 +6,6 @@ import { redisStore } from 'cache-manager-redis-store';
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { UserModule } from './user/user.module';
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { MoviesModule } from './movies/movies.module';
@@ -28,7 +27,8 @@ import { ShowsDataModule } from './shows/shows.data';
 import { TraktApiModule } from './trakt/trakt.api';
 import { ShowsQueuesModule } from './shows/shows.queues';
 import { ShowsModule } from './shows/shows.module';
-import { logger } from '../logger';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { dataSourceOptions } from '../datasource';
 
 @Module({
   imports: [
@@ -50,23 +50,7 @@ import { logger } from '../logger';
       }),
       inject: [ConfigService],
     }),
-    SequelizeModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        dialect: 'postgres',
-        host: configService.getOrThrow('POSTGRES_HOST'),
-        port: configService.getOrThrow('POSTGRES_PORT'),
-        username: configService.getOrThrow('POSTGRES_USER'),
-        password: configService.getOrThrow('POSTGRES_PASS'),
-        database: configService.getOrThrow('POSTGRES_DB'),
-        autoLoadModels: true,
-        synchronize: true,
-        logging: (sql) => {
-          return logger.debug(sql);
-        },
-      }),
-      inject: [ConfigService],
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],

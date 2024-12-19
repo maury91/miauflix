@@ -1,25 +1,23 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import { Show, ShowCreationAttributes } from '../database/entities/show.entity';
 import { ShowSimple as TraktShow } from '../trakt/trakt.types';
-import { Op, Sequelize } from 'sequelize';
-import { ShowDto } from '@miauflix/types';
+import { MediaImages, ShowDto } from '@miauflix/types';
 import {
-  Season,
-  SeasonCreationAttributes,
+  Season, SeasonCreationAttributes
 } from '../database/entities/season.entity';
 import {
-  Episode,
-  EpisodeCreationAttributes,
+  Episode, EpisodeCreationAttributes
 } from '../database/entities/episode.entity';
 import { EpisodeSource } from '../database/entities/episode.source.entity';
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
+import { In, Raw, Repository } from 'typeorm';
 
 @Injectable()
 export class ShowsData {
   constructor(
-    @InjectModel(Show) private readonly showModel: typeof Show,
-    @InjectModel(Season) private readonly seasonModel: typeof Season,
-    @InjectModel(Episode) private readonly episodeModel: typeof Episode
+    @InjectRepository(Show) private readonly showModel: Repository<Show>,
+    @InjectRepository(Season) private readonly seasonModel: Repository<Season>,
+    @InjectRepository(Episode) private readonly episodeModel: Repository<Episode>
   ) {}
 
   async findShow(slug: string, withSeasons = false): Promise<Show | null> {
@@ -28,70 +26,75 @@ export class ShowsData {
         where: {
           slug,
         },
-        include: [
-          {
-            model: Season,
-            include: [
-              {
-                model: Episode,
-              },
-            ],
-          },
-        ],
+        relations: {
+          seasons: {
+            episodes: true,
+          }
+        }
       });
     }
-    return await this.showModel.findOne({
-      where: {
+    return await this.showModel.findOneBy({
         slug,
-      },
     });
   }
 
-  async findEpisode(id: number): Promise<Episode | null> {
-    return await this.episodeModel.findOne({
-      where: {
-        id,
+  async updateImages(showId: number, images: MediaImages): Promise<void> {
+    await this.showModel.update(
+      { id: showId },
+      images,
+    );
+  }
+
+  async updateSeasonsSount(showId: number, seasonsCount: number): Promise<void> {
+    await this.showModel.update(
+      { id: showId },
+      { seasonsCount },
+    );
+  }
+
+  async updateEpisodeImage(episodeId: number, image: string): Promise<void> {
+    await this.episodeModel.update(
+      { id: episodeId },
+      {
+        image
       },
-      raw: true,
+    );
+  }
+
+  async findEpisode(id: number): Promise<Episode | null> {
+    return await this.episodeModel.findOneBy({
+        id,
     });
   }
 
   async findSeason(id: number): Promise<Season | null> {
-    return await this.seasonModel.findOne({
-      where: {
+    return await this.seasonModel.findOneBy({
         id,
-      },
-      raw: true,
     });
   }
 
   async findShowFromDb(id: number): Promise<Show | null> {
-    return await this.showModel.findOne({
-      where: {
+    return await this.showModel.findOneBy({
         id,
-      },
     });
   }
 
   async findShowsWithoutImages(): Promise<Show[]> {
-    return await this.showModel.findAll({
-      where: {
-        [Op.or]: [
-          {
-            poster: '',
-          },
-          Sequelize.where(
-            Sequelize.fn('cardinality', Sequelize.col('backdrops')),
-            0
-          ),
-        ],
-      },
+    return await this.showModel.find({
+      where: [
+        {
+          poster: '',
+        },
+        {
+          backdrops: Raw((alias) => `cardinality(${alias}) = 0`),
+        }
+      ]
     });
   }
 
   async findTraktShow(slug: string): Promise<TraktShow | null> {
     const show = await this.showModel.findOne({
-      attributes: [
+      select: [
         'slug',
         'traktId',
         'tvdbId',
@@ -103,7 +106,6 @@ export class ShowsData {
       where: {
         slug,
       },
-      raw: true,
     });
 
     if (!show) {
@@ -124,13 +126,10 @@ export class ShowsData {
   }
 
   async findShows(slugs: string[]): Promise<Show[]> {
-    return await this.showModel.findAll({
+    return await this.showModel.find({
       where: {
-        slug: {
-          [Op.in]: slugs,
-        },
-      },
-      raw: true,
+        slug: In(slugs),
+      }
     });
   }
 
@@ -164,19 +163,15 @@ export class ShowsData {
   }
 
   async createShow(show: ShowCreationAttributes): Promise<Show> {
-    return (await this.showModel.upsert(show))[0];
+    return (await this.showModel.upsert(show, ['id', 'slug']))[0];
   }
 
   async updateLastCheckedAt(slug: string): Promise<void> {
     await this.showModel.update(
+      {slug},
       {
         lastCheckedAt: new Date(),
       },
-      {
-        where: {
-          slug,
-        },
-      }
     );
   }
 
@@ -184,66 +179,84 @@ export class ShowsData {
     show: Show,
     season: Omit<SeasonCreationAttributes, 'showId'>
   ): Promise<Season> {
-    return (await this.seasonModel.upsert({ ...season, showId: show.id }))[0];
+    const existingSeason = await this.seasonModel.findOne({
+      where: {
+        number: season.number,
+        showId: show.id,
+      },
+    });
+
+    if (existingSeason) {
+      return await this.seasonModel.save(
+        {
+          id: existingSeason.id,
+          ...season,
+          showId: show.id,
+        },
+      );
+    }
+
+    return (await this.seasonModel.upsert({ ...season, showId: show.id }, ['id', ]))[0];
   }
 
   async addEpisode(
     season: Season,
     episode: Omit<EpisodeCreationAttributes, 'seasonId' | 'showId'>
   ): Promise<Episode> {
-    return (
-      await this.episodeModel.upsert({
-        ...episode,
+    // If an episode with the same number and season already exists, update it
+    const existingEpisode = await this.episodeModel.findOne({
+      where: {
+        number: episode.number,
         seasonId: season.id,
-        showId: season.showId,
-      })
-    )[0];
+      },
+    });
+
+    if (existingEpisode) {
+         return await this.episodeModel.save(
+          {
+            id: existingEpisode.id,
+            ...episode,
+            seasonId: season.id,
+            showId: season.showId,
+          },
+        );
+    }
+
+    return existingEpisode;
   }
 
   async setEpisodeSearched(episodeId: number): Promise<void> {
     await this.episodeModel.update(
+      episodeId,
       {
         sourcesSearched: true,
       },
-      {
-        where: {
-          id: episodeId,
-        },
-      }
     );
   }
 
   async setNoSourceFound(episodeId: number): Promise<void> {
     await this.episodeModel.update(
+      episodeId,
       {
         noSourceFound: true,
       },
-      {
-        where: {
-          id: episodeId,
-        },
-      }
     );
   }
 
   async setSourceFound(episodeId: number): Promise<void> {
     await this.episodeModel.update(
+      episodeId,
       {
         sourceFound: true,
       },
-      {
-        where: {
-          id: episodeId,
-        },
-      }
     );
   }
 }
 
 @Global()
 @Module({
-  imports: [SequelizeModule.forFeature([Show, Season, Episode, EpisodeSource])],
+  imports: [TypeOrmModule.forFeature([Show, Season, Episode, EpisodeSource])],
   providers: [ShowsData],
-  exports: [ShowsData, SequelizeModule],
+  exports: [ShowsData, TypeOrmModule],
 })
 export class ShowsDataModule {}

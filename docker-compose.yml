@@ -1,6 +1,20 @@
 name: miauflix
 
 services:
+  vpn:
+    image: ghcr.io/bubuntux/nordvpn
+    cap_add:
+      - NET_ADMIN               # Required
+      - NET_RAW                 # Required
+    environment:                # Review https://github.com/bubuntux/nordvpn#environment-variables
+      - TOKEN="${NORDVPN_TOKEN}"
+      - CONNECT="${NORDVPN_SERVER}"
+      - TECHNOLOGY=NordLynx
+      - NETWORK=192.168.0.0/16  # So it can be accessed within the local network
+    ports:
+      - 8080:8080
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1  # Recomended if using ipv4 only
   postgres:
     image: postgres:14-alpine
     ports:
@@ -8,9 +22,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD="${POSTGRES_PASS}"
-      - POSTGRES_USER="${POSTGRES_USER}"
-      - POSTGRES_DB="${POSTGRES_DB}"
+      - POSTGRES_PASSWORD=$POSTGRES_PASS
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_DB=$POSTGRES_DB
   redis:
     image: redis/redis-stack-server:latest
     ports:
@@ -59,9 +73,9 @@ services:
       - default
     restart: unless-stopped
 
-include:
+#include:
   # Development docker compose, uncomment when you want to edit the code
-  - ./docker-compose.dev.yml
+#  - ./docker-compose.dev.yml
 
 volumes:
   redis_data:

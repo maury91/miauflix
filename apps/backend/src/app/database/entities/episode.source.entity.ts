@@ -1,80 +1,69 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from 'sequelize-typescript';
 import { Episode } from './episode.entity';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { PartialKeys } from '../../../helper.types';
 
-export interface EpisodeSourceAttributes {
+@Entity()
+export class EpisodeSource {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => Episode, (episode) => episode.sources)
+  episode: Episode;
   episodeId: number;
-  episode: Episode;
+
+  @Column()
   showSlug: string;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  rejected = false;
+
+  @Column('smallint')
   seasonNum: number;
+
+  @Column('smallint')
   episodeNum: number;
+
+  @Column()
   originalSource: string;
-  rejected: boolean;
-  size: number;
-  data: Buffer;
-  quality: VideoQuality;
+
+  @Column({
+    type: 'varchar',
+    array: true,
+    length: 500,
+  })
   videos: string[];
-  codec: VideoCodec;
-  source: VideoSource;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
-export type EpisodeSourceCreationAttributes = Omit<
-  EpisodeSourceAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'episode' | 'rejected'
->;
-
-@Table
-export class EpisodeSource extends Model<
-  EpisodeSourceAttributes,
-  EpisodeSourceCreationAttributes
-> {
-  @ForeignKey(() => Episode)
-  episodeId!: number;
-
-  @BelongsTo(() => Episode)
-  episode: Episode;
-
-  @Column
-  showSlug!: string;
-
-  @Column(DataType.BOOLEAN)
-  rejected!: boolean;
-
-  @Column(DataType.SMALLINT)
-  seasonNum!: number;
-
-  @Column(DataType.SMALLINT)
-  episodeNum!: number;
-
-  @Column
-  originalSource!: string;
-
-  @Column(DataType.ARRAY(DataType.STRING(500)))
-  videos!: string[];
-
-  @Column(DataType.BIGINT)
+  @Column('bigint')
   size!: number;
 
-  @Column(DataType.BLOB)
+  @Column('blob')
   data?: Buffer;
 
-  @Column(DataType.SMALLINT)
+  @Column('smallint')
   quality!: VideoQuality;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: 'varchar',
+    length: 20,
+  })
   codec!: VideoCodec;
 
-  @Column(DataType.STRING)
+  @Column({
+    type: 'varchar',
+    length: 20,
+  })
   source!: VideoSource;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
+
+export type EpisodeSourceCreationAttributes = PartialKeys<Omit<EpisodeSource, 'id' | 'episode'>, 'createdAt' | 'updatedAt' | 'rejected'>;

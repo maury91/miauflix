@@ -1,30 +1,29 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import {
-  Torrent,
-  TorrentCreationAttributes,
+  Torrent, TorrentCreationAttributes
 } from '../database/entities/torrent.entity';
-import { GetTorrentFileData, VideoQuality } from '@miauflix/types';
+import { GetTorrentFileData, VideoCodec, VideoQuality } from '@miauflix/types';
 import { Movie } from '../database/entities/movie.entity';
-import sequelize, { Op, Sequelize, WhereOptions } from 'sequelize';
 import { MovieSource } from '../database/entities/movie.source.entity';
 import { createHmac } from 'node:crypto';
 import { Episode } from '../database/entities/episode.entity';
 import { EpisodeSource } from '../database/entities/episode.source.entity';
 import { Show } from '../database/entities/show.entity';
 import { Season } from '../database/entities/season.entity';
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
+import { Brackets, In, LessThan, Like, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class TorrentData {
   constructor(
     // private readonly movieProcessorService: MovieProcessorService,
-    @InjectModel(Movie) private readonly movieModel: typeof Movie,
-    @InjectModel(Episode) private readonly episodeModel: typeof Episode,
-    @InjectModel(Torrent) private readonly torrentModel: typeof Torrent,
-    @InjectModel(MovieSource)
-    private readonly movieSourceModel: typeof MovieSource,
-    @InjectModel(EpisodeSource)
-    private readonly episodeSourceModel: typeof EpisodeSource
+    @InjectRepository(Movie) private readonly movieModel: Repository< Movie>,
+    @InjectRepository(Episode) private readonly episodeModel: Repository< Episode>,
+    @InjectRepository(Torrent) private readonly torrentModel: Repository< Torrent>,
+    @InjectRepository(MovieSource)
+    private readonly movieSourceModel: Repository< MovieSource>,
+    @InjectRepository(EpisodeSource)
+    private readonly episodeSourceModel: Repository< EpisodeSource>
   ) {}
 
   async createTorrent(
@@ -44,7 +43,7 @@ export class TorrentData {
       return existingTorrent;
     }
 
-    return this.torrentModel.create({ ...torrent, uuid: torrentUuid });
+    return this.torrentModel.save({ ...torrent, uuid: torrentUuid });
   }
 
   async findTorrentToProcess({
@@ -58,61 +57,41 @@ export class TorrentData {
     highQuality: boolean;
     hevc: boolean;
   }): Promise<Torrent[]> {
-    const filter: WhereOptions = {
-      [mediaType === 'movie' ? 'movieId' : 'episodeId']: mediaId,
-      quality: {
-        [highQuality ? Op.gt : Op.lte]: 1080,
-      },
-      codec: {
-        [hevc ? Op.like : Op.notLike]: '%x265%',
-      },
-      processed: false,
-    };
-    const minimumSeeds = (await this.torrentModel.findAll({
-      attributes: [
-        [
-          Sequelize.literal(
-            'PERCENTILE_CONT(0.3) WITHIN GROUP (ORDER BY "seeders")'
-          ),
-          'median_seeders',
-        ],
-        'quality',
-      ],
-      where: filter,
-      group: ['quality'],
-      raw: true,
-    })) as unknown as { median_seeders: number; quality: VideoQuality }[];
+    const query = `${mediaType === 'movie' ? 'movieId' : 'episodeId'} = :mediaId AND quality ${highQuality ? '>' : '<='} 1080 AND codec ${hevc ? 'LIKE' : 'NOT LIKE'} '%x265%' AND processed = false`;
 
-    return this.torrentModel.findAll({
-      where: {
-        ...filter,
-        [Op.or]: minimumSeeds.map(({ median_seeders, quality }) => ({
-          quality,
-          seeders: {
-            [Op.gte]: median_seeders,
-          },
-        })),
-      },
-      include: [
-        {
-          model: Movie,
-        },
-      ],
-      order: [
-        [
-          Sequelize.literal(`CASE
-            WHEN "source" = 'WEB' OR "source" = 'Blu-ray' THEN 3
-            WHEN "source" = 'HDTV' OR "source" = 'DVD' THEN 2
-            WHEN "source" = 'TS' OR "source" = 'unknown' THEN 1
-            WHEN "source" = 'Cam' THEN 0
-        END`),
-          'DESC',
-        ],
-        ['quality', 'DESC'],
-        [Sequelize.literal('"size"/"movie"."runtime"'), 'ASC'],
-      ],
-      limit: 2,
-    });
+    const minimumSeeds = await this.torrentModel
+      .createQueryBuilder('torrent')
+      .select(
+        'PERCENTILE_CONT(0.3) WITHIN GROUP (ORDER BY torrent.seeders)',
+        'median_seeders'
+      )
+      .addSelect('torrent.quality')
+      .where(query, { mediaId })
+      .groupBy('torrent.quality')
+      .getRawMany<{ median_seeders: number; quality: VideoQuality }>();
+
+    return this.torrentModel
+      .createQueryBuilder('torrent')
+      .where(query, { mediaId })
+      .andWhere(
+        new Brackets((qb) => {
+          minimumSeeds.forEach(({ median_seeders, quality }, index) => {
+            qb.orWhere(
+              `quality = :quality${index} AND seeders >= :seeders${index}`,
+              {
+                [`quality${index}`]: quality,
+                [`seeders${index}`]: median_seeders,
+              }
+            );
+          });
+        })
+      )
+      .leftJoinAndSelect('torrent.movie', 'movie')
+      .orderBy('CASE WHEN source = \'WEB\' OR source = \'Blu-ray\' THEN 3 WHEN source = \'HDTV\' OR source = \'DVD\' THEN 2 WHEN source = \'TS\' OR source = \'unknown\' THEN 1 WHEN source = \'Cam\' THEN 0 END', 'DESC')
+      .addOrderBy('quality', 'DESC')
+      .addOrderBy('size / movie.runtime', 'ASC')
+      .limit(2)
+      .getMany();
   }
 
   async getTorrentByMovieAndQuality(
@@ -121,22 +100,19 @@ export class TorrentData {
     useLowQuality: boolean
   ) {
     const bestSource = await this.movieSourceModel.findOne({
-      attributes: ['data', 'videos', 'id'],
+      select: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
-        codec: {
-          [useHevc ? Op.like : Op.notLike]: '%x265%',
-        },
+        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
         ...(useLowQuality
           ? {
-              quality: {
-                [Op.lte]: 180,
-              },
+              quality: LessThan(1080),
             }
           : {}),
       },
-      order: [['quality', 'DESC']],
-      raw: true,
+      order: {
+        quality: 'DESC',
+      }
     });
 
     if (bestSource) {
@@ -144,15 +120,14 @@ export class TorrentData {
     }
 
     const sameCodec = await this.movieSourceModel.findOne({
-      attributes: ['data', 'videos', 'id'],
+      select: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
-        codec: {
-          [useHevc ? Op.like : Op.notLike]: '%x265%',
-        },
+        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
       },
-      order: [['quality', 'DESC']],
-      raw: true,
+      order: {
+        quality: 'DESC',
+      }
     });
 
     if (sameCodec) {
@@ -160,12 +135,13 @@ export class TorrentData {
     }
 
     const highestQuality = await this.movieSourceModel.findOne({
-      attributes: ['data', 'videos', 'id'],
+      select: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
       },
-      order: [['quality', 'DESC']],
-      raw: true,
+      order: {
+        quality: 'DESC',
+      }
     });
 
     if (highestQuality) {
@@ -181,23 +157,20 @@ export class TorrentData {
     useLowQuality: boolean
   ) {
     const bestSource = await this.episodeSourceModel.findOne({
-      attributes: ['data', 'videos', 'id'],
+      select: ['data', 'videos', 'id'],
       where: {
         episodeId,
         rejected: false,
-        codec: {
-          [useHevc ? Op.like : Op.notLike]: '%x265%',
-        },
+        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
         ...(useLowQuality
           ? {
-              quality: {
-                [Op.lte]: 180,
-              },
-            }
+            quality: LessThan(1080),
+          }
           : {}),
       },
-      order: [['quality', 'DESC']],
-      raw: true,
+      order: {
+        quality: 'DESC',
+      }
     });
 
     if (bestSource) {
@@ -205,16 +178,15 @@ export class TorrentData {
     }
 
     const sameCodec = await this.episodeSourceModel.findOne({
-      attributes: ['data', 'videos', 'id'],
+      select: ['data', 'videos', 'id'],
       where: {
         episodeId,
         rejected: false,
-        codec: {
-          [useHevc ? Op.like : Op.notLike]: '%x265%',
-        },
+        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
       },
-      order: [['quality', 'DESC']],
-      raw: true,
+      order: {
+        quality: 'DESC',
+      }
     });
 
     if (sameCodec) {
@@ -222,13 +194,14 @@ export class TorrentData {
     }
 
     const highestQuality = await this.episodeSourceModel.findOne({
-      attributes: ['data', 'videos', 'id'],
+      select: ['data', 'videos', 'id'],
       where: {
         episodeId,
         rejected: false,
       },
-      order: [['quality', 'DESC']],
-      raw: true,
+      order: {
+        quality: 'DESC',
+      }
     });
 
     if (highestQuality) {
@@ -239,53 +212,45 @@ export class TorrentData {
   }
 
   async getTorrentsToProcess() {
-    const notProcessedMovies = await this.movieModel.findAll({
-      attributes: ['id'],
+    const notProcessedMovies = await this.movieModel.find({
+      select: ['id'],
       where: {
         sourcesSearched: false,
         sourceFound: false,
       },
-      raw: true,
     });
-    const notProcessedEpisodes = await this.episodeModel.findAll({
-      attributes: ['id'],
+    const notProcessedEpisodes = await this.episodeModel.find({
+      select: ['id'],
       where: {
         sourcesSearched: true, // We have a lot of episode in the database, better not search everything but only what have been requested
         sourceFound: false,
       },
-      raw: true,
     });
-    const torrentGroups = (await this.torrentModel.findAll({
-      attributes: [
-        'movieId',
-        'episodeId',
-        [sequelize.fn('COUNT', sequelize.col('*')), 'count'],
-        [sequelize.literal('"quality" > 1080'), 'highQuality'],
-        [sequelize.literal('"codec" LIKE \'%x265%\''), 'hevc'],
-      ],
-      where: {
-        processed: false,
-        [Op.or]: [
-          {
-            movieId: {
-              [Op.in]: notProcessedMovies.map(({ id }) => id),
-            },
-          },
-          {
-            episodeId: {
-              [Op.in]: notProcessedEpisodes.map(({ id }) => id),
-            },
-          },
-        ],
-      },
-      group: ['highQuality', 'hevc', 'movieId', 'episodeId'],
-      raw: true,
-    })) as unknown as {
-      movieId: number | null;
-      episodeId: number | null;
-      highQuality: boolean;
-      hevc: boolean;
-    }[];
+    const torrentGroups = await this.torrentModel
+      .createQueryBuilder('torrent')
+      .select('torrent.movieId')
+      .addSelect('torrent.episodeId')
+      .addSelect('COUNT(*)', 'count')
+      .addSelect('torrent.quality > 1080', 'highQuality')
+      .addSelect('torrent.codec LIKE \'%x265%\'', 'hevc')
+      .where('torrent.processed = false')
+      .andWhere(new Brackets((qb) => {
+        qb.where('torrent.movieId IN (:...movieIds)', {
+          movieIds: notProcessedMovies.map(({ id }) => id),
+        }).orWhere('torrent.episodeId IN (:...episodeIds)', {
+          episodeIds: notProcessedEpisodes.map(({ id }) => id),
+        });
+      }))
+      .groupBy('highQuality')
+      .addGroupBy('hevc')
+      .addGroupBy('torrent.movieId')
+      .addGroupBy('torrent.episodeId')
+      .getRawMany<{
+        movieId: number | null;
+        episodeId: number | null;
+        highQuality: boolean;
+        hevc: boolean;
+      }>();
 
     if (!torrentGroups.length) {
       return [];
@@ -296,14 +261,11 @@ export class TorrentData {
         .map(({ movieId }) => movieId)
         .filter((id) => id !== null) satisfies number[]
     );
-    const movies = await this.movieModel.findAll({
-      attributes: ['id', 'runtime'],
+    const movies = await this.movieModel.find({
+      select: ['id', 'runtime'],
       where: {
-        id: {
-          [Op.in]: [...movieIds],
-        },
+        id: In([...movieIds]),
       },
-      raw: true,
     });
 
     const episodeIds = new Set(
@@ -311,14 +273,11 @@ export class TorrentData {
         .map(({ episodeId }) => episodeId)
         .filter((id) => id !== null) satisfies number[]
     );
-    const episodes = await this.episodeModel.findAll({
-      attributes: ['id', 'runtime'],
+    const episodes = await this.episodeModel.find({
+      select: ['id', 'runtime'],
       where: {
-        id: {
-          [Op.in]: [...episodeIds],
-        },
+        id: In([...episodeIds]),
       },
-      raw: true,
     });
 
     return torrentGroups.map<GetTorrentFileData>(
@@ -347,23 +306,29 @@ export class TorrentData {
     mediaId: number,
     mediaType: 'movie' | 'episode'
   ) {
-    const torrentGroups = (await this.torrentModel.findAll({
-      attributes: [
-        [sequelize.fn('COUNT', sequelize.col('*')), 'count'],
-        [sequelize.literal('"quality" > 1080'), 'highQuality'],
-        [sequelize.literal('"codec" LIKE \'%x265%\''), 'hevc'],
-      ],
-      where: {
-        [mediaType === 'movie' ? 'movieId' : 'episodeId']: mediaId,
-        processed: false,
-      },
-      group: ['highQuality', 'hevc'],
-      raw: true,
-    })) as unknown as { highQuality: boolean; hevc: boolean }[];
+    const torrentGroups = await this.torrentModel
+      .createQueryBuilder('torrent')
+      .select('COUNT(*)', 'count')
+      .addSelect('torrent.quality > 1080', 'highQuality')
+      .addSelect('torrent.codec LIKE \'%x265%\'', 'hevc')
+      .where(
+        mediaType === 'movie'
+          ? { movieId: mediaId }
+          : { episodeId: mediaId }
+      )
+      .andWhere('torrent.processed = false')
+      .groupBy('highQuality')
+      .addGroupBy('hevc')
+      .getRawMany<{
+        highQuality: boolean;
+        hevc: boolean;
+      }>();
 
-    const { runtime } = await (mediaType === 'movie'
-      ? this.movieModel.findByPk(mediaId, { raw: true })
-      : this.episodeModel.findByPk(mediaId, { raw: true }));
+    const { runtime } = await(
+      mediaType === 'movie'
+        ? this.movieModel.findOneBy({ id: mediaId })
+        : this.episodeModel.findOneBy({ id: mediaId })
+    );
     return torrentGroups.map<GetTorrentFileData>(({ highQuality, hevc }) => ({
       mediaId,
       mediaType,
@@ -377,37 +342,44 @@ export class TorrentData {
     if (type === 'movie') {
       // ToDo
     } else {
-      const source = await this.episodeSourceModel.findByPk(sourceId, {
-        include: [
-          {
-            model: Episode,
-          },
-        ],
+      const source = await this.episodeSourceModel.findOne({
+        where: { id: sourceId },
+        relations: {
+          episode: true,
+        }
       });
       if (!source) {
         throw new Error('Source not found');
       }
       console.log('Updating source');
-      await source.update({ rejected: true });
+      await this.episodeSourceModel.update(source.id, { rejected: true })
       if (source.originalSource.includes('torrent::')) {
         console.log('Updating torrent');
         const torrentId = parseInt(source.originalSource.split('::')[1], 10);
-        const torrent = await this.torrentModel.findByPk(torrentId);
+        const torrent = await this.torrentModel.findOneBy({ id: torrentId });
         if (!torrent) {
           throw new Error('Torrent not found');
         }
-        await torrent.update({ rejected: true });
+        await this.torrentModel.update(torrent.id, { rejected: true });
       }
       console.log('Updating episode');
-      await source.episode.update({ sourceFound: false });
+      await this.episodeModel.update(source.episode.id, { sourceFound: false });
     }
+  }
+
+  async setProcessed(torrentId: number) {
+    await this.torrentModel.update(torrentId, { processed: true });
+  }
+
+  async setRejected(torrentId: number) {
+    await this.torrentModel.update(torrentId, { processed: true, rejected: true });
   }
 }
 
 @Global()
 @Module({
   imports: [
-    SequelizeModule.forFeature([
+    TypeOrmModule.forFeature([
       Torrent,
       Movie,
       MovieSource,
@@ -418,6 +390,6 @@ export class TorrentData {
     ]),
   ],
   providers: [TorrentData],
-  exports: [TorrentData, SequelizeModule],
+  exports: [TorrentData, TypeOrmModule],
 })
 export class TorrentDataModule {}

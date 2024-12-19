@@ -1,59 +1,45 @@
-import { Optional } from 'sequelize';
-import {
-  Table,
-  Column,
-  Model,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-} from 'sequelize-typescript';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import { User } from './user.entity';
+import { PartialKeys } from '../../../helper.types';
 
-export interface AccessTokenAttributes {
+@Entity()
+export class AccessToken {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   accessToken: string;
-  tokenType: string;
-  expiresIn: number;
+
+  @Column()
   refreshToken: string;
-  deviceCode?: string;
+
+  @Column()
+  deviceCode: string;
+
+  @Column({
+    type: 'varchar',
+    length: 20
+  })
+  tokenType: string;
+
+  @Column({
+    type: 'varchar',
+    length: 20
+  })
   scope: string;
+
+  @Column()
+  expiresIn: number;
+
+  @ManyToOne(() => User, (user) => user.accessTokens)
+  user: User;
+  userId: number;
+
+  @CreateDateColumn()
   createdAt: Date;
-  userId: number;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
 
-export type AccessTokenCreationAttributes = Optional<
-  AccessTokenAttributes,
-  'id' | 'createdAt'
->;
-
-@Table
-export class AccessToken extends Model<
-  AccessTokenAttributes,
-  AccessTokenCreationAttributes
-> {
-  @Column
-  accessToken!: string;
-
-  @Column
-  refreshToken!: string;
-
-  @Column
-  deviceCode?: string;
-
-  @Column(DataType.STRING(20))
-  tokenType!: string;
-
-  @Column(DataType.STRING(20))
-  scope!: string;
-
-  @Column
-  expiresIn!: number;
-
-  @ForeignKey(() => User)
-  @Column
-  userId: number;
-
-  @CreatedAt
-  @Column
-  override createdAt!: Date;
-}
+export type AccessTokenCreationAttributes = PartialKeys<Omit<AccessToken, 'id' | 'user'>, 'createdAt' | 'updatedAt'>

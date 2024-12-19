@@ -15,6 +15,10 @@ Miauflix is a play on words between Miau ( the sound a cat makes in latin based 
 
 ## Quick start
 
+Start by copying the `.env.example` file to `.env`:
+
+```shell
+
 First of all we need things running:
 ```shell
 docker-compose up -d --env-file .env
@@ -49,6 +53,18 @@ Next we want to obtain an access key for TMDB, TMDB is the service that provides
 To obtain an access key, navigate to https://www.themoviedb.org/settings/api and create a new application.
 
 Copy the API key and paste it in the `.env` file as the value for `TMDB_API_ACCESS_TOKEN`.
+
+### VPN
+
+I use NordVPN simply because I currently have a subscription, you can use any VPN provider that you want.
+Pull requests to add support for other VPN providers are welcome.
+
+To configure NordVPN, we are going to navigate to https://my.nordaccount.com/dashboard/nordvpn/access-tokens/ and generate a new token.
+
+Add the toke to the `.env` file as the value for `NORDVPN_TOKEN`.
+
+You can also add the country that you want to use as the value for `NORDVPN_COUNTRY`,
+the name is a little bit confusing because you can also specify a City or Server, refer to [NordVPN Docker](https://github.com/bubuntux/nordvpn?tab=readme-ov-file#environment-variables) for more information.
 
 ### Database
 

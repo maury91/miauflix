@@ -12,9 +12,10 @@
     "backend:dev": "nx serve backend",
     "frontend:dev": "nx serve frontend",
     "build:tizen": "nx build frontend --env.VITE_TIZEN=true",
-    "migration:generate": "ts-node -P ./apps/backend/tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create ./apps/backend/src/app/database/migrations/",
-    "migrate": "ts-node -P ./apps/backend/tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d ./apps/backend/src/datasource.ts",
-    "migration:down": "ts-node -P ./apps/backend/tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d ./apps/backend/src/datasource.ts"
+    "typeorm": "nx build backend && cp .env ./dist/apps/backend/src && npx typeorm -d ./dist/apps/backend/src/typeorm.config.js",
+    "migration:generate": "npm run typeorm -- migration:generate",
+    "migration:run": "npm run typeorm -- migration:run",
+    "migration:revert": "npm run typeorm -- migration:revert"
   },
   "dependencies": {
     "@dicebear/collection": "9.2.2",

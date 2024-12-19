@@ -1,83 +1,89 @@
-import {
-  Column,
-  DataType,
-  HasMany,
-  Model,
-  PrimaryKey,
-  Table,
-} from 'sequelize-typescript';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { IndexerCategory } from './indexer.category.entity';
+import { PartialKeys } from '../../../helper.types';
 
-export interface IndexerAttributes {
-  id: string;
+@Entity()
+export class Indexer {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   configured: boolean;
+
+  @Column()
   title: string;
+
+  @Column()
   description: string;
+
+  @Column()
   language: string;
+
+  @Column()
   isPrivate: boolean;
+
+  @Column()
   defaultLimit: number;
+
+  @Column()
   maxLimit: number;
+
+  @Column()
   searchAvailable: boolean;
+
+  @Column({
+    type: 'varchar',
+    array: true,
+  })
   searchSupportedParams: string[];
+
+  @Column()
   tvSearchAvailable: boolean;
+
+  @Column({
+    type: 'varchar',
+    array: true
+  })
   tvSearchSupportedParams: string[];
+
+  @Column()
   movieSearchAvailable: boolean;
+
+  @Column({
+    type: 'varchar',
+    array: true
+  })
   movieSearchSupportedParams: string[];
-}
 
-@Table
-export class Indexer extends Model<IndexerAttributes> {
-  @PrimaryKey
-  override id!: string;
+  @Column({
+    type: 'smallint',
+    unsigned: true,
+    array: true
+  })
+  tvCategories: number[];
 
-  @Column
-  configured!: boolean;
+  @Column({
+    type: 'smallint',
+    unsigned: true,
+    array: true
+  })
+  movieCategories: number[];
 
-  @Column
-  title!: string;
+  @Column({
+    type: 'smallint',
+    unsigned: true,
+    array: true
+  })
+  animeCategories: number[];
 
-  @Column
-  description!: string;
-
-  @Column
-  language!: string;
-
-  @Column
-  isPrivate!: boolean;
-
-  @Column
-  defaultLimit!: number;
-
-  @Column
-  maxLimit!: number;
-
-  @Column
-  searchAvailable!: boolean;
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  searchSupportedParams!: string[];
-
-  @Column
-  tvSearchAvailable!: boolean;
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  tvSearchSupportedParams!: string[];
-
-  @Column
-  movieSearchAvailable!: boolean;
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  movieSearchSupportedParams!: string[];
-
-  @Column(DataType.ARRAY(DataType.INTEGER.UNSIGNED))
-  tvCategories!: number[];
-
-  @Column(DataType.ARRAY(DataType.INTEGER.UNSIGNED))
-  movieCategories!: number[];
-
-  @Column(DataType.ARRAY(DataType.INTEGER.UNSIGNED))
-  animeCategories!: number[];
-
-  @HasMany(() => IndexerCategory)
+  @OneToMany(() => IndexerCategory, (category) => category.indexer)
   categories: IndexerCategory[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
+
+export type IndexerCreationAttributes = PartialKeys< Omit<Indexer, 'id' | 'categories'>, 'createdAt' | 'updatedAt'>;

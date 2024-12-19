@@ -22,17 +22,15 @@ export class DeviceCodeProcessor extends WorkerHost {
       await this.userData.createUser({
         name: user.name,
         slug: user.ids.slug,
-        accessTokens: [
-          {
-            accessToken: token.access_token,
-            refreshToken: token.refresh_token,
-            tokenType: token.token_type,
-            expiresIn: token.expires_in,
-            scope: token.scope,
-            createdAt: new Date(token.created_at * 1000),
-            deviceCode,
-          },
-        ],
+        accessTokens: [{
+          accessToken: token.access_token,
+          refreshToken: token.refresh_token,
+          tokenType: token.token_type,
+          expiresIn: token.expires_in,
+          scope: token.scope,
+          createdAt: new Date(token.created_at * 1000),
+          deviceCode,
+        }],
       });
     } catch (err) {
       console.error(err);

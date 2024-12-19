@@ -1,135 +1,93 @@
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  Default,
-  ForeignKey,
-  Model,
-  Table,
-  Unique,
-} from 'sequelize-typescript';
-import { Movie } from './movie.entity';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
-import { Show } from './show.entity';
-import { Season } from './season.entity';
-import { Episode } from './episode.entity';
+import { PartialKeys } from '../../../helper.types';
 
-export interface TorrentAttributes {
+@Entity()
+export class Torrent {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   movieId?: number;
-  movie?: Movie;
+
+  @Column()
   showId?: number;
+
+  @Column()
   seasonId?: number;
+
+  @Column()
   episodeId?: number;
+
+  @Column()
   seasonNum?: number;
+
+  @Column()
   episodeNum?: number;
-  episode?: Episode;
+
+  @Column()
   runtime: number;
+
+  @Column()
   mediaSlug: string;
+
+  @Column()
   title: string;
+
+  @Column({
+    type: 'varchar',
+    unique: true,
+  })
   uuid: string;
+
+  @Column()
   pubDate: Date;
+
+  @Column('bigint')
   size: number;
+
+  @Column('text')
   url: string;
+
+  @Column()
   urlType: string;
+
+  @Column()
   tracker: string;
+
+  @Column()
   seeders: number;
+
+  @Column()
   peers: number;
+
+  @Column('smallint')
   quality: VideoQuality;
+
+  @Column('varchar')
   codec: VideoCodec;
+
+  @Column('varchar')
   source: VideoSource;
-  processed: boolean;
-  rejected: boolean;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  processed = false;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  rejected = false;
+
+  @CreateDateColumn()
   createdAt: Date;
-  updatedAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
 
-export type TorrentCreationAttributes = Omit<
-  TorrentAttributes,
-  | 'id'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'processed'
-  | 'rejected'
-  | 'movie'
-  | 'episode'
->;
-
-@Table
-export class Torrent extends Model {
-  @ForeignKey(() => Movie)
-  movieId?: number;
-
-  @BelongsTo(() => Movie)
-  movie?: Movie;
-
-  @ForeignKey(() => Show)
-  showId?: number;
-
-  @ForeignKey(() => Season)
-  seasonId?: number;
-
-  @ForeignKey(() => Episode)
-  episodeId?: number;
-
-  @BelongsTo(() => Episode)
-  episode?: Episode;
-
-  @Column
-  seasonNum?: number;
-
-  @Column
-  episodeNum?: number;
-
-  @Column
-  runtime!: number;
-
-  @Column
-  mediaSlug!: string;
-
-  @Column
-  title!: string;
-
-  @Unique
-  @Column
-  uuid!: string;
-
-  @Column
-  pubDate!: Date;
-
-  @Column(DataType.BIGINT)
-  size!: number;
-
-  @Column(DataType.TEXT)
-  url!: string;
-
-  @Column
-  urlType!: string;
-
-  @Column
-  tracker!: string;
-
-  @Column
-  seeders!: number;
-
-  @Column
-  peers!: number;
-
-  @Column(DataType.SMALLINT)
-  quality!: VideoQuality;
-
-  @Column(DataType.STRING)
-  codec!: VideoCodec;
-
-  @Column(DataType.STRING)
-  source!: VideoSource;
-
-  @Default(false)
-  @Column
-  processed!: boolean;
-
-  @Default(false)
-  @Column
-  rejected!: boolean;
-}
+export type TorrentCreationAttributes = PartialKeys<Omit<Torrent, 'id' | 'createdAt' | 'updatedAt'>, 'rejected' | 'processed'>

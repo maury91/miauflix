@@ -1,7 +1,7 @@
-import { DataSource } from 'typeorm';
-import { join } from 'path';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { join } from 'path'
 
-export const connectionSource = new DataSource({
+export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: process.env['POSTGRES_HOST'],
   port: parseInt(process.env['POSTGRES_PORT'], 10),
@@ -14,4 +14,8 @@ export const connectionSource = new DataSource({
   synchronize: false,
   migrationsTableName: 'miauflix_migrations',
   migrationsRun: false,
-})
+}
+
+const connectionSource = new DataSource(dataSourceOptions)
+
+export default connectionSource;

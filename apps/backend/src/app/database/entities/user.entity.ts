@@ -1,44 +1,31 @@
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import {
-  Table,
-  Column,
-  Model,
-  Unique,
-  HasMany,
-  CreatedAt,
-} from 'sequelize-typescript';
-import {
-  AccessToken,
-  AccessTokenAttributes,
-  AccessTokenCreationAttributes,
+  AccessToken, AccessTokenCreationAttributes
 } from './accessToken.entity';
-import { Optional } from 'sequelize';
 
-export interface UserAttributes {
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
   id: number;
-  name: string;
-  slug: string;
-  accessTokens: AccessTokenAttributes[];
-  createdAt: Date;
-}
 
-export interface UserCreationAttributes
-  extends Omit<Optional<UserAttributes, 'id' | 'createdAt'>, 'accessTokens'> {
-  accessTokens?: Omit<AccessTokenCreationAttributes, 'userId'>[];
-}
-
-@Table
-export class User extends Model<UserAttributes, UserCreationAttributes> {
-  @Column
+  @Column()
   name!: string;
 
-  @Unique
-  @Column
+  @PrimaryColumn()
   slug!: string;
 
-  @HasMany(() => AccessToken)
-  accessTokens: AccessToken;
+  @OneToMany(() => AccessToken, (accessToken) => accessToken.user, {
+    cascade: ['insert'],
+  })
+  accessTokens: AccessToken[];
 
-  @CreatedAt
-  @Column
-  override createdAt!: Date;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
+
+export type UserCreationAttributes = Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'accessTokens'> & {
+  accessTokens: Omit<AccessTokenCreationAttributes, 'userId'>[];
+};

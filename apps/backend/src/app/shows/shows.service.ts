@@ -150,29 +150,6 @@ export class ShowsService {
         return null;
       })
     );
-    // If an episode is missing a traktId get it
-    const missingDataEpisodes = season.episodes.some(
-      (episode) => !episode.traktId || !episode.overview
-    );
-    if (missingDataEpisodes) {
-      const traktEpisodes = await this.traktService.getShowSeasonEpisodes(
-        slug,
-        seasonNumber,
-        true
-      );
-      for (const traktEpisode of traktEpisodes) {
-        const episode = season.episodes.find(
-          (episode) => episode.number === traktEpisode.number
-        );
-        if (episode) {
-          await episode.update({
-            traktId: traktEpisode.ids.trakt,
-            overview: traktEpisode.overview,
-          });
-          episode.traktId = traktEpisode.ids.trakt;
-        }
-      }
-    }
     const missingImages = season.episodes.some((episode) => !episode.image);
     if (missingImages) {
       console.log('Searching images');
@@ -187,7 +164,7 @@ export class ShowsService {
             ({ episode_number }) => episode_number === episode.number
           )?.still_path;
           if (episodeImage) {
-            await episode.update({ image: episodeImage });
+            this.showData.updateEpisodeImage(episode.id, episodeImage);
             episode.image = episodeImage;
           }
         }

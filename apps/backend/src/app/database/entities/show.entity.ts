@@ -1,130 +1,113 @@
-import {
-  Column,
-  DataType,
-  Default,
-  HasMany,
-  Index,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Season } from './season.entity';
 import { Episode } from './episode.entity';
-import { NOW } from 'sequelize';
+import { PartialKeys } from '../../../helper.types';
 
-export interface ShowAttributes {
+@Entity()
+export class Show {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @PrimaryColumn()
   slug: string;
+
+  @Column()
   title: string;
+
+  @Column()
   year: number;
+
+  @Column('text')
   overview: string;
-  runtime: number;
-  trailer: string;
+
+  @Column()
   network: string;
+
+  @Column()
   status: string;
+
+  @Column()
+  runtime: number;
+
+  @Column({
+    type: 'varchar',
+    length: 500
+  })
+  trailer: string;
+
+  @Column({
+    type: 'decimal',
+    precision: 4,
+    scale: 2,
+  })
   rating: number;
-  genres: string[];
+
+  @Column('smallint')
   airedEpisodes: number;
+
+  @Column()
   traktId: number;
+
+  @Column()
   imdbId: string;
+
+  @Column()
   tmdbId: number;
+
+  @Column()
   tvdbId: number;
+
+  @Column()
   poster: string;
+
+  @Column()
   backdrop: string;
+
+  @Column({
+    type: 'varchar',
+    array: true
+  })
   backdrops: string[];
+
+  @Column({
+    type: 'varchar',
+    array: true
+  })
   logos: string[];
-  seasonsCount: number;
-  seasons: Season[];
-  episodes: Episode[];
+
+  @Column({
+    type: 'varchar',
+    array: true
+  })
+  genres: string[];
+
+  @Column({
+    type: 'smallint',
+    unsigned: true,
+    default: 0
+  })
+  seasonsCount = 0;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
   lastCheckedAt: Date;
+
+  @OneToMany(() => Season, (season) => season.show)
+  seasons: Season[];
+
+  @OneToMany(() => Episode, (episode) => episode.show)
+  episodes: Episode[];
+
+  @Column()
+  lastSeasonAirDate?: Date;
+
+  @Column()
+  lastEpisodeAirDate?: Date;
+
+  @CreateDateColumn()
   createdAt: Date;
-  updatedAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
 
-export type ShowCreationAttributes = Omit<
-  ShowAttributes,
-  | 'id'
-  | 'seasons'
-  | 'episodes'
-  | 'seasonsCount'
-  | 'lastCheckedAt'
-  | 'createdAt'
-  | 'updatedAt'
->;
-
-@Table
-export class Show extends Model<ShowAttributes, ShowCreationAttributes> {
-  @Index('show_slug_index')
-  @Column
-  slug!: string;
-
-  @Column
-  title!: string;
-
-  @Column
-  year!: number;
-
-  @Column(DataType.TEXT)
-  overview!: string;
-
-  @Column
-  network!: string;
-
-  @Column
-  status!: string;
-
-  @Column
-  runtime!: number;
-
-  @Column(DataType.STRING(500))
-  trailer!: string;
-
-  @Column(DataType.DECIMAL(4, 2))
-  rating!: number;
-
-  @Column(DataType.SMALLINT)
-  airedEpisodes!: number;
-
-  @Column
-  traktId!: number;
-
-  @Column
-  imdbId!: string;
-
-  @Column
-  tmdbId!: number;
-
-  @Column
-  tvdbId!: number;
-
-  @Column
-  poster!: string;
-
-  @Column
-  backdrop!: string;
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  backdrops!: string[];
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  logos!: string[];
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  genres!: string[];
-
-  @Default(0)
-  @Column(DataType.SMALLINT)
-  seasonsCount!: number;
-
-  @Default(NOW)
-  @Column
-  lastCheckedAt!: Date;
-
-  @HasMany(() => Season)
-  seasons!: Season[];
-
-  @HasMany(() => Episode)
-  episodes!: Episode[];
-
-  // Add last season aired at
-  // Add last episode aired at
-}
+export type ShowCreationAttributes = PartialKeys<Omit<Show, 'id' | 'seasons' | 'episodes'>, 'createdAt' | 'updatedAt' | 'seasonsCount' | 'lastCheckedAt'>;

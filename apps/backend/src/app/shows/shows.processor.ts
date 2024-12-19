@@ -32,7 +32,7 @@ export class ShowsProcessor extends WorkerHost {
     const showExists = await this.showData.findShow(showSlug);
     if (showExists) {
       if (images && images.poster && !showExists.poster) {
-        await showExists.update(images);
+        await this.showData.updateImages(showExists.id, images);
       }
       return showExists;
     }
@@ -129,9 +129,7 @@ export class ShowsProcessor extends WorkerHost {
       (max, season) => (season.number > max ? season.number : max),
       0
     );
-    await show.update({
-      seasonsCount: latestSeason,
-    });
+    await this.showData.updateSeasonsSount(show.id, latestSeason);
     await Promise.all(
       seasons.map((season) => this.getShowSeason(show, season))
     );
@@ -160,7 +158,7 @@ export class ShowsProcessor extends WorkerHost {
         return;
       }
       const images = await this.tmdbApi.getSimpleMediaImages('tv', show.tmdbId);
-      await show.update(images);
+      this.showData.updateImages(show.id, images);
     } catch (error) {
       console.error('Failed to search images for show', job.data, error);
       throw error;

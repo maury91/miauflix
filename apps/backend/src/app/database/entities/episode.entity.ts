@@ -1,109 +1,94 @@
-import {
-  Column,
-  DataType,
-  Default,
-  ForeignKey,
-  HasMany,
-  Model,
-  Table,
-} from 'sequelize-typescript';
 import { Season } from './season.entity';
 import { Show } from './show.entity';
 import { EpisodeSource } from './episode.source.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { PartialKeys } from '../../../helper.types';
 
-export interface EpisodeAttributes {
+@Entity()
+export class Episode {
+  @PrimaryGeneratedColumn()
   id: number;
-  seasonId: number;
-  showId: number;
-  number: number;
-  order: number;
-  title: string;
-  overview: string;
-  rating: number;
-  firstAired: Date;
-  runtime: number;
-  episodeType: string;
-  sourceFound: boolean;
-  sourcesSearched: boolean;
-  noSourceFound: boolean;
-  image: string;
-  traktId: number;
-  tmdbId: number;
-  tvdbId: number;
-  imdbId: string;
-  sources: EpisodeSource[];
-  season: Season;
+
+  @ManyToOne(() => Show, (show) => show.episodes)
   show: Show;
-  createdAt: Date;
-  updatedAt: Date;
-}
+  showId: number;
 
-export type EpisodeCreationAttributes = Omit<
-  EpisodeAttributes,
-  | 'id'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'season'
-  | 'show'
-  | 'sources'
-  | 'sourceFound'
-  | 'sourcesSearched'
-  | 'noSourceFound'
->;
+  @ManyToOne(() => Season, (season) => season.episodes)
+  season: Season;
+  seasonId: number;
 
-@Table
-export class Episode extends Model<
-  EpisodeAttributes,
-  EpisodeCreationAttributes
-> {
-  @ForeignKey(() => Show)
-  showId!: number;
+  @OneToMany(() => EpisodeSource, (episodeSource) => episodeSource.episode)
+  sources!: EpisodeSource[];
 
-  @ForeignKey(() => Season)
-  seasonId!: number;
+  @Column('smallint')
+  number: number;
 
-  @Column(DataType.SMALLINT)
-  number!: number;
+  @Column('smallint')
+  order: number;
 
-  @Column(DataType.SMALLINT)
-  order!: number;
+  @Column()
+  title: string;
 
-  @Column
-  title!: string;
+  @Column('text')
+  overview: string;
 
-  @Column(DataType.TEXT)
-  overview!: string;
+  @Column({
+    type: 'decimal',
+    precision: 4,
+    scale: 2,
+  })
+  rating: number;
 
-  @Column(DataType.DECIMAL(4, 2))
-  rating!: number;
+  @Column()
+  firstAired: Date;
 
-  @Column
-  firstAired!: Date;
+  @Column('smallint')
+  runtime: number;
 
-  @Column
-  runtime!: number;
-
-  @Column(DataType.STRING(30))
+  @Column({
+    type: 'varchar',
+    length: 30,
+  })
   episodeType!: string;
 
-  @Column
-  image!: string;
+  @Column()
+  image: string;
 
-  @Column
-  traktId!: number;
+  @Column()
+  traktId: number;
 
-  @Default(false)
-  @Column
-  sourceFound!: boolean;
+  @Column()
+  imdbId: string;
 
-  @Default(false)
-  @Column
-  sourcesSearched!: boolean;
+  @Column()
+  tvdbId: number;
 
-  @Default(false)
-  @Column
-  noSourceFound!: boolean;
+  @Column()
+  tmdbId: number;
 
-  @HasMany(() => EpisodeSource)
-  sources!: EpisodeSource[];
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  sourceFound = false;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  sourcesSearched = false;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  noSourceFound = false;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date
 }
+
+export type EpisodeCreationAttributes = PartialKeys<Omit<Episode, 'id' | 'season' | 'show' | 'sources'>, 'createdAt' | 'updatedAt' | 'sourceFound' | 'sourcesSearched' | 'noSourceFound'>

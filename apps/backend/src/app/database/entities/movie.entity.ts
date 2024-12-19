@@ -1,108 +1,107 @@
 import {
   Column,
-  DataType,
-  Default,
-  HasMany,
-  Index,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { MovieSource } from './movie.source.entity';
+import { PartialKeys } from '../../../helper.types';
 
-export interface MovieAttributes {
+@Entity()
+export class Movie {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @PrimaryColumn()
   slug: string;
+
+  @Column()
   title: string;
+
+  @Column()
   year: number;
+
+  @Column('text')
   overview: string;
+
+  @Column()
   runtime: number;
+
+  @Column({
+    type: 'varchar',
+    length: 500,
+  })
   trailer: string;
+
+  @Column({
+    type: 'decimal',
+    precision: 4,
+    scale: 2,
+  })
   rating: number;
-  genres: string[];
-  sourceFound: boolean;
-  sourcesSearched: boolean;
-  noSourceFound: boolean;
+
+  @Column()
   traktId: number;
+
+  @Column()
   imdbId: string;
+
+  @Column()
   tmdbId: number;
+
+  @Column()
   poster: string;
+
+  @Column()
   backdrop: string;
+
+  @Column({
+    type: 'varchar',
+    array: true,
+  })
   backdrops: string[];
+
+  @Column({
+    type: 'varchar',
+    array: true,
+  })
   logos: string[];
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  sourcesSearched = false;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  noSourceFound = false;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  sourceFound = false;
+
+  @OneToMany(() => MovieSource, (movieSource) => movieSource.movie)
+  sources: MovieSource[] = [];
+
+  @Column({
+    type: 'varchar',
+    array: true,
+  })
+  genres: string[];
+
+  @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
   updatedAt: Date;
 }
 
-export type MovieCreationAttributes = Omit<
-  MovieAttributes,
-  | 'id'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'sourceFound'
-  | 'sourcesSearched'
-  | 'noSourceFound'
->;
-
-@Table
-export class Movie extends Model<MovieAttributes, MovieCreationAttributes> {
-  @Index('movie_slug_index')
-  @Column
-  slug!: string;
-
-  @Column
-  title!: string;
-
-  @Column
-  year!: number;
-
-  @Column(DataType.TEXT)
-  overview!: string;
-
-  @Column
-  runtime!: number;
-
-  @Column(DataType.STRING(500))
-  trailer!: string;
-
-  @Column(DataType.DECIMAL(4, 2))
-  rating!: number;
-
-  @Column
-  traktId!: number;
-
-  @Column
-  imdbId!: string;
-
-  @Column
-  tmdbId!: number;
-
-  @Column
-  poster!: string;
-
-  @Column
-  backdrop!: string;
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  backdrops!: string[];
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  logos!: string[];
-
-  @Default(false)
-  @Column
-  sourcesSearched: boolean;
-
-  @Default(false)
-  @Column
-  noSourceFound: boolean;
-
-  @Default(false)
-  @Column
-  sourceFound: boolean;
-
-  @HasMany(() => MovieSource)
-  allSources: MovieSource[];
-
-  @Column(DataType.ARRAY(DataType.STRING))
-  genres!: string[];
-}
+export type MovieCreationAttributes = PartialKeys<Omit<Movie, 'id' | 'sources' | 'createdAt' | 'updatedAt'>, 'noSourceFound' | 'sourceFound' | 'sourcesSearched'>;

@@ -1,44 +1,43 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import {
-  MovieSource,
-  MovieSourceCreationAttributes,
+  MovieSource, MovieSourceCreationAttributes
 } from '../database/entities/movie.source.entity';
 import { Movie } from '../database/entities/movie.entity';
 import {
-  EpisodeSource,
-  EpisodeSourceCreationAttributes,
+  EpisodeSource, EpisodeSourceCreationAttributes
 } from '../database/entities/episode.source.entity';
 import { Episode } from '../database/entities/episode.entity';
 import { Show } from '../database/entities/show.entity';
 import { Season } from '../database/entities/season.entity';
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class SourceData {
   constructor(
-    @InjectModel(MovieSource)
-    private readonly movieSourceModel: typeof MovieSource,
-    @InjectModel(EpisodeSource)
-    private readonly episodeSourceModel: typeof EpisodeSource
+    @InjectRepository(MovieSource)
+    private readonly movieSourceModel: Repository<MovieSource>,
+    @InjectRepository(EpisodeSource)
+    private readonly episodeSourceModel: Repository<EpisodeSource>
   ) {}
 
   async createMovieSource(
     source: MovieSourceCreationAttributes
   ): Promise<MovieSource> {
-    return this.movieSourceModel.create(source);
+    return this.movieSourceModel.save(source);
   }
 
   async createEpisodeSource(
     source: EpisodeSourceCreationAttributes
   ): Promise<EpisodeSource> {
-    return this.episodeSourceModel.create(source);
+    return this.episodeSourceModel.save(source);
   }
 }
 
 @Global()
 @Module({
   imports: [
-    SequelizeModule.forFeature([
+    TypeOrmModule.forFeature([
       Movie,
       MovieSource,
       Show,
@@ -48,6 +47,6 @@ export class SourceData {
     ]),
   ],
   providers: [SourceData],
-  exports: [SourceData, SequelizeModule],
+  exports: [SourceData, TypeOrmModule],
 })
 export class SourceDataModule {}

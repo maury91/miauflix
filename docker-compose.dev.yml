@@ -21,6 +21,9 @@ services:
       - postgres
       - seq
       - jackett
+    network_mode: service:vpn
+    depends_on:
+      - vpn
   frontend:
     container_name: miauflix_frontend
     image: miauflix_frontend

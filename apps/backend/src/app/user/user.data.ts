@@ -1,16 +1,16 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import { InjectModel, SequelizeModule } from '@nestjs/sequelize';
 import { AccessToken } from '../database/entities/accessToken.entity';
 import { User, UserCreationAttributes } from '../database/entities/user.entity';
 import { UserDto } from '@miauflix/types';
-import { Op } from 'sequelize';
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
+import { Not, Repository } from 'typeorm';
 
 @Injectable()
 export class UserData {
   constructor(
-    @InjectModel(User) private readonly userModel: typeof User,
-    @InjectModel(AccessToken)
-    private readonly accessTokenModel: typeof AccessToken
+    @InjectRepository(User) private readonly userModel: Repository<User>,
+    @InjectRepository(AccessToken)
+    private readonly accessTokenModel: Repository<AccessToken>
   ) {}
 
   async getAccessTokenByUserId(userId: number): Promise<AccessToken | null> {
@@ -18,7 +18,6 @@ export class UserData {
       where: {
         userId,
       },
-      raw: true,
     });
   }
 
@@ -29,35 +28,28 @@ export class UserData {
       },
     });
     if (maybeUser) {
-      const existingToken = await this.accessTokenModel.findAll({
+      const existingToken = await this.accessTokenModel.find({
         where: {
           userId: maybeUser.id,
         },
-        raw: true,
       });
       if (existingToken.length > 1) {
-        await this.accessTokenModel.destroy({
-          where: {
+        await this.accessTokenModel.delete({
             userId: maybeUser.id,
-            id: {
-              [Op.ne]: existingToken[0].id,
-            },
-          },
+            id: Not(existingToken[0].id),
         });
       }
       if (existingToken.length) {
         await this.accessTokenModel.update(
           {
-            ...user.accessTokens[0],
+            userId: maybeUser.id,
           },
           {
-            where: {
-              userId: maybeUser.id,
-            },
-          }
+            ...user.accessTokens[0],
+          },
         );
       } else {
-        await this.accessTokenModel.create({
+        await this.accessTokenModel.insert({
           ...user.accessTokens[0],
           userId: maybeUser.id,
         });
@@ -66,43 +58,37 @@ export class UserData {
         where: {
           slug: user.slug,
         },
-        include: [AccessToken],
+        relations: {
+          accessTokens: true,
+        }
       });
     }
-    return this.userModel.create(user, {
-      include: [AccessToken],
-    });
+    return await this.userModel.save(user)
   }
 
   public async findUserByDeviceCode(deviceCode: string): Promise<User | null> {
     return await this.userModel.findOne({
-      include: [
-        {
-          model: AccessToken,
-          where: {
-            deviceCode: deviceCode,
-          },
-        },
-      ],
-      raw: true,
-      nest: true,
+      where: {
+        accessTokens: {
+          deviceCode,
+        }
+      },
+      relations: ['accessTokens'],
     });
   }
 
   public async getUsers(): Promise<UserDto[]> {
-    return (await this.userModel.findAll({
-      attributes: ['id', 'name', 'slug'],
-      raw: true,
-    })) as UserDto[];
+    return await this.userModel.find({
+      select: ['id', 'name', 'slug'],
+    });
   }
 
   public async getUserAccessToken(userId: number) {
     const accessTokenData = await this.accessTokenModel.findOne({
-      attributes: ['accessToken'],
+      select: ['accessToken'],
       where: {
         userId,
       },
-      raw: true,
     });
 
     if (!accessTokenData) {
@@ -113,7 +99,7 @@ export class UserData {
   }
 
   public async getExpiringTokens(): Promise<AccessToken[]> {
-    const accessTokens = await this.accessTokenModel.findAll();
+    const accessTokens = await this.accessTokenModel.find();
     return accessTokens.filter((accessToken) => {
       // If expires in less than 5 days
       return (
@@ -122,12 +108,19 @@ export class UserData {
       );
     });
   }
+
+  public async updateToken(token: AccessToken) {
+    await this.accessTokenModel.update(
+      token.id,
+      token,
+    );
+  }
 }
 
 @Global()
 @Module({
-  imports: [SequelizeModule.forFeature([User, AccessToken])],
+  imports: [TypeOrmModule.forFeature([User, AccessToken])],
   providers: [UserData],
-  exports: [UserData, SequelizeModule],
+  exports: [UserData, TypeOrmModule],
 })
 export class UserDataModule {}

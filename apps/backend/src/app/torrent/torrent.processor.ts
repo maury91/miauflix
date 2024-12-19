@@ -84,10 +84,7 @@ export class TorrentProcessor extends WorkerHost {
           );
 
           if (videoFiles.length) {
-            await torrentCandidates[0].update({
-              // data: torrent.torrentFile,
-              processed: true,
-            });
+            await this.torrentData.setProcessed(id);
             if (mediaType === 'movie') {
               const movie = await this.movieData.findMovieById(mediaId);
               await this.sourceData.createMovieSource({
@@ -126,17 +123,11 @@ export class TorrentProcessor extends WorkerHost {
           throw err;
         }
 
-        await torrentCandidates[0].update({
-          processed: true,
-          rejected: true,
-        });
+        await this.torrentData.setRejected(id);
         console.error('No video files found in torrent', torrent.files);
         throw new Error('No video files found in torrent');
       } else {
-        await torrentCandidates[0].update({
-          processed: true,
-          rejected: true,
-        });
+        await this.torrentData.setRejected(id);
         throw new Error('Torrent contains no files');
       }
     }
