@@ -1,20 +1,36 @@
 name: miauflix
 
 services:
+#  vpn_old:
+#    image: maury91/nordvpn
+#    cap_add:
+#      - NET_ADMIN               # Required
+#      - NET_RAW                 # Required
+#    environment:                # Review https://github.com/bubuntux/nordvpn#environment-variables
+#      - TOKEN=$NORDVPN_TOKEN
+#      - CONNECT=$NORDVPN_SERVER
+#      - TECHNOLOGY=NordLynx
+#      - NETWORK=192.168.0.0/16  # So it can be accessed within the local network
+#    ports:
+#      - "9117:9117" # Jackett
+#    sysctls:
+#      - net.ipv6.conf.all.disable_ipv6=1  # Recomended if using ipv4 only
   vpn:
-    image: ghcr.io/bubuntux/nordvpn
+    image: ghcr.io/bubuntux/nordlynx
     cap_add:
       - NET_ADMIN               # Required
-      - NET_RAW                 # Required
-    environment:                # Review https://github.com/bubuntux/nordvpn#environment-variables
-      - TOKEN="${NORDVPN_TOKEN}"
-      - CONNECT="${NORDVPN_SERVER}"
-      - TECHNOLOGY=NordLynx
-      - NETWORK=192.168.0.0/16  # So it can be accessed within the local network
+      - SYS_MODULE              # maybe
+    environment:
+      - PRIVATE_KEY=$NORDVPN_KEY
+      - NET_LOCAL=192.168.0.0/16  # So it can be accessed within the local network
+      - TZ=$TZ
     ports:
-      - 8080:8080
+      - "9117:9117" # Jackett
     sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1  # Recomended if using ipv4 only
+      - net.ipv4.conf.all.src_valid_mark=1   # maybe
+      - net.ipv4.conf.all.rp_filter=2        # maybe; set reverse path filter to loose mode
+      - net.ipv6.conf.all.disable_ipv6=1     # disable ipv6; recommended if using ipv4 only
+    restart: unless-stopped
   postgres:
     image: postgres:14-alpine
     ports:
@@ -25,6 +41,7 @@ services:
       - POSTGRES_PASSWORD=$POSTGRES_PASS
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_DB=$POSTGRES_DB
+    restart: unless-stopped
   redis:
     image: redis/redis-stack-server:latest
     ports:
@@ -33,12 +50,13 @@ services:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
     volumes:
       - redis_data:/data
+    restart: unless-stopped
   seq:
     image: datalust/seq:latest
     container_name: seq
     environment:
       - ACCEPT_EULA=Y
-      - TZ="${TZ}"
+      - TZ=$TZ
     ports:
       - "5341:80"
     volumes:
@@ -48,16 +66,17 @@ services:
     image: lscr.io/linuxserver/jackett:latest
     container_name: jackett
     environment:
-      - PUID="${PUID}"
-      - PGID="${PGID}"
-      - TZ="${TZ}"
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
       - AUTO_UPDATE=true #optional
       - RUN_OPTS= #optional
     volumes:
       - jackett_config:/config
       - jackett_downloads:/downloads
-    ports:
-      - "9117:9117"
+    depends_on:
+      - vpn
+    network_mode: service:vpn
     restart: unless-stopped
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -66,11 +85,12 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-info}
       - LOG_HTML=${LOG_HTML:-false}
       - CAPTCHA_SOLVER=${CAPTCHA_SOLVER:-none}
-      - PUID="${PUID}"
-      - PGID="${PGID}"
-      - TZ="${TZ}"
-    networks:
-      - default
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    depends_on:
+      - vpn
+    network_mode: service:vpn
     restart: unless-stopped
 
 #include:

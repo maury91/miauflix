@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
 import { PartialKeys } from '../../../helper.types';
@@ -8,22 +14,34 @@ export class Torrent {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   movieId?: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   showId?: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   seasonId?: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   episodeId?: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   seasonNum?: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   episodeNum?: number;
 
   @Column()
@@ -87,7 +105,10 @@ export class Torrent {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type TorrentCreationAttributes = PartialKeys<Omit<Torrent, 'id' | 'createdAt' | 'updatedAt'>, 'rejected' | 'processed'>
+export type TorrentCreationAttributes = PartialKeys<
+  Omit<Torrent, 'id' | 'createdAt' | 'updatedAt'>,
+  'rejected' | 'processed'
+>;

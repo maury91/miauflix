@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Movie } from './movie.entity';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
@@ -13,7 +21,10 @@ export class MovieSource {
   movieSlug: string;
 
   @ManyToOne(() => Movie, (movie) => movie.sources)
+  @JoinColumn({ name: 'movieId', referencedColumnName: 'id' })
   movie: Movie;
+
+  @Column()
   movieId: number;
 
   @Column()
@@ -29,7 +40,7 @@ export class MovieSource {
   @Column('bigint')
   size: number;
 
-  @Column('blob')
+  @Column('bytea')
   data?: Buffer;
 
   @Column('smallint')
@@ -45,7 +56,10 @@ export class MovieSource {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type MovieSourceCreationAttributes = PartialKeys<Omit<MovieSource, 'id' | 'movie'>, 'createdAt' | 'updatedAt'>;
+export type MovieSourceCreationAttributes = PartialKeys<
+  Omit<MovieSource, 'id' | 'movie'>,
+  'createdAt' | 'updatedAt'
+>;

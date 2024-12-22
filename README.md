@@ -59,12 +59,14 @@ Copy the API key and paste it in the `.env` file as the value for `TMDB_API_ACCE
 I use NordVPN simply because I currently have a subscription, you can use any VPN provider that you want.
 Pull requests to add support for other VPN providers are welcome.
 
-To configure NordVPN, we are going to navigate to https://my.nordaccount.com/dashboard/nordvpn/access-tokens/ and generate a new token.
+To configure NordVPN, follow this guide https://github.com/bubuntux/nordlynx, once you obtain the private key,
+add it to the `.env` file as the value for `NORDVPN_PRIVATE_KEY`.
 
-Add the toke to the `.env` file as the value for `NORDVPN_TOKEN`.
+### Logging ( Optional )
 
-You can also add the country that you want to use as the value for `NORDVPN_COUNTRY`,
-the name is a little bit confusing because you can also specify a City or Server, refer to [NordVPN Docker](https://github.com/bubuntux/nordvpn?tab=readme-ov-file#environment-variables) for more information.
+Navigate to http://localhost:5341/#/user/api-keys/new give a title to the API key and click on "Save Changes".
+
+A popup will appear with the API key token, copy the token and paste it in the `.env` file as the value for `SEQ_API_KEY`.
 
 ### Database
 

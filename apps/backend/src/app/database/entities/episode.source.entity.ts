@@ -1,7 +1,15 @@
 import { Episode } from './episode.entity';
 import { VideoSource } from '../../jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { PartialKeys } from '../../../helper.types';
 
 @Entity()
@@ -10,7 +18,10 @@ export class EpisodeSource {
   id: number;
 
   @ManyToOne(() => Episode, (episode) => episode.sources)
+  @JoinColumn({ name: 'episodeId', referencedColumnName: 'id' })
   episode: Episode;
+
+  @Column()
   episodeId: number;
 
   @Column()
@@ -41,29 +52,35 @@ export class EpisodeSource {
   @Column('bigint')
   size!: number;
 
-  @Column('blob')
+  @Column({
+    type: 'bytea',
+    nullable: true,
+  })
   data?: Buffer;
 
   @Column('smallint')
-  quality!: VideoQuality;
+  quality: VideoQuality;
 
   @Column({
     type: 'varchar',
     length: 20,
   })
-  codec!: VideoCodec;
+  codec: VideoCodec;
 
   @Column({
     type: 'varchar',
     length: 20,
   })
-  source!: VideoSource;
+  source: VideoSource;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type EpisodeSourceCreationAttributes = PartialKeys<Omit<EpisodeSource, 'id' | 'episode'>, 'createdAt' | 'updatedAt' | 'rejected'>;
+export type EpisodeSourceCreationAttributes = PartialKeys<
+  Omit<EpisodeSource, 'id' | 'episode'>,
+  'createdAt' | 'updatedAt' | 'rejected'
+>;

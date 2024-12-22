@@ -1,6 +1,7 @@
 import { Global, Injectable, Module } from '@nestjs/common';
 import {
-  Torrent, TorrentCreationAttributes
+  Torrent,
+  TorrentCreationAttributes,
 } from '../database/entities/torrent.entity';
 import { GetTorrentFileData, VideoCodec, VideoQuality } from '@miauflix/types';
 import { Movie } from '../database/entities/movie.entity';
@@ -17,13 +18,15 @@ import { Brackets, In, LessThan, Like, Not, Repository } from 'typeorm';
 export class TorrentData {
   constructor(
     // private readonly movieProcessorService: MovieProcessorService,
-    @InjectRepository(Movie) private readonly movieModel: Repository< Movie>,
-    @InjectRepository(Episode) private readonly episodeModel: Repository< Episode>,
-    @InjectRepository(Torrent) private readonly torrentModel: Repository< Torrent>,
+    @InjectRepository(Movie) private readonly movieModel: Repository<Movie>,
+    @InjectRepository(Episode)
+    private readonly episodeModel: Repository<Episode>,
+    @InjectRepository(Torrent)
+    private readonly torrentModel: Repository<Torrent>,
     @InjectRepository(MovieSource)
-    private readonly movieSourceModel: Repository< MovieSource>,
+    private readonly movieSourceModel: Repository<MovieSource>,
     @InjectRepository(EpisodeSource)
-    private readonly episodeSourceModel: Repository< EpisodeSource>
+    private readonly episodeSourceModel: Repository<EpisodeSource>
   ) {}
 
   async createTorrent(
@@ -57,7 +60,11 @@ export class TorrentData {
     highQuality: boolean;
     hevc: boolean;
   }): Promise<Torrent[]> {
-    const query = `${mediaType === 'movie' ? 'movieId' : 'episodeId'} = :mediaId AND quality ${highQuality ? '>' : '<='} 1080 AND codec ${hevc ? 'LIKE' : 'NOT LIKE'} '%x265%' AND processed = false`;
+    const query = `${
+      mediaType === 'movie' ? '"movieId"' : '"episodeId"'
+    } = :mediaId AND quality ${highQuality ? '>' : '<='} 1080 AND codec ${
+      hevc ? 'LIKE' : 'NOT LIKE'
+    } '%x265%' AND processed = false`;
 
     const minimumSeeds = await this.torrentModel
       .createQueryBuilder('torrent')
@@ -68,28 +75,37 @@ export class TorrentData {
       .addSelect('torrent.quality')
       .where(query, { mediaId })
       .groupBy('torrent.quality')
-      .getRawMany<{ median_seeders: number; quality: VideoQuality }>();
+      .getRawMany<{ median_seeders: number; torrent_quality: VideoQuality }>();
+
+    console.log('minimumSeeds', minimumSeeds);
 
     return this.torrentModel
       .createQueryBuilder('torrent')
       .where(query, { mediaId })
       .andWhere(
         new Brackets((qb) => {
-          minimumSeeds.forEach(({ median_seeders, quality }, index) => {
+          minimumSeeds.forEach(({ median_seeders, torrent_quality }, index) => {
             qb.orWhere(
               `quality = :quality${index} AND seeders >= :seeders${index}`,
               {
-                [`quality${index}`]: quality,
-                [`seeders${index}`]: median_seeders,
+                [`quality${index}`]: torrent_quality,
+                [`seeders${index}`]: Math.floor(median_seeders),
               }
             );
           });
         })
       )
-      .leftJoinAndSelect('torrent.movie', 'movie')
-      .orderBy('CASE WHEN source = \'WEB\' OR source = \'Blu-ray\' THEN 3 WHEN source = \'HDTV\' OR source = \'DVD\' THEN 2 WHEN source = \'TS\' OR source = \'unknown\' THEN 1 WHEN source = \'Cam\' THEN 0 END', 'DESC')
+      .leftJoinAndSelect(
+        mediaType === 'movie' ? Movie : Episode,
+        'media',
+        `media.id = torrent.${mediaType === 'movie' ? 'movieId' : 'episodeId'}`
+      )
+      .orderBy(
+        "CASE WHEN source = 'WEB' OR source = 'Blu-ray' THEN 3 WHEN source = 'HDTV' OR source = 'DVD' THEN 2 WHEN source = 'TS' OR source = 'unknown' THEN 1 WHEN source = 'Cam' THEN 0 END",
+        'DESC'
+      )
       .addOrderBy('quality', 'DESC')
-      .addOrderBy('size / movie.runtime', 'ASC')
+      .addOrderBy('size / media.runtime', 'ASC')
       .limit(2)
       .getMany();
   }
@@ -103,7 +119,9 @@ export class TorrentData {
       select: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
-        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
+        codec: useHevc
+          ? Like('%x265%' as VideoCodec)
+          : Not(Like('%x265%' as VideoCodec)),
         ...(useLowQuality
           ? {
               quality: LessThan(1080),
@@ -112,7 +130,7 @@ export class TorrentData {
       },
       order: {
         quality: 'DESC',
-      }
+      },
     });
 
     if (bestSource) {
@@ -123,11 +141,13 @@ export class TorrentData {
       select: ['data', 'videos', 'id'],
       where: {
         movieSlug: slug,
-        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
+        codec: useHevc
+          ? Like('%x265%' as VideoCodec)
+          : Not(Like('%x265%' as VideoCodec)),
       },
       order: {
         quality: 'DESC',
-      }
+      },
     });
 
     if (sameCodec) {
@@ -141,7 +161,7 @@ export class TorrentData {
       },
       order: {
         quality: 'DESC',
-      }
+      },
     });
 
     if (highestQuality) {
@@ -161,16 +181,18 @@ export class TorrentData {
       where: {
         episodeId,
         rejected: false,
-        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
+        codec: useHevc
+          ? Like('%x265%' as VideoCodec)
+          : Not(Like('%x265%' as VideoCodec)),
         ...(useLowQuality
           ? {
-            quality: LessThan(1080),
-          }
+              quality: LessThan(1080),
+            }
           : {}),
       },
       order: {
         quality: 'DESC',
-      }
+      },
     });
 
     if (bestSource) {
@@ -182,11 +204,13 @@ export class TorrentData {
       where: {
         episodeId,
         rejected: false,
-        codec: useHevc ? Like('%x265%' as VideoCodec) : Not(Like('%x265%' as VideoCodec)),
+        codec: useHevc
+          ? Like('%x265%' as VideoCodec)
+          : Not(Like('%x265%' as VideoCodec)),
       },
       order: {
         quality: 'DESC',
-      }
+      },
     });
 
     if (sameCodec) {
@@ -201,7 +225,7 @@ export class TorrentData {
       },
       order: {
         quality: 'DESC',
-      }
+      },
     });
 
     if (highestQuality) {
@@ -226,28 +250,46 @@ export class TorrentData {
         sourceFound: false,
       },
     });
+
+    if (!notProcessedMovies.length && !notProcessedEpisodes.length) {
+      return [];
+    }
+
     const torrentGroups = await this.torrentModel
       .createQueryBuilder('torrent')
       .select('torrent.movieId')
       .addSelect('torrent.episodeId')
       .addSelect('COUNT(*)', 'count')
       .addSelect('torrent.quality > 1080', 'highQuality')
-      .addSelect('torrent.codec LIKE \'%x265%\'', 'hevc')
+      .addSelect("torrent.codec LIKE '%x265%'", 'hevc')
       .where('torrent.processed = false')
-      .andWhere(new Brackets((qb) => {
-        qb.where('torrent.movieId IN (:...movieIds)', {
-          movieIds: notProcessedMovies.map(({ id }) => id),
-        }).orWhere('torrent.episodeId IN (:...episodeIds)', {
-          episodeIds: notProcessedEpisodes.map(({ id }) => id),
-        });
-      }))
-      .groupBy('highQuality')
+      .andWhere(
+        new Brackets((qb) => {
+          const movieQuery = 'torrent.movieId IN (:...movieIds)';
+          const episodeQuery = 'torrent.episodeId IN (:...episodeIds)';
+          const movieIds = notProcessedMovies.map(({ id }) => id);
+          const episodeIds = notProcessedEpisodes.map(({ id }) => id);
+
+          if (notProcessedMovies.length && notProcessedEpisodes.length) {
+            qb.where(movieQuery, {
+              movieIds,
+            }).orWhere(episodeQuery, {
+              episodeIds,
+            });
+          } else if (notProcessedMovies.length) {
+            qb.where(movieQuery, { movieIds });
+          } else if (notProcessedEpisodes.length) {
+            qb.where(episodeQuery, { episodeIds });
+          }
+        })
+      )
+      .groupBy('"highQuality"')
       .addGroupBy('hevc')
-      .addGroupBy('torrent.movieId')
-      .addGroupBy('torrent.episodeId')
+      .addGroupBy('"movieId"')
+      .addGroupBy('"episodeId"')
       .getRawMany<{
-        movieId: number | null;
-        episodeId: number | null;
+        torrent_movieId: number | null;
+        torrent_episodeId: number | null;
         highQuality: boolean;
         hevc: boolean;
       }>();
@@ -258,7 +300,7 @@ export class TorrentData {
 
     const movieIds = new Set(
       torrentGroups
-        .map(({ movieId }) => movieId)
+        .map(({ torrent_movieId }) => torrent_movieId)
         .filter((id) => id !== null) satisfies number[]
     );
     const movies = await this.movieModel.find({
@@ -270,7 +312,7 @@ export class TorrentData {
 
     const episodeIds = new Set(
       torrentGroups
-        .map(({ episodeId }) => episodeId)
+        .map(({ torrent_episodeId }) => torrent_episodeId)
         .filter((id) => id !== null) satisfies number[]
     );
     const episodes = await this.episodeModel.find({
@@ -280,21 +322,25 @@ export class TorrentData {
       },
     });
 
+    console.log('torrentGroups', torrentGroups);
+    console.log('movies', movies);
+
     return torrentGroups.map<GetTorrentFileData>(
-      ({ highQuality, hevc, movieId, episodeId }) => {
-        if (episodeId) {
+      ({ highQuality, hevc, torrent_movieId, torrent_episodeId }) => {
+        if (torrent_episodeId) {
           return {
-            mediaId: episodeId,
+            mediaId: torrent_episodeId,
             mediaType: 'episode',
-            runtime: episodes.find(({ id }) => id === episodeId).runtime,
+            runtime: episodes.find(({ id }) => id === torrent_episodeId)
+              .runtime,
             highQuality,
             hevc,
           };
         }
         return {
-          mediaId: movieId,
+          mediaId: torrent_movieId,
           mediaType: 'movie',
-          runtime: movies.find(({ id }) => id === movieId).runtime,
+          runtime: movies.find(({ id }) => id === torrent_movieId).runtime,
           highQuality,
           hevc,
         };
@@ -310,25 +356,21 @@ export class TorrentData {
       .createQueryBuilder('torrent')
       .select('COUNT(*)', 'count')
       .addSelect('torrent.quality > 1080', 'highQuality')
-      .addSelect('torrent.codec LIKE \'%x265%\'', 'hevc')
+      .addSelect("torrent.codec LIKE '%x265%'", 'hevc')
       .where(
-        mediaType === 'movie'
-          ? { movieId: mediaId }
-          : { episodeId: mediaId }
+        mediaType === 'movie' ? { movieId: mediaId } : { episodeId: mediaId }
       )
       .andWhere('torrent.processed = false')
-      .groupBy('highQuality')
+      .groupBy('"highQuality"')
       .addGroupBy('hevc')
       .getRawMany<{
         highQuality: boolean;
         hevc: boolean;
       }>();
 
-    const { runtime } = await(
-      mediaType === 'movie'
-        ? this.movieModel.findOneBy({ id: mediaId })
-        : this.episodeModel.findOneBy({ id: mediaId })
-    );
+    const { runtime } = await (mediaType === 'movie'
+      ? this.movieModel.findOneBy({ id: mediaId })
+      : this.episodeModel.findOneBy({ id: mediaId }));
     return torrentGroups.map<GetTorrentFileData>(({ highQuality, hevc }) => ({
       mediaId,
       mediaType,
@@ -346,13 +388,13 @@ export class TorrentData {
         where: { id: sourceId },
         relations: {
           episode: true,
-        }
+        },
       });
       if (!source) {
         throw new Error('Source not found');
       }
       console.log('Updating source');
-      await this.episodeSourceModel.update(source.id, { rejected: true })
+      await this.episodeSourceModel.update(source.id, { rejected: true });
       if (source.originalSource.includes('torrent::')) {
         console.log('Updating torrent');
         const torrentId = parseInt(source.originalSource.split('::')[1], 10);
@@ -372,7 +414,10 @@ export class TorrentData {
   }
 
   async setRejected(torrentId: number) {
-    await this.torrentModel.update(torrentId, { processed: true, rejected: true });
+    await this.torrentModel.update(torrentId, {
+      processed: true,
+      rejected: true,
+    });
   }
 }
 

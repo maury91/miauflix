@@ -266,12 +266,6 @@ export class JackettService {
           };
         })
         .filter(({ pubDate }) => {
-          console.log(
-            'pubDate',
-            pubDate,
-            airedOn,
-            pubDate.getTime() >= airedOn.getTime() - 259200000
-          );
           return (
             !airedOn ||
             pubDate.getTime() >= airedOn.getTime() - 259200000 /* 3 day */

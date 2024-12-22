@@ -45,8 +45,13 @@ export class ShowsService {
         images,
         0
       );
-      await this.showQueuesService.waitForJob(job);
-      return this.getExtendedShow(slug);
+      const getSeasonsJob: string | null =
+        await this.showQueuesService.waitForJob(job);
+      if (withSeasons && getSeasonsJob) {
+        await this.showQueuesService.waitForJob(getSeasonsJob);
+      }
+
+      return this.getExtendedShow(slug, withSeasons);
     }
 
     return show;

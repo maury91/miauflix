@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Season } from './season.entity';
 import { Episode } from './episode.entity';
 import { PartialKeys } from '../../../helper.types';
@@ -8,7 +15,9 @@ export class Show {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @PrimaryColumn()
+  @Column({
+    unique: true,
+  })
   slug: string;
 
   @Column()
@@ -31,7 +40,7 @@ export class Show {
 
   @Column({
     type: 'varchar',
-    length: 500
+    length: 500,
   })
   trailer: string;
 
@@ -48,14 +57,20 @@ export class Show {
   @Column()
   traktId: number;
 
-  @Column()
-  imdbId: string;
+  @Column({
+    nullable: true,
+  })
+  imdbId?: string;
 
-  @Column()
-  tmdbId: number;
+  @Column({
+    nullable: true,
+  })
+  tmdbId?: number;
 
-  @Column()
-  tvdbId: number;
+  @Column({
+    nullable: true,
+  })
+  tvdbId?: number;
 
   @Column()
   poster: string;
@@ -65,30 +80,30 @@ export class Show {
 
   @Column({
     type: 'varchar',
-    array: true
+    array: true,
   })
   backdrops: string[];
 
   @Column({
     type: 'varchar',
-    array: true
+    array: true,
   })
   logos: string[];
 
   @Column({
     type: 'varchar',
-    array: true
+    array: true,
   })
   genres: string[];
 
   @Column({
     type: 'smallint',
     unsigned: true,
-    default: 0
+    default: 0,
   })
   seasonsCount = 0;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastCheckedAt: Date;
 
   @OneToMany(() => Season, (season) => season.show)
@@ -97,17 +112,24 @@ export class Show {
   @OneToMany(() => Episode, (episode) => episode.show)
   episodes: Episode[];
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   lastSeasonAirDate?: Date;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   lastEpisodeAirDate?: Date;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type ShowCreationAttributes = PartialKeys<Omit<Show, 'id' | 'seasons' | 'episodes'>, 'createdAt' | 'updatedAt' | 'seasonsCount' | 'lastCheckedAt'>;
+export type ShowCreationAttributes = PartialKeys<
+  Omit<Show, 'id' | 'seasons' | 'episodes'>,
+  'createdAt' | 'updatedAt' | 'seasonsCount' | 'lastCheckedAt'
+>;

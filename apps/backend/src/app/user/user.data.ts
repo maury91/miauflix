@@ -35,8 +35,8 @@ export class UserData {
       });
       if (existingToken.length > 1) {
         await this.accessTokenModel.delete({
-            userId: maybeUser.id,
-            id: Not(existingToken[0].id),
+          userId: maybeUser.id,
+          id: Not(existingToken[0].id),
         });
       }
       if (existingToken.length) {
@@ -46,7 +46,7 @@ export class UserData {
           },
           {
             ...user.accessTokens[0],
-          },
+          }
         );
       } else {
         await this.accessTokenModel.insert({
@@ -60,10 +60,10 @@ export class UserData {
         },
         relations: {
           accessTokens: true,
-        }
+        },
       });
     }
-    return await this.userModel.save(user)
+    return await this.userModel.save(user);
   }
 
   public async findUserByDeviceCode(deviceCode: string): Promise<User | null> {
@@ -71,7 +71,7 @@ export class UserData {
       where: {
         accessTokens: {
           deviceCode,
-        }
+        },
       },
       relations: ['accessTokens'],
     });
@@ -110,10 +110,7 @@ export class UserData {
   }
 
   public async updateToken(token: AccessToken) {
-    await this.accessTokenModel.update(
-      token.id,
-      token,
-    );
+    await this.accessTokenModel.update(token.id, token);
   }
 }
 

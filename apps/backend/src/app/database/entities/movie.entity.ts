@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -15,7 +14,9 @@ export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @PrimaryColumn()
+  @Column({
+    unique: true,
+  })
   slug: string;
 
   @Column()
@@ -46,11 +47,15 @@ export class Movie {
   @Column()
   traktId: number;
 
-  @Column()
-  imdbId: string;
+  @Column({
+    nullable: true,
+  })
+  imdbId?: string;
 
-  @Column()
-  tmdbId: number;
+  @Column({
+    nullable: true,
+  })
+  tmdbId?: number;
 
   @Column()
   poster: string;
@@ -89,7 +94,7 @@ export class Movie {
   sourceFound = false;
 
   @OneToMany(() => MovieSource, (movieSource) => movieSource.movie)
-  sources: MovieSource[] = [];
+  sources: MovieSource[];
 
   @Column({
     type: 'varchar',
@@ -104,4 +109,7 @@ export class Movie {
   updatedAt: Date;
 }
 
-export type MovieCreationAttributes = PartialKeys<Omit<Movie, 'id' | 'sources' | 'createdAt' | 'updatedAt'>, 'noSourceFound' | 'sourceFound' | 'sourcesSearched'>;
+export type MovieCreationAttributes = PartialKeys<
+  Omit<Movie, 'id' | 'sources' | 'createdAt' | 'updatedAt'>,
+  'noSourceFound' | 'sourceFound' | 'sourcesSearched'
+>;

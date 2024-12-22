@@ -1,6 +1,14 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import {
-  AccessToken, AccessTokenCreationAttributes
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import {
+  AccessToken,
+  AccessTokenCreationAttributes,
 } from './accessToken.entity';
 
 @Entity()
@@ -9,10 +17,12 @@ export class User {
   id: number;
 
   @Column()
-  name!: string;
+  name: string;
 
-  @PrimaryColumn()
-  slug!: string;
+  @Column({
+    unique: true,
+  })
+  slug: string;
 
   @OneToMany(() => AccessToken, (accessToken) => accessToken.user, {
     cascade: ['insert'],
@@ -23,9 +33,12 @@ export class User {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type UserCreationAttributes = Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'accessTokens'> & {
+export type UserCreationAttributes = Omit<
+  User,
+  'id' | 'createdAt' | 'updatedAt' | 'accessTokens'
+> & {
   accessTokens: Omit<AccessTokenCreationAttributes, 'userId'>[];
 };

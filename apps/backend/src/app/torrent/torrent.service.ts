@@ -60,6 +60,7 @@ export class TorrentService {
   private webTorrentServer: NodeServer;
   private streams: Record<string, TorrentInfo> = {};
   private readonly logger = new Logger(TorrentService.name);
+  private readonly port: number;
   constructor(
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
@@ -75,6 +76,7 @@ export class TorrentService {
     @Inject(asyncProviders.webTorrent)
     private WebTorrent: WebTorrent
   ) {
+    this.port = this.configService.getOrThrow('TORRENT_PORT', { infer: true });
     this.client = new this.WebTorrent({
       maxConns: this.configService.getOrThrow('MAX_CONNS', { infer: true }),
       downloadLimit:
@@ -93,7 +95,7 @@ export class TorrentService {
     this.webTorrentServer = this.client.createServer({}, 'node') as NodeServer;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    this.webTorrentServer.listen(818, () => {
+    this.webTorrentServer.listen(this.port, () => {
       console.log(
         'WebTorrent server listening',
         this.webTorrentServer.address()

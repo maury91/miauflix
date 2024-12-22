@@ -3,10 +3,12 @@ import { Show, ShowCreationAttributes } from '../database/entities/show.entity';
 import { ShowSimple as TraktShow } from '../trakt/trakt.types';
 import { MediaImages, ShowDto } from '@miauflix/types';
 import {
-  Season, SeasonCreationAttributes
+  Season,
+  SeasonCreationAttributes,
 } from '../database/entities/season.entity';
 import {
-  Episode, EpisodeCreationAttributes
+  Episode,
+  EpisodeCreationAttributes,
 } from '../database/entities/episode.entity';
 import { EpisodeSource } from '../database/entities/episode.source.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
@@ -17,7 +19,8 @@ export class ShowsData {
   constructor(
     @InjectRepository(Show) private readonly showModel: Repository<Show>,
     @InjectRepository(Season) private readonly seasonModel: Repository<Season>,
-    @InjectRepository(Episode) private readonly episodeModel: Repository<Episode>
+    @InjectRepository(Episode)
+    private readonly episodeModel: Repository<Episode>
   ) {}
 
   async findShow(slug: string, withSeasons = false): Promise<Show | null> {
@@ -29,53 +32,50 @@ export class ShowsData {
         relations: {
           seasons: {
             episodes: true,
-          }
-        }
+          },
+        },
       });
     }
     return await this.showModel.findOneBy({
-        slug,
+      slug,
     });
   }
 
   async updateImages(showId: number, images: MediaImages): Promise<void> {
-    await this.showModel.update(
-      { id: showId },
-      images,
-    );
+    await this.showModel.update({ id: showId }, images);
   }
 
-  async updateSeasonsSount(showId: number, seasonsCount: number): Promise<void> {
-    await this.showModel.update(
-      { id: showId },
-      { seasonsCount },
-    );
+  async updateSeasonsSount(
+    showId: number,
+    seasonsCount: number
+  ): Promise<void> {
+    await this.showModel.update({ id: showId }, { seasonsCount });
   }
 
   async updateEpisodeImage(episodeId: number, image: string): Promise<void> {
     await this.episodeModel.update(
       { id: episodeId },
       {
-        image
-      },
+        image,
+      }
     );
   }
 
   async findEpisode(id: number): Promise<Episode | null> {
     return await this.episodeModel.findOneBy({
-        id,
+      id,
     });
   }
 
   async findSeason(id: number): Promise<Season | null> {
     return await this.seasonModel.findOneBy({
-        id,
+      id,
     });
   }
 
   async findShowFromDb(id: number): Promise<Show | null> {
     return await this.showModel.findOneBy({
-        id,
+      id,
     });
   }
 
@@ -87,8 +87,8 @@ export class ShowsData {
         },
         {
           backdrops: Raw((alias) => `cardinality(${alias}) = 0`),
-        }
-      ]
+        },
+      ],
     });
   }
 
@@ -129,7 +129,7 @@ export class ShowsData {
     return await this.showModel.find({
       where: {
         slug: In(slugs),
-      }
+      },
     });
   }
 
@@ -163,15 +163,15 @@ export class ShowsData {
   }
 
   async createShow(show: ShowCreationAttributes): Promise<Show> {
-    return (await this.showModel.upsert(show, ['id', 'slug']))[0];
+    return await this.showModel.save(show);
   }
 
   async updateLastCheckedAt(slug: string): Promise<void> {
     await this.showModel.update(
-      {slug},
+      { slug },
       {
         lastCheckedAt: new Date(),
-      },
+      }
     );
   }
 
@@ -187,16 +187,14 @@ export class ShowsData {
     });
 
     if (existingSeason) {
-      return await this.seasonModel.save(
-        {
-          id: existingSeason.id,
-          ...season,
-          showId: show.id,
-        },
-      );
+      return await this.seasonModel.save({
+        id: existingSeason.id,
+        ...season,
+        showId: show.id,
+      });
     }
 
-    return (await this.seasonModel.upsert({ ...season, showId: show.id }, ['id', ]))[0];
+    return await this.seasonModel.save({ ...season, showId: show.id });
   }
 
   async addEpisode(
@@ -212,44 +210,37 @@ export class ShowsData {
     });
 
     if (existingEpisode) {
-         return await this.episodeModel.save(
-          {
-            id: existingEpisode.id,
-            ...episode,
-            seasonId: season.id,
-            showId: season.showId,
-          },
-        );
+      return await this.episodeModel.save({
+        id: existingEpisode.id,
+        ...episode,
+        seasonId: season.id,
+        showId: season.showId,
+      });
     }
 
-    return existingEpisode;
+    return await this.episodeModel.save({
+      ...episode,
+      seasonId: season.id,
+      showId: season.showId,
+    });
   }
 
   async setEpisodeSearched(episodeId: number): Promise<void> {
-    await this.episodeModel.update(
-      episodeId,
-      {
-        sourcesSearched: true,
-      },
-    );
+    await this.episodeModel.update(episodeId, {
+      sourcesSearched: true,
+    });
   }
 
   async setNoSourceFound(episodeId: number): Promise<void> {
-    await this.episodeModel.update(
-      episodeId,
-      {
-        noSourceFound: true,
-      },
-    );
+    await this.episodeModel.update(episodeId, {
+      noSourceFound: true,
+    });
   }
 
   async setSourceFound(episodeId: number): Promise<void> {
-    await this.episodeModel.update(
-      episodeId,
-      {
-        sourceFound: true,
-      },
-    );
+    await this.episodeModel.update(episodeId, {
+      sourceFound: true,
+    });
   }
 }
 

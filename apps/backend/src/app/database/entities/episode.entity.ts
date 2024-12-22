@@ -1,7 +1,16 @@
 import { Season } from './season.entity';
 import { Show } from './show.entity';
 import { EpisodeSource } from './episode.source.entity';
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { PartialKeys } from '../../../helper.types';
 
 @Entity()
@@ -10,11 +19,17 @@ export class Episode {
   id: number;
 
   @ManyToOne(() => Show, (show) => show.episodes)
+  @JoinColumn({ name: 'showId', referencedColumnName: 'id' })
   show: Show;
+
+  @Column()
   showId: number;
 
   @ManyToOne(() => Season, (season) => season.episodes)
+  @JoinColumn({ name: 'seasonId', referencedColumnName: 'id' })
   season: Season;
+
+  @Column()
   seasonId: number;
 
   @OneToMany(() => EpisodeSource, (episodeSource) => episodeSource.episode)
@@ -23,14 +38,20 @@ export class Episode {
   @Column('smallint')
   number: number;
 
-  @Column('smallint')
+  @Column({
+    type: 'smallint',
+    nullable: true,
+  })
   order: number;
 
   @Column()
   title: string;
 
-  @Column('text')
-  overview: string;
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  overview?: string;
 
   @Column({
     type: 'decimal',
@@ -39,8 +60,8 @@ export class Episode {
   })
   rating: number;
 
-  @Column()
-  firstAired: Date;
+  @Column({ nullable: true })
+  firstAired?: Date;
 
   @Column('smallint')
   runtime: number;
@@ -57,14 +78,20 @@ export class Episode {
   @Column()
   traktId: number;
 
-  @Column()
-  imdbId: string;
+  @Column({
+    nullable: true,
+  })
+  imdbId?: string;
 
-  @Column()
-  tvdbId: number;
+  @Column({
+    nullable: true,
+  })
+  tvdbId?: number;
 
-  @Column()
-  tmdbId: number;
+  @Column({
+    nullable: true,
+  })
+  tmdbId?: number;
 
   @Column({
     type: 'boolean',
@@ -88,7 +115,14 @@ export class Episode {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type EpisodeCreationAttributes = PartialKeys<Omit<Episode, 'id' | 'season' | 'show' | 'sources'>, 'createdAt' | 'updatedAt' | 'sourceFound' | 'sourcesSearched' | 'noSourceFound'>
+export type EpisodeCreationAttributes = PartialKeys<
+  Omit<Episode, 'id' | 'season' | 'show' | 'sources'>,
+  | 'createdAt'
+  | 'updatedAt'
+  | 'sourceFound'
+  | 'sourcesSearched'
+  | 'noSourceFound'
+>;

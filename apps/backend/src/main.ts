@@ -22,7 +22,7 @@ async function bootstrap() {
 
   app.enableCors();
 
-  const port = process.env['PORT'] || 808;
+  const port = process.env['PORT'] || 1808;
   await app.listen(port);
 
   Logger.log(

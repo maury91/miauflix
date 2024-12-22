@@ -69,6 +69,7 @@
     "socket.io": "4.8.1",
     "styled-components": "5.3.6",
     "typeorm": "0.3.20",
+    "typeorm-extension": "3.6.3",
     "uuid": "10.0.0",
     "video.js": "8.21.0",
     "webtorrent": "https://github.com/maury91/webtorrent.git",

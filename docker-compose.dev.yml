@@ -8,8 +8,8 @@ services:
     working_dir: /miauflix
     command: ["npm", "run", "backend:dev", "--host=0.0.0.0"]
     ports:
-      - "808:808"
-      - "818:818"
+      - "1808:1808"
+      - "1818:1818"
     volumes:
       - ./apps:/miauflix/apps
       - ./libs:/miauflix/libs

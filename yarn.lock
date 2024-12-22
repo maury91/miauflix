@@ -1769,6 +1769,11 @@
   dependencies:
     levn "^0.4.1"
 
+"@faker-js/faker@^8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-8.4.1.tgz#5d5e8aee8fce48f5e189bf730ebd1f758f491451"
+  integrity sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==
+
 "@harves/nx-node-esm-plugin@0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@harves/nx-node-esm-plugin/-/nx-node-esm-plugin-0.2.1.tgz#9847278307d0429a095c9b23233f298def38d301"
@@ -7223,6 +7228,11 @@ consola@^2.15.0:
   resolved "https://registry.yarnpkg.com/consola/-/consola-2.15.3.tgz#2e11f98d6a4be71ff72e0bdf07bd23e12cb61550"
   integrity sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==
 
+consola@^3.2.3:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/consola/-/consola-3.3.0.tgz#b89affdff331a40eac2f11ecc571eb230b7b560b"
+  integrity sha512-kxltocVQCwQNFvw40dlVRYeAkAvtYjMFZYNlOcsF5wExPpGwPxMwgx4IfDJvBRPtBpnQwItd5WkTaR0ZwT/TmQ==
+
 constant-case@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/constant-case/-/constant-case-3.0.4.tgz#3b84a9aeaf4cf31ec45e6bf5de91bdfb0589faf1"
@@ -7957,6 +7967,11 @@ dequal@^2.0.3:
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.3.tgz#2644214f1997d39ed0ee0ece72335490a7ac67be"
   integrity sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==
 
+destr@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/destr/-/destr-2.0.3.tgz#7f9e97cb3d16dbdca7be52aca1644ce402cfe449"
+  integrity sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ==
+
 destroy@1.2.0, destroy@^1.0.4:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
@@ -8175,6 +8190,18 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
+ebec@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ebec/-/ebec-1.1.1.tgz#683a0dc82a77e86349e05b24c43d7233a6d0f840"
+  integrity sha512-JZ1vcvPQtR+8LGbZmbjG21IxLQq/v47iheJqn2F6yB2CgnGfn8ZVg3myHrf3buIZS8UCwQK0jOSIb3oHX7aH8g==
+  dependencies:
+    smob "^1.4.0"
+
+ebec@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/ebec/-/ebec-2.3.0.tgz#9b5b423f1196a0cd414e041111f2b1d146308bd5"
+  integrity sha512-bt+0tSL7223VU3PSVi0vtNLZ8pO1AfWolcPPMk2a/a5H+o/ZU9ky0n3A0zhrR4qzJTN61uPsGIO4ShhOukdzxA==
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -8322,6 +8349,13 @@ envinfo@^7.7.3:
   version "7.14.0"
   resolved "https://registry.yarnpkg.com/envinfo/-/envinfo-7.14.0.tgz#26dac5db54418f2a4c1159153a0b2ae980838aae"
   integrity sha512-CO40UI41xDQzhLB1hWyqUKgFhs250pNcGbyGKe1l/e4FSaI/+YE4IMG76GDt0In67WLPACIITC+sOi08x4wIvg==
+
+envix@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/envix/-/envix-1.5.0.tgz#bbb7ceba6f098a272ef2044e606789844d08c1db"
+  integrity sha512-IOxTKT+tffjxgvX2O5nq6enbkv6kBQ/QdMy18bZWo0P0rKPvsRp2/EypIPwTvJfnmk3VdOlq/KcRSZCswefM/w==
+  dependencies:
+    std-env "^3.7.0"
 
 err-code@^3.0.1:
   version "3.0.1"
@@ -11827,6 +11861,11 @@ jest@^29.7.0:
     import-local "^3.0.2"
     jest-cli "^29.7.0"
 
+jiti@^2.4.0:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/jiti/-/jiti-2.4.2.tgz#d19b7732ebb6116b06e2038da74a55366faef560"
+  integrity sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==
+
 join-async-iterator@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/join-async-iterator/-/join-async-iterator-1.1.1.tgz#7d2857d7f4066267861888d264769e842110d07e"
@@ -12448,6 +12487,18 @@ locate-path@^7.1.0:
   integrity sha512-gvVijfZvn7R+2qyPX8mAuKcFGDf6Nc61GdvGafQsHL0sBIxfKzA+usWn4GFC/bk+QdwPUD4kWFJLhElipq+0VA==
   dependencies:
     p-locate "^6.0.0"
+
+locter@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/locter/-/locter-2.1.5.tgz#b16306a321b40f579f1124069618c41612420502"
+  integrity sha512-eI57PuVxigQ0GBscGIIFGPB467E5zKODHD3XGuknzLvf7HdnvRw3GdZVGj1J8XKsKOYovZQesX/oOdTwbdjwuQ==
+  dependencies:
+    destr "^2.0.3"
+    ebec "^2.3.0"
+    fast-glob "^3.3.2"
+    flat "^5.0.2"
+    jiti "^2.4.0"
+    yaml "^2.6.0"
 
 lodash.camelcase@^4.3.0:
   version "4.3.0"
@@ -14794,6 +14845,14 @@ range-parser@^1.2.1, range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
+rapiq@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/rapiq/-/rapiq-0.9.0.tgz#0f427b1a459064a488ae86d2fb91f14524369240"
+  integrity sha512-k4oT4RarFBrlLMJ49xUTeQpa/us0uU4I70D/UEnK3FWQ4GENzei01rEQAmvPKAIzACo4NMW+YcYJ7EVfSa7EFg==
+  dependencies:
+    ebec "^1.1.0"
+    smob "^1.4.0"
+
 raw-body@2.5.2:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/raw-body/-/raw-body-2.5.2.tgz#99febd83b90e08975087e8f1f9419a149366b68a"
@@ -14976,7 +15035,7 @@ reflect-metadata@^0.1.13:
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.14.tgz#24cf721fe60677146bb77eeb0e1f9dece3d65859"
   integrity sha512-ZhYeb6nRaXCfhnndflDK8qI6ZQ/YcWZCISRAWICW9XYqMUwjZM9Z0DveWX/ABN01oxSHwVxKQmxeYZSsm0jh5A==
 
-reflect-metadata@^0.2.1:
+reflect-metadata@^0.2.1, reflect-metadata@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.2.2.tgz#400c845b6cba87a21f2c65c4aeb158f4fa4d9c5b"
   integrity sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==
@@ -16001,6 +16060,11 @@ smart-buffer@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
   integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
+
+smob@^1.4.0, smob@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/smob/-/smob-1.5.0.tgz#85d79a1403abf128d24d3ebc1cdc5e1a9548d3ab"
+  integrity sha512-g6T+p7QO8npa+/hNx9ohv1E5pVCmWrVCUzUXJyLdMmftX6ER0oiWY/w9knEonLpnOp6b6FenKnMfR8gqwWdwig==
 
 snake-case@^3.0.4:
   version "3.0.4"
@@ -17176,6 +17240,21 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
+typeorm-extension@3.6.3:
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/typeorm-extension/-/typeorm-extension-3.6.3.tgz#555cb5786eddf39315bfef9453257bd13dea86d9"
+  integrity sha512-AE+8KqBphlBdVz5JS77o6LZzzi+b+YFFt8So4Qu/KRo/iynAwekrx98Oxuu3FAYNm6DUKDcubOBMZsJeiRvHkA==
+  dependencies:
+    "@faker-js/faker" "^8.4.1"
+    consola "^3.2.3"
+    envix "^1.5.0"
+    locter "^2.1.5"
+    pascal-case "^3.1.2"
+    rapiq "^0.9.0"
+    reflect-metadata "^0.2.2"
+    smob "^1.5.0"
+    yargs "^17.7.2"
+
 typeorm@0.3.20:
   version "0.3.20"
   resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.3.20.tgz#4b61d737c6fed4e9f63006f88d58a5e54816b7ab"
@@ -18298,6 +18377,11 @@ yaml@^1.10.0, yaml@^1.7.2:
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
+yaml@^2.6.0:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.6.1.tgz#42f2b1ba89203f374609572d5349fb8686500773"
+  integrity sha512-7r0XPzioN/Q9kXBro/XPnA6kznR73DHq+GXh5ON7ZozRO6aMjbmiBuKste2wslTFkC5d1dw0GooOCepZXJ2SAg==
+
 yargs-parser@21.0.1:
   version "21.0.1"
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-21.0.1.tgz#0267f286c877a4f0f728fceb6f8a3e4cb95c6e35"
@@ -18326,7 +18410,7 @@ yargs@^16.0.0, yargs@^16.2.0:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-yargs@^17.3.1, yargs@^17.4.0, yargs@^17.6.2:
+yargs@^17.3.1, yargs@^17.4.0, yargs@^17.6.2, yargs@^17.7.2:
   version "17.7.2"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.7.2.tgz#991df39aca675a192b816e1e0363f9d75d2aa269"
   integrity sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==

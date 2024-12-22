@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Show } from './show.entity';
 import { Episode } from './episode.entity';
 import { PartialKeys } from '../../../helper.types';
@@ -9,7 +18,10 @@ export class Season {
   id: number;
 
   @ManyToOne(() => Show, (show) => show.seasons)
+  @JoinColumn({ name: 'showId', referencedColumnName: 'id' })
   show: Show;
+
+  @Column()
   showId: number;
 
   @OneToMany(() => Episode, (episode) => episode.season)
@@ -43,17 +55,24 @@ export class Season {
   @Column()
   traktId: number;
 
-  @Column()
-  tvdbId: number;
+  @Column({
+    nullable: true,
+  })
+  tvdbId?: number;
 
-  @Column()
-  tmdbId: number;
+  @Column({
+    nullable: true,
+  })
+  tmdbId?: number;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type SeasonCreationAttributes = PartialKeys<Omit<Season, 'id' | 'episodes' | 'show'>, 'createdAt' | 'updatedAt'>
+export type SeasonCreationAttributes = PartialKeys<
+  Omit<Season, 'id' | 'episodes' | 'show'>,
+  'createdAt' | 'updatedAt'
+>;

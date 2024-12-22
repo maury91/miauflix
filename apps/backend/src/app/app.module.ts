@@ -28,7 +28,7 @@ import { TraktApiModule } from './trakt/trakt.api';
 import { ShowsQueuesModule } from './shows/shows.queues';
 import { ShowsModule } from './shows/shows.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { dataSourceOptions } from '../datasource';
+import { initializeDatabase } from '../datasource';
 
 @Module({
   imports: [
@@ -50,7 +50,9 @@ import { dataSourceOptions } from '../datasource';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forRoot(dataSourceOptions),
+    TypeOrmModule.forRootAsync({
+      useFactory: initializeDatabase,
+    }),
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],

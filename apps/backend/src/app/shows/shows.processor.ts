@@ -34,11 +34,11 @@ export class ShowsProcessor extends WorkerHost {
       if (images && images.poster && !showExists.poster) {
         await this.showData.updateImages(showExists.id, images);
       }
-      return showExists;
+      return null;
     }
     const show = await this.traktService.getShow(showSlug, true);
 
-    const createdShow = await this.showData.createShow({
+    await this.showData.createShow({
       slug: show.ids.slug,
       title: show.title,
       year: show.year,
@@ -60,8 +60,8 @@ export class ShowsProcessor extends WorkerHost {
       status: show.status,
     });
 
-    await this.queues.requestEpisodesForShow(showSlug);
-    return createdShow;
+    const job = await this.queues.requestEpisodesForShow(showSlug);
+    return job.id;
   }
 
   private async addEpisodeToDatabase(
@@ -141,7 +141,7 @@ export class ShowsProcessor extends WorkerHost {
   ) {
     // Double check if the show is in the database
     try {
-      await this.getShowExtendedData(job.data.slug, job.data.images);
+      return await this.getShowExtendedData(job.data.slug, job.data.images);
     } catch (error) {
       console.error('Failed to get show', job.data, error);
       throw error;

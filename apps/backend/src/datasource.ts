@@ -1,5 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { join } from 'path'
+import { createDatabase } from 'typeorm-extension';
+import { join } from 'path';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
@@ -8,14 +9,25 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env['POSTGRES_USER'],
   password: process.env['POSTGRES_PASS'],
   database: process.env['POSTGRES_DB'],
-  logging: true,
-  entities: [join(__dirname, './app/database/entities/*.entity.ts')],
-  migrations: [join(__dirname, './app/database/migrations/*.ts')],
-  synchronize: false,
+
+  entities: [join(__dirname, './app/database/entities/*.entity.{ts,js}')],
+
   migrationsTableName: 'miauflix_migrations',
-  migrationsRun: false,
-}
+  migrations: [join(__dirname, './app/database/migrations/*.{ts,js}')],
 
-const connectionSource = new DataSource(dataSourceOptions)
+  logging: ['error', 'migration'],
+  // logger: 'file',
+  // synchronize: false,
+  migrationsRun: true,
+};
 
-export default connectionSource;
+export const initializeDatabase = async () => {
+  await createDatabase({
+    options: dataSourceOptions,
+    initialDatabase: 'postgres',
+    ifNotExist: true,
+  });
+  return dataSourceOptions;
+};
+
+export default new DataSource(dataSourceOptions);

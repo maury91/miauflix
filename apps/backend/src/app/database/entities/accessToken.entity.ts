@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  JoinColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 import { PartialKeys } from '../../../helper.types';
 
@@ -18,13 +26,13 @@ export class AccessToken {
 
   @Column({
     type: 'varchar',
-    length: 20
+    length: 20,
   })
   tokenType: string;
 
   @Column({
     type: 'varchar',
-    length: 20
+    length: 20,
   })
   scope: string;
 
@@ -32,14 +40,20 @@ export class AccessToken {
   expiresIn: number;
 
   @ManyToOne(() => User, (user) => user.accessTokens)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
+
+  @Column()
   userId: number;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type AccessTokenCreationAttributes = PartialKeys<Omit<AccessToken, 'id' | 'user'>, 'createdAt' | 'updatedAt'>
+export type AccessTokenCreationAttributes = PartialKeys<
+  Omit<AccessToken, 'id' | 'user'>,
+  'createdAt' | 'updatedAt'
+>;

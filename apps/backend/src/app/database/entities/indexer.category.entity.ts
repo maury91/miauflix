@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Indexer } from './indexer.entity';
 import { PartialKeys } from '../../../helper.types';
 
@@ -12,26 +21,36 @@ export class IndexerCategory {
 
   @Column({
     type: 'int',
-    unsigned: true
+    unsigned: true,
   })
   catId: number;
 
   @OneToMany(() => IndexerCategory, (category) => category.parentCategory)
   subCategories: IndexerCategory[];
 
-  @ManyToOne(() => IndexerCategory, (category) => category.subCategories)
+  @ManyToOne(() => IndexerCategory, (category) => category.subCategories, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'parentCategoryId', referencedColumnName: 'id' })
   parentCategory?: IndexerCategory;
   parentCategoryId?: number;
 
-  @OneToMany(() => Indexer, (indexer) => indexer.categories)
+  @ManyToOne(() => Indexer, (indexer) => indexer.categories, {
+    nullable: false,
+  })
   indexer: Indexer;
+
+  @Column()
   indexerId: number;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type IndexerCategoryCreationAttributes = PartialKeys<Omit<IndexerCategory, 'id' | 'parentCategory' | 'indexer'>, 'createdAt' | 'updatedAt'>
+export type IndexerCategoryCreationAttributes = PartialKeys<
+  Omit<IndexerCategory, 'id' | 'parentCategory' | 'indexer'>,
+  'createdAt' | 'updatedAt'
+>;

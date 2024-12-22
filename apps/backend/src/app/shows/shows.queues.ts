@@ -28,7 +28,7 @@ export class ShowsQueues {
       connection: {
         host: configService.get<string>('REDIS_HOST'),
         port: configService.get<number>('REDIS_PORT'),
-      }
+      },
     });
     this.startProcessingShowsWithoutImages();
   }
@@ -43,6 +43,7 @@ export class ShowsQueues {
   }
 
   public async requestEpisodesForShow(slug: string) {
+    console.log('Getting episode for show', slug);
     return this.showQueue.add(showJobs.getShowEpisodes, {
       slug,
     });
@@ -63,6 +64,9 @@ export class ShowsQueues {
     const jobId = `get_show_extended_data_${slug}`;
     const existingJob = await this.showQueue.getJob(jobId);
     if (existingJob) {
+      if (await existingJob.isFailed()) {
+        await existingJob.retry();
+      }
       // Update priority ( it may have changed to a lower one )
       if (existingJob.priority > priority) {
         // Optimistic change, we don't need to wait for it
@@ -72,7 +76,7 @@ export class ShowsQueues {
       }
       return existingJob;
     }
-    return this.showQueue.add(
+    return (await this.showQueue.add(
       showJobs.getShowExtendedData,
       {
         slug,
@@ -84,10 +88,17 @@ export class ShowsQueues {
         jobId,
         priority,
       }
-    );
+    )) as Job<GetShowExtendedDataData, string, showJobs.getShowExtendedData>;
   }
 
-  public waitForJob(job: Job) {
+  public async waitForJob(job: Job | string) {
+    if (typeof job === 'string') {
+      const fullJob = await this.showQueue.getJob(job);
+      if (!fullJob) {
+        throw new Error('Job not found');
+      }
+      return fullJob.waitUntilFinished(this.showsEventsQueue);
+    }
     return job.waitUntilFinished(this.showsEventsQueue);
   }
 }
