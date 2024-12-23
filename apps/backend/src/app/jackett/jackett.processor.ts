@@ -167,7 +167,12 @@ export class JackettProcessor extends WorkerHost {
                 quality: torrent.quality,
               });
             } else {
-              this.logger.error('Season X Episode not matching', torrent);
+              this.logger.error(
+                'Season X Episode not matching',
+                JSON.stringify(torrent),
+                season,
+                episode
+              );
             }
           }
 

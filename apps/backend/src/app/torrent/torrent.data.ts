@@ -12,7 +12,15 @@ import { EpisodeSource } from '../database/entities/episode.source.entity';
 import { Show } from '../database/entities/show.entity';
 import { Season } from '../database/entities/season.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
-import { Brackets, In, LessThan, Like, Not, Repository } from 'typeorm';
+import {
+  Brackets,
+  FindOptionsWhere,
+  In,
+  LessThan,
+  Like,
+  Not,
+  Repository,
+} from 'typeorm';
 
 @Injectable()
 export class TorrentData {
@@ -110,126 +118,153 @@ export class TorrentData {
       .getMany();
   }
 
-  async getTorrentByMovieAndQuality(
+  private chooseBestSource<
+    T extends { quality: VideoQuality; size: number; availability: number }
+  >(hevc: T | null, notHevc: T | null) {
+    if (hevc) {
+      if (notHevc) {
+        if (notHevc.quality >= hevc.quality) {
+          const notHevcNotTooBig = hevc.size * 1.2 >= notHevc.size;
+          const notHevcHasMoreAvailability =
+            notHevc.availability >= hevc.availability;
+          if (notHevcNotTooBig && notHevcHasMoreAvailability) {
+            return notHevc;
+          }
+        }
+      }
+      return hevc;
+    }
+
+    return notHevc;
+  }
+
+  private async getOneTorrentByMovieAndQuality(
     slug: string,
     useHevc: boolean,
     useLowQuality: boolean
-  ) {
-    const bestSource = await this.movieSourceModel.findOne({
-      select: ['data', 'videos', 'id'],
+  ): Promise<MovieSource | null> {
+    const baseWhere: FindOptionsWhere<MovieSource> = {
+      movieSlug: slug,
+      rejected: false,
+      ...(useLowQuality
+        ? {
+            quality: LessThan(1080),
+          }
+        : {}),
+    };
+
+    const bestSourceNotHvec = await this.movieSourceModel.findOne({
+      select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
       where: {
-        movieSlug: slug,
-        codec: useHevc
-          ? Like('%x265%' as VideoCodec)
-          : Not(Like('%x265%' as VideoCodec)),
-        ...(useLowQuality
-          ? {
-              quality: LessThan(1080),
-            }
-          : {}),
+        ...baseWhere,
+        codec: Not(Like('%x265%' as VideoCodec)),
       },
       order: {
         quality: 'DESC',
       },
     });
+
+    if (useHevc) {
+      const bestSourceHevc = await this.movieSourceModel.findOne({
+        select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
+        where: {
+          ...baseWhere,
+          codec: Like('%x265%' as VideoCodec),
+        },
+        order: {
+          quality: 'DESC',
+        },
+      });
+
+      return this.chooseBestSource(bestSourceHevc, bestSourceNotHvec);
+    }
+
+    return bestSourceNotHvec;
+  }
+
+  async getTorrentByMovieAndQuality(
+    slug: string,
+    useHevc: boolean,
+    useLowQuality: boolean
+  ): Promise<MovieSource | null> {
+    const bestSource = await this.getOneTorrentByMovieAndQuality(
+      slug,
+      useHevc,
+      useLowQuality
+    );
 
     if (bestSource) {
       return bestSource;
     }
 
-    const sameCodec = await this.movieSourceModel.findOne({
-      select: ['data', 'videos', 'id'],
-      where: {
-        movieSlug: slug,
-        codec: useHevc
-          ? Like('%x265%' as VideoCodec)
-          : Not(Like('%x265%' as VideoCodec)),
-      },
-      order: {
-        quality: 'DESC',
-      },
-    });
-
-    if (sameCodec) {
-      return sameCodec;
-    }
-
-    const highestQuality = await this.movieSourceModel.findOne({
-      select: ['data', 'videos', 'id'],
-      where: {
-        movieSlug: slug,
-      },
-      order: {
-        quality: 'DESC',
-      },
-    });
-
-    if (highestQuality) {
-      return highestQuality;
+    if (useLowQuality) {
+      return this.getOneTorrentByMovieAndQuality(slug, useHevc, false);
     }
 
     return null;
+  }
+
+  private async getOneTorrentByEpisodeAndQuality(
+    episodeId: number,
+    useHevc: boolean,
+    useLowQuality: boolean
+  ): Promise<EpisodeSource | null> {
+    const baseWhere: FindOptionsWhere<EpisodeSource> = {
+      episodeId,
+      rejected: false,
+      ...(useLowQuality
+        ? {
+            quality: LessThan(1080),
+          }
+        : {}),
+    };
+
+    const bestSourceNotHvec = await this.episodeSourceModel.findOne({
+      select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
+      where: {
+        ...baseWhere,
+        codec: Not(Like('%x265%' as VideoCodec)),
+      },
+      order: {
+        quality: 'DESC',
+      },
+    });
+
+    if (useHevc) {
+      const bestSourceHevc = await this.episodeSourceModel.findOne({
+        select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
+        where: {
+          ...baseWhere,
+          codec: Like('%x265%' as VideoCodec),
+        },
+        order: {
+          quality: 'DESC',
+        },
+      });
+
+      return this.chooseBestSource(bestSourceHevc, bestSourceNotHvec);
+    }
+
+    return bestSourceNotHvec;
   }
 
   async getTorrentByEpisodeAndQuality(
     episodeId: number,
     useHevc: boolean,
     useLowQuality: boolean
-  ) {
-    const bestSource = await this.episodeSourceModel.findOne({
-      select: ['data', 'videos', 'id'],
-      where: {
-        episodeId,
-        rejected: false,
-        codec: useHevc
-          ? Like('%x265%' as VideoCodec)
-          : Not(Like('%x265%' as VideoCodec)),
-        ...(useLowQuality
-          ? {
-              quality: LessThan(1080),
-            }
-          : {}),
-      },
-      order: {
-        quality: 'DESC',
-      },
-    });
+  ): Promise<EpisodeSource | null> {
+    const bestSource = this.getOneTorrentByEpisodeAndQuality(
+      episodeId,
+      useHevc,
+      useLowQuality
+    );
 
     if (bestSource) {
       return bestSource;
     }
 
-    const sameCodec = await this.episodeSourceModel.findOne({
-      select: ['data', 'videos', 'id'],
-      where: {
-        episodeId,
-        rejected: false,
-        codec: useHevc
-          ? Like('%x265%' as VideoCodec)
-          : Not(Like('%x265%' as VideoCodec)),
-      },
-      order: {
-        quality: 'DESC',
-      },
-    });
-
-    if (sameCodec) {
-      return sameCodec;
-    }
-
-    const highestQuality = await this.episodeSourceModel.findOne({
-      select: ['data', 'videos', 'id'],
-      where: {
-        episodeId,
-        rejected: false,
-      },
-      order: {
-        quality: 'DESC',
-      },
-    });
-
-    if (highestQuality) {
-      return highestQuality;
+    if (useLowQuality) {
+      return this.getOneTorrentByEpisodeAndQuality(episodeId, useHevc, false);
     }
 
     return null;

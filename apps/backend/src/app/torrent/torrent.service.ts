@@ -243,7 +243,11 @@ export class TorrentService {
               return resolve(true);
             }
 
-            console.log('Torrent progress', torrent.progress);
+            console.log(
+              `Torrent ${torrent.name} progress ${Math.round(
+                torrent.progress * 100
+              )}%`
+            );
             torrent.destroy(
               {
                 destroyStore: torrent.progress < 0.2 || forceDestroy,
@@ -257,6 +261,9 @@ export class TorrentService {
                       ? 'Torrent destroyed'
                       : 'Torrent stopped'
                   );
+                  if (torrent.progress < 0.2 || forceDestroy) {
+                    this.cacheManager.del(`torrent:${streamKey}:bitfield`);
+                  }
                   delete this.streams[streamKey];
                   resolve(true);
                 }
@@ -489,7 +496,7 @@ export class TorrentService {
         streamKey,
       };
     }
-    console.log('Searching DB');
+    console.log('Searching DB for torrent', streamKey);
     const {
       data: torrentFile,
       videos,
@@ -557,7 +564,11 @@ export class TorrentService {
             resolve({ stream: streamURL, streamKey });
           }
           torrent.on('verified', (index) => {
-            console.log('Torrent progress', torrent.progress);
+            console.log(
+              `Torrent ${torrent.name} progress ${Math.round(
+                torrent.progress * 100
+              )}%`
+            );
             console.log('Verified', index);
             this.cacheManager.set(
               `torrent:${streamKey}:bitfield`,

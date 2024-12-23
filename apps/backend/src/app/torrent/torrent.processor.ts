@@ -75,6 +75,8 @@ export class TorrentProcessor extends WorkerHost {
         size,
         episodeNum,
         seasonNum,
+        peers,
+        seeders,
       } = torrentCandidates[0];
       const torrent = await this.getTorrentFileByUrl(url);
       if (torrent.files.length) {
@@ -97,6 +99,8 @@ export class TorrentProcessor extends WorkerHost {
                 videos: videoFiles.map((file) => file.name),
                 size,
                 originalSource: `torrent::${id}`,
+                availability: peers + seeders * 10,
+                rejected: false,
               });
               await this.movieData.setSourceFound(mediaSlug);
             } else {
@@ -112,6 +116,7 @@ export class TorrentProcessor extends WorkerHost {
                 videos: videoFiles.map((file) => file.name),
                 size,
                 originalSource: `torrent::${id}`,
+                availability: peers + seeders * 10,
               });
               await this.showData.setSourceFound(mediaId);
             }

@@ -62,6 +62,13 @@ export class EpisodeSource {
   quality: VideoQuality;
 
   @Column({
+    type: 'int',
+    unsigned: true,
+    default: 0,
+  })
+  availability: number;
+
+  @Column({
     type: 'varchar',
     length: 20,
   })

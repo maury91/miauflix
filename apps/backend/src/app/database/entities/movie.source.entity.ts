@@ -52,6 +52,19 @@ export class MovieSource {
   @Column('varchar')
   source: VideoSource;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  rejected: boolean;
+
+  @Column({
+    type: 'int',
+    unsigned: true,
+    default: 0,
+  })
+  availability: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
