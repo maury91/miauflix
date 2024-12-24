@@ -86,6 +86,7 @@ export class ShowsProcessor extends WorkerHost {
       runtime: episode.runtime,
       order: episode.number_abs,
       episodeType: episode.episode_type,
+      seasonNumber: season.number,
       image: episodeImage,
     });
   }

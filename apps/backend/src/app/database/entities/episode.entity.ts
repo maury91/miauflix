@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PartialKeys } from '../../../helper.types';
+import { EpisodeProgress } from './episode.progress.entity';
 
 @Entity()
 export class Episode {
@@ -31,6 +32,9 @@ export class Episode {
 
   @Column()
   seasonId: number;
+
+  @Column()
+  seasonNumber: number;
 
   @OneToMany(() => EpisodeSource, (episodeSource) => episodeSource.episode)
   sources!: EpisodeSource[];
@@ -111,6 +115,12 @@ export class Episode {
   })
   noSourceFound = false;
 
+  @OneToMany(
+    () => EpisodeProgress,
+    (episodeProgress) => episodeProgress.episode
+  )
+  progress: EpisodeProgress;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -119,7 +129,7 @@ export class Episode {
 }
 
 export type EpisodeCreationAttributes = PartialKeys<
-  Omit<Episode, 'id' | 'season' | 'show' | 'sources'>,
+  Omit<Episode, 'id' | 'season' | 'show' | 'sources' | 'progress'>,
   | 'createdAt'
   | 'updatedAt'
   | 'sourceFound'

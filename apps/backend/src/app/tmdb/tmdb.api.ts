@@ -167,7 +167,7 @@ export class TMDBApi {
   }
 
   public async addImagesToMedias<
-    T extends { images: MediaImages; id: string; ids: { tmdb: number } }
+    T extends { images: MediaImages; ids: { slug: string; tmdb: number } }
   >(type: MediaType, medias: T[]): Promise<[T[], string[]]> {
     const mediasWithoutImages: string[] = [];
 
@@ -183,7 +183,7 @@ export class TMDBApi {
               ...media,
               images,
             };
-            mediasWithoutImages.push(newMedia.id);
+            mediasWithoutImages.push(newMedia.ids.slug);
             return newMedia;
           }
           return media;

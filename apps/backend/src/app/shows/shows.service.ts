@@ -14,6 +14,7 @@ import { Show } from '../database/entities/show.entity';
 import { Season } from '../database/entities/season.entity';
 import { JackettQueues } from '../jackett/jackett.queues';
 import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
+import { showToDto } from './shows.utils';
 
 @Injectable()
 export class ShowsService {
@@ -61,21 +62,7 @@ export class ShowsService {
     const show = await this.getExtendedShow(slug, true);
 
     return {
-      type: 'show',
-      id: show.slug,
-      title: show.title,
-      year: show.year,
-      ids: {
-        imdb: show.imdbId,
-        tmdb: show.tmdbId,
-        tvdb: show.tvdbId,
-      },
-      images: {
-        backdrop: show.backdrop,
-        backdrops: show.backdrops,
-        logos: show.logos,
-        poster: show.poster,
-      },
+      ...showToDto(show),
       overview: show.overview,
       runtime: show.runtime,
       trailer: show.trailer,
@@ -157,12 +144,11 @@ export class ShowsService {
     );
     const missingImages = season.episodes.some((episode) => !episode.image);
     if (missingImages) {
-      console.log('Searching images');
+      console.log('Searching missing images');
       const tmdbSeason = await this.tmdbApi.getSeason(
         show.tmdbId,
         season.number
       );
-      console.log('found', tmdbSeason);
       for (const episode of season.episodes) {
         if (!episode.image) {
           const episodeImage = tmdbSeason.episodes.find(
@@ -187,7 +173,7 @@ export class ShowsService {
     const [showsWithImages, showsWithIncompleteInformation] =
       await this.tmdbApi.addImagesToMedias(
         'tv',
-        shows.map((show) => {
+        shows.map((show): ShowDto => {
           if (show.ids.slug in storedShows) {
             return storedShows[show.ids.slug];
           }

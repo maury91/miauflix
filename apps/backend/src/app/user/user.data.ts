@@ -1,14 +1,22 @@
 import { Global, Injectable, Module } from '@nestjs/common';
 import { AccessToken } from '../database/entities/accessToken.entity';
 import { User, UserCreationAttributes } from '../database/entities/user.entity';
-import { UserDto } from '@miauflix/types';
+import { MovieProgressDto, ShowProgressDto, UserDto } from '@miauflix/types';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { Not, Raw, Repository } from 'typeorm';
+import { movieToDto } from '../movies/movies.utils';
+import { showToDto } from '../shows/shows.utils';
+import { EpisodeProgress } from '../database/entities/episode.progress.entity';
+import { MovieProgress } from '../database/entities/movie.progress.entity';
 
 @Injectable()
 export class UserData {
   constructor(
     @InjectRepository(User) private readonly userModel: Repository<User>,
+    @InjectRepository(EpisodeProgress)
+    private readonly episodeProgressModel: Repository<EpisodeProgress>,
+    @InjectRepository(MovieProgress)
+    private readonly movieProgressModel: Repository<MovieProgress>,
     @InjectRepository(AccessToken)
     private readonly accessTokenModel: Repository<AccessToken>
   ) {}
@@ -19,6 +27,192 @@ export class UserData {
         userId,
       },
     });
+  }
+
+  public async getProgress(userId: number) {
+    const user = await this.userModel.findOne({
+      where: {
+        id: userId,
+      },
+      relations: {
+        episodeProgress: true,
+        movieProgress: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return {
+      episodes: user.episodeProgress.map((progress) => ({
+        episodeId: progress.episodeId,
+        progress: progress.progress,
+        traktId: progress.traktId,
+        status: progress.status,
+        updatedAt: progress.updatedAt.toISOString(),
+      })),
+      movies: user.movieProgress.map((progress) => ({
+        movieId: progress.movieId,
+        progress: progress.progress,
+        movieSlug: progress.movie.slug,
+        status: progress.status,
+        updatedAt: progress.updatedAt.toISOString(),
+      })),
+    };
+  }
+
+  public async getProgressWithMedias(userId: number) {
+    const user = await this.userModel.findOne({
+      where: {
+        id: userId,
+      },
+      relations: {
+        episodeProgress: {
+          episode: {
+            show: true,
+          },
+        },
+        movieProgress: {
+          movie: true,
+        },
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const shows = user.episodeProgress
+      .map((progress) => progress.episode.show)
+      .filter(
+        (show, index, self) => self.findIndex((s) => s.id === show.id) === index
+      )
+      .map((show): ShowProgressDto => {
+        const episodes = user.episodeProgress.filter(
+          (progress) => progress.episode.show.id === show.id
+        );
+        const latestEpisode = episodes.reduce((latestEpisode, episode) => {
+          if (
+            episode.episode.seasonNumber > latestEpisode.episode.seasonNumber
+          ) {
+            return episode;
+          }
+          if (
+            episode.episode.seasonNumber ===
+              latestEpisode.episode.seasonNumber &&
+            episode.episode.number > latestEpisode.episode.number
+          ) {
+            return episode;
+          }
+          return episode;
+        }, episodes[0]);
+
+        return {
+          type: 'episode',
+          show: showToDto(show),
+          progress: latestEpisode.progress,
+          episode: latestEpisode.episode.number,
+          season: latestEpisode.episode.seasonNumber,
+          pausedAt: latestEpisode.updatedAt.toISOString(),
+        };
+      });
+
+    const movies = user.movieProgress.map(
+      (progress): MovieProgressDto => ({
+        type: 'movie' as const,
+        progress: progress.progress,
+        movie: movieToDto(progress.movie),
+        pausedAt: progress.updatedAt.toISOString(),
+      })
+    );
+
+    return [...shows, ...movies].sort(
+      (a, b) => new Date(a.pausedAt).getTime() - new Date(b.pausedAt).getTime()
+    );
+  }
+
+  static actionToStatus(action: 'start' | 'pause' | 'stop') {
+    switch (action) {
+      case 'start':
+        return 'watching';
+      case 'pause':
+        return 'paused';
+      case 'stop':
+        return 'stopped';
+    }
+  }
+
+  public async updateEpisodeProgress(
+    userId: number,
+    episodeId: number,
+    progress: number,
+    status: 'watching' | 'stopped' | 'paused',
+    traktId: number,
+    synced = false
+  ) {
+    return this.episodeProgressModel.save({
+      userId,
+      episodeId,
+      progress,
+      status,
+      synced,
+      traktId,
+    });
+  }
+
+  public async updateMovieProgress(
+    userId: number,
+    movieId: number,
+    progress: number,
+    status: 'watching' | 'stopped' | 'paused',
+    slug: string,
+    synced = false
+  ) {
+    return this.movieProgressModel.save({
+      userId,
+      movieId,
+      progress,
+      status,
+      synced,
+      slug,
+    });
+  }
+
+  public async getUnSyncedProgress(userId: number) {
+    const unSyncedEpisodes = await this.episodeProgressModel.find({
+      where: {
+        userId,
+        synced: false,
+      },
+      relations: {
+        episode: true,
+      },
+    });
+    const unSyncedMovies = await this.movieProgressModel.find({
+      where: {
+        userId,
+        synced: false,
+      },
+      relations: {
+        movie: true,
+      },
+    });
+
+    return {
+      episodes: unSyncedEpisodes.map((episode) => ({
+        progress: episode.progress,
+        runtime: episode.episode.runtime,
+        status: episode.status,
+        traktId: episode.traktId,
+      })),
+      movies: unSyncedMovies.map((movie) => ({
+        progress: movie.progress,
+        runtime: movie.movie.runtime,
+        status: movie.status,
+        movieSlug: movie.slug,
+      })),
+    };
   }
 
   public async createUser(user: UserCreationAttributes): Promise<User> {
@@ -83,6 +277,31 @@ export class UserData {
     });
   }
 
+  public async getLoggedUsers() {
+    // Get non expired tokens
+    const validAccessTokens = await this.accessTokenModel.find({
+      where: {
+        createdAt: Raw(
+          (alias) => `${alias} > NOW() - "expiresIn" * INTERVAL '1s'`
+        ),
+      },
+      relations: ['user'],
+    });
+    return validAccessTokens
+      .map((accessToken) => ({
+        id: accessToken.user.id,
+        name: accessToken.user.name,
+        slug: accessToken.user.slug,
+        accessToken: accessToken.accessToken,
+        expiresAt:
+          accessToken.createdAt.getTime() + accessToken.expiresIn * 1000,
+      }))
+      .sort((a, b) => b.expiresAt - a.expiresAt)
+      .filter(
+        (user, index, self) => self.findIndex((u) => u.id === user.id) === index
+      );
+  }
+
   public async getUserAccessToken(userId: number) {
     const accessTokenData = await this.accessTokenModel.findOne({
       select: ['accessToken'],
@@ -116,7 +335,14 @@ export class UserData {
 
 @Global()
 @Module({
-  imports: [TypeOrmModule.forFeature([User, AccessToken])],
+  imports: [
+    TypeOrmModule.forFeature([
+      User,
+      AccessToken,
+      EpisodeProgress,
+      MovieProgress,
+    ]),
+  ],
   providers: [UserData],
   exports: [UserData, TypeOrmModule],
 })

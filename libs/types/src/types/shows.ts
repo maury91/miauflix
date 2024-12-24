@@ -6,6 +6,7 @@ export interface ShowDto {
   title: string;
   year: number;
   ids: {
+    slug: string;
     imdb: string;
     tmdb: number;
     tvdb: number;

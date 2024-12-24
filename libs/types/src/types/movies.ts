@@ -2,7 +2,7 @@ import { MediaImages, VideoQualityStr } from './media';
 
 export interface MovieDto {
   type: 'movie';
-  id: string;
+  id: number;
   title: string;
   year: number;
   ids: {
@@ -26,7 +26,7 @@ export interface ExtendedMovieDto extends MovieDto {
 }
 
 export interface TrackPlaybackRequest {
-  action: 'start' | 'pause' | 'stop';
+  status: 'watching' | 'stopped' | 'paused';
   type: 'movie' | 'episode';
   progress: number;
 }

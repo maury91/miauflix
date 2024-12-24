@@ -17,30 +17,27 @@ export const resumeSlice = createSlice({
   reducers: {
     setMediaProgress: (
       state,
-      action: PayloadAction<{ mediaId: string; progress: number }>
+      action: PayloadAction<{ mediaId: number; progress: number }>
     ) => {
       state.movieProgress[action.payload.mediaId] = action.payload.progress;
     },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      progressApi.endpoints.getMoviesProgress.matchFulfilled,
+      progressApi.endpoints.getProgress.matchFulfilled,
       (state, action) => {
-        for (const movieProgress of action.payload) {
-          state.movieProgress[movieProgress.movie.id] = movieProgress.progress;
-        }
-      }
-    );
-    builder.addMatcher(
-      progressApi.endpoints.getEpisodesProgress.matchFulfilled,
-      (state, action) => {
-        for (const movieProgress of action.payload) {
-          if (!state.showProgress[movieProgress.show.id]) {
-            state.showProgress[movieProgress.show.id] = {};
+        for (const mediaProgress of action.payload) {
+          if (mediaProgress.type === 'movie') {
+            state.movieProgress[mediaProgress.movie.id] =
+              mediaProgress.progress;
+          } else {
+            if (!state.showProgress[mediaProgress.show.id]) {
+              state.showProgress[mediaProgress.show.id] = {};
+            }
+            state.showProgress[mediaProgress.show.id][
+              `${mediaProgress.season}-${mediaProgress.episode}`
+            ] = mediaProgress.progress;
           }
-          state.showProgress[movieProgress.show.id][
-            `${movieProgress.season}-${movieProgress.episode}`
-          ] = movieProgress.progress;
         }
       }
     );

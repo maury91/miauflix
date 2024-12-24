@@ -20,7 +20,6 @@ import LineMdPlay from '~icons/line-md/play';
 import { useEpisodeStreaming } from '../hooks/useEpisodeStreaming';
 import { useGetSelectedEpisode } from '../hooks/useGetSelectedEpisode';
 import { useGetSeasonEpisodes } from '../hooks/useGetSeasonEpisodes';
-import { useWhatChanged } from '@simbathesailor/use-what-changed';
 
 interface TvShowPageProps {
   media: ExtendedShowDto;
@@ -92,7 +91,7 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
       dispatch(
         setStreamUrl({
           url: streamInfo.stream,
-          id: episode.traktId.toString(),
+          id: episode.id,
           season: season.number,
           episode: episode.number,
           type: 'episode',

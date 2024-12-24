@@ -29,19 +29,19 @@ export const useTrackProgress = (player: Player) => {
     player.on('status', (playerStatus) => {
       if (playerStatus === 'PLAYING') {
         updateProgress({
-          action: 'start',
+          status: 'watching',
           progress: (player.played() * 100) / player.videoLength(),
         });
       }
       if (playerStatus === 'PAUSED') {
         updateProgress({
-          action: 'pause',
+          status: 'paused',
           progress: (player.played() * 100) / player.videoLength(),
         });
       }
       if (playerStatus === 'NONE') {
         updateProgress({
-          action: 'stop',
+          status: 'stopped',
           progress: (player.played() * 100) / player.videoLength(),
         });
       }

@@ -13,6 +13,7 @@ import {
 import { EpisodeSource } from '../database/entities/episode.source.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { In, Raw, Repository } from 'typeorm';
+import { showToDto } from './shows.utils';
 
 @Injectable()
 export class ShowsData {
@@ -138,25 +139,7 @@ export class ShowsData {
     return storedShows.reduce<Record<string, ShowDto>>(
       (acc, show) => ({
         ...acc,
-        [show.slug]: {
-          type: 'show',
-          id: show.slug,
-          title: show.title,
-          year: show.year,
-          ids: {
-            trakt: show.traktId,
-            slug: show.slug,
-            imdb: show.imdbId,
-            tmdb: show.tmdbId,
-            tvdb: show.tvdbId,
-          },
-          images: {
-            poster: show.poster,
-            backdrop: show.backdrop,
-            backdrops: show.backdrops,
-            logos: show.logos,
-          },
-        },
+        [show.slug]: showToDto(show),
       }),
       {}
     );

@@ -68,16 +68,6 @@ Navigate to http://localhost:5341/#/user/api-keys/new give a title to the API ke
 
 A popup will appear with the API key token, copy the token and paste it in the `.env` file as the value for `SEQ_API_KEY`.
 
-### Database
-
-The last thing is to initialize the database, run the following command to create the database ( if it does not exists )
-
-```shell
-npx sequelize-cli db:create
-```
-
-ToDo: Add migrations, wait for sequelize 7 or use TypeORM
-
 ## Local development
 
 Start by installing the dependencies:

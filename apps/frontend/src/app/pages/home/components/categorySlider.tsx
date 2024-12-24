@@ -12,12 +12,9 @@ import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { CONTINUE_WATCHING_CATEGORY, HOME_PREFIX } from '../consts';
-import {
-  useGetEpisodesProgressQuery,
-  useGetMoviesProgressQuery,
-} from '../../../../store/api/progress';
 import { CATEGORY_CONTAINER_TOP_MASK } from './categoriesContainer';
 import { Slider } from '../../../components/slider';
+import { useGetProgressQuery } from '../../../../store/api/progress';
 
 export const SLIDER_MARGIN = 10;
 
@@ -99,19 +96,12 @@ const SPECIAL_CATEGORIES = [CONTINUE_WATCHING_CATEGORY];
 
 const useSpecialList = (category: string): ListHookReturn => {
   const userId = useAppSelector((state) => state.app.currentUserId);
-  const { data: movieProgressCategory } = useGetMoviesProgressQuery(
-    category === CONTINUE_WATCHING_CATEGORY ? userId : skipToken
-  );
-  const { data: episodeProgressCategory } = useGetEpisodesProgressQuery(
+  const { data: progressCategory } = useGetProgressQuery(
     category === CONTINUE_WATCHING_CATEGORY ? userId : skipToken
   );
 
-  if (movieProgressCategory && episodeProgressCategory) {
-    const data = [...movieProgressCategory, ...episodeProgressCategory]
-      .sort(
-        (a, b) =>
-          new Date(a.pausedAt).getTime() - new Date(b.pausedAt).getTime()
-      )
+  if (progressCategory) {
+    const data = progressCategory
       .map((media) => (media.type === 'movie' ? media.movie : media.show))
       .filter(
         (media, index, arr) =>

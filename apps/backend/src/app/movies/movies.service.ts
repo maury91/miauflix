@@ -12,6 +12,8 @@ import { JackettQueues } from '../jackett/jackett.queues';
 import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
 import { MoviesQueues } from './movies.queues';
 import { TraktApi } from '../trakt/trakt.api';
+import { Movie } from '../database/entities/movie.entity';
+import { movieToDto } from './movies.utils';
 
 @Injectable()
 export class MoviesService {
@@ -24,7 +26,7 @@ export class MoviesService {
     private readonly moviesQueuesService: MoviesQueues
   ) {}
 
-  private async getExtendedMovie(slug: string) {
+  private async getExtendedMovie(slug: string): Promise<Movie> {
     const movie = await this.movieData.findMovieWithSources(slug);
 
     if (!movie) {
@@ -57,42 +59,24 @@ export class MoviesService {
       );
     }
 
-    return {
-      movie,
-      sources: movie.sources,
-    };
+    return movie;
   }
 
   public async getMovie(slug: string): Promise<ExtendedMovieDto> {
-    const { movie, sources } = await this.getExtendedMovie(slug);
+    const movie = await this.getExtendedMovie(slug);
 
     return {
-      type: 'movie',
-      id: movie.slug,
-      title: movie.title,
-      year: movie.year,
-      ids: {
-        trakt: movie.traktId,
-        slug: movie.slug,
-        imdb: movie.imdbId,
-        tmdb: movie.tmdbId,
-      },
-      images: {
-        backdrop: movie.backdrop,
-        backdrops: movie.backdrops,
-        logos: movie.logos,
-        poster: movie.poster,
-      },
+      ...movieToDto(movie),
+      id: movie.id,
       overview: movie.overview,
       runtime: movie.runtime,
       trailer: movie.trailer,
       rating: Number(movie.rating),
       genres: movie.genres,
-      sourceFound: sources.length > 0,
-      noSourceFound: movie.noSourceFound,
+      sourceFound: movie.sources.length > 0,
       qualities: [
         ...new Set<VideoQualityStr>(
-          sources.map(({ quality }) => `${quality}` as const)
+          movie.sources.map(({ quality }) => `${quality}` as const)
         ),
       ],
     };
@@ -121,7 +105,7 @@ export class MoviesService {
             type: 'movie' as const,
             sourceFound: false,
             noSourceFound: false,
-            id: movie.ids.slug,
+            id: 0,
             images: NO_IMAGES,
           };
         })
@@ -132,7 +116,7 @@ export class MoviesService {
       ...moviesWithoutSource,
     ]).forEach((movieId) => {
       const index = moviesWithImages.findIndex(
-        (movieWithImage) => movieWithImage.id === movieId
+        (movieWithImage) => movieWithImage.ids.slug === movieId
       );
       if (index !== -1) {
         this.moviesQueuesService.requestMovieExtendedData(

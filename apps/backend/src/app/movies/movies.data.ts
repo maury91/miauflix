@@ -1,6 +1,7 @@
 import { Global, Injectable, Module } from '@nestjs/common';
 import {
-  Movie, MovieCreationAttributes
+  Movie,
+  MovieCreationAttributes,
 } from '../database/entities/movie.entity';
 import { Movie as TraktMovie } from '../trakt/trakt.types';
 import { MediaImages, MovieDto } from '@miauflix/types';
@@ -8,10 +9,13 @@ import { Torrent } from '../database/entities/torrent.entity';
 import { MovieSource } from '../database/entities/movie.source.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { In, Raw, Repository } from 'typeorm';
+import { movieToDto } from './movies.utils';
 
 @Injectable()
 export class MoviesData {
-  constructor(@InjectRepository(Movie) private readonly movieModel: Repository<Movie>) {}
+  constructor(
+    @InjectRepository(Movie) private readonly movieModel: Repository<Movie>
+  ) {}
 
   async findMovie(slug: string): Promise<Movie | null> {
     return await this.movieModel.findOne({
@@ -22,16 +26,11 @@ export class MoviesData {
   }
 
   async updateImages(movieId: number, images: MediaImages): Promise<void> {
-    await this.movieModel.update(
-      { id: movieId },
-      images,
-    );
+    await this.movieModel.update({ id: movieId }, images);
   }
 
   async findMovieById(id: number): Promise<Movie | null> {
-    return await this.movieModel.findOneBy(
-      { id },
-    );
+    return await this.movieModel.findOneBy({ id });
   }
 
   async findMoviesWithoutImages(): Promise<Movie[]> {
@@ -43,7 +42,7 @@ export class MoviesData {
         {
           backdrops: Raw((alias) => `cardinality(${alias}) = 0`),
         },
-      ]
+      ],
     });
   }
 
@@ -53,8 +52,8 @@ export class MoviesData {
         slug,
       },
       relations: {
-        sources: true
-      }
+        sources: true,
+      },
     });
   }
 
@@ -95,26 +94,7 @@ export class MoviesData {
     return storedMovies.reduce<Record<string, MovieDto>>(
       (acc, movie) => ({
         ...acc,
-        [movie.slug]: {
-          type: 'movie',
-          id: movie.slug,
-          title: movie.title,
-          year: movie.year,
-          ids: {
-            trakt: movie.traktId,
-            slug: movie.slug,
-            imdb: movie.imdbId,
-            tmdb: movie.tmdbId,
-          },
-          noSourceFound: movie.noSourceFound,
-          sourceFound: movie.sourceFound,
-          images: {
-            poster: movie.poster,
-            backdrop: movie.backdrop,
-            backdrops: movie.backdrops,
-            logos: movie.logos,
-          },
-        },
+        [movie.slug]: movieToDto(movie),
       }),
       {}
     );
@@ -125,14 +105,11 @@ export class MoviesData {
   }
 
   async setTorrentSearched(slug: string): Promise<void> {
-    await this.movieModel.update(
-      {slug},
-      { sourcesSearched: true },
-    );
+    await this.movieModel.update({ slug }, { sourcesSearched: true });
   }
 
   async setSourceFound(slug: string): Promise<void> {
-    await this.movieModel.update({slug}, { sourceFound: true });
+    await this.movieModel.update({ slug }, { sourceFound: true });
   }
 
   async setNoSourceFound(slug: string): Promise<void> {

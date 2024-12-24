@@ -1,6 +1,5 @@
 import {
   MovieProgressDto,
-  ProgressDto,
   ShowProgressDto,
   TrackPlaybackRequest,
 } from '@miauflix/types';
@@ -11,17 +10,9 @@ export const progressApi = createApi({
   reducerPath: 'progressApi',
   baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/progress` }),
   endpoints: (builder) => ({
-    getMoviesProgress: builder.query<MovieProgressDto[], number>({
+    getProgress: builder.query<(MovieProgressDto | ShowProgressDto)[], number>({
       query: (userId) => ({
-        url: 'movies',
-        headers: {
-          'x-user-id': `${userId}`,
-        },
-      }),
-    }),
-    getEpisodesProgress: builder.query<ShowProgressDto[], number>({
-      query: (userId) => ({
-        url: 'episodes',
+        url: '',
         headers: {
           'x-user-id': `${userId}`,
         },
@@ -29,16 +20,16 @@ export const progressApi = createApi({
     }),
     trackMovieProgress: builder.mutation<
       void,
-      TrackPlaybackRequest & { id: string; userId: number }
+      TrackPlaybackRequest & { id: number; userId: number }
     >({
       query: (body) => ({
-        url: body.id,
+        url: `${body.id}`,
         method: 'POST',
         headers: {
-          'x-user-id': body.userId.toString(),
+          'x-user-id': `${body.userId}`,
         },
         body: {
-          action: body.action,
+          status: body.status,
           progress: body.progress,
           type: body.type,
         },
@@ -47,8 +38,5 @@ export const progressApi = createApi({
   }),
 });
 
-export const {
-  useGetMoviesProgressQuery,
-  useGetEpisodesProgressQuery,
-  useTrackMovieProgressMutation,
-} = progressApi;
+export const { useGetProgressQuery, useTrackMovieProgressMutation } =
+  progressApi;

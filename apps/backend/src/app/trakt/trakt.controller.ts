@@ -4,107 +4,64 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Req,
 } from '@nestjs/common';
-import { TraktApi } from './trakt.api';
 import { Request } from 'express';
-import {
-  MovieProgressDto,
-  ShowProgressDto,
-  TrackPlaybackRequest,
-} from '@miauflix/types';
-import { MoviesService } from '../movies/movies.service';
+import { TrackPlaybackRequest } from '@miauflix/types';
 import { UserData } from '../user/user.data';
-import { ShowsService } from '../shows/shows.service';
+import { ShowsData } from '../shows/shows.data';
+import { MoviesData } from '../movies/movies.data';
 
 @Controller('progress')
 export class TraktController {
   constructor(
     private readonly userData: UserData,
-    private readonly moviesService: MoviesService,
-    private readonly showsService: ShowsService,
-    private readonly traktService: TraktApi
+    private readonly showsData: ShowsData,
+    private readonly moviesData: MoviesData
   ) {}
 
-  @Get('movies')
-  async getMoviesProgress(@Req() req: Request): Promise<MovieProgressDto[]> {
+  @Get('')
+  async getProgress(@Req() req: Request) {
     const userId = req.headers['x-user-id'];
     if (typeof userId !== 'string' || !userId) {
       throw new BadRequestException('User id missing');
     }
-    const accessToken = await this.userData.getUserAccessToken(
-      parseInt(userId, 10)
-    );
-    const rawProgress = await this.traktService.getProgress(
-      accessToken,
-      'movies'
-    );
-    const extendedMovies = await this.moviesService.addExtendedDataToMovies(
-      rawProgress.map((progress) => progress.movie)
-    );
-    return rawProgress.map((progress) => ({
-      progress: progress.progress,
-      pausedAt: progress.paused_at,
-      type: progress.type,
-      movie: extendedMovies.find(
-        (movie) => movie.id === progress.movie.ids.slug
-      ),
-    }));
+
+    return await this.userData.getProgressWithMedias(parseInt(userId, 10));
   }
 
-  @Get('episodes')
-  async getEpisodesProgress(@Req() req: Request): Promise<ShowProgressDto[]> {
-    const userId = req.headers['x-user-id'];
-    if (typeof userId !== 'string' || !userId) {
-      throw new BadRequestException('User id missing');
-    }
-    const accessToken = await this.userData.getUserAccessToken(
-      parseInt(userId, 10)
-    );
-    const rawProgress = await this.traktService.getProgress(
-      accessToken,
-      'episodes'
-    );
-    const showsSimple = rawProgress
-      .map((progress) => progress.show)
-      .filter(
-        (show, index, arr) =>
-          arr.findIndex((s) => s.ids.slug === show.ids.slug) === index
-      );
-    const shows = await this.showsService.addExtendedDataToShows(showsSimple);
-
-    return rawProgress.map((progress) => ({
-      progress: progress.progress,
-      pausedAt: progress.paused_at,
-      type: progress.type,
-      show: shows.find((show) => show.id === progress.show.ids.slug),
-      episode: progress.episode.number,
-      season: progress.episode.season,
-    }));
-  }
-
-  @Post(':slug')
-  async watchMovie(
-    @Param('slug') slug: string,
+  @Post(':id')
+  async updateProgress(
+    @Param('id', ParseIntPipe) id: number,
     @Req() req: Request,
-    @Body() { action, progress, type }: TrackPlaybackRequest
+    @Body() { status, progress, type }: TrackPlaybackRequest
   ) {
     const userId = req.headers['x-user-id'];
     if (typeof userId !== 'string' || !userId) {
       throw new BadRequestException('User id missing');
     }
-    const accessToken = await this.userData.getUserAccessToken(
-      parseInt(userId, 10)
-    );
     try {
-      await this.traktService.trackPlayback(
-        slug,
-        accessToken,
-        type,
-        action,
-        progress
-      );
+      if (type === 'episode') {
+        const episode = await this.showsData.findEpisode(id);
+        await this.userData.updateEpisodeProgress(
+          parseInt(userId, 10),
+          id,
+          progress,
+          status,
+          episode.traktId
+        );
+      } else {
+        const movie = await this.moviesData.findMovieById(id);
+        await this.userData.updateMovieProgress(
+          parseInt(userId, 10),
+          id,
+          progress,
+          status,
+          movie.slug
+        );
+      }
       return { success: true };
     } catch (e) {
       console.error(e);

@@ -10,6 +10,8 @@ import {
   AccessToken,
   AccessTokenCreationAttributes,
 } from './accessToken.entity';
+import { EpisodeProgress } from './episode.progress.entity';
+import { MovieProgress } from './movie.progress.entity';
 
 @Entity()
 export class User {
@@ -29,6 +31,12 @@ export class User {
   })
   accessTokens: AccessToken[];
 
+  @OneToMany(() => EpisodeProgress, (episodeProgress) => episodeProgress.user)
+  episodeProgress: EpisodeProgress[];
+
+  @OneToMany(() => MovieProgress, (movieProgress) => movieProgress.user)
+  movieProgress: MovieProgress[];
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -38,7 +46,12 @@ export class User {
 
 export type UserCreationAttributes = Omit<
   User,
-  'id' | 'createdAt' | 'updatedAt' | 'accessTokens'
+  | 'id'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'accessTokens'
+  | 'episodeProgress'
+  | 'movieProgress'
 > & {
   accessTokens: Omit<AccessTokenCreationAttributes, 'userId'>[];
 };

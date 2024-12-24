@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { MovieSource } from './movie.source.entity';
 import { PartialKeys } from '../../../helper.types';
+import { MovieProgress } from './movie.progress.entity';
 
 @Entity()
 export class Movie {
@@ -102,6 +103,9 @@ export class Movie {
   })
   genres: string[];
 
+  @OneToMany(() => MovieProgress, (movieProgress) => movieProgress.movie)
+  progress: MovieProgress[];
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -110,6 +114,6 @@ export class Movie {
 }
 
 export type MovieCreationAttributes = PartialKeys<
-  Omit<Movie, 'id' | 'sources' | 'createdAt' | 'updatedAt'>,
+  Omit<Movie, 'id' | 'sources' | 'createdAt' | 'updatedAt' | 'progress'>,
   'noSourceFound' | 'sourceFound' | 'sourcesSearched'
 >;

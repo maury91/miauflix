@@ -23,10 +23,7 @@ import {
 import { CategoriesContainer, CategoriesWrapper } from './categoriesContainer';
 import { CategorySlider, SLIDER_MARGIN } from './categorySlider';
 import { CategoryDto, MediaDto } from '@miauflix/types';
-import {
-  useGetEpisodesProgressQuery,
-  useGetMoviesProgressQuery,
-} from '../../../../store/api/progress';
+import { useGetProgressQuery } from '../../../../store/api/progress';
 import { useAppSelector } from '../../../../store/store';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
 import { debounce } from '../../../utils/debounce';
@@ -43,35 +40,19 @@ interface CategoriesProps {
 
 const useCategories = () => {
   const userId = useAppSelector((state) => state.app.currentUserId);
-  const {
-    data: moviesProgressCategory,
-    isLoading: isMoviesProgressCategoryLoading,
-  } = useGetMoviesProgressQuery(userId, {
-    pollingInterval: 30000,
-  });
-  const {
-    data: showsProgressCategory,
-    isLoading: isShowsProgressCategoryLoading,
-  } = useGetEpisodesProgressQuery(userId, {
-    pollingInterval: 30000,
-  });
+  const { data: progressCategory, isLoading: isProgressCategoryLoading } =
+    useGetProgressQuery(userId, {
+      pollingInterval: 30000,
+    });
   const { data: normalCategories, isLoading: areNormalCategoriesLoading } =
     useGetCategoriesQuery();
 
   return useMemo<CategoryDto[]>(() => {
     const categories: CategoryDto[] = [];
-    if (
-      isMoviesProgressCategoryLoading ||
-      isShowsProgressCategoryLoading ||
-      areNormalCategoriesLoading
-    ) {
+    if (isProgressCategoryLoading || areNormalCategoriesLoading) {
       return [];
     }
-    if (
-      moviesProgressCategory &&
-      showsProgressCategory &&
-      moviesProgressCategory.length + showsProgressCategory.length > 0
-    ) {
+    if (progressCategory && progressCategory.length > 0) {
       categories.push({
         id: CONTINUE_WATCHING_CATEGORY,
         name: 'Continue Watching',
@@ -80,11 +61,9 @@ const useCategories = () => {
     return [...categories, ...(normalCategories ?? [])];
   }, [
     areNormalCategoriesLoading,
-    isMoviesProgressCategoryLoading,
-    isShowsProgressCategoryLoading,
-    moviesProgressCategory,
+    isProgressCategoryLoading,
     normalCategories,
-    showsProgressCategory,
+    progressCategory,
   ]);
 };
 

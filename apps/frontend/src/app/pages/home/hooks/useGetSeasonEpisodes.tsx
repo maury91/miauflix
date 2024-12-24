@@ -1,7 +1,6 @@
 import { useAppSelector } from '../../../../store/store';
 import { useMemo } from 'react';
 import { ExtendedShowDto, SeasonDto } from '@miauflix/types';
-import { useWhatChanged } from '@simbathesailor/use-what-changed';
 
 interface GetSeasonEpisodesArgs {
   defaultBackground: string;

@@ -528,6 +528,13 @@ export class TorrentService {
               destroyStore: true,
             });
           } else {
+            // Download subtitles files
+            for (const file of torrent.files) {
+              console.log(file.name);
+              if (file.name.endsWith('.srt')) {
+                file.select();
+              }
+            }
             console.log('Torrent progress', torrent.progress);
             const file = videoFiles[0];
             file.select();
