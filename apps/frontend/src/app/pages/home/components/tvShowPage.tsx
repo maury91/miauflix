@@ -1,5 +1,5 @@
 import { ExtendedShowDto } from '@miauflix/types';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   useGetShowSeasonQuery,
   useGetShowSeasonsQuery,
@@ -41,10 +41,48 @@ const usePreloadShowImages = (showId: string) => {
   }, [show]);
 };
 
+export const useLatestWatchedSeasonAndEpisode = (
+  showId: string,
+  seasons: ExtendedShowDto['seasons']
+) => {
+  const progress = useAppSelector((state) => state.resume.showProgress[showId]);
+  const [latestSeason, latestEpisode] = useMemo((): [number, number] => {
+    if (progress) {
+      const episodesWithProgress = Object.keys(progress);
+      return episodesWithProgress.reduce<[number, number]>(
+        ([latestSeason, latestEpisode], episode) => {
+          const [seasonNumber, episodeNumber] = episode.split('-').map(Number);
+          if (seasonNumber > latestSeason) {
+            return [seasonNumber, episodeNumber];
+          } else if (
+            seasonNumber === latestSeason &&
+            episodeNumber > latestEpisode
+          ) {
+            return [seasonNumber, episodeNumber];
+          }
+          return [latestSeason, latestEpisode];
+        },
+        [0, 0]
+      );
+    }
+    return [0, 0];
+  }, [progress]);
+  return useMemo(() => {
+    const seasonIndex = seasons.findIndex(
+      (season) => season.number === latestSeason
+    );
+    return [seasonIndex, latestEpisode];
+  }, [latestEpisode, latestSeason, seasons]);
+};
+
 export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
   const page = useAppSelector((state) => state.app.currentPage);
-  const [selectedSeason, setSelectedSeason] = useState(0);
-  const [selectedEpisode, setSelectedEpisode] = useState(0);
+  const [latestSeason, latestEpisode] = useLatestWatchedSeasonAndEpisode(
+    media.id,
+    media.seasons
+  );
+  const [selectedSeason, setSelectedSeason] = useState(latestSeason);
+  const [selectedEpisode, setSelectedEpisode] = useState(latestEpisode);
   const { data: season } = useGetShowSeasonQuery({
     showId: media.id,
     season: media.seasons[selectedSeason].number,

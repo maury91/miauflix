@@ -35,6 +35,7 @@ export class Movie {
   @Column({
     type: 'varchar',
     length: 500,
+    nullable: true,
   })
   trailer: string;
 

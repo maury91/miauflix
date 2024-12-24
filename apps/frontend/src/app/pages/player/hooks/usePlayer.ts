@@ -73,7 +73,9 @@ export const usePlayer = ({
   }, [player, subtitleEnabled]);
 
   useEffect(() => {
-    player.seekTo(player.videoLength() * (initialPosition / 100));
+    return player.on('ready', () => {
+      player.seekTo(player.videoLength() * (initialPosition / 100));
+    });
   }, [initialPosition, player]);
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import {
   Player,
-  PlayerEvents,
   PlayerLanguage,
   PlayerStatus,
   Track,
@@ -13,10 +12,6 @@ import {
   TrackInfo,
 } from '../../../../tizen';
 import { createRef } from 'react';
-
-type Listeners = {
-  [E in keyof PlayerEvents]: ((data: PlayerEvents[E]) => void)[];
-};
 
 // ToDo: extend it
 const languageMap: Record<PlayerLanguage, RegExp> = {
@@ -37,20 +32,13 @@ export const TizenPlayerContainer = styled.object`
   z-index: 10000;
 `;
 
-export class TizenPlayer implements Player {
+export class TizenPlayer extends Player {
   private videoDuration = 0;
   private currentTime = 0;
   private currentSubtitle = '';
+  private currentSubtitleCueEndsAt = 0;
   private subtitlesEnabled = true;
   private ready = false;
-  private listeners: Listeners = {
-    length: [],
-    currentTime: [],
-    status: [],
-    subtitle: [],
-    error: [],
-    ready: [],
-  };
   private containerRef = createRef<HTMLObjectElement>();
 
   public container = (
@@ -186,7 +174,8 @@ export class TizenPlayer implements Player {
     return {
       oncurrentplaytime: this.updateTime,
       onstreamcompleted: this.stop,
-      onsubtitlechange: (_duration: number, text: string) => {
+      onsubtitlechange: (duration: number, text: string) => {
+        this.currentSubtitleCueEndsAt = this.currentTime + duration;
         this.updateSubtitle(text);
       },
     };
@@ -208,43 +197,46 @@ export class TizenPlayer implements Player {
     const duration = window.webapis.avplay.getDuration();
     if (duration !== this.videoDuration) {
       this.videoDuration = duration;
-      this.listeners.length.forEach((cb) => cb(duration));
+      this.emit('length', duration);
     }
   };
   private updateTime = (currentTime: number) => {
     if (this.currentTime !== currentTime) {
       this.currentTime = currentTime;
-      this.listeners.currentTime.forEach((cb) => cb(currentTime));
+      this.emit('currentTime', currentTime);
+      if (this.currentSubtitleCueEndsAt < currentTime) {
+        this.updateSubtitle('');
+      }
     }
   };
 
   private updateSubtitle(text: string) {
     if (this.currentSubtitle !== text) {
       this.currentSubtitle = text;
-      this.listeners.subtitle.forEach((cb) => cb(text));
+      this.emit('subtitle', text);
     }
   }
   private onError = (error: unknown) => {
     console.error(error);
     if (error instanceof Error) {
-      this.listeners.error.forEach((cb) => cb(error));
+      this.emit('error', error);
     } else if (typeof error === 'string') {
-      this.listeners.error.forEach((cb) => cb(new Error(error)));
+      this.emit('error', new Error(error));
     } else {
-      this.listeners.error.forEach((cb) => cb(error));
+      this.emit('error', error);
     }
   };
 
   private onReady() {
     this.ready = true;
-    this.listeners.ready.forEach((cb) => cb());
+    this.emit('ready', undefined);
   }
   private getState() {
     return window.webapis.avplay.getState();
   }
 
   private updateState(state: PlayerStatus) {
-    this.listeners.status.forEach((cb) => cb(state));
+    this.emit('status', state);
   }
 
   private prepare(): Promise<void> {
@@ -458,17 +450,4 @@ export class TizenPlayer implements Player {
   isReady = (): boolean => {
     return this.ready;
   };
-
-  on<T extends keyof PlayerEvents>(
-    event: T,
-    callback: (data: PlayerEvents[T]) => void
-  ): () => void {
-    this.listeners[event].push(callback);
-    return () => {
-      const listenerIndex = this.listeners[event].indexOf(callback);
-      if (listenerIndex !== -1) {
-        this.listeners[event].splice(listenerIndex, 1);
-      }
-    };
-  }
 }

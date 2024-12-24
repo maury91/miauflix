@@ -8,6 +8,10 @@ export interface Track {
 
 export type PlayerStatus = 'NONE' | 'PLAYING' | 'READY' | 'IDLE' | 'PAUSED';
 
+export type Listeners = {
+  [E in keyof PlayerEvents]: ((data: PlayerEvents[E]) => void)[];
+};
+
 export interface PlayerEvents {
   length: number;
   currentTime: number;
@@ -19,11 +23,22 @@ export interface PlayerEvents {
 
 export abstract class Player {
   public abstract container: ReactNode;
+  protected listeners: Listeners = {
+    length: [],
+    currentTime: [],
+    status: [],
+    subtitle: [],
+    error: [],
+    ready: [],
+  };
 
-  abstract on<T extends keyof PlayerEvents>(
+  protected emit<T extends keyof PlayerEvents>(
     event: T,
-    callback: (data: PlayerEvents[T]) => void
-  ): () => void;
+    data: PlayerEvents[T]
+  ): void {
+    this.listeners[event].forEach((listener) => listener(data));
+  }
+
   abstract init(url: string): Promise<boolean>;
   abstract pause(): boolean;
   abstract play(): boolean;
@@ -44,4 +59,17 @@ export abstract class Player {
   abstract toggleSubtitle(): boolean;
   abstract setCustomSubtitle(url: string): Promise<boolean>;
   abstract isReady(): boolean;
+
+  on<T extends keyof PlayerEvents>(
+    event: T,
+    callback: (data: PlayerEvents[T]) => void
+  ): () => void {
+    this.listeners[event].push(callback);
+    return () => {
+      const listenerIndex = this.listeners[event].indexOf(callback);
+      if (listenerIndex !== -1) {
+        this.listeners[event].splice(listenerIndex, 1);
+      }
+    };
+  }
 }

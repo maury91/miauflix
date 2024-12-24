@@ -162,7 +162,7 @@ export const CategorySlider: FC<{
               backdrop: scaleImage(
                 media.images.backdrop || media.images.backdrops[0]
               ),
-              id: media.id,
+              id: media.ids.slug,
               logo: media.images.backdrop ? undefined : media.images.logos[0],
               progress: moviesProgress[media.id] || 0,
             }

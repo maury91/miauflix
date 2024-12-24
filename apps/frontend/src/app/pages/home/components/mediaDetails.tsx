@@ -163,7 +163,7 @@ export const MediaDetails: FC<{
     : '';
   const { data: extendedMedia } = useGetExtendedInfoQuery(
     selectedMedia
-      ? { type: selectedMedia.type, id: selectedMedia.id }
+      ? { type: selectedMedia.type, id: selectedMedia.ids.slug }
       : skipToken
   );
   const [displayedSrc, setDisplayedSrc] = useState(imageSrc);

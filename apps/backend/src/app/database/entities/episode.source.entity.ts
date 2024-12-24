@@ -58,6 +58,38 @@ export class EpisodeSource {
   })
   data?: Buffer;
 
+  @Column({
+    type: 'bytea',
+    nullable: true,
+  })
+  downloaded?: Buffer;
+
+  @Column({
+    type: 'decimal',
+    precision: 4,
+    scale: 1,
+    default: 0,
+  })
+  downloadPercentage = 0;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  downloadedPath?: string;
+
+  @Column({
+    type: 'enum',
+    enum: ['created', 'downloading', 'completed'],
+    default: 'created',
+  })
+  status?: 'created' | 'downloading' | 'completed' = 'created';
+
+  @Column({
+    nullable: true,
+  })
+  lastUsedAt?: Date;
+
   @Column('smallint')
   quality: VideoQuality;
 
@@ -89,5 +121,5 @@ export class EpisodeSource {
 
 export type EpisodeSourceCreationAttributes = PartialKeys<
   Omit<EpisodeSource, 'id' | 'episode'>,
-  'createdAt' | 'updatedAt' | 'rejected'
+  'createdAt' | 'updatedAt' | 'rejected' | 'downloadPercentage'
 >;

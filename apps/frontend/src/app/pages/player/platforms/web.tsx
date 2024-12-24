@@ -11,7 +11,7 @@ const VideoContainer = styled.video`
   height: 100%;
 `;
 
-export class WebPlayer implements Player {
+export class WebPlayer extends Player {
   private containerRef = createRef<HTMLVideoElement>();
   private audioTracks: Track[] = [];
   private subtitleTracks: Track[] = [];
@@ -25,39 +25,61 @@ export class WebPlayer implements Player {
     />
   );
 
-  constructor() {
-    // ToDo
-    console.log('Constructed');
-  }
-
   async init(url: string): Promise<boolean> {
     if (!this.containerRef.current) {
       return false;
     }
-    this.player = videojs(
-      this.containerRef.current,
-      {
-        controls: true,
-        autoplay: false,
-        preload: 'auto',
-        crossOrigin: 'anonymous',
-        sources: [
-          {
-            src: url,
-            type: 'video/webm',
-          },
-        ],
-      },
-      () => {
-        this.ready = true;
-      }
-    );
-    console.log(this.player);
-    // add source
+
+    this.containerRef.current.src = url;
     // const source = document.createElement('source');
     // source.src = url;
+    // source.type = 'video/mkv';
     // this.containerRef.current.appendChild(source);
-    // this.containerRef.current.load();
+    this.containerRef.current.addEventListener('loadedmetadata', () => {
+      this.ready = true;
+      this.emit('ready', undefined);
+    });
+    this.containerRef.current.addEventListener('durationchange', () => {
+      this.emit('length', this.videoLength());
+    });
+    this.containerRef.current.addEventListener('timeupdate', () => {
+      this.emit('currentTime', this.played());
+    });
+    this.containerRef.current.addEventListener('pause', () => {
+      this.emit('status', 'PAUSED');
+    });
+    this.containerRef.current.addEventListener('play', () => {
+      this.emit('status', 'PLAYING');
+    });
+    this.containerRef.current.addEventListener('ended', () => {
+      this.emit('status', 'IDLE');
+    });
+    this.containerRef.current.addEventListener('error', (error) => {
+      this.emit('error', error);
+      console.error(error);
+    });
+    this.containerRef.current.load();
+
+    // this.player = videojs(
+    //   this.containerRef.current,
+    //   {
+    //     controls: true,
+    //     autoplay: false,
+    //     preload: 'auto',
+    //     crossOrigin: 'anonymous',
+    //     sources: [
+    //       {
+    //         src: url,
+    //         type: 'video/webm',
+    //       },
+    //     ],
+    //   },
+    //   () => {
+    //     this.ready = true;
+    //   }
+    // );
+    console.log(this.player);
+    // add source
     // this.ready = true;
     // console.log(this.containerRef.current, this.container);
     return true;
@@ -65,23 +87,42 @@ export class WebPlayer implements Player {
 
   play(): boolean {
     console.log('Playing');
-    this.containerRef.current?.play();
-    return true;
+    if (this.containerRef.current) {
+      this.containerRef.current?.play();
+      return true;
+    }
+    return false;
   }
 
   pause(): boolean {
     console.log('Pausing');
-    return true;
+    if (this.containerRef.current) {
+      this.containerRef.current.pause();
+      return true;
+    }
+    return false;
   }
 
   stop(): boolean {
     console.log('Stopping');
-    return true;
+    if (this.containerRef.current) {
+      this.containerRef.current.pause();
+      return true;
+    }
+    return false;
   }
 
   togglePlay(): boolean {
     console.log('Toggling play');
-    return true;
+    if (this.containerRef.current) {
+      if (this.containerRef.current.paused) {
+        this.play();
+      } else {
+        this.pause();
+      }
+      return true;
+    }
+    return false;
   }
 
   fastForward(ms: number): boolean {
@@ -95,11 +136,12 @@ export class WebPlayer implements Player {
   }
 
   played(): number {
-    return 0;
+    return (this.containerRef.current?.currentTime ?? 0) * 1000;
   }
 
   close(): boolean {
     console.log('Closing');
+    this.containerRef.current?.remove();
     return true;
   }
 
@@ -115,11 +157,15 @@ export class WebPlayer implements Player {
 
   seekTo(position: number): boolean {
     console.log('Seeking to', position);
-    return true;
+    if (this.containerRef.current) {
+      this.containerRef.current.currentTime = position / 1000;
+      return true;
+    }
+    return false;
   }
 
   videoLength(): number {
-    return 100;
+    return (this.containerRef.current?.duration ?? 0) * 1000;
   }
 
   isReady(): boolean {
@@ -141,7 +187,14 @@ export class WebPlayer implements Player {
 
   setSubtitleTrack(track: Track): boolean {
     console.log('Setting subtitle track', track);
-    return true;
+    if (this.containerRef.current) {
+      for (let i = 0; i < this.containerRef.current.textTracks.length; i++) {
+        this.containerRef.current.textTracks[i].mode = 'hidden';
+      }
+      this.containerRef.current.textTracks[track.index].mode = 'showing';
+      return true;
+    }
+    return false;
   }
 
   enableSubtitle(): boolean {
@@ -152,14 +205,5 @@ export class WebPlayer implements Player {
   disableSubtitle(): boolean {
     console.log('Disabling subtitle');
     return true;
-  }
-
-  on<T extends keyof PlayerEvents>(
-    event: T,
-    callback: (data: PlayerEvents[T]) => void
-  ): () => void {
-    return () => {
-      // Do nothing
-    };
   }
 }

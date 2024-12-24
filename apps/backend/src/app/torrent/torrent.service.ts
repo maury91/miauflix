@@ -24,6 +24,10 @@ import path from 'node:path';
 import BitField from 'bitfield';
 import { ShowsData } from '../shows/shows.data';
 import { stat } from 'node:fs/promises';
+import { SourceData } from '../sources/sources.data';
+import { MovieSource } from '../database/entities/movie.source.entity';
+import { EpisodeSource } from '../database/entities/episode.source.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -52,6 +56,20 @@ interface TorrentInfo {
   useLowQuality: boolean;
 }
 
+const calculateSizeInBytes = (size: string) => {
+  const numSize = BigInt(parseInt(size.substring(0, size.length - 2), 10));
+  const unit = size.substring(size.length - 2).toUpperCase();
+  switch (unit) {
+    case 'TB':
+      return numSize << BigInt(40);
+    case 'GB':
+      return numSize << BigInt(30);
+    case 'MB':
+      return numSize << BigInt(20);
+  }
+  throw 'Invalid size';
+};
+
 @Injectable()
 export class TorrentService {
   private client: Instance;
@@ -60,6 +78,7 @@ export class TorrentService {
   private readonly logger = new Logger(TorrentService.name);
   private readonly port: number;
   private readonly path: string;
+  private readonly maxStorage: bigint;
   constructor(
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
@@ -70,12 +89,16 @@ export class TorrentService {
     private readonly torrentData: TorrentData,
     private readonly moviesData: MoviesData,
     private readonly showsData: ShowsData,
+    private readonly sourceData: SourceData,
     @Inject(asyncProviders.parseTorrent)
     private parseTorrent: ParseTorrentImport,
     @Inject(asyncProviders.webTorrent)
     private WebTorrent: WebTorrent
   ) {
     this.port = this.configService.getOrThrow('TORRENT_PORT', { infer: true });
+    this.maxStorage = calculateSizeInBytes(
+      this.configService.getOrThrow('MAX_STORAGE')
+    );
     this.path = this.configService.getOrThrow('STORAGE_PATH');
     this.client = new this.WebTorrent({
       maxConns: this.configService.getOrThrow('MAX_CONNS', { infer: true }),
@@ -101,6 +124,64 @@ export class TorrentService {
         this.webTorrentServer.address()
       );
     });
+  }
+
+  private async deleteSource(
+    source: MovieSource | EpisodeSource,
+    type: 'movie' | 'episode'
+  ) {
+    return new Promise((resolve, reject) => {
+      console.log('Deleting source', source.id);
+      this.client
+        .get(source.data)
+        .then((torrent) => {
+          if (!torrent) {
+            this.sourceData.clearSource(type, source.id);
+            return resolve(true);
+          }
+
+          torrent.destroy(
+            {
+              destroyStore: true,
+            },
+            (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                console.log('Torrent destroyed');
+                this.sourceData.clearSource(type, source.id);
+                resolve(true);
+              }
+            }
+          );
+        })
+        .catch(reject);
+    });
+  }
+
+  @Cron(CronExpression.EVERY_3_HOURS)
+  private async storageCleaning() {
+    const sourcesUsingStorage = await this.sourceData.getUsedStorage();
+    const totalUsedStorage = sourcesUsingStorage.reduce(
+      (acc, source) => acc + BigInt(source.source.size),
+      BigInt(0)
+    );
+    if (totalUsedStorage > this.maxStorage) {
+      const sortedSources = sourcesUsingStorage.sort(
+        (a, b) => a.source.lastUsedAt.getTime() - b.source.lastUsedAt.getTime()
+      );
+      let i = 0,
+        totalCleaned = BigInt(0);
+      while (
+        totalUsedStorage - totalCleaned > this.maxStorage &&
+        i < sortedSources.length
+      ) {
+        const source = sortedSources[i];
+        await this.deleteSource(source.source, source.type);
+        totalCleaned += BigInt(source.source.size);
+        i++;
+      }
+    }
   }
 
   private async getTorrentOrMagnet(url: string): Promise<Buffer | string> {
@@ -240,9 +321,12 @@ export class TorrentService {
           .then((torrent) => {
             if (!torrent) {
               delete this.streams[streamKey];
+              this.cacheManager.del(`torrent:${streamKey}:bitfield`);
+              this.sourceData.clearSource(streamTorrent.type, streamTorrent.id);
               return resolve(true);
             }
 
+            const shouldDestroy = torrent.progress < 0.05 || forceDestroy;
             console.log(
               `Torrent ${torrent.name} progress ${Math.round(
                 torrent.progress * 100
@@ -250,19 +334,21 @@ export class TorrentService {
             );
             torrent.destroy(
               {
-                destroyStore: torrent.progress < 0.2 || forceDestroy,
+                destroyStore: shouldDestroy,
               },
               (err) => {
                 if (err) {
                   reject(err);
                 } else {
                   console.log(
-                    torrent.progress < 0.2 || forceDestroy
-                      ? 'Torrent destroyed'
-                      : 'Torrent stopped'
+                    shouldDestroy ? 'Torrent destroyed' : 'Torrent stopped'
                   );
-                  if (torrent.progress < 0.2 || forceDestroy) {
+                  if (shouldDestroy) {
                     this.cacheManager.del(`torrent:${streamKey}:bitfield`);
+                    this.sourceData.clearSource(
+                      streamTorrent.type,
+                      streamTorrent.id
+                    );
                   }
                   delete this.streams[streamKey];
                   resolve(true);
@@ -519,6 +605,7 @@ export class TorrentService {
             : undefined,
         },
         (torrent) => {
+          console.log(torrent.files);
           const videoFiles = torrent.files.filter((file) =>
             videos.includes(file.name)
           );
@@ -538,6 +625,17 @@ export class TorrentService {
             console.log('Torrent progress', torrent.progress);
             const file = videoFiles[0];
             file.select();
+
+            this.sourceData
+              .updateSource({
+                type,
+                id,
+                status: torrent.progress === 1 ? 'completed' : 'downloading',
+                downloadedPath: torrent.path,
+                downloadPercentage: torrent.progress * 100,
+              })
+              .then(this.storageCleaning.bind(this));
+
             let start = -1,
               end = -1;
             for (let i = 0; i < torrent.pieces.length; i++) {
@@ -582,6 +680,14 @@ export class TorrentService {
               Buffer.from(torrent.bitfield.buffer).toString('base64'),
               1000 * 60 * 60 * 24 * 7
             );
+
+            this.sourceData.updateSource({
+              type,
+              id,
+              status: torrent.progress === 1 ? 'completed' : 'downloading',
+              downloadPercentage: torrent.progress * 100,
+              downloaded: Buffer.from(torrent.bitfield.buffer),
+            });
           });
         }
       );

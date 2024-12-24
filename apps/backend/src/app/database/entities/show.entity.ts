@@ -41,6 +41,7 @@ export class Show {
   @Column({
     type: 'varchar',
     length: 500,
+    nullable: true,
   })
   trailer: string;
 
@@ -48,10 +49,14 @@ export class Show {
     type: 'decimal',
     precision: 4,
     scale: 2,
+    nullable: true,
   })
   rating: number;
 
-  @Column('smallint')
+  @Column({
+    type: 'smallint',
+    default: 0,
+  })
   airedEpisodes: number;
 
   @Column()
