@@ -1,12 +1,12 @@
 import { Falsy } from 'rxjs';
 import { useGetStreamUrlQuery } from '../../../../store/api/medias';
-import { IS_TIZEN } from '../../../../consts';
+import { DISABLE_STREAMING, IS_TIZEN } from '../../../../consts';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
 
 export const useEpisodeStreaming = (episodeId: number | Falsy) => {
   const { data: streamInfo, isLoading } = useGetStreamUrlQuery(
-    typeof episodeId === 'number'
+    typeof episodeId === 'number' && !DISABLE_STREAMING
       ? {
           type: 'episode',
           id: episodeId,

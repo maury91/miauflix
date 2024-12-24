@@ -25,6 +25,13 @@ const CategoryContent = styled.div`
   }
 `;
 
+const CategoryLastElement = styled.div<{ mediaCount: number }>`
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  left: ${({ mediaCount }) => mediaCount * 37.2}vh;
+`;
+
 const CategoryContentWrapper = styled.div<{ mediaCount: number }>`
   width: ${({ mediaCount }) => mediaCount * 37.2}vh;
 `;
@@ -193,6 +200,7 @@ export const Slider: FC<{
               </MediaBox>
             );
           })}
+          <CategoryLastElement mediaCount={data.length + mediaPerPage} />
         </CategoryContentWrapper>
       </CategoryContent>
       {focused && IS_TV && (

@@ -10,7 +10,7 @@ import {
   useGetStreamUrlQuery,
   useStopStreamMutation,
 } from '../../../../store/api/medias';
-import { IS_TIZEN } from '../../../../consts';
+import { DISABLE_STREAMING, IS_TIZEN } from '../../../../consts';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { setStreamUrl } from '../../../../store/slices/stream';
 import { navigateTo } from '../../../../store/slices/app';
@@ -29,7 +29,7 @@ export const MoviePage: FC<MoviePageProps> = ({ media }) => {
     isFocusBoundary: true,
   });
   const { data: streamInfo, isLoading } = useGetStreamUrlQuery(
-    media
+    media && !DISABLE_STREAMING
       ? {
           type: 'movie',
           id: media.id,

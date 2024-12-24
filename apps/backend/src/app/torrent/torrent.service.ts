@@ -25,8 +25,6 @@ import BitField from 'bitfield';
 import { ShowsData } from '../shows/shows.data';
 import { stat } from 'node:fs/promises';
 
-const TORRENT_PATH = '/tmp';
-
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const retryPromise = <T>(
@@ -61,6 +59,7 @@ export class TorrentService {
   private streams: Record<string, TorrentInfo> = {};
   private readonly logger = new Logger(TorrentService.name);
   private readonly port: number;
+  private readonly path: string;
   constructor(
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
@@ -77,6 +76,7 @@ export class TorrentService {
     private WebTorrent: WebTorrent
   ) {
     this.port = this.configService.getOrThrow('TORRENT_PORT', { infer: true });
+    this.path = this.configService.getOrThrow('STORAGE_PATH');
     this.client = new this.WebTorrent({
       maxConns: this.configService.getOrThrow('MAX_CONNS', { infer: true }),
       downloadLimit:
@@ -293,7 +293,7 @@ export class TorrentService {
   }
 
   private async getVideoInformation(file: TorrentFile) {
-    const filePath = path.join(TORRENT_PATH, file.path);
+    const filePath = path.join(this.path, file.path);
     return new Promise((resolve, reject) => {
       stat(filePath)
         .then(() => {
@@ -512,7 +512,7 @@ export class TorrentService {
       this.client.add(
         torrentFile,
         {
-          path: TORRENT_PATH,
+          path: this.path,
           deselect: true,
           bitfield: bitfieldBuffer
             ? Buffer.from(bitfieldBuffer, 'base64')
