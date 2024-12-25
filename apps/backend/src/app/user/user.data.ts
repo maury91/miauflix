@@ -111,7 +111,9 @@ export class UserData {
         return {
           type: 'episode',
           show: showToDto(show),
-          progress: latestEpisode.progress,
+          // Progress in seconds, Runtime in minute, divide by 60 to get minutes and multiply by 100 to get percentage
+          progress:
+            (latestEpisode.progress * 5) / (latestEpisode.episode.runtime * 3),
           episode: latestEpisode.episode.number,
           season: latestEpisode.episode.seasonNumber,
           pausedAt: latestEpisode.updatedAt.toISOString(),
@@ -119,11 +121,12 @@ export class UserData {
       });
 
     const movies = user.movieProgress.map(
-      (progress): MovieProgressDto => ({
+      (movieProgress): MovieProgressDto => ({
         type: 'movie' as const,
-        progress: progress.progress,
-        movie: movieToDto(progress.movie),
-        pausedAt: progress.updatedAt.toISOString(),
+        progress:
+          (movieProgress.progress * 5) / (movieProgress.movie.runtime * 3),
+        movie: movieToDto(movieProgress.movie),
+        pausedAt: movieProgress.updatedAt.toISOString(),
       })
     );
 
@@ -151,14 +154,17 @@ export class UserData {
     traktId: number,
     synced = false
   ) {
-    return this.episodeProgressModel.save({
-      userId,
-      episodeId,
-      progress,
-      status,
-      synced,
-      traktId,
-    });
+    return this.episodeProgressModel.upsert(
+      {
+        userId,
+        episodeId,
+        progress,
+        status,
+        synced,
+        traktId,
+      },
+      ['userId', 'episodeId']
+    );
   }
 
   public async updateMovieProgress(
@@ -169,14 +175,17 @@ export class UserData {
     slug: string,
     synced = false
   ) {
-    return this.movieProgressModel.save({
-      userId,
-      movieId,
-      progress,
-      status,
-      synced,
-      slug,
-    });
+    return this.movieProgressModel.upsert(
+      {
+        userId,
+        movieId,
+        progress,
+        status,
+        synced,
+        slug,
+      },
+      ['userId', 'movieId']
+    );
   }
 
   public async getUnSyncedProgress(userId: number) {

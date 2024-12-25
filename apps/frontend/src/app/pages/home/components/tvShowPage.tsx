@@ -130,6 +130,7 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
         setStreamUrl({
           url: streamInfo.stream,
           id: episode.id,
+          showSlug: media.id,
           season: season.number,
           episode: episode.number,
           type: 'episode',

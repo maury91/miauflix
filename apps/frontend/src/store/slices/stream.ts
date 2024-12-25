@@ -4,6 +4,7 @@ export interface StreamState {
   url: string;
   id: number;
   streamId: string;
+  showSlug: string;
   season: number;
   episode: number;
   type: 'movie' | 'episode';
@@ -12,6 +13,7 @@ export interface StreamState {
 const initialState: StreamState = {
   url: '',
   id: 0,
+  showSlug: '',
   streamId: '',
   season: 0,
   episode: 0,
@@ -34,6 +36,7 @@ export const streamSlice = createSlice({
         | {
             url: string;
             id: number;
+            showSlug: string;
             streamId: string;
             season: number;
             episode: number;
@@ -48,9 +51,11 @@ export const streamSlice = createSlice({
       if (action.payload.type === 'episode') {
         state.season = action.payload.season;
         state.episode = action.payload.episode;
+        state.showSlug = action.payload.showSlug;
       } else {
         state.season = 0;
         state.episode = 0;
+        state.showSlug = '';
       }
     },
   },

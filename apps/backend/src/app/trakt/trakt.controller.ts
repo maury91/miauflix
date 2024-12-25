@@ -48,7 +48,7 @@ export class TraktController {
         await this.userData.updateEpisodeProgress(
           parseInt(userId, 10),
           id,
-          progress,
+          Math.floor(episode.runtime * 0.6 * progress),
           status,
           episode.traktId
         );
@@ -57,7 +57,7 @@ export class TraktController {
         await this.userData.updateMovieProgress(
           parseInt(userId, 10),
           id,
-          progress,
+          Math.floor(movie.runtime * 0.6 * progress),
           status,
           movie.slug
         );
