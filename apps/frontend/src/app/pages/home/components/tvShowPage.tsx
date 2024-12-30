@@ -20,6 +20,7 @@ import LineMdPlay from '~icons/line-md/play';
 import { useEpisodeStreaming } from '../hooks/useEpisodeStreaming';
 import { useGetSelectedEpisode } from '../hooks/useGetSelectedEpisode';
 import { useGetSeasonEpisodes } from '../hooks/useGetSeasonEpisodes';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 interface TvShowPageProps {
   media: ExtendedShowDto;
@@ -51,7 +52,11 @@ export const useLatestWatchedSeasonAndEpisode = (
       const episodesWithProgress = Object.keys(progress);
       return episodesWithProgress.reduce<[number, number]>(
         ([latestSeason, latestEpisode], episode) => {
-          const [seasonNumber, episodeNumber] = episode.split('-').map(Number);
+          const [seasonNumber, episodeNumberRaw] = episode
+            .split('-')
+            .map(Number);
+          // ToDo: removing 1 feels hacky, look for better solution
+          const episodeNumber = episodeNumberRaw - 1;
           if (seasonNumber > latestSeason) {
             return [seasonNumber, episodeNumber];
           } else if (
@@ -71,7 +76,16 @@ export const useLatestWatchedSeasonAndEpisode = (
     const seasonIndex = seasons.findIndex(
       (season) => season.number === latestSeason
     );
-    return [seasonIndex, latestEpisode];
+    if (seasonIndex !== -1) {
+      return [seasonIndex, latestEpisode];
+    }
+    const seasonIndexFirstSeason = seasons.findIndex(
+      (season) => season.number === 1
+    );
+    if (seasonIndexFirstSeason !== -1) {
+      return [seasonIndexFirstSeason, 0];
+    }
+    return [0, 0];
   }, [latestEpisode, latestSeason, seasons]);
 };
 
@@ -83,10 +97,14 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
   );
   const [selectedSeason, setSelectedSeason] = useState(latestSeason);
   const [selectedEpisode, setSelectedEpisode] = useState(latestEpisode);
-  const { data: season } = useGetShowSeasonQuery({
-    showId: media.id,
-    season: media.seasons[selectedSeason].number,
-  });
+  const { data: season } = useGetShowSeasonQuery(
+    page === 'home/details'
+      ? {
+          showId: media.id,
+          season: media.seasons[selectedSeason].number,
+        }
+      : skipToken
+  );
   const episode = useGetSelectedEpisode(season, selectedEpisode);
   const dispatch = useAppDispatch();
   const { ref } = useFocusable({
@@ -116,7 +134,8 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
     (episode: number) => {
       if (episode !== selectedEpisode) {
         if (streamInfo) {
-          stopStream(streamInfo.streamId);
+          console.log('Stopping stream (tv show page)');
+          // stopStream(streamInfo.streamId);
         }
         setSelectedEpisode(episode);
       }
@@ -139,7 +158,7 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
       );
       dispatch(navigateTo('player'));
     }
-  }, [dispatch, episode, isLoading, season, streamInfo]);
+  }, [dispatch, episode, isLoading, media.id, season, streamInfo]);
 
   useEffect(() => {
     setFocus('season-selector');
@@ -188,7 +207,7 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
       )}
       <SeasonSelector
         seasons={media.seasons}
-        selected={selectedSeason}
+        selected={page === 'home/details' ? selectedSeason : 0}
         onSeasonChange={handleSeasonChange}
       />
       {season && (
@@ -196,7 +215,7 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
           data={episodes}
           key={season.number}
           enabled={page === 'home/details'}
-          lastHovered={0}
+          lastHovered={latestEpisode}
           sliderKey={season.number}
           totalData={episodes.length}
           onHover={handleEpisodeChange}

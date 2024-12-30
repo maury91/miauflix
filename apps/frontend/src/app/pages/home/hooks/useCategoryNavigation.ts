@@ -61,6 +61,9 @@ export const useCategoryNavigation = ({
 
   const onArrowPress: ArrowPressHandler = useCallback(
     (direction: string, props, details) => {
+      if (!enabled) {
+        return false;
+      }
       if (direction === 'left' || direction === 'right') {
         const isEnd = move(direction);
         if (isEnd && direction === 'left') {
@@ -77,7 +80,7 @@ export const useCategoryNavigation = ({
       }
       return true;
     },
-    [move, onLeft, restrictUpAndDown]
+    [enabled, move, onLeft, restrictUpAndDown]
   );
 
   const onEnterPress = useCallback(() => {

@@ -182,7 +182,7 @@ export const MediaDetails: FC<{
     if (!selectedMedia) {
       return null;
     }
-    if (extendedMedia && extendedMedia.id === selectedMedia.id) {
+    if (extendedMedia && extendedMedia.ids.slug === selectedMedia.ids.slug) {
       return extendedMedia;
     }
     return selectedMedia;
@@ -219,6 +219,7 @@ export const MediaDetails: FC<{
         margin={margin / 2}
         expanded={expanded}
         visible={page.startsWith('home')}
+        ref={ref}
       >
         <MotionConfig transition={{ duration: imageVisible ? 1 : 0.3 }}>
           {displayedSrc && (
@@ -251,7 +252,7 @@ export const MediaDetails: FC<{
               />
             )}
           </MediaInformationContainer>
-          <MediaPageContainer visible={expandedVisible} ref={ref}>
+          <MediaPageContainer visible={expandedVisible}>
             {expanded &&
               extendedMedia &&
               (extendedMedia.type === 'movie' ? (

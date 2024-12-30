@@ -60,7 +60,8 @@ export const MoviePage: FC<MoviePageProps> = ({ media }) => {
   useEffect(() => {
     return () => {
       if (streamInfo) {
-        stopStream(streamInfo.streamId);
+        console.log('Stop stream ( movie page )');
+        // stopStream(streamInfo.streamId);
       }
     };
   }, [stopStream, streamInfo]);

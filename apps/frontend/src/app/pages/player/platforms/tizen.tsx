@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {
+  PlaybackSpeed,
   Player,
   PlayerLanguage,
   PlayerStatus,
@@ -48,6 +49,11 @@ export class TizenPlayer extends Player {
     />
   );
 
+  constructor() {
+    super();
+    setInterval(this.updateTime, 500);
+  }
+
   private static standardizeLanguage(
     rawLanguage: string
   ): PlayerLanguage | null {
@@ -90,6 +96,7 @@ export class TizenPlayer extends Player {
 
   private is4KSupported() {
     try {
+      console.log('is4KSupported');
       return window.webapis.productinfo.isUdPanelSupported();
     } catch {
       return false;
@@ -98,6 +105,7 @@ export class TizenPlayer extends Player {
   private set4K() {
     if (this.is4KSupported()) {
       try {
+        console.log('set4K');
         window.webapis.avplay.setStreamingProperty('SET_MODE_4K', 'true');
         return true;
       } catch {
@@ -109,6 +117,7 @@ export class TizenPlayer extends Player {
 
   private is8KSupported() {
     try {
+      console.log('is8KSupported');
       return window.webapis.productinfo.is8KPanelSupported();
     } catch {
       return false;
@@ -117,6 +126,7 @@ export class TizenPlayer extends Player {
   private set8K() {
     if (this.is8KSupported()) {
       try {
+        console.log('set8K');
         window.webapis.avplay.setStreamingProperty(
           'ADAPTIVE_INFO',
           'FIXED_MAX_RESOLUTION=7680x4320'
@@ -131,6 +141,7 @@ export class TizenPlayer extends Player {
 
   private setTrack(type: 'AUDIO' | 'TEXT', index: number) {
     try {
+      console.log('setTrack', type, index);
       window.webapis.avplay.setSelectTrack(type, index);
       return true;
     } catch (error) {
@@ -140,6 +151,7 @@ export class TizenPlayer extends Player {
   }
   private getTracks(type: 'AUDIO' | 'TEXT'): Track[] {
     try {
+      console.log('getTracks', type);
       const tracks = window.webapis.avplay
         .getTotalTrackInfo()
         .filter((track) => track.type === type);
@@ -156,6 +168,7 @@ export class TizenPlayer extends Player {
 
   private getResolution(): Promise<{ width: number; height: number }> {
     return new Promise((resolve) => {
+      console.log('getResolution');
       window.tizen.systeminfo.getPropertyValue(
         'DISPLAY',
         function successHandler(data) {
@@ -172,8 +185,15 @@ export class TizenPlayer extends Player {
   }
   private getListeners(): Partial<AVPlayListeners> {
     return {
-      oncurrentplaytime: this.updateTime,
-      onstreamcompleted: this.stop,
+      // oncurrentplaytime: this.updateTime,
+      onstreamcompleted: () => {
+        console.log('Stream completed');
+        if (this.currentTime < this.videoDuration * 0.9) {
+          setTimeout(this.reload, 200);
+        } else {
+          this.stop();
+        }
+      },
       onsubtitlechange: (duration: number, text: string) => {
         this.currentSubtitleCueEndsAt = this.currentTime + duration;
         this.updateSubtitle(text);
@@ -183,6 +203,7 @@ export class TizenPlayer extends Player {
 
   private setSubtitlesEnabled(enabled: boolean): boolean {
     this.subtitlesEnabled = enabled;
+    console.log('setSilentSubtitle', !this.subtitlesEnabled);
     if (
       window.webapis.avplay.setSilentSubtitle(!this.subtitlesEnabled) ===
       'success'
@@ -194,13 +215,15 @@ export class TizenPlayer extends Player {
   }
 
   private updateDuration = () => {
+    console.log('getDuration');
     const duration = window.webapis.avplay.getDuration();
     if (duration !== this.videoDuration) {
       this.videoDuration = duration;
       this.emit('length', duration);
     }
   };
-  private updateTime = (currentTime: number) => {
+  private updateTime = () => {
+    const currentTime = window.webapis.avplay.getCurrentTime();
     if (this.currentTime !== currentTime) {
       this.currentTime = currentTime;
       this.emit('currentTime', currentTime);
@@ -209,13 +232,19 @@ export class TizenPlayer extends Player {
       }
     }
   };
-
   private updateSubtitle(text: string) {
     if (this.currentSubtitle !== text) {
       this.currentSubtitle = text;
       this.emit('subtitle', text);
     }
   }
+
+  private reload = () => {
+    if (window.webapis.avplay.suspend() === 'success') {
+      window.webapis.avplay.restore();
+    }
+  };
+
   private onError = (error: unknown) => {
     console.error(error);
     if (error instanceof Error) {
@@ -232,6 +261,7 @@ export class TizenPlayer extends Player {
     this.emit('ready', undefined);
   }
   private getState() {
+    console.log('getState');
     return window.webapis.avplay.getState();
   }
 
@@ -241,24 +271,31 @@ export class TizenPlayer extends Player {
 
   private prepare(): Promise<void> {
     return new Promise((resolve, reject) => {
+      console.log('prepareAsync');
       window.webapis.avplay.prepareAsync(resolve, reject);
     });
   }
   private prepareAndPlay() {
+    console.log('prepareAndPlay');
     window.webapis.avplay.prepareAsync(this.play, this.onError);
   }
 
   async init(url: string): Promise<boolean> {
     try {
+      console.log('TizenPlayer.init', url);
       const { width, height } = await this.getResolution();
 
       if (this.getState() !== 'NONE') {
         this.close();
       }
 
+      console.log('open', url);
       window.webapis.avplay.open(url);
+      console.log('setDisplayRect', width, height);
       window.webapis.avplay.setDisplayRect(0, 0, width, height);
+      console.log('setListeners');
       window.webapis.avplay.setListener(this.getListeners());
+      console.log('setDisplayMethod');
       window.webapis.avplay.setDisplayMethod(
         'PLAYER_DISPLAY_MODE_AUTO_ASPECT_RATIO'
       );
@@ -282,6 +319,7 @@ export class TizenPlayer extends Player {
     const playerState = this.getState();
 
     if (playerState === 'PLAYING' || playerState === 'READY') {
+      console.log('pause');
       if (window.webapis.avplay.pause() !== 'success') {
         return false;
       }
@@ -298,6 +336,7 @@ export class TizenPlayer extends Player {
           return true;
         case 'READY':
         case 'PAUSED':
+          console.log('play');
           if (window.webapis.avplay.play() !== 'success') {
             return false;
           }
@@ -316,10 +355,11 @@ export class TizenPlayer extends Player {
     const playerState = this.getState();
 
     if (playerState === 'PLAYING' || playerState === 'PAUSED') {
+      console.log('stop');
       if (window.webapis.avplay.stop() !== 'success') {
         return false;
       }
-      this.updateTime(0);
+      this.updateTime();
     }
 
     this.updateSubtitle('');
@@ -334,8 +374,9 @@ export class TizenPlayer extends Player {
     }
 
     try {
+      console.log('fastForward', ms);
       if (window.webapis.avplay.jumpForward(ms) === 'success') {
-        this.updateTime(newTime);
+        this.updateTime();
         return true;
       }
     } catch (error: unknown) {
@@ -351,8 +392,9 @@ export class TizenPlayer extends Player {
     }
 
     try {
+      console.log('rewind', ms);
       if (window.webapis.avplay.jumpBackward(ms) === 'success') {
-        this.updateTime(newTime);
+        this.updateTime();
         return true;
       }
     } catch (error: unknown) {
@@ -363,8 +405,19 @@ export class TizenPlayer extends Player {
   videoLength = (): number => {
     return this.videoDuration;
   };
+  setSpeed = (speed: PlaybackSpeed): boolean => {
+    try {
+      console.log('Settings speed', speed);
+      window.webapis.avplay.setSpeed(speed);
+      return true;
+    } catch {
+      return false;
+    }
+  };
   seekTo = (time: number): boolean => {
-    return window.webapis.avplay.seekTo(time) === 'success';
+    console.log('seekTo', Math.floor(time), this.getState());
+    window.webapis.avplay.seekTo(Math.floor(time));
+    return true;
   };
   played = (): number => {
     return this.currentTime;
@@ -378,6 +431,7 @@ export class TizenPlayer extends Player {
   close = (): boolean => {
     this.ready = false;
     this.updateState('NONE');
+    console.log('close');
     return window.webapis.avplay.close() === 'success';
   };
   getAudioTracks = (): Track[] => {

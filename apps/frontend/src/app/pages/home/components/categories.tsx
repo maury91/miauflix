@@ -24,11 +24,12 @@ import { CategoriesContainer, CategoriesWrapper } from './categoriesContainer';
 import { CategorySlider, SLIDER_MARGIN } from './categorySlider';
 import { CategoryDto, MediaDto } from '@miauflix/types';
 import { useGetProgressQuery } from '../../../../store/api/progress';
-import { useAppSelector } from '../../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../../store/store';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
 import { debounce } from '../../../utils/debounce';
 import { IS_TV } from '../../../../consts';
 import { useControls } from '../../../hooks/useControls';
+import { changeCategory } from '../../../../store/slices/home';
 
 const HOME_SLIDER_PREFIX = SLIDER_PREFIX + HOME_PREFIX;
 
@@ -73,9 +74,13 @@ export const Categories: FC<CategoriesProps> = ({
   visible,
 }) => {
   const categories = useCategories();
-  const [sendToBack, setSendToBack] = useState(false);
+  const dispatch = useAppDispatch();
+  const [firstRender, setFirstRender] = useState(true);
+  const highlightedCategoryId = useAppSelector(
+    (state) => state.home.category.id
+  );
 
-  const { focusKey, ref, focusSelf } = useFocusable({
+  const { focusKey, ref } = useFocusable({
     saveLastFocusedChild: true,
     focusKey: CATEGORIES_FOCUS_KEY,
     focusable: visible,
@@ -100,9 +105,10 @@ export const Categories: FC<CategoriesProps> = ({
           { scrollTop: top, duration: 0.2 }
         );
         setFocus(`${HOME_SLIDER_PREFIX}${categories[boundedIndex].id}`);
+        dispatch(changeCategory(categories[boundedIndex]));
       }
     },
-    [categories, ref]
+    [categories, dispatch, ref]
   );
 
   const on = useControls();
@@ -158,40 +164,19 @@ export const Categories: FC<CategoriesProps> = ({
   );
 
   useEffect(() => {
-    if (visible) {
-      focusSelf();
+    if (categories.length && firstRender) {
+      const categoryToHighlight = categories.findIndex(
+        ({ id }) => id === highlightedCategoryId
+      );
+      focusCategory(categoryToHighlight !== -1 ? categoryToHighlight : 0);
+      setFirstRender(false);
     }
-  }, [focusSelf, visible]);
-
-  useEffect(() => {
-    if (!visible) {
-      setTimeout(() => {
-        setSendToBack(true);
-      }, 400);
-    } else {
-      setSendToBack(false);
-    }
-  }, [visible]);
-
-  useEffect(() => {
-    if (categories.length) {
-      const firstCategory = categories[0];
-      if (
-        !(
-          getCurrentFocusKey() &&
-          getCurrentFocusKey().startsWith(HOME_SLIDER_PREFIX)
-        )
-      ) {
-        setFocus(`${HOME_SLIDER_PREFIX}${firstCategory.id}`);
-      }
-    }
-  }, [categories]);
+  }, [categories, firstRender, focusCategory, highlightedCategoryId]);
 
   return (
     <FocusContext.Provider value={focusKey}>
       <CategoriesContainer
         visible={visible}
-        sendToBack={sendToBack}
         ref={ref}
         onScroll={IS_TV ? undefined : handleCategoriesScroll}
       >

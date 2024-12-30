@@ -7,7 +7,6 @@ export const CATEGORY_CONTAINER_TOP_MASK = 8;
 
 export const CategoriesContainer = styled.div<{
   visible: boolean;
-  sendToBack: boolean;
 }>`
   position: absolute;
   top: ${() => (IS_SLOW_DEVICE ? 50 : 45)}vh;
@@ -21,7 +20,6 @@ export const CategoriesContainer = styled.div<{
       : `linear-gradient(180deg, transparent 0%, black ${CATEGORY_CONTAINER_TOP_MASK}vh)`};
   opacity: ${({ visible }) => (visible ? 1 : 0)};
   transition: opacity 0.3s;
-  visibility: ${({ sendToBack }) => (sendToBack ? 'hidden' : 'visible')};
 
   &::-webkit-scrollbar {
     display: none;

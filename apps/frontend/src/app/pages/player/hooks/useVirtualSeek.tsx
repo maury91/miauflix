@@ -31,7 +31,9 @@ function calculatePosition(
 export const useVirtualSeek = (player: Player) => {
   const [startingPosition, setStartingPosition] = useState(0);
   const [action, setAction] = useState<'FF' | 'REW' | null>(null);
+  // const [speed, setSpeed] = useState<PlaybackSpeed>(1);
   const [actionStartingTime, setActionStartingTime] = useState(Date.now());
+  // const [position, setPosition] = useState(0);
   const [virtualPosition, setVirtualPosition] = useState(0);
   const [lastSeekTo, setLastSeekTo] = useState(0);
   const on = useControls('player');
@@ -43,6 +45,7 @@ export const useVirtualSeek = (player: Player) => {
       setStartingPosition(virtualPosition);
       setLastSeekTo(Date.now());
       player.pause();
+      // setSpeed(type === 'FF' ? 2 : -2);
     },
     [player, virtualPosition]
   );
@@ -52,11 +55,34 @@ export const useVirtualSeek = (player: Player) => {
     player.seekTo(
       calculatePosition(startingPosition, player, action, actionStartingTime)
     );
+    // setSpeed(1);
     player.play();
-  }, [player, actionStartingTime, action, startingPosition]);
+  }, [action, actionStartingTime, player, startingPosition]);
+
+  // useEffect(() => {
+  //   player.setSpeed(speed);
+  // }, [speed, player]);
+
+  // useEffect(
+  //   () =>
+  //     player.on('currentTime', (played) => {
+  //       setPosition(played);
+  //     }),
+  //   [player]
+  // );
 
   useEffect(() => {
     const interval = setInterval(() => {
+      // if (action) {
+      //   if (Date.now() > actionStartingTime + 8000) {
+      //     // Do nothing
+      //     return;
+      //   } else if (Date.now() > actionStartingTime + 6000) {
+      //     setSpeed(action === 'FF' ? 8 : -8);
+      //   } else if (Date.now() > actionStartingTime + 3000) {
+      //     setSpeed(action === 'FF' ? 4 : -4);
+      //   }
+      // }
       setVirtualPosition(
         calculatePosition(startingPosition, player, action, actionStartingTime)
       );
@@ -66,8 +92,8 @@ export const useVirtualSeek = (player: Player) => {
 
   // Seeking often has bad effect on the tv
   useEffect(() => {
-    if (lastSeekTo < Date.now() - 2000) {
-      if (action === 'FF' || action === 'REW') {
+    if (lastSeekTo < Date.now() - 1000) {
+      if (action !== null) {
         player.seekTo(virtualPosition);
         setLastSeekTo(Date.now());
       }

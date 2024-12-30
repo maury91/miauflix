@@ -20,6 +20,7 @@ export const resumeSlice = createSlice({
       action: PayloadAction<{ mediaId: number; progress: number }>
     ) => {
       state.movieProgress[action.payload.mediaId] = action.payload.progress;
+      // ToDo: Episode progress
     },
   },
   extraReducers: (builder) => {

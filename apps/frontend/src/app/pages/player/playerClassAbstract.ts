@@ -21,6 +21,8 @@ export interface PlayerEvents {
   ready: void;
 }
 
+export type PlaybackSpeed = -8 | -4 | -2 | 1 | 2 | 4 | 8;
+
 export abstract class Player {
   public abstract container: ReactNode;
   protected listeners: Listeners = {
@@ -48,6 +50,7 @@ export abstract class Player {
   abstract rewind(ms: number): boolean;
   abstract videoLength(): number;
   abstract seekTo(time: number): boolean;
+  abstract setSpeed(speed: PlaybackSpeed): boolean;
   abstract played(): number;
   abstract close(): boolean;
   abstract getAudioTracks(): Track[];

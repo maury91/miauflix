@@ -18,7 +18,7 @@ export const progressApi = createApi({
         },
       }),
     }),
-    trackMovieProgress: builder.mutation<
+    trackMediaProgress: builder.mutation<
       void,
       TrackPlaybackRequest & { id: number; userId: number }
     >({
@@ -38,5 +38,5 @@ export const progressApi = createApi({
   }),
 });
 
-export const { useGetProgressQuery, useTrackMovieProgressMutation } =
+export const { useGetProgressQuery, useTrackMediaProgressMutation } =
   progressApi;

@@ -74,7 +74,10 @@ export const usePlayer = ({
 
   useEffect(() => {
     return player.on('ready', () => {
-      player.seekTo(player.videoLength() * (initialPosition / 100));
+      if (initialPosition) {
+        // ToDo: use absolute time instead of percentage
+        player.seekTo(player.videoLength() * (initialPosition / 100));
+      }
     });
   }, [initialPosition, player]);
 

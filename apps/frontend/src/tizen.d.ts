@@ -271,6 +271,7 @@ declare global {
         stop(): 'success' | string;
         jumpForward(ms: number): 'success' | string;
         jumpBackward(ms: number): 'success' | string;
+        setSpeed(speed: number): 'success' | string;
         getState(): PlayerState;
         getDuration(): number; // in milliseconds
         getCurrentTime(): number; // in milliseconds
@@ -298,6 +299,8 @@ declare global {
         setListener(listeners: AVPlayListeners): void;
         setSilentSubtitle(silent: boolean): 'success' | string;
         setExternalSubtitlePath(path: string): 'success' | string;
+        suspend(): 'success' | string;
+        restore(): 'success' | string;
       };
     };
   }

@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listsApi } from '../api/lists';
 import { Page } from '../../types';
+import { MediaDto } from '@miauflix/types';
 
 export interface AppState {
   currentPage: Page;
+  currentMedia: MediaDto | null;
   currentUserId: number;
   currentProfile: string | null;
   backgrounds: string[];
@@ -13,6 +15,7 @@ export interface AppState {
 
 const initialState: AppState = {
   currentPage: 'profile-selection',
+  currentMedia: null,
   currentUserId: 0,
   currentProfile: null,
   backgrounds: [],
@@ -34,6 +37,9 @@ export const appSlice = createSlice({
     },
     navigateTo: (state, actions: PayloadAction<Page>) => {
       state.currentPage = actions.payload;
+    },
+    setCurrentMedia: (state, action: PayloadAction<MediaDto | null>) => {
+      state.currentMedia = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -59,5 +65,5 @@ export const appSlice = createSlice({
   },
 });
 
-export const { chooseProfile, navigateTo } = appSlice.actions;
+export const { chooseProfile, navigateTo, setCurrentMedia } = appSlice.actions;
 export default appSlice.reducer;

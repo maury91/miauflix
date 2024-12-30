@@ -115,3 +115,5 @@ nx run miauflix:serve
 - [ ] Audio menu
 - [ ] Support external subtitles
 - [ ] Re-work priority system
+- [ ] Investigate stop stream called at the wrong moment ( while watching )
+- [ ]

@@ -11,13 +11,16 @@ import { FullScreenDiv } from '../../components/fullScreenDiv';
 import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { HomeSidebar } from './components/sidebar';
 import { PageProvider } from '../../contexts/page.context';
-import { navigateTo } from '../../../store/slices/app';
+import { navigateTo, setCurrentMedia } from '../../../store/slices/app';
 
 export const Home = () => {
   const dispatch = useAppDispatch();
-  const [showCategories, setShowCategories] = useState(true);
-  const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
+  const currentMedia = useAppSelector((state) => state.app.currentMedia);
   const currentPage = useAppSelector((state) => state.app.currentPage);
+  const [showCategories, setShowCategories] = useState(
+    currentPage === 'home/categories'
+  );
+  // ToDo: look into moving the entire state to redux
 
   const openSidebar = useCallback(() => {
     setFocus(SIDEBAR_FOCUS_KEY);
@@ -29,8 +32,8 @@ export const Home = () => {
 
   const navigateToMedia = useCallback(
     (media: MediaDto) => {
-      setSelectedMedia(media);
       dispatch(navigateTo('home/details'));
+      dispatch(setCurrentMedia(media));
       // Wait for previous animation to end before starting the next one
       setTimeout(() => {
         setShowCategories(false);
@@ -44,7 +47,7 @@ export const Home = () => {
     dispatch(navigateTo('home/categories'));
 
     setTimeout(() => {
-      setSelectedMedia(null);
+      dispatch(setCurrentMedia(null));
     }, 300);
   }, [dispatch]);
 
@@ -58,17 +61,19 @@ export const Home = () => {
       >
         <PageProvider value={'home/details'}>
           <MediaDetails
-            expanded={!!selectedMedia}
+            expanded={!!currentMedia}
             expandedVisible={!showCategories}
             onNavigateBack={navigateToCategoryList}
           />
         </PageProvider>
         <PageProvider value={'home/categories'}>
-          <Categories
-            onLeft={openSidebar}
-            onMediaSelect={navigateToMedia}
-            visible={!selectedMedia}
-          />
+          {showCategories && (
+            <Categories
+              onLeft={openSidebar}
+              onMediaSelect={navigateToMedia}
+              visible={!currentMedia}
+            />
+          )}
         </PageProvider>
       </FullScreenDiv>
       {currentPage.startsWith('home') && <HomeSidebar />}

@@ -61,18 +61,28 @@ export const PlayerProgressBarContainer = styled.div`
   bottom: 8vh;
 `;
 
-export const PlayerProgressBar = styled.div<{ percent: number }>`
+export const PlayerProgressBar = styled.div.attrs<{ percent: number }>(
+  ({ percent }) => ({
+    style: {
+      width: `${percent}%`,
+    },
+  })
+)`
   position: absolute;
   left: 0;
   top: 0;
-  width: ${({ percent }) => percent}%;
   height: 100%;
   background: ${PALETTE.background.primary};
 `;
 
-export const PlayerProgressBubble = styled(MdiPaw)<{ percent: number }>`
+export const PlayerProgressBubble = styled(MdiPaw).attrs<{ percent: number }>(
+  ({ percent }) => ({
+    style: {
+      left: `${percent}%`,
+    },
+  })
+)`
   position: absolute;
-  left: ${({ percent }) => percent}%;
   top: 50%;
   font-size: 3.5vh;
   color: ${PALETTE.background.primary};
