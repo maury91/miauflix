@@ -153,28 +153,44 @@ export class TorrentData {
         : {}),
     };
 
-    const bestSourceNotHvec = await this.movieSourceModel.findOne({
-      select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
-      where: {
+    const bestSourceNotHvec = await this.movieSourceModel
+      .createQueryBuilder('movie')
+      .select(
+        '"quality" * "availability" / ("size" * (100-"downloadPercentage") / 1000000)',
+        'score'
+      )
+      .addSelect('data')
+      .addSelect('videos')
+      .addSelect('id')
+      .addSelect('availability')
+      .addSelect('size')
+      .addSelect('quality')
+      .where({
         ...baseWhere,
         codec: Not(Like('%x265%' as VideoCodec)),
-      },
-      order: {
-        quality: 'DESC',
-      },
-    });
+      })
+      .orderBy('score', 'DESC')
+      .getOne();
 
     if (useHevc) {
-      const bestSourceHevc = await this.movieSourceModel.findOne({
-        select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
-        where: {
+      const bestSourceHevc = await this.movieSourceModel
+        .createQueryBuilder('movie')
+        .select(
+          '"quality" * "availability" / ("size" * (100-"downloadPercentage") / 1000000)',
+          'score'
+        )
+        .addSelect('data')
+        .addSelect('videos')
+        .addSelect('id')
+        .addSelect('availability')
+        .addSelect('size')
+        .addSelect('quality')
+        .where({
           ...baseWhere,
           codec: Like('%x265%' as VideoCodec),
-        },
-        order: {
-          quality: 'DESC',
-        },
-      });
+        })
+        .orderBy('score', 'DESC')
+        .getOne();
 
       return this.chooseBestSource(bestSourceHevc, bestSourceNotHvec);
     }
@@ -219,28 +235,38 @@ export class TorrentData {
         : {}),
     };
 
-    const bestSourceNotHvec = await this.episodeSourceModel.findOne({
-      select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
-      where: {
+    const bestSourceNotHvec = await this.episodeSourceModel
+      .createQueryBuilder('source')
+      .select(
+        '"quality" * "availability" / ("size" * (101-"downloadPercentage") / 1000000)',
+        'score'
+      )
+      .addSelect('source.*')
+      .where({
         ...baseWhere,
         codec: Not(Like('%x265%' as VideoCodec)),
-      },
-      order: {
-        quality: 'DESC',
-      },
-    });
+      })
+      .orderBy('score', 'DESC')
+      .getRawOne();
+
+    console.log('bestSourceNotHvec', bestSourceNotHvec);
 
     if (useHevc) {
-      const bestSourceHevc = await this.episodeSourceModel.findOne({
-        select: ['data', 'videos', 'id', 'availability', 'size', 'quality'],
-        where: {
+      const bestSourceHevc = await this.episodeSourceModel
+        .createQueryBuilder('source')
+        .select(
+          '"quality" * "availability" / ("size" * (101-"downloadPercentage") / 1000000)',
+          'score'
+        )
+        .addSelect('source.*')
+        .where({
           ...baseWhere,
           codec: Like('%x265%' as VideoCodec),
-        },
-        order: {
-          quality: 'DESC',
-        },
-      });
+        })
+        .orderBy('score', 'DESC')
+        .getRawOne();
+
+      console.log('bestSourceHevc', bestSourceHevc);
 
       return this.chooseBestSource(bestSourceHevc, bestSourceNotHvec);
     }

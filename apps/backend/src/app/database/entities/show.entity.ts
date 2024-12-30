@@ -108,6 +108,12 @@ export class Show {
   })
   seasonsCount = 0;
 
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  initialSearchDone = false;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lastCheckedAt: Date;
 
@@ -136,5 +142,9 @@ export class Show {
 
 export type ShowCreationAttributes = PartialKeys<
   Omit<Show, 'id' | 'seasons' | 'episodes'>,
-  'createdAt' | 'updatedAt' | 'seasonsCount' | 'lastCheckedAt'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'seasonsCount'
+  | 'lastCheckedAt'
+  | 'initialSearchDone'
 >;

@@ -122,26 +122,26 @@ export class TraktService {
       }
 
       // Sync from Local DB to Trakt
-      const unSyncedProgress = await this.userData.getUnSyncedProgress(user.id);
-      for (const episodeProgress of unSyncedProgress.movies) {
-        await this.traktApi.trackPlayback(
-          episodeProgress.movieSlug,
-          user.accessToken,
-          'movie',
-          TraktService.statusToAction(episodeProgress.status),
-          episodeProgress.progress / episodeProgress.runtime
-        );
-      }
-
-      for (const episodeProgress of unSyncedProgress.episodes) {
-        await this.traktApi.trackPlayback(
-          episodeProgress.traktId.toString(),
-          user.accessToken,
-          'episode',
-          TraktService.statusToAction(episodeProgress.status),
-          episodeProgress.progress / episodeProgress.runtime
-        );
-      }
+      //   const unSyncedProgress = await this.userData.getUnSyncedProgress(user.id);
+      //   for (const episodeProgress of unSyncedProgress.movies) {
+      //     await this.traktApi.trackPlayback(
+      //       episodeProgress.movieSlug,
+      //       user.accessToken,
+      //       'movie',
+      //       TraktService.statusToAction(episodeProgress.status),
+      //       episodeProgress.progress / episodeProgress.runtime
+      //     );
+      //   }
+      //
+      //   for (const episodeProgress of unSyncedProgress.episodes) {
+      //     await this.traktApi.trackPlayback(
+      //       episodeProgress.traktId.toString(),
+      //       user.accessToken,
+      //       'episode',
+      //       TraktService.statusToAction(episodeProgress.status),
+      //       episodeProgress.progress / episodeProgress.runtime
+      //     );
+      //   }
     }
   }
 }

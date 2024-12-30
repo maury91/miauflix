@@ -11,6 +11,7 @@
   "scripts": {
     "backend:dev": "nx serve backend",
     "frontend:dev": "nx serve frontend",
+    "backend:prod": "nx build backend && pm2 start dist/apps/backend/src/main.js",
     "build:tizen": "nx build frontend --env.VITE_TIZEN=true",
     "typeorm": "nx build backend && cp .env ./dist/apps/backend/src && npx typeorm -d ./dist/apps/backend/src/typeorm.config.js",
     "migration:generate": "npm run typeorm -- migration:generate",
@@ -55,6 +56,7 @@
     "pg": "8.13.0",
     "pg-hstore": "2.3.4",
     "pluralize": "8.0.0",
+    "pm2": "5.4.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-is": "18.3.1",

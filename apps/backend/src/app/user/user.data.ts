@@ -83,48 +83,25 @@ export class UserData {
       throw new Error('User not found');
     }
 
-    const shows = user.episodeProgress
-      .map((progress) => progress.episode.show)
-      .filter(
-        (show, index, self) => self.findIndex((s) => s.id === show.id) === index
-      )
-      .map((show): ShowProgressDto => {
-        const episodes = user.episodeProgress.filter(
-          (progress) => progress.episode.show.id === show.id
-        );
-        const latestEpisode = episodes.reduce((latestEpisode, episode) => {
-          if (
-            episode.episode.seasonNumber > latestEpisode.episode.seasonNumber
-          ) {
-            return episode;
-          }
-          if (
-            episode.episode.seasonNumber ===
-              latestEpisode.episode.seasonNumber &&
-            episode.episode.number > latestEpisode.episode.number
-          ) {
-            return episode;
-          }
-          return episode;
-        }, episodes[0]);
-
-        return {
-          type: 'episode',
-          show: showToDto(show),
-          // Progress in seconds, Runtime in minute, divide by 60 to get minutes and multiply by 100 to get percentage
-          progress:
-            (latestEpisode.progress * 5) / (latestEpisode.episode.runtime * 3),
-          episode: latestEpisode.episode.number,
-          season: latestEpisode.episode.seasonNumber,
-          pausedAt: latestEpisode.updatedAt.toISOString(),
-        };
-      });
+    const shows = user.episodeProgress.map((progress): ShowProgressDto => {
+      return {
+        type: 'episode',
+        show: showToDto(progress.episode.show),
+        // Progress in seconds, Runtime in minute, divide by 60 to get minutes and multiply by 100 to get percentage
+        progress: (progress.progress * 5) / (progress.episode.runtime * 3),
+        progressAbs: progress.progress,
+        episode: progress.episode.number,
+        season: progress.episode.seasonNumber,
+        pausedAt: progress.updatedAt.toISOString(),
+      };
+    });
 
     const movies = user.movieProgress.map(
       (movieProgress): MovieProgressDto => ({
         type: 'movie' as const,
         progress:
           (movieProgress.progress * 5) / (movieProgress.movie.runtime * 3),
+        progressAbs: movieProgress.progress,
         movie: movieToDto(movieProgress.movie),
         pausedAt: movieProgress.updatedAt.toISOString(),
       })

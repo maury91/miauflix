@@ -12,7 +12,8 @@
     "typeRoots": [
       "./node_modules/@types",
       "./types/"
-    ]
+    ],
+    "target": "es2018",
   },
   "files": [],
   "include": [],

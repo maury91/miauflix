@@ -11,6 +11,7 @@ import {
 import { Show } from './show.entity';
 import { Episode } from './episode.entity';
 import { PartialKeys } from '../../../helper.types';
+import { SeasonSource } from './season.source.entity';
 
 @Entity()
 export class Season {
@@ -26,6 +27,9 @@ export class Season {
 
   @OneToMany(() => Episode, (episode) => episode.season)
   episodes: Episode[];
+
+  @OneToMany(() => SeasonSource, (seasonSource) => seasonSource.season)
+  sources: SeasonSource[];
 
   @Column()
   number: number;
@@ -73,6 +77,6 @@ export class Season {
 }
 
 export type SeasonCreationAttributes = PartialKeys<
-  Omit<Season, 'id' | 'episodes' | 'show'>,
+  Omit<Season, 'id' | 'episodes' | 'show' | 'sources'>,
   'createdAt' | 'updatedAt'
 >;

@@ -16,14 +16,12 @@ import { Cache } from 'cache-manager';
 import {
   getCategoriesByType,
   getInnerSearchType,
-  getVideoCodec,
-  getVideoQuality,
-  getVideoSource,
   simplifyTracker,
   simplifyXMLObject,
 } from './jackett.utils';
 import { Cacheable } from '../utils/cacheable.util';
 import { asArray } from '../utils/array';
+import { parseTorrentInfo } from '../trackers/utils';
 
 const trackerPreference: Record<CategoryType, string[]> = {
   movie: ['1337x', 'badasstorrents', 'therarbg'],
@@ -243,10 +241,18 @@ export class JackettService {
             item['torznab:attr'].find(({ name }) => name === 'peers')?.value ??
               '0'
           );
-          const [season, episode] = item.title
-            .match(/\bS(\d+)E(\d+)\b/)
-            ?.slice(1)
-            .map(Number) ?? [0, 0];
+          const imdb =
+            item['torznab:attr'].find(({ name }) => name === 'imdb')?.value ??
+            '';
+          const {
+            season,
+            episode,
+            videoCodec,
+            videoSource,
+            title,
+            year,
+            videoQuality,
+          } = parseTorrentInfo(item.title, item.description);
           return {
             title: item.title,
             guid: item.guid,
@@ -254,15 +260,24 @@ export class JackettService {
             pubDate: new Date(item.pubDate),
             size: item.size,
             category: asArray(item.category),
-            url: item.enclosure.url,
-            urlType: item.enclosure.type,
-            codec: getVideoCodec(item.title),
-            source: getVideoSource(item.title),
-            quality: getVideoQuality(item.title),
+            urls: [
+              {
+                url: item.enclosure.url,
+                type: item.enclosure.type,
+              },
+            ],
+            codec: videoCodec,
+            source: videoSource,
+            quality: videoQuality,
             season,
             episode,
             seeders,
             peers,
+            mediaName: title,
+            mediaYear: year,
+            infoHash: '',
+            type: searchType === 'tv' ? 'tv' : 'movie',
+            imdb,
           };
         })
         .filter(({ pubDate }) => {

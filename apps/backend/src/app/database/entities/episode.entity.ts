@@ -37,7 +37,7 @@ export class Episode {
   seasonNumber: number;
 
   @OneToMany(() => EpisodeSource, (episodeSource) => episodeSource.episode)
-  sources!: EpisodeSource[];
+  sources: EpisodeSource[];
 
   @Column('smallint')
   number: number;

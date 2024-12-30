@@ -95,3 +95,23 @@ and
 ```bash
 nx run miauflix:serve
 ```
+
+## ToDo
+
+- [ ] Add language to sources and choose the source in the correct language
+- [ ] Add customizable language based on user
+- [ ] Finish implementing searching sources for entire Show based on IMDB id
+- [ ] Fix syncing back to Trakt
+- [ ] Add visible arrows on screen for mouse based navigation in the sliders
+- [ ] Add error icon to buttons
+- [ ] Display details about the episode
+- [ ] Download bar
+- [ ] Buffering feedback
+- [ ] Show streaming errors
+- [ ] Auto-next if there's a next episode
+- [ ] Preload next episode if there's a next episode ( and enough of the current episode is buffered )
+- [ ] Add support for server outside the same network
+- [ ] Subtitles menu
+- [ ] Audio menu
+- [ ] Support external subtitles
+- [ ] Re-work priority system

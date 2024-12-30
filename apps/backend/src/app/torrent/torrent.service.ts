@@ -28,6 +28,11 @@ import { SourceData } from '../sources/sources.data';
 import { MovieSource } from '../database/entities/movie.source.entity';
 import { EpisodeSource } from '../database/entities/episode.source.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import {
+  bestTrackersURL,
+  blacklistedTrackersURL,
+  extra_trackers,
+} from '../trackers/consts';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -79,6 +84,8 @@ export class TorrentService {
   private readonly port: number;
   private readonly path: string;
   private readonly maxStorage: bigint;
+  private bestTrackers: string[] = [];
+  private blacklistedTrackers: string[] = [];
   constructor(
     private readonly jackettQueuesService: JackettQueues,
     private readonly torrentOrchestratorQueuesService: TorrentOrchestratorQueues,
@@ -124,6 +131,44 @@ export class TorrentService {
         this.webTorrentServer.address()
       );
     });
+    this.loadTrackers();
+  }
+
+  private async getTrackers(url: string) {
+    try {
+      const response = await this.httpService.axiosRef.get(url, {
+        timeout: 10000,
+        maxRedirects: 0,
+        responseType: 'text',
+      });
+
+      if (response.status >= 200 && response.status < 300 && response.data) {
+        const trackers: string[] = response.data
+          .split('\n')
+          .map((line) => line.split('#')[0].trim())
+          .filter((line) => line.trim() !== '');
+        return trackers;
+      }
+    } catch (error) {
+      console.error('Error fetching blacklistTrackers:', error);
+    }
+    return [];
+  }
+
+  private async loadTrackers() {
+    const [bestTrackers, blacklistedTrackers] = await Promise.all([
+      this.getTrackers(bestTrackersURL),
+      this.getTrackers(blacklistedTrackersURL),
+    ]);
+
+    if (bestTrackers.length) {
+      this.bestTrackers = bestTrackers;
+    }
+    this.bestTrackers = [...new Set([...this.bestTrackers, ...extra_trackers])];
+
+    if (blacklistedTrackers.length) {
+      this.blacklistedTrackers = blacklistedTrackers;
+    }
   }
 
   private async deleteSource(
@@ -603,6 +648,7 @@ export class TorrentService {
           bitfield: bitfieldBuffer
             ? Buffer.from(bitfieldBuffer, 'base64')
             : undefined,
+          announce: this.bestTrackers,
         },
         (torrent) => {
           console.log(torrent.files);
@@ -672,7 +718,7 @@ export class TorrentService {
             console.log(
               `Torrent ${torrent.name} progress ${Math.round(
                 torrent.progress * 100
-              )}%`
+              )}% [${torrent.numPeers} / ${torrent.downloadSpeed}]`
             );
             console.log('Verified', index);
             this.cacheManager.set(

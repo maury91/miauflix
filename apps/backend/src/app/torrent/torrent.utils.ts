@@ -1,6 +1,7 @@
 import { GetTorrentFileData, VideoCodec, VideoQuality } from '@miauflix/types';
 import { MIN_MB_MN } from './torrent.const';
-import { getVideoCodec } from '../jackett/jackett.utils';
+
+import { getVideoCodec } from '../trackers/utils';
 
 const supportedVideoExtensions = ['mkv', 'mp4', 'avi', 'ts', 'mov', 'webm'];
 export const isValidVideoFile =
@@ -12,8 +13,8 @@ export const isValidVideoFile =
     }
     const codecFromVideoName = getVideoCodec(name);
     const codec =
-      codecFromVideoName !== 'unknown'
-        ? codecFromVideoName
+      codecFromVideoName.codec !== 'unknown'
+        ? codecFromVideoName.codec
         : codecFromTorrentName;
     console.log(
       `[${codecFromVideoName}, ${codecFromTorrentName}][${quality}]`,

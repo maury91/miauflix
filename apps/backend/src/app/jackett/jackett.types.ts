@@ -112,6 +112,11 @@ export interface JackettQueryItem {
   }[];
 }
 
+interface TorrentUrl {
+  url: string;
+  type: string;
+}
+
 export interface Torrent {
   title: string;
   guid: string;
@@ -119,15 +124,19 @@ export interface Torrent {
   pubDate: Date;
   size: number;
   category: number[];
-  url: string;
-  urlType: string;
+  urls: TorrentUrl[];
   codec: VideoCodec;
   source: VideoSource;
-  seeders: number; // Users that has part of it
-  peers: number; // Users that has all the torrent
+  seeders: number; // Users that has all the torrent
+  peers: number; // Users that has part of it
   quality: VideoQuality;
-  episode: number;
-  season: number;
+  episode: number | undefined;
+  season: number | undefined;
+  mediaName: string;
+  mediaYear: number | undefined;
+  type: 'tv' | 'movie' | 'anime';
+  infoHash: string;
+  imdb: string;
 }
 
 export interface JackettTracker {
