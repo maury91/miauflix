@@ -1,13 +1,16 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import { AccessToken } from '../database/entities/accessToken.entity';
-import { User, UserCreationAttributes } from '../database/entities/user.entity';
+import { AccessToken } from '../../database/entities/accessToken.entity';
+import {
+  User,
+  UserCreationAttributes,
+} from '../../database/entities/user.entity';
 import { MovieProgressDto, ShowProgressDto, UserDto } from '@miauflix/types';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { Not, Raw, Repository } from 'typeorm';
 import { movieToDto } from '../movies/movies.utils';
 import { showToDto } from '../shows/shows.utils';
-import { EpisodeProgress } from '../database/entities/episode.progress.entity';
-import { MovieProgress } from '../database/entities/movie.progress.entity';
+import { EpisodeProgress } from '../../database/entities/episode.progress.entity';
+import { MovieProgress } from '../../database/entities/movie.progress.entity';
 
 @Injectable()
 export class UserData {

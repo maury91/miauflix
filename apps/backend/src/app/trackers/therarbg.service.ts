@@ -1,9 +1,11 @@
+import { HttpService } from '@nestjs/axios';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Inject, Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import PQueue from 'p-queue';
+
 import { Torrent } from '../jackett/jackett.types';
 import { parseTorrentInfo } from './utils';
-import { Inject, Injectable } from '@nestjs/common';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import { HttpService } from '@nestjs/axios';
 import { Cacheable } from '../utils/cacheable.util';
 
 interface TheRarBgIMDBPost {
@@ -90,18 +92,19 @@ const magnetTracker = [
   .join();
 
 class RateLimited {
+  private running = 0;
+
   constructor(
     private readonly concurrency: number,
     private readonly delay: number
-  ) {
-    for (let i = 0; i < this.concurrency; i++) {
-      this.runner();
-    }
-  }
+  ) {}
 
   private queue: (() => Promise<void>)[] = [];
 
   private runner = async () => {
+    if (this.running >= this.concurrency) {
+      return;
+    }
     const nextJob = this.queue.shift();
     if (nextJob) {
       try {
@@ -110,8 +113,8 @@ class RateLimited {
         // ToDo: move to logger
         console.error(err);
       }
+      setTimeout(this.runner, this.delay);
     }
-    setTimeout(this.runner, this.delay);
   };
 
   public async rateLimited<T>(fn: () => Promise<T>): Promise<T> {
@@ -119,6 +122,7 @@ class RateLimited {
       this.queue.push(() => {
         return fn().then(resolve).catch(reject);
       });
+      this.runner();
     });
   }
 }

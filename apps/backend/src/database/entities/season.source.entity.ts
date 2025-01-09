@@ -1,4 +1,4 @@
-import { VideoSource } from '../../jackett/jackett.types';
+import { VideoSource } from '../../app/jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
 import {
   Column,
@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 import { Season } from './season.entity';
 
 @Entity()

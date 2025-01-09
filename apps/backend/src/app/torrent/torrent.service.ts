@@ -25,8 +25,8 @@ import BitField from 'bitfield';
 import { ShowsData } from '../shows/shows.data';
 import { stat } from 'node:fs/promises';
 import { SourceData } from '../sources/sources.data';
-import { MovieSource } from '../database/entities/movie.source.entity';
-import { EpisodeSource } from '../database/entities/episode.source.entity';
+import { MovieSource } from '../../database/entities/movie.source.entity';
+import { EpisodeSource } from '../../database/entities/episode.source.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import {
   bestTrackersURL,

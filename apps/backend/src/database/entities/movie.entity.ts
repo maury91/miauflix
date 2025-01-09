@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { MovieSource } from './movie.source.entity';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 import { MovieProgress } from './movie.progress.entity';
 
 @Entity()

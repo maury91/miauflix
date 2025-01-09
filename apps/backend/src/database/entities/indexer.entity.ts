@@ -1,6 +1,13 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { IndexerCategory } from './indexer.category.entity';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 
 @Entity()
 export class Indexer {
@@ -42,7 +49,7 @@ export class Indexer {
 
   @Column({
     type: 'varchar',
-    array: true
+    array: true,
   })
   tvSearchSupportedParams: string[];
 
@@ -51,28 +58,28 @@ export class Indexer {
 
   @Column({
     type: 'varchar',
-    array: true
+    array: true,
   })
   movieSearchSupportedParams: string[];
 
   @Column({
     type: 'smallint',
     unsigned: true,
-    array: true
+    array: true,
   })
   tvCategories: number[];
 
   @Column({
     type: 'smallint',
     unsigned: true,
-    array: true
+    array: true,
   })
   movieCategories: number[];
 
   @Column({
     type: 'smallint',
     unsigned: true,
-    array: true
+    array: true,
   })
   animeCategories: number[];
 
@@ -83,7 +90,10 @@ export class Indexer {
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date
+  updatedAt: Date;
 }
 
-export type IndexerCreationAttributes = PartialKeys< Omit<Indexer, 'id' | 'categories'>, 'createdAt' | 'updatedAt'>;
+export type IndexerCreationAttributes = PartialKeys<
+  Omit<Indexer, 'id' | 'categories'>,
+  'createdAt' | 'updatedAt'
+>;

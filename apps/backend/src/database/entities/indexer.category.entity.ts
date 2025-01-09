@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Indexer } from './indexer.entity';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 
 @Entity()
 export class IndexerCategory {

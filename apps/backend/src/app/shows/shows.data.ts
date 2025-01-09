@@ -1,16 +1,19 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import { Show, ShowCreationAttributes } from '../database/entities/show.entity';
+import {
+  Show,
+  ShowCreationAttributes,
+} from '../../database/entities/show.entity';
 import { ShowSimple as TraktShow } from '../trakt/trakt.types';
 import { MediaImages, ShowDto } from '@miauflix/types';
 import {
   Season,
   SeasonCreationAttributes,
-} from '../database/entities/season.entity';
+} from '../../database/entities/season.entity';
 import {
   Episode,
   EpisodeCreationAttributes,
-} from '../database/entities/episode.entity';
-import { EpisodeSource } from '../database/entities/episode.source.entity';
+} from '../../database/entities/episode.entity';
+import { EpisodeSource } from '../../database/entities/episode.source.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { In, Raw, Repository } from 'typeorm';
 import { showToDto } from './shows.utils';

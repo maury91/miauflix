@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { Show } from './show.entity';
 import { Episode } from './episode.entity';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 import { SeasonSource } from './season.source.entity';
 
 @Entity()

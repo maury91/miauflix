@@ -7,10 +7,10 @@ import {
   SearchShowEpisodeData,
 } from '@miauflix/types';
 import { Job, Queue, QueueEvents } from 'bullmq';
-import { Movie } from '../database/entities/movie.entity';
-import { Show } from '../database/entities/show.entity';
-import { Episode } from '../database/entities/episode.entity';
-import { Season } from '../database/entities/season.entity';
+import { Movie } from '../../database/entities/movie.entity';
+import { Show } from '../../database/entities/show.entity';
+import { Episode } from '../../database/entities/episode.entity';
+import { Season } from '../../database/entities/season.entity';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -29,8 +29,14 @@ export class JackettQueues {
       connection: {
         host: configService.get<string>('REDIS_HOST'),
         port: configService.get<number>('REDIS_PORT'),
-      }
+      },
     });
+    this.clearFailedJobs();
+  }
+
+  private async clearFailedJobs() {
+    const failedJobs = await this.jackettQueue.getFailed();
+    await Promise.all(failedJobs.map((job) => job.remove()));
   }
 
   public async prioritizeTorrentSearch(slug: string, priority: number) {

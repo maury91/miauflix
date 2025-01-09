@@ -5,9 +5,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { VideoSource } from '../../jackett/jackett.types';
+import { VideoSource } from '../../app/jackett/jackett.types';
 import { VideoCodec, VideoQuality } from '@miauflix/types';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 
 @Entity()
 export class Torrent {

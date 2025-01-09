@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 
 @Entity()
 export class AccessToken {

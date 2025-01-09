@@ -2,11 +2,11 @@ import { Global, Injectable, Module } from '@nestjs/common';
 import {
   Movie,
   MovieCreationAttributes,
-} from '../database/entities/movie.entity';
+} from '../../database/entities/movie.entity';
 import { Movie as TraktMovie } from '../trakt/trakt.types';
 import { MediaImages, MovieDto } from '@miauflix/types';
-import { Torrent } from '../database/entities/torrent.entity';
-import { MovieSource } from '../database/entities/movie.source.entity';
+import { Torrent } from '../../database/entities/torrent.entity';
+import { MovieSource } from '../../database/entities/movie.source.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { In, Raw, Repository } from 'typeorm';
 import { movieToDto } from './movies.utils';

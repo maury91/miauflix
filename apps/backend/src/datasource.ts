@@ -10,10 +10,10 @@ export const dataSourceOptions: DataSourceOptions = {
   password: process.env['POSTGRES_PASS'],
   database: process.env['POSTGRES_DB'],
 
-  entities: [join(__dirname, './app/database/entities/*.entity.{ts,js}')],
+  entities: [join(__dirname, './database/entities/*.entity.{ts,js}')],
 
   migrationsTableName: 'miauflix_migrations',
-  migrations: [join(__dirname, './app/database/migrations/*.{ts,js}')],
+  migrations: [join(__dirname, './database/migrations/*.{ts,js}')],
 
   logging: ['error', 'migration'],
   // logger: 'file',

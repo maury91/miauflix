@@ -1,13 +1,14 @@
+import { Keyv } from 'keyv';
+import KeyvRedis from '@keyv/redis';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BullModule } from '@nestjs/bullmq';
-import { redisStore } from 'cache-manager-redis-store';
 
 import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UserModule } from './user/user.module';
-import { CacheModule, CacheStore } from '@nestjs/cache-manager';
+import { CacheModule } from '@nestjs/cache-manager';
 import { MoviesModule } from './movies/movies.module';
 import { JackettModule } from './jackett/jackett.module';
 import { TorrentModule } from './torrent/torrent.module';
@@ -29,6 +30,7 @@ import { ShowsQueuesModule } from './shows/shows.queues';
 import { ShowsModule } from './shows/shows.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { initializeDatabase } from '../datasource';
+import { TrackersServiceModule } from './trackers/trackers.service';
 
 @Module({
   imports: [
@@ -56,17 +58,18 @@ import { initializeDatabase } from '../datasource';
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        const store = await redisStore({
-          socket: {
-            host: configService.get<string>('REDIS_HOST'),
-            port: configService.get<number>('REDIS_PORT'),
-          },
-        });
-        return {
-          store: store as unknown as CacheStore,
-        };
-      },
+      useFactory: async (configService: ConfigService) => ({
+        stores: [
+          new Keyv({
+            store: new KeyvRedis({
+              socket: {
+                host: configService.get<string>('REDIS_HOST'),
+                port: configService.get<number>('REDIS_PORT'),
+              },
+            }),
+          }),
+        ],
+      }),
       inject: [ConfigService],
     }),
     ScheduleModule.forRoot(),
@@ -80,6 +83,7 @@ import { initializeDatabase } from '../datasource';
     ListsModule,
     TraktModule,
     ShowsModule,
+    TrackersServiceModule,
     // Queues
     JackettQueuesModule,
     MoviesQueuesModule,

@@ -11,7 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 import { EpisodeProgress } from './episode.progress.entity';
 
 @Entity()

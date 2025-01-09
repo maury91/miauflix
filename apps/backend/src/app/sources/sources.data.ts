@@ -2,15 +2,15 @@ import { Global, Injectable, Module } from '@nestjs/common';
 import {
   MovieSource,
   MovieSourceCreationAttributes,
-} from '../database/entities/movie.source.entity';
-import { Movie } from '../database/entities/movie.entity';
+} from '../../database/entities/movie.source.entity';
+import { Movie } from '../../database/entities/movie.entity';
 import {
   EpisodeSource,
   EpisodeSourceCreationAttributes,
-} from '../database/entities/episode.source.entity';
-import { Episode } from '../database/entities/episode.entity';
-import { Show } from '../database/entities/show.entity';
-import { Season } from '../database/entities/season.entity';
+} from '../../database/entities/episode.source.entity';
+import { Episode } from '../../database/entities/episode.entity';
+import { Show } from '../../database/entities/show.entity';
+import { Season } from '../../database/entities/season.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 

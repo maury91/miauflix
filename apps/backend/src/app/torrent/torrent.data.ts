@@ -2,15 +2,15 @@ import { Global, Injectable, Module } from '@nestjs/common';
 import {
   Torrent,
   TorrentCreationAttributes,
-} from '../database/entities/torrent.entity';
+} from '../../database/entities/torrent.entity';
 import { GetTorrentFileData, VideoCodec, VideoQuality } from '@miauflix/types';
-import { Movie } from '../database/entities/movie.entity';
-import { MovieSource } from '../database/entities/movie.source.entity';
+import { Movie } from '../../database/entities/movie.entity';
+import { MovieSource } from '../../database/entities/movie.source.entity';
 import { createHmac } from 'node:crypto';
-import { Episode } from '../database/entities/episode.entity';
-import { EpisodeSource } from '../database/entities/episode.source.entity';
-import { Show } from '../database/entities/show.entity';
-import { Season } from '../database/entities/season.entity';
+import { Episode } from '../../database/entities/episode.entity';
+import { EpisodeSource } from '../../database/entities/episode.source.entity';
+import { Show } from '../../database/entities/show.entity';
+import { Season } from '../../database/entities/season.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import {
   Brackets,

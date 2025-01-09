@@ -12,7 +12,7 @@ import { JackettQueues } from '../jackett/jackett.queues';
 import { TorrentOrchestratorQueues } from '../torrent/torrent.orchestrator.queues';
 import { MoviesQueues } from './movies.queues';
 import { TraktApi } from '../trakt/trakt.api';
-import { Movie } from '../database/entities/movie.entity';
+import { Movie } from '../../database/entities/movie.entity';
 import { movieToDto } from './movies.utils';
 
 @Injectable()

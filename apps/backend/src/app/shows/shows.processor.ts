@@ -14,8 +14,8 @@ import { TMDBApi } from '../tmdb/tmdb.api';
 import { ShowsQueues } from './shows.queues';
 import { ShowEpisodeExtended, ShowSeasonExtended } from '../trakt/trakt.types';
 import { ShowSeason } from '../tmdb/tmdb.types';
-import { Season } from '../database/entities/season.entity';
-import { Show } from '../database/entities/show.entity';
+import { Season } from '../../database/entities/season.entity';
+import { Show } from '../../database/entities/show.entity';
 
 @Processor(queues.show)
 export class ShowsProcessor extends WorkerHost {

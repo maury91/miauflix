@@ -1,4 +1,4 @@
-import { Show } from '../database/entities/show.entity';
+import { Show } from '../../database/entities/show.entity';
 import { ShowDto } from '@miauflix/types';
 
 export const showToDto = (show: Show): ShowDto => ({

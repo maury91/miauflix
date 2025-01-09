@@ -1,4 +1,4 @@
-import { Movie } from '../database/entities/movie.entity';
+import { Movie } from '../../database/entities/movie.entity';
 import { MovieDto } from '@miauflix/types';
 
 export const movieToDto = (movie: Movie): MovieDto => ({

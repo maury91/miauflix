@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 import { User } from './user.entity';
 
 @Entity()

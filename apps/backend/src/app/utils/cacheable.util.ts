@@ -21,7 +21,9 @@ export function Cacheable<
       const cacheKey = `cache.${this.constructor.name}.${
         originalMethod.name
       }.${JSON.stringify(args)}`;
-      const cached = await this.cacheManager.get<Return>(cacheKey);
+      const cached = await this.cacheManager
+        .get<Return>(cacheKey)
+        .catch(() => null);
       if (cached && !reset) {
         return cached;
       }

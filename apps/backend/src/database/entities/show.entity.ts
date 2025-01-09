@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Season } from './season.entity';
 import { Episode } from './episode.entity';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 
 @Entity()
 export class Show {

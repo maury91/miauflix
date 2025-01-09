@@ -1,3 +1,6 @@
+import { Episode } from './episode.entity';
+import { VideoSource } from '../../app/jackett/jackett.types';
+import { VideoCodec, VideoQuality } from '@miauflix/types';
 import {
   Column,
   CreateDateColumn,
@@ -7,25 +10,34 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Movie } from './movie.entity';
-import { VideoSource } from '../../jackett/jackett.types';
-import { VideoCodec, VideoQuality } from '@miauflix/types';
-import { PartialKeys } from '../../../helper.types';
+import { PartialKeys } from '../../helper.types';
 
 @Entity()
-export class MovieSource {
+export class EpisodeSource {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  movieSlug: string;
-
-  @ManyToOne(() => Movie, (movie) => movie.sources)
-  @JoinColumn({ name: 'movieId', referencedColumnName: 'id' })
-  movie: Movie;
+  @ManyToOne(() => Episode, (episode) => episode.sources)
+  @JoinColumn({ name: 'episodeId', referencedColumnName: 'id' })
+  episode: Episode;
 
   @Column()
-  movieId: number;
+  episodeId: number;
+
+  @Column()
+  showSlug: string;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+  })
+  rejected = false;
+
+  @Column('smallint')
+  seasonNum: number;
+
+  @Column('smallint')
+  episodeNum: number;
 
   @Column()
   originalSource: string;
@@ -38,9 +50,12 @@ export class MovieSource {
   videos: string[];
 
   @Column('bigint')
-  size: number;
+  size!: number;
 
-  @Column('bytea')
+  @Column({
+    type: 'bytea',
+    nullable: true,
+  })
   data?: Buffer;
 
   @Column({
@@ -78,24 +93,24 @@ export class MovieSource {
   @Column('smallint')
   quality: VideoQuality;
 
-  @Column('varchar')
-  codec: VideoCodec;
-
-  @Column('varchar')
-  source: VideoSource;
-
-  @Column({
-    type: 'boolean',
-    default: false,
-  })
-  rejected: boolean;
-
   @Column({
     type: 'int',
     unsigned: true,
     default: 0,
   })
   availability: number;
+
+  @Column({
+    type: 'varchar',
+    length: 20,
+  })
+  codec: VideoCodec;
+
+  @Column({
+    type: 'varchar',
+    length: 20,
+  })
+  source: VideoSource;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -104,7 +119,7 @@ export class MovieSource {
   updatedAt: Date;
 }
 
-export type MovieSourceCreationAttributes = PartialKeys<
-  Omit<MovieSource, 'id' | 'movie'>,
-  'createdAt' | 'updatedAt' | 'downloadPercentage'
+export type EpisodeSourceCreationAttributes = PartialKeys<
+  Omit<EpisodeSource, 'id' | 'episode'>,
+  'createdAt' | 'updatedAt' | 'rejected' | 'downloadPercentage'
 >;
