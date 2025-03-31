@@ -1,4 +1,5 @@
 import { ENV } from "src/constants";
+import { ServiceConfiguration } from "src/types/configuration";
 import { TraktList, TraktListItem, TraktPagination } from "./trakt.types";
 
 interface RateLimitInfo {
@@ -14,8 +15,8 @@ interface RateLimitInfo {
 }
 
 export class TraktApi {
-  private readonly clientId = ENV.TRAKT_CLIENT_ID;
-  private readonly apiUrl = ENV.TRAKT_API_URL ?? "https://api.trakt.tv";
+  private readonly clientId = ENV("TRAKT_CLIENT_ID");
+  private readonly apiUrl = ENV("TRAKT_API_URL", "https://api.trakt.tv");
   private rateLimits: Partial<Record<RateLimitInfo["name"], RateLimitInfo>> =
     {};
   private staticLimits: Record<RateLimitInfo["name"], [number, number]> = {
@@ -135,6 +136,15 @@ export class TraktApi {
     };
   }
 
+  public async test() {
+    await this.request<TraktList>(
+      `${this.apiUrl}/lists/trending?limit=10`,
+      {},
+      "UNAUTHED_API_GET_LIMIT",
+    );
+    return true;
+  }
+
   public async getTrendingLists() {
     const url = `${this.apiUrl}/lists/trending?limit=50`;
     const response = await this.request<TraktList>(
@@ -166,3 +176,38 @@ export class TraktApi {
     return response;
   }
 }
+
+export const traktConfigurationDefinition: ServiceConfiguration = {
+  name: "Trakt.tv",
+  description: "Service for tracking movies and TV shows watched by users",
+  variables: {
+    TRAKT_API_URL: {
+      description: "URL for the Trakt API",
+      example: "https://api.trakt.tv",
+      defaultValue: "https://api.trakt.tv",
+      required: false,
+    },
+    TRAKT_CLIENT_ID: {
+      description: "Client ID for the Trakt API",
+      example: "abc123def456ghi789",
+      link: "https://trakt.tv/oauth/applications",
+      required: true,
+      password: true,
+    },
+  },
+  test: async () => {
+    try {
+      const traktApi = new TraktApi();
+
+      await traktApi.test();
+    } catch (error: any) {
+      if ("status" in error) {
+        if (error.status === 401) {
+          throw new Error(`Invalid Client ID`);
+        }
+        throw new Error(`Connection error: ${error.status}`);
+      }
+      throw error;
+    }
+  },
+};

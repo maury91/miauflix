@@ -10,9 +10,11 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@inquirer/prompts": "^7.4.0",
     "@keyv/sqlite": "^4.0.1",
     "cache-manager": "^6.4.1",
     "cacheable": "^1.8.9",
+    "chalk": "^5.4.1",
     "dotenv": "^16.0.3",
     "elysia": "^1.2.25",
     "keyv": "^5.3.1",
