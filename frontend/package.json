@@ -1,0 +1,13 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm start",
+    "build": "bun run build",
+    "test": "bun run test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "type": "module"
+}

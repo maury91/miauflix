@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    // Enable latest features
+    "lib": ["ESNext"],
+    "target": "ES2021",
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "moduleDetection": "force",
+    "allowJs": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": ".",
+    "paths": {
+      "@entities/*": ["src/entities/*"],
+      "@services/*": ["src/services/*"],
+      "@repositories/*": ["src/repositories/*"],
+      "@database/*": ["src/database/*"],
+      "@types/*": ["src/types/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

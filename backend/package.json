@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/app.ts",
+  "scripts": {
+    "start": "bun src/app.ts",
+    "dev": "bun run --watch src/app.ts",
+    "build": "bun build src/app.ts",
+    "check:ts": "bun run tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@keyv/sqlite": "^4.0.1",
+    "cache-manager": "^6.4.1",
+    "cacheable": "^1.8.9",
+    "dotenv": "^16.0.3",
+    "elysia": "^1.2.25",
+    "keyv": "^5.3.1",
+    "node-fetch": "^3.2.10",
+    "sqlite3": "^5.0.11",
+    "typeorm": "^0.3.10"
+  },
+  "devDependencies": {
+    "@types/cache-manager": "^5.0.0",
+    "@types/node-fetch": "^3.0.3",
+    "nodemon": "^2.0.20",
+    "typescript": "^4.5.5"
+  },
+  "type": "module"
+}

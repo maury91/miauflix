@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+coverage
+.cache
+public
+**/*.min.js
+*.lock
+*.sqlite
+*.md
