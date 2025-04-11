@@ -6,6 +6,7 @@ import { MediaSummaryList } from "@services/tmdb/tmdb.types";
 import { Movie } from "@entities/movie.entity";
 import { TVShow } from "@entities/tvshow.entity";
 import { Database } from "@database/database";
+import { TranslatedMedia } from "./media.types";
 
 export class ListService {
   private readonly lists: Record<
@@ -37,6 +38,12 @@ export class ListService {
         slug: "@@tmdb_movies_top-rated",
         description: "List of top rated movies from TMDB",
       },
+      // "@@tmdb_shows_popular": {
+      //   name: "Popular TV Shows",
+      //   source: this.tmdbApi.getPopularShows.bind(this.tmdbApi),
+      //   slug: "@@tmdb_shows_popular",
+      //   description: "List of popular TV shows from TMDB",
+      // },
     };
     this.mediaListRepository = db.getMediaListRepository();
   }
@@ -49,14 +56,10 @@ export class ListService {
       throw new Error(`List with slug ${slug} not found`);
     }
     const list = this.lists[slug];
-    const {
-      total_pages,
-      total_results,
-      results: medias,
-    } = await list.source(page);
+    const { totalPages, totalItems, items: medias } = await list.source(page);
 
     console.log(
-      `[ListService] List ${slug} has ${total_results} results and ${total_pages} pages, obtained page ${page}`,
+      `[ListService] List ${slug} has ${totalItems} results and ${totalPages} pages, obtained page ${page}`,
     );
 
     return {
@@ -68,8 +71,8 @@ export class ListService {
           return this.mediaService.getTVShow(mediaData.id);
         }),
       ),
-      pages: total_pages,
-      total: total_results,
+      pages: totalPages,
+      total: totalItems,
     };
   }
 
@@ -111,7 +114,6 @@ export class ListService {
       }
     }
 
-    console.log("saving list");
     return await this.mediaListRepository.saveMediaList(mediaList);
   }
 
@@ -121,7 +123,6 @@ export class ListService {
     if (mediaList.movies.length + mediaList.tvShows.length === 0) {
       console.log("Data is empty, getting more of it");
       const { medias } = await this.getListContentFromApi(slug, 1);
-      console.log("Got the data, updating content");
       return await this.updateListContent(slug, medias);
     }
     return mediaList;
@@ -130,31 +131,18 @@ export class ListService {
   async getListContent(
     slug: string,
     language = "en",
-  ): Promise<(Omit<Movie, "translations"> | TVShow)[]> {
+  ): Promise<TranslatedMedia[]> {
     const mediaList = await this.getListBySlug(slug);
     if (!mediaList.movies) {
       console.log(mediaList);
     }
-    return [...mediaList.movies, ...mediaList.tvShows]
-      .sort((a, b) => b.popularity - a.popularity)
-      .map((media) => {
-        if (media instanceof Movie) {
-          const { translations, ...movie } = media;
-          const translation = translations.find(
-            (translation) => translation.language === language,
-          );
-          if (translation) {
-            return {
-              ...movie,
-              title: translation.title || media.title,
-              overview: translation.overview || media.overview,
-              tagline: translation.tagline || media.tagline,
-            };
-          }
-          return movie;
-        }
-        return media;
-      });
+
+    const medias = await this.mediaService.mediasWithLanguage(
+      [...mediaList.movies, ...mediaList.tvShows],
+      language,
+    );
+
+    return medias.sort((a, b) => b.popularity - a.popularity);
   }
 
   async getLists() {

@@ -1,20 +1,25 @@
 import path from "path";
 import { DataSource } from "typeorm";
-import { Movie, MovieTranslation } from "../entities/movie.entity";
-import { TVShow } from "../entities/tvshow.entity";
-import { TVShowTranslation } from "@entities/tvshow.translations.entity";
-import { Season } from "../entities/season.entity";
-import { Episode } from "../entities/episode.entity";
-import { MediaList } from "../entities/list.entity";
+
+import { Movie, MovieTranslation } from "@entities/movie.entity";
+import { TVShow } from "@entities/tvshow.entity";
+import { TVShowTranslation } from "@entities/tvshow.entity";
+import { Season } from "@entities/season.entity";
+import { Episode } from "@entities/episode.entity";
+import { MediaList } from "@entities/list.entity";
+
 import { MediaListRepository } from "@repositories/mediaList.repository";
 import { MovieRepository } from "@repositories/movie.repository";
 import { TVShowRepository } from "@repositories/tvshow.repository";
+import { Genre, GenreTranslation } from "@entities/genre.entity";
+import { GenreRepository } from "@repositories/genre.repository";
 
 export class Database {
   private readonly dataSource: DataSource;
   private mediaListRepository: MediaListRepository;
   private movieRepository: MovieRepository;
   private tvShowRepository: TVShowRepository;
+  private genreRepository: GenreRepository;
 
   constructor() {
     this.dataSource = new DataSource({
@@ -28,9 +33,10 @@ export class Database {
         Season,
         Episode,
         MediaList,
+        Genre,
+        GenreTranslation,
       ],
       synchronize: true,
-      // logging: true,
     });
   }
 
@@ -39,6 +45,7 @@ export class Database {
     this.mediaListRepository = new MediaListRepository(this.dataSource);
     this.movieRepository = new MovieRepository(this.dataSource);
     this.tvShowRepository = new TVShowRepository(this.dataSource);
+    this.genreRepository = new GenreRepository(this.dataSource);
   }
 
   public getMovieRepository() {
@@ -59,5 +66,9 @@ export class Database {
 
   public getMediaListRepository() {
     return this.mediaListRepository;
+  }
+
+  public getGenreRepository() {
+    return this.genreRepository;
   }
 }

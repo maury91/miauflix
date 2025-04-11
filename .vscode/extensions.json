@@ -1,3 +1,6 @@
 {
-  "recommendations": ["yy0931.vscode-sqlite3-editor"]
+  "recommendations": [
+    "yy0931.vscode-sqlite3-editor",
+    "oven.bun-vscode"
+  ]
 }
