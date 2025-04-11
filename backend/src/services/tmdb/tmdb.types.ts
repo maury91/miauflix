@@ -23,6 +23,20 @@ interface Image {
 
 export type MediaType = "movie" | "tv";
 
+export type Paged<T> = {
+  page: number;
+  items: T[];
+  totalPages: number;
+  totalItems: number;
+};
+
+export type PagedResponse<T> = {
+  page: number;
+  results: T[];
+  total_pages: number;
+  total_results: number;
+};
+
 export interface CrewMember {
   job: string;
   department: string;
@@ -263,7 +277,7 @@ export interface ChangeResult {
   items: ChangeItem[];
   page: number;
   totalPages: number;
-  totalResults: number;
+  totalItems: number;
 }
 
 export interface MovieSummary {
@@ -283,15 +297,8 @@ export interface MovieSummary {
   vote_count: number;
 }
 
-export interface MovieDetailsResponse {
-  page: number;
-  results: MovieSummary[];
-  total_pages: number;
-  total_results: number;
-}
-
 export interface MovieMediaSummary extends Omit<MovieSummary, "genre_ids"> {
-  genres: string[];
+  genres: number[];
   _type: "movie";
 }
 
@@ -314,15 +321,14 @@ export interface TVShowSummary {
 }
 
 export interface TVShowMediaSummary extends Omit<TVShowSummary, "genre_ids"> {
-  genres: string[];
+  genres: number[];
   _type: "tv";
 }
 
+export type MovieListResponse = PagedResponse<MovieSummary>;
+export type TVShowListResponse = PagedResponse<TVShowSummary>;
+export type MediaListResponse = PagedResponse<MovieSummary | TVShowSummary>;
+
 export type MediaSummary = MovieMediaSummary | TVShowMediaSummary;
 
-export interface MediaSummaryList {
-  page: number;
-  results: MediaSummary[];
-  total_pages: number;
-  total_results: number;
-}
+export type MediaSummaryList = Paged<MediaSummary>;

@@ -6,40 +6,12 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  ManyToMany,
+  JoinTable,
   Unique,
   type Relation,
 } from "typeorm";
-
-@Unique(["movie", "language"])
-@Entity()
-export class MovieTranslation {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  language: string;
-
-  @ManyToOne(() => Movie, (movie) => movie.translations)
-  movie: Relation<Movie>;
-
-  @Column()
-  movieId: number;
-
-  @Column("text")
-  overview: string;
-
-  @Column()
-  title: string;
-
-  @Column()
-  tagline: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-}
+import { Genre } from "./genre.entity";
 
 @Entity()
 export class Movie {
@@ -97,11 +69,13 @@ export class Movie {
   @Column()
   releaseDate: string;
 
-  @Column("simple-array")
-  genres: string[];
+  @ManyToMany(() => Genre, {
+    eager: true,
+  })
+  @JoinTable()
+  genres: Relation<Genre>[];
 
   @OneToMany(() => MovieTranslation, (translation) => translation.movie, {
-    cascade: true,
     eager: true,
   })
   translations: Relation<MovieTranslation>[];
@@ -118,6 +92,37 @@ export class Movie {
   logo: string;
 
   /** Time */
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+
+@Unique(["movie", "language"])
+@Entity()
+export class MovieTranslation {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  language: string;
+
+  @ManyToOne(() => Movie, (movie) => movie.translations)
+  movie: Relation<Movie>;
+
+  @Column()
+  movieId: number;
+
+  @Column("text")
+  overview: string;
+
+  @Column()
+  title: string;
+
+  @Column()
+  tagline: string;
 
   @CreateDateColumn()
   createdAt: Date;

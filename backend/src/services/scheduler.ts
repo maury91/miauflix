@@ -7,7 +7,11 @@ export class Scheduler {
     this.tasks = new Map();
   }
 
-  scheduleTask(taskName: string, interval: number, task: () => void): void {
+  scheduleTask(
+    taskName: string,
+    interval: number,
+    task: () => void | Promise<void>,
+  ): void {
     if (this.tasks.has(taskName)) {
       throw new Error(`Task with name "${taskName}" is already scheduled.`);
     }
