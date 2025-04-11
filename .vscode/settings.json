@@ -13,5 +13,6 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "prettier.requireConfig": true
+  "prettier.requireConfig": true,
+  "terminal.integrated.defaultProfile.linux": "zsh"
 }

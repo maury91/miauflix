@@ -1,6 +1,6 @@
 import { DataSource, Repository } from "typeorm";
 import { TVShow } from "../entities/tvshow.entity";
-import { TVShowTranslation } from "@entities/tvshow.translations.entity";
+import { TVShowTranslation } from "@entities/tvshow.entity";
 import { objectKeys } from "src/utils/object.util";
 
 export class TVShowRepository {

@@ -82,11 +82,13 @@ async function startApp() {
 
 // Start the application: first check environment variables, then start the app
 async function main() {
-  await validateConfiguration();
-  await startApp();
+  try {
+    await validateConfiguration();
+    await startApp();
+  } catch (error) {
+    console.error("Error during application startup:", error);
+    process.exit(1);
+  }
 }
 
-main().catch((error) => {
-  console.error("Fatal error:", error);
-  process.exit(1);
-});
+main();

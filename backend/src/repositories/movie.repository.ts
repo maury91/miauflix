@@ -1,6 +1,7 @@
 import { DataSource, Repository } from "typeorm";
 import { Movie, MovieTranslation } from "../entities/movie.entity";
 import { objectKeys } from "src/utils/object.util";
+import { Genre } from "@entities/genre.entity";
 
 export class MovieRepository {
   private readonly movieRepository: Repository<Movie>;
@@ -73,6 +74,17 @@ export class MovieRepository {
     if (hasChanges) {
       await this.movieRepository.update(movie.id, updatedMovie);
     }
+  }
+
+  async updateGenres(movie: Movie, genres: Genre[]): Promise<void> {
+    const updatedMovie = await this.movieRepository.findOneBy({
+      id: movie.id,
+    });
+    if (!updatedMovie) {
+      throw new Error("Movie not found");
+    }
+    updatedMovie.genres = genres;
+    await this.movieRepository.save(updatedMovie);
   }
 
   async saveMovie(movie: Movie): Promise<Movie> {

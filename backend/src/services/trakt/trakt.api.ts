@@ -125,7 +125,6 @@ export class TraktApi {
     const page = Number(response.headers.get("x-pagination-page"));
     const limit = Number(response.headers.get("x-pagination-limit"));
     const total = Number(response.headers.get("x-pagination-item-count"));
-    console.log(response.headers);
 
     return {
       page,
@@ -152,7 +151,6 @@ export class TraktApi {
       {},
       "UNAUTHED_API_GET_LIMIT",
     );
-    console.log(response);
     return response.items.map((item) => item.list);
   }
 

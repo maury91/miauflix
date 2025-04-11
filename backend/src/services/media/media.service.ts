@@ -4,15 +4,28 @@ import { Movie } from "@entities/movie.entity";
 import { MovieMediaSummary } from "@services/tmdb/tmdb.types";
 import { MovieRepository } from "@repositories/movie.repository";
 import { TVShowRepository } from "@repositories/tvshow.repository";
+import { GenreRepository } from "@repositories/genre.repository";
+import { Genre } from "@entities/genre.entity";
+import { TVShow } from "@entities/tvshow.entity";
+import { GenreWithLanguages, TranslatedMedia } from "./media.types";
+
+// ToDo: Move to configuration
+const supportedLanguages = ["en"];
 
 export class MediaService {
   private readonly tmdbApi = new TMDBApi();
   private readonly movieRepository: MovieRepository;
   private readonly tvShowRepository: TVShowRepository;
+  private readonly genreRepository: GenreRepository;
+  private genreCache = new Map<number, GenreWithLanguages>();
 
-  constructor(private readonly db: Database) {
+  constructor(
+    db: Database,
+    private readonly defaultLanguage: string = "en",
+  ) {
     this.movieRepository = db.getMovieRepository();
     this.tvShowRepository = db.getTVShowRepository();
+    this.genreRepository = db.getGenreRepository();
   }
 
   public async getMovie(
@@ -30,6 +43,8 @@ export class MediaService {
           (translation) => translation.data.runtime > 0,
         )?.data.runtime ??
         0;
+      const genresIds = movieDetails.genres.map((genre) => genre.id);
+      const genres = await this.getGenres(genresIds);
 
       movie = await this.movieRepository.create({
         imdbId: movieDetails.imdb_id,
@@ -41,7 +56,7 @@ export class MediaService {
         poster: movieDetails.poster_path,
         backdrop: movieDetails.backdrop_path,
         logo: movieDetails.logo_path,
-        genres: movieDetails.genres.map((genre) => genre.name),
+        genres,
         runtime,
         popularity: movieDetails.popularity,
         rating: movieDetails.vote_average,
@@ -61,6 +76,8 @@ export class MediaService {
       );
     }
     if (movieSummary) {
+      const genres = await this.getGenres(movieSummary.genres);
+
       await this.movieRepository.checkForChangesAndUpdate(movie, {
         tmdbId: movieSummary.id,
         title: movieSummary.title,
@@ -68,19 +85,27 @@ export class MediaService {
         releaseDate: movieSummary.release_date,
         poster: movieSummary.poster_path,
         backdrop: movieSummary.backdrop_path,
-        genres: movieSummary.genres,
         popularity: movieSummary.popularity,
       });
+
+      if (
+        movie.genres.map((genre) => genre.id).toString() !== genres.toString()
+      ) {
+        await this.movieRepository.updateGenres(movie, genres);
+      }
     }
     return movie;
   }
 
-  public async getTVShow(showId: number) {
+  public async getTVShow(showId: number): Promise<TVShow> {
     // Check if the TV show is available in the local DB
     let show = await this.tvShowRepository.findByTMDBId(showId);
     if (!show) {
       // If not, fetch from TMDB and save it to the local DB
       const showDetails = await this.tmdbApi.getTVShowDetails(showId);
+      const genresIds = showDetails.genres.map((genre) => genre.id);
+      const genres = await this.getGenres(genresIds);
+
       show = await this.tvShowRepository.create({
         imdbId: showDetails.external_ids.imdb_id || "",
         tmdbId: showDetails.id,
@@ -92,7 +117,7 @@ export class MediaService {
         tagline: showDetails.tagline,
         type: showDetails.type,
         inProduction: showDetails.in_production,
-        genres: showDetails.genres.map((genre) => genre.name),
+        genres,
         firstAirDate: showDetails.first_air_date,
         episodeRunTime: showDetails.episode_run_time,
       });
@@ -126,13 +151,15 @@ export class MediaService {
       const existingMovie = await this.movieRepository.findByTMDBId(movie.id);
       if (existingMovie) {
         const movieDetails = await this.tmdbApi.getMovieDetails(movie.id);
+        const genresIds = movieDetails.genres.map((genre: any) => genre.id);
+        const genres = await this.getGenres(genresIds);
         await this.movieRepository.checkForChangesAndUpdate(existingMovie, {
           title: movieDetails.title,
           overview: movieDetails.overview,
           releaseDate: movieDetails.release_date,
           poster: movieDetails.poster_path,
           backdrop: movieDetails.backdrop_path,
-          genres: movieDetails.genres.map((genre: any) => genre.name),
+          genres,
         });
 
         await Promise.all(
@@ -153,6 +180,8 @@ export class MediaService {
       const existingShow = await this.tvShowRepository.findByTMDBId(show.id);
       if (existingShow) {
         const showDetails = await this.tmdbApi.getTVShowDetails(show.id);
+        const genresIds = showDetails.genres.map((genre: any) => genre.id);
+        const genres = await this.getGenres(genresIds);
         await this.tvShowRepository.checkForChangesAndUpdate(existingShow, {
           name: showDetails.name,
           overview: showDetails.overview,
@@ -165,7 +194,7 @@ export class MediaService {
           inProduction: showDetails.in_production,
           episodeRunTime: showDetails.episode_run_time,
           imdbId: showDetails.external_ids.imdb_id || "",
-          genres: showDetails.genres.map((genre) => genre.name),
+          genres,
         });
 
         await Promise.all(
@@ -180,5 +209,168 @@ export class MediaService {
         );
       }
     }
+  }
+
+  public async mediasWithLanguage(
+    medias: (Movie | TVShow)[],
+    language: string,
+  ): Promise<TranslatedMedia[]> {
+    const ids = [
+      ...new Set<number>(
+        medias.flatMap((media) => media.genres.map((genre) => genre.id)),
+      ),
+    ];
+    const genres = await this.getGenres(ids, [language]);
+    const genreMap = genres.reduce(
+      (acc, genre) => {
+        const translation = genre.translations.find(
+          (translation) => translation.language === language,
+        );
+        if (translation) {
+          acc[genre.id] = translation.name;
+        } else {
+          const defaultTranslation = genre.translations.find(
+            (translation) => translation.language === this.defaultLanguage,
+          );
+          if (defaultTranslation) {
+            acc[genre.id] = defaultTranslation.name;
+          } else if (genre.translations.length > 0) {
+            acc[genre.id] = genre.translations[0].name;
+          } else {
+            acc[genre.id] = `Genre ${genre.id}`;
+          }
+        }
+        return acc;
+      },
+      {} as Record<number, string>,
+    );
+
+    return medias.map((media) => {
+      if (media instanceof Movie) {
+        const { genres, translations, ...movie } = media;
+        const translation = translations.find(
+          (translation) => translation.language === language,
+        );
+        const translatedGenres = genres.map((genre) => genreMap[genre.id]);
+        if (translation) {
+          return {
+            ...movie,
+            genres: translatedGenres,
+            title: translation.title || media.title,
+            overview: translation.overview || media.overview,
+            tagline: translation.tagline || media.tagline,
+          };
+        }
+        return {
+          ...movie,
+          genres: translatedGenres,
+        };
+      }
+      const { genres, translations, ...tvShow } = media;
+      const translation = translations.find(
+        (translation) => translation.language === language,
+      );
+      const translatedGenres = genres.map((genre) => genreMap[genre.id]);
+      if (translation) {
+        return {
+          ...tvShow,
+          genres: translatedGenres,
+          name: translation.name || media.name,
+          overview: translation.overview || media.overview,
+          tagline: translation.tagline || media.tagline,
+        };
+      }
+      return {
+        ...tvShow,
+        genres: translatedGenres,
+      };
+    });
+  }
+
+  private async getGenres(
+    ids: number[],
+    additionalLanguages: string[] = [],
+  ): Promise<Genre[]> {
+    await this.ensureGenres(ids, additionalLanguages);
+
+    return ids.map((id) => {
+      const genre = this.genreCache.get(id);
+      if (genre) {
+        return genre;
+      }
+      throw new Error(`Genre with id ${id} not found`);
+    });
+  }
+
+  private async ensureGenres(
+    ids: number[],
+    additionalLanguages: string[] = [],
+  ): Promise<boolean> {
+    const languages = [...supportedLanguages, ...additionalLanguages];
+    const incompleteLanguagesBeforeCacheRefresh = languages.filter((language) =>
+      ids.some((id) => !this.genreCache.get(id)?.languages.includes(language)),
+    );
+
+    if (incompleteLanguagesBeforeCacheRefresh.length === 0) {
+      return false;
+    }
+
+    const allGenres = await this.genreRepository.findAll();
+    for (const genre of allGenres) {
+      this.genreCache.set(genre.id, {
+        ...genre,
+        languages: genre.translations.map(
+          (translation) => translation.language,
+        ),
+      });
+    }
+
+    const incompleteLanguagesAfterCacheRefresh = languages.filter((language) =>
+      ids.some((id) => !this.genreCache.get(id)?.languages.includes(language)),
+    );
+
+    // Update the genres for all the incomplete languages
+    for (const language of incompleteLanguagesAfterCacheRefresh) {
+      const [movieGenres, tvShowGenres] = await Promise.all([
+        this.tmdbApi.getMovieGenres(language),
+        this.tmdbApi.getTVShowGenres(language),
+      ]);
+      for (const apiGenre of [...movieGenres.genres, ...tvShowGenres.genres]) {
+        if (apiGenre.name) {
+          const genre = await this.genreRepository.createOrGetGenre(
+            apiGenre.id,
+          );
+          const cachedGenre = this.genreCache.get(genre.id) ?? {
+            ...genre,
+            translations: [],
+            languages: [],
+          };
+          const translations = cachedGenre.languages.includes(language)
+            ? cachedGenre.translations
+            : [
+                ...cachedGenre.translations,
+                {
+                  id: 0,
+                  genre,
+                  genreId: genre.id,
+                  language,
+                  name: apiGenre.name,
+                },
+              ];
+          this.genreCache.set(genre.id, {
+            ...cachedGenre,
+            translations,
+            languages: translations.map((translation) => translation.language),
+          });
+          await this.genreRepository.createTranslation(
+            genre,
+            apiGenre.name,
+            language,
+          );
+        }
+      }
+    }
+
+    return true;
   }
 }
