@@ -5,6 +5,11 @@ import path from "path";
 import { tmdbConfigurationDefinition } from "@services/tmdb/tmdb.api";
 import { traktConfigurationDefinition } from "@services/trakt/trakt.api";
 import { ServiceConfiguration, VariableInfo } from "src/types/configuration";
+import { isatty } from "tty";
+
+function isNonInteractiveEnvironment() {
+  return !isatty(process.stdout.fd);
+}
 
 const services = {
   TMDB: tmdbConfigurationDefinition,
@@ -128,6 +133,7 @@ async function promptForVariable(
   if ("password" in varInfo && varInfo.password) {
     const passwordValue = await password({
       message: `Enter ${chalk.cyan(varName)}:`,
+      mask: true,
       validate: (input) => {
         if (!input.trim() && varInfo.required) {
           return `${varName} is required`;
@@ -210,8 +216,7 @@ export async function validateConfiguration(): Promise<void> {
   }
 
   if (servicesNeedingConfiguration.size === 0) {
-    console.log(chalk.cyan("All required environment variables are set."));
-    console.log(chalk.cyan("Testing existing configuration..."));
+    console.log(chalk.cyan("Self testing..."));
 
     const invalidServices = await validateExistingConfiguration();
     if (invalidServices.length > 0) {
@@ -224,61 +229,75 @@ export async function validateConfiguration(): Promise<void> {
       for (const invalidService of invalidServices) {
         servicesNeedingConfiguration.add(invalidService);
       }
+    } else {
+      console.log(chalk.green("✅ All services are configured correctly!"));
     }
   }
 
-  console.log(chalk.yellow.bold("⚠️  Missing required environment variables!"));
-  console.log(chalk.cyan("Let's set up your configuration for each service."));
-
-  const changedEnvVariables = new Set<string>();
-  for (const serviceKey of servicesNeedingConfiguration) {
-    const service = services[serviceKey];
-    const envVariablesBefore = Object.keys(service.variables)
-      .map(
-        (varName) =>
-          [varName, process.env[varName]] satisfies [
-            string,
-            string | undefined,
-          ],
-      )
-      .reduce(
-        (acc, [varName, value]) => {
-          acc[varName] = value;
-          return acc;
-        },
-        {} as Record<string, string | undefined>,
+  if (servicesNeedingConfiguration.size > 0) {
+    if (isNonInteractiveEnvironment()) {
+      throw new Error(
+        "Configuration is incomplete and cannot be completed in a non-interactive environment. Please set the required environment variables.",
       );
-    await configureService(service);
+    }
 
-    for (const [varName, value] of Object.entries(service.variables)) {
-      if (
-        value.required &&
-        process.env[varName] !== envVariablesBefore[varName]
-      ) {
-        changedEnvVariables.add(varName);
+    console.log(
+      chalk.yellow.bold("⚠️  Missing required environment variables!"),
+    );
+    console.log(
+      chalk.cyan("Let's set up your configuration for each service."),
+    );
+
+    const changedEnvVariables = new Set<string>();
+    for (const serviceKey of servicesNeedingConfiguration) {
+      const service = services[serviceKey];
+      const envVariablesBefore = Object.keys(service.variables)
+        .map(
+          (varName) =>
+            [varName, process.env[varName]] satisfies [
+              string,
+              string | undefined,
+            ],
+        )
+        .reduce(
+          (acc, [varName, value]) => {
+            acc[varName] = value;
+            return acc;
+          },
+          {} as Record<string, string | undefined>,
+        );
+      await configureService(service);
+
+      for (const [varName, value] of Object.entries(service.variables)) {
+        if (
+          value.required &&
+          process.env[varName] !== envVariablesBefore[varName]
+        ) {
+          changedEnvVariables.add(varName);
+        }
       }
     }
-  }
 
-  // Save configuration if any variables were set
-  if (changedEnvVariables.size > 0) {
-    const saveToEnvFile = await confirm({
-      message: `Would you like to save these values to a ${chalk.cyan(".env")} file?`,
-      default: true,
-    });
+    // Save configuration if any variables were set
+    if (changedEnvVariables.size > 0) {
+      const saveToEnvFile = await confirm({
+        message: `Would you like to save these values to a ${chalk.cyan(".env")} file?`,
+        default: true,
+      });
 
-    if (saveToEnvFile) {
-      const envValues = [...changedEnvVariables].reduce(
-        (acc, varName) => {
-          const value = process.env[varName];
-          if (value) {
-            acc[varName] = value;
-          }
-          return acc;
-        },
-        {} as Record<string, string>,
-      );
-      await saveEnvironmentVariables(envValues);
+      if (saveToEnvFile) {
+        const envValues = [...changedEnvVariables].reduce(
+          (acc, varName) => {
+            const value = process.env[varName];
+            if (value) {
+              acc[varName] = value;
+            }
+            return acc;
+          },
+          {} as Record<string, string>,
+        );
+        await saveEnvironmentVariables(envValues);
+      }
     }
   }
 }
@@ -293,10 +312,7 @@ async function validateExistingConfiguration(): Promise<ServiceKey[]> {
         async ([serviceKey, service]) => {
           // Execute test
           const testResult = await testService(service);
-          return [testResult.success, serviceKey] satisfies [
-            boolean,
-            ServiceKey,
-          ];
+          return [testResult.success, serviceKey] as const;
         },
       ),
     )

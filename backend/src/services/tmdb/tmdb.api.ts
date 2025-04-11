@@ -4,7 +4,7 @@ import type {
   ChangesResponse,
   ConfigurationResponse,
   MovieDetails,
-  MovieDetailsResponse,
+  MovieListResponse,
   MediaSummaryList,
   MovieSummary,
   ShowSeason,
@@ -14,11 +14,18 @@ import type {
   WithTVShowTranslations,
   WithMovieTranslations,
   WithMovieImages,
+  MediaSummary,
+  TVShowListResponse,
+  MediaListResponse,
+  PagedResponse,
+  Paged,
+  Genre,
 } from "./tmdb.types";
 import { Cacheable } from "../../utils/cacheable.util";
 import { ENV } from "../../constants";
 import { RateLimiter } from "../../utils/rateLimiter";
 import { ServiceConfiguration } from "src/types/configuration";
+import { GenreRepository } from "../../repositories/genre.repository";
 
 export interface MediaImages {
   poster: string;
@@ -92,6 +99,15 @@ export class TMDBApi {
   public async test() {
     await this.get(`${this.apiUrl}/configuration`);
     return true;
+  }
+
+  private paged<T>(input: PagedResponse<T>): Paged<T> {
+    return {
+      page: input.page,
+      items: input.results,
+      totalPages: input.total_pages,
+      totalItems: input.total_results,
+    };
   }
 
   @Cacheable(26e8 /* 30 days */)
@@ -192,119 +208,96 @@ export class TMDBApi {
     };
   }
 
+  private async getList<
+    T extends MediaListResponse | MovieListResponse | TVShowListResponse,
+  >(url: string): Promise<MediaSummaryList> {
+    const response = await this.get<T>(url);
+    const results = await Promise.all(
+      response.results.map(async (media): Promise<MediaSummary> => {
+        const [poster_path, backdrop_path] = await Promise.all([
+          media.poster_path ? this.completeImageUrl(media.poster_path) : "",
+          media.backdrop_path ? this.completeImageUrl(media.backdrop_path) : "",
+        ]);
+
+        if ("name" in media) {
+          const { genre_ids, ...rest } = media;
+          return {
+            ...rest,
+            genres: genre_ids,
+            poster_path,
+            backdrop_path,
+            _type: "tv",
+          };
+        }
+
+        const { genre_ids, ...rest } = media;
+        return {
+          ...rest,
+          genres: genre_ids,
+          poster_path,
+          backdrop_path,
+          _type: "movie",
+        };
+      }),
+    );
+    return this.paged({
+      ...response,
+      results,
+    });
+  }
+
   @Cacheable(36e5 /* 1 hour */, true)
   public async getPopularMovies(page = 1): Promise<MediaSummaryList> {
-    const url = `${this.apiUrl}/discover/movie?include_adult=false&include_video=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`;
-    const [response, genreMap] = await Promise.all([
-      this.get<MovieDetailsResponse>(url),
-      this.getMovieGenresMap(),
-    ]);
-    return {
-      ...response,
-      results: await Promise.all(
-        response.results.map(async ({ genre_ids, ...movie }) => ({
-          ...movie,
-          genres: genre_ids.map((id) => genreMap[id]),
-          poster_path: await this.completeImageUrl(movie.poster_path),
-          backdrop_path: await this.completeImageUrl(movie.backdrop_path),
-          _type: "movie",
-        })),
-      ),
-    };
+    return this.getList<MovieListResponse>(
+      `${this.apiUrl}/discover/movie?include_adult=false&include_video=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`,
+    );
   }
 
   @Cacheable(36e5 /* 1 hour */, true)
   public async getTopRatedMovies(page = 1): Promise<MediaSummaryList> {
-    const url = `${this.apiUrl}/movie/top_rated?language=${this.language}&page=${page}`;
-    const [response, genreMap] = await Promise.all([
-      this.get<MovieDetailsResponse>(url),
-      this.getMovieGenresMap(),
-    ]);
-
-    return {
-      ...response,
-      results: await Promise.all(
-        response.results.map(async ({ genre_ids, ...movie }) => ({
-          ...movie,
-          genres: genre_ids.map((id) => genreMap[id]),
-          poster_path: await this.completeImageUrl(movie.poster_path),
-          backdrop_path: await this.completeImageUrl(movie.backdrop_path),
-          _type: "movie",
-        })),
-      ),
-    };
+    return this.getList<MovieListResponse>(
+      `${this.apiUrl}/movie/top_rated?language=${this.language}&page=${page}`,
+    );
   }
 
   @Cacheable(36e5 /* 1 hour */)
   public async getTrending(
     timeWindow: "day" | "week" = "week",
-  ): Promise<(MovieSummary | TVShowSummary)[]> {
-    const url = `${this.apiUrl}/trending/all/${timeWindow}?language=${this.language}`;
-    const response = await this.get<{
-      results: (MovieSummary | TVShowSummary)[];
-    }>(url);
-    return Promise.all(
-      response.results.map(async (item) => ({
-        ...item,
-        poster_path: await this.completeImageUrl(item.poster_path),
-        backdrop_path: await this.completeImageUrl(item.backdrop_path),
-      })),
+  ): Promise<MediaSummaryList> {
+    return this.getList<MediaListResponse>(
+      `${this.apiUrl}/trending/all/${timeWindow}?language=${this.language}`,
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
   public async getTrendingMovies(
     timeWindow: "day" | "week" = "week",
-  ): Promise<MovieSummary[]> {
-    const url = `${this.apiUrl}/trending/movie/${timeWindow}?language=${this.language}`;
-    const response = await this.get<{ results: MovieSummary[] }>(url);
-    return Promise.all(
-      response.results.map(async (movie) => ({
-        ...movie,
-        poster_path: await this.completeImageUrl(movie.poster_path),
-        backdrop_path: await this.completeImageUrl(movie.backdrop_path),
-      })),
+  ): Promise<MediaSummaryList> {
+    return this.getList<MovieListResponse>(
+      `${this.apiUrl}/trending/movie/${timeWindow}?language=${this.language}`,
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
   public async getTrendingShows(
     timeWindow: "day" | "week" = "week",
-  ): Promise<TVShowSummary[]> {
-    const url = `${this.apiUrl}/trending/tv/${timeWindow}?language=${this.language}`;
-    const response = await this.get<{ results: TVShowSummary[] }>(url);
-    return Promise.all(
-      response.results.map(async (show) => ({
-        ...show,
-        poster_path: await this.completeImageUrl(show.poster_path),
-        backdrop_path: await this.completeImageUrl(show.backdrop_path),
-      })),
+  ): Promise<MediaSummaryList> {
+    return this.getList<TVShowListResponse>(
+      `${this.apiUrl}/trending/tv/${timeWindow}?language=${this.language}`,
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  public async getPopularShows(page = 1): Promise<TVShowSummary[]> {
-    const url = `${this.apiUrl}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`;
-    const response = await this.get<{ results: TVShowSummary[] }>(url);
-    return Promise.all(
-      response.results.map(async (show) => ({
-        ...show,
-        poster_path: await this.completeImageUrl(show.poster_path),
-        backdrop_path: await this.completeImageUrl(show.backdrop_path),
-      })),
+  public async getPopularShows(page = 1): Promise<MediaSummaryList> {
+    return this.getList<TVShowListResponse>(
+      `${this.apiUrl}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`,
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  public async getTopRatedShows(): Promise<TVShowSummary[]> {
-    const url = `${this.apiUrl}/tv/top_rated?language=${this.language}`;
-    const response = await this.get<{ results: TVShowSummary[] }>(url);
-    return Promise.all(
-      response.results.map(async (show) => ({
-        ...show,
-        poster_path: await this.completeImageUrl(show.poster_path),
-        backdrop_path: await this.completeImageUrl(show.backdrop_path),
-      })),
+  public async getTopRatedShows(): Promise<MediaSummaryList> {
+    return this.getList<TVShowListResponse>(
+      `${this.apiUrl}/tv/top_rated?language=${this.language}`,
     );
   }
 
@@ -336,12 +329,7 @@ export class TMDBApi {
     const url = `${this.apiUrl}/movie/changes?start_date=${startDateStr}&end_date=${endDateStr}&page=${page}&language=${this.language}`;
     const response = await this.get<ChangesResponse>(url);
 
-    return {
-      items: response.results,
-      page: response.page,
-      totalPages: response.total_pages,
-      totalResults: response.total_results,
-    };
+    return this.paged(response);
   }
 
   /**
@@ -363,12 +351,7 @@ export class TMDBApi {
     const url = `${this.apiUrl}/tv/changes?start_date=${startDateStr}&end_date=${endDateStr}&page=${page}&language=${this.language}`;
     const response = await this.get<ChangesResponse>(url);
 
-    return {
-      items: response.results,
-      page: response.page,
-      totalPages: response.total_pages,
-      totalResults: response.total_results,
-    };
+    return this.paged(response);
   }
 
   /**
@@ -434,41 +417,19 @@ export class TMDBApi {
   }
 
   @Cacheable(172800000 /* 2 days */)
-  public async getMovieGenres(): Promise<{
-    genres: { id: number; name: string }[];
+  public async getMovieGenres(language: string = this.language): Promise<{
+    genres: Genre[];
   }> {
-    const url = `${this.apiUrl}/genre/movie/list?language=${this.language}`;
-    return this.get<{ genres: { id: number; name: string }[] }>(url);
-  }
-
-  private async getMovieGenresMap() {
-    const data = await this.getMovieGenres();
-    return data.genres.reduce(
-      (acc, genre) => {
-        acc[genre.id] = genre.name;
-        return acc;
-      },
-      {} as Record<number, string>,
-    );
+    const url = `${this.apiUrl}/genre/movie/list?language=${language}`;
+    return this.get<{ genres: Genre[] }>(url);
   }
 
   @Cacheable(172800000 /* 2 days */)
-  public async getTVShowGenres(): Promise<{
-    genres: { id: number; name: string }[];
+  public async getTVShowGenres(language: string = this.language): Promise<{
+    genres: Genre[];
   }> {
-    const url = `${this.apiUrl}/genre/tv/list?language=${this.language}`;
-    return this.get<{ genres: { id: number; name: string }[] }>(url);
-  }
-
-  private async getTVShowGenresMap() {
-    const data = await this.getTVShowGenres();
-    return data.genres.reduce(
-      (acc, genre) => {
-        acc[genre.id] = genre.name;
-        return acc;
-      },
-      {} as Record<number, string>,
-    );
+    const url = `${this.apiUrl}/genre/tv/list?language=${language}`;
+    return this.get<{ genres: Genre[] }>(url);
   }
 }
 
@@ -497,6 +458,7 @@ export const tmdbConfigurationDefinition: ServiceConfiguration = {
       // Use test because it doesn't use cache
       await tmdbApi.test();
     } catch (error: any) {
+      console.log(error);
       if ("status" in error) {
         if (error.status === 401) {
           throw new Error(`Invalid Access Token`);

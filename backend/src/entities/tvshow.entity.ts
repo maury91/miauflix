@@ -5,10 +5,14 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
   type Relation,
+  ManyToOne,
+  Unique,
 } from "typeorm";
 import { Season } from "./season.entity";
-import { TVShowTranslation } from "./tvshow.translations.entity";
+import { Genre } from "./genre.entity";
 
 @Entity()
 export class TVShow {
@@ -51,8 +55,9 @@ export class TVShow {
   @Column("simple-array")
   episodeRunTime: number[];
 
-  @Column("simple-array")
-  genres: string[];
+  @ManyToMany(() => Genre)
+  @JoinTable()
+  genres: Relation<Genre>[];
 
   @Column({
     type: "float",
@@ -68,6 +73,34 @@ export class TVShow {
     (tvShowTranslation) => tvShowTranslation.tvShow,
   )
   translations: Relation<TVShowTranslation>[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
+
+@Entity()
+@Unique(["tvShow", "language"])
+export class TVShowTranslation {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ManyToOne(() => TVShow, (tvShow) => tvShow.translations)
+  tvShow: Relation<TVShow>;
+
+  @Column()
+  language: string;
+
+  @Column()
+  name: string;
+
+  @Column("text")
+  overview: string;
+
+  @Column()
+  tagline: string;
 
   @CreateDateColumn()
   createdAt: Date;

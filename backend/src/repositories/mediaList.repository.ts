@@ -1,6 +1,5 @@
 import { DataSource, Repository } from "typeorm";
 import { MediaList } from "../entities/list.entity";
-import { Database } from "@database/database";
 
 export class MediaListRepository {
   private readonly repository: Repository<MediaList>;
@@ -16,8 +15,16 @@ export class MediaListRepository {
   async findBySlug(slug: string, preload: boolean): Promise<MediaList | null> {
     return this.repository.findOne({
       relations: {
-        movies: preload,
-        tvShows: preload,
+        movies: preload
+          ? {
+              genres: true,
+            }
+          : false,
+        tvShows: preload
+          ? {
+              genres: true,
+            }
+          : false,
         seasons: preload,
       },
       where: { slug },
