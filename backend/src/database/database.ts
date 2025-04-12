@@ -7,12 +7,18 @@ import { TVShowTranslation } from "@entities/tvshow.entity";
 import { Season } from "@entities/season.entity";
 import { Episode } from "@entities/episode.entity";
 import { MediaList } from "@entities/list.entity";
+import { User } from "@entities/user.entity";
+import { RefreshToken } from "@entities/refresh-token.entity";
+import { AuditLog } from "@entities/audit-log.entity";
 
 import { MediaListRepository } from "@repositories/mediaList.repository";
 import { MovieRepository } from "@repositories/movie.repository";
 import { TVShowRepository } from "@repositories/tvshow.repository";
 import { Genre, GenreTranslation } from "@entities/genre.entity";
 import { GenreRepository } from "@repositories/genre.repository";
+import { UserRepository } from "@repositories/user.repository";
+import { RefreshTokenRepository } from "@repositories/refresh-token.repository";
+import { AuditLogRepository } from "@repositories/audit-log.repository";
 
 export class Database {
   private readonly dataSource: DataSource;
@@ -20,6 +26,9 @@ export class Database {
   private movieRepository: MovieRepository;
   private tvShowRepository: TVShowRepository;
   private genreRepository: GenreRepository;
+  private userRepository: UserRepository;
+  private refreshTokenRepository: RefreshTokenRepository;
+  private auditLogRepository: AuditLogRepository;
 
   constructor() {
     this.dataSource = new DataSource({
@@ -35,6 +44,9 @@ export class Database {
         MediaList,
         Genre,
         GenreTranslation,
+        User,
+        RefreshToken,
+        AuditLog,
       ],
       synchronize: true,
     });
@@ -46,6 +58,9 @@ export class Database {
     this.movieRepository = new MovieRepository(this.dataSource);
     this.tvShowRepository = new TVShowRepository(this.dataSource);
     this.genreRepository = new GenreRepository(this.dataSource);
+    this.userRepository = new UserRepository(this.dataSource);
+    this.refreshTokenRepository = new RefreshTokenRepository(this.dataSource);
+    this.auditLogRepository = new AuditLogRepository(this.dataSource);
   }
 
   public getMovieRepository() {
@@ -70,5 +85,17 @@ export class Database {
 
   public getGenreRepository() {
     return this.genreRepository;
+  }
+
+  public getUserRepository() {
+    return this.userRepository;
+  }
+
+  public getRefreshTokenRepository() {
+    return this.refreshTokenRepository;
+  }
+
+  public getAuditLogRepository() {
+    return this.auditLogRepository;
   }
 }

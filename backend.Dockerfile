@@ -13,7 +13,8 @@ COPY frontend/package.json ./frontend/
 RUN bun install
 
 # Expose the port the app runs on
-EXPOSE 9229
+EXPOSE 3000
+EXPOSE 6499
 
 # Start the backend service in debug mode
-CMD ["bun", "--inspect", "--pwd", "backend", "src/app.ts"]
+CMD ["bun", "--inspect", "--watch", "backend/src/app.ts"]

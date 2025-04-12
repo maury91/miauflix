@@ -10,21 +10,27 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@elysiajs/server-timing": "^1.2.1",
     "@inquirer/prompts": "^7.4.0",
     "@keyv/sqlite": "^4.0.1",
+    "bcrypt": "^5.1.1",
     "cache-manager": "^6.4.1",
     "cacheable": "^1.8.9",
     "chalk": "^5.4.1",
     "dotenv": "^16.0.3",
     "elysia": "^1.2.25",
+    "jose": "^6.0.10",
     "keyv": "^5.3.1",
     "node-fetch": "^3.2.10",
     "sqlite3": "^5.0.11",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.10",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cache-manager": "^5.0.0",
     "@types/node-fetch": "^3.0.3",
+    "@types/uuid": "^10.0.0",
     "nodemon": "^2.0.20",
     "typescript": "^4.5.5"
   },
