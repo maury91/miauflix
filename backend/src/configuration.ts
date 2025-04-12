@@ -4,6 +4,7 @@ import { writeFileSync } from "fs";
 import path from "path";
 import { tmdbConfigurationDefinition } from "@services/tmdb/tmdb.api";
 import { traktConfigurationDefinition } from "@services/trakt/trakt.api";
+import { jwtConfigurationDefinition } from "@services/auth/auth.service";
 import { ServiceConfiguration, VariableInfo } from "src/types/configuration";
 import { isatty } from "tty";
 
@@ -14,6 +15,7 @@ function isNonInteractiveEnvironment() {
 const services = {
   TMDB: tmdbConfigurationDefinition,
   TRAKT: traktConfigurationDefinition,
+  JWT: jwtConfigurationDefinition,
 };
 
 type ServiceKey = keyof typeof services;

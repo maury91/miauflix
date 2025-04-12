@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backend:
@@ -9,5 +9,6 @@ services:
       - ./:/usr/src/app/
       - /usr/src/app/node_modules
     ports:
-      - "9229:9229"
-    command: ["bun", "--inspect", "backend/src/app.ts"]
+      - "3000:3000"
+      - "6499:6499"
+    command: ["bun", "--inspect", "--watch", "backend/src/app.ts"]
