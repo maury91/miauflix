@@ -40,7 +40,14 @@ export class AuditLogService {
       severity,
       description,
       userEmail,
-      metadata,
+      metadata: {
+        ...(request && {
+          method: request.method,
+          query: Object.fromEntries(new URL(request.url).searchParams),
+          headers: Object.fromEntries(request.headers),
+        }),
+        ...metadata,
+      },
       ipAddress,
       userAgent,
     };
@@ -155,6 +162,26 @@ export class AuditLogService {
       eventType: AuditEventType.RATE_LIMIT_EXCEEDED,
       severity: AuditEventSeverity.WARNING,
       description: `Rate limit of ${limit} exceeded`,
+      ...rest,
+    });
+  }
+
+  /**
+   * Log an unauthorized access attempt
+   */
+  async logUnauthorizedAccess(params: {
+    userEmail?: string;
+    request: Context["request"];
+    server: Context["server"];
+    reason?: string;
+    metadata?: Record<string, any>;
+  }): Promise<void> {
+    const { reason, ...rest } = params;
+
+    await this.logSecurityEvent({
+      eventType: AuditEventType.UNAUTHORIZED_ACCESS,
+      severity: AuditEventSeverity.WARNING,
+      description: reason || "Unauthorized access attempt",
       ...rest,
     });
   }

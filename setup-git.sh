@@ -3,15 +3,33 @@
 # Exit on error
 set -e
 
-echo "Setting up Git with GitHub CLI in dev container..."
+# Detect if running in dev container
+if [ -f /.dockerenv ] || [ -d /.devcontainer ]; then
+    IS_DEV_CONTAINER=true
+    echo "Detected dev container environment"
+else
+    IS_DEV_CONTAINER=false
+    echo "Detected local environment"
+fi
+
+echo "Setting up Git with GitHub CLI..."
 
 # Check if GitHub CLI is installed
 if ! command -v gh &> /dev/null; then
     echo "GitHub CLI not found. Installing..."
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    apt update
-    apt install gh -y
+    if [ "$IS_DEV_CONTAINER" = true ]; then
+        # Dev container installation (no sudo needed)
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        apt update
+        apt install gh -y
+    else
+        # Local environment installation (requires sudo)
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt update
+        sudo apt install gh -y
+    fi
     echo "GitHub CLI installed successfully."
 else
     echo "GitHub CLI is already installed."
@@ -50,4 +68,4 @@ echo "Verifying Git setup..."
 git pull
 
 echo "Git setup completed successfully!"
-echo "You can now use Git commands in your dev container." 
+echo "You can now use Git commands."

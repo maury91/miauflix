@@ -18,13 +18,14 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
-      "@entities/*": ["src/entities/*"],
-      "@services/*": ["src/services/*"],
-      "@repositories/*": ["src/repositories/*"],
       "@database/*": ["src/database/*"],
-      "@types/*": ["src/types/*"],
+      "@entities/*": ["src/entities/*"],
+      "@errors/*": ["src/errors/*"],
       "@middleware/*": ["src/middleware/*"],
-      "@routes/*": ["src/routes/*"]
+      "@repositories/*": ["src/repositories/*"],
+      "@routes/*": ["src/routes/*"],
+      "@services/*": ["src/services/*"],
+      "@types/*": ["src/types/*"]
     }
   },
   "include": ["src/**/*"],
