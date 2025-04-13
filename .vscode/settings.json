@@ -15,6 +15,5 @@
   },
   "prettier.requireConfig": true,
   "terminal.integrated.defaultProfile.linux": "zsh",
-  "git.enableSmartCommit": true,
-  "git.ssh.useSSHAgent": true
+  "git.enableSmartCommit": true
 }

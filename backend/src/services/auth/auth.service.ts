@@ -1,6 +1,5 @@
 import { Database } from "@database/database";
 import { User, UserRole } from "@entities/user.entity";
-import { RefreshToken } from "@entities/refresh-token.entity";
 import { compare, hash } from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { JWTPayload, SignJWT, jwtVerify } from "jose";
@@ -13,6 +12,7 @@ import { hostname } from "os";
 import { AuditLogService } from "@services/audit-log.service";
 import { AuditEventType, AuditEventSeverity } from "@entities/audit-log.entity";
 import { generateSecurePassword } from "../../utils/password.util";
+import { InvalidTokenError } from "@errors/auth.errors";
 
 export class AuthService {
   private readonly userRepository: UserRepository;
@@ -150,24 +150,57 @@ export class AuthService {
       .sign(this.refreshSecretKey);
   }
 
-  async verifyAccessToken(token: string): Promise<JWTPayload> {
+  async verifyAccessToken(token: string) {
     try {
-      const { payload } = await jwtVerify(token, this.secretKey, {
-        issuer: this.issuer,
-        audience: this.audience,
-      });
+      const { payload } = await jwtVerify<JWTPayload & { userId: string }>(
+        token,
+        this.secretKey,
+        {
+          issuer: this.issuer,
+          audience: this.audience,
+        },
+      );
+
+      if (!payload.userId || !payload.email || !payload.role) {
+        throw new InvalidTokenError();
+      }
 
       return payload;
     } catch (error) {
-      throw new Error("Invalid token");
+      throw new InvalidTokenError();
     }
   }
 
-  async refreshAccessToken(
-    refreshToken: string,
-  ): Promise<{ accessToken: string; refreshToken: string } | null> {
-    const tokenEntity =
-      await this.refreshTokenRepository.findByToken(refreshToken);
+  async verifyRefreshToken(refreshToken: string) {
+    try {
+      const { payload } = await jwtVerify<JWTPayload & { token: string }>(
+        refreshToken,
+        this.refreshSecretKey,
+        {
+          issuer: this.issuer,
+          audience: this.audience,
+        },
+      );
+
+      if (!payload.token) {
+        throw new InvalidTokenError();
+      }
+
+      return payload;
+    } catch (error) {
+      throw new InvalidTokenError();
+    }
+  }
+
+  async refreshAccessToken(refreshToken: string): Promise<{
+    tokens: { accessToken: string; refreshToken: string };
+    email: string;
+  } | null> {
+    const refreshTokenPayload = await this.verifyRefreshToken(refreshToken);
+
+    const tokenEntity = await this.refreshTokenRepository.findByToken(
+      refreshTokenPayload.token,
+    );
 
     if (!tokenEntity || tokenEntity.expiresAt < new Date()) {
       return null;
@@ -179,16 +212,25 @@ export class AuthService {
     // Delete the old refresh token
     await this.refreshTokenRepository.delete(tokenEntity.id);
 
-    return newTokens;
+    return {
+      tokens: {
+        accessToken: newTokens.accessToken,
+        refreshToken: newTokens.refreshToken,
+      },
+      email: tokenEntity.user.email,
+    };
   }
 
-  async logout(refreshToken: string): Promise<void> {
+  async logout(refreshToken: string): Promise<User | null> {
     const tokenEntity =
       await this.refreshTokenRepository.findByToken(refreshToken);
 
     if (tokenEntity) {
       await this.refreshTokenRepository.delete(tokenEntity.id);
+      return tokenEntity.user;
     }
+
+    return null;
   }
 }
 

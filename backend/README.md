@@ -97,7 +97,7 @@
 - [x] Basic route structure
 - [x] Authentication middleware
 - [x] Role-based middleware
-- [ ] Rate limiting
+- [x] Rate limiting
 - [ ] API documentation (Swagger/OpenAPI)
 - [ ] API versioning
 - [ ] Error handling middleware
@@ -121,7 +121,7 @@
 - [ ] Input sanitization
 - [ ] CORS configuration
 - [ ] Security headers
-- [ ] Rate limiting
+- [x] Rate limiting
 - [ ] DDoS protection
 - [x] Security logging
 - [ ] Vulnerability scanning

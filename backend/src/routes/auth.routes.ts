@@ -2,22 +2,35 @@ import { Elysia, t } from "elysia";
 import { AuthService } from "@services/auth/auth.service";
 import { createAuthMiddleware } from "@middleware/auth.middleware";
 import { UserRole } from "@entities/user.entity";
-import { LoginError } from "src/errors/auth.errors";
+import { InvalidTokenError, LoginError } from "@errors/auth.errors";
+import { AuditLogService } from "@services/audit-log.service";
+import { createRateLimitMiddleware } from "../middleware/rate-limit.middleware";
 
-export const createAuthRoutes = (authService: AuthService) => {
+export const createAuthRoutes = (
+  authService: AuthService,
+  auditLogService: AuditLogService,
+) => {
   return new Elysia()
     .use(createAuthMiddleware(authService))
+    .use(createRateLimitMiddleware(auditLogService))
     .group("/auth", (app) =>
       app
         .post(
           "/login",
-          async ({ body: { email, password }, set }) => {
+          async ({ body: { email, password }, request, server, set }) => {
             const user = await authService.validateUser(email, password);
             if (!user) {
               set.status = 401;
               throw new LoginError(email);
             }
             const tokens = await authService.generateTokens(user);
+
+            await auditLogService.logLoginAttempt({
+              success: true,
+              userEmail: email,
+              request,
+              server,
+            });
             return tokens;
           },
           {
@@ -25,53 +38,61 @@ export const createAuthRoutes = (authService: AuthService) => {
               email: t.String({ format: "email" }),
               password: t.String(),
             }),
-            isPublic: true,
+            rateLimit: 1, // 1 attempt per second
           },
         )
         .post(
           "/refresh",
-          async ({ body }: { body: { refreshToken: string } }) => {
+          async ({ body, request, server, set }) => {
             const { refreshToken } = body;
-            const tokens = await authService.refreshAccessToken(refreshToken);
-            if (!tokens) {
-              throw new Error("Invalid refresh token");
+            const refreshResponse =
+              await authService.refreshAccessToken(refreshToken);
+
+            if (!refreshResponse) {
+              set.status = 401;
+              throw new InvalidTokenError();
             }
-            return tokens;
+
+            await auditLogService.logTokenRefresh({
+              userEmail: refreshResponse.email,
+              request,
+              server,
+            });
+            return refreshResponse.tokens;
           },
           {
             body: t.Object({
               refreshToken: t.String(),
             }),
-            isPublic: true,
+            rateLimit: 0.2, // 1 attempt every 5 seconds
           },
         )
         .post(
           "/logout",
-          async ({ body }: { body: { refreshToken: string } }) => {
+          async ({ body, request, server }) => {
             const { refreshToken } = body;
-            await authService.logout(refreshToken);
+            const user = await authService.logout(refreshToken);
+
+            if (user) {
+              await auditLogService.logTokenInvalidation({
+                userEmail: user.email,
+                request,
+                server,
+                reason: "User logged out",
+              });
+            }
             return { message: "Logged out successfully" };
           },
           {
             body: t.Object({
               refreshToken: t.String(),
             }),
+            rateLimit: 1, // 1 attempt per second
           },
         )
         .post(
           "/users",
-          async ({
-            body,
-            user,
-          }: {
-            body: { email: string; password: string; role: UserRole };
-            user: { role: UserRole };
-          }) => {
-            if (user.role !== UserRole.ADMIN) {
-              throw new Error(
-                "Forbidden: Only administrators can create users",
-              );
-            }
+          async ({ body }) => {
             const { email, password, role } = body;
             const newUser = await authService.createUser(email, password, role);
             return {
@@ -87,6 +108,7 @@ export const createAuthRoutes = (authService: AuthService) => {
               password: t.String({ minLength: 8 }),
               role: t.Enum(UserRole),
             }),
+            rateLimit: 1, // 1 attempt per second
           },
         ),
     );
