@@ -20,3 +20,9 @@ export class AuthError extends Error {
     super("Authentication required");
   }
 }
+
+export class InvalidTokenError extends Error {
+  constructor() {
+    super("Invalid token");
+  }
+}

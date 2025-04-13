@@ -15,6 +15,7 @@ import { createAuthRoutes } from "@routes/auth.routes";
 import { createAuthMiddleware } from "@middleware/auth.middleware";
 import { AuditLogService } from "@services/audit-log.service";
 import { createAuditLogMiddleware } from "@middleware/audit-log.middleware";
+import { createRateLimitMiddleware } from "./middleware/rate-limit.middleware";
 
 const db = new Database();
 
@@ -56,9 +57,16 @@ async function startApp() {
     .use(serverTiming())
     .use(createAuthMiddleware(authService))
     .use(createAuditLogMiddleware(auditLogService))
-    .get("/", () => ({
-      message: "Welcome to the Elysia and TypeScript project!",
-    }))
+    .use(createRateLimitMiddleware(auditLogService))
+    .get(
+      "/health",
+      () => ({
+        message: "Welcome to the Elysia and TypeScript project!",
+      }),
+      {
+        rateLimit: 10, // 10 requests per second
+      },
+    )
     .get(
       "/lists",
       async () => {
@@ -72,6 +80,7 @@ async function startApp() {
       },
       {
         isAuth: true,
+        rateLimit: 5, // 2 requests per second
       },
     )
     .get(
@@ -91,9 +100,10 @@ async function startApp() {
         query: t.Object({
           lang: t.Optional(t.String()),
         }),
+        rateLimit: 10, // 10 request per second
       },
     )
-    .use(createAuthRoutes(authService))
+    .use(createAuthRoutes(authService, auditLogService))
     .listen(3000, () => {
       console.log(`Server is running on http://localhost:3000`);
     });

@@ -4,7 +4,12 @@ import {
   AuditEventType,
   AuditEventSeverity,
 } from "../entities/audit-log.entity";
-import { AuthError, LoginError, RoleError } from "src/errors/auth.errors";
+import {
+  AuthError,
+  InvalidTokenError,
+  LoginError,
+  RoleError,
+} from "src/errors/auth.errors";
 
 export function createAuditLogMiddleware(auditLogService: AuditLogService) {
   return new Elysia({
@@ -27,32 +32,9 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         metadata: { path },
       });
     })
-    .onAfterResponse(
-      { as: "global" },
-      async ({ path, request, response, server, body }) => {
-        switch (path) {
-          case "/auth/login":
-            if (
-              response &&
-              typeof body === "object" &&
-              body &&
-              "email" in body &&
-              typeof body.email === "string"
-            ) {
-              await auditLogService.logLoginAttempt({
-                success: true,
-                userEmail: body.email,
-                request,
-                server,
-              });
-            }
-            break;
-        }
-      },
-    )
-    .onError({ as: "global" }, async ({ request, error, server }) => {
-      console.log("error!", error);
+    .onError({ as: "global" }, async ({ request, error, server, set }) => {
       if (error instanceof LoginError) {
+        set.status = 401;
         await auditLogService.logLoginAttempt({
           success: false,
           userEmail: error.email,
@@ -62,7 +44,8 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         return;
       }
 
-      if (error instanceof AuthError) {
+      if (error instanceof AuthError || error instanceof InvalidTokenError) {
+        set.status = 401;
         await auditLogService.logUnauthorizedAccess({
           request,
           server,
@@ -72,6 +55,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
       }
 
       if (error instanceof RoleError) {
+        set.status = 401;
         await auditLogService.logUnauthorizedAccess({
           request,
           server,
@@ -83,6 +67,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         });
         return;
       }
+
       // Log API errors
       const errorMessage =
         error instanceof Error ? error.message : String(error);
