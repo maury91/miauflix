@@ -14,5 +14,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "prettier.requireConfig": true,
-  "terminal.integrated.defaultProfile.linux": "zsh"
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "git.enableSmartCommit": true,
+  "git.ssh.useSSHAgent": true
 }
