@@ -9,6 +9,10 @@ import { RefreshTokenRepository } from "@repositories/refresh-token.repository";
 import { ENV } from "../../constants";
 import { randomBytes } from "crypto";
 import { ServiceConfiguration } from "../../types/configuration";
+import { hostname } from "os";
+import { AuditLogService } from "@services/audit-log.service";
+import { AuditEventType, AuditEventSeverity } from "@entities/audit-log.entity";
+import { generateSecurePassword } from "../../utils/password.util";
 
 export class AuthService {
   private readonly userRepository: UserRepository;
@@ -18,7 +22,10 @@ export class AuthService {
   private readonly issuer = "miauflix-api";
   private readonly audience = "miauflix-client";
 
-  constructor(private readonly db: Database) {
+  constructor(
+    db: Database,
+    private readonly auditLogService: AuditLogService,
+  ) {
     this.userRepository = db.getUserRepository();
     this.refreshTokenRepository = db.getRefreshTokenRepository();
 
@@ -27,6 +34,30 @@ export class AuthService {
     this.refreshSecretKey = new TextEncoder().encode(
       ENV("REFRESH_TOKEN_SECRET"),
     );
+  }
+
+  /**
+   * Configures initial admin user if none exists
+   */
+  async configureUsers(): Promise<void> {
+    // Check if any admin user exists
+    const adminUsers = await this.userRepository.findByRole(UserRole.ADMIN);
+
+    if (adminUsers.length > 0) {
+      return; // Admin user already exists, no need to create one
+    }
+
+    // Generate admin credentials using hostname
+    const adminEmail = `admin@${hostname()}.local`;
+    const adminPassword = generateSecurePassword();
+
+    // Create the admin user
+    await this.createUser(adminEmail, adminPassword, UserRole.ADMIN);
+
+    console.log(
+      `Created initial admin user with email: ${adminEmail} and password: ${adminPassword}`,
+    );
+    console.log("Please change these credentials after first login.");
   }
 
   async createUser(
@@ -41,11 +72,25 @@ export class AuthService {
 
     const passwordHash = await hash(password, 10);
 
-    return this.userRepository.create({
+    const newUser = await this.userRepository.create({
       email,
       passwordHash,
       role,
     });
+
+    // Create audit log for user creation
+    await this.auditLogService.logSecurityEvent({
+      eventType: AuditEventType.USER_CREATION,
+      severity: AuditEventSeverity.INFO,
+      description: `User created with role: ${role}`,
+      userEmail: email,
+      metadata: {
+        role,
+        isEmailVerified: false,
+      },
+    });
+
+    return newUser;
   }
 
   async validateUser(email: string, password: string): Promise<User | null> {

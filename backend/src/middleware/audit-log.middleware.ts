@@ -4,7 +4,7 @@ import {
   AuditEventType,
   AuditEventSeverity,
 } from "../entities/audit-log.entity";
-import { LoginError } from "src/errors/auth.errors";
+import { AuthError, LoginError, RoleError } from "src/errors/auth.errors";
 
 export function createAuditLogMiddleware(auditLogService: AuditLogService) {
   return new Elysia({
@@ -24,17 +24,32 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         description: `${request.method} ${path}`,
         server,
         request,
-        metadata: {
-          method: request.method,
-          path,
-          query: Object.fromEntries(new URL(request.url).searchParams),
-          headers: Object.fromEntries(request.headers),
-        },
+        metadata: { path },
       });
     })
-    .onAfterResponse(async ({ path, request, response, server }) => {
-      console.log(path, request, response, server);
-    })
+    .onAfterResponse(
+      { as: "global" },
+      async ({ path, request, response, server, body }) => {
+        switch (path) {
+          case "/auth/login":
+            if (
+              response &&
+              typeof body === "object" &&
+              body &&
+              "email" in body &&
+              typeof body.email === "string"
+            ) {
+              await auditLogService.logLoginAttempt({
+                success: true,
+                userEmail: body.email,
+                request,
+                server,
+              });
+            }
+            break;
+        }
+      },
+    )
     .onError({ as: "global" }, async ({ request, error, server }) => {
       console.log("error!", error);
       if (error instanceof LoginError) {
@@ -47,6 +62,27 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         return;
       }
 
+      if (error instanceof AuthError) {
+        await auditLogService.logUnauthorizedAccess({
+          request,
+          server,
+          reason: error.message,
+        });
+        return;
+      }
+
+      if (error instanceof RoleError) {
+        await auditLogService.logUnauthorizedAccess({
+          request,
+          server,
+          reason: error.message,
+          userEmail: error.email,
+          metadata: {
+            role: error.role,
+          },
+        });
+        return;
+      }
       // Log API errors
       const errorMessage =
         error instanceof Error ? error.message : String(error);

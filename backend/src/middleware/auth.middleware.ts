@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import { AuthService } from "@services/auth/auth.service";
 import { UserRole } from "@entities/user.entity";
+import { AuthError, RoleError } from "@errors/auth.errors";
 
 // Define the user type for the auth context
 export interface AuthUser {
@@ -39,11 +40,17 @@ export const createAuthMiddleware = (authService: AuthService) => {
       }
     })
     .macro(({ onBeforeHandle }) => ({
-      isAuth(value: boolean) {
+      isAuth(value: boolean | UserRole) {
         if (value) {
           onBeforeHandle(({ error, user, set }) => {
             if (!user) {
-              throw error(401, "Unauthorized: Authentication required");
+              throw new AuthError();
+            }
+            if (typeof value === "boolean") {
+              return;
+            }
+            if (user.role !== value) {
+              throw new RoleError(value, user.email);
             }
           });
         }

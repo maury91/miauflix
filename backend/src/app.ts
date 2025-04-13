@@ -37,12 +37,14 @@ async function startApp() {
 
   const traktApi = new TraktApi();
   const tmdbApi = new TMDBApi();
-  const authService = new AuthService(db);
+  const auditLogService = new AuditLogService(db);
+  const authService = new AuthService(db, auditLogService);
   const mediaService = new MediaService(db);
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
-  const auditLogService = new AuditLogService(db);
+
+  await authService.configureUsers();
 
   scheduler.scheduleTask(
     "refreshLists",

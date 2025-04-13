@@ -81,6 +81,7 @@ export const createAuthRoutes = (authService: AuthService) => {
             };
           },
           {
+            isAuth: UserRole.ADMIN,
             body: t.Object({
               email: t.String({ format: "email" }),
               password: t.String({ minLength: 8 }),
