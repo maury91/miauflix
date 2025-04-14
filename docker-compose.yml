@@ -7,8 +7,13 @@ services:
       dockerfile: backend.Dockerfile
     volumes:
       - ./:/usr/src/app/
-      - /usr/src/app/node_modules
+      - backend_node_modules:/usr/src/app/node_modules
     ports:
       - "3000:3000"
       - "6499:6499"
+    restart: unless-stopped
     command: ["bun", "--inspect", "--watch", "backend/src/app.ts"]
+
+volumes:
+  backend_node_modules:
+    name: backend_node_modules

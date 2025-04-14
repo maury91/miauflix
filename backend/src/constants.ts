@@ -4,7 +4,7 @@ const requiredEnv = [
   "JWT_SECRET",
   "REFRESH_TOKEN_SECRET",
 ] as const;
-const optionalEnv = ["TMDB_API_URL", "TRAKT_API_URL"] as const;
+const optionalEnv = ["TMDB_API_URL", "TRAKT_API_URL", "CORS_ORIGIN"] as const;
 
 export const ENV = (
   variable: (typeof requiredEnv)[number] | (typeof optionalEnv)[number],

@@ -243,12 +243,14 @@ export const jwtConfigurationDefinition: ServiceConfiguration = {
       example: "a-random-secret-key",
       defaultValue: randomBytes(32).toString("hex"),
       required: true,
+      skipUserInteraction: true,
     },
     REFRESH_TOKEN_SECRET: {
       description: "Secret key for refresh token signing",
       example: "a-random-refresh-secret-key",
       defaultValue: randomBytes(32).toString("hex"),
       required: true,
+      skipUserInteraction: true,
     },
   },
   test: async () => {

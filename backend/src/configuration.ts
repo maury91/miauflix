@@ -12,10 +12,28 @@ function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
 }
 
+const corsConfigurationDefinition: ServiceConfiguration = {
+  name: "CORS",
+  description: "Cross-Origin Resource Sharing configuration",
+  variables: {
+    CORS_ORIGIN: {
+      description: "Allowed origins for CORS (use '*' for all origins)",
+      required: false,
+      defaultValue: "*",
+      example: "http://localhost:3000",
+    },
+  },
+  test: async () => {
+    // No test needed for CORS configuration
+    return;
+  },
+};
+
 const services = {
   TMDB: tmdbConfigurationDefinition,
   TRAKT: traktConfigurationDefinition,
   JWT: jwtConfigurationDefinition,
+  CORS: corsConfigurationDefinition,
 };
 
 type ServiceKey = keyof typeof services;
@@ -206,10 +224,26 @@ async function saveEnvironmentVariables(
  */
 export async function validateConfiguration(): Promise<void> {
   const servicesNeedingConfiguration = new Set<ServiceKey>();
+  const changedEnvVariables = new Set<string>();
+  const autoConfiguredVars = new Set<string>();
 
   for (const [serviceKey, service] of Object.entries(services)) {
     const missingRequiredVars = Object.entries(service.variables)
-      .filter(([varName, varInfo]) => varInfo.required && !process.env[varName])
+      .filter(([varName, varInfo]) => {
+        // Auto-configure variables with skipUserInteraction set to true
+        if (
+          "skipUserInteraction" in varInfo &&
+          varInfo.skipUserInteraction === true
+        ) {
+          if (!process.env[varName]) {
+            process.env[varName] = varInfo.defaultValue;
+            autoConfiguredVars.add(varName);
+            changedEnvVariables.add(varName);
+          }
+          return false; // Cause it's auto-configured is not missing
+        }
+        return varInfo.required && !process.env[varName];
+      })
       .map(([varName]) => varName);
 
     if (missingRequiredVars.length > 0) {
@@ -250,7 +284,6 @@ export async function validateConfiguration(): Promise<void> {
       chalk.cyan("Let's set up your configuration for each service."),
     );
 
-    const changedEnvVariables = new Set<string>();
     for (const serviceKey of servicesNeedingConfiguration) {
       const service = services[serviceKey];
       const envVariablesBefore = Object.keys(service.variables)
@@ -279,27 +312,38 @@ export async function validateConfiguration(): Promise<void> {
         }
       }
     }
+  }
 
-    // Save configuration if any variables were set
-    if (changedEnvVariables.size > 0) {
-      const saveToEnvFile = await confirm({
-        message: `Would you like to save these values to a ${chalk.cyan(".env")} file?`,
-        default: true,
-      });
+  // Save configuration if any variables were set
+  if (changedEnvVariables.size > 0) {
+    if (autoConfiguredVars.size > 0) {
+      console.log(
+        chalk.green(
+          `✅ Auto-configured ${autoConfiguredVars.size} variables: ${Array.from(autoConfiguredVars).join(", ")}`,
+        ),
+      );
+    }
 
-      if (saveToEnvFile) {
-        const envValues = [...changedEnvVariables].reduce(
-          (acc, varName) => {
-            const value = process.env[varName];
-            if (value) {
-              acc[varName] = value;
-            }
-            return acc;
-          },
-          {} as Record<string, string>,
-        );
-        await saveEnvironmentVariables(envValues);
-      }
+    // Don't ask for confirmation in non-interactive environment
+    const saveToEnvFile = isNonInteractiveEnvironment()
+      ? true
+      : await confirm({
+          message: `Would you like to save these values to a ${chalk.cyan(".env")} file?`,
+          default: true,
+        });
+
+    if (saveToEnvFile) {
+      const envValues = [...changedEnvVariables].reduce(
+        (acc, varName) => {
+          const value = process.env[varName];
+          if (value) {
+            acc[varName] = value;
+          }
+          return acc;
+        },
+        {} as Record<string, string>,
+      );
+      await saveEnvironmentVariables(envValues);
     }
   }
 }
