@@ -10,6 +10,7 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@elysiajs/cors": "^1.2.0",
     "@elysiajs/server-timing": "^1.2.1",
     "@inquirer/prompts": "^7.4.0",
     "@keyv/sqlite": "^4.0.1",

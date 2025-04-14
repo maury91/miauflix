@@ -7,9 +7,17 @@ type BaseVariableInfo = {
 
 type PasswordVariableInfo = BaseVariableInfo & {
   password: true;
+  skipUserInteraction?: false;
 };
 
 type DefaultVariableInfo = BaseVariableInfo & {
+  defaultValue: string;
+  password?: false;
+  skipUserInteraction?: boolean;
+};
+
+type SkipUserInteractionVariableInfo = BaseVariableInfo & {
+  skipUserInteraction: true;
   defaultValue: string;
   password?: false;
 };
@@ -17,6 +25,7 @@ type DefaultVariableInfo = BaseVariableInfo & {
 export type VariableInfo =
   | PasswordVariableInfo
   | DefaultVariableInfo
+  | SkipUserInteractionVariableInfo
   | BaseVariableInfo;
 
 export type ServiceVariables = Record<string, VariableInfo>;

@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { Elysia, t } from "elysia";
 import { serverTiming } from "@elysiajs/server-timing";
+import { cors } from "@elysiajs/cors";
 
 import { Database } from "./database/database";
 import { TraktApi } from "@services/trakt/trakt.api";
@@ -10,6 +11,7 @@ import { MediaService } from "@services/media/media.service";
 import { ListService } from "@services/media/list.service";
 import { ListSynchronizer } from "@services/media/list.syncronizer";
 import { validateConfiguration } from "./configuration";
+import { ENV } from "./constants";
 import { AuthService } from "@services/auth/auth.service";
 import { createAuthRoutes } from "@routes/auth.routes";
 import { createAuthMiddleware } from "@middleware/auth.middleware";
@@ -55,6 +57,16 @@ async function startApp() {
 
   new Elysia()
     .use(serverTiming())
+    .use(
+      cors({
+        origin: ENV("CORS_ORIGIN", "*"),
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        exposeHeaders: ["Content-Range", "X-Content-Range"],
+        credentials: true,
+        maxAge: 86400, // 24 hours
+      }),
+    )
     .use(createAuthMiddleware(authService))
     .use(createAuditLogMiddleware(auditLogService))
     .use(createRateLimitMiddleware(auditLogService))
