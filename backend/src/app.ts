@@ -15,9 +15,10 @@ import { ENV } from "./constants";
 import { AuthService } from "@services/auth/auth.service";
 import { createAuthRoutes } from "@routes/auth.routes";
 import { createAuthMiddleware } from "@middleware/auth.middleware";
-import { AuditLogService } from "@services/audit-log.service";
+import { AuditLogService } from "@services/security/audit-log.service";
 import { createAuditLogMiddleware } from "@middleware/audit-log.middleware";
 import { createRateLimitMiddleware } from "./middleware/rate-limit.middleware";
+import { VpnDetectionService } from "@services/security/vpn.service";
 
 const db = new Database();
 
@@ -40,12 +41,16 @@ async function startApp() {
 
   const traktApi = new TraktApi();
   const tmdbApi = new TMDBApi();
+  const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
   const authService = new AuthService(db, auditLogService);
   const mediaService = new MediaService(db);
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
+
+  // ToDo: just testing for now, later it will be part of another service
+  console.log("vpn detected :", await vpnDetectionService.isVpnActive());
 
   await authService.configureUsers();
 

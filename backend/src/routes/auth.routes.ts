@@ -3,7 +3,7 @@ import { AuthService } from "@services/auth/auth.service";
 import { createAuthMiddleware } from "@middleware/auth.middleware";
 import { UserRole } from "@entities/user.entity";
 import { InvalidTokenError, LoginError } from "@errors/auth.errors";
-import { AuditLogService } from "@services/audit-log.service";
+import { AuditLogService } from "@services/security/audit-log.service";
 import { createRateLimitMiddleware } from "../middleware/rate-limit.middleware";
 
 export const createAuthRoutes = (
