@@ -24,7 +24,7 @@
 
 #### Media information providers integration
 - [ ] Media Provider Integration
-  - [x] TMDb movie synchronization
+  - [ ] TMDb movie synchronization
     - [x] Synchronization on request
     - [ ] Periodical synchronization
   - [ ] TMDb TV show synchronization
@@ -34,7 +34,7 @@
   - [ ] Trakt.tv list synchronization
   - [ ] Media metadata handling
   - [x] Genre categorization
-- [x] Localization Support
+- [ ] Localization Support
   - [x] Multi-language content retrieval
   - [x] Language preference handling
   - [x] Fallback language mechanism
@@ -123,6 +123,8 @@
 - [x] CORS configuration
 - [x] Rate limiting
 - [x] Security logging
+- [x] VPN detection
+- [ ] VPN failsafe
 - [ ] Vulnerability scanning
 - [ ] DDoS protection
 

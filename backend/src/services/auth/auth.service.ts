@@ -9,7 +9,7 @@ import { ENV } from "../../constants";
 import { randomBytes } from "crypto";
 import { ServiceConfiguration } from "../../types/configuration";
 import { hostname } from "os";
-import { AuditLogService } from "@services/audit-log.service";
+import { AuditLogService } from "@services/security/audit-log.service";
 import { AuditEventType, AuditEventSeverity } from "@entities/audit-log.entity";
 import { generateSecurePassword } from "../../utils/password.util";
 import { InvalidTokenError } from "@errors/auth.errors";

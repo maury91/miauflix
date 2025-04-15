@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { RateLimiter } from "../utils/rateLimiter";
-import { AuditLogService } from "@services/audit-log.service";
+import { AuditLogService } from "@services/security/audit-log.service";
 
 // Create a map to store rate limiters by IP address
 const rateLimiters = new Map<string, RateLimiter>();

@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import { AuditLogService } from "../services/audit-log.service";
+import { AuditLogService } from "../services/security/audit-log.service";
 import {
   AuditEventType,
   AuditEventSeverity,
