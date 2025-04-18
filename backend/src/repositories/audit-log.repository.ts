@@ -1,9 +1,11 @@
-import { DataSource, Repository, Between } from "typeorm";
-import {
-  AuditLog,
-  AuditEventType,
+import type { DataSource, Repository } from "typeorm";
+import { Between } from "typeorm";
+
+import type {
   AuditEventSeverity,
+  AuditEventType,
 } from "@entities/audit-log.entity";
+import { AuditLog } from "@entities/audit-log.entity";
 
 export class AuditLogRepository {
   private readonly repository: Repository<AuditLog>;

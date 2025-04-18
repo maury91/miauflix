@@ -1,4 +1,4 @@
-import { setTimeout, clearInterval } from "timers";
+import { clearInterval, setTimeout } from "timers";
 
 export class Scheduler {
   private tasks: Map<string, Timer>;
@@ -10,7 +10,7 @@ export class Scheduler {
   scheduleTask(
     taskName: string,
     interval: number,
-    task: () => void | Promise<void>,
+    task: () => Promise<void> | void,
   ): void {
     if (this.tasks.has(taskName)) {
       throw new Error(`Task with name "${taskName}" is already scheduled.`);

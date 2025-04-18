@@ -1,10 +1,11 @@
 import { Elysia, t } from "elysia";
-import { AuthService } from "@services/auth/auth.service";
-import { createAuthMiddleware } from "@middleware/auth.middleware";
+
 import { UserRole } from "@entities/user.entity";
 import { InvalidTokenError, LoginError } from "@errors/auth.errors";
-import { AuditLogService } from "@services/security/audit-log.service";
-import { createRateLimitMiddleware } from "../middleware/rate-limit.middleware";
+import { createAuthMiddleware } from "@middleware/auth.middleware";
+import { createRateLimitMiddleware } from "@middleware/rate-limit.middleware";
+import type { AuthService } from "@services/auth/auth.service";
+import type { AuditLogService } from "@services/security/audit-log.service";
 
 export const createAuthRoutes = (
   authService: AuthService,

@@ -1,5 +1,6 @@
-import { DataSource, Repository } from "typeorm";
-import { MediaList } from "../entities/list.entity";
+import type { DataSource, Repository } from "typeorm";
+
+import { MediaList } from "@entities/list.entity";
 
 export class MediaListRepository {
   private readonly repository: Repository<MediaList>;

@@ -1,4 +1,5 @@
-import { DataSource, Repository } from "typeorm";
+import type { DataSource, Repository } from "typeorm";
+
 import { Genre, GenreTranslation } from "@entities/genre.entity";
 
 export class GenreRepository {

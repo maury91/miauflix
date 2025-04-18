@@ -1,8 +1,9 @@
 import type { Context } from "elysia";
 
-import { Database } from "@database/database";
-import { AuditLogRepository } from "@repositories/audit-log.repository";
-import { AuditEventType, AuditEventSeverity } from "@entities/audit-log.entity";
+import type { AuditLog } from "@entities/audit-log.entity";
+import { AuditEventSeverity, AuditEventType } from "@entities/audit-log.entity";
+import type { Database } from "@database/database";
+import type { AuditLogRepository } from "@repositories/audit-log.repository";
 
 export class AuditLogService {
   private repository: AuditLogRepository;
@@ -21,7 +22,7 @@ export class AuditLogService {
     request?: Context["request"];
     server?: Context["server"];
     userEmail?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     const {
       eventType,
@@ -63,7 +64,7 @@ export class AuditLogService {
     userEmail: string;
     request: Context["request"];
     server: Context["server"];
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     const { success, ...rest } = params;
 
@@ -82,7 +83,7 @@ export class AuditLogService {
     userEmail: string;
     request: Context["request"];
     server: Context["server"];
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     await this.logSecurityEvent({
       eventType: AuditEventType.LOGOUT,
@@ -99,7 +100,7 @@ export class AuditLogService {
     userEmail: string;
     request: Context["request"];
     server: Context["server"];
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     await this.logSecurityEvent({
       eventType: AuditEventType.TOKEN_REFRESH,
@@ -117,7 +118,7 @@ export class AuditLogService {
     request: Context["request"];
     server: Context["server"];
     reason: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     const { reason, ...rest } = params;
 
@@ -137,7 +138,7 @@ export class AuditLogService {
     request: Context["request"];
     server: Context["server"];
     description: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     await this.logSecurityEvent({
       eventType: AuditEventType.SUSPICIOUS_ACTIVITY,
@@ -154,7 +155,7 @@ export class AuditLogService {
     request: Context["request"];
     server: Context["server"];
     limit: number;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     const { limit, ...rest } = params;
 
@@ -174,7 +175,7 @@ export class AuditLogService {
     request: Context["request"];
     server: Context["server"];
     reason?: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<void> {
     const { reason, ...rest } = params;
 
@@ -189,28 +190,19 @@ export class AuditLogService {
   /**
    * Get recent audit logs
    */
-  async getRecentLogs(limit: number = 100): Promise<any[]> {
+  async getRecentLogs(limit: number = 100): Promise<AuditLog[]> {
     return this.repository.findRecent(limit);
   }
 
-  /**
-   * Get audit logs for a specific user
-   */
-  async getUserLogs(userEmail: string): Promise<any[]> {
+  async getUserLogs(userEmail: string): Promise<AuditLog[]> {
     return this.repository.findByUserId(userEmail);
   }
 
-  /**
-   * Get audit logs by event type
-   */
-  async getLogsByEventType(eventType: AuditEventType): Promise<any[]> {
+  async getLogsByEventType(eventType: AuditEventType): Promise<AuditLog[]> {
     return this.repository.findByEventType(eventType);
   }
 
-  /**
-   * Get audit logs by severity
-   */
-  async getLogsBySeverity(severity: AuditEventSeverity): Promise<any[]> {
+  async getLogsBySeverity(severity: AuditEventSeverity): Promise<AuditLog[]> {
     return this.repository.findBySeverity(severity);
   }
 

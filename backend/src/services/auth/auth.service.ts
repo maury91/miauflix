@@ -1,18 +1,22 @@
-import { Database } from "@database/database";
-import { User, UserRole } from "@entities/user.entity";
 import { compare, hash } from "bcrypt";
-import { v4 as uuidv4 } from "uuid";
-import { JWTPayload, SignJWT, jwtVerify } from "jose";
-import { UserRepository } from "@repositories/user.repository";
-import { RefreshTokenRepository } from "@repositories/refresh-token.repository";
-import { ENV } from "../../constants";
 import { randomBytes } from "crypto";
-import { ServiceConfiguration } from "../../types/configuration";
+import type { JWTPayload } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 import { hostname } from "os";
-import { AuditLogService } from "@services/security/audit-log.service";
-import { AuditEventType, AuditEventSeverity } from "@entities/audit-log.entity";
-import { generateSecurePassword } from "../../utils/password.util";
+import { v4 as uuidv4 } from "uuid";
+
+import { AuditEventSeverity, AuditEventType } from "@entities/audit-log.entity";
+import type { User } from "@entities/user.entity";
+import { UserRole } from "@entities/user.entity";
+import type { Database } from "@database/database";
 import { InvalidTokenError } from "@errors/auth.errors";
+import type { RefreshTokenRepository } from "@repositories/refresh-token.repository";
+import type { UserRepository } from "@repositories/user.repository";
+import type { AuditLogService } from "@services/security/audit-log.service";
+import type { ServiceConfiguration } from "@mytypes/configuration";
+import { generateSecurePassword } from "@utils/password.util";
+
+import { ENV } from "../../constants";
 
 export class AuthService {
   private readonly userRepository: UserRepository;
@@ -166,7 +170,7 @@ export class AuthService {
       }
 
       return payload;
-    } catch (error) {
+    } catch {
       throw new InvalidTokenError();
     }
   }
@@ -187,7 +191,7 @@ export class AuthService {
       }
 
       return payload;
-    } catch (error) {
+    } catch {
       throw new InvalidTokenError();
     }
   }

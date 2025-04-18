@@ -1,15 +1,13 @@
 import { Elysia } from "elysia";
-import { AuditLogService } from "../services/security/audit-log.service";
-import {
-  AuditEventType,
-  AuditEventSeverity,
-} from "../entities/audit-log.entity";
+
+import { AuditEventSeverity, AuditEventType } from "@entities/audit-log.entity";
 import {
   AuthError,
   InvalidTokenError,
   LoginError,
   RoleError,
-} from "src/errors/auth.errors";
+} from "@errors/auth.errors";
+import type { AuditLogService } from "@services/security/audit-log.service";
 
 export function createAuditLogMiddleware(auditLogService: AuditLogService) {
   return new Elysia({

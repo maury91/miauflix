@@ -1,18 +1,19 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToMany,
+  Entity,
   JoinTable,
-  type Relation,
+  ManyToMany,
   ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  type Relation,
   Unique,
+  UpdateDateColumn,
 } from "typeorm";
-import { Season } from "./season.entity";
+
 import { Genre } from "./genre.entity";
+import { Season } from "./season.entity";
 
 @Entity()
 export class TVShow {

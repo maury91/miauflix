@@ -7,6 +7,7 @@
     "dev": "bun run --watch src/app.ts",
     "build": "bun build src/app.ts",
     "check:ts": "bun run tsc --noEmit",
+    "lint": "eslint --ext .ts src/",
     "test": "bun test"
   },
   "dependencies": {
@@ -32,6 +33,11 @@
     "@types/cache-manager": "^5.0.0",
     "@types/node-fetch": "^3.0.3",
     "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.30.1",
+    "@typescript-eslint/parser": "^8.30.1",
+    "eslint": "^9.24.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "nodemon": "^2.0.20",
     "typescript": "^4.5.5"
   },

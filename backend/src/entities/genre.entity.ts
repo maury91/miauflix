@@ -1,11 +1,11 @@
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  Unique,
+  Entity,
   ManyToOne,
-  type Relation,
   OneToMany,
+  PrimaryGeneratedColumn,
+  type Relation,
+  Unique,
 } from "typeorm";
 
 @Entity()

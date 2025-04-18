@@ -1,8 +1,8 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 export enum AuditEventType {
@@ -68,7 +68,7 @@ export class AuditLog {
   userAgent: string;
 
   @Column({ type: "json", nullable: true })
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 
   @Column({ nullable: true })
   userEmail: string;

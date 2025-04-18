@@ -1,0 +1,2 @@
+cd backend && bun run lint
+cd ../ && bun run format:check --write

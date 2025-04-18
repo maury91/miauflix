@@ -1,6 +1,7 @@
-import { Movie } from "@entities/movie.entity";
-import { TVShow } from "@entities/tvshow.entity";
-import { ListService } from "./list.service";
+import type { Movie } from "@entities/movie.entity";
+import type { TVShow } from "@entities/tvshow.entity";
+
+import type { ListService } from "./list.service";
 
 export class ListSynchronizer {
   constructor(private readonly listService: ListService) {}

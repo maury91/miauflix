@@ -1,4 +1,4 @@
-import { UserRole } from "@entities/user.entity";
+import type { UserRole } from "@entities/user.entity";
 
 export class LoginError extends Error {
   constructor(public email: string) {

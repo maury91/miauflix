@@ -1,16 +1,17 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
-  ManyToMany,
-  JoinTable,
-  Unique,
+  PrimaryGeneratedColumn,
   type Relation,
+  Unique,
+  UpdateDateColumn,
 } from "typeorm";
+
 import { Genre } from "./genre.entity";
 
 @Entity()

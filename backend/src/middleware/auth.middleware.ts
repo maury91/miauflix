@@ -1,7 +1,8 @@
 import { Elysia } from "elysia";
-import { AuthService } from "@services/auth/auth.service";
-import { UserRole } from "@entities/user.entity";
+
+import type { UserRole } from "@entities/user.entity";
 import { AuthError, RoleError } from "@errors/auth.errors";
+import type { AuthService } from "@services/auth/auth.service";
 
 // Define the user type for the auth context
 export interface AuthUser {
@@ -35,14 +36,14 @@ export const createAuthMiddleware = (authService: AuthService) => {
             role: payload.role as UserRole,
           } as AuthUser,
         };
-      } catch (error) {
+      } catch {
         return {};
       }
     })
     .macro(({ onBeforeHandle }) => ({
-      isAuth(value: boolean | UserRole) {
+      isAuth(value: UserRole | boolean) {
         if (value) {
-          onBeforeHandle(({ error, user, set }) => {
+          onBeforeHandle(({ user }) => {
             if (!user) {
               throw new AuthError();
             }

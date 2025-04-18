@@ -1,22 +1,27 @@
-import { TMDBApi } from "../tmdb/tmdb.api";
-import { Database } from "../../database/database";
+import type { Genre } from "@entities/genre.entity";
 import { Movie } from "@entities/movie.entity";
-import { MovieMediaSummary } from "@services/tmdb/tmdb.types";
-import { MovieRepository } from "@repositories/movie.repository";
-import { TVShowRepository } from "@repositories/tvshow.repository";
-import { GenreRepository } from "@repositories/genre.repository";
-import { Genre } from "@entities/genre.entity";
-import { TVShow } from "@entities/tvshow.entity";
-import { GenreWithLanguages, TranslatedMedia } from "./media.types";
+import type { TVShow } from "@entities/tvshow.entity";
+import type { Database } from "@database/database";
+import type { GenreRepository } from "@repositories/genre.repository";
+import type { MovieRepository } from "@repositories/movie.repository";
+import type { SyncStateRepository } from "@repositories/syncState.repository";
+import type { TVShowRepository } from "@repositories/tvshow.repository";
+import type { MovieMediaSummary } from "@services/tmdb/tmdb.types";
+
+import { TMDBApi } from "../tmdb/tmdb.api";
+import type { GenreWithLanguages, TranslatedMedia } from "./media.types";
 
 // ToDo: Move to configuration
 const supportedLanguages = ["en"];
+const MOVIE_SYNC_NAME = "TMDB_Movies";
+const TV_SYNC_NAME = "TMDB_TVShows";
 
 export class MediaService {
   private readonly tmdbApi = new TMDBApi();
   private readonly movieRepository: MovieRepository;
   private readonly tvShowRepository: TVShowRepository;
   private readonly genreRepository: GenreRepository;
+  private readonly syncStateRepository: SyncStateRepository;
   private genreCache = new Map<number, GenreWithLanguages>();
 
   constructor(
@@ -26,6 +31,7 @@ export class MediaService {
     this.movieRepository = db.getMovieRepository();
     this.tvShowRepository = db.getTVShowRepository();
     this.genreRepository = db.getGenreRepository();
+    this.syncStateRepository = db.getSyncStateRepository();
   }
 
   public async getMovie(
@@ -139,19 +145,26 @@ export class MediaService {
   }
 
   public async sync() {
-    // FixMe: Obtain info of when was the last sync, instead of a fix date
+    // Use persistent sync state
+    const lastMovieSync =
+      await this.syncStateRepository.getLastSync(MOVIE_SYNC_NAME);
+    const lastTVSync = await this.syncStateRepository.getLastSync(TV_SYNC_NAME);
     const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const movieSyncDate = lastMovieSync || yesterday;
+    const tvSyncDate = lastTVSync || yesterday;
+
     // Get all changed movie and TV show IDs from TMDB
-    const changedMovieIds = await this.tmdbApi.getAllChangedMovieIds(yesterday);
+    const changedMovieIds =
+      await this.tmdbApi.getAllChangedMovieIds(movieSyncDate);
     const changedTVShowIds =
-      await this.tmdbApi.getAllChangedTVShowIds(yesterday);
+      await this.tmdbApi.getAllChangedTVShowIds(tvSyncDate);
 
     // Update the local DB with the changed movies
     for (const movie of changedMovieIds) {
       const existingMovie = await this.movieRepository.findByTMDBId(movie.id);
       if (existingMovie) {
         const movieDetails = await this.tmdbApi.getMovieDetails(movie.id);
-        const genresIds = movieDetails.genres.map((genre: any) => genre.id);
+        const genresIds = movieDetails.genres.map((genre) => genre.id);
         const genres = await this.getGenres(genresIds);
         await this.movieRepository.checkForChangesAndUpdate(existingMovie, {
           title: movieDetails.title,
@@ -180,7 +193,7 @@ export class MediaService {
       const existingShow = await this.tvShowRepository.findByTMDBId(show.id);
       if (existingShow) {
         const showDetails = await this.tmdbApi.getTVShowDetails(show.id);
-        const genresIds = showDetails.genres.map((genre: any) => genre.id);
+        const genresIds = showDetails.genres.map((genre) => genre.id);
         const genres = await this.getGenres(genresIds);
         await this.tvShowRepository.checkForChangesAndUpdate(existingShow, {
           name: showDetails.name,
@@ -209,6 +222,10 @@ export class MediaService {
         );
       }
     }
+
+    // Update sync state using 'yesterday' as the new sync timestamp
+    await this.syncStateRepository.setLastSync(MOVIE_SYNC_NAME, yesterday);
+    await this.syncStateRepository.setLastSync(TV_SYNC_NAME, yesterday);
   }
 
   public async mediasWithLanguage(

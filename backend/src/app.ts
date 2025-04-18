@@ -1,29 +1,30 @@
 import "reflect-metadata";
-import { Elysia, t } from "elysia";
-import { serverTiming } from "@elysiajs/server-timing";
-import { cors } from "@elysiajs/cors";
 
-import { Database } from "./database/database";
-import { TraktApi } from "@services/trakt/trakt.api";
-import { TMDBApi } from "@services/tmdb/tmdb.api";
-import { Scheduler } from "@services/scheduler";
-import { MediaService } from "@services/media/media.service";
+import { cors } from "@elysiajs/cors";
+import { serverTiming } from "@elysiajs/server-timing";
+import { Elysia, t } from "elysia";
+
+import { Database } from "@database/database";
+import { createAuditLogMiddleware } from "@middleware/audit-log.middleware";
+import { createAuthMiddleware } from "@middleware/auth.middleware";
+import { createRateLimitMiddleware } from "@middleware/rate-limit.middleware";
+import { createAuthRoutes } from "@routes/auth.routes";
+import { AuthService } from "@services/auth/auth.service";
 import { ListService } from "@services/media/list.service";
 import { ListSynchronizer } from "@services/media/list.syncronizer";
+import { MediaService } from "@services/media/media.service";
+import { Scheduler } from "@services/scheduler";
+import { AuditLogService } from "@services/security/audit-log.service";
+import { VpnDetectionService } from "@services/security/vpn.service";
+import { TMDBApi } from "@services/tmdb/tmdb.api";
+
 import { validateConfiguration } from "./configuration";
 import { ENV } from "./constants";
-import { AuthService } from "@services/auth/auth.service";
-import { createAuthRoutes } from "@routes/auth.routes";
-import { createAuthMiddleware } from "@middleware/auth.middleware";
-import { AuditLogService } from "@services/security/audit-log.service";
-import { createAuditLogMiddleware } from "@middleware/audit-log.middleware";
-import { createRateLimitMiddleware } from "./middleware/rate-limit.middleware";
-import { VpnDetectionService } from "@services/security/vpn.service";
 
 const db = new Database();
 
 type Methods<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? T[K] : never;
+  [K in keyof T]: T[K] extends (...args: unknown[]) => void ? T[K] : never;
 };
 
 const bind =
@@ -39,7 +40,6 @@ const bind =
 async function startApp() {
   await db.initialize();
 
-  const traktApi = new TraktApi();
   const tmdbApi = new TMDBApi();
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
@@ -50,7 +50,12 @@ async function startApp() {
   const listSynchronizer = new ListSynchronizer(listService);
 
   // ToDo: just testing for now, later it will be part of another service
-  console.log("vpn detected :", await vpnDetectionService.isVpnActive());
+  vpnDetectionService.on("connect", () => {
+    console.log("VPN connected");
+  });
+  vpnDetectionService.on("disconnect", () => {
+    console.log("VPN disconnected");
+  });
 
   await authService.configureUsers();
 
@@ -58,6 +63,15 @@ async function startApp() {
     "refreshLists",
     60 * 60,
     bind(listSynchronizer, "synchronize"),
+  );
+
+  // Schedule movie synchronization every 6 hours
+  scheduler.scheduleTask(
+    "syncMovies",
+    6 * 60 * 60, // 6 hours
+    async () => {
+      // ToDo: Implement movie synchronization logic here
+    },
   );
 
   new Elysia()

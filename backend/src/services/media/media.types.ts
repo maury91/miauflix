@@ -1,6 +1,6 @@
-import { Genre } from "@entities/genre.entity";
-import { Movie } from "@entities/movie.entity";
-import { TVShow } from "@entities/tvshow.entity";
+import type { Genre } from "@entities/genre.entity";
+import type { Movie } from "@entities/movie.entity";
+import type { TVShow } from "@entities/tvshow.entity";
 
 export interface GenreWithLanguages extends Genre {
   languages: string[];

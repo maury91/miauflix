@@ -1,6 +1,7 @@
-import { DataSource, Repository } from 'typeorm';
-import { RefreshToken } from '@entities/refresh-token.entity';
-import { User } from '@entities/user.entity';
+import type { DataSource, Repository } from "typeorm";
+
+import { RefreshToken } from "@entities/refresh-token.entity";
+import type { User } from "@entities/user.entity";
 
 export class RefreshTokenRepository {
   private readonly repository: Repository<RefreshToken>;
@@ -50,7 +51,7 @@ export class RefreshTokenRepository {
     const result = await this.repository
       .createQueryBuilder()
       .delete()
-      .where('expiresAt < :now', { now })
+      .where("expiresAt < :now", { now })
       .execute();
 
     return result.affected || 0;

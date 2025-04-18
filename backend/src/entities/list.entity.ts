@@ -1,13 +1,14 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
+  Entity,
   JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
+
 import { Movie } from "./movie.entity";
-import { TVShow } from "./tvshow.entity";
 import { Season } from "./season.entity";
+import { TVShow } from "./tvshow.entity";
 
 @Entity()
 export class MediaList {
