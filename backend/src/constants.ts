@@ -1,12 +1,12 @@
-const requiredEnv = [
-  "TMDB_API_ACCESS_TOKEN",
-  "TRAKT_CLIENT_ID",
-  "JWT_SECRET",
-  "REFRESH_TOKEN_SECRET",
-] as const;
-const optionalEnv = ["TMDB_API_URL", "TRAKT_API_URL", "CORS_ORIGIN"] as const;
+type RequiredEnv =
+  | "JWT_SECRET"
+  | "REFRESH_TOKEN_SECRET"
+  | "TMDB_API_ACCESS_TOKEN"
+  | "TRAKT_CLIENT_ID";
+
+type OptionalEnv = "CORS_ORIGIN" | "TMDB_API_URL" | "TRAKT_API_URL";
 
 export const ENV = (
-  variable: (typeof requiredEnv)[number] | (typeof optionalEnv)[number],
+  variable: OptionalEnv | RequiredEnv,
   defaultValue?: string,
-) => process.env[variable] ?? defaultValue ?? "";
+): string => process.env[variable] ?? defaultValue ?? "";

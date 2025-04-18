@@ -1,7 +1,8 @@
-import { DataSource, Repository } from "typeorm";
-import { Movie, MovieTranslation } from "../entities/movie.entity";
 import { objectKeys } from "src/utils/object.util";
-import { Genre } from "@entities/genre.entity";
+import type { DataSource, Repository } from "typeorm";
+
+import type { Genre } from "@entities/genre.entity";
+import { Movie, MovieTranslation } from "@entities/movie.entity";
 
 export class MovieRepository {
   private readonly movieRepository: Repository<Movie>;

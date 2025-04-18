@@ -12,8 +12,21 @@ interface NordVpnIpInsightsResponse {
   zip_code: string;
 }
 
+type VpnEventType = "connect" | "disconnect";
+type VpnEventListener = () => void;
+
 export class VpnDetectionService {
   private readonly knownVpnIps: string[] = [];
+  private eventListeners: Map<VpnEventType, VpnEventListener[]> = new Map([
+    ["connect", []],
+    ["disconnect", []],
+  ]);
+  private monitoringInterval: ReturnType<typeof setInterval> | null = null;
+  private lastVpnStatus: boolean | null = null;
+
+  constructor(private readonly checkIntervalMs: number = 500) {
+    this.startMonitoring();
+  }
 
   private async getIpAddress(): Promise<string> {
     const response = await fetch("https://api.ipify.org?format=json");
@@ -21,30 +34,80 @@ export class VpnDetectionService {
     return data.ip;
   }
 
-  private async isNordVpn(): Promise<boolean> {
+  private async isNordVpn(): Promise<string | false> {
     const response = await fetch(
       "https://api.nordvpn.com/v1/helpers/ips/insights",
     );
     const data = (await response.json()) as NordVpnIpInsightsResponse;
     if (data.protected) {
-      return true;
-    }
-    return false;
-  }
-
-  private async isVpnIp(ipAddress: string): Promise<boolean> {
-    if (this.knownVpnIps.includes(ipAddress)) {
-      return true;
-    }
-    if (await this.isNordVpn()) {
-      this.knownVpnIps.push(ipAddress);
-      return true;
+      return data.ip;
     }
     return false;
   }
 
   public async isVpnActive(): Promise<boolean> {
-    const ipAddress = await this.getIpAddress();
-    return this.isVpnIp(ipAddress);
+    if (this.knownVpnIps.length > 0) {
+      const ipAddress = await this.getIpAddress();
+      if (this.knownVpnIps.includes(ipAddress)) {
+        return true;
+      }
+    }
+    const isNordVpnIp = await this.isNordVpn();
+    if (isNordVpnIp) {
+      this.knownVpnIps.push(isNordVpnIp);
+      return true;
+    }
+    return false;
+  }
+
+  public on(event: VpnEventType, listener: VpnEventListener): () => void {
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      listeners.push(listener);
+      if (event === "connect" && this.lastVpnStatus === true) {
+        listener();
+      } else if (event === "disconnect" && this.lastVpnStatus === false) {
+        listener();
+      }
+    }
+
+    // Return unsubscribe function
+    return () => {
+      const listeners = this.eventListeners.get(event);
+      if (listeners) {
+        const index = listeners.indexOf(listener);
+        if (index > -1) {
+          listeners.splice(index, 1);
+        }
+      }
+    };
+  }
+
+  private notifyEventListeners(event: VpnEventType): void {
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      listeners.forEach((listener) => listener());
+    }
+  }
+
+  private async checkVpnStatus(): Promise<void> {
+    const currentStatus = await this.isVpnActive();
+
+    if (currentStatus !== this.lastVpnStatus) {
+      this.notifyEventListeners(currentStatus ? "connect" : "disconnect");
+      this.lastVpnStatus = currentStatus;
+    }
+  }
+
+  private startMonitoring(): void {
+    if (this.monitoringInterval) {
+      return;
+    }
+
+    this.monitoringInterval = setInterval(() => {
+      this.checkVpnStatus().catch((error) => {
+        console.error("Error checking VPN status:", error);
+      });
+    }, this.checkIntervalMs);
   }
 }

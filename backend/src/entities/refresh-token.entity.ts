@@ -1,17 +1,18 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToOne,
+  Entity,
   JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
   type Relation,
-} from 'typeorm';
-import { User } from './user.entity';
+} from "typeorm";
 
-@Entity('refresh_tokens')
+import { User } from "./user.entity";
+
+@Entity("refresh_tokens")
 export class RefreshToken {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -23,8 +24,8 @@ export class RefreshToken {
   @Column()
   userId: string;
 
-  @ManyToOne(() => User, user => user.refreshTokens)
-  @JoinColumn({ name: 'userId' })
+  @ManyToOne(() => User, (user) => user.refreshTokens)
+  @JoinColumn({ name: "userId" })
   user: Relation<User>;
 
   @CreateDateColumn()

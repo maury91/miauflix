@@ -23,10 +23,10 @@ type SkipUserInteractionVariableInfo = BaseVariableInfo & {
 };
 
 export type VariableInfo =
-  | PasswordVariableInfo
+  | BaseVariableInfo
   | DefaultVariableInfo
-  | SkipUserInteractionVariableInfo
-  | BaseVariableInfo;
+  | PasswordVariableInfo
+  | SkipUserInteractionVariableInfo;
 
 export type ServiceVariables = Record<string, VariableInfo>;
 

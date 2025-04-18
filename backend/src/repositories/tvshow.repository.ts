@@ -1,7 +1,8 @@
-import { DataSource, Repository } from "typeorm";
-import { TVShow } from "../entities/tvshow.entity";
-import { TVShowTranslation } from "@entities/tvshow.entity";
 import { objectKeys } from "src/utils/object.util";
+import type { DataSource, Repository } from "typeorm";
+
+import { TVShow } from "@entities/tvshow.entity";
+import { TVShowTranslation } from "@entities/tvshow.entity";
 
 export class TVShowRepository {
   private readonly tvShowRepository: Repository<TVShow>;

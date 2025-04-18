@@ -1,24 +1,25 @@
 import path from "path";
 import { DataSource } from "typeorm";
 
+import { AuditLog } from "@entities/audit-log.entity";
+import { Episode } from "@entities/episode.entity";
+import { Genre, GenreTranslation } from "@entities/genre.entity";
+import { MediaList } from "@entities/list.entity";
 import { Movie, MovieTranslation } from "@entities/movie.entity";
+import { RefreshToken } from "@entities/refresh-token.entity";
+import { Season } from "@entities/season.entity";
+import { SyncState } from "@entities/sync-state.entity";
 import { TVShow } from "@entities/tvshow.entity";
 import { TVShowTranslation } from "@entities/tvshow.entity";
-import { Season } from "@entities/season.entity";
-import { Episode } from "@entities/episode.entity";
-import { MediaList } from "@entities/list.entity";
 import { User } from "@entities/user.entity";
-import { RefreshToken } from "@entities/refresh-token.entity";
-import { AuditLog } from "@entities/audit-log.entity";
-
+import { AuditLogRepository } from "@repositories/audit-log.repository";
+import { GenreRepository } from "@repositories/genre.repository";
 import { MediaListRepository } from "@repositories/mediaList.repository";
 import { MovieRepository } from "@repositories/movie.repository";
-import { TVShowRepository } from "@repositories/tvshow.repository";
-import { Genre, GenreTranslation } from "@entities/genre.entity";
-import { GenreRepository } from "@repositories/genre.repository";
-import { UserRepository } from "@repositories/user.repository";
 import { RefreshTokenRepository } from "@repositories/refresh-token.repository";
-import { AuditLogRepository } from "@repositories/audit-log.repository";
+import { SyncStateRepository } from "@repositories/syncState.repository";
+import { TVShowRepository } from "@repositories/tvshow.repository";
+import { UserRepository } from "@repositories/user.repository";
 
 export class Database {
   private readonly dataSource: DataSource;
@@ -29,6 +30,7 @@ export class Database {
   private userRepository: UserRepository;
   private refreshTokenRepository: RefreshTokenRepository;
   private auditLogRepository: AuditLogRepository;
+  private syncStateRepository: SyncStateRepository;
 
   constructor() {
     this.dataSource = new DataSource({
@@ -47,6 +49,7 @@ export class Database {
         User,
         RefreshToken,
         AuditLog,
+        SyncState,
       ],
       synchronize: true,
     });
@@ -61,6 +64,11 @@ export class Database {
     this.userRepository = new UserRepository(this.dataSource);
     this.refreshTokenRepository = new RefreshTokenRepository(this.dataSource);
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
+    this.syncStateRepository = new SyncStateRepository(this.dataSource);
+  }
+
+  public getSyncStateRepository(): SyncStateRepository {
+    return this.syncStateRepository;
   }
 
   public getMovieRepository() {

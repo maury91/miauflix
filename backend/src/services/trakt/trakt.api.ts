@@ -1,12 +1,13 @@
 import { ENV } from "src/constants";
-import { ServiceConfiguration } from "src/types/configuration";
-import { TraktList, TraktListItem, TraktPagination } from "./trakt.types";
+import type { ServiceConfiguration } from "src/types/configuration";
+
+import type { TraktList, TraktListItem, TraktPagination } from "./trakt.types";
 
 interface RateLimitInfo {
   name:
     | "AUTHED_API_GET_LIMIT"
-    | "UNAUTHED_API_GET_LIMIT"
-    | "AUTHED_API_POST_LIMIT";
+    | "AUTHED_API_POST_LIMIT"
+    | "UNAUTHED_API_GET_LIMIT";
   period: number;
   limit: number;
   remaining: number;
@@ -198,12 +199,13 @@ export const traktConfigurationDefinition: ServiceConfiguration = {
       const traktApi = new TraktApi();
 
       await traktApi.test();
-    } catch (error: any) {
-      if ("status" in error) {
-        if (error.status === 401) {
+    } catch (error: unknown) {
+      if (typeof error === "object" && error !== null && "status" in error) {
+        const err = error as { status: number };
+        if (err.status === 401) {
           throw new Error(`Invalid Client ID`);
         }
-        throw new Error(`Connection error: ${error.status}`);
+        throw new Error(`Connection error: ${err.status}`);
       }
       throw error;
     }

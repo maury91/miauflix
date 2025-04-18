@@ -1,12 +1,16 @@
+import { confirm, input, password } from "@inquirer/prompts";
 import chalk from "chalk";
-import { input, confirm, password } from "@inquirer/prompts";
 import { writeFileSync } from "fs";
 import path from "path";
+import type {
+  ServiceConfiguration,
+  VariableInfo,
+} from "src/types/configuration";
+import { isatty } from "tty";
+
+import { jwtConfigurationDefinition } from "@services/auth/auth.service";
 import { tmdbConfigurationDefinition } from "@services/tmdb/tmdb.api";
 import { traktConfigurationDefinition } from "@services/trakt/trakt.api";
-import { jwtConfigurationDefinition } from "@services/auth/auth.service";
-import { ServiceConfiguration, VariableInfo } from "src/types/configuration";
-import { isatty } from "tty";
 
 function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
@@ -68,11 +72,11 @@ async function configureService(service: ServiceConfiguration): Promise<void> {
 
   // Get variables by required state
   const optionalVars = Object.entries(service.variables)
-    .filter(([_, info]) => !info.required)
+    .filter(([, info]) => !info.required)
     .map(([name]) => name);
 
   const requiredVars = Object.entries(service.variables)
-    .filter(([_, info]) => info.required)
+    .filter(([, info]) => info.required)
     .map(([name]) => name);
 
   // Handle optional variables
@@ -193,7 +197,7 @@ async function saveEnvironmentVariables(
     try {
       const fileContent = await Bun.file(envFilePath).text();
       envContent = fileContent;
-    } catch (error) {
+    } catch {
       // File doesn't exist, start with empty content
     }
 
@@ -364,7 +368,7 @@ async function validateExistingConfiguration(): Promise<ServiceKey[]> {
     )
   )
     .filter(([isValid]) => !isValid)
-    .map(([_, serviceKey]) => serviceKey);
+    .map(([, serviceKey]) => serviceKey);
 
   return invalidServices;
 }

@@ -1,14 +1,15 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  CreateDateColumn,
+  Entity,
   ManyToOne,
   OneToMany,
-  CreateDateColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { TVShow } from "./tvshow.entity";
+
 import { Episode } from "./episode.entity";
+import { TVShow } from "./tvshow.entity";
 
 @Entity()
 export class Season {

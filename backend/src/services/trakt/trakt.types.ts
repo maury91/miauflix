@@ -157,13 +157,13 @@ export interface ShowEpisodeExtended extends ShowEpisodeSimple {
   available_translations: string[];
   runtime: number;
   episode_type:
-    | "standard"
-    | "series_premiere"
-    | "season_premiere"
     | "mid_season_finale"
     | "mid_season_premiere"
     | "season_finale"
-    | "series_finale";
+    | "season_premiere"
+    | "series_finale"
+    | "series_premiere"
+    | "standard";
 }
 
 export type ShowEpisode<E extends boolean> = E extends true
@@ -296,7 +296,7 @@ export interface TraktListItemSeason extends TraktListItemBase {
 }
 
 export type TraktListItem =
-  | TraktListItemMovie
-  | TraktListItemShow
   | TraktListItemEpisode
-  | TraktListItemSeason;
+  | TraktListItemMovie
+  | TraktListItemSeason
+  | TraktListItemShow;

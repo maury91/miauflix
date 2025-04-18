@@ -1,12 +1,13 @@
-import { MediaService } from "./media.service";
-import { MediaListRepository } from "@repositories/mediaList.repository";
-import { MediaList } from "@entities/list.entity";
-import { TMDBApi } from "@services/tmdb/tmdb.api";
-import { MediaSummaryList } from "@services/tmdb/tmdb.types";
+import type { MediaList } from "@entities/list.entity";
 import { Movie } from "@entities/movie.entity";
 import { TVShow } from "@entities/tvshow.entity";
-import { Database } from "@database/database";
-import { TranslatedMedia } from "./media.types";
+import type { Database } from "@database/database";
+import type { MediaListRepository } from "@repositories/mediaList.repository";
+import type { TMDBApi } from "@services/tmdb/tmdb.api";
+import type { MediaSummaryList } from "@services/tmdb/tmdb.types";
+
+import type { MediaService } from "./media.service";
+import type { TranslatedMedia } from "./media.types";
 
 export class ListService {
   private readonly lists: Record<
