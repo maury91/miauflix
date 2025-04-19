@@ -24,9 +24,9 @@
 
 #### Media information providers integration
 - [ ] Media Provider Integration
-  - [ ] TMDb movie synchronization
+  - [x] TMDb movie synchronization
     - [x] Synchronization on request
-    - [ ] Periodical synchronization
+    - [x] Periodical synchronization
   - [ ] TMDb TV show synchronization
     - [x] Synchronization on request
     - [ ] Periodical synchronization

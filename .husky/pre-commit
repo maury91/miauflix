@@ -1,2 +1,2 @@
-cd backend && bun run lint
+cd backend && bun run lint -- --fix
 cd ../ && bun run format:check --write

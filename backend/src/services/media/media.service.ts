@@ -1,3 +1,5 @@
+import { sleep } from "bun";
+
 import type { Genre } from "@entities/genre.entity";
 import { Movie } from "@entities/movie.entity";
 import type { TVShow } from "@entities/tvshow.entity";
@@ -14,7 +16,11 @@ import type { GenreWithLanguages, TranslatedMedia } from "./media.types";
 // ToDo: Move to configuration
 const supportedLanguages = ["en"];
 const MOVIE_SYNC_NAME = "TMDB_Movies";
-const TV_SYNC_NAME = "TMDB_TVShows";
+// const TV_SYNC_NAME = "TMDB_TVShows";
+
+const oneHourMs = 1 * 60 * 60 * 1000;
+const twoHoursMs = oneHourMs * 2;
+const fourHoursMs = oneHourMs * 4;
 
 export class MediaService {
   private readonly tmdbApi = new TMDBApi();
@@ -42,34 +48,12 @@ export class MediaService {
     let movie = await this.movieRepository.findByTMDBId(Number(movieId));
     if (!movie) {
       // If not, fetch from TMDB and save it to the local DB
-      const movieDetails = await this.tmdbApi.getMovieDetails(movieId);
-      const runtime =
-        movieDetails.runtime ??
-        movieDetails.translations.find(
-          (translation) => translation.data.runtime > 0,
-        )?.data.runtime ??
-        0;
-      const genresIds = movieDetails.genres.map((genre) => genre.id);
-      const genres = await this.getGenres(genresIds);
-
-      movie = await this.movieRepository.create({
-        imdbId: movieDetails.imdb_id,
-        tmdbId: movieDetails.id,
-        title: movieDetails.title,
-        overview: movieDetails.overview,
-        tagline: movieDetails.tagline ?? "",
-        releaseDate: movieDetails.release_date,
-        poster: movieDetails.poster_path,
-        backdrop: movieDetails.backdrop_path,
-        logo: movieDetails.logo_path,
-        genres,
-        runtime,
-        popularity: movieDetails.popularity,
-        rating: movieDetails.vote_average,
-      });
+      const { translations, ...movieDetails } =
+        await this.getMovieDetails(movieId);
+      movie = await this.movieRepository.create(movieDetails);
 
       await Promise.all(
-        movieDetails.translations.map((translation) => {
+        translations.map((translation) => {
           if (movie) {
             return this.movieRepository.addTranslation(movie, {
               title: translation.data.title,
@@ -101,6 +85,52 @@ export class MediaService {
       }
     }
     return movie;
+  }
+
+  private async updateMovie(movie: Movie) {
+    const { translations, ...movieDetails } = await this.getMovieDetails(
+      movie.tmdbId,
+    );
+    await this.movieRepository.checkForChangesAndUpdate(movie, movieDetails);
+    await Promise.all(
+      translations.map((translation) => {
+        return this.movieRepository.addTranslation(movie, {
+          title: translation.data.title,
+          overview: translation.data.overview,
+          tagline: translation.data.tagline,
+          language: translation.iso_639_1,
+        });
+      }),
+    );
+  }
+
+  private async getMovieDetails(movieId: number | string) {
+    const movieDetails = await this.tmdbApi.getMovieDetails(movieId);
+    const runtime =
+      movieDetails.runtime ??
+      movieDetails.translations.find(
+        (translation) => translation.data.runtime > 0,
+      )?.data.runtime ??
+      0;
+    const genresIds = movieDetails.genres.map((genre) => genre.id);
+    const genres = await this.getGenres(genresIds);
+
+    return {
+      imdbId: movieDetails.imdb_id,
+      tmdbId: movieDetails.id,
+      title: movieDetails.title,
+      overview: movieDetails.overview,
+      tagline: movieDetails.tagline ?? "",
+      releaseDate: movieDetails.release_date,
+      poster: movieDetails.poster_path,
+      backdrop: movieDetails.backdrop_path,
+      logo: movieDetails.logo_path,
+      genres,
+      runtime,
+      popularity: movieDetails.popularity,
+      rating: movieDetails.vote_average,
+      translations: movieDetails.translations,
+    };
   }
 
   public async getTVShow(showId: number): Promise<TVShow> {
@@ -144,88 +174,66 @@ export class MediaService {
     return show;
   }
 
-  public async sync() {
-    // Use persistent sync state
+  public async syncMovies() {
     const lastMovieSync =
       await this.syncStateRepository.getLastSync(MOVIE_SYNC_NAME);
-    const lastTVSync = await this.syncStateRepository.getLastSync(TV_SYNC_NAME);
-    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const movieSyncDate = lastMovieSync || yesterday;
-    const tvSyncDate = lastTVSync || yesterday;
+    const now = new Date();
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Fallback if no sync state
+    const movieSyncStartDate = lastMovieSync || yesterday;
 
-    // Get all changed movie and TV show IDs from TMDB
-    const changedMovieIds =
-      await this.tmdbApi.getAllChangedMovieIds(movieSyncDate);
-    const changedTVShowIds =
-      await this.tmdbApi.getAllChangedTVShowIds(tvSyncDate);
-
-    // Update the local DB with the changed movies
-    for (const movie of changedMovieIds) {
-      const existingMovie = await this.movieRepository.findByTMDBId(movie.id);
-      if (existingMovie) {
-        const movieDetails = await this.tmdbApi.getMovieDetails(movie.id);
-        const genresIds = movieDetails.genres.map((genre) => genre.id);
-        const genres = await this.getGenres(genresIds);
-        await this.movieRepository.checkForChangesAndUpdate(existingMovie, {
-          title: movieDetails.title,
-          overview: movieDetails.overview,
-          releaseDate: movieDetails.release_date,
-          poster: movieDetails.poster_path,
-          backdrop: movieDetails.backdrop_path,
-          genres,
-        });
-
-        await Promise.all(
-          movieDetails.translations.map((translation) => {
-            return this.movieRepository.addTranslation(existingMovie, {
-              title: translation.data.title,
-              overview: translation.data.overview,
-              tagline: translation.data.tagline,
-              language: translation.iso_639_1,
-            });
-          }),
-        );
-      }
+    if (now.getDate() - movieSyncStartDate.getDate() < oneHourMs) {
+      console.log(
+        `[MovieSync] Last sync was less than 1 hour ago. Skipping sync.`,
+      );
+      return;
     }
 
-    // Update the local DB with the changed TV shows
-    for (const show of changedTVShowIds) {
-      const existingShow = await this.tvShowRepository.findByTMDBId(show.id);
-      if (existingShow) {
-        const showDetails = await this.tmdbApi.getTVShowDetails(show.id);
-        const genresIds = showDetails.genres.map((genre) => genre.id);
-        const genres = await this.getGenres(genresIds);
-        await this.tvShowRepository.checkForChangesAndUpdate(existingShow, {
-          name: showDetails.name,
-          overview: showDetails.overview,
-          firstAirDate: showDetails.first_air_date,
-          poster: showDetails.poster_path,
-          backdrop: showDetails.backdrop_path,
-          status: showDetails.status,
-          tagline: showDetails.tagline,
-          type: showDetails.type,
-          inProduction: showDetails.in_production,
-          episodeRunTime: showDetails.episode_run_time,
-          imdbId: showDetails.external_ids.imdb_id || "",
-          genres,
-        });
+    let chunkStart = movieSyncStartDate;
+    let chunkIndex = 1;
+    const totalChunks =
+      Math.floor((now.getTime() - chunkStart.getTime()) / twoHoursMs) + 1;
 
-        await Promise.all(
-          showDetails.translations.map(async (translation) => {
-            this.tvShowRepository.addTranslation(existingShow, {
-              name: translation.data.name,
-              overview: translation.data.overview,
-              tagline: translation.data.tagline,
-              language: translation.iso_639_1,
-            });
-          }),
+    while (chunkStart.getTime() < now.getTime()) {
+      const chunkSize =
+        now.getTime() - chunkStart.getTime() > fourHoursMs
+          ? twoHoursMs
+          : now.getTime() - chunkStart.getTime();
+      const chunkEnd = new Date(chunkStart.getTime() + chunkSize);
+      const changedMovieIdsGenerator = this.tmdbApi.getAllChangedMovieIds(
+        chunkStart,
+        chunkEnd,
+      );
+
+      for await (const pageResult of changedMovieIdsGenerator) {
+        console.log(
+          `[MovieSync] Processing chunk ${chunkIndex++}/${totalChunks}, page ${
+            pageResult.page
+          }/${pageResult.totalPages}`,
         );
-      }
-    }
+        const changedMoviesIds = pageResult.items;
+        const existingMoviesInDB: Movie[] = (
+          await Promise.all(
+            changedMoviesIds.map((change) =>
+              this.movieRepository.findByTMDBId(change.id),
+            ),
+          )
+        ).filter((movie): movie is Movie => movie !== null);
 
-    // Update sync state using 'yesterday' as the new sync timestamp
-    await this.syncStateRepository.setLastSync(MOVIE_SYNC_NAME, yesterday);
-    await this.syncStateRepository.setLastSync(TV_SYNC_NAME, yesterday);
+        for (const movie of existingMoviesInDB) {
+          try {
+            await this.updateMovie(movie);
+          } catch (error) {
+            console.error(
+              `Error updating movie with TMDB ID ${movie.tmdbId}:`,
+              error,
+            );
+          }
+        }
+        await sleep(1000);
+      }
+      await this.syncStateRepository.setLastSync(MOVIE_SYNC_NAME, chunkEnd);
+      chunkStart = chunkEnd;
+    }
   }
 
   public async mediasWithLanguage(

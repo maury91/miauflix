@@ -22,6 +22,9 @@ export class Scheduler {
           `Executing task: ${taskName} [${new Date().toISOString()}]`,
         );
         await task();
+        console.log(
+          `Task ${taskName} completed successfully [${new Date().toISOString()}]`,
+        );
       } catch (err) {
         console.error(`Task ${taskName} failed with error:`, err);
       } finally {
