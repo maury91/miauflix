@@ -356,33 +356,27 @@ export class TMDBApi {
    * Get all changed movie IDs across all pages since the specified timestamp
    * @param startDate Date from which to start tracking changes
    * @param endDate Optional end date for the changes (defaults to current date)
-   * @returns Array of all changed movie items
+   * @yields ChangeResult Pages of changed movie items
    */
-  public async getAllChangedMovieIds(
+  public async *getAllChangedMovieIds(
     startDate: Date,
     endDate: Date = new Date(),
-  ): Promise<ChangeItem[]> {
-    const firstPage = await this.getChangedMovieIds(startDate, endDate, 1);
-    const allItems = [...firstPage.items];
+  ): AsyncGenerator<ChangeResult> {
+    // Ensure it yields ChangeResult
+    let currentPage = 1;
+    let totalPages = 1; // Initialize with 1 to fetch the first page
 
-    // If there are more pages, fetch them all
-    if (firstPage.totalPages > 1) {
-      const remainingPagePromises = [];
+    do {
+      const pageResult = await this.getChangedMovieIds(
+        startDate,
+        endDate,
+        currentPage,
+      );
+      yield pageResult;
 
-      for (let page = 2; page <= firstPage.totalPages; page++) {
-        remainingPagePromises.push(
-          this.getChangedMovieIds(startDate, endDate, page),
-        );
-      }
-
-      const remainingPages = await Promise.all(remainingPagePromises);
-
-      for (const pageResult of remainingPages) {
-        allItems.push(...pageResult.items);
-      }
-    }
-
-    return allItems;
+      totalPages = pageResult.totalPages;
+      currentPage++;
+    } while (currentPage <= totalPages);
   }
 
   /**

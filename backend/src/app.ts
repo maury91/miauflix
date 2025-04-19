@@ -61,17 +61,15 @@ async function startApp() {
 
   scheduler.scheduleTask(
     "refreshLists",
-    60 * 60,
+    60 * 60, // 1 hour
     bind(listSynchronizer, "synchronize"),
   );
 
   // Schedule movie synchronization every 6 hours
   scheduler.scheduleTask(
     "syncMovies",
-    6 * 60 * 60, // 6 hours
-    async () => {
-      // ToDo: Implement movie synchronization logic here
-    },
+    1.5 * 60 * 60, // 1.5 hour
+    bind(mediaService, "syncMovies"),
   );
 
   new Elysia()
