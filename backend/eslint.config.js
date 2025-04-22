@@ -99,6 +99,15 @@ export default [
               ],
               message: "Use '@mytypes/...' instead of long relative paths.",
             },
+            {
+              group: [
+                "../utils/*",
+                "../../utils/*",
+                "../../../utils/*",
+                "../../../../utils/*",
+              ],
+              message: "Use '@utils/...' instead of long relative paths.",
+            },
           ],
         },
       ],

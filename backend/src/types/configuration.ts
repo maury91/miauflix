@@ -28,11 +28,17 @@ export type VariableInfo =
   | PasswordVariableInfo
   | SkipUserInteractionVariableInfo;
 
-export type ServiceVariables = Record<string, VariableInfo>;
+export type ServiceVariables<V extends string> = Record<V, VariableInfo>;
 
-export type ServiceConfiguration = {
+export type ServiceConfiguration<V extends string> = {
   name: string;
   description: string;
-  variables: ServiceVariables;
+  variables: ServiceVariables<V>;
   test: () => Promise<void>;
 };
+
+export function serviceConfiguration<V extends string>(
+  config: ServiceConfiguration<V>,
+): ServiceConfiguration<V> {
+  return config;
+}

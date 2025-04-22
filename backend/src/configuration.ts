@@ -2,23 +2,24 @@ import { confirm, input, password } from "@inquirer/prompts";
 import chalk from "chalk";
 import { writeFileSync } from "fs";
 import path from "path";
-import type {
-  ServiceConfiguration,
-  VariableInfo,
+import {
+  type ServiceConfiguration,
+  serviceConfiguration,
+  type VariableInfo,
 } from "src/types/configuration";
 import { isatty } from "tty";
 
-import { jwtConfigurationDefinition } from "@services/auth/auth.service";
-import { tmdbConfigurationDefinition } from "@services/tmdb/tmdb.api";
-import { traktConfigurationDefinition } from "@services/trakt/trakt.api";
+import { jwtConfigurationDefinition } from "@services/auth/auth.configuration";
+import { tmdbConfigurationDefinition } from "@services/tmdb/tmdb.configuration";
+import { traktConfigurationDefinition } from "@services/trakt/trakt.configuration";
 
 function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
 }
 
-const corsConfigurationDefinition: ServiceConfiguration = {
-  name: "CORS",
-  description: "Cross-Origin Resource Sharing configuration",
+const serverConfigurationDefinition = serviceConfiguration({
+  name: "Server",
+  description: "Server configuration",
   variables: {
     CORS_ORIGIN: {
       description: "Allowed origins for CORS (use '*' for all origins)",
@@ -26,24 +27,48 @@ const corsConfigurationDefinition: ServiceConfiguration = {
       defaultValue: "*",
       example: "http://localhost:3000",
     },
+    PORT: {
+      description: "Port for the server to listen on",
+      required: false,
+      defaultValue: "3000",
+      example: "3000",
+    },
   },
   test: async () => {
     // No test needed for CORS configuration
     return;
   },
-};
+});
 
-const services = {
+export const services = {
   TMDB: tmdbConfigurationDefinition,
   TRAKT: traktConfigurationDefinition,
   JWT: jwtConfigurationDefinition,
-  CORS: corsConfigurationDefinition,
+  SERVER: serverConfigurationDefinition,
 };
+
+export type Variables = {
+  [K in keyof typeof services]: keyof (typeof services)[K]["variables"];
+}[keyof typeof services];
+
+export const variablesDefaultValues = Object.values(services).reduce(
+  (acc, service) => {
+    (Object.entries(service.variables) as [Variables, VariableInfo][]).forEach(
+      ([varName, varInfo]) => {
+        if ("defaultValue" in varInfo) {
+          acc[varName] = varInfo.defaultValue;
+        }
+      },
+    );
+    return acc;
+  },
+  {} as Partial<Record<Variables, string>>,
+);
 
 type ServiceKey = keyof typeof services;
 
 const testService = async (
-  service: ServiceConfiguration,
+  service: ServiceConfiguration<string>,
 ): Promise<{ success: boolean; message?: string }> => {
   const err = console.error;
   console.error = () => {};
@@ -64,7 +89,9 @@ const testService = async (
 /**
  * Configure a service by prompting for variables and testing the configuration
  */
-async function configureService(service: ServiceConfiguration): Promise<void> {
+async function configureService(
+  service: ServiceConfiguration<string>,
+): Promise<void> {
   console.log();
   console.log(chalk.cyan.bold(`===== ${service.name} Configuration =====`));
   console.log(chalk.white(service.description));
@@ -358,13 +385,13 @@ export async function validateConfiguration(): Promise<void> {
 async function validateExistingConfiguration(): Promise<ServiceKey[]> {
   const invalidServices = (
     await Promise.all(
-      (Object.entries(services) as [ServiceKey, ServiceConfiguration][]).map(
-        async ([serviceKey, service]) => {
-          // Execute test
-          const testResult = await testService(service);
-          return [testResult.success, serviceKey] as const;
-        },
-      ),
+      (
+        Object.entries(services) as [ServiceKey, ServiceConfiguration<string>][]
+      ).map(async ([serviceKey, service]) => {
+        // Execute test
+        const testResult = await testService(service);
+        return [testResult.success, serviceKey] as const;
+      }),
     )
   )
     .filter(([isValid]) => !isValid)

@@ -1,5 +1,4 @@
 import { compare, hash } from "bcrypt";
-import { randomBytes } from "crypto";
 import type { JWTPayload } from "jose";
 import { jwtVerify, SignJWT } from "jose";
 import { hostname } from "os";
@@ -13,7 +12,6 @@ import { InvalidTokenError } from "@errors/auth.errors";
 import type { RefreshTokenRepository } from "@repositories/refresh-token.repository";
 import type { UserRepository } from "@repositories/user.repository";
 import type { AuditLogService } from "@services/security/audit-log.service";
-import type { ServiceConfiguration } from "@mytypes/configuration";
 import { generateSecurePassword } from "@utils/password.util";
 
 import { ENV } from "../../constants";
@@ -237,27 +235,3 @@ export class AuthService {
     return null;
   }
 }
-
-export const jwtConfigurationDefinition: ServiceConfiguration = {
-  name: "JWT Authentication",
-  description: "Configuration for JWT authentication",
-  variables: {
-    JWT_SECRET: {
-      description: "Secret key for JWT token signing",
-      example: "a-random-secret-key",
-      defaultValue: randomBytes(32).toString("hex"),
-      required: true,
-      skipUserInteraction: true,
-    },
-    REFRESH_TOKEN_SECRET: {
-      description: "Secret key for refresh token signing",
-      example: "a-random-refresh-secret-key",
-      defaultValue: randomBytes(32).toString("hex"),
-      required: true,
-      skipUserInteraction: true,
-    },
-  },
-  test: async () => {
-    return;
-  },
-};

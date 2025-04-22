@@ -1,3 +1,5 @@
+import { logger } from "@logger";
+
 import type { MediaList } from "@entities/list.entity";
 import { Movie } from "@entities/movie.entity";
 import { TVShow } from "@entities/tvshow.entity";
@@ -59,8 +61,9 @@ export class ListService {
     const list = this.lists[slug];
     const { totalPages, totalItems, items: medias } = await list.source(page);
 
-    console.log(
-      `[ListService] List ${slug} has ${totalItems} results and ${totalPages} pages, obtained page ${page}`,
+    logger.debug(
+      "ListService",
+      `List ${slug} has ${totalItems} results and ${totalPages} pages, obtained page ${page}`,
     );
 
     return {
@@ -122,7 +125,6 @@ export class ListService {
     const mediaList = await this.getOrCreateList(slug, true);
 
     if (mediaList.movies.length + mediaList.tvShows.length === 0) {
-      console.log("Data is empty, getting more of it");
       const { medias } = await this.getListContentFromApi(slug, 1);
       return await this.updateListContent(slug, medias);
     }

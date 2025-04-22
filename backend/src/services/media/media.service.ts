@@ -1,3 +1,4 @@
+import { logger } from "@logger";
 import { sleep } from "bun";
 
 import type { Genre } from "@entities/genre.entity";
@@ -181,9 +182,10 @@ export class MediaService {
     const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Fallback if no sync state
     const movieSyncStartDate = lastMovieSync || yesterday;
 
-    if (now.getDate() - movieSyncStartDate.getDate() < oneHourMs) {
-      console.log(
-        `[MovieSync] Last sync was less than 1 hour ago. Skipping sync.`,
+    if (now.getTime() - movieSyncStartDate.getTime() < oneHourMs) {
+      logger.debug(
+        "MovieSync",
+        "Last sync was less than 1 hour ago. Skipping sync.",
       );
       return;
     }
@@ -205,10 +207,9 @@ export class MediaService {
       );
 
       for await (const pageResult of changedMovieIdsGenerator) {
-        console.log(
-          `[MovieSync] Processing chunk ${chunkIndex++}/${totalChunks}, page ${
-            pageResult.page
-          }/${pageResult.totalPages}`,
+        logger.debug(
+          "MovieSync",
+          `Chunk ${chunkIndex}/${totalChunks} - Processing page ${pageResult.page}/${pageResult.totalPages}`,
         );
         const changedMoviesIds = pageResult.items;
         const existingMoviesInDB: Movie[] = (
@@ -223,7 +224,8 @@ export class MediaService {
           try {
             await this.updateMovie(movie);
           } catch (error) {
-            console.error(
+            logger.error(
+              "MovieSync",
               `Error updating movie with TMDB ID ${movie.tmdbId}:`,
               error,
             );
@@ -233,6 +235,7 @@ export class MediaService {
       }
       await this.syncStateRepository.setLastSync(MOVIE_SYNC_NAME, chunkEnd);
       chunkStart = chunkEnd;
+      chunkIndex++;
     }
   }
 

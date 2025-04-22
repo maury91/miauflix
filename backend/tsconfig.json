@@ -26,7 +26,8 @@
       "@routes/*": ["src/routes/*"],
       "@services/*": ["src/services/*"],
       "@mytypes/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@logger": ["src/logger"]
     }
   },
   "include": ["src/**/*"],

@@ -1,3 +1,4 @@
+import { logger } from "@logger";
 import { clearInterval, setTimeout } from "timers";
 
 export class Scheduler {
@@ -18,20 +19,14 @@ export class Scheduler {
 
     const executeTask = async () => {
       try {
-        console.log(
-          `Executing task: ${taskName} [${new Date().toISOString()}]`,
-        );
+        logger.debug("Scheduler", `Executing task: ${taskName}`);
         await task();
-        console.log(
-          `Task ${taskName} completed successfully [${new Date().toISOString()}]`,
-        );
+        logger.debug("Scheduler", `Task ${taskName} completed successfully`);
       } catch (err) {
-        console.error(`Task ${taskName} failed with error:`, err);
+        logger.error("Scheduler", `Task ${taskName} failed with error:`, err);
       } finally {
-        if (this.tasks.has(taskName)) {
-          const intervalId = setTimeout(executeTask, interval * 1000);
-          this.tasks.set(taskName, intervalId);
-        }
+        const intervalId = setTimeout(executeTask, interval * 1000);
+        this.tasks.set(taskName, intervalId);
       }
     };
 

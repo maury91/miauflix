@@ -1,3 +1,5 @@
+import { logger } from "@logger";
+
 import type { Movie } from "@entities/movie.entity";
 import type { TVShow } from "@entities/tvshow.entity";
 
@@ -9,7 +11,7 @@ export class ListSynchronizer {
   async synchronize(): Promise<void> {
     const lists = await this.listService.getLists();
     for (const { slug } of lists) {
-      console.log(`[${new Date()}][Synchronizer] Synchronizing list: ${slug}`);
+      logger.debug("Synchronizer", `Synchronizing list: ${slug}`);
       // This creates the list ( if it doesn't exist ) and also preloads the first page
       await this.listService.getListBySlug(slug);
       let pages = 1;
@@ -31,8 +33,8 @@ export class ListSynchronizer {
       } while (currentPage <= Math.min(pages, 6));
       // Not liking the idea of incremental loading, it can lead to problems where the list gets periodically empty
       await this.listService.updateListContent(slug, allMedias);
-      console.log(`[${new Date()}][Synchronizer] List ${slug} synchronized`);
+      logger.debug("Synchronizer", `List ${slug} synchronized`);
     }
-    console.log(`[${new Date()}][Synchronizer] All lists synchronized`);
+    logger.debug("Synchronizer", `All lists synchronized`);
   }
 }
