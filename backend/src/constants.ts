@@ -1,12 +1,7 @@
-type RequiredEnv =
-  | "JWT_SECRET"
-  | "REFRESH_TOKEN_SECRET"
-  | "TMDB_API_ACCESS_TOKEN"
-  | "TRAKT_CLIENT_ID";
+import type { Variables} from "./configuration";
+import { variablesDefaultValues } from "./configuration";
 
-type OptionalEnv = "CORS_ORIGIN" | "TMDB_API_URL" | "TRAKT_API_URL";
+export const ENV = (variable: Variables): string =>
+  process.env[variable] ?? variablesDefaultValues[variable] ?? "";
 
-export const ENV = (
-  variable: OptionalEnv | RequiredEnv,
-  defaultValue?: string,
-): string => process.env[variable] ?? defaultValue ?? "";
+ENV.number = (variable: Variables): number => parseInt(ENV(variable), 10) || 0;

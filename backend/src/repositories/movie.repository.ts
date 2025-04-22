@@ -52,7 +52,6 @@ export class MovieRepository {
 
   async addTranslation(movie: Movie, translation: Partial<MovieTranslation>) {
     if (!movie.id) {
-      console.log(movie);
       throw new Error("Movie ID is required to add a translation");
     }
     const newTranslation = this.movieTranslationRepository.create({

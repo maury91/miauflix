@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 import { cors } from "@elysiajs/cors";
 import { serverTiming } from "@elysiajs/server-timing";
+import { logger } from "@logger";
 import { Elysia, t } from "elysia";
 
 import { Database } from "@database/database";
@@ -51,10 +52,10 @@ async function startApp() {
 
   // ToDo: just testing for now, later it will be part of another service
   vpnDetectionService.on("connect", () => {
-    console.log("VPN connected");
+    logger.debug("App", "VPN connected");
   });
   vpnDetectionService.on("disconnect", () => {
-    console.log("VPN disconnected");
+    logger.debug("App", "VPN disconnected");
   });
 
   await authService.configureUsers();
@@ -133,8 +134,11 @@ async function startApp() {
       },
     )
     .use(createAuthRoutes(authService, auditLogService))
-    .listen(3000, () => {
-      console.log(`Server is running on http://localhost:3000`);
+    .listen(ENV.number("PORT"), (server) => {
+      logger.info(
+        "App",
+        `Server is running on http://localhost:${server.port}`,
+      );
     });
 }
 

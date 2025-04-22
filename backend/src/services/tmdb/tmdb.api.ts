@@ -1,8 +1,7 @@
-import { ServiceConfiguration } from "src/types/configuration";
+import { Cacheable } from "@utils/cacheable.util";
+import { RateLimiter } from "@utils/rateLimiter";
 
 import { ENV } from "../../constants";
-import { Cacheable } from "../../utils/cacheable.util";
-import { RateLimiter } from "../../utils/rateLimiter";
 import type {
   ChangeItem,
   ChangeResult,
@@ -47,7 +46,7 @@ export class TMDBApi {
    * start rate limiting itself.
    */
 
-  private readonly apiUrl = ENV("TMDB_API_URL", "https://api.themoviedb.org/3");
+  private readonly apiUrl = ENV("TMDB_API_URL");
   private readonly apiKey = ENV("TMDB_API_ACCESS_TOKEN");
   private readonly rateLimiter = new RateLimiter(50);
   private readonly configuration: Promise<ConfigurationResponse>;
@@ -424,42 +423,3 @@ export class TMDBApi {
     return this.get<{ genres: Genre[] }>(url);
   }
 }
-
-export const tmdbConfigurationDefinition: ServiceConfiguration = {
-  name: "The Movie Database (TMDB)",
-  description: "Service for fetching movie and TV show information",
-  variables: {
-    TMDB_API_URL: {
-      description: "URL for The Movie Database API",
-      example: "https://api.themoviedb.org/3",
-      defaultValue: "https://api.themoviedb.org/3",
-      required: false,
-    },
-    TMDB_API_ACCESS_TOKEN: {
-      description: "Access token for The Movie Database API",
-      example: "eyJhbGciOiJIUzI1NiJ9...",
-      link: "https://www.themoviedb.org/settings/api",
-      required: true,
-      password: true,
-    },
-  },
-  test: async () => {
-    try {
-      const tmdbApi = new TMDBApi();
-
-      // Use test because it doesn't use cache
-      await tmdbApi.test();
-    } catch (error: unknown) {
-      console.error(error);
-      if (error) {
-        if (typeof error === "object" && error && "status" in error) {
-          if (error.status === 401) {
-            throw new Error(`Invalid Access Token`);
-          }
-          throw new Error(`Connection error: ${error.status}`);
-        }
-        throw error;
-      }
-    }
-  },
-};
