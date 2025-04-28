@@ -10,8 +10,8 @@ export default [
       sourceType: "module",
       parser: tsParser,
       parserOptions: {
-        project: "./tsconfig.json",
-        tsconfigRootDir: __dirname,
+        project: "tsconfig.json",
+        tsconfigRootDir: process.cwd(),
         ecmaFeatures: { legacyDecorators: true },
       },
     },

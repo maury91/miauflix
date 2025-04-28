@@ -41,12 +41,12 @@ export class ListService {
         slug: "@@tmdb_movies_top-rated",
         description: "List of top rated movies from TMDB",
       },
-      // "@@tmdb_shows_popular": {
-      //   name: "Popular TV Shows",
-      //   source: this.tmdbApi.getPopularShows.bind(this.tmdbApi),
-      //   slug: "@@tmdb_shows_popular",
-      //   description: "List of popular TV shows from TMDB",
-      // },
+      "@@tmdb_shows_popular": {
+        name: "Popular TV Shows",
+        source: this.tmdbApi.getPopularShows.bind(this.tmdbApi),
+        slug: "@@tmdb_shows_popular",
+        description: "List of popular TV shows from TMDB",
+      },
     };
     this.mediaListRepository = db.getMediaListRepository();
   }
@@ -72,7 +72,7 @@ export class ListService {
           if (mediaData._type === "movie") {
             return this.mediaService.getMovie(mediaData.id, mediaData);
           }
-          return this.mediaService.getTVShow(mediaData.id);
+          return this.mediaService.getTVShow(mediaData.id, mediaData);
         }),
       ),
       pages: totalPages,

@@ -66,6 +66,12 @@ export class TVShow {
   })
   popularity: number;
 
+  @Column({
+    type: "float",
+    default: 0,
+  })
+  rating: number;
+
   @OneToMany(() => Season, (season) => season.tvShow)
   seasons: Relation<Season>[];
 
@@ -90,6 +96,9 @@ export class TVShowTranslation {
 
   @ManyToOne(() => TVShow, (tvShow) => tvShow.translations)
   tvShow: Relation<TVShow>;
+
+  @Column()
+  tvShowId: number;
 
   @Column()
   language: string;
