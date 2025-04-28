@@ -3,13 +3,17 @@ import { sleep } from "bun";
 
 import type { Genre } from "@entities/genre.entity";
 import { Movie } from "@entities/movie.entity";
-import type { TVShow } from "@entities/tvshow.entity";
+import type { Season } from "@entities/season.entity";
+import type { TVShow, TVShowTranslation } from "@entities/tvshow.entity";
 import type { Database } from "@database/database";
 import type { GenreRepository } from "@repositories/genre.repository";
 import type { MovieRepository } from "@repositories/movie.repository";
 import type { SyncStateRepository } from "@repositories/syncState.repository";
 import type { TVShowRepository } from "@repositories/tvshow.repository";
-import type { MovieMediaSummary } from "@services/tmdb/tmdb.types";
+import type {
+  MovieMediaSummary,
+  TVShowMediaSummary,
+} from "@services/tmdb/tmdb.types";
 
 import { TMDBApi } from "../tmdb/tmdb.api";
 import type { GenreWithLanguages, TranslatedMedia } from "./media.types";
@@ -134,7 +138,10 @@ export class MediaService {
     };
   }
 
-  public async getTVShow(showId: number): Promise<TVShow> {
+  public async getTVShow(
+    showId: number,
+    tvShowSummary?: TVShowMediaSummary,
+  ): Promise<TVShow> {
     // Check if the TV show is available in the local DB
     let show = await this.tvShowRepository.findByTMDBId(showId);
     if (!show) {
@@ -157,21 +164,96 @@ export class MediaService {
         genres,
         firstAirDate: showDetails.first_air_date,
         episodeRunTime: showDetails.episode_run_time,
+        popularity: showDetails.popularity,
+        rating: showDetails.vote_average,
       });
 
-      await Promise.all(
-        showDetails.translations.map(async (translation) => {
-          if (show) {
-            this.tvShowRepository.addTranslation(show, {
-              name: translation.data.name,
-              overview: translation.data.overview,
-              tagline: translation.data.tagline,
-              language: translation.iso_639_1,
-            });
-          }
-        }),
+      const dbTranslations = (
+        await Promise.all(
+          showDetails.translations.map(async (translation) => {
+            if (show) {
+              return this.tvShowRepository.addTranslation(show, {
+                name: translation.data.name,
+                overview: translation.data.overview,
+                tagline: translation.data.tagline,
+                language: translation.iso_639_1,
+              });
+            }
+          }),
+        )
+      ).filter(
+        (translation): translation is TVShowTranslation => !!translation,
       );
+      show.translations = dbTranslations;
+
+      // Obtain all episodes and seasons
+      const dbSeasons = (
+        await Promise.all(
+          showDetails.seasons.map(async (season) => {
+            if (show) {
+              const seasonDetails = await this.tmdbApi.getSeason(
+                showId,
+                season.season_number,
+              );
+
+              // Create the season first
+              const createdSeason = await this.tvShowRepository.createSeason(
+                show,
+                {
+                  tmdbId: season.id,
+                  name: season.name,
+                  overview: season.overview,
+                  airDate: season.air_date,
+                  posterPath: season.poster_path,
+                  seasonNumber: season.season_number,
+                },
+              );
+
+              // Then create all episodes for this season
+              await Promise.all(
+                seasonDetails.episodes.map(async (episode) => {
+                  return this.tvShowRepository.createEpisode(createdSeason, {
+                    tmdbId: episode.id,
+                    name: episode.name,
+                    overview: episode.overview,
+                    episodeNumber: episode.episode_number,
+                    airDate: episode.air_date,
+                    stillPath: episode.still_path,
+                    seasonId: createdSeason.id,
+                    imdbId: "", // We'll add this later once we sync more episode info
+                  });
+                }),
+              );
+
+              return createdSeason;
+            }
+          }),
+        )
+      ).filter((season): season is Season => !!season);
+      show.seasons = dbSeasons;
     }
+
+    if (tvShowSummary) {
+      const genres = await this.getGenres(tvShowSummary.genres);
+
+      await this.tvShowRepository.checkForChangesAndUpdate(show, {
+        tmdbId: tvShowSummary.id,
+        name: tvShowSummary.name,
+        overview: tvShowSummary.overview,
+        poster: tvShowSummary.poster_path,
+        backdrop: tvShowSummary.backdrop_path,
+        firstAirDate: tvShowSummary.first_air_date,
+        popularity: tvShowSummary.popularity,
+        rating: tvShowSummary.vote_average,
+      });
+
+      if (
+        show.genres.map((genre) => genre.id).toString() !== genres.toString()
+      ) {
+        await this.tvShowRepository.updateGenres(show, genres);
+      }
+    }
+
     return show;
   }
 

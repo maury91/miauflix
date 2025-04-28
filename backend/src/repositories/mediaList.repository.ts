@@ -19,11 +19,14 @@ export class MediaListRepository {
         movies: preload
           ? {
               genres: true,
+              translations: true,
             }
           : false,
         tvShows: preload
           ? {
               genres: true,
+              translations: true,
+              seasons: true,
             }
           : false,
         seasons: preload,

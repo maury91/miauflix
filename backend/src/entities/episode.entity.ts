@@ -18,6 +18,9 @@ export class Episode {
   tmdbId: number;
 
   @Column()
+  seasonId: number;
+
+  @Column()
   episodeNumber: number;
 
   @Column()

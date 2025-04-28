@@ -180,7 +180,7 @@ export class TMDBApi {
    */
   @Cacheable(36e5 /* 1 hour */)
   public async getTVShowDetails(showId: number | string) {
-    const url = `${this.apiUrl}/tv/${showId}?append_to_response=external_ids,translations`;
+    const url = `${this.apiUrl}/tv/${showId}?append_to_response=external_ids,translations&language=${this.language}`;
     const showData = await this.get<
       TVShowDetails & WithExternalIds & WithTVShowTranslations
     >(url);

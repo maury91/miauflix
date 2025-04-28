@@ -29,7 +29,7 @@
     - [x] Periodical synchronization
   - [ ] TMDb TV show synchronization
     - [x] Synchronization on request
-    - [ ] Periodical synchronization
+    - [x] Periodical synchronization
     - [ ] Season and episode synchronization
   - [ ] Trakt.tv list synchronization
   - [ ] Media metadata handling

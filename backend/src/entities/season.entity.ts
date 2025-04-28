@@ -5,12 +5,14 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  type Relation,
   UpdateDateColumn,
 } from "typeorm";
 
 import { Episode } from "./episode.entity";
 import { TVShow } from "./tvshow.entity";
 
+// ToDo: support translations ( priority low )
 @Entity()
 export class Season {
   @PrimaryGeneratedColumn()
@@ -18,6 +20,9 @@ export class Season {
 
   @Column()
   tmdbId: number;
+
+  @Column()
+  tvShowId: number;
 
   @Column()
   seasonNumber: number;
@@ -34,14 +39,11 @@ export class Season {
   @Column()
   posterPath: string;
 
-  @Column()
-  imdbId: string;
-
   @OneToMany(() => Episode, (episode) => episode.season)
-  episodes: (typeof Episode)[];
+  episodes: Relation<Episode>[];
 
   @ManyToOne(() => TVShow, (tvShow) => tvShow.seasons)
-  tvShow: typeof TVShow;
+  tvShow: Relation<TVShow>;
 
   @CreateDateColumn()
   createdAt: Date;

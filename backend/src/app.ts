@@ -77,7 +77,7 @@ async function startApp() {
     .use(serverTiming())
     .use(
       cors({
-        origin: ENV("CORS_ORIGIN", "*"),
+        origin: ENV("CORS_ORIGIN"),
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
         exposeHeaders: ["Content-Range", "X-Content-Range"],

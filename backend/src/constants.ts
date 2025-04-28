@@ -1,4 +1,4 @@
-import type { Variables} from "./configuration";
+import type { Variables } from "./configuration";
 import { variablesDefaultValues } from "./configuration";
 
 export const ENV = (variable: Variables): string =>
