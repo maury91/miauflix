@@ -1,5 +1,9 @@
 import { Cacheable } from "@utils/cacheable.util";
 import { RateLimiter } from "@utils/rateLimiter";
+import {
+  groupTimestampsByInterval,
+  TrackStatus,
+} from "@utils/trackStatus.util";
 
 import { ENV } from "../../constants";
 import type {
@@ -39,6 +43,10 @@ export const NO_IMAGES: MediaImages = {
 };
 
 export class TMDBApi {
+  private requestQueueCount = 0;
+  private requestSuccesses: number[] = [];
+  private requestFailures: number[] = [];
+  private lastRequest: number | null = null;
   /**
    * Note about rate limiting, the API is limited to 50requests per second
    * I hightly doubt is possible to reach this limit in a home setting.
@@ -56,6 +64,7 @@ export class TMDBApi {
     this.configuration = this.getConfiguration();
   }
 
+  @TrackStatus()
   private async request<T>(url: string, init: RequestInit): Promise<T> {
     // Apply rate limiting before making the request
     await this.rateLimiter.throttle();
@@ -376,6 +385,32 @@ export class TMDBApi {
       totalPages = pageResult.totalPages;
       currentPage++;
     } while (currentPage <= totalPages);
+  }
+
+  /**
+   * Returns the current status of the API instance.
+   * - queue: number of requests in the queue
+   * - successes: array of { time, count } for last 24h, grouped by 5 min
+   * - failures: array of { time, count } for last 24h, grouped by 5 min
+   * - lastRequest: timestamp of last request (ms since epoch)
+   */
+  public status() {
+    return {
+      queue: this.requestQueueCount,
+      successes: groupTimestampsByInterval(this.requestSuccesses).map(
+        (item) => ({
+          ...item,
+          time: new Date(item.time).toISOString(),
+        }),
+      ),
+      failures: groupTimestampsByInterval(this.requestFailures).map((item) => ({
+        ...item,
+        time: new Date(item.time).toISOString(),
+      })),
+      lastRequest: this.lastRequest
+        ? new Date(this.lastRequest).toISOString()
+        : null,
+    };
   }
 
   /**

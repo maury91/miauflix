@@ -1,3 +1,50 @@
+# Dependencies
 node_modules
+
+# Environment files
 .env
+.env.local
+.env.*.local
+
+# Database files
 *.sqlite
+*.sqlite3
+*.db
+
+# SSL certificates and keys
+nginx/ssl/*
+*.pem
+*.key
+*.crt
+*.csr
+dhparam.pem
+
+# Nginx configuration
+nginx/conf.d/default.conf
+nginx/conf.d/*.conf.bak
+
+# Certbot - ignore sensitive directories but keep config files
+nginx/certbot/conf/live/
+nginx/certbot/conf/archive/
+nginx/certbot/conf/renewal/
+nginx/certbot/conf/accounts/
+nginx/certbot/www/.well-known/acme-challenge/
+# Don't ignore these config files
+!nginx/certbot/conf/options-ssl-nginx.conf
+!nginx/certbot/conf/ssl-dhparams.pem
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Docker
+.docker-volumes/

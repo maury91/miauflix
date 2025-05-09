@@ -1,18 +1,66 @@
-version: "3.8"
-
 services:
+  nordvpn:
+    image: ghcr.io/bubuntux/nordlynx
+    hostname: nordvpn
+    container_name: nordvpn
+    env_file: .env
+    ports:
+      - "3000:3000" # Expose port 3000 directly
+      - "6499:6499" # Expose port 6499 directly
+    cap_add:
+      - NET_ADMIN # Required
+      - SYS_MODULE # Maybe required
+    environment:
+      - PRIVATE_KEY=$NORDVPN_PRIVATE_KEY # Using token from .env file
+      - CONNECT=United_States # Optional - Change to your preferred server location
+      - NET_LOCAL=192.168.0.0/16 # Optional - Your local network
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1 # Maybe required
+      - net.ipv4.conf.all.rp_filter=2 # Set reverse path filter to loose mode
+      - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
+    restart: unless-stopped
+
   backend:
     build:
       context: .
       dockerfile: backend.Dockerfile
+    container_name: miauflix-backend
+    depends_on:
+      - nordvpn
     volumes:
       - ./:/usr/src/app/
       - backend_node_modules:/usr/src/app/node_modules
-    ports:
-      - "3000:3000"
-      - "6499:6499"
+    network_mode: service:nordvpn # Route traffic through NordVPN
+    # No ports section here as they're defined in the nordvpn service
     restart: unless-stopped
     command: ["bun", "--inspect", "--watch", "backend/src/app.ts"]
+
+  nginx:
+    image: nginx:alpine
+    container_name: miauflix-nginx
+    ports:
+      - "80:80" # Expose HTTP port
+      - "443:443" # Expose HTTPS port
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    depends_on:
+      - backend
+    restart: unless-stopped
+    # Not using network_mode: service:nordvpn so it can be accessible from outside
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
+  certbot:
+    image: certbot/certbot
+    container_name: miauflix-certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
 
 volumes:
   backend_node_modules:

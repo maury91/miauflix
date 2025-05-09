@@ -191,11 +191,6 @@ export class MediaService {
         await Promise.all(
           showDetails.seasons.map(async (season) => {
             if (show) {
-              const seasonDetails = await this.tmdbApi.getSeason(
-                showId,
-                season.season_number,
-              );
-
               // Create the season first
               const createdSeason = await this.tvShowRepository.createSeason(
                 show,
@@ -207,22 +202,6 @@ export class MediaService {
                   posterPath: season.poster_path,
                   seasonNumber: season.season_number,
                 },
-              );
-
-              // Then create all episodes for this season
-              await Promise.all(
-                seasonDetails.episodes.map(async (episode) => {
-                  return this.tvShowRepository.createEpisode(createdSeason, {
-                    tmdbId: episode.id,
-                    name: episode.name,
-                    overview: episode.overview,
-                    episodeNumber: episode.episode_number,
-                    airDate: episode.air_date,
-                    stillPath: episode.still_path,
-                    seasonId: createdSeason.id,
-                    imdbId: "", // We'll add this later once we sync more episode info
-                  });
-                }),
               );
 
               return createdSeason;
@@ -255,6 +234,34 @@ export class MediaService {
     }
 
     return show;
+  }
+
+  public async syncIncompleteSeasons() {
+    const incompleteSeason = await this.tvShowRepository.findIncompleteSeason();
+    if (incompleteSeason) {
+      const seasonDetails = await this.tmdbApi.getSeason(
+        incompleteSeason.tvShow.tmdbId,
+        incompleteSeason.seasonNumber,
+      );
+
+      // Then create all episodes for this season
+      await Promise.all(
+        seasonDetails.episodes.map(async (episode) => {
+          return this.tvShowRepository.createEpisode(incompleteSeason, {
+            tmdbId: episode.id,
+            name: episode.name,
+            overview: episode.overview,
+            episodeNumber: episode.episode_number,
+            airDate: episode.air_date,
+            stillPath: episode.still_path,
+            seasonId: incompleteSeason.id,
+            imdbId: "", // We'll add this later once we sync more episode info
+          });
+        }),
+      );
+
+      await this.tvShowRepository.markSeasonAsSynced(incompleteSeason);
+    }
   }
 
   public async syncMovies() {
