@@ -71,7 +71,6 @@ export class TraktApi {
 
   private calculateDelay(limitName: RateLimitInfo['name']) {
     const limit = this.getRateLimit(limitName);
-    console.log(limit);
     const now = Date.now();
 
     if (limit.remaining <= 0) {
