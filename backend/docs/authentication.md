@@ -24,6 +24,7 @@ The backend uses a secure authentication system with the following features:
 ### Public Routes (Whitelisted)
 
 - `POST /auth/login` - Login with email and password
+
   - Body: `{ email: string, password: string }`
   - Returns: `{ accessToken: string, refreshToken: string }`
 
@@ -55,16 +56,16 @@ JWT_SECRET=your-secure-secret-key
 
 ```typescript
 // Protected route example
-app.get("/protected", ({ user }) => {
+app.get('/protected', ({ user }) => {
   return { message: `Hello ${user.email}!` };
 });
 
 // Admin-only route example
-app.get("/admin", ({ user }) => {
+app.get('/admin', ({ user }) => {
   if (user.role !== UserRole.ADMIN) {
-    throw new Error("Forbidden");
+    throw new Error('Forbidden');
   }
-  return { message: "Admin access granted" };
+  return { message: 'Admin access granted' };
 });
 ```
 
@@ -86,4 +87,4 @@ The authentication system uses industry-standard JWT handling, which provides:
 - **Advanced Security**: Support for multiple algorithms and key types
 - **Fine-grained Control**: Detailed control over token claims and headers
 - **Type Safety**: Excellent TypeScript support
-- **Performance**: Optimized for performance with minimal dependencies 
+- **Performance**: Optimized for performance with minimal dependencies

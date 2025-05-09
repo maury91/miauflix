@@ -1,6 +1,6 @@
-import type { DataSource, Repository } from "typeorm";
+import type { DataSource, Repository } from 'typeorm';
 
-import { SyncState } from "@entities/sync-state.entity";
+import { SyncState } from '@entities/sync-state.entity';
 
 export class SyncStateRepository {
   private readonly repository: Repository<SyncState>;

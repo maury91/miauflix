@@ -38,7 +38,7 @@ export type ServiceConfiguration<V extends string> = {
 };
 
 export function serviceConfiguration<V extends string>(
-  config: ServiceConfiguration<V>,
+  config: ServiceConfiguration<V>
 ): ServiceConfiguration<V> {
   return config;
 }

@@ -1,7 +1,7 @@
-import type { DataSource, Repository } from "typeorm";
+import type { DataSource, Repository } from 'typeorm';
 
-import type { UserRole } from "@entities/user.entity";
-import { User } from "@entities/user.entity";
+import type { UserRole } from '@entities/user.entity';
+import { User } from '@entities/user.entity';
 
 export class UserRepository {
   private readonly repository: Repository<User>;

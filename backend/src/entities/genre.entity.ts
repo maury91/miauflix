@@ -6,27 +6,24 @@ import {
   PrimaryGeneratedColumn,
   type Relation,
   Unique,
-} from "typeorm";
+} from 'typeorm';
 
 @Entity()
 export class Genre {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(
-    () => GenreTranslation,
-    (genreTranslation) => genreTranslation.genre,
-  )
+  @OneToMany(() => GenreTranslation, genreTranslation => genreTranslation.genre)
   translations: Relation<GenreTranslation[]>;
 }
 
 @Entity()
-@Unique(["genreId", "language"])
+@Unique(['genreId', 'language'])
 export class GenreTranslation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Genre, (genre) => genre.translations)
+  @ManyToOne(() => Genre, genre => genre.translations)
   genre: Relation<Genre>;
 
   @Column()

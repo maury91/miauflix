@@ -28,4 +28,4 @@ The configuration system:
 - **Improved Developer Experience**: Interactive prompts guide users through setup
 - **Simplified Deployment**: Easier to identify missing configuration in production
 - **Centralized Configuration**: All configuration in one place with validation
-- **Service Validation**: Tests service connections before saving configuration 
+- **Service Validation**: Tests service connections before saving configuration

@@ -21,7 +21,7 @@ interface Image {
   width: number;
 }
 
-export type MediaType = "movie" | "tv";
+export type MediaType = 'movie' | 'tv';
 
 export type Paged<T> = {
   page: number;
@@ -297,9 +297,9 @@ export interface MovieSummary {
   vote_count: number;
 }
 
-export interface MovieMediaSummary extends Omit<MovieSummary, "genre_ids"> {
+export interface MovieMediaSummary extends Omit<MovieSummary, 'genre_ids'> {
   genres: number[];
-  _type: "movie";
+  _type: 'movie';
 }
 
 export interface TVShowSummary {
@@ -320,9 +320,9 @@ export interface TVShowSummary {
   origin_country: string[];
 }
 
-export interface TVShowMediaSummary extends Omit<TVShowSummary, "genre_ids"> {
+export interface TVShowMediaSummary extends Omit<TVShowSummary, 'genre_ids'> {
   genres: number[];
-  _type: "tv";
+  _type: 'tv';
 }
 
 export type MovieListResponse = PagedResponse<MovieSummary>;

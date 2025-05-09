@@ -10,9 +10,9 @@ import {
   type Relation,
   Unique,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Genre } from "./genre.entity";
+import { Genre } from './genre.entity';
 
 @Entity()
 export class Movie {
@@ -36,7 +36,7 @@ export class Movie {
   @Column()
   title: string;
 
-  @Column("text")
+  @Column('text')
   overview: string;
 
   @Column()
@@ -47,14 +47,14 @@ export class Movie {
 
   // ToDo: Obtain data
   @Column({
-    type: "varchar",
+    type: 'varchar',
     length: 500,
     nullable: true,
   })
   trailer: string;
 
   @Column({
-    type: "decimal",
+    type: 'decimal',
     precision: 4,
     scale: 2,
     default: 0,
@@ -62,7 +62,7 @@ export class Movie {
   rating: number;
 
   @Column({
-    type: "float",
+    type: 'float',
     default: 0,
   })
   popularity: number;
@@ -76,7 +76,7 @@ export class Movie {
   @JoinTable()
   genres: Relation<Genre>[];
 
-  @OneToMany(() => MovieTranslation, (translation) => translation.movie, {
+  @OneToMany(() => MovieTranslation, translation => translation.movie, {
     eager: true,
   })
   translations: Relation<MovieTranslation>[];
@@ -101,7 +101,7 @@ export class Movie {
   updatedAt: Date;
 }
 
-@Unique(["movie", "language"])
+@Unique(['movie', 'language'])
 @Entity()
 export class MovieTranslation {
   @PrimaryGeneratedColumn()
@@ -110,13 +110,13 @@ export class MovieTranslation {
   @Column()
   language: string;
 
-  @ManyToOne(() => Movie, (movie) => movie.translations)
+  @ManyToOne(() => Movie, movie => movie.translations)
   movie: Relation<Movie>;
 
   @Column()
   movieId: number;
 
-  @Column("text")
+  @Column('text')
   overview: string;
 
   @Column()

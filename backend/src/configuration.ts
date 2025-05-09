@@ -1,37 +1,37 @@
-import { confirm, input, password } from "@inquirer/prompts";
-import chalk from "chalk";
-import { writeFileSync } from "fs";
-import path from "path";
+import { confirm, input, password } from '@inquirer/prompts';
+import chalk from 'chalk';
+import { writeFileSync } from 'fs';
+import path from 'path';
 import {
   type ServiceConfiguration,
   serviceConfiguration,
   type VariableInfo,
-} from "src/types/configuration";
-import { isatty } from "tty";
+} from 'src/types/configuration';
+import { isatty } from 'tty';
 
-import { jwtConfigurationDefinition } from "@services/auth/auth.configuration";
-import { tmdbConfigurationDefinition } from "@services/tmdb/tmdb.configuration";
-import { traktConfigurationDefinition } from "@services/trakt/trakt.configuration";
+import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
+import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
+import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
 
 function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
 }
 
 const serverConfigurationDefinition = serviceConfiguration({
-  name: "Server",
-  description: "Server configuration",
+  name: 'Server',
+  description: 'Server configuration',
   variables: {
     CORS_ORIGIN: {
       description: "Allowed origins for CORS (use '*' for all origins)",
       required: false,
-      defaultValue: "*",
-      example: "http://localhost:3000",
+      defaultValue: '*',
+      example: 'http://localhost:3000',
     },
     PORT: {
-      description: "Port for the server to listen on",
+      description: 'Port for the server to listen on',
       required: false,
-      defaultValue: "3000",
-      example: "3000",
+      defaultValue: '3000',
+      example: '3000',
     },
   },
   test: async () => {
@@ -48,27 +48,27 @@ export const services = {
 };
 
 export type Variables = {
-  [K in keyof typeof services]: keyof (typeof services)[K]["variables"];
+  [K in keyof typeof services]: keyof (typeof services)[K]['variables'];
 }[keyof typeof services];
 
 export const variablesDefaultValues = Object.values(services).reduce(
   (acc, service) => {
     (Object.entries(service.variables) as [Variables, VariableInfo][]).forEach(
       ([varName, varInfo]) => {
-        if ("defaultValue" in varInfo) {
+        if ('defaultValue' in varInfo) {
           acc[varName] = varInfo.defaultValue;
         }
-      },
+      }
     );
     return acc;
   },
-  {} as Partial<Record<Variables, string>>,
+  {} as Partial<Record<Variables, string>>
 );
 
 type ServiceKey = keyof typeof services;
 
 const testService = async (
-  service: ServiceConfiguration<string>,
+  service: ServiceConfiguration<string>
 ): Promise<{ success: boolean; message?: string }> => {
   const err = console.error;
   console.error = () => {};
@@ -89,9 +89,7 @@ const testService = async (
 /**
  * Configure a service by prompting for variables and testing the configuration
  */
-async function configureService(
-  service: ServiceConfiguration<string>,
-): Promise<void> {
+async function configureService(service: ServiceConfiguration<string>): Promise<void> {
   console.log();
   console.log(chalk.cyan.bold(`===== ${service.name} Configuration =====`));
   console.log(chalk.white(service.description));
@@ -131,9 +129,7 @@ async function configureService(
     return;
   }
 
-  console.log(
-    chalk.red(`❌ ${service.name} configuration failed: ${testResult.message}`),
-  );
+  console.log(chalk.red(`❌ ${service.name} configuration failed: ${testResult.message}`));
 
   const tryAgain = await confirm({
     message: `Would you like to reconfigure ${service.name}?`,
@@ -144,11 +140,7 @@ async function configureService(
     return configureService(service);
   }
 
-  console.log(
-    chalk.yellow(
-      `Warning: Using potentially invalid configuration for ${service.name}`,
-    ),
-  );
+  console.log(chalk.yellow(`Warning: Using potentially invalid configuration for ${service.name}`));
 }
 
 /**
@@ -157,19 +149,18 @@ async function configureService(
 async function promptForVariable(
   varName: string,
   varInfo: VariableInfo,
-  optional: boolean,
+  optional: boolean
 ): Promise<string> {
-  const defaultValue = "defaultValue" in varInfo ? varInfo.defaultValue : "";
+  const defaultValue = 'defaultValue' in varInfo ? varInfo.defaultValue : '';
   const currentValue = process.env[varName] || defaultValue;
 
   console.log();
   console.log(
-    chalk.cyan.bold(`${varName}:`) +
-      chalk.dim(` (${optional ? "optional" : "required"})`),
+    chalk.cyan.bold(`${varName}:`) + chalk.dim(` (${optional ? 'optional' : 'required'})`)
   );
   console.log(chalk.white(varInfo.description));
 
-  if ("defaultValue" in varInfo) {
+  if ('defaultValue' in varInfo) {
     console.log(chalk.dim(`Default: ${varInfo.defaultValue}`));
   }
 
@@ -181,11 +172,11 @@ async function promptForVariable(
     console.log(`You can get this from: ${varInfo.link}`);
   }
 
-  if ("password" in varInfo && varInfo.password) {
+  if ('password' in varInfo && varInfo.password) {
     const passwordValue = await password({
       message: `Enter ${chalk.cyan(varName)}:`,
       mask: true,
-      validate: (input) => {
+      validate: input => {
         if (!input.trim() && varInfo.required) {
           return `${varName} is required`;
         }
@@ -193,13 +184,13 @@ async function promptForVariable(
       },
     });
 
-    return passwordValue || defaultValue || "";
+    return passwordValue || defaultValue || '';
   }
 
   const value = await input({
     message: `Enter ${chalk.cyan(varName)}:`,
     default: currentValue,
-    validate: (input) => {
+    validate: input => {
       if (!input.trim() && varInfo.required) {
         return `${varName} is required`;
       }
@@ -207,18 +198,16 @@ async function promptForVariable(
     },
   });
 
-  return value || defaultValue || "";
+  return value || defaultValue || '';
 }
 
 /**
  * Save environment variables to a .env file.
  */
-async function saveEnvironmentVariables(
-  envValues: Record<string, string>,
-): Promise<void> {
+async function saveEnvironmentVariables(envValues: Record<string, string>): Promise<void> {
   try {
-    const envFilePath = path.resolve(process.cwd(), ".env");
-    let envContent = "";
+    const envFilePath = path.resolve(process.cwd(), '.env');
+    let envContent = '';
 
     // Read existing .env if available
     try {
@@ -231,7 +220,7 @@ async function saveEnvironmentVariables(
     // Update with new values
     for (const [key, value] of Object.entries(envValues)) {
       // Check if the key already exists in the file
-      const regex = new RegExp(`^${key}=.*`, "m");
+      const regex = new RegExp(`^${key}=.*`, 'm');
       if (regex.test(envContent)) {
         // Replace existing value
         envContent = envContent.replace(regex, `${key}=${value}`);
@@ -242,11 +231,9 @@ async function saveEnvironmentVariables(
     }
 
     writeFileSync(envFilePath, envContent);
-    console.log(
-      chalk.green.bold("✅ Environment variables saved to .env file."),
-    );
+    console.log(chalk.green.bold('✅ Environment variables saved to .env file.'));
   } catch (error) {
-    console.error(chalk.red.bold("Error saving to .env file:"), error);
+    console.error(chalk.red.bold('Error saving to .env file:'), error);
   }
 }
 
@@ -262,10 +249,7 @@ export async function validateConfiguration(): Promise<void> {
     const missingRequiredVars = Object.entries(service.variables)
       .filter(([varName, varInfo]) => {
         // Auto-configure variables with skipUserInteraction set to true
-        if (
-          "skipUserInteraction" in varInfo &&
-          varInfo.skipUserInteraction === true
-        ) {
+        if ('skipUserInteraction' in varInfo && varInfo.skipUserInteraction === true) {
           if (!process.env[varName]) {
             process.env[varName] = varInfo.defaultValue;
             autoConfiguredVars.add(varName);
@@ -283,62 +267,49 @@ export async function validateConfiguration(): Promise<void> {
   }
 
   if (servicesNeedingConfiguration.size === 0) {
-    console.log(chalk.cyan("Self testing..."));
+    console.log(chalk.cyan('Self testing...'));
 
     const invalidServices = await validateExistingConfiguration();
     if (invalidServices.length > 0) {
       console.log(
         chalk.red(
-          `❌ Detected invalid configuration for the following services: ${invalidServices.join(", ")}
-          You will be prompted to reconfigure them.`,
-        ),
+          `❌ Detected invalid configuration for the following services: ${invalidServices.join(', ')}
+          You will be prompted to reconfigure them.`
+        )
       );
       for (const invalidService of invalidServices) {
         servicesNeedingConfiguration.add(invalidService);
       }
     } else {
-      console.log(chalk.green("✅ All services are configured correctly!"));
+      console.log(chalk.green('✅ All services are configured correctly!'));
     }
   }
 
   if (servicesNeedingConfiguration.size > 0) {
     if (isNonInteractiveEnvironment()) {
       throw new Error(
-        "Configuration is incomplete and cannot be completed in a non-interactive environment. Please set the required environment variables.",
+        'Configuration is incomplete and cannot be completed in a non-interactive environment. Please set the required environment variables.'
       );
     }
 
-    console.log(
-      chalk.yellow.bold("⚠️  Missing required environment variables!"),
-    );
-    console.log(
-      chalk.cyan("Let's set up your configuration for each service."),
-    );
+    console.log(chalk.yellow.bold('⚠️  Missing required environment variables!'));
+    console.log(chalk.cyan("Let's set up your configuration for each service."));
 
     for (const serviceKey of servicesNeedingConfiguration) {
       const service = services[serviceKey];
       const envVariablesBefore = Object.keys(service.variables)
-        .map(
-          (varName) =>
-            [varName, process.env[varName]] satisfies [
-              string,
-              string | undefined,
-            ],
-        )
+        .map(varName => [varName, process.env[varName]] satisfies [string, string | undefined])
         .reduce(
           (acc, [varName, value]) => {
             acc[varName] = value;
             return acc;
           },
-          {} as Record<string, string | undefined>,
+          {} as Record<string, string | undefined>
         );
       await configureService(service);
 
       for (const [varName, value] of Object.entries(service.variables)) {
-        if (
-          value.required &&
-          process.env[varName] !== envVariablesBefore[varName]
-        ) {
+        if (value.required && process.env[varName] !== envVariablesBefore[varName]) {
           changedEnvVariables.add(varName);
         }
       }
@@ -350,8 +321,8 @@ export async function validateConfiguration(): Promise<void> {
     if (autoConfiguredVars.size > 0) {
       console.log(
         chalk.green(
-          `✅ Auto-configured ${autoConfiguredVars.size} variables: ${Array.from(autoConfiguredVars).join(", ")}`,
-        ),
+          `✅ Auto-configured ${autoConfiguredVars.size} variables: ${Array.from(autoConfiguredVars).join(', ')}`
+        )
       );
     }
 
@@ -359,7 +330,7 @@ export async function validateConfiguration(): Promise<void> {
     const saveToEnvFile = isNonInteractiveEnvironment()
       ? true
       : await confirm({
-          message: `Would you like to save these values to a ${chalk.cyan(".env")} file?`,
+          message: `Would you like to save these values to a ${chalk.cyan('.env')} file?`,
           default: true,
         });
 
@@ -372,7 +343,7 @@ export async function validateConfiguration(): Promise<void> {
           }
           return acc;
         },
-        {} as Record<string, string>,
+        {} as Record<string, string>
       );
       await saveEnvironmentVariables(envValues);
     }
@@ -385,13 +356,13 @@ export async function validateConfiguration(): Promise<void> {
 async function validateExistingConfiguration(): Promise<ServiceKey[]> {
   const invalidServices = (
     await Promise.all(
-      (
-        Object.entries(services) as [ServiceKey, ServiceConfiguration<string>][]
-      ).map(async ([serviceKey, service]) => {
-        // Execute test
-        const testResult = await testService(service);
-        return [testResult.success, serviceKey] as const;
-      }),
+      (Object.entries(services) as [ServiceKey, ServiceConfiguration<string>][]).map(
+        async ([serviceKey, service]) => {
+          // Execute test
+          const testResult = await testService(service);
+          return [testResult.success, serviceKey] as const;
+        }
+      )
     )
   )
     .filter(([isValid]) => !isValid)

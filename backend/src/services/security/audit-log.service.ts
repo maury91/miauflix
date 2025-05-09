@@ -1,9 +1,9 @@
-import type { Context } from "elysia";
+import type { Context } from 'elysia';
 
-import type { AuditLog } from "@entities/audit-log.entity";
-import { AuditEventSeverity, AuditEventType } from "@entities/audit-log.entity";
-import type { Database } from "@database/database";
-import type { AuditLogRepository } from "@repositories/audit-log.repository";
+import type { AuditLog } from '@entities/audit-log.entity';
+import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
+import type { Database } from '@database/database';
+import type { AuditLogRepository } from '@repositories/audit-log.repository';
 
 export class AuditLogService {
   private repository: AuditLogRepository;
@@ -19,22 +19,14 @@ export class AuditLogService {
     eventType: AuditEventType;
     severity?: AuditEventSeverity;
     description?: string;
-    request?: Context["request"];
-    server?: Context["server"];
+    request?: Context['request'];
+    server?: Context['server'];
     userEmail?: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
-    const {
-      eventType,
-      severity,
-      description,
-      request,
-      server,
-      userEmail,
-      metadata,
-    } = params;
+    const { eventType, severity, description, request, server, userEmail, metadata } = params;
     const ipAddress = request ? server?.requestIP(request)?.address : undefined;
-    const userAgent = request?.headers.get("user-agent") || undefined;
+    const userAgent = request?.headers.get('user-agent') || undefined;
 
     const logData = {
       eventType,
@@ -62,8 +54,8 @@ export class AuditLogService {
   async logLoginAttempt(params: {
     success: boolean;
     userEmail: string;
-    request: Context["request"];
-    server: Context["server"];
+    request: Context['request'];
+    server: Context['server'];
     metadata?: Record<string, unknown>;
   }): Promise<void> {
     const { success, ...rest } = params;
@@ -72,7 +64,7 @@ export class AuditLogService {
       ...rest,
       eventType: success ? AuditEventType.LOGIN : AuditEventType.LOGIN_FAILURE,
       severity: success ? AuditEventSeverity.INFO : AuditEventSeverity.WARNING,
-      description: success ? "Successful login" : "Failed login attempt",
+      description: success ? 'Successful login' : 'Failed login attempt',
     });
   }
 
@@ -81,14 +73,14 @@ export class AuditLogService {
    */
   async logLogout(params: {
     userEmail: string;
-    request: Context["request"];
-    server: Context["server"];
+    request: Context['request'];
+    server: Context['server'];
     metadata?: Record<string, unknown>;
   }): Promise<void> {
     await this.logSecurityEvent({
       eventType: AuditEventType.LOGOUT,
       severity: AuditEventSeverity.INFO,
-      description: "User logged out",
+      description: 'User logged out',
       ...params,
     });
   }
@@ -98,14 +90,14 @@ export class AuditLogService {
    */
   async logTokenRefresh(params: {
     userEmail: string;
-    request: Context["request"];
-    server: Context["server"];
+    request: Context['request'];
+    server: Context['server'];
     metadata?: Record<string, unknown>;
   }): Promise<void> {
     await this.logSecurityEvent({
       eventType: AuditEventType.TOKEN_REFRESH,
       severity: AuditEventSeverity.INFO,
-      description: "Access token refreshed",
+      description: 'Access token refreshed',
       ...params,
     });
   }
@@ -115,8 +107,8 @@ export class AuditLogService {
    */
   async logTokenInvalidation(params: {
     userEmail: string;
-    request: Context["request"];
-    server: Context["server"];
+    request: Context['request'];
+    server: Context['server'];
     reason: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
@@ -135,8 +127,8 @@ export class AuditLogService {
    */
   async logSuspiciousActivity(params: {
     userEmail?: string;
-    request: Context["request"];
-    server: Context["server"];
+    request: Context['request'];
+    server: Context['server'];
     description: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
@@ -152,8 +144,8 @@ export class AuditLogService {
    */
   async logRateLimitExceeded(params: {
     userEmail?: string;
-    request: Context["request"];
-    server: Context["server"];
+    request: Context['request'];
+    server: Context['server'];
     limit: number;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
@@ -172,8 +164,8 @@ export class AuditLogService {
    */
   async logUnauthorizedAccess(params: {
     userEmail?: string;
-    request: Context["request"];
-    server: Context["server"];
+    request: Context['request'];
+    server: Context['server'];
     reason?: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
@@ -182,7 +174,7 @@ export class AuditLogService {
     await this.logSecurityEvent({
       eventType: AuditEventType.UNAUTHORIZED_ACCESS,
       severity: AuditEventSeverity.WARNING,
-      description: reason || "Unauthorized access attempt",
+      description: reason || 'Unauthorized access attempt',
       ...rest,
     });
   }

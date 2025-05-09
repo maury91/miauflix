@@ -8,10 +8,10 @@ export interface DeviceCodeResponse {
 
 export interface DeviceTokenResponse {
   access_token: string;
-  token_type: "bearer";
+  token_type: 'bearer';
   expires_in: number;
   refresh_token: string;
-  scope: "public";
+  scope: 'public';
   created_at: number;
 }
 
@@ -45,7 +45,7 @@ export interface ExtendedMovie extends Movie {
   country: string;
   trailer: string;
   homepage: string;
-  status: "released";
+  status: 'released';
   rating: number;
   votes: number;
   comment_count: number;
@@ -97,9 +97,7 @@ export interface ExtendedShow extends ShowSimple {
   aired_episodes: number;
 }
 
-export type Show<E extends boolean> = E extends true
-  ? ExtendedShow
-  : ShowSimple;
+export type Show<E extends boolean> = E extends true ? ExtendedShow : ShowSimple;
 
 export interface ShowSeasonSimple {
   number: number;
@@ -124,9 +122,7 @@ export interface ShowSeasonExtended extends ShowSeasonSimple {
   // episodes: ShowEpisode[];
 }
 
-export type ShowSeason<E extends boolean> = E extends true
-  ? ShowSeasonExtended
-  : ShowSeasonSimple;
+export type ShowSeason<E extends boolean> = E extends true ? ShowSeasonExtended : ShowSeasonSimple;
 
 export interface ShowEpisodeMinimal {
   ids: {
@@ -157,13 +153,13 @@ export interface ShowEpisodeExtended extends ShowEpisodeSimple {
   available_translations: string[];
   runtime: number;
   episode_type:
-    | "mid_season_finale"
-    | "mid_season_premiere"
-    | "season_finale"
-    | "season_premiere"
-    | "series_finale"
-    | "series_premiere"
-    | "standard";
+    | 'mid_season_finale'
+    | 'mid_season_premiere'
+    | 'season_finale'
+    | 'season_premiere'
+    | 'series_finale'
+    | 'series_premiere'
+    | 'standard';
 }
 
 export type ShowEpisode<E extends boolean> = E extends true
@@ -200,7 +196,7 @@ export type MovieProgress = {
   progress: number;
   paused_at: string;
   id: number;
-  type: "movie";
+  type: 'movie';
   movie: Movie;
 };
 
@@ -208,17 +204,15 @@ export type EpisodeProgress = {
   progress: number;
   paused_at: string;
   id: number;
-  type: "episode";
+  type: 'episode';
   episode: ShowEpisode<false>;
   show: ShowSimple;
 };
 
-export type ProgressResponse<T> = (T extends "movies"
-  ? MovieProgress
-  : EpisodeProgress)[];
+export type ProgressResponse<T> = (T extends 'movies' ? MovieProgress : EpisodeProgress)[];
 
 export type SearchMoviesResponse = {
-  type: "movie";
+  type: 'movie';
   score: number;
   movie: Movie;
 }[];
@@ -274,23 +268,23 @@ export interface TraktListItemBase {
 }
 
 export interface TraktListItemMovie extends TraktListItemBase {
-  type: "movie";
+  type: 'movie';
   movie: Movie;
 }
 
 export interface TraktListItemShow extends TraktListItemBase {
-  type: "show";
+  type: 'show';
   show: ShowSimple;
 }
 
 export interface TraktListItemEpisode extends TraktListItemBase {
-  type: "episode";
+  type: 'episode';
   episode: ShowEpisodeSimple;
   show: ShowSimple;
 }
 
 export interface TraktListItemSeason extends TraktListItemBase {
-  type: "season";
+  type: 'season';
   season: ShowSeasonSimple;
   show: ShowSimple;
 }

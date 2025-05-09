@@ -1,6 +1,6 @@
-import type { DataSource, Repository } from "typeorm";
+import type { DataSource, Repository } from 'typeorm';
 
-import { Genre, GenreTranslation } from "@entities/genre.entity";
+import { Genre, GenreTranslation } from '@entities/genre.entity';
 
 export class GenreRepository {
   private readonly genreRepository: Repository<Genre>;
@@ -8,8 +8,7 @@ export class GenreRepository {
 
   constructor(datasource: DataSource) {
     this.genreRepository = datasource.getRepository(Genre);
-    this.genreTranslationRepository =
-      datasource.getRepository(GenreTranslation);
+    this.genreTranslationRepository = datasource.getRepository(GenreTranslation);
   }
 
   async createOrGetGenre(id: number): Promise<Genre> {
@@ -21,11 +20,7 @@ export class GenreRepository {
     return this.genreRepository.save(newGenre);
   }
 
-  async createTranslation(
-    genre: Genre,
-    name: string,
-    language: string,
-  ): Promise<void> {
+  async createTranslation(genre: Genre, name: string, language: string): Promise<void> {
     const existingTranslation = await this.genreTranslationRepository.findOne({
       where: { genreId: genre.id, language },
     });

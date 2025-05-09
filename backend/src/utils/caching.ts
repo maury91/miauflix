@@ -1,8 +1,8 @@
-import KeyvSqlite from "@keyv/sqlite";
-import { createCache } from "cache-manager";
-import { CacheableMemory } from "cacheable";
-import Keyv from "keyv";
-import path from "path";
+import KeyvSqlite from '@keyv/sqlite';
+import { createCache } from 'cache-manager';
+import { CacheableMemory } from 'cacheable';
+import Keyv from 'keyv';
+import path from 'path';
 
 const cache = createCache({
   stores: [
@@ -15,9 +15,7 @@ const cache = createCache({
 
     // File-based cache
     new Keyv({
-      store: new KeyvSqlite(
-        `sqlite://${path.resolve(process.cwd(), "cache.sqlite")}`,
-      ),
+      store: new KeyvSqlite(`sqlite://${path.resolve(process.cwd(), 'cache.sqlite')}`),
     }),
   ],
 });

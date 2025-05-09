@@ -1,11 +1,8 @@
-import { Cacheable } from "@utils/cacheable.util";
-import { RateLimiter } from "@utils/rateLimiter";
-import {
-  groupTimestampsByInterval,
-  TrackStatus,
-} from "@utils/trackStatus.util";
+import { Cacheable } from '@utils/cacheable.util';
+import { RateLimiter } from '@utils/rateLimiter';
+import { groupTimestampsByInterval, TrackStatus } from '@utils/trackStatus.util';
 
-import { ENV } from "../../constants";
+import { ENV } from '../../constants';
 import type {
   ChangeItem,
   ChangeResult,
@@ -26,7 +23,7 @@ import type {
   WithMovieImages,
   WithMovieTranslations,
   WithTVShowTranslations,
-} from "./tmdb.types";
+} from './tmdb.types';
 
 export interface MediaImages {
   poster: string;
@@ -37,9 +34,9 @@ export interface MediaImages {
 
 export const NO_IMAGES: MediaImages = {
   logos: [],
-  backdrop: "",
+  backdrop: '',
   backdrops: [],
-  poster: "",
+  poster: '',
 };
 
 export class TMDBApi {
@@ -54,12 +51,12 @@ export class TMDBApi {
    * start rate limiting itself.
    */
 
-  private readonly apiUrl = ENV("TMDB_API_URL");
-  private readonly apiKey = ENV("TMDB_API_ACCESS_TOKEN");
+  private readonly apiUrl = ENV('TMDB_API_URL');
+  private readonly apiKey = ENV('TMDB_API_ACCESS_TOKEN');
   private readonly rateLimiter = new RateLimiter(50);
   private readonly configuration: Promise<ConfigurationResponse>;
 
-  constructor(private readonly language = "en") {
+  constructor(private readonly language = 'en') {
     this.language = language;
     this.configuration = this.getConfiguration();
   }
@@ -73,7 +70,7 @@ export class TMDBApi {
       ...init,
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     if (!response.ok) {
@@ -87,17 +84,14 @@ export class TMDBApi {
     return this.request<T>(url, {});
   }
 
-  private async post<T>(
-    url: string,
-    body: Record<string, unknown>,
-  ): Promise<T> {
+  private async post<T>(url: string, body: Record<string, unknown>): Promise<T> {
     return this.request<T>(url, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(body),
     });
   }
 
-  private async completeImageUrl(image: string, size = "original") {
+  private async completeImageUrl(image: string, size = 'original') {
     const config = await this.configuration;
     return `${config.images.secure_base_url}${size}${image}`;
   }
@@ -124,7 +118,7 @@ export class TMDBApi {
   @Cacheable(36e5 /* 1 hour */)
   public async getSeasonRaw(showId: number, season: number) {
     return this.get<ShowSeason>(
-      `${this.apiUrl}/tv/${showId}/season/${season}?language=${this.language}`,
+      `${this.apiUrl}/tv/${showId}/season/${season}?language=${this.language}`
     );
   }
 
@@ -133,16 +127,12 @@ export class TMDBApi {
     const data = await this.getSeasonRaw(showId, season);
     return {
       ...data,
-      poster_path: data.poster_path
-        ? await this.completeImageUrl(data.poster_path)
-        : "",
+      poster_path: data.poster_path ? await this.completeImageUrl(data.poster_path) : '',
       episodes: await Promise.all(
-        data.episodes.map(async (episode) => ({
+        data.episodes.map(async episode => ({
           ...episode,
-          still_path: episode.still_path
-            ? await this.completeImageUrl(episode.still_path)
-            : "",
-        })),
+          still_path: episode.still_path ? await this.completeImageUrl(episode.still_path) : '',
+        }))
       ),
     };
   }
@@ -155,28 +145,22 @@ export class TMDBApi {
   @Cacheable(36e5 /* 1 hour */)
   public async getMovieDetails(movieId: number | string) {
     const url = `${this.apiUrl}/movie/${movieId}?append_to_response=translations,images&language=${this.language}`;
-    const movieData = await this.get<
-      MovieDetails & WithMovieImages & WithMovieTranslations
-    >(url);
+    const movieData = await this.get<MovieDetails & WithMovieImages & WithMovieTranslations>(url);
     // Process image paths to include the full URL
     return {
       ...movieData,
-      poster_path: movieData.poster_path
-        ? await this.completeImageUrl(movieData.poster_path)
-        : "",
+      poster_path: movieData.poster_path ? await this.completeImageUrl(movieData.poster_path) : '',
       backdrop_path: movieData.backdrop_path
         ? await this.completeImageUrl(movieData.backdrop_path)
-        : "",
+        : '',
       logo_path: movieData.images?.logos?.length
         ? await this.completeImageUrl(movieData.images.logos[0].file_path)
-        : "",
+        : '',
       production_companies: await Promise.all(
-        movieData.production_companies.map(async (company) => ({
+        movieData.production_companies.map(async company => ({
           ...company,
-          logo_path: company.logo_path
-            ? await this.completeImageUrl(company.logo_path)
-            : "",
-        })),
+          logo_path: company.logo_path ? await this.completeImageUrl(company.logo_path) : '',
+        }))
       ),
       translations: movieData.translations.translations,
     };
@@ -190,49 +174,43 @@ export class TMDBApi {
   @Cacheable(36e5 /* 1 hour */)
   public async getTVShowDetails(showId: number | string) {
     const url = `${this.apiUrl}/tv/${showId}?append_to_response=external_ids,translations&language=${this.language}`;
-    const showData = await this.get<
-      TVShowDetails & WithExternalIds & WithTVShowTranslations
-    >(url);
+    const showData = await this.get<TVShowDetails & WithExternalIds & WithTVShowTranslations>(url);
     // Process image paths to include the full URL
     return {
       ...showData,
-      poster_path: showData.poster_path
-        ? await this.completeImageUrl(showData.poster_path)
-        : "",
+      poster_path: showData.poster_path ? await this.completeImageUrl(showData.poster_path) : '',
       backdrop_path: showData.backdrop_path
         ? await this.completeImageUrl(showData.backdrop_path)
-        : "",
+        : '',
       production_companies: await Promise.all(
-        showData.production_companies.map(async (company) => ({
+        showData.production_companies.map(async company => ({
           ...company,
-          logo_path: company.logo_path
-            ? await this.completeImageUrl(company.logo_path)
-            : "",
-        })),
+          logo_path: company.logo_path ? await this.completeImageUrl(company.logo_path) : '',
+        }))
       ),
       translations: showData.translations.translations,
     };
   }
 
-  private async getList<
-    T extends MediaListResponse | MovieListResponse | TVShowListResponse,
-  >(url: string): Promise<MediaSummaryList> {
+  private async getList<T extends MediaListResponse | MovieListResponse | TVShowListResponse>(
+    url: string
+  ): Promise<MediaSummaryList> {
     const response = await this.get<T>(url);
     const results = await Promise.all(
       response.results.map(async (media): Promise<MediaSummary> => {
         const [poster_path, backdrop_path] = await Promise.all([
-          media.poster_path ? this.completeImageUrl(media.poster_path) : "",
-          media.backdrop_path ? this.completeImageUrl(media.backdrop_path) : "",
+          media.poster_path ? this.completeImageUrl(media.poster_path) : '',
+          media.backdrop_path ? this.completeImageUrl(media.backdrop_path) : '',
         ]);
 
-        if ("name" in media) {
+        if ('name' in media) {
           const { genre_ids, ...rest } = media;
           return {
             ...rest,
             genres: genre_ids,
             poster_path,
             backdrop_path,
-            _type: "tv",
+            _type: 'tv',
           };
         }
 
@@ -242,9 +220,9 @@ export class TMDBApi {
           genres: genre_ids,
           poster_path,
           backdrop_path,
-          _type: "movie",
+          _type: 'movie',
         };
-      }),
+      })
     );
     return this.paged({
       ...response,
@@ -255,55 +233,49 @@ export class TMDBApi {
   @Cacheable(36e5 /* 1 hour */, true)
   public async getPopularMovies(page = 1): Promise<MediaSummaryList> {
     return this.getList<MovieListResponse>(
-      `${this.apiUrl}/discover/movie?include_adult=false&include_video=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`,
+      `${this.apiUrl}/discover/movie?include_adult=false&include_video=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
     );
   }
 
   @Cacheable(36e5 /* 1 hour */, true)
   public async getTopRatedMovies(page = 1): Promise<MediaSummaryList> {
     return this.getList<MovieListResponse>(
-      `${this.apiUrl}/movie/top_rated?language=${this.language}&page=${page}`,
+      `${this.apiUrl}/movie/top_rated?language=${this.language}&page=${page}`
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  public async getTrending(
-    timeWindow: "day" | "week" = "week",
-  ): Promise<MediaSummaryList> {
+  public async getTrending(timeWindow: 'day' | 'week' = 'week'): Promise<MediaSummaryList> {
     return this.getList<MediaListResponse>(
-      `${this.apiUrl}/trending/all/${timeWindow}?language=${this.language}`,
+      `${this.apiUrl}/trending/all/${timeWindow}?language=${this.language}`
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  public async getTrendingMovies(
-    timeWindow: "day" | "week" = "week",
-  ): Promise<MediaSummaryList> {
+  public async getTrendingMovies(timeWindow: 'day' | 'week' = 'week'): Promise<MediaSummaryList> {
     return this.getList<MovieListResponse>(
-      `${this.apiUrl}/trending/movie/${timeWindow}?language=${this.language}`,
+      `${this.apiUrl}/trending/movie/${timeWindow}?language=${this.language}`
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  public async getTrendingShows(
-    timeWindow: "day" | "week" = "week",
-  ): Promise<MediaSummaryList> {
+  public async getTrendingShows(timeWindow: 'day' | 'week' = 'week'): Promise<MediaSummaryList> {
     return this.getList<TVShowListResponse>(
-      `${this.apiUrl}/trending/tv/${timeWindow}?language=${this.language}`,
+      `${this.apiUrl}/trending/tv/${timeWindow}?language=${this.language}`
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
   public async getPopularShows(page = 1): Promise<MediaSummaryList> {
     return this.getList<TVShowListResponse>(
-      `${this.apiUrl}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`,
+      `${this.apiUrl}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
     );
   }
 
   @Cacheable(36e5 /* 1 hour */)
   public async getTopRatedShows(): Promise<MediaSummaryList> {
     return this.getList<TVShowListResponse>(
-      `${this.apiUrl}/tv/top_rated?language=${this.language}`,
+      `${this.apiUrl}/tv/top_rated?language=${this.language}`
     );
   }
 
@@ -313,7 +285,7 @@ export class TMDBApi {
    * @returns Formatted date string
    */
   private formatDate(date: Date): string {
-    return date.toISOString().split("T")[0];
+    return date.toISOString().split('T')[0];
   }
 
   /**
@@ -327,7 +299,7 @@ export class TMDBApi {
   public async getChangedMovieIds(
     startDate: Date,
     endDate: Date = new Date(),
-    page: number = 1,
+    page: number = 1
   ): Promise<ChangeResult> {
     const startDateStr = this.formatDate(startDate);
     const endDateStr = this.formatDate(endDate);
@@ -349,7 +321,7 @@ export class TMDBApi {
   public async getChangedTVShowIds(
     startDate: Date,
     endDate: Date = new Date(),
-    page: number = 1,
+    page: number = 1
   ): Promise<ChangeResult> {
     const startDateStr = this.formatDate(startDate);
     const endDateStr = this.formatDate(endDate);
@@ -368,18 +340,14 @@ export class TMDBApi {
    */
   public async *getAllChangedMovieIds(
     startDate: Date,
-    endDate: Date = new Date(),
+    endDate: Date = new Date()
   ): AsyncGenerator<ChangeResult> {
     // Ensure it yields ChangeResult
     let currentPage = 1;
     let totalPages = 1; // Initialize with 1 to fetch the first page
 
     do {
-      const pageResult = await this.getChangedMovieIds(
-        startDate,
-        endDate,
-        currentPage,
-      );
+      const pageResult = await this.getChangedMovieIds(startDate, endDate, currentPage);
       yield pageResult;
 
       totalPages = pageResult.totalPages;
@@ -397,19 +365,15 @@ export class TMDBApi {
   public status() {
     return {
       queue: this.requestQueueCount,
-      successes: groupTimestampsByInterval(this.requestSuccesses).map(
-        (item) => ({
-          ...item,
-          time: new Date(item.time).toISOString(),
-        }),
-      ),
-      failures: groupTimestampsByInterval(this.requestFailures).map((item) => ({
+      successes: groupTimestampsByInterval(this.requestSuccesses).map(item => ({
         ...item,
         time: new Date(item.time).toISOString(),
       })),
-      lastRequest: this.lastRequest
-        ? new Date(this.lastRequest).toISOString()
-        : null,
+      failures: groupTimestampsByInterval(this.requestFailures).map(item => ({
+        ...item,
+        time: new Date(item.time).toISOString(),
+      })),
+      lastRequest: this.lastRequest ? new Date(this.lastRequest).toISOString() : null,
     };
   }
 
@@ -421,7 +385,7 @@ export class TMDBApi {
    */
   public async getAllChangedTVShowIds(
     startDate: Date,
-    endDate: Date = new Date(),
+    endDate: Date = new Date()
   ): Promise<ChangeItem[]> {
     const firstPage = await this.getChangedTVShowIds(startDate, endDate, 1);
     const allItems = [...firstPage.items];
@@ -430,13 +394,11 @@ export class TMDBApi {
     if (firstPage.totalPages > 1) {
       const remainingPages = await Promise.all(
         Array.from({ length: firstPage.totalPages - 1 }, (_, i) =>
-          this.getChangedTVShowIds(startDate, endDate, i + 2),
-        ),
+          this.getChangedTVShowIds(startDate, endDate, i + 2)
+        )
       );
 
-      allItems.push(
-        ...remainingPages.flatMap((pageResult) => pageResult.items),
-      );
+      allItems.push(...remainingPages.flatMap(pageResult => pageResult.items));
     }
 
     return allItems;

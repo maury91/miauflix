@@ -1,8 +1,8 @@
-import { Elysia } from "elysia";
+import { Elysia } from 'elysia';
 
-import type { UserRole } from "@entities/user.entity";
-import { AuthError, RoleError } from "@errors/auth.errors";
-import type { AuthService } from "@services/auth/auth.service";
+import type { UserRole } from '@entities/user.entity';
+import { AuthError, RoleError } from '@errors/auth.errors';
+import type { AuthService } from '@services/auth/auth.service';
 
 // Define the user type for the auth context
 export interface AuthUser {
@@ -13,16 +13,16 @@ export interface AuthUser {
 
 export const createAuthMiddleware = (authService: AuthService) => {
   return new Elysia({
-    name: "authMiddleware",
+    name: 'authMiddleware',
   })
-    .derive({ as: "global" }, async ({ headers: { authorization } }) => {
+    .derive({ as: 'global' }, async ({ headers: { authorization } }) => {
       // Check authorization header
-      if (!authorization?.startsWith("Bearer ")) {
+      if (!authorization?.startsWith('Bearer ')) {
         return {};
       }
 
       // Extract the token
-      const token = authorization.substring("Bearer ".length);
+      const token = authorization.substring('Bearer '.length);
 
       try {
         // Verify the token
@@ -47,7 +47,7 @@ export const createAuthMiddleware = (authService: AuthService) => {
             if (!user) {
               throw new AuthError();
             }
-            if (typeof value === "boolean") {
+            if (typeof value === 'boolean') {
               return;
             }
             if (user.role !== value) {
