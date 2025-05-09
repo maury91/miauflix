@@ -92,6 +92,10 @@ Or run it in Docker's interactive mode:
 docker compose run --rm backend bun --pwd backend start
 ```
 
+<p align="center">
+  <img src="./docs/assets/miauflix env wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
+</p>
+
 <details>
 <summary>What does the configuration wizard do?</summary>
 
