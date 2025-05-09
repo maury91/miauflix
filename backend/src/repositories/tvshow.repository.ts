@@ -25,12 +25,40 @@ export class TVShowRepository {
     return this.tvShowRepository.findOne({
       where: { tmdbId },
       relations: {
+        genres: true,
         translations: true,
-        seasons: {
-          episodes: true,
-        },
+        seasons: true,
       },
     });
+  }
+
+  async findIncompleteSeasons(): Promise<Season[]> {
+    return this.seasonRepository.find({
+      where: { synced: false },
+      relations: {
+        tvShow: true,
+      },
+    });
+  }
+
+  async findIncompleteSeason(): Promise<Season | null> {
+    return this.seasonRepository.findOne({
+      where: { synced: false },
+      relations: {
+        tvShow: true,
+      },
+    });
+  }
+
+  async markSeasonAsSynced(season: Season): Promise<void> {
+    await this.seasonRepository.update(
+      {
+        id: season.id,
+      },
+      {
+        synced: true,
+      },
+    );
   }
 
   async create(tvShow: Partial<TVShow>): Promise<TVShow> {
@@ -88,6 +116,7 @@ export class TVShowRepository {
     const newSeason = this.seasonRepository.create({
       ...seasonData,
       tvShowId: tvShow.id,
+      synced: false,
     });
 
     return await this.seasonRepository.save(newSeason);

@@ -66,11 +66,16 @@ async function startApp() {
     bind(listSynchronizer, "synchronize"),
   );
 
-  // Schedule movie synchronization every 6 hours
   scheduler.scheduleTask(
     "syncMovies",
     1.5 * 60 * 60, // 1.5 hour
     bind(mediaService, "syncMovies"),
+  );
+
+  scheduler.scheduleTask(
+    "syncIncompleteSeasons",
+    1, // 1 second
+    bind(mediaService, "syncIncompleteSeasons"),
   );
 
   new Elysia()
@@ -93,6 +98,18 @@ async function startApp() {
       () => ({
         message: "Welcome to the Elysia and TypeScript project!",
       }),
+      {
+        rateLimit: 10, // 10 requests per second
+      },
+    )
+    .get(
+      "/status",
+      () => {
+        return {
+          tmdb: tmdbApi.status(),
+          vpn: vpnDetectionService.status(),
+        };
+      },
       {
         rateLimit: 10, // 10 requests per second
       },

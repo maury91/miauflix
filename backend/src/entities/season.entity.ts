@@ -33,11 +33,20 @@ export class Season {
   @Column()
   overview: string;
 
-  @Column()
-  airDate: string;
+  @Column({
+    nullable: true,
+  })
+  airDate?: string;
 
-  @Column()
-  posterPath: string;
+  @Column({
+    nullable: true,
+  })
+  posterPath?: string;
+
+  @Column({
+    default: false,
+  })
+  synced: boolean = false;
 
   @OneToMany(() => Episode, (episode) => episode.season)
   episodes: Relation<Episode>[];

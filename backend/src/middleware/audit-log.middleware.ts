@@ -66,6 +66,8 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         return;
       }
 
+      const path = new URL(request.url).pathname;
+
       // Log API errors
       const errorMessage =
         error instanceof Error ? error.message : String(error);
@@ -87,6 +89,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         server,
         metadata: {
           error: errorDetails,
+          path,
         },
       });
     });

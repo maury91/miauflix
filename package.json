@@ -6,8 +6,8 @@
     "start": "concurrently \"bun --cwd backend start\" \"bun --cwd frontend start\"",
     "build": "bun build src/app.ts",
     "test": "bun test",
-    "format": "prettier --write \"**/*.{js,ts,tsx,json,css,scss,md}\"",
-    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,css,scss,md}\"",
+    "format": "prettier --write \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
+    "format:check": "prettier --check \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "prepare": "husky"
   },
   "dependencies": {

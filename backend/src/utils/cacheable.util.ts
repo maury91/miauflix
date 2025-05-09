@@ -7,7 +7,7 @@ export function Cacheable<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Args extends any[],
   Return,
->(ttlMs: number, reset = false) {
+>(ttlMs: number, reset = false, customCache: { get: typeof cache.get; set: typeof cache.set } = cache) {
   return function (
     target: This,
     _key: string | symbol,
@@ -20,7 +20,7 @@ export function Cacheable<
         const cacheKey = `cache.${target.constructor.name}.${
           (originalMethod as typeof cacheMethod).name
         }.${JSON.stringify(args)}`;
-        const cached = await cache.get<Return>(cacheKey).catch(() => null);
+        const cached = await customCache.get<Return>(cacheKey).catch(() => null);
         if (cached && !reset) {
           return cached;
         }
@@ -29,7 +29,7 @@ export function Cacheable<
           this,
           args,
         );
-        await cache.set(cacheKey, result, ttlMs);
+        await customCache.set(cacheKey, result, ttlMs);
 
         return result;
       }

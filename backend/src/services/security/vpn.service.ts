@@ -60,6 +60,12 @@ export class VpnDetectionService {
     return false;
   }
 
+  public status() {
+    return {
+      isVpnActive: this.lastVpnStatus,
+    };
+  }
+
   public on(event: VpnEventType, listener: VpnEventListener): () => void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
