@@ -1,15 +1,15 @@
-import { logger } from "@logger";
+import { logger } from '@logger';
 
-import type { MediaList } from "@entities/list.entity";
-import { Movie } from "@entities/movie.entity";
-import { TVShow } from "@entities/tvshow.entity";
-import type { Database } from "@database/database";
-import type { MediaListRepository } from "@repositories/mediaList.repository";
-import type { TMDBApi } from "@services/tmdb/tmdb.api";
-import type { MediaSummaryList } from "@services/tmdb/tmdb.types";
+import type { MediaList } from '@entities/list.entity';
+import { Movie } from '@entities/movie.entity';
+import { TVShow } from '@entities/tvshow.entity';
+import type { Database } from '@database/database';
+import type { MediaListRepository } from '@repositories/mediaList.repository';
+import type { TMDBApi } from '@services/tmdb/tmdb.api';
+import type { MediaSummaryList } from '@services/tmdb/tmdb.types';
 
-import type { MediaService } from "./media.service";
-import type { TranslatedMedia } from "./media.types";
+import type { MediaService } from './media.service';
+import type { TranslatedMedia } from './media.types';
 
 export class ListService {
   private readonly lists: Record<
@@ -26,26 +26,26 @@ export class ListService {
   constructor(
     db: Database,
     private readonly tmdbApi: TMDBApi,
-    private readonly mediaService: MediaService,
+    private readonly mediaService: MediaService
   ) {
     this.lists = {
-      "@@tmdb_movies_popular": {
-        name: "Popular Movies",
+      '@@tmdb_movies_popular': {
+        name: 'Popular Movies',
         source: this.tmdbApi.getPopularMovies.bind(this.tmdbApi),
-        slug: "@@tmdb_movies_popular",
-        description: "List of popular movies from TMDB",
+        slug: '@@tmdb_movies_popular',
+        description: 'List of popular movies from TMDB',
       },
-      "@@tmdb_movies_top-rated": {
-        name: "Top Rated Movies",
+      '@@tmdb_movies_top-rated': {
+        name: 'Top Rated Movies',
         source: this.tmdbApi.getTopRatedMovies.bind(this.tmdbApi),
-        slug: "@@tmdb_movies_top-rated",
-        description: "List of top rated movies from TMDB",
+        slug: '@@tmdb_movies_top-rated',
+        description: 'List of top rated movies from TMDB',
       },
-      "@@tmdb_shows_popular": {
-        name: "Popular TV Shows",
+      '@@tmdb_shows_popular': {
+        name: 'Popular TV Shows',
         source: this.tmdbApi.getPopularShows.bind(this.tmdbApi),
-        slug: "@@tmdb_shows_popular",
-        description: "List of popular TV shows from TMDB",
+        slug: '@@tmdb_shows_popular',
+        description: 'List of popular TV shows from TMDB',
       },
     };
     this.mediaListRepository = db.getMediaListRepository();
@@ -53,7 +53,7 @@ export class ListService {
 
   async getListContentFromApi(
     slug: string,
-    page: number,
+    page: number
   ): Promise<{ medias: (Movie | TVShow)[]; pages: number; total: number }> {
     if (!this.lists[slug]) {
       throw new Error(`List with slug ${slug} not found`);
@@ -62,28 +62,25 @@ export class ListService {
     const { totalPages, totalItems, items: medias } = await list.source(page);
 
     logger.debug(
-      "ListService",
-      `List ${slug} has ${totalItems} results and ${totalPages} pages, obtained page ${page}`,
+      'ListService',
+      `List ${slug} has ${totalItems} results and ${totalPages} pages, obtained page ${page}`
     );
 
     return {
       medias: await Promise.all(
-        medias.map(async (mediaData) => {
-          if (mediaData._type === "movie") {
+        medias.map(async mediaData => {
+          if (mediaData._type === 'movie') {
             return this.mediaService.getMovie(mediaData.id, mediaData);
           }
           return this.mediaService.getTVShow(mediaData.id, mediaData);
-        }),
+        })
       ),
       pages: totalPages,
       total: totalItems,
     };
   }
 
-  private async getOrCreateList(
-    slug: string,
-    preload: boolean,
-  ): Promise<MediaList> {
+  private async getOrCreateList(slug: string, preload: boolean): Promise<MediaList> {
     let mediaList = await this.mediaListRepository.findBySlug(slug, preload);
     if (!mediaList) {
       if (this.lists[slug]) {
@@ -91,7 +88,7 @@ export class ListService {
         mediaList = await this.mediaListRepository.createMediaList(
           list.name,
           list.description,
-          slug,
+          slug
         );
       } else {
         throw new Error(`List with slug ${slug} not found`);
@@ -100,10 +97,7 @@ export class ListService {
     return mediaList;
   }
 
-  async updateListContent(
-    slug: string,
-    medias: (Movie | TVShow)[],
-  ): Promise<MediaList> {
+  async updateListContent(slug: string, medias: (Movie | TVShow)[]): Promise<MediaList> {
     const mediaList = await this.getOrCreateList(slug, false);
 
     mediaList.movies = [];
@@ -131,10 +125,7 @@ export class ListService {
     return mediaList;
   }
 
-  async getListContent(
-    slug: string,
-    language = "en",
-  ): Promise<TranslatedMedia[]> {
+  async getListContent(slug: string, language = 'en'): Promise<TranslatedMedia[]> {
     const mediaList = await this.getListBySlug(slug);
     if (!mediaList.movies) {
       console.log(mediaList);
@@ -142,7 +133,7 @@ export class ListService {
 
     const medias = await this.mediaService.mediasWithLanguage(
       [...mediaList.movies, ...mediaList.tvShows],
-      language,
+      language
     );
 
     return medias.sort((a, b) => b.popularity - a.popularity);

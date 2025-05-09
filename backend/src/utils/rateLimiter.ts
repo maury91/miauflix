@@ -4,7 +4,7 @@ export class RateLimiter {
   constructor(private readonly limit: number) {}
 
   private sleep(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
@@ -22,9 +22,7 @@ export class RateLimiter {
    */
   private filterOldTimestamps(now: number): number[] {
     const intervalMs = this.getIntervalMs();
-    return this.requestTimestamps.filter(
-      (timestamp) => now - timestamp < intervalMs,
-    );
+    return this.requestTimestamps.filter(timestamp => now - timestamp < intervalMs);
   }
 
   private calculateDelay(): number {

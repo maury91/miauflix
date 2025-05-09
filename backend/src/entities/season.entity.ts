@@ -7,10 +7,10 @@ import {
   PrimaryGeneratedColumn,
   type Relation,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Episode } from "./episode.entity";
-import { TVShow } from "./tvshow.entity";
+import { Episode } from './episode.entity';
+import { TVShow } from './tvshow.entity';
 
 // ToDo: support translations ( priority low )
 @Entity()
@@ -48,10 +48,10 @@ export class Season {
   })
   synced: boolean = false;
 
-  @OneToMany(() => Episode, (episode) => episode.season)
+  @OneToMany(() => Episode, episode => episode.season)
   episodes: Relation<Episode>[];
 
-  @ManyToOne(() => TVShow, (tvShow) => tvShow.seasons)
+  @ManyToOne(() => TVShow, tvShow => tvShow.seasons)
   tvShow: Relation<TVShow>;
 
   @CreateDateColumn()

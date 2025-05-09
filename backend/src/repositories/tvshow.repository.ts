@@ -1,11 +1,11 @@
-import { objectKeys } from "src/utils/object.util";
-import type { DataSource, Repository } from "typeorm";
+import { objectKeys } from 'src/utils/object.util';
+import type { DataSource, Repository } from 'typeorm';
 
-import { Episode } from "@entities/episode.entity";
-import type { Genre } from "@entities/genre.entity";
-import { Season } from "@entities/season.entity";
-import { TVShow } from "@entities/tvshow.entity";
-import { TVShowTranslation } from "@entities/tvshow.entity";
+import { Episode } from '@entities/episode.entity';
+import type { Genre } from '@entities/genre.entity';
+import { Season } from '@entities/season.entity';
+import { TVShow } from '@entities/tvshow.entity';
+import { TVShowTranslation } from '@entities/tvshow.entity';
 
 export class TVShowRepository {
   private readonly tvShowRepository: Repository<TVShow>;
@@ -15,8 +15,7 @@ export class TVShowRepository {
 
   constructor(datasource: DataSource) {
     this.tvShowRepository = datasource.getRepository(TVShow);
-    this.tvShowTranslationRepository =
-      datasource.getRepository(TVShowTranslation);
+    this.tvShowTranslationRepository = datasource.getRepository(TVShowTranslation);
     this.seasonRepository = datasource.getRepository(Season);
     this.episodeRepository = datasource.getRepository(Episode);
   }
@@ -57,7 +56,7 @@ export class TVShowRepository {
       },
       {
         synced: true,
-      },
+      }
     );
   }
 
@@ -68,25 +67,19 @@ export class TVShowRepository {
 
   async addTranslation(
     tvShow: TVShow,
-    translation: Partial<TVShowTranslation>,
+    translation: Partial<TVShowTranslation>
   ): Promise<TVShowTranslation> {
     const newTranslation = this.tvShowTranslationRepository.create({
       ...translation,
       tvShow,
     });
-    await this.tvShowTranslationRepository.upsert(newTranslation, [
-      "tvShowId",
-      "language",
-    ]);
+    await this.tvShowTranslationRepository.upsert(newTranslation, ['tvShowId', 'language']);
 
     return newTranslation;
   }
 
-  async checkForChangesAndUpdate(
-    tvShow: TVShow,
-    updatedTVShow: Partial<TVShow>,
-  ): Promise<void> {
-    const hasChanges = objectKeys(updatedTVShow).some((key) => {
+  async checkForChangesAndUpdate(tvShow: TVShow, updatedTVShow: Partial<TVShow>): Promise<void> {
+    const hasChanges = objectKeys(updatedTVShow).some(key => {
       return tvShow[key] !== updatedTVShow[key];
     });
     if (hasChanges) {
@@ -98,10 +91,7 @@ export class TVShowRepository {
     return this.tvShowRepository.save(tvShow);
   }
 
-  async createSeason(
-    tvShow: TVShow,
-    seasonData: Partial<Season>,
-  ): Promise<Season> {
+  async createSeason(tvShow: TVShow, seasonData: Partial<Season>): Promise<Season> {
     const existingSeason = await this.seasonRepository.findOne({
       where: {
         tvShowId: tvShow.id,
@@ -122,10 +112,7 @@ export class TVShowRepository {
     return await this.seasonRepository.save(newSeason);
   }
 
-  async createEpisode(
-    season: Season,
-    episodeData: Partial<Episode>,
-  ): Promise<Episode> {
+  async createEpisode(season: Season, episodeData: Partial<Episode>): Promise<Episode> {
     const existingEpisode = await this.episodeRepository.findOne({
       where: {
         seasonId: season.id,
@@ -150,7 +137,7 @@ export class TVShowRepository {
       id: show.id,
     });
     if (!updatedShow) {
-      throw new Error("TV Show not found");
+      throw new Error('TV Show not found');
     }
     updatedShow.genres = genres;
     await this.tvShowRepository.save(updatedShow);

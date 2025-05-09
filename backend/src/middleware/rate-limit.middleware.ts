@@ -1,17 +1,13 @@
-import { Elysia } from "elysia";
+import { Elysia } from 'elysia';
 
-import type { AuditLogService } from "@services/security/audit-log.service";
-import { RateLimiter } from "@utils/rateLimiter";
+import type { AuditLogService } from '@services/security/audit-log.service';
+import { RateLimiter } from '@utils/rateLimiter';
 
 // Create a map to store rate limiters by IP address
 const rateLimiters = new Map<string, RateLimiter>();
 
 // Create a function to get or create a rate limiter for an IP
-const getRateLimiter = (
-  ip: string,
-  path: string,
-  limit: number,
-): RateLimiter => {
+const getRateLimiter = (ip: string, path: string, limit: number): RateLimiter => {
   const key = `${ip}-${path}`;
   if (!rateLimiters.has(key)) {
     rateLimiters.set(key, new RateLimiter(limit));
@@ -21,11 +17,11 @@ const getRateLimiter = (
 
 export const createRateLimitMiddleware = (auditLogService: AuditLogService) => {
   return new Elysia({
-    name: "rateLimitMiddleware",
+    name: 'rateLimitMiddleware',
   }).macro(({ onBeforeHandle }) => ({
     rateLimit(limit: number) {
       onBeforeHandle(({ error, path, request, server }) => {
-        const clientIp = server?.requestIP(request)?.address || "unknown";
+        const clientIp = server?.requestIP(request)?.address || 'unknown';
         const rateLimiter = getRateLimiter(clientIp, path, limit);
 
         // Check if the request should be rejected
@@ -43,7 +39,7 @@ export const createRateLimitMiddleware = (auditLogService: AuditLogService) => {
           });
 
           // Return a 429 Too Many Requests response
-          throw error("Too Many Requests");
+          throw error('Too Many Requests');
         }
 
         return;

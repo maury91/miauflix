@@ -10,10 +10,10 @@ import {
   type Relation,
   Unique,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Genre } from "./genre.entity";
-import { Season } from "./season.entity";
+import { Genre } from './genre.entity';
+import { Season } from './season.entity';
 
 @Entity()
 export class TVShow {
@@ -26,7 +26,7 @@ export class TVShow {
   @Column()
   name: string;
 
-  @Column("text")
+  @Column('text')
   overview: string;
 
   @Column()
@@ -53,7 +53,7 @@ export class TVShow {
   @Column()
   inProduction: boolean;
 
-  @Column("simple-array")
+  @Column('simple-array')
   episodeRunTime: number[];
 
   @ManyToMany(() => Genre)
@@ -61,24 +61,21 @@ export class TVShow {
   genres: Relation<Genre>[];
 
   @Column({
-    type: "float",
+    type: 'float',
     default: 0,
   })
   popularity: number;
 
   @Column({
-    type: "float",
+    type: 'float',
     default: 0,
   })
   rating: number;
 
-  @OneToMany(() => Season, (season) => season.tvShow)
+  @OneToMany(() => Season, season => season.tvShow)
   seasons: Relation<Season>[];
 
-  @OneToMany(
-    () => TVShowTranslation,
-    (tvShowTranslation) => tvShowTranslation.tvShow,
-  )
+  @OneToMany(() => TVShowTranslation, tvShowTranslation => tvShowTranslation.tvShow)
   translations: Relation<TVShowTranslation>[];
 
   @CreateDateColumn()
@@ -89,12 +86,12 @@ export class TVShow {
 }
 
 @Entity()
-@Unique(["tvShow", "language"])
+@Unique(['tvShow', 'language'])
 export class TVShowTranslation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => TVShow, (tvShow) => tvShow.translations)
+  @ManyToOne(() => TVShow, tvShow => tvShow.translations)
   tvShow: Relation<TVShow>;
 
   @Column()
@@ -106,7 +103,7 @@ export class TVShowTranslation {
   @Column()
   name: string;
 
-  @Column("text")
+  @Column('text')
   overview: string;
 
   @Column()

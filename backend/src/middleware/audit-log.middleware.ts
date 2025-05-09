@@ -1,22 +1,17 @@
-import { Elysia } from "elysia";
+import { Elysia } from 'elysia';
 
-import { AuditEventSeverity, AuditEventType } from "@entities/audit-log.entity";
-import {
-  AuthError,
-  InvalidTokenError,
-  LoginError,
-  RoleError,
-} from "@errors/auth.errors";
-import type { AuditLogService } from "@services/security/audit-log.service";
+import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
+import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
+import type { AuditLogService } from '@services/security/audit-log.service';
 
 export function createAuditLogMiddleware(auditLogService: AuditLogService) {
   return new Elysia({
-    name: "auditLogMiddleware",
+    name: 'auditLogMiddleware',
   })
     .onRequest(async ({ request, server }) => {
       // Skip logging for certain paths (like health checks)
       const path = new URL(request.url).pathname;
-      if (path === "/health") {
+      if (path === '/health') {
         return;
       }
 
@@ -30,7 +25,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
         metadata: { path },
       });
     })
-    .onError({ as: "global" }, async ({ request, error, server, set }) => {
+    .onError({ as: 'global' }, async ({ request, error, server, set }) => {
       if (error instanceof LoginError) {
         set.status = 401;
         await auditLogService.logLoginAttempt({
@@ -69,8 +64,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService) {
       const path = new URL(request.url).pathname;
 
       // Log API errors
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
 
       const errorDetails =
         error instanceof Error

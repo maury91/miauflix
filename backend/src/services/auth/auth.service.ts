@@ -1,41 +1,39 @@
-import { compare, hash } from "bcrypt";
-import type { JWTPayload } from "jose";
-import { jwtVerify, SignJWT } from "jose";
-import { hostname } from "os";
-import { v4 as uuidv4 } from "uuid";
+import { compare, hash } from 'bcrypt';
+import type { JWTPayload } from 'jose';
+import { jwtVerify, SignJWT } from 'jose';
+import { hostname } from 'os';
+import { v4 as uuidv4 } from 'uuid';
 
-import { AuditEventSeverity, AuditEventType } from "@entities/audit-log.entity";
-import type { User } from "@entities/user.entity";
-import { UserRole } from "@entities/user.entity";
-import type { Database } from "@database/database";
-import { InvalidTokenError } from "@errors/auth.errors";
-import type { RefreshTokenRepository } from "@repositories/refresh-token.repository";
-import type { UserRepository } from "@repositories/user.repository";
-import type { AuditLogService } from "@services/security/audit-log.service";
-import { generateSecurePassword } from "@utils/password.util";
+import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
+import type { User } from '@entities/user.entity';
+import { UserRole } from '@entities/user.entity';
+import type { Database } from '@database/database';
+import { InvalidTokenError } from '@errors/auth.errors';
+import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
+import type { UserRepository } from '@repositories/user.repository';
+import type { AuditLogService } from '@services/security/audit-log.service';
+import { generateSecurePassword } from '@utils/password.util';
 
-import { ENV } from "../../constants";
+import { ENV } from '../../constants';
 
 export class AuthService {
   private readonly userRepository: UserRepository;
   private readonly refreshTokenRepository: RefreshTokenRepository;
   private readonly secretKey: Uint8Array;
   private readonly refreshSecretKey: Uint8Array;
-  private readonly issuer = "miauflix-api";
-  private readonly audience = "miauflix-client";
+  private readonly issuer = 'miauflix-api';
+  private readonly audience = 'miauflix-client';
 
   constructor(
     db: Database,
-    private readonly auditLogService: AuditLogService,
+    private readonly auditLogService: AuditLogService
   ) {
     this.userRepository = db.getUserRepository();
     this.refreshTokenRepository = db.getRefreshTokenRepository();
 
     // Convert the secret to a Uint8Array for jose
-    this.secretKey = new TextEncoder().encode(ENV("JWT_SECRET"));
-    this.refreshSecretKey = new TextEncoder().encode(
-      ENV("REFRESH_TOKEN_SECRET"),
-    );
+    this.secretKey = new TextEncoder().encode(ENV('JWT_SECRET'));
+    this.refreshSecretKey = new TextEncoder().encode(ENV('REFRESH_TOKEN_SECRET'));
   }
 
   /**
@@ -57,19 +55,15 @@ export class AuthService {
     await this.createUser(adminEmail, adminPassword, UserRole.ADMIN);
 
     console.log(
-      `Created initial admin user with email: ${adminEmail} and password: ${adminPassword}`,
+      `Created initial admin user with email: ${adminEmail} and password: ${adminPassword}`
     );
-    console.log("Please change these credentials after first login.");
+    console.log('Please change these credentials after first login.');
   }
 
-  async createUser(
-    email: string,
-    password: string,
-    role: UserRole = UserRole.USER,
-  ): Promise<User> {
+  async createUser(email: string, password: string, role: UserRole = UserRole.USER): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
-      throw new Error("User already exists");
+      throw new Error('User already exists');
     }
 
     const passwordHash = await hash(password, 10);
@@ -121,11 +115,11 @@ export class AuthService {
       email: user.email,
       role: user.role,
     })
-      .setProtectedHeader({ alg: "HS256" })
+      .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt(now)
       .setIssuer(this.issuer)
       .setAudience(this.audience)
-      .setExpirationTime("15m")
+      .setExpirationTime('15m')
       .sign(this.secretKey);
   }
 
@@ -144,24 +138,20 @@ export class AuthService {
     return new SignJWT({
       token,
     })
-      .setProtectedHeader({ alg: "HS256" })
+      .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt(now)
       .setIssuer(this.issuer)
       .setAudience(this.audience)
-      .setExpirationTime("7d")
+      .setExpirationTime('7d')
       .sign(this.refreshSecretKey);
   }
 
   async verifyAccessToken(token: string) {
     try {
-      const { payload } = await jwtVerify<JWTPayload & { userId: string }>(
-        token,
-        this.secretKey,
-        {
-          issuer: this.issuer,
-          audience: this.audience,
-        },
-      );
+      const { payload } = await jwtVerify<JWTPayload & { userId: string }>(token, this.secretKey, {
+        issuer: this.issuer,
+        audience: this.audience,
+      });
 
       if (!payload.userId || !payload.email || !payload.role) {
         throw new InvalidTokenError();
@@ -181,7 +171,7 @@ export class AuthService {
         {
           issuer: this.issuer,
           audience: this.audience,
-        },
+        }
       );
 
       if (!payload.token) {
@@ -200,9 +190,7 @@ export class AuthService {
   } | null> {
     const refreshTokenPayload = await this.verifyRefreshToken(refreshToken);
 
-    const tokenEntity = await this.refreshTokenRepository.findByToken(
-      refreshTokenPayload.token,
-    );
+    const tokenEntity = await this.refreshTokenRepository.findByToken(refreshTokenPayload.token);
 
     if (!tokenEntity || tokenEntity.expiresAt < new Date()) {
       return null;
@@ -224,8 +212,7 @@ export class AuthService {
   }
 
   async logout(refreshToken: string): Promise<User | null> {
-    const tokenEntity =
-      await this.refreshTokenRepository.findByToken(refreshToken);
+    const tokenEntity = await this.refreshTokenRepository.findByToken(refreshToken);
 
     if (tokenEntity) {
       await this.refreshTokenRepository.delete(tokenEntity.id);

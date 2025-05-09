@@ -1,9 +1,9 @@
-import { randomBytes } from "crypto";
+import { randomBytes } from 'crypto';
 
-const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
-const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const numberChars = "0123456789";
-const specialChars = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const numberChars = '0123456789';
+const specialChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
 
 /**
  * Generates a secure password with the specified requirements
@@ -17,10 +17,10 @@ export function generateSecurePassword(
   minLength: number = 24,
   minNumbers: number = 1,
   minUppercase: number = 1,
-  minSpecial: number = 1,
+  minSpecial: number = 1
 ): string {
   // Ensure at least the minimum required characters of each type
-  let password = "";
+  let password = '';
 
   // Add minimum required lowercase letters (at least 1)
   password += lowercaseChars[randomInt(0, lowercaseChars.length)];
@@ -76,10 +76,10 @@ function randomInt(min: number, max: number): number {
  * @returns The shuffled string
  */
 function shuffleString(str: string): string {
-  const chars = str.split("");
+  const chars = str.split('');
   for (let i = chars.length - 1; i > 0; i--) {
     const j = randomInt(0, i + 1);
     [chars[i], chars[j]] = [chars[j], chars[i]];
   }
-  return chars.join("");
+  return chars.join('');
 }

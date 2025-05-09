@@ -1,12 +1,9 @@
-import { ENV } from "src/constants";
+import { ENV } from 'src/constants';
 
-import type { TraktList, TraktListItem, TraktPagination } from "./trakt.types";
+import type { TraktList, TraktListItem, TraktPagination } from './trakt.types';
 
 interface RateLimitInfo {
-  name:
-    | "AUTHED_API_GET_LIMIT"
-    | "AUTHED_API_POST_LIMIT"
-    | "UNAUTHED_API_GET_LIMIT";
+  name: 'AUTHED_API_GET_LIMIT' | 'AUTHED_API_POST_LIMIT' | 'UNAUTHED_API_GET_LIMIT';
   period: number;
   limit: number;
   remaining: number;
@@ -15,11 +12,10 @@ interface RateLimitInfo {
 }
 
 export class TraktApi {
-  private readonly clientId = ENV("TRAKT_CLIENT_ID");
-  private readonly apiUrl = ENV("TRAKT_API_URL");
-  private rateLimits: Partial<Record<RateLimitInfo["name"], RateLimitInfo>> =
-    {};
-  private staticLimits: Record<RateLimitInfo["name"], [number, number]> = {
+  private readonly clientId = ENV('TRAKT_CLIENT_ID');
+  private readonly apiUrl = ENV('TRAKT_API_URL');
+  private rateLimits: Partial<Record<RateLimitInfo['name'], RateLimitInfo>> = {};
+  private staticLimits: Record<RateLimitInfo['name'], [number, number]> = {
     // These are from the documentation
     AUTHED_API_GET_LIMIT: [1000, 300],
     UNAUTHED_API_GET_LIMIT: [1000, 300],
@@ -28,15 +24,12 @@ export class TraktApi {
 
   constructor() {
     if (!this.clientId) {
-      throw new Error("TRAKT_CLIENT_ID is not set");
+      throw new Error('TRAKT_CLIENT_ID is not set');
     }
   }
 
-  private getRateLimit(limitName: RateLimitInfo["name"]) {
-    if (
-      this.rateLimits[limitName] &&
-      this.rateLimits[limitName].until > new Date()
-    ) {
+  private getRateLimit(limitName: RateLimitInfo['name']) {
+    if (this.rateLimits[limitName] && this.rateLimits[limitName].until > new Date()) {
       return this.rateLimits[limitName];
     }
     const period = this.staticLimits[limitName][1];
@@ -46,9 +39,7 @@ export class TraktApi {
       limit: this.staticLimits[limitName][0],
       remaining: this.staticLimits[limitName][0],
       ongoing: 0,
-      until: new Date(
-        (Math.floor(Date.now() / (period * 1000)) + 1) * (period * 1000),
-      ),
+      until: new Date((Math.floor(Date.now() / (period * 1000)) + 1) * (period * 1000)),
     };
   }
 
@@ -70,7 +61,7 @@ export class TraktApi {
     };
   }
 
-  private increaseOngoing(limitName: RateLimitInfo["name"], count: number) {
+  private increaseOngoing(limitName: RateLimitInfo['name'], count: number) {
     const limit = this.getRateLimit(limitName);
     this.rateLimits[limit.name] = {
       ...limit,
@@ -78,7 +69,7 @@ export class TraktApi {
     };
   }
 
-  private calculateDelay(limitName: RateLimitInfo["name"]) {
+  private calculateDelay(limitName: RateLimitInfo['name']) {
     const limit = this.getRateLimit(limitName);
     console.log(limit);
     const now = Date.now();
@@ -94,25 +85,25 @@ export class TraktApi {
   private async request<T>(
     url: string,
     init: RequestInit,
-    limitName: RateLimitInfo["name"],
+    limitName: RateLimitInfo['name']
   ): Promise<TraktPagination<T>> {
     const delay = this.calculateDelay(limitName);
 
     if (delay > 0) {
-      await new Promise((resolve) => setTimeout(resolve, delay));
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
 
     const response = await fetch(url, {
       ...init,
       headers: {
-        "trakt-api-version": "2",
-        "trakt-api-key": this.clientId,
-        "Content-Type": "application/json",
+        'trakt-api-version': '2',
+        'trakt-api-key': this.clientId,
+        'Content-Type': 'application/json',
       },
     });
 
-    if (response.headers.has("x-ratelimit")) {
-      const rateLimitInfo = JSON.parse(response.headers.get("x-ratelimit")!);
+    if (response.headers.has('x-ratelimit')) {
+      const rateLimitInfo = JSON.parse(response.headers.get('x-ratelimit')!);
       this.setRateLimit(rateLimitInfo);
     }
     this.increaseOngoing(limitName, -1);
@@ -122,9 +113,9 @@ export class TraktApi {
     }
 
     const data = (await response.json()) as Promise<T[]>;
-    const page = Number(response.headers.get("x-pagination-page"));
-    const limit = Number(response.headers.get("x-pagination-limit"));
-    const total = Number(response.headers.get("x-pagination-item-count"));
+    const page = Number(response.headers.get('x-pagination-page'));
+    const limit = Number(response.headers.get('x-pagination-limit'));
+    const total = Number(response.headers.get('x-pagination-item-count'));
 
     return {
       page,
@@ -139,38 +130,26 @@ export class TraktApi {
     await this.request<TraktList>(
       `${this.apiUrl}/lists/trending?limit=10`,
       {},
-      "UNAUTHED_API_GET_LIMIT",
+      'UNAUTHED_API_GET_LIMIT'
     );
     return true;
   }
 
   public async getTrendingLists() {
     const url = `${this.apiUrl}/lists/trending?limit=50`;
-    const response = await this.request<TraktList>(
-      url,
-      {},
-      "UNAUTHED_API_GET_LIMIT",
-    );
-    return response.items.map((item) => item.list);
+    const response = await this.request<TraktList>(url, {}, 'UNAUTHED_API_GET_LIMIT');
+    return response.items.map(item => item.list);
   }
 
   public async getPopularLists() {
     const url = `${this.apiUrl}/lists/popular`;
-    const response = await this.request<TraktList>(
-      url,
-      {},
-      "UNAUTHED_API_GET_LIMIT",
-    );
-    return response.items.map((item) => item.list);
+    const response = await this.request<TraktList>(url, {}, 'UNAUTHED_API_GET_LIMIT');
+    return response.items.map(item => item.list);
   }
 
   public async getList(listId: string) {
     const url = `${this.apiUrl}/lists/${listId}/items`;
-    const response = await this.request<TraktListItem>(
-      url,
-      {},
-      "UNAUTHED_API_GET_LIMIT",
-    );
+    const response = await this.request<TraktListItem>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response;
   }
 }

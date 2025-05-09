@@ -18,6 +18,7 @@ The security logging system provides comprehensive audit trails for security-rel
 The system tracks the following event types:
 
 - **Authentication Events**:
+
   - `LOGIN`: Successful user login
   - `LOGOUT`: User logout
   - `LOGIN_FAILURE`: Failed login attempt
@@ -26,16 +27,19 @@ The system tracks the following event types:
   - `PASSWORD_RESET_COMPLETE`: Password reset completion
 
 - **Token Events**:
+
   - `TOKEN_REFRESH`: Access token refresh
   - `TOKEN_INVALIDATION`: Token invalidation
 
 - **User Management Events**:
+
   - `USER_CREATION`: New user creation
   - `USER_UPDATE`: User information update
   - `USER_DELETION`: User deletion
   - `ROLE_CHANGE`: User role change
 
 - **API Events**:
+
   - `API_ACCESS`: API endpoint access
   - `API_ERROR`: API error occurrence
 
@@ -66,7 +70,7 @@ await auditLogService.logLoginAttempt({
   success: true,
   userId: user.id,
   request: req,
-  metadata: { loginMethod: 'password' }
+  metadata: { loginMethod: 'password' },
 });
 
 // Example: Logging suspicious activity
@@ -74,7 +78,7 @@ await auditLogService.logSuspiciousActivity({
   userId: user.id,
   request: req,
   description: 'Multiple failed login attempts',
-  metadata: { attemptCount: 5, timeWindow: '5 minutes' }
+  metadata: { attemptCount: 5, timeWindow: '5 minutes' },
 });
 ```
 
@@ -115,17 +119,17 @@ const deletedCount = await auditLogService.cleanupOldLogs(90);
 
 The audit logs are stored in the `audit_logs` table with the following structure:
 
-| Column      | Type         | Description                                |
-|-------------|--------------|--------------------------------------------|
-| id          | uuid         | Primary key                                |
-| event_type  | enum         | Type of security event                     |
-| severity    | enum         | Severity level (INFO, WARNING, ERROR, CRITICAL) |
-| description | text         | Human-readable description of the event    |
-| ip_address  | varchar      | IP address of the client                   |
-| user_agent  | varchar      | User agent of the client                   |
-| metadata    | jsonb        | Additional contextual information          |
-| user_id     | uuid         | Foreign key to users table (nullable)      |
-| created_at  | timestamp    | When the event occurred                    |
+| Column      | Type      | Description                                     |
+| ----------- | --------- | ----------------------------------------------- |
+| id          | uuid      | Primary key                                     |
+| event_type  | enum      | Type of security event                          |
+| severity    | enum      | Severity level (INFO, WARNING, ERROR, CRITICAL) |
+| description | text      | Human-readable description of the event         |
+| ip_address  | varchar   | IP address of the client                        |
+| user_agent  | varchar   | User agent of the client                        |
+| metadata    | jsonb     | Additional contextual information               |
+| user_id     | uuid      | Foreign key to users table (nullable)           |
+| created_at  | timestamp | When the event occurred                         |
 
 ## Indexes
 
@@ -134,4 +138,4 @@ The following indexes are created to optimize query performance:
 - `idx_audit_logs_user_id`: For queries filtering by user
 - `idx_audit_logs_event_type`: For queries filtering by event type
 - `idx_audit_logs_severity`: For queries filtering by severity
-- `idx_audit_logs_created_at`: For date range queries and sorting 
+- `idx_audit_logs_created_at`: For date range queries and sorting

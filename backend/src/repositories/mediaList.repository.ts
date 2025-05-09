@@ -1,6 +1,6 @@
-import type { DataSource, Repository } from "typeorm";
+import type { DataSource, Repository } from 'typeorm';
 
-import { MediaList } from "@entities/list.entity";
+import { MediaList } from '@entities/list.entity';
 
 export class MediaListRepository {
   private readonly repository: Repository<MediaList>;
@@ -39,11 +39,7 @@ export class MediaListRepository {
     return this.repository.save(mediaList);
   }
 
-  createMediaList(
-    name: string,
-    description: string,
-    slug: string,
-  ): Promise<MediaList> {
+  createMediaList(name: string, description: string, slug: string): Promise<MediaList> {
     const mediaList = this.repository.create({
       name,
       description,

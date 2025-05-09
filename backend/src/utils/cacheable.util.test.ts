@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, it } from "bun:test";
+import { beforeEach, describe, expect, it } from 'bun:test';
 
-import { Cacheable } from "./cacheable.util";
+import { Cacheable } from './cacheable.util';
 
-describe("Cacheable", () => {
+describe('Cacheable', () => {
   // Simple in-memory cache for testing
   // Shared store for the test cache
   let store: Map<string, unknown>;
@@ -29,7 +29,7 @@ describe("Cacheable", () => {
     }
   }
 
-  it("caches the result for the same arguments", async () => {
+  it('caches the result for the same arguments', async () => {
     const obj = new TestClass();
     const v1 = await obj.getValue(2);
     const v2 = await obj.getValue(2);
@@ -38,7 +38,7 @@ describe("Cacheable", () => {
     expect(obj.count).toBe(1);
   });
 
-  it("does not cache for different arguments", async () => {
+  it('does not cache for different arguments', async () => {
     const obj = new TestClass();
     await obj.getValue(2);
     await obj.getValue(3);

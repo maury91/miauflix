@@ -14,7 +14,7 @@ interface TimeBucket {
 export function groupTimestampsByInterval(
   timestamps: number[],
   bucketSize = FiveMinutes,
-  dataSize = TwentyFourHours,
+  dataSize = TwentyFourHours
 ): TimeBucket[] {
   const now = Date.now();
   const start = Math.floor((now - dataSize) / bucketSize) * bucketSize;
@@ -37,7 +37,7 @@ export function TrackStatus() {
   return function (
     _target: unknown,
     _propertyKey: string | symbol,
-    descriptor: PropertyDescriptor,
+    descriptor: PropertyDescriptor
   ) {
     const originalMethod = descriptor.value;
     descriptor.value = async function (...args: unknown[]) {
@@ -49,8 +49,7 @@ export function TrackStatus() {
         lastRequest: number | null;
       };
 
-      if (typeof self.requestQueueCount !== "number")
-        self.requestQueueCount = 0;
+      if (typeof self.requestQueueCount !== 'number') self.requestQueueCount = 0;
       if (!Array.isArray(self.requestSuccesses)) self.requestSuccesses = [];
       if (!Array.isArray(self.requestFailures)) self.requestFailures = [];
       self.requestQueueCount++;
@@ -66,12 +65,8 @@ export function TrackStatus() {
       } finally {
         self.requestQueueCount = Math.max(0, self.requestQueueCount - 1);
         const cutoff = Date.now() - TwentyFourHours;
-        self.requestSuccesses = self.requestSuccesses.filter(
-          (t: number) => t >= cutoff,
-        );
-        self.requestFailures = self.requestFailures.filter(
-          (t: number) => t >= cutoff,
-        );
+        self.requestSuccesses = self.requestSuccesses.filter((t: number) => t >= cutoff);
+        self.requestFailures = self.requestFailures.filter((t: number) => t >= cutoff);
       }
     };
     return descriptor;

@@ -6,18 +6,18 @@ import {
   PrimaryGeneratedColumn,
   type Relation,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { RefreshToken } from "./refresh-token.entity";
+import { RefreshToken } from './refresh-token.entity';
 
 export enum UserRole {
-  USER = "user",
-  ADMIN = "admin",
+  USER = 'user',
+  ADMIN = 'admin',
 }
 
-@Entity("users")
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ unique: true })
@@ -27,7 +27,7 @@ export class User {
   passwordHash: string;
 
   @Column({
-    type: "varchar",
+    type: 'varchar',
     length: 10,
     enum: UserRole,
     default: UserRole.USER,
@@ -37,7 +37,7 @@ export class User {
   @Column({ default: false })
   isEmailVerified: boolean;
 
-  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  @OneToMany(() => RefreshToken, refreshToken => refreshToken.user)
   refreshTokens: Relation<RefreshToken>[];
 
   @CreateDateColumn()

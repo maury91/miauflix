@@ -1,7 +1,7 @@
-import type { Variables } from "./configuration";
-import { variablesDefaultValues } from "./configuration";
+import type { Variables } from './configuration';
+import { variablesDefaultValues } from './configuration';
 
 export const ENV = (variable: Variables): string =>
-  process.env[variable] ?? variablesDefaultValues[variable] ?? "";
+  process.env[variable] ?? variablesDefaultValues[variable] ?? '';
 
 ENV.number = (variable: Variables): number => parseInt(ENV(variable), 10) || 0;

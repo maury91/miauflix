@@ -1,25 +1,25 @@
-import path from "path";
-import { DataSource } from "typeorm";
+import path from 'path';
+import { DataSource } from 'typeorm';
 
-import { AuditLog } from "@entities/audit-log.entity";
-import { Episode } from "@entities/episode.entity";
-import { Genre, GenreTranslation } from "@entities/genre.entity";
-import { MediaList } from "@entities/list.entity";
-import { Movie, MovieTranslation } from "@entities/movie.entity";
-import { RefreshToken } from "@entities/refresh-token.entity";
-import { Season } from "@entities/season.entity";
-import { SyncState } from "@entities/sync-state.entity";
-import { TVShow } from "@entities/tvshow.entity";
-import { TVShowTranslation } from "@entities/tvshow.entity";
-import { User } from "@entities/user.entity";
-import { AuditLogRepository } from "@repositories/audit-log.repository";
-import { GenreRepository } from "@repositories/genre.repository";
-import { MediaListRepository } from "@repositories/mediaList.repository";
-import { MovieRepository } from "@repositories/movie.repository";
-import { RefreshTokenRepository } from "@repositories/refresh-token.repository";
-import { SyncStateRepository } from "@repositories/syncState.repository";
-import { TVShowRepository } from "@repositories/tvshow.repository";
-import { UserRepository } from "@repositories/user.repository";
+import { AuditLog } from '@entities/audit-log.entity';
+import { Episode } from '@entities/episode.entity';
+import { Genre, GenreTranslation } from '@entities/genre.entity';
+import { MediaList } from '@entities/list.entity';
+import { Movie, MovieTranslation } from '@entities/movie.entity';
+import { RefreshToken } from '@entities/refresh-token.entity';
+import { Season } from '@entities/season.entity';
+import { SyncState } from '@entities/sync-state.entity';
+import { TVShow } from '@entities/tvshow.entity';
+import { TVShowTranslation } from '@entities/tvshow.entity';
+import { User } from '@entities/user.entity';
+import { AuditLogRepository } from '@repositories/audit-log.repository';
+import { GenreRepository } from '@repositories/genre.repository';
+import { MediaListRepository } from '@repositories/mediaList.repository';
+import { MovieRepository } from '@repositories/movie.repository';
+import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
+import { SyncStateRepository } from '@repositories/syncState.repository';
+import { TVShowRepository } from '@repositories/tvshow.repository';
+import { UserRepository } from '@repositories/user.repository';
 
 export class Database {
   private readonly dataSource: DataSource;
@@ -34,8 +34,8 @@ export class Database {
 
   constructor() {
     this.dataSource = new DataSource({
-      type: "sqlite",
-      database: path.resolve(process.cwd(), "database.sqlite"),
+      type: 'sqlite',
+      database: path.resolve(process.cwd(), 'database.sqlite'),
       entities: [
         Movie,
         MovieTranslation,

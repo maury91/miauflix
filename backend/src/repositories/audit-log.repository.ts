@@ -1,11 +1,8 @@
-import type { DataSource, Repository } from "typeorm";
-import { Between } from "typeorm";
+import type { DataSource, Repository } from 'typeorm';
+import { Between } from 'typeorm';
 
-import type {
-  AuditEventSeverity,
-  AuditEventType,
-} from "@entities/audit-log.entity";
-import { AuditLog } from "@entities/audit-log.entity";
+import type { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
+import { AuditLog } from '@entities/audit-log.entity';
 
 export class AuditLogRepository {
   private readonly repository: Repository<AuditLog>;
@@ -28,21 +25,21 @@ export class AuditLogRepository {
   async findByEventType(eventType: AuditEventType): Promise<AuditLog[]> {
     return this.repository.find({
       where: { eventType },
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
     });
   }
 
   async findBySeverity(severity: AuditEventSeverity): Promise<AuditLog[]> {
     return this.repository.find({
       where: { severity },
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
     });
   }
 
   async findByUserId(userEmail: string): Promise<AuditLog[]> {
     return this.repository.find({
       where: { userEmail },
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -51,13 +48,13 @@ export class AuditLogRepository {
       where: {
         createdAt: Between(startDate, endDate),
       },
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
     });
   }
 
   async findRecent(limit: number = 100): Promise<AuditLog[]> {
     return this.repository.find({
-      order: { createdAt: "DESC" },
+      order: { createdAt: 'DESC' },
       take: limit,
     });
   }

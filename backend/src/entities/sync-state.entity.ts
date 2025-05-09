@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
-@Unique(["name"])
+@Unique(['name'])
 export class SyncState {
   @PrimaryGeneratedColumn()
   id: number;
@@ -9,6 +9,6 @@ export class SyncState {
   @Column({ unique: true })
   name: string;
 
-  @Column({ type: "datetime", nullable: true })
+  @Column({ type: 'datetime', nullable: true })
   lastSync: Date | null;
 }

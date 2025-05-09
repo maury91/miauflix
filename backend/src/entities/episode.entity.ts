@@ -5,9 +5,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Season } from "./season.entity";
+import { Season } from './season.entity';
 
 @Entity()
 export class Episode {
@@ -38,7 +38,7 @@ export class Episode {
   @Column()
   imdbId: string;
 
-  @ManyToOne(() => Season, (season) => season.episodes)
+  @ManyToOne(() => Season, season => season.episodes)
   season: typeof Season;
 
   @CreateDateColumn()

@@ -1,4 +1,4 @@
-import cache from "./caching";
+import cache from './caching';
 
 abstract class Class {}
 
@@ -7,15 +7,19 @@ export function Cacheable<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Args extends any[],
   Return,
->(ttlMs: number, reset = false, customCache: { get: typeof cache.get; set: typeof cache.set } = cache) {
+>(
+  ttlMs: number,
+  reset = false,
+  customCache: { get: typeof cache.get; set: typeof cache.set } = cache
+) {
   return function (
     target: This,
     _key: string | symbol,
-    descriptor: TypedPropertyDescriptor<(...args: Args) => Promise<Return>>,
+    descriptor: TypedPropertyDescriptor<(...args: Args) => Promise<Return>>
   ) {
     const originalMethod = descriptor.value;
 
-    if (typeof originalMethod === "function") {
+    if (typeof originalMethod === 'function') {
       async function cacheMethod(this: This, ...args: Args): Promise<Return> {
         const cacheKey = `cache.${target.constructor.name}.${
           (originalMethod as typeof cacheMethod).name
@@ -25,10 +29,7 @@ export function Cacheable<
           return cached;
         }
 
-        const result = await (originalMethod as typeof cacheMethod).apply(
-          this,
-          args,
-        );
+        const result = await (originalMethod as typeof cacheMethod).apply(this, args);
         await customCache.set(cacheKey, result, ttlMs);
 
         return result;

@@ -5,6 +5,7 @@
 ### Core Features
 
 #### Authentication & Authorization
+
 - [x] Admin-only user creation
 - [x] JWT-based authentication
 - [x] Refresh token rotation
@@ -12,9 +13,10 @@
 - [x] Password hashing with bcrypt
 - [x] Token expiration management
 - [ ] Admin-only password reset functionality
-- [ ] Email verification 
+- [ ] Email verification
 
 #### User Management
+
 - [x] User CRUD operations
 - [x] User roles and permissions
 - [ ] User profile management
@@ -23,6 +25,7 @@
 - [ ] Account deletion
 
 #### Media information providers integration
+
 - [ ] Media Provider Integration
   - [x] TMDb movie synchronization
     - [x] Synchronization on request
@@ -60,6 +63,7 @@
   - [ ] Favorites/bookmarks
 
 #### Media content discovery
+
 - [ ] Rarbg Integration
   - [ ] Result caching
   - [ ] Rate limiting
@@ -71,6 +75,7 @@
   - [ ] Content availability tracking
 
 #### Media streaming
+
 - [ ] Custom Webtorrent Server
   - [ ] Authentication integration
   - [ ] User-specific streaming sessions
@@ -80,6 +85,7 @@
   - [ ] Error recovery mechanisms
 
 #### Configuration Management
+
 - [x] Assisted Configuration
   - [x] Environment variable validation
   - [x] Configuration schema definition
@@ -95,6 +101,7 @@
   - [ ] Configuration backup and restore
 
 #### API Features
+
 - [x] Basic route structure
 - [x] Authentication middleware
 - [x] Role-based middleware
@@ -106,6 +113,7 @@
 - [ ] Response caching
 
 #### Database & Infrastructure
+
 - [x] SQLite database setup
 - [x] TypeORM integration
 - [x] Repository pattern implementation
@@ -116,6 +124,7 @@
 - [ ] Database indexing
 
 #### Security
+
 - [x] JWT security
 - [x] Password hashing
 - [x] Role-based access control
@@ -129,6 +138,7 @@
 - [ ] DDoS protection
 
 #### Testing
+
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] API tests
@@ -139,6 +149,7 @@
 - [ ] Test coverage reporting
 
 #### Monitoring & Logging
+
 - [x] Application logging
 - [x] Error tracking
 - [ ] Performance monitoring
@@ -147,6 +158,7 @@
 - [ ] Alert system
 
 #### Documentation
+
 - [x] Basic README
 - [x] Security documentation
 - [x] Configuration documentation
