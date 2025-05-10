@@ -48,19 +48,9 @@ else
   www_domain=""
 fi
 
-# Check if template exists
-template_file="${SCRIPT_DIR}/../nginx/conf.d/default.conf.template"
-output_file="${SCRIPT_DIR}/../nginx/conf.d/default.conf"
-
-if [ ! -f "$template_file" ]; then
-  print_message "$RED" "Error: Template file not found: $template_file"
-  exit 1
-fi
-
-# Create a backup of the original config if it exists
-if [ -f "$output_file" ] && [ ! -f "${output_file}.bak" ]; then
-  cp "$output_file" "${output_file}.bak"
-  print_message "$GREEN" "Original Nginx configuration backed up to ${output_file}.bak"
+# Load environment variables if .env exists
+if [ -f "${SCRIPT_DIR}/../.env" ]; then
+  source "${SCRIPT_DIR}/../.env"
 fi
 
 # Generate configuration from template
@@ -69,9 +59,25 @@ if [ "$include_www" = true ]; then
   print_message "$GREEN" "Including www subdomain: $www_domain"
 fi
 
-# Replace placeholders with actual values
-sed "s/{{DOMAIN}}/$domain/g" "$template_file" | \
-sed "s/{{WWW_DOMAIN}}/$www_domain/g" > "$output_file"
+# Check for reverse proxy secret
+if [ -z "$REVERSE_PROXY_SECRET" ]; then
+  print_message "$YELLOW" "Warning: REVERSE_PROXY_SECRET is not set in .env file"
+  print_message "$YELLOW" "Client IP addresses won't be properly detected behind the reverse proxy"
+  print_message "$YELLOW" "Consider adding a strong random secret to your .env file"
+fi
 
-print_message "$GREEN" "✅ Nginx configuration generated successfully: $output_file"
+# Update environment variables in .env file
+update_env_var "DOMAIN" "$domain"
+
+# Update WWW_DOMAIN in .env
+if [ "$include_www" = true ]; then
+  update_env_var "WWW_DOMAIN" "$www_domain"
+else
+  update_env_var "WWW_DOMAIN" ""
+fi
+
+print_message "$GREEN" "Updated DOMAIN and WWW_DOMAIN in .env file"
+print_message "$GREEN" "✅ Nginx configuration setup complete"
+print_message "$GREEN" "Docker will use environment variables from .env file when starting"
+print_message "$GREEN" "Restart the Nginx container with: docker compose down nginx && docker compose up -d nginx"
 exit 0

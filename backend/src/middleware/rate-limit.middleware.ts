@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 
 import type { AuditLogService } from '@services/security/audit-log.service';
+import { getRealClientIp } from '@utils/proxy.util';
 import { RateLimiter } from '@utils/rateLimiter';
 
 // Create a map to store rate limiters by IP address
@@ -21,7 +22,7 @@ export const createRateLimitMiddleware = (auditLogService: AuditLogService) => {
   }).macro(({ onBeforeHandle }) => ({
     rateLimit(limit: number) {
       onBeforeHandle(({ error, path, request, server }) => {
-        const clientIp = server?.requestIP(request)?.address || 'unknown';
+        const clientIp = getRealClientIp(request, server) || 'unknown';
         const rateLimiter = getRateLimiter(clientIp, path, limit);
 
         // Check if the request should be rejected
