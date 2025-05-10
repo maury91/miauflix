@@ -4,12 +4,26 @@ import type { AuditLog } from '@entities/audit-log.entity';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { Database } from '@database/database';
 import type { AuditLogRepository } from '@repositories/audit-log.repository';
+import { getRealClientIp } from '@utils/proxy.util';
 
 export class AuditLogService {
   private repository: AuditLogRepository;
 
   constructor(db: Database) {
     this.repository = db.getAuditLogRepository();
+  }
+
+  private filterSensitiveHeaders(headers: Headers): Record<string, string> {
+    const sensitiveHeaders = ['authorization', 'cookie', 'x-reverse-proxy-secret'];
+    const filteredHeaders: Record<string, string> = {};
+    headers.forEach((value, key) => {
+      if (sensitiveHeaders.includes(key.toLowerCase())) {
+        filteredHeaders[key] = 'REDACTED';
+      } else {
+        filteredHeaders[key] = value;
+      }
+    });
+    return filteredHeaders;
   }
 
   /**
@@ -25,7 +39,7 @@ export class AuditLogService {
     metadata?: Record<string, unknown>;
   }): Promise<void> {
     const { eventType, severity, description, request, server, userEmail, metadata } = params;
-    const ipAddress = request ? server?.requestIP(request)?.address : undefined;
+    const ipAddress = getRealClientIp(request, server);
     const userAgent = request?.headers.get('user-agent') || undefined;
 
     const logData = {
@@ -37,7 +51,7 @@ export class AuditLogService {
         ...(request && {
           method: request.method,
           query: Object.fromEntries(new URL(request.url).searchParams),
-          headers: Object.fromEntries(request.headers),
+          headers: this.filterSensitiveHeaders(request.headers),
         }),
         ...metadata,
       },

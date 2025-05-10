@@ -116,3 +116,30 @@ create_directories() {
   mkdir -p ./nginx/certbot/www
   mkdir -p ./nginx/ssl
 }
+
+# Function to update or add a variable in the .env file
+# Usage: update_env_var "VARIABLE_NAME" "value"
+update_env_var() {
+  local var_name=$1
+  local var_value=$2
+  local env_file="${SCRIPT_DIR}/../.env"
+  
+  # Create .env file if it doesn't exist
+  if [ ! -f "$env_file" ]; then
+    touch "$env_file"
+    print_message "$GREEN" "Created new .env file at $env_file"
+  fi
+  
+  # Check if the variable already exists in the .env file
+  if grep -q "^${var_name}=" "$env_file"; then
+    # Replace the existing value
+    sed -i "s|^${var_name}=.*$|${var_name}=${var_value}|" "$env_file"
+    print_message "$GREEN" "Updated $var_name in .env file"
+  else
+    # Add the new variable
+    echo "${var_name}=${var_value}" >> "$env_file"
+    print_message "$GREEN" "Added $var_name to .env file"
+  fi
+  
+  return 0
+}

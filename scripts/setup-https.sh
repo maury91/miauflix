@@ -119,13 +119,27 @@ if [ "$include_www" = true ]; then
 fi    # Run generate_nginx_config.sh
 "${SCRIPT_DIR}/generate_nginx_config.sh" $domain_arg
 
-# Update SSL certificate paths to point to self-signed certificates
+# Ensure template directory exists
 base_path="${SCRIPT_DIR}/.."
-nginx_conf="${base_path}/nginx/conf.d/default.conf"
+nginx_template_dir="${base_path}/nginx/templates"
 
-# Fix the certificate paths - using more specific patterns to avoid duplicate replacements
-sed -i "s#ssl_certificate .*fullchain.pem;#ssl_certificate /etc/nginx/ssl/fullchain.pem;#" "$nginx_conf"
-sed -i "s#ssl_certificate_key .*privkey.pem;#ssl_certificate_key /etc/nginx/ssl/privkey.pem;#" "$nginx_conf"
-sed -i "s#ssl_dhparam .*pem;#ssl_dhparam /etc/nginx/ssl/dhparam.pem;#" "$nginx_conf"
+# Make sure the template directory exists
+if [ ! -d "$nginx_template_dir" ]; then
+  print_message "$GREEN" "Creating Docker template directory..."
+  mkdir -p "$nginx_template_dir"
+fi
+
+# Check if the template exists
+nginx_template="${nginx_template_dir}/default.conf.template"
+if [ ! -f "$nginx_template" ]; then
+  print_message "$RED" "Error: Template file not found: $nginx_template"
+  print_message "$YELLOW" "Please create a template file before running this script."
+  exit 1
+fi
+
+# Create environment variables for SSL paths to use in Docker
+update_env_var "SSL_CERTIFICATE" "/etc/nginx/ssl/fullchain.pem"
+update_env_var "SSL_CERTIFICATE_KEY" "/etc/nginx/ssl/privkey.pem"
+update_env_var "SSL_DHPARAM" "/etc/nginx/ssl/dhparam.pem"
 
 print_message "$GREEN" "✅ Self-signed SSL certificate setup completed successfully!"

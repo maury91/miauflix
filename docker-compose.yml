@@ -5,8 +5,8 @@ services:
     container_name: nordvpn
     env_file: .env
     ports:
-      - "3000:3000" # Expose port 3000 directly
-      - "6499:6499" # Expose port 6499 directly
+      - '3000:3000' # Expose port 3000 directly
+      - '6499:6499' # Expose port 6499 directly
     cap_add:
       - NET_ADMIN # Required
       - SYS_MODULE # Maybe required
@@ -33,24 +33,30 @@ services:
     network_mode: service:nordvpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service
     restart: unless-stopped
-    command: ["bun", "--inspect", "--watch", "backend/src/app.ts"]
+    command: ['bun', '--inspect', '--watch', 'backend/src/app.ts']
 
   nginx:
     image: nginx:alpine
     container_name: miauflix-nginx
     ports:
-      - "80:80" # Expose HTTP port
-      - "443:443" # Expose HTTPS port
+      - '80:80' # Expose HTTP port
+      - '443:443' # Expose HTTPS port
     volumes:
       - ./nginx/ssl:/etc/nginx/ssl
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/templates:/etc/nginx/templates
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
+    env_file: .env
+    environment:
+      - REVERSE_PROXY_SECRET=${REVERSE_PROXY_SECRET}
+      - DOMAIN=${DOMAIN}
+      - WWW_DOMAIN=${WWW_DOMAIN}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_CERTIFICATE_KEY=${SSL_CERTIFICATE_KEY}
+      - SSL_DHPARAM=${SSL_DHPARAM}
     depends_on:
       - backend
     restart: unless-stopped
-    # Not using network_mode: service:nordvpn so it can be accessible from outside
-    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
   certbot:
     image: certbot/certbot

@@ -232,8 +232,15 @@ else
   print_message "$GREEN" "Certificate successfully obtained!"
 fi
 
+# Update environment variables with the certificate paths
+print_message "$GREEN" "Updating environment variables with certificate paths..."
+update_env_var "SSL_CERTIFICATE" "/etc/letsencrypt/live/${domains[0]}/fullchain.pem"
+update_env_var "SSL_CERTIFICATE_KEY" "/etc/letsencrypt/live/${domains[0]}/privkey.pem"
+update_env_var "SSL_DHPARAM" "/etc/letsencrypt/ssl-dhparams.pem"
+
 print_message "$GREEN" "Reloading Nginx with new certificates..."
-$dockercompose exec nginx nginx -s reload
+$dockercompose down nginx
+$dockercompose up -d nginx
 
 print_message "$GREEN" "✅ Let's Encrypt certificate setup complete!"
 if [ $staging -eq 1 ]; then
