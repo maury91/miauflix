@@ -419,4 +419,30 @@ export class TMDBApi {
     const url = `${this.apiUrl}/genre/tv/list?language=${language}`;
     return this.get<{ genres: Genre[] }>(url);
   }
+
+  /**
+   * Get changes for a specific TV show
+   * @param tvShowId The TMDB ID of the TV show
+   * @returns TV show changes
+   */
+  @Cacheable(3600) // Cache for 1 hour
+  public async getTVShowChanges(tvShowId: number | string): Promise<{
+    changes: {
+      key: string;
+      items: Array<{
+        id: string;
+        action: string;
+        time: string;
+        iso_639_1: string;
+        iso_3166_1: string;
+        value?: {
+          season_id?: number;
+          season_number?: number;
+        };
+      }>;
+    }[];
+  }> {
+    const url = `${this.apiUrl}/tv/${tvShowId}/changes?page=1`;
+    return this.get(url);
+  }
 }

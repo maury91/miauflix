@@ -1,0 +1,5 @@
+# Bun configuration file
+
+[test]
+# Preload the HTTP VCR and other test utilities
+preload = ["./src/test-preload.ts"]

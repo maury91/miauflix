@@ -34,7 +34,8 @@ const serverConfigurationDefinition = serviceConfiguration({
       example: '3000',
     },
     REVERSE_PROXY_SECRET: {
-      description: 'Secret key shared between the reverse proxy and the backend to validate requests',
+      description:
+        'Secret key shared between the reverse proxy and the backend to validate requests',
       required: false,
       defaultValue: '',
       example: 'your-secure-random-string',
