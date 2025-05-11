@@ -1,11 +1,9 @@
+import { sleep } from './time';
+
 export class RateLimiter {
   private requestTimestamps: number[] = [];
 
   constructor(private readonly limit: number) {}
-
-  private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
 
   /**
    * Calculates the interval in milliseconds based on the rate limit
@@ -47,7 +45,7 @@ export class RateLimiter {
     const delayMs = this.calculateDelay();
 
     if (delayMs > 0) {
-      await this.sleep(delayMs);
+      await sleep(delayMs);
     }
 
     this.requestTimestamps.push(Date.now());

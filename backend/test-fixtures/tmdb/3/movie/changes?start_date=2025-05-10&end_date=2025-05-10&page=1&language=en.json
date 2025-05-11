@@ -1,0 +1,25 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22849",
+    "connection": "keep-alive",
+    "content-encoding": "gzip",
+    "content-type": "application/json;charset=utf-8",
+    "date": "Sun, 11 May 2025 17:39:11 GMT",
+    "etag": "W/\"d529573abf9a323d552f8e501a1012e8\"",
+    "server": "openresty",
+    "transfer-encoding": "chunked",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6ae82cc0c8a39c993134c2be90b4d120.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "27Cuv4L0Tl_wYimy-HgBfVge5mjWVZbebodpF1BnLr7E3crhQbcyNg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-cache": "RefreshHit from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "327",
+    "x-memc-expires": "273",
+    "x-memc-key": "03dd3b388d92c90bf8949ab16f9a6007"
+  },
+  "body": "{\"results\":[{\"id\":1184918,\"adult\":false},{\"id\":1450709,\"adult\":false},{\"id\":506941,\"adult\":false},{\"id\":1478549,\"adult\":false},{\"id\":1223542,\"adult\":false},{\"id\":1135569,\"adult\":false},{\"id\":1410321,\"adult\":false},{\"id\":1269118,\"adult\":false},{\"id\":1431761,\"adult\":true},{\"id\":977294,\"adult\":false},{\"id\":1478247,\"adult\":false},{\"id\":1461103,\"adult\":false},{\"id\":1086910,\"adult\":false},{\"id\":1431784,\"adult\":false},{\"id\":1471416,\"adult\":false},{\"id\":1472083,\"adult\":false},{\"id\":1476374,\"adult\":false},{\"id\":1476755,\"adult\":false},{\"id\":1476762,\"adult\":false},{\"id\":1477811,\"adult\":false},{\"id\":1277884,\"adult\":false},{\"id\":1424145,\"adult\":false},{\"id\":1443935,\"adult\":false},{\"id\":1469290,\"adult\":false},{\"id\":1478547,\"adult\":false},{\"id\":1469824,\"adult\":false},{\"id\":1470082,\"adult\":false},{\"id\":1472019,\"adult\":false},{\"id\":1473736,\"adult\":false},{\"id\":1476827,\"adult\":false},{\"id\":1476895,\"adult\":false},{\"id\":1478251,\"adult\":false},{\"id\":1478305,\"adult\":true},{\"id\":1477997,\"adult\":false},{\"id\":1478506,\"adult\":false},{\"id\":1477942,\"adult\":false},{\"id\":1478292,\"adult\":false},{\"id\":1478299,\"adult\":false},{\"id\":1429252,\"adult\":false},{\"id\":1448534,\"adult\":false},{\"id\":1477983,\"adult\":false},{\"id\":1477990,\"adult\":false},{\"id\":1477993,\"adult\":false},{\"id\":1478013,\"adult\":false},{\"id\":1478168,\"adult\":false},{\"id\":1478007,\"adult\":false},{\"id\":1478266,\"adult\":false},{\"id\":1478320,\"adult\":false},{\"id\":1478424,\"adult\":false},{\"id\":989751,\"adult\":false},{\"id\":1478057,\"adult\":false},{\"id\":1472327,\"adult\":false},{\"id\":1474233,\"adult\":false},{\"id\":1478046,\"adult\":false},{\"id\":1478242,\"adult\":false},{\"id\":1473156,\"adult\":false},{\"id\":1460930,\"adult\":false},{\"id\":1427491,\"adult\":false},{\"id\":1477834,\"adult\":false},{\"id\":1478542,\"adult\":false},{\"id\":1478539,\"adult\":false},{\"id\":483766,\"adult\":false},{\"id\":1151039,\"adult\":false},{\"id\":10413,\"adult\":false},{\"id\":301007,\"adult\":false},{\"id\":5256,\"adult\":false},{\"id\":1478550,\"adult\":true},{\"id\":1272,\"adult\":false},{\"id\":1475415,\"adult\":false},{\"id\":1128614,\"adult\":false},{\"id\":1140513,\"adult\":false},{\"id\":7518,\"adult\":false},{\"id\":986056,\"adult\":false},{\"id\":353486,\"adult\":false},{\"id\":39335,\"adult\":false},{\"id\":1133429,\"adult\":false},{\"id\":1336200,\"adult\":false},{\"id\":1422562,\"adult\":false},{\"id\":408450,\"adult\":false},{\"id\":1478551,\"adult\":false},{\"id\":15762,\"adult\":false},{\"id\":3175,\"adult\":false},{\"id\":1423192,\"adult\":false},{\"id\":1478552,\"adult\":false},{\"id\":1478553,\"adult\":true},{\"id\":8954,\"adult\":false},{\"id\":1478554,\"adult\":false},{\"id\":1477385,\"adult\":false},{\"id\":1038392,\"adult\":false},{\"id\":300786,\"adult\":false},{\"id\":1429864,\"adult\":false},{\"id\":1858,\"adult\":false},{\"id\":11836,\"adult\":false},{\"id\":1382766,\"adult\":false},{\"id\":31142,\"adult\":false},{\"id\":1478555,\"adult\":false},{\"id\":465351,\"adult\":false},{\"id\":1478556,\"adult\":false},{\"id\":1289893,\"adult\":false},{\"id\":1429867,\"adult\":false}],\"page\":1,\"total_pages\":2,\"total_results\":199}"
+}

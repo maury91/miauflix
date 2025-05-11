@@ -1,5 +1,4 @@
 import { logger } from '@logger';
-import { sleep } from 'bun';
 
 import type { Genre } from '@entities/genre.entity';
 import { Movie } from '@entities/movie.entity';
@@ -11,6 +10,7 @@ import type { MovieRepository } from '@repositories/movie.repository';
 import type { SyncStateRepository } from '@repositories/syncState.repository';
 import type { TVShowRepository } from '@repositories/tvshow.repository';
 import type { MovieMediaSummary, TVShowMediaSummary } from '@services/tmdb/tmdb.types';
+import { sleep } from '@utils/time';
 
 import { TMDBApi } from '../tmdb/tmdb.api';
 import type { GenreWithLanguages, TranslatedMedia } from './media.types';
@@ -18,11 +18,9 @@ import type { GenreWithLanguages, TranslatedMedia } from './media.types';
 // ToDo: Move to configuration
 const supportedLanguages = ['en'];
 const MOVIE_SYNC_NAME = 'TMDB_Movies';
-// const TV_SYNC_NAME = "TMDB_TVShows";
+const TV_SYNC_NAME = 'TMDB_TVShows';
 
 const oneHourMs = 1 * 60 * 60 * 1000;
-const twoHoursMs = oneHourMs * 2;
-const fourHoursMs = oneHourMs * 4;
 
 export class MediaService {
   private readonly tmdbApi = new TMDBApi();
@@ -79,7 +77,10 @@ export class MediaService {
         popularity: movieSummary.popularity,
       });
 
-      if (movie.genres.map(genre => genre.id).toString() !== genres.toString()) {
+      const movieGenreIds = movie.genres.map(genre => genre.id).sort();
+      const sortedGenres = genres.map(genre => genre.id).sort();
+
+      if (movieGenreIds.toString() !== sortedGenres.toString()) {
         await this.movieRepository.updateGenres(movie, genres);
       }
     }
@@ -250,27 +251,47 @@ export class MediaService {
     const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Fallback if no sync state
     const movieSyncStartDate = lastMovieSync || yesterday;
 
+    // Note: TMDB API doesn't support passing time, but only dates,
+    // so our increments cannot be smaller than 1 day.
+
     if (now.getTime() - movieSyncStartDate.getTime() < oneHourMs) {
       logger.debug('MovieSync', 'Last sync was less than 1 hour ago. Skipping sync.');
       return;
     }
 
-    let chunkStart = movieSyncStartDate;
-    let chunkIndex = 1;
-    const totalChunks = Math.floor((now.getTime() - chunkStart.getTime()) / twoHoursMs) + 1;
+    // TMDB doesn't support more than 14 days in the past
+    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+    if (movieSyncStartDate.getTime() < fourteenDaysAgo.getTime()) {
+      logger.debug('MovieSync', 'Last sync was more than 14 days ago. Resetting to 14 days ago.');
+      movieSyncStartDate.setTime(fourteenDaysAgo.getTime());
+    }
 
-    while (chunkStart.getTime() < now.getTime()) {
-      const chunkSize =
-        now.getTime() - chunkStart.getTime() > fourHoursMs
-          ? twoHoursMs
-          : now.getTime() - chunkStart.getTime();
-      const chunkEnd = new Date(chunkStart.getTime() + chunkSize);
+    // Set the start date to the beginning of the day
+    movieSyncStartDate.setHours(0);
+    movieSyncStartDate.setMinutes(0);
+    movieSyncStartDate.setSeconds(0);
+
+    const chunks: Date[] = [];
+    let chunk = new Date(movieSyncStartDate.getTime());
+    while (chunk.getTime() < now.getTime()) {
+      chunks.push(new Date(chunk));
+      chunk.setDate(chunk.getDate() + 1);
+    }
+
+    let chunkIndex = 1;
+    for (const chunkStart of chunks) {
+      // Chunk starts at 00:00:00, chunk ends at 23:59:59 ( or now if it's the last chunk )
+      const chunkEnd = chunkIndex < chunks.length ? new Date(chunkStart) : now;
+      if (chunkIndex < chunks.length) {
+        chunkEnd.setDate(chunkEnd.getDate() + 1);
+        chunkEnd.setSeconds(-1);
+      }
       const changedMovieIdsGenerator = this.tmdbApi.getAllChangedMovieIds(chunkStart, chunkEnd);
 
       for await (const pageResult of changedMovieIdsGenerator) {
         logger.debug(
           'MovieSync',
-          `Chunk ${chunkIndex}/${totalChunks} - Processing page ${pageResult.page}/${pageResult.totalPages}`
+          `Chunk ${chunkIndex}/${chunks.length} - Processing page ${pageResult.page}/${pageResult.totalPages}`
         );
         const changedMoviesIds = pageResult.items;
         const existingMoviesInDB: Movie[] = (
@@ -288,8 +309,12 @@ export class MediaService {
         }
         await sleep(1000);
       }
+      // If it isn't the last chunk
+      if (chunkIndex < chunks.length) {
+        // We want to set the last sync to the beginning of the next chunk, so we add 1 second
+        chunkEnd.setSeconds(60);
+      }
       await this.syncStateRepository.setLastSync(MOVIE_SYNC_NAME, chunkEnd);
-      chunkStart = chunkEnd;
       chunkIndex++;
     }
   }
@@ -433,5 +458,197 @@ export class MediaService {
     }
 
     return true;
+  }
+
+  private async updateTVShow(tvShow: TVShow): Promise<void> {
+    const showDetails = await this.tmdbApi.getTVShowDetails(tvShow.tmdbId);
+
+    // Update main TV show details
+    await this.tvShowRepository.checkForChangesAndUpdate(tvShow, {
+      imdbId: showDetails.external_ids.imdb_id || '',
+      name: showDetails.name,
+      overview: showDetails.overview,
+      poster: showDetails.poster_path,
+      backdrop: showDetails.backdrop_path,
+      status: showDetails.status,
+      tagline: showDetails.tagline,
+      type: showDetails.type,
+      inProduction: showDetails.in_production,
+      firstAirDate: showDetails.first_air_date,
+      episodeRunTime: showDetails.episode_run_time,
+      popularity: showDetails.popularity,
+      rating: showDetails.vote_average,
+    });
+
+    // Update translations
+    await Promise.all(
+      showDetails.translations.map(translation => {
+        return this.tvShowRepository.addTranslation(tvShow, {
+          name: translation.data.name,
+          overview: translation.data.overview,
+          tagline: translation.data.tagline,
+          language: translation.iso_639_1,
+        });
+      })
+    );
+
+    // Update genres
+    const genresIds = showDetails.genres.map(genre => genre.id);
+    const genres = await this.getGenres(genresIds);
+    if (tvShow.genres.map(genre => genre.id).toString() !== genres.toString()) {
+      await this.tvShowRepository.updateGenres(tvShow, genres);
+    }
+  }
+
+  private async updateSeason(season: Season): Promise<void> {
+    const seasonDetails = await this.tmdbApi.getSeason(season.tvShow.tmdbId, season.seasonNumber);
+
+    // Update season data if needed
+    await this.tvShowRepository.updateSeasonDetails(season, {
+      name: seasonDetails.name,
+      overview: seasonDetails.overview,
+      airDate: seasonDetails.air_date,
+      posterPath: seasonDetails.poster_path,
+    });
+
+    // Update or create episodes
+    await Promise.all(
+      seasonDetails.episodes.map(async episode => {
+        return this.tvShowRepository.createEpisode(season, {
+          tmdbId: episode.id,
+          name: episode.name,
+          overview: episode.overview,
+          episodeNumber: episode.episode_number,
+          airDate: episode.air_date,
+          stillPath: episode.still_path,
+          seasonId: season.id,
+          imdbId: '', // We'll add this later once we sync more episode info
+        });
+      })
+    );
+
+    await this.tvShowRepository.markSeasonAsSynced(season);
+  }
+
+  public async syncTVShows(): Promise<void> {
+    const lastTVShowSync = await this.syncStateRepository.getLastSync(TV_SYNC_NAME);
+    const now = new Date();
+    const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Fallback if no sync state
+    const tvShowSyncStartDate = lastTVShowSync || yesterday;
+
+    // Note: TMDB API doesn't support passing time, but only dates,
+    // so our increments cannot be smaller than 1 day.
+
+    if (now.getTime() - tvShowSyncStartDate.getTime() < oneHourMs) {
+      logger.debug('TVShowSync', 'Last sync was less than 1 hour ago. Skipping sync.');
+      return;
+    }
+
+    // TMDB doesn't support more than 14 days in the past
+    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+    if (tvShowSyncStartDate.getTime() < fourteenDaysAgo.getTime()) {
+      logger.debug('TVShowSync', 'Last sync was more than 14 days ago. Resetting to 14 days ago.');
+      tvShowSyncStartDate.setTime(fourteenDaysAgo.getTime());
+    }
+
+    // Set the start date to the beginning of the day
+    tvShowSyncStartDate.setHours(0);
+    tvShowSyncStartDate.setMinutes(0);
+    tvShowSyncStartDate.setSeconds(0);
+
+    const chunks: Date[] = [];
+    let chunk = new Date(tvShowSyncStartDate.getTime());
+    while (chunk.getTime() < now.getTime()) {
+      chunks.push(new Date(chunk));
+      chunk.setDate(chunk.getDate() + 1);
+    }
+
+    let chunkIndex = 1;
+    for (const chunkStart of chunks) {
+      // Chunk starts at 00:00:00, chunk ends at 23:59:59 (or now if it's the last chunk)
+      const chunkEnd = chunkIndex < chunks.length ? new Date(chunkStart) : now;
+      if (chunkIndex < chunks.length) {
+        chunkEnd.setDate(chunkEnd.getDate() + 1);
+        chunkEnd.setSeconds(-1);
+      }
+
+      // Get all TV show IDs that have changed in this time period
+      const changedTVShowIds = await this.tmdbApi.getAllChangedTVShowIds(chunkStart, chunkEnd);
+
+      logger.debug(
+        'TVShowSync',
+        `Chunk ${chunkIndex}/${chunks.length} - Processing ${changedTVShowIds.length} changed TV shows`
+      );
+
+      // Find the TV shows that exist in our DB
+      const existingTVShowsInDB: TVShow[] = (
+        await Promise.all(
+          changedTVShowIds.map(change => this.tvShowRepository.findByTMDBId(change.id))
+        )
+      ).filter((tvShow): tvShow is TVShow => tvShow !== null);
+
+      // Process each TV show
+      for (const tvShow of existingTVShowsInDB) {
+        try {
+          // First update the main TV show data
+          await this.updateTVShow(tvShow);
+
+          // Then check for specific changes to seasons
+          const tvShowChanges = await this.tmdbApi.getTVShowChanges(tvShow.tmdbId);
+
+          // Look for season changes
+          const seasonChanges = tvShowChanges.changes.filter(change => change.key === 'season');
+
+          if (seasonChanges.length > 0) {
+            for (const seasonChange of seasonChanges) {
+              for (const item of seasonChange.items) {
+                if (item.value && typeof item.value.season_number === 'number') {
+                  // Find this season in our database
+                  const season = tvShow.seasons.find(
+                    s => s.seasonNumber === item.value!.season_number
+                  );
+
+                  if (season) {
+                    // Mark as not synced so we'll update it in the next syncIncompleteSeasons call
+                    await this.tvShowRepository.updateSeasonSyncStatus(season, false);
+                  } else {
+                    // This is a new season, add it to the database
+                    const seasonNumber = item.value.season_number;
+
+                    // Get season details from TMDB
+                    const seasonDetails = await this.tmdbApi.getSeason(tvShow.tmdbId, seasonNumber);
+
+                    // Create the new season
+                    await this.tvShowRepository.createSeason(tvShow, {
+                      tmdbId: seasonDetails.id,
+                      name: seasonDetails.name,
+                      overview: seasonDetails.overview,
+                      airDate: seasonDetails.air_date,
+                      posterPath: seasonDetails.poster_path,
+                      seasonNumber: seasonNumber,
+                    });
+                  }
+                }
+              }
+            }
+          }
+        } catch (error) {
+          logger.error(
+            'TVShowSync',
+            `Error updating TV show with TMDB ID ${tvShow.tmdbId}:`,
+            error
+          );
+        }
+        await sleep(1000); // Rate limiting
+      }
+
+      // If it isn't the last chunk
+      if (chunkIndex < chunks.length) {
+        // We want to set the last sync to the beginning of the next chunk, so we add 1 second
+        chunkEnd.setSeconds(60);
+      }
+      await this.syncStateRepository.setLastSync(TV_SYNC_NAME, chunkEnd);
+      chunkIndex++;
+    }
   }
 }

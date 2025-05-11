@@ -142,4 +142,19 @@ export class TVShowRepository {
     updatedShow.genres = genres;
     await this.tvShowRepository.save(updatedShow);
   }
+
+  async updateSeasonSyncStatus(season: Season, synced: boolean): Promise<void> {
+    await this.seasonRepository.update(
+      {
+        id: season.id,
+      },
+      {
+        synced,
+      }
+    );
+  }
+
+  async updateSeasonDetails(season: Season, seasonData: Partial<Season>): Promise<void> {
+    await this.seasonRepository.update({ id: season.id }, seasonData);
+  }
 }

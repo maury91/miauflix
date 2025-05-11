@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "x-cache": "Hit from cloudfront"
+  },
+  "body": "{\"adult\":false,\"backdrop_path\":\"/path.jpg\",\"belongs_to_collection\":null,\"budget\":0,\"genres\":[{\"id\":16,\"name\":\"Animation\"},{\"id\":10751,\"name\":\"Family\"}],\"homepage\":\"\",\"id\":1184918,\"imdb_id\":\"tt29623751\",\"original_language\":\"en\",\"original_title\":\"The Wild Robot\",\"overview\":\"Overview here.\",\"popularity\":17.797,\"poster_path\":\"/poster.jpg\",\"production_companies\":[{\"id\":521,\"logo_path\":\"/dsWh7dDZssMLyRj3N3PqOryDRvH.png\",\"name\":\"DreamWorks Animation\",\"origin_country\":\"US\"}],\"production_countries\":[{\"iso_3166_1\":\"US\",\"name\":\"United States of America\"}],\"release_date\":\"2024-09-19\",\"revenue\":0,\"runtime\":0,\"spoken_languages\":[{\"english_name\":\"English\",\"iso_639_1\":\"en\",\"name\":\"English\"}],\"status\":\"Post Production\",\"tagline\":\"\",\"title\":\"The Wild Robot\",\"video\":false,\"vote_average\":0.0,\"vote_count\":0,\"translations\":{\"translations\":[{\"iso_3166_1\":\"GB\",\"iso_639_1\":\"en\",\"name\":\"English\",\"english_name\":\"English\",\"data\":{\"homepage\":\"\",\"overview\":\"Overview here.\",\"runtime\":0,\"tagline\":\"\",\"title\":\"The Wild Robot\"}},{\"iso_3166_1\":\"US\",\"iso_639_1\":\"en\",\"name\":\"English\",\"english_name\":\"English\",\"data\":{\"homepage\":\"\",\"overview\":\"Overview here.\",\"runtime\":0,\"tagline\":\"\",\"title\":\"The Wild Robot\"}}]},\"images\":{\"backdrops\":[],\"logos\":[],\"posters\":[]}}"
+}
