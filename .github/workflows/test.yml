@@ -42,12 +42,3 @@ jobs:
           HTTP_VCR_MODE: replay
           # Mock API keys - not real credentials needed
           TMDB_API_KEY: mock-api-key
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-results
-          path: |
-            backend/test-results
-          retention-days: 7
