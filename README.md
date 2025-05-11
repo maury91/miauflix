@@ -7,6 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Bun](https://img.shields.io/badge/Powered%20by-Bun-orange)](https://bun.sh/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
+[![CI Status](https://github.com/{owner}/{repo}/actions/workflows/ci.yml/badge.svg)](https://github.com/{owner}/{repo}/actions/workflows/ci.yml)
 
 **The self-hosted streaming service that meows!**
 
@@ -20,6 +21,8 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
+- [CI/CD](#cicd)
+  - [GitHub Actions](#github-actions)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -182,6 +185,10 @@ docker compose up -d
 
 - 🌐 Backend API: `https://yourdomain.com/`
 - ✅ Health check: `https://yourdomain.com/health`
+
+## 🔄 CI/CD
+
+This project uses GitHub Actions for continuous integration and testing. Tests run automatically in networkless mode using pre-recorded fixtures. For more details, see the [GitHub Actions Guide](docs/GITHUB_ACTIONS.md).
 
 ## 🤝 Contributing
 
