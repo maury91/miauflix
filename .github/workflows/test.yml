@@ -34,7 +34,7 @@ jobs:
         run: bun install
 
       - name: Run backend tests
-        run: bun test
+        run: bun test --coverage
         env:
           # Environment variables for tests
           NODE_ENV: test
