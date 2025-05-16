@@ -1,5 +1,6 @@
 import { objectKeys } from 'src/utils/object.util';
 import type { DataSource, Repository } from 'typeorm';
+import { IsNull, Not } from 'typeorm';
 
 import type { Genre } from '@entities/genre.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
@@ -74,6 +75,31 @@ export class MovieRepository {
     }
     updatedMovie.genres = genres;
     await this.movieRepository.save(updatedMovie);
+  }
+
+  /**
+   * Find movies that haven't been searched for sources yet
+   */
+  async findMoviesWithoutSources(limit: number = 10): Promise<Movie[]> {
+    return this.movieRepository.find({
+      where: {
+        sourceSearched: false,
+        imdbId: Not(IsNull()), // Only search movies with IMDb ID
+      },
+      order: {
+        popularity: 'DESC',
+      },
+      take: limit,
+    });
+  }
+
+  /**
+   * Mark a movie as having been searched for sources
+   */
+  async markSourceSearched(movieId: number): Promise<void> {
+    await this.movieRepository.update(movieId, {
+      sourceSearched: true,
+    });
   }
 
   async saveMovie(movie: Movie): Promise<Movie> {

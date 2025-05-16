@@ -17,6 +17,7 @@ import { MediaService } from '@services/media/media.service';
 import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
+import { SourceService } from '@services/source/source.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { validateConfiguration } from './configuration';
@@ -49,6 +50,7 @@ async function startApp() {
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
+  const movieSourceService = new SourceService(db, vpnDetectionService);
 
   // ToDo: just testing for now, later it will be part of another service
   vpnDetectionService.on('connect', () => {
@@ -76,6 +78,12 @@ async function startApp() {
     'syncIncompleteSeasons',
     1, // 1 second
     bind(mediaService, 'syncIncompleteSeasons')
+  );
+
+  scheduler.scheduleTask(
+    'movieSourceSearch',
+    0.1, // 0.1 second
+    bind(movieSourceService, 'searchSourcesForMovies')
   );
 
   new Elysia()

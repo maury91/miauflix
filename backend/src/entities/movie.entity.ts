@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 
 import { Genre } from './genre.entity';
+import { MovieSource } from './movie-source.entity';
 
 @Entity()
 export class Movie {
@@ -91,6 +92,12 @@ export class Movie {
 
   @Column()
   logo: string;
+
+  @Column({ default: false })
+  sourceSearched: boolean;
+
+  @OneToMany(() => MovieSource, source => source.movie)
+  sources: Relation<MovieSource>[];
 
   /** Time */
 
