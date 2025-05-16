@@ -6,6 +6,7 @@ import { Episode } from '@entities/episode.entity';
 import { Genre, GenreTranslation } from '@entities/genre.entity';
 import { MediaList } from '@entities/list.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
+import { MovieSource } from '@entities/movie-source.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { SyncState } from '@entities/sync-state.entity';
@@ -16,6 +17,7 @@ import { AuditLogRepository } from '@repositories/audit-log.repository';
 import { GenreRepository } from '@repositories/genre.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
+import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { SyncStateRepository } from '@repositories/syncState.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
@@ -25,6 +27,7 @@ export class Database {
   private readonly dataSource: DataSource;
   private mediaListRepository: MediaListRepository;
   private movieRepository: MovieRepository;
+  private movieSourceRepository: MovieSourceRepository;
   private tvShowRepository: TVShowRepository;
   private genreRepository: GenreRepository;
   private userRepository: UserRepository;
@@ -50,6 +53,7 @@ export class Database {
         RefreshToken,
         AuditLog,
         SyncState,
+        MovieSource,
       ],
       synchronize: true,
     });
@@ -59,6 +63,7 @@ export class Database {
     await this.dataSource.initialize();
     this.mediaListRepository = new MediaListRepository(this.dataSource);
     this.movieRepository = new MovieRepository(this.dataSource);
+    this.movieSourceRepository = new MovieSourceRepository(this.dataSource);
     this.tvShowRepository = new TVShowRepository(this.dataSource);
     this.genreRepository = new GenreRepository(this.dataSource);
     this.userRepository = new UserRepository(this.dataSource);
@@ -105,5 +110,9 @@ export class Database {
 
   public getAuditLogRepository() {
     return this.auditLogRepository;
+  }
+
+  public getMovieSourceRepository() {
+    return this.movieSourceRepository;
   }
 }

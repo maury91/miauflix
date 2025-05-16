@@ -33,7 +33,7 @@ services:
     network_mode: service:nordvpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service
     restart: unless-stopped
-    command: ['bun', '--inspect', '--watch', 'backend/src/app.ts']
+    command: ['bun', '--inspect', 'backend/src/app.ts']
 
   nginx:
     image: nginx:alpine
