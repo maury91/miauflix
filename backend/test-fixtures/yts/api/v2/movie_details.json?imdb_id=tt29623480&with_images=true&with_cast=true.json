@@ -21,11 +21,7 @@
         "year": 2024,
         "rating": 8.2,
         "runtime": 102,
-        "genres": [
-          "Action",
-          "Animation",
-          "Sci-Fi"
-        ],
+        "genres": ["Action", "Animation", "Sci-Fi"],
         "like_count": 264,
         "description_intro": "",
         "description_full": "",

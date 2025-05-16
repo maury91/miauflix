@@ -25,10 +25,7 @@
           "year": 2025,
           "rating": 0,
           "runtime": 100,
-          "genres": [
-            "Action",
-            "Horror"
-          ],
+          "genres": ["Action", "Horror"],
           "summary": "",
           "description_full": "",
           "synopsis": "",
