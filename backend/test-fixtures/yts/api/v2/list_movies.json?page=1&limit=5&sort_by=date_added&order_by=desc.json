@@ -1,0 +1,263 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "content-type": "application/json; charset=utf-8"
+  },
+  "body": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 67797,
+      "limit": 5,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 69018,
+          "url": "https://yts.mx/movies/the-gentle-voyage-2024",
+          "imdb_code": "tt32842974",
+          "title": "The Gentle Voyage",
+          "title_english": "The Gentle Voyage",
+          "title_long": "The Gentle Voyage Gentle (2024)",
+          "slug": "the-gentle-voyage-2024",
+          "year": 2024,
+          "rating": 6.8,
+          "runtime": 98,
+          "genres": [
+            "Drama"
+          ],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "h1kFdbN5r20",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2024/background.jpg",
+          "background_image_original": "https://yts.mx/assets/images/movies/the_gentle_voyage_2024/background.jpg",
+          "small_cover_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2024/small-cover.jpg",
+          "medium_cover_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2024/medium-cover.jpg",
+          "large_cover_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2024/large-cover.jpg",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/37242DC4BE090C71F4E7E0028EECCEB51C1D2000",
+              "hash": "37242DC4BE090C71F4E7E0028EECCEB51C1D2000",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "914.97 MB",
+              "size_bytes": 959415583,
+              "date_uploaded": "2025-05-16 11:33:28",
+              "date_uploaded_unix": 1747388008
+            }
+          ],
+          "date_uploaded": "2025-05-16 11:33:28",
+          "date_uploaded_unix": 1747388008
+        },
+        {
+          "id": 69017,
+          "url": "https://yts.mx/movies/the-joyful-adventure-2024",
+          "imdb_code": "tt36954627",
+          "title": "The Joyful Adventure",
+          "title_english": "The Joyful Adventure",
+          "title_long": "The Joyful Adventure Peaceful (2024)",
+          "slug": "the-joyful-adventure-2024",
+          "year": 2024,
+          "rating": 0,
+          "runtime": 0,
+          "genres": [
+            "Comedy"
+          ],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "93tGxDxfx-U",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://yts.mx/assets/images/movies/the_joyful_adventure_2024/background.jpg",
+          "background_image_original": "https://yts.mx/assets/images/movies/the_joyful_adventure_2024/background.jpg",
+          "small_cover_image": "https://yts.mx/assets/images/movies/the_joyful_adventure_2024/small-cover.jpg",
+          "medium_cover_image": "https://yts.mx/assets/images/movies/the_joyful_adventure_2024/medium-cover.jpg",
+          "large_cover_image": "https://yts.mx/assets/images/movies/the_joyful_adventure_2024/large-cover.jpg",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/17A655D722F4F80119C7AA033AB8D99C1C4E4000",
+              "hash": "17A655D722F4F80119C7AA033AB8D99C1C4E4000",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "576.03 MB",
+              "size_bytes": 604011233,
+              "date_uploaded": "2025-05-16 11:18:22",
+              "date_uploaded_unix": 1747387102
+            }
+          ],
+          "date_uploaded": "2025-05-16 11:18:22",
+          "date_uploaded_unix": 1747387102
+        },
+        {
+          "id": 69016,
+          "url": "https://yts.mx/movies/the-gentle-voyage-2023",
+          "imdb_code": "tt28522155",
+          "title": "The Gentle Voyage",
+          "title_english": "The Gentle Voyage",
+          "title_long": "The Gentle Voyage Sunny (2023)",
+          "slug": "the-gentle-voyage-2023",
+          "year": 2023,
+          "rating": 0,
+          "runtime": 12,
+          "genres": [
+            "Comedy"
+          ],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2023/background.jpg",
+          "background_image_original": "https://yts.mx/assets/images/movies/the_gentle_voyage_2023/background.jpg",
+          "small_cover_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2023/small-cover.jpg",
+          "medium_cover_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2023/medium-cover.jpg",
+          "large_cover_image": "https://yts.mx/assets/images/movies/the_gentle_voyage_2023/large-cover.jpg",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/6518879A27EC5D5938B3C800FC414229D2673800",
+              "hash": "6518879A27EC5D5938B3C800FC414229D2673800",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "854.12 MB",
+              "size_bytes": 895609733,
+              "date_uploaded": "2025-05-16 11:31:52",
+              "date_uploaded_unix": 1747387912
+            }
+          ],
+          "date_uploaded": "2025-05-16 11:31:52",
+          "date_uploaded_unix": 1747387912
+        },
+        {
+          "id": 69013,
+          "url": "https://yts.mx/movies/the-calm-day-2023",
+          "imdb_code": "tt31829513",
+          "title": "The Calm Day",
+          "title_english": "The Calm Day",
+          "title_long": "The Calm Day Kind (2023)",
+          "slug": "the-calm-day-2023",
+          "year": 2023,
+          "rating": 7,
+          "runtime": 28,
+          "genres": [
+            "Documentary"
+          ],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://yts.mx/assets/images/movies/the_calm_day_2023/background.jpg",
+          "background_image_original": "https://yts.mx/assets/images/movies/the_calm_day_2023/background.jpg",
+          "small_cover_image": "https://yts.mx/assets/images/movies/the_calm_day_2023/small-cover.jpg",
+          "medium_cover_image": "https://yts.mx/assets/images/movies/the_calm_day_2023/medium-cover.jpg",
+          "large_cover_image": "https://yts.mx/assets/images/movies/the_calm_day_2023/large-cover.jpg",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/2DB8726A82A5D1DEF82940017554776F9FFCF000",
+              "hash": "2DB8726A82A5D1DEF82940017554776F9FFCF000",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "250.24 MB",
+              "size_bytes": 262395658,
+              "date_uploaded": "2025-05-16 11:31:29",
+              "date_uploaded_unix": 1747387889
+            }
+          ],
+          "date_uploaded": "2025-05-16 11:31:29",
+          "date_uploaded_unix": 1747387889
+        },
+        {
+          "id": 69012,
+          "url": "https://yts.mx/movies/the-brave-day-2023",
+          "imdb_code": "tt31989199",
+          "title": "The Brave Day",
+          "title_english": "The Brave Day",
+          "title_long": "The Brave Day Eager (2023)",
+          "slug": "the-brave-day-2023",
+          "year": 2023,
+          "rating": 5.5,
+          "runtime": 44,
+          "genres": [
+            "Animation"
+          ],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://yts.mx/assets/images/movies/the_brave_day_2023/background.jpg",
+          "background_image_original": "https://yts.mx/assets/images/movies/the_brave_day_2023/background.jpg",
+          "small_cover_image": "https://yts.mx/assets/images/movies/the_brave_day_2023/small-cover.jpg",
+          "medium_cover_image": "https://yts.mx/assets/images/movies/the_brave_day_2023/medium-cover.jpg",
+          "large_cover_image": "https://yts.mx/assets/images/movies/the_brave_day_2023/large-cover.jpg",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/635004E82686FCCE81181200EF23EAFE2BCFB800",
+              "hash": "635004E82686FCCE81181200EF23EAFE2BCFB800",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "412.12 MB",
+              "size_bytes": 432139141,
+              "date_uploaded": "2025-05-16 11:08:40",
+              "date_uploaded_unix": 1747386520
+            }
+          ],
+          "date_uploaded": "2025-05-16 11:08:40",
+          "date_uploaded_unix": 1747386520
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1747388875,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0.23 ms"
+    }
+  },
+  "bodyIsJson": true,
+  "isTransformed": true
+}

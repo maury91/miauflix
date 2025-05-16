@@ -22,10 +22,11 @@
       "@entities/*": ["src/entities/*"],
       "@errors/*": ["src/errors/*"],
       "@middleware/*": ["src/middleware/*"],
+      "@mytypes/*": ["src/types/*"],
       "@repositories/*": ["src/repositories/*"],
       "@routes/*": ["src/routes/*"],
       "@services/*": ["src/services/*"],
-      "@mytypes/*": ["src/types/*"],
+      "@trackers/*": ["src/trackers/*"],
       "@utils/*": ["src/utils/*"],
       "@logger": ["src/logger"]
     }

@@ -80,6 +80,15 @@ export default [
               message: "Use '@services/...' instead of long relative paths.",
             },
             {
+              group: [
+                '../trackers/*',
+                '../../trackers/*',
+                '../../../trackers/*',
+                '../../../../trackers/*',
+              ],
+              message: "Use '@trackers/...' instead of long relative paths.",
+            },
+            {
               group: ['../types/*', '../../types/*', '../../../types/*', '../../../../types/*'],
               message: "Use '@mytypes/...' instead of long relative paths.",
             },
@@ -106,10 +115,11 @@ export default [
               '^@database/',
               '^@errors/',
               '^@middleware/',
+              '^@mytypes/',
               '^@repositories/',
               '^@routes/',
               '^@services/',
-              '^@mytypes/',
+              '^@trackers/',
               '^@utils/',
               '^@constants',
               '^@config', // Assuming @config maps to configuration.ts

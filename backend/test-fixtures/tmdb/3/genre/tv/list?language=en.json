@@ -2,24 +2,76 @@
   "status": 200,
   "statusText": "OK",
   "headers": {
-    "alt-svc": "h3=\":443\"; ma=86400",
     "cache-control": "public, max-age=20984",
-    "connection": "keep-alive",
-    "content-encoding": "gzip",
-    "content-type": "application/json;charset=utf-8",
-    "date": "Sun, 11 May 2025 11:14:01 GMT",
-    "etag": "W/\"c9414e40a9e909888e1e74fd911cf7d1\"",
-    "server": "openresty",
-    "transfer-encoding": "chunked",
-    "vary": "accept-encoding, Origin",
-    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "7drLSQSXbVw5CqMmZNl73DDebLirKQAg1zPHLCHVFqiCc2WrDyJvXw==",
-    "x-amz-cf-pop": "FRA60-P3",
-    "x-cache": "RefreshHit from cloudfront",
-    "x-memc": "HIT",
-    "x-memc-age": "3813",
-    "x-memc-expires": "18114",
-    "x-memc-key": "802dfd0c0b218bb30b1dbe3917b34e76"
+    "content-type": "application/json;charset=utf-8"
   },
-  "body": "{\"genres\":[{\"id\":10759,\"name\":\"Action & Adventure\"},{\"id\":16,\"name\":\"Animation\"},{\"id\":35,\"name\":\"Comedy\"},{\"id\":80,\"name\":\"Crime\"},{\"id\":99,\"name\":\"Documentary\"},{\"id\":18,\"name\":\"Drama\"},{\"id\":10751,\"name\":\"Family\"},{\"id\":10762,\"name\":\"Kids\"},{\"id\":9648,\"name\":\"Mystery\"},{\"id\":10763,\"name\":\"News\"},{\"id\":10764,\"name\":\"Reality\"},{\"id\":10765,\"name\":\"Sci-Fi & Fantasy\"},{\"id\":10766,\"name\":\"Soap\"},{\"id\":10767,\"name\":\"Talk\"},{\"id\":10768,\"name\":\"War & Politics\"},{\"id\":37,\"name\":\"Western\"}]}"
+  "body": {
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 10762,
+        "name": "Kids"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10763,
+        "name": "News"
+      },
+      {
+        "id": 10764,
+        "name": "Reality"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10766,
+        "name": "Soap"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 10768,
+        "name": "War & Politics"
+      },
+      {
+        "id": 37,
+        "name": "Western"
+      }
+    ]
+  },
+  "bodyIsJson": true
 }

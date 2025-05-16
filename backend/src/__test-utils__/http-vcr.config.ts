@@ -1,0 +1,62 @@
+import { join } from 'path/posix';
+
+import type { HttpVcrConfig } from './http-vcr-utils/types';
+import { transformYtsData } from './http-vcr-utils/yts.transformer';
+
+export const HTTP_VCR_CONFIG: HttpVcrConfig = {
+  mode: (process.env.HTTP_VCR_MODE as HttpVcrConfig['mode']) || 'hybrid',
+  fixturesDir: process.env.HTTP_VCR_FIXTURES_DIR || join(__dirname, '../..', 'test-fixtures'),
+  includePatterns: [],
+  excludePatterns: [],
+  providerMap: [
+    { pattern: 'api.themoviedb.org', name: 'tmdb' },
+    { pattern: 'api.trakt.tv', name: 'trakt' },
+    { pattern: 'yts.mx', name: 'yts' },
+    { pattern: 'yts.rs', name: 'yts' },
+    { pattern: 'yts.hn', name: 'yts' },
+    { pattern: 'yts.lt', name: 'yts' },
+    { pattern: 'yts.am', name: 'yts' },
+  ],
+  defaultProvider: 'other',
+  headersBlacklist: [
+    'accept-ranges',
+    'age',
+    'alt-svc',
+    'cf-cache-status',
+    'cf-ray',
+    'content-encoding',
+    'connection',
+    'date',
+    'etag',
+    'expires',
+    'nel',
+    'pragma',
+    'report-to',
+    'server',
+    'server-timing',
+    'speculation-rules',
+    'strict-transport-security',
+    'transfer-encoding',
+    'vary',
+    'via',
+    'x-amz-cf-id',
+    'x-amz-cf-pop',
+    'x-cache',
+    'x-content-type-options',
+    'x-frame-options',
+    'x-memc',
+    'x-memc-age',
+    'x-memc-expires',
+    'x-memc-key',
+    'x-varnish',
+    'set-cookie',
+  ],
+  prettyPrintJson: true,
+  transformers: [
+    {
+      urlPattern: 'yts\\..*\\/api\\/v2\\/',
+      transform: transformYtsData,
+    },
+  ],
+  autoTransform: true,
+};
