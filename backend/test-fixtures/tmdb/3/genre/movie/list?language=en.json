@@ -2,25 +2,88 @@
   "status": 200,
   "statusText": "OK",
   "headers": {
-    "age": "15146",
-    "alt-svc": "h3=\":443\"; ma=86400",
     "cache-control": "public, max-age=27221",
-    "connection": "keep-alive",
-    "content-encoding": "gzip",
-    "content-type": "application/json;charset=utf-8",
-    "date": "Sun, 11 May 2025 07:01:34 GMT",
-    "etag": "W/\"98d6f4fb3a0e0c77544a7277f32baebb\"",
-    "server": "openresty",
-    "transfer-encoding": "chunked",
-    "vary": "accept-encoding, Origin",
-    "via": "1.1 74c5b19a4695b76162adbf07ed9ef370.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "utbDBAdjTOtbdfgdmU20Hqzdp9aqMIYaCCKK3lLPO45K0pVTNhzXzg==",
-    "x-amz-cf-pop": "FRA60-P3",
-    "x-cache": "Hit from cloudfront",
-    "x-memc": "HIT",
-    "x-memc-age": "17019",
-    "x-memc-expires": "7198",
-    "x-memc-key": "f781971c95c323df5625e30d17cbce76"
+    "content-type": "application/json;charset=utf-8"
   },
-  "body": "{\"genres\":[{\"id\":28,\"name\":\"Action\"},{\"id\":12,\"name\":\"Adventure\"},{\"id\":16,\"name\":\"Animation\"},{\"id\":35,\"name\":\"Comedy\"},{\"id\":80,\"name\":\"Crime\"},{\"id\":99,\"name\":\"Documentary\"},{\"id\":18,\"name\":\"Drama\"},{\"id\":10751,\"name\":\"Family\"},{\"id\":14,\"name\":\"Fantasy\"},{\"id\":36,\"name\":\"History\"},{\"id\":27,\"name\":\"Horror\"},{\"id\":10402,\"name\":\"Music\"},{\"id\":9648,\"name\":\"Mystery\"},{\"id\":10749,\"name\":\"Romance\"},{\"id\":878,\"name\":\"Science Fiction\"},{\"id\":10770,\"name\":\"TV Movie\"},{\"id\":53,\"name\":\"Thriller\"},{\"id\":10752,\"name\":\"War\"},{\"id\":37,\"name\":\"Western\"}]}"
+  "body": {
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 36,
+        "name": "History"
+      },
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 10402,
+        "name": "Music"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 10770,
+        "name": "TV Movie"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 10752,
+        "name": "War"
+      },
+      {
+        "id": 37,
+        "name": "Western"
+      }
+    ]
+  },
+  "bodyIsJson": true
 }

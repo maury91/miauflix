@@ -1,0 +1,92 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "content-type": "application/json; charset=utf-8"
+  },
+  "body": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 67797,
+      "limit": 1,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 69006,
+          "url": "https://yts.mx/movies/the-friendly-path-2025",
+          "imdb_code": "tt32323148",
+          "title": "The Friendly Path",
+          "title_english": "The Friendly Path",
+          "title_long": "The Friendly Path Sweet (2025)",
+          "slug": "the-friendly-path-2025",
+          "year": 2025,
+          "rating": 0,
+          "runtime": 100,
+          "genres": [
+            "Action",
+            "Horror"
+          ],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "MQudR1Gb7m4",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/background.jpg",
+          "background_image_original": "https://yts.mx/assets/images/movies/the_friendly_path_2025/background.jpg",
+          "small_cover_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/small-cover.jpg",
+          "medium_cover_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/medium-cover.jpg",
+          "large_cover_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/large-cover.jpg",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/6658CD1528EAE23A5EBAA400105BC7A8783C3A00",
+              "hash": "6658CD1528EAE23A5EBAA400105BC7A8783C3A00",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "918.21 MB",
+              "size_bytes": 962812969,
+              "date_uploaded": "2025-05-16 06:34:41",
+              "date_uploaded_unix": 1747370081
+            },
+            {
+              "url": "https://yts.mx/torrent/download/196FCEC8287073808767C40404A4B3B6BF818000",
+              "hash": "196FCEC8287073808767C40404A4B3B6BF818000",
+              "quality": "1080p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "5.1",
+              "seeds": 0,
+              "peers": 0,
+              "size": "1.84 GB",
+              "size_bytes": 1975684956,
+              "date_uploaded": "2025-05-16 07:46:01",
+              "date_uploaded_unix": 1747374361
+            }
+          ],
+          "date_uploaded": "2025-05-16 06:34:41",
+          "date_uploaded_unix": 1747370081
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1747388874,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  },
+  "bodyIsJson": true,
+  "isTransformed": true
+}

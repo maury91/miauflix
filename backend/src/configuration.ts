@@ -12,6 +12,7 @@ import { isatty } from 'tty';
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
+import { ytsConfigurationDefinition } from '@trackers/yts/yts.configuration';
 
 function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
@@ -50,6 +51,7 @@ const serverConfigurationDefinition = serviceConfiguration({
 export const services = {
   TMDB: tmdbConfigurationDefinition,
   TRAKT: traktConfigurationDefinition,
+  YTS: ytsConfigurationDefinition,
   JWT: jwtConfigurationDefinition,
   SERVER: serverConfigurationDefinition,
 };
