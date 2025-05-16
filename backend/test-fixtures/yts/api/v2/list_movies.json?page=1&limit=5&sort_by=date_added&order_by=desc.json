@@ -25,9 +25,7 @@
           "year": 2024,
           "rating": 6.8,
           "runtime": 98,
-          "genres": [
-            "Drama"
-          ],
+          "genres": ["Drama"],
           "summary": "",
           "description_full": "",
           "synopsis": "",
@@ -72,9 +70,7 @@
           "year": 2024,
           "rating": 0,
           "runtime": 0,
-          "genres": [
-            "Comedy"
-          ],
+          "genres": ["Comedy"],
           "summary": "",
           "description_full": "",
           "synopsis": "",
@@ -119,9 +115,7 @@
           "year": 2023,
           "rating": 0,
           "runtime": 12,
-          "genres": [
-            "Comedy"
-          ],
+          "genres": ["Comedy"],
           "summary": "",
           "description_full": "",
           "synopsis": "",
@@ -166,9 +160,7 @@
           "year": 2023,
           "rating": 7,
           "runtime": 28,
-          "genres": [
-            "Documentary"
-          ],
+          "genres": ["Documentary"],
           "summary": "",
           "description_full": "",
           "synopsis": "",
@@ -213,9 +205,7 @@
           "year": 2023,
           "rating": 5.5,
           "runtime": 44,
-          "genres": [
-            "Animation"
-          ],
+          "genres": ["Animation"],
           "summary": "",
           "description_full": "",
           "synopsis": "",
