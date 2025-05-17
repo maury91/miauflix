@@ -1,2 +1,2 @@
-cd backend && bun run lint -- --fix
-cd ../ && bun run format:check --write
+cd backend && bun run lint -- --fix && bun run tsc --noEmit
+cd ../ && bun run format:check --write && bun test
