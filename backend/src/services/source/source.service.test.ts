@@ -64,6 +64,9 @@ const mockTrackerService = {
       return Promise.reject(new Error('Failed to search torrents'));
     }
   }),
+  // Add missing properties from TrackerService
+  ytsApi: { status: () => ({ ok: true }) },
+  status: () => ({ yts: { ok: true } }),
 };
 
 // Create mock VPN service
@@ -82,13 +85,6 @@ const mockDatabase = {
   getMovieSourceRepository: () => mockMovieSourceRepository,
 } as unknown as Database;
 
-// Mock the constructor for TrackerService
-mock.module('@services/source/tracker.service', () => ({
-  TrackerService: function () {
-    return mockTrackerService;
-  },
-}));
-
 describe('MovieSourceService', () => {
   let service: SourceService;
 
@@ -100,8 +96,8 @@ describe('MovieSourceService', () => {
     mockMovieSourceRepository.findByMovieId.mockClear();
     mockTrackerService.searchTorrentsForMovie.mockClear();
 
-    // Create service instance
-    service = new SourceService(mockDatabase, mockVpnService);
+    // Create service instance with direct injection of the mock tracker service
+    service = new SourceService(mockDatabase, mockVpnService, mockTrackerService);
   });
 
   describe('searchSourcesForMovies', () => {
