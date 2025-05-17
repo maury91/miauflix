@@ -1,9 +1,11 @@
+import type { Mock } from 'bun:test';
 import { beforeEach, describe, expect, it, mock } from 'bun:test';
 
 import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 
 import { SourceService } from './source.service';
+import type { TrackerService } from './tracker.service';
 
 // Create mock repositories and DB
 const mockMovieRepository = {
@@ -32,41 +34,43 @@ const mockMovieSourceRepository = {
   ),
 };
 
+const searchTorrentsForMovieMock = mock((imdbId: string) => {
+  if (imdbId === 'tt1234567') {
+    return Promise.resolve({
+      title: 'Test Movie 1',
+      torrents: [
+        {
+          magnetLink: 'magnet:?xt=urn:btih:abc123',
+          quality: '1080p',
+          resolution: { height: 1080, width: 1920, label: 'FHD' },
+          size: { bytes: 1500000000, value: 1.5, unit: 'GB' },
+          videoCodec: 'x264',
+          seeders: 100,
+          leechers: 10,
+        },
+        {
+          magnetLink: 'magnet:?xt=urn:btih:def456',
+          quality: '720p',
+          resolution: { height: 720, width: 1280, label: 'HD' },
+          size: { bytes: 800000000, value: 800, unit: 'MB' },
+          videoCodec: 'x264',
+          seeders: 50,
+          leechers: 5,
+        },
+      ],
+    });
+  } else if (imdbId === 'tt7654321') {
+    return Promise.resolve(null); // No torrents found
+  } else {
+    return Promise.reject(new Error('Failed to search torrents'));
+  }
+});
+
 const mockTrackerService = {
-  searchTorrentsForMovie: mock((imdbId: string) => {
-    if (imdbId === 'tt1234567') {
-      return Promise.resolve({
-        title: 'Test Movie 1',
-        torrents: [
-          {
-            magnetLink: 'magnet:?xt=urn:btih:abc123',
-            quality: '1080p',
-            resolution: { height: 1080, width: 1920, label: 'FHD' },
-            size: { bytes: 1500000000, value: 1.5, unit: 'GB' },
-            videoCodec: 'x264',
-            seeders: 100,
-            leechers: 10,
-          },
-          {
-            magnetLink: 'magnet:?xt=urn:btih:def456',
-            quality: '720p',
-            resolution: { height: 720, width: 1280, label: 'HD' },
-            size: { bytes: 800000000, value: 800, unit: 'MB' },
-            videoCodec: 'x264',
-            seeders: 50,
-            leechers: 5,
-          },
-        ],
-      });
-    } else if (imdbId === 'tt7654321') {
-      return Promise.resolve(null); // No torrents found
-    } else {
-      return Promise.reject(new Error('Failed to search torrents'));
-    }
-  }),
-  // Add missing properties from TrackerService
-  ytsApi: { status: () => ({ ok: true }) },
-  status: () => ({ yts: { ok: true } }),
+  searchTorrentsForMovie: searchTorrentsForMovieMock,
+  status: mock(() => ({ yts: { ok: true } })),
+} as unknown as TrackerService & {
+  searchTorrentsForMovie: Mock<TrackerService['searchTorrentsForMovie']>;
 };
 
 // Create mock VPN service
