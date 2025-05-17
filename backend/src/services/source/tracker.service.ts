@@ -11,6 +11,16 @@ export class TrackerService {
   }
 
   /**
+   * Get the status of the tracker services
+   * @returns Status of the tracker services
+   */
+  public status() {
+    return {
+      yts: this.ytsApi.status(),
+    };
+  }
+
+  /**
    * Search torrents for a movie by its IMDb ID
    *
    * @param imdbId - The IMDb ID of the movie (format: ttXXXXXXX)

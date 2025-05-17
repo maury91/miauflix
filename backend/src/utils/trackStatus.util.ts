@@ -1,3 +1,5 @@
+import type { Api } from './api.util';
+
 const FiveMinutes = 5 * 60 * 1000;
 const TwentyFourHours = 24 * 60 * 60 * 1000;
 
@@ -34,39 +36,31 @@ export function groupTimestampsByInterval(
  * Updates queue, success/failure counts, and last request timestamp.
  */
 export function TrackStatus() {
-  return function (
+  return function <This extends Api>(
     _target: unknown,
     _propertyKey: string | symbol,
     descriptor: PropertyDescriptor
   ) {
     const originalMethod = descriptor.value;
-    descriptor.value = async function (...args: unknown[]) {
-      // Type assertion for 'this' to satisfy TypeScript
-      const self = this as {
-        requestQueueCount: number;
-        requestSuccesses: number[];
-        requestFailures: number[];
-        lastRequest: number | null;
-      };
-
-      if (typeof self.requestQueueCount !== 'number') self.requestQueueCount = 0;
-      if (!Array.isArray(self.requestSuccesses)) self.requestSuccesses = [];
-      if (!Array.isArray(self.requestFailures)) self.requestFailures = [];
-      self.requestQueueCount++;
+    descriptor.value = async function (this: This, ...args: unknown[]) {
+      if (typeof this.requestQueueCount !== 'number') this.requestQueueCount = 0;
+      if (!Array.isArray(this.requestSuccesses)) this.requestSuccesses = [];
+      if (!Array.isArray(this.requestFailures)) this.requestFailures = [];
+      this.requestQueueCount++;
       try {
         const result = await originalMethod.apply(this, args);
-        self.lastRequest = Date.now();
-        self.requestSuccesses.push(self.lastRequest);
+        this.lastRequest = Date.now();
+        this.requestSuccesses.push(this.lastRequest);
         return result;
       } catch (err) {
-        self.lastRequest = Date.now();
-        self.requestFailures.push(self.lastRequest);
+        this.lastRequest = Date.now();
+        this.requestFailures.push(this.lastRequest);
         throw err;
       } finally {
-        self.requestQueueCount = Math.max(0, self.requestQueueCount - 1);
+        this.requestQueueCount = Math.max(0, this.requestQueueCount - 1);
         const cutoff = Date.now() - TwentyFourHours;
-        self.requestSuccesses = self.requestSuccesses.filter((t: number) => t >= cutoff);
-        self.requestFailures = self.requestFailures.filter((t: number) => t >= cutoff);
+        this.requestSuccesses = this.requestSuccesses.filter((t: number) => t >= cutoff);
+        this.requestFailures = this.requestFailures.filter((t: number) => t >= cutoff);
       }
     };
     return descriptor;

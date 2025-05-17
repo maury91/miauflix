@@ -1,5 +1,5 @@
+import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
-import { RateLimiter } from '@utils/rateLimiter';
 import { TrackStatus } from '@utils/trackStatus.util';
 
 import { ENV } from '../../constants';
@@ -12,25 +12,24 @@ import type {
 } from './yts.types';
 import { normalizeYTSTorrent } from './yts.utils';
 
+// A list of YTS domain mirrors to try if the primary domain is unreachable
+const domainMirrors = ['yts.mx', 'yts.rs', 'yts.hn', 'yts.lt', 'yts.am'];
+
 /**
  * YTS API Service
  *
  * API documentation: https://yts.mx/api
  */
-export class YTSApi {
-  private apiUrl: string;
-  private readonly rateLimiter: RateLimiter;
-
-  // A list of YTS domain mirrors to try if the primary domain is unreachable
-  private readonly domainMirrors = ['yts.mx', 'yts.rs', 'yts.hn', 'yts.lt', 'yts.am'];
+export class YTSApi extends Api {
   private currentDomainIndex = 0;
 
   constructor() {
-    this.apiUrl = ENV('YTS_API_URL') || `https://${this.domainMirrors[0]}/api/v2`;
-
-    // YTS doesn't document rate limits specifically, but we'll implement
-    // a conservative rate limiter (20 requests per minute) to be safe
-    this.rateLimiter = new RateLimiter(20 / 60); // 20 requests per minute
+    super(
+      ENV('YTS_API_URL') || `https://${domainMirrors[0]}/api/v2`,
+      // YTS doesn't document rate limits specifically, but we'll implement
+      // a conservative rate limiter (20 requests per minute) to be safe
+      20 / 60 // 20 requests per minute
+    );
   }
 
   /**
@@ -65,9 +64,9 @@ export class YTSApi {
       console.error(`YTS API request failed for ${url}:`, error);
 
       // Try with a different domain mirror if available
-      if (this.currentDomainIndex < this.domainMirrors.length - 1) {
+      if (this.currentDomainIndex < domainMirrors.length - 1) {
         this.currentDomainIndex++;
-        const newDomain = this.domainMirrors[this.currentDomainIndex];
+        const newDomain = domainMirrors[this.currentDomainIndex];
         console.log(`Trying alternative YTS domain: ${newDomain}`);
         this.apiUrl = `https://${newDomain}/api/v2`;
         return this.request<T>(endpoint, params);

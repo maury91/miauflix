@@ -1,6 +1,6 @@
+import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
-import { RateLimiter } from '@utils/rateLimiter';
-import { groupTimestampsByInterval, TrackStatus } from '@utils/trackStatus.util';
+import { TrackStatus } from '@utils/trackStatus.util';
 
 import { ENV } from '../../constants';
 import type {
@@ -39,24 +39,22 @@ export const NO_IMAGES: MediaImages = {
   poster: '',
 };
 
-export class TMDBApi {
-  private requestQueueCount = 0;
-  private requestSuccesses: number[] = [];
-  private requestFailures: number[] = [];
-  private lastRequest: number | null = null;
+export class TMDBApi extends Api {
   /**
-   * Note about rate limiting, the API is limited to 50requests per second
-   * I hightly doubt is possible to reach this limit in a home setting.
+   * Note about rate limiting, the API is limited to 50 requests per second
+   * I highly doubt is possible to reach this limit in a home setting.
    * However, if this happens a 429 error will be returned and this class should
    * start rate limiting itself.
    */
 
-  private readonly apiUrl = ENV('TMDB_API_URL');
   private readonly apiKey = ENV('TMDB_API_ACCESS_TOKEN');
-  private readonly rateLimiter = new RateLimiter(50);
   private readonly configuration: Promise<ConfigurationResponse>;
 
   constructor(private readonly language = 'en') {
+    super(
+      ENV('TMDB_API_URL'),
+      50 // 50 requests per second, TMDB's documented rate limit
+    );
     this.language = language;
     this.configuration = this.getConfiguration();
   }
@@ -353,28 +351,6 @@ export class TMDBApi {
       totalPages = pageResult.totalPages;
       currentPage++;
     } while (currentPage <= totalPages);
-  }
-
-  /**
-   * Returns the current status of the API instance.
-   * - queue: number of requests in the queue
-   * - successes: array of { time, count } for last 24h, grouped by 5 min
-   * - failures: array of { time, count } for last 24h, grouped by 5 min
-   * - lastRequest: timestamp of last request (ms since epoch)
-   */
-  public status() {
-    return {
-      queue: this.requestQueueCount,
-      successes: groupTimestampsByInterval(this.requestSuccesses).map(item => ({
-        ...item,
-        time: new Date(item.time).toISOString(),
-      })),
-      failures: groupTimestampsByInterval(this.requestFailures).map(item => ({
-        ...item,
-        time: new Date(item.time).toISOString(),
-      })),
-      lastRequest: this.lastRequest ? new Date(this.lastRequest).toISOString() : null,
-    };
   }
 
   /**
