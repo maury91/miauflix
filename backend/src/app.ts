@@ -18,6 +18,7 @@ import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceService } from '@services/source/source.service';
+import { TrackerService } from '@services/source/tracker.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { validateConfiguration } from './configuration';
@@ -50,7 +51,8 @@ async function startApp() {
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
-  const movieSourceService = new SourceService(db, vpnDetectionService);
+  const trackerService = new TrackerService();
+  const movieSourceService = new SourceService(db, vpnDetectionService, trackerService);
 
   // ToDo: just testing for now, later it will be part of another service
   vpnDetectionService.on('connect', () => {
@@ -116,6 +118,7 @@ async function startApp() {
         return {
           tmdb: tmdbApi.status(),
           vpn: vpnDetectionService.status(),
+          trackers: trackerService.status(),
         };
       },
       {

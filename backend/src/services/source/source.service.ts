@@ -2,7 +2,8 @@ import { logger } from '@logger';
 
 import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
-import { TrackerService } from '@services/source/tracker.service';
+import type { TrackerService } from '@services/source/tracker.service';
+import { sleep } from '@utils/time';
 
 /**
  * Service for searching and managing sources
@@ -10,14 +11,17 @@ import { TrackerService } from '@services/source/tracker.service';
 export class SourceService {
   private readonly movieRepository;
   private readonly movieSourceRepository;
-  private readonly trackerService: TrackerService;
+
   private vpnConnected = false;
   private readonly searchOnlyBehindVpn = true;
 
-  constructor(db: Database, vpnService: VpnDetectionService) {
+  constructor(
+    db: Database,
+    vpnService: VpnDetectionService,
+    private readonly trackerService: TrackerService
+  ) {
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
-    this.trackerService = new TrackerService();
     if (this.searchOnlyBehindVpn) {
       vpnService.isVpnActive().then(connected => {
         this.vpnConnected = connected;
@@ -40,6 +44,7 @@ export class SourceService {
   public async searchSourcesForMovies(): Promise<void> {
     if (!this.vpnConnected) {
       logger.warn('SourceService', 'VPN is not connected, skipping source search');
+      await sleep(2000);
       return;
     }
 
@@ -48,7 +53,7 @@ export class SourceService {
     const moviesToSearch = await this.movieRepository.findMoviesWithoutSources(1);
 
     if (moviesToSearch.length === 0) {
-      logger.info('SourceService', 'No movies found that need sources');
+      await sleep(500);
       return;
     }
 
