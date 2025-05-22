@@ -2,11 +2,16 @@
   "name": "miauflix",
   "version": "1.0.0",
   "scripts": {
-    "start:backend": "npm -w backend start",
-    "test:backend": "npm -w backend test",
+    "check:ts": "npm -w backend run check:ts",
+    "lint": "npm -w backend run lint",
+    "lint:fix": "npm -w backend run lint -- --fix",
     "format": "prettier --write \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "format:check": "prettier --check \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "start": "npm run start:backend",
+    "start:backend": "npm -w backend start",
+    "test": "npm run test:backend",
+    "test:backend": "npm -w backend test"
   },
   "dependencies": {
     "concurrently": "latest"

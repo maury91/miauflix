@@ -1,4 +1,4 @@
-npm -w backend run lint -- --fix
-npm -w backend run check:ts
-npm run format:check --write
-npm run test:backend
+npm run lint:fix
+npm run check:ts
+npm run format
+npm test

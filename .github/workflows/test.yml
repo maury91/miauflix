@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Run backend tests
-        run: npm -w backend test
+        run: npm run test:backend
         env:
           # Environment variables for tests
           NODE_ENV: test

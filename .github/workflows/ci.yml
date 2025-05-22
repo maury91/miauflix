@@ -24,10 +24,10 @@ jobs:
         run: npm ci
 
       - name: Check TypeScript
-        run: cd backend && npm run check:ts
+        run: npm run check:ts
 
       - name: Lint
-        run: cd backend && npm run lint
+        run: npm run lint
 
       - name: Format check
         run: npm run format:check
@@ -50,7 +50,7 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test
+        run: npm run test:backend
         env:
           NODE_ENV: test
           # Force HTTP_VCR_MODE to replay mode only - no network requests
