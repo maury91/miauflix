@@ -1,3 +1,5 @@
+import { createCache } from 'cache-manager';
+
 import { serviceConfiguration } from '@mytypes/configuration';
 
 import { YTSApi } from './yts.api';
@@ -15,7 +17,8 @@ export const ytsConfigurationDefinition = serviceConfiguration({
   },
   test: async () => {
     try {
-      const ytsApi = new YTSApi();
+      const cache = createCache();
+      const ytsApi = new YTSApi(cache);
 
       // Use test because it doesn't use cache
       const testResult = await ytsApi.test();

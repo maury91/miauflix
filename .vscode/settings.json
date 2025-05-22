@@ -13,7 +13,9 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "jest.rootPath": "backend",
   "prettier.requireConfig": true,
+  "npm.packageManager": "npm",
   "terminal.integrated.defaultProfile.linux": "zsh",
   "git.enableSmartCommit": true
 }

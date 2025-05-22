@@ -29,6 +29,8 @@ export class Movie {
   @Column({
     unique: true,
     nullable: true,
+    type: 'varchar',
+    length: 11,
   })
   imdbId: string | null;
 

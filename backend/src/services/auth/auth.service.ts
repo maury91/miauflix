@@ -153,11 +153,16 @@ export class AuthService {
         audience: this.audience,
       });
 
-      if (!payload.userId || !payload.email || !payload.role) {
+      const { userId, email, role } = payload;
+      if (!userId || !email || !role || typeof email !== 'string') {
         throw new InvalidTokenError();
       }
 
-      return payload;
+      return {
+        userId,
+        email,
+        role: role as UserRole,
+      };
     } catch {
       throw new InvalidTokenError();
     }

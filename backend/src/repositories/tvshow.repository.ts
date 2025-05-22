@@ -1,4 +1,3 @@
-import { objectKeys } from 'src/utils/object.util';
 import type { DataSource, Repository } from 'typeorm';
 
 import { Episode } from '@entities/episode.entity';
@@ -6,6 +5,7 @@ import type { Genre } from '@entities/genre.entity';
 import { Season } from '@entities/season.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { TVShowTranslation } from '@entities/tvshow.entity';
+import { objectKeys } from '@utils/object.util';
 
 export class TVShowRepository {
   private readonly tvShowRepository: Repository<TVShow>;

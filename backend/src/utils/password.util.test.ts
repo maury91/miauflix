@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'bun:test';
-
 import { generateSecurePassword } from './password.util';
 
 describe('generateSecurePassword', () => {

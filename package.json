@@ -1,11 +1,9 @@
 {
-  "name": "bun-ts-project",
+  "name": "miauflix",
   "version": "1.0.0",
-  "main": "src/app.ts",
   "scripts": {
-    "start": "concurrently \"bun --cwd backend start\" \"bun --cwd frontend start\"",
-    "build": "bun build src/app.ts",
-    "test": "bun test",
+    "start:backend": "npm -w backend start",
+    "test:backend": "npm -w backend test",
     "format": "prettier --write \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "format:check": "prettier --check \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "prepare": "husky"
@@ -14,8 +12,6 @@
     "concurrently": "latest"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.5",
-    "backend": "workspace:*",
     "husky": "^9.1.7",
     "prettier": "^3.5.3",
     "typescript": "^4.5.0"

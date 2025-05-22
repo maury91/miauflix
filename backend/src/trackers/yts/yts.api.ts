@@ -1,8 +1,11 @@
+import { logger } from '@logger';
+import { Cache } from 'cache-manager';
+
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
 import { TrackStatus } from '@utils/trackStatus.util';
+import { ENV } from '@constants';
 
-import { ENV } from '../../constants';
 import type {
   Movie,
   MovieDetailsResponse,
@@ -23,8 +26,9 @@ const domainMirrors = ['yts.mx', 'yts.rs', 'yts.hn', 'yts.lt', 'yts.am'];
 export class YTSApi extends Api {
   private currentDomainIndex = 0;
 
-  constructor() {
+  constructor(cache: Cache) {
     super(
+      cache,
       ENV('YTS_API_URL') || `https://${domainMirrors[0]}/api/v2`,
       // YTS doesn't document rate limits specifically, but we'll implement
       // a conservative rate limiter (20 requests per minute) to be safe
@@ -54,14 +58,14 @@ export class YTSApi extends Api {
       const response = await fetch(url);
 
       if (!response.ok) {
-        console.error(`YTS API error for ${url}:`, response.status, response.statusText);
+        logger.error('YTS', `API error for ${url}:`, response.status, response.statusText);
         throw new Error(`YTS API error: ${response.status} ${response.statusText}`);
       }
 
       const data = (await response.json()) as T;
       return data;
     } catch (error) {
-      console.error(`YTS API request failed for ${url}:`, error);
+      logger.error('YTS', `API request failed for ${url}:`, error);
 
       // Try with a different domain mirror if available
       if (this.currentDomainIndex < domainMirrors.length - 1) {

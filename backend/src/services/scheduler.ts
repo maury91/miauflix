@@ -2,7 +2,7 @@ import { logger } from '@logger';
 import { clearInterval, setTimeout } from 'timers';
 
 export class Scheduler {
-  private tasks: Map<string, Timer>;
+  private tasks: Map<string, NodeJS.Timeout>;
 
   constructor() {
     this.tasks = new Map();

@@ -1,4 +1,4 @@
-import type { Context } from 'elysia';
+import type { Context } from 'hono';
 
 import type { AuditLog } from '@entities/audit-log.entity';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
@@ -33,14 +33,13 @@ export class AuditLogService {
     eventType: AuditEventType;
     severity?: AuditEventSeverity;
     description?: string;
-    request?: Context['request'];
-    server?: Context['server'];
+    context?: Context;
     userEmail?: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
-    const { eventType, severity, description, request, server, userEmail, metadata } = params;
-    const ipAddress = getRealClientIp(request, server);
-    const userAgent = request?.headers.get('user-agent') || undefined;
+    const { eventType, severity, description, context, userEmail, metadata } = params;
+    const ipAddress = getRealClientIp(context);
+    const userAgent = context?.req.header('user-agent') || undefined;
 
     const logData = {
       eventType,
@@ -48,10 +47,10 @@ export class AuditLogService {
       description,
       userEmail,
       metadata: {
-        ...(request && {
-          method: request.method,
-          query: Object.fromEntries(new URL(request.url).searchParams),
-          headers: this.filterSensitiveHeaders(request.headers),
+        ...(context && {
+          method: context.req.method,
+          query: Object.fromEntries(new URL(context.req.url).searchParams),
+          headers: this.filterSensitiveHeaders(context.req.raw.headers),
         }),
         ...metadata,
       },
@@ -68,8 +67,7 @@ export class AuditLogService {
   async logLoginAttempt(params: {
     success: boolean;
     userEmail: string;
-    request: Context['request'];
-    server: Context['server'];
+    context?: Context;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
     const { success, ...rest } = params;
@@ -87,8 +85,7 @@ export class AuditLogService {
    */
   async logLogout(params: {
     userEmail: string;
-    request: Context['request'];
-    server: Context['server'];
+    context?: Context;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
     await this.logSecurityEvent({
@@ -104,8 +101,7 @@ export class AuditLogService {
    */
   async logTokenRefresh(params: {
     userEmail: string;
-    request: Context['request'];
-    server: Context['server'];
+    context?: Context;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
     await this.logSecurityEvent({
@@ -121,8 +117,7 @@ export class AuditLogService {
    */
   async logTokenInvalidation(params: {
     userEmail: string;
-    request: Context['request'];
-    server: Context['server'];
+    context?: Context;
     reason: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
@@ -141,8 +136,7 @@ export class AuditLogService {
    */
   async logSuspiciousActivity(params: {
     userEmail?: string;
-    request: Context['request'];
-    server: Context['server'];
+    context?: Context;
     description: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
@@ -158,8 +152,7 @@ export class AuditLogService {
    */
   async logRateLimitExceeded(params: {
     userEmail?: string;
-    request: Context['request'];
-    server: Context['server'];
+    context?: Context;
     limit: number;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
@@ -178,8 +171,7 @@ export class AuditLogService {
    */
   async logUnauthorizedAccess(params: {
     userEmail?: string;
-    request: Context['request'];
-    server: Context['server'];
+    context?: Context;
     reason?: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {

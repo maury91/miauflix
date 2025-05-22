@@ -1,20 +1,54 @@
-// filepath: /home/vscode/projects/miauflix-bun/backend/src/utils/proxy.util.test.ts
-import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
-import type { Context } from 'elysia';
-import type { Server } from 'elysia/dist/universal/server';
+import type { Context } from 'hono';
+
+// Extend Context type to include connInfo for our tests
+declare module 'hono' {
+  interface Context {
+    connInfo?: {
+      remote: {
+        address: string;
+      };
+    };
+  }
+}
+
+// Mock the ENV import
+jest.mock('@constants', () => ({
+  ENV: jest.fn((key: string) => {
+    if (key === 'REVERSE_PROXY_SECRET') {
+      return process.env.REVERSE_PROXY_SECRET || '';
+    }
+    return '';
+  }),
+}));
+
+// Mock the getConnInfo function
+jest.mock('@hono/node-server/conninfo', () => ({
+  getConnInfo: jest.fn((context: Context) => {
+    // Use the context's own connInfo property that we've set up in our mocks
+    return context.connInfo;
+  }),
+}));
 
 import { getRealClientIp } from './proxy.util';
 
 const originalEnv = { ...process.env };
 
-const createMockServer = (ip: string) => {
+const createMockContext = (ip: string, headers: Record<string, string> = {}): Context => {
   return {
-    requestIP: () => ({
-      address: ip,
-      family: 'IPv4',
-      port: 12345,
-    }),
-  } satisfies Pick<Server, 'requestIP'> as unknown as Context['server'];
+    req: {
+      raw: {
+        headers: new Headers(headers),
+      },
+      header: (name: string) => headers[name.toLowerCase()] || null,
+    },
+    get: (name: string) => headers[name.toLowerCase()],
+    // Mock the connInfo that would be extracted by getConnInfo
+    connInfo: {
+      remote: {
+        address: ip,
+      },
+    },
+  } as unknown as Context;
 };
 
 describe('getRealClientIp', () => {
@@ -32,99 +66,72 @@ describe('getRealClientIp', () => {
     // Empty secret
     process.env.REVERSE_PROXY_SECRET = '';
 
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-reverse-proxy-secret': proxySecret,
-        'x-forwarded-for': '10.0.0.1',
-      },
+    const mockContext = createMockContext('192.168.1.1', {
+      'x-forwarded-for': '10.0.0.1',
     });
 
-    const mockServer = createMockServer('192.168.1.1');
-    expect(getRealClientIp(mockRequest, mockServer)).toBe('192.168.1.1');
+    expect(getRealClientIp(mockContext)).toBe('192.168.1.1');
   });
 
-  it('should return direct IP when proxy secret is missing', () => {
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-forwarded-for': '10.0.0.1',
-      },
-    });
-
-    const mockServer = createMockServer('192.168.1.1');
-    expect(getRealClientIp(mockRequest, mockServer)).toBe('192.168.1.1');
+  it('should return direct IP when no proxy headers are present', () => {
+    const mockContext = createMockContext('192.168.1.1');
+    expect(getRealClientIp(mockContext)).toBe('192.168.1.1');
   });
 
-  it('should return direct IP when proxy secret is incorrect', () => {
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-reverse-proxy-secret': 'wrong-secret',
-        'x-forwarded-for': '10.0.0.1',
-      },
+  it('should return direct IP when proxy secret is not provided', () => {
+    const mockContext = createMockContext('192.168.1.1', {
+      'x-forwarded-for': '10.0.0.1',
     });
 
-    const mockServer = createMockServer('192.168.1.1');
-    expect(getRealClientIp(mockRequest, mockServer)).toBe('192.168.1.1');
+    expect(getRealClientIp(mockContext)).toBe('192.168.1.1');
+  });
+
+  it('should return direct IP when proxy secret is wrong', () => {
+    const mockContext = createMockContext('192.168.1.1', {
+      'x-reverse-proxy-secret': 'wrong-secret',
+      'x-forwarded-for': '10.0.0.1',
+    });
+
+    expect(getRealClientIp(mockContext)).toBe('192.168.1.1');
   });
 
   it('should return client IP when proxy secret is correct', () => {
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-reverse-proxy-secret': proxySecret,
-        'x-forwarded-for': '10.0.0.1',
-      },
+    const mockContext = createMockContext('192.168.1.1', {
+      'x-reverse-proxy-secret': proxySecret,
+      'x-forwarded-for': '10.0.0.1',
     });
 
-    const mockServer = createMockServer('192.168.1.1');
-    expect(getRealClientIp(mockRequest, mockServer)).toBe('10.0.0.1');
+    expect(getRealClientIp(mockContext)).toBe('10.0.0.1');
   });
 
   it('should return first IP from X-Forwarded-For when there are multiple', () => {
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-reverse-proxy-secret': proxySecret,
-        'x-forwarded-for': '10.0.0.1, 11.11.11.11, 22.22.22.22',
-      },
+    const mockContext = createMockContext('192.168.1.1', {
+      'x-reverse-proxy-secret': proxySecret,
+      'x-forwarded-for': '10.0.0.1, 11.11.11.11, 22.22.22.22',
     });
 
-    const mockServer = createMockServer('192.168.1.1');
-    expect(getRealClientIp(mockRequest, mockServer)).toBe('10.0.0.1');
+    expect(getRealClientIp(mockContext)).toBe('10.0.0.1');
   });
 
   it('should handle spaces in X-Forwarded-For', () => {
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-reverse-proxy-secret': proxySecret,
-        'x-forwarded-for': ' 10.0.0.1 , 11.11.11.11 ',
-      },
+    const mockContext = createMockContext('192.168.1.1', {
+      'x-reverse-proxy-secret': proxySecret,
+      'x-forwarded-for': ' 10.0.0.1 , 11.11.11.11 ',
     });
 
-    const mockServer = createMockServer('192.168.1.1');
-    expect(getRealClientIp(mockRequest, mockServer)).toBe('10.0.0.1');
+    expect(getRealClientIp(mockContext)).toBe('10.0.0.1');
   });
 
-  it('should return undefined when request is undefined', () => {
-    const mockServer = createMockServer('192.168.1.1');
-    expect(getRealClientIp(undefined, mockServer)).toBeUndefined();
+  it('should return undefined when context is undefined', () => {
+    expect(getRealClientIp(undefined)).toBeUndefined();
   });
 
-  it('should return undefined when server is undefined and secret is missing', () => {
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-forwarded-for': '10.0.0.1',
-      },
+  it('should return direct IP when X-Forwarded-For header is empty', () => {
+    const mockContext = createMockContext('192.168.1.1', {
+      'x-reverse-proxy-secret': proxySecret,
+      'x-forwarded-for': '',
     });
 
-    expect(getRealClientIp(mockRequest, undefined)).toBeUndefined();
-  });
-
-  it('should return client IP when server is undefined and secret is correct', () => {
-    const mockRequest = new Request('http://example.com', {
-      headers: {
-        'x-forwarded-for': '10.0.0.1',
-        'x-reverse-proxy-secret': proxySecret,
-      },
-    });
-
-    expect(getRealClientIp(mockRequest, undefined)).toBe('10.0.0.1');
+    expect(getRealClientIp(mockContext)).toBe('192.168.1.1');
   });
 });

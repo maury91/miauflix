@@ -15,27 +15,50 @@ export class RateLimiter {
 
   /**
    * Filters out old timestamps based on the current rate limit
-   * @param now Current timestamp
    * @returns Filtered timestamps array
    */
-  private filterOldTimestamps(now: number): number[] {
-    const intervalMs = this.getIntervalMs();
-    return this.requestTimestamps.filter(timestamp => now - timestamp < intervalMs);
+  private filterOldTimestamps(): void {
+    const intervalMs = this.getIntervalMs() + 1;
+    const cutoffTime = Date.now() - intervalMs;
+    this.requestTimestamps = this.requestTimestamps.filter(timestamp => timestamp > cutoffTime);
   }
 
+  /**
+   * Calculates the delay in milliseconds until the next request can be made
+   * @returns The delay in milliseconds
+   */
   private calculateDelay(): number {
     const now = Date.now();
 
-    this.requestTimestamps = this.filterOldTimestamps(now);
-    if (this.requestTimestamps.length === Math.max(this.limit, 1)) {
-      return 0;
+    this.filterOldTimestamps();
+    if (this.limit < 1) {
+      // For fractional rates (e.g., 0.2 req/sec = 1 req every 5 seconds)
+      if (this.requestTimestamps.length > 0) {
+        const intervalMs = this.getIntervalMs();
+
+        // When calculating the next available slot, we need to consider all previous requests
+        // Each request "blocks" a slot for a full interval
+        // For example, with a rate limit of 0.2 req/sec:
+        // - Request 1 at t=0s blocks until t=5s
+        // - Request 2 (throttled) at t=0s, waits until t=5s, then blocks until t=10s
+        // - Request 3 at t=2.5s should wait until t=10s (5s after Request 2 completes)
+
+        const lastTimestamp = this.requestTimestamps[this.requestTimestamps.length - 1];
+
+        // The delay is the time until the last slot ends
+        return Math.max(0, lastTimestamp + intervalMs - now);
+      }
+    } else {
+      // For standard rates (e.g., 5 req/sec)
+      if (this.requestTimestamps.length >= this.limit) {
+        // We need to wait until the oldest request expires
+        const intervalMs = this.getIntervalMs();
+        const oldestRequest = Math.min(...this.requestTimestamps);
+        return oldestRequest + intervalMs - now;
+      }
     }
 
-    const intervalMs = this.getIntervalMs();
-    const oldestRequest = this.requestTimestamps[0];
-    const timeUntilSlotFrees = oldestRequest + intervalMs - now;
-
-    return Math.max(0, timeUntilSlotFrees);
+    return 0;
   }
 
   /**
@@ -44,11 +67,11 @@ export class RateLimiter {
   async throttle(): Promise<void> {
     const delayMs = this.calculateDelay();
 
+    this.requestTimestamps.push(Date.now() + delayMs);
+
     if (delayMs > 0) {
       await sleep(delayMs);
     }
-
-    this.requestTimestamps.push(Date.now());
   }
 
   /**
@@ -56,18 +79,11 @@ export class RateLimiter {
    * @returns true if the request should be rejected, false otherwise
    */
   shouldReject(): boolean {
-    const now = Date.now();
+    if (this.calculateDelay() > 0) {
+      return true;
+    }
 
-    // Filter out old timestamps
-    this.requestTimestamps = this.filterOldTimestamps(now);
-
-    const result =
-      this.limit < 1
-        ? // For fractional limits (e.g., 0.2 requests per second = 1 request every 5 seconds)
-          this.requestTimestamps.length > 0
-        : // For regular limits (e.g., 5 requests per second)
-          this.requestTimestamps.length >= this.limit;
     this.requestTimestamps.push(Date.now());
-    return result;
+    return false;
   }
 }

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'bun:test';
+import { MockCache } from '@__test-utils__/cache.mock';
 
 import { TrackerService } from './tracker.service';
 
@@ -8,7 +8,10 @@ describe('TrackerService', () => {
   let service: TrackerService;
 
   beforeEach(() => {
-    service = new TrackerService();
+    // Create a minimal mock cache with just the required methods
+    const mockCache = new MockCache();
+
+    service = new TrackerService(mockCache);
   });
 
   describe('searchTorrentsForMovie', () => {
@@ -19,8 +22,8 @@ describe('TrackerService', () => {
 
       if (result) {
         expect(result.imdbCode).toBe(imdbId);
-        expect(result.title).toBeString();
-        expect(result.torrents).toBeArray();
+        expect(typeof result.title).toBe('string');
+        expect(Array.isArray(result.torrents)).toBe(true);
         expect(result.torrents.length).toBeGreaterThan(0);
 
         // Check torrent structure
@@ -29,7 +32,7 @@ describe('TrackerService', () => {
         expect(torrent.resolution).toBeDefined();
         expect(torrent.videoCodec).toBeDefined();
         expect(torrent.size).toBeDefined();
-        expect(torrent.magnetLink).toStartWith('magnet:?xt=urn:btih:');
+        expect(torrent.magnetLink.startsWith('magnet:?xt=urn:btih:')).toBe(true);
       }
     });
 

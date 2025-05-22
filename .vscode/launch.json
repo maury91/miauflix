@@ -1,0 +1,25 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Backend (Node)",
+      "program": "${workspaceFolder}/backend/src/app.ts",
+      "runtimeArgs": [
+        "--env-file",
+        ".env",
+        "--experimental-specifier-resolution=node",
+        "--loader",
+        "./backend/loader.js"
+      ],
+      "cwd": "${workspaceFolder}",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/backend/dist/**/*.js"]
+    }
+  ]
+}
