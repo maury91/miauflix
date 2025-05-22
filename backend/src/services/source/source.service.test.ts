@@ -1,6 +1,3 @@
-import type { Mock } from 'bun:test';
-import { beforeEach, describe, expect, it, mock } from 'bun:test';
-
 import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 
@@ -9,24 +6,24 @@ import type { TrackerService } from './tracker.service';
 
 // Create mock repositories and DB
 const mockMovieRepository = {
-  findMoviesWithoutSources: mock(() =>
+  findMoviesWithoutSources: jest.fn(() =>
     Promise.resolve([
       { id: 1, imdbId: 'tt1234567', title: 'Test Movie 1' },
       { id: 2, imdbId: 'tt7654321', title: 'Test Movie 2' },
       { id: 3, imdbId: null, title: 'Test Movie Without IMDb ID' },
     ])
   ),
-  markSourceSearched: mock(() => Promise.resolve(undefined)),
+  markSourceSearched: jest.fn(() => Promise.resolve(undefined)),
 };
 
 const mockMovieSourceRepository = {
-  createMany: mock(() =>
+  createMany: jest.fn(() =>
     Promise.resolve([
       { id: 1, movieId: 1 },
       { id: 2, movieId: 1 },
     ])
   ),
-  findByMovieId: mock(() =>
+  findByMovieId: jest.fn(() =>
     Promise.resolve([
       { id: 1, movieId: 1, hash: 'abc123', quality: '1080p' },
       { id: 2, movieId: 1, hash: 'def456', quality: '720p' },
@@ -34,7 +31,7 @@ const mockMovieSourceRepository = {
   ),
 };
 
-const searchTorrentsForMovieMock = mock((imdbId: string) => {
+const searchTorrentsForMovieMock = jest.fn((imdbId: string) => {
   if (imdbId === 'tt1234567') {
     return Promise.resolve({
       title: 'Test Movie 1',
@@ -68,19 +65,19 @@ const searchTorrentsForMovieMock = mock((imdbId: string) => {
 
 const mockTrackerService = {
   searchTorrentsForMovie: searchTorrentsForMovieMock,
-  status: mock(() => ({ yts: { ok: true } })),
+  status: jest.fn(() => ({ yts: { ok: true } })),
 } as unknown as TrackerService & {
-  searchTorrentsForMovie: Mock<TrackerService['searchTorrentsForMovie']>;
+  searchTorrentsForMovie: jest.Mock<TrackerService['searchTorrentsForMovie']>;
 };
 
 // Create mock VPN service
 const mockVpnService = {
-  isVpnActive: mock(() => Promise.resolve(true)),
+  isVpnActive: jest.fn(() => Promise.resolve(true)),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  on: mock((event: string, callback: () => void) => {
+  on: jest.fn((event: string, callback: () => void) => {
     /* Do nothing */
   }),
-  status: mock(() => ({ connected: true })),
+  status: jest.fn(() => ({ connected: true })),
 } as unknown as VpnDetectionService;
 
 // Create a mock database

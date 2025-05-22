@@ -1,14 +1,16 @@
 import 'reflect-metadata';
 
-import { cors } from '@elysiajs/cors';
-import { serverTiming } from '@elysiajs/server-timing';
+import { serve } from '@hono/node-server';
+import { zValidator } from '@hono/zod-validator';
 import { logger } from '@logger';
-import { Elysia, t } from 'elysia';
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import z from 'zod';
 
 import { Database } from '@database/database';
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
-import { createAuthMiddleware } from '@middleware/auth.middleware';
-import { createRateLimitMiddleware } from '@middleware/rate-limit.middleware';
+import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
+import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { createAuthRoutes } from '@routes/auth.routes';
 import { AuthService } from '@services/auth/auth.service';
 import { ListService } from '@services/media/list.service';
@@ -20,11 +22,10 @@ import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceService } from '@services/source/source.service';
 import { TrackerService } from '@services/source/tracker.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
+import { buildCache } from '@utils/caching';
 
 import { validateConfiguration } from './configuration';
 import { ENV } from './constants';
-
-const db = new Database();
 
 type Methods<T> = {
   [K in keyof T]: T[K] extends (...args: unknown[]) => void ? T[K] : never;
@@ -40,29 +41,44 @@ const bind =
     return (instance[method] as Methods<T>[K])(...args);
   };
 
-async function startApp() {
+// Enhanced error handling
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise);
+  console.error('Reason:', reason);
+  // Don't exit, keep the server running
+});
+
+process.on('uncaughtException', error => {
+  console.error('Uncaught Exception:', error);
+  // Don't exit, keep the server running
+});
+
+try {
+  await validateConfiguration();
+
+  const db = new Database();
   await db.initialize();
 
-  const tmdbApi = new TMDBApi();
+  const cache = buildCache();
+  const tmdbApi = new TMDBApi(cache);
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
   const authService = new AuthService(db, auditLogService);
-  const mediaService = new MediaService(db);
+  const mediaService = new MediaService(db, tmdbApi);
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
-  const trackerService = new TrackerService();
-  const movieSourceService = new SourceService(db, vpnDetectionService, trackerService);
+  const trackerService = new TrackerService(cache);
+  const sourceService = new SourceService(db, vpnDetectionService, trackerService);
 
-  // ToDo: just testing for now, later it will be part of another service
+  await authService.configureUsers();
+
   vpnDetectionService.on('connect', () => {
     logger.debug('App', 'VPN connected');
   });
   vpnDetectionService.on('disconnect', () => {
     logger.debug('App', 'VPN disconnected');
   });
-
-  await authService.configureUsers();
 
   scheduler.scheduleTask(
     'refreshLists',
@@ -85,97 +101,110 @@ async function startApp() {
   scheduler.scheduleTask(
     'movieSourceSearch',
     0.1, // 0.1 second
-    bind(movieSourceService, 'searchSourcesForMovies')
+    bind(sourceService, 'searchSourcesForMovies')
   );
 
-  new Elysia()
-    .use(serverTiming())
-    .use(
-      cors({
-        origin: ENV('CORS_ORIGIN'),
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
-        exposeHeaders: ['Content-Range', 'X-Content-Range'],
-        credentials: true,
-        maxAge: 86400, // 24 hours
-      })
-    )
-    .use(createAuthMiddleware(authService))
-    .use(createAuditLogMiddleware(auditLogService))
-    .use(createRateLimitMiddleware(auditLogService))
-    .get(
-      '/health',
-      () => ({
-        message: 'Welcome to the Elysia and TypeScript project!',
-      }),
+  const app = new Hono();
+
+  app.onError(async (err, c) => {
+    logger.error('App', 'An error occured:', err);
+
+    return c.json(
       {
-        rateLimit: 10, // 10 requests per second
-      }
-    )
-    .get(
-      '/status',
-      () => {
-        return {
-          tmdb: tmdbApi.status(),
-          vpn: vpnDetectionService.status(),
-          trackers: trackerService.status(),
-        };
+        success: false,
+        message: err.message || 'Internal Server Error',
+        status: 500,
       },
-      {
-        rateLimit: 10, // 10 requests per second
-      }
-    )
-    .get(
-      '/lists',
-      async () => {
-        const lists = await listService.getLists();
-        return lists.map(list => ({
-          name: list.name,
-          slug: list.slug,
-          description: list.description,
-          url: `/list/${list.slug}`,
-        }));
-      },
-      {
-        isAuth: true,
-        rateLimit: 5, // 2 requests per second
-      }
-    )
-    .get(
-      '/list/:slug',
-      async ({ params, query }) => {
-        const list = await listService.getListContent(params.slug, query.lang);
-        return {
-          results: list,
-          total: list.length,
-        };
-      },
-      {
-        isAuth: true,
-        params: t.Object({
-          slug: t.String(),
-        }),
-        query: t.Object({
-          lang: t.Optional(t.String()),
-        }),
-        rateLimit: 10, // 10 request per second
-      }
-    )
-    .use(createAuthRoutes(authService, auditLogService))
-    .listen(ENV.number('PORT'), server => {
-      logger.info('App', `Server is running on http://localhost:${server.port}`);
+      500
+    );
+  });
+
+  app.use(
+    cors({
+      origin: ENV('CORS_ORIGIN'),
+      allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+      allowHeaders: ['Content-Type', 'Authorization'],
+      exposeHeaders: ['Content-Range', 'X-Content-Range'],
+      credentials: true,
+      maxAge: 86400, // 24 hours
+    })
+  );
+
+  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
+
+  app.use(createAuthMiddleware(authService));
+  app.use(createAuditLogMiddleware(auditLogService));
+
+  app.get('/health', rateLimitGuard(10), c => {
+    return c.json({
+      status: 'ok',
     });
-}
+  });
 
-// Start the application: first check environment variables, then start the app
-async function main() {
-  try {
-    await validateConfiguration();
-    await startApp();
-  } catch (error) {
-    console.error('Error during application startup:', error);
-    process.exit(1);
-  }
-}
+  app.get('/status', rateLimitGuard(10), c => {
+    return c.json({
+      tmdb: tmdbApi.status(),
+      vpn: vpnDetectionService.status(),
+      trackers: trackerService.status(),
+    });
+  });
 
-main();
+  app.route('/auth', createAuthRoutes(authService, auditLogService));
+
+  app.get('/lists', rateLimitGuard(5), authGuard(), async c => {
+    const lists = await listService.getLists();
+    return c.json(
+      lists.map(list => ({
+        name: list.name,
+        slug: list.slug,
+        description: list.description,
+        url: `/list/${list.slug}`,
+      }))
+    );
+  });
+
+  app.get(
+    '/list/:slug',
+    rateLimitGuard(10),
+    authGuard(),
+    zValidator(
+      'query',
+      z.object({
+        lang: z.string().min(2).max(5).optional(),
+      })
+    ),
+    zValidator(
+      'param',
+      z.object({
+        slug: z.string().min(2).max(100),
+      })
+    ),
+    async c => {
+      const slug = c.req.valid('param').slug;
+      const lang = c.req.valid('query').lang;
+
+      const list = await listService.getListContent(slug, lang);
+      return c.json({
+        results: list,
+        total: list.length,
+      });
+    }
+  );
+
+  const port = ENV.number('PORT');
+  const server = serve({
+    fetch: app.fetch,
+    port,
+  });
+
+  server.on('error', err => {
+    logger.error('App', `Server error: ${err}`);
+  });
+
+  server.on('listening', () => {
+    logger.info('App', `Server is listening on http://localhost:${port}`);
+  });
+} catch (error) {
+  logger.error('App', `Error during application startup: `, error);
+  process.exit(1);
+}

@@ -1,4 +1,4 @@
-import { Elysia } from 'elysia';
+import { createMiddleware } from 'hono/factory';
 
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { getRealClientIp } from '@utils/proxy.util';
@@ -16,35 +16,34 @@ const getRateLimiter = (ip: string, path: string, limit: number): RateLimiter =>
   return rateLimiters.get(key)!;
 };
 
-export const createRateLimitMiddleware = (auditLogService: AuditLogService) => {
-  return new Elysia({
-    name: 'rateLimitMiddleware',
-  }).macro(({ onBeforeHandle }) => ({
-    rateLimit(limit: number) {
-      onBeforeHandle(({ error, path, request, server }) => {
-        const clientIp = getRealClientIp(request, server) || 'unknown';
-        const rateLimiter = getRateLimiter(clientIp, path, limit);
+export const createRateLimitMiddlewareFactory =
+  (auditLogService: AuditLogService) => (limit: number) => {
+    return createMiddleware(async (context, next) => {
+      const request = context.req.raw;
 
-        // Check if the request should be rejected
-        if (rateLimiter.shouldReject()) {
-          // Log the rate limit exceeded event
-          auditLogService.logRateLimitExceeded({
-            request,
-            server,
+      const clientIp = getRealClientIp(context) || 'unknown';
+      const path = new URL(request.url).pathname;
+      const routePath = context.req.routePath;
+      const rateLimiter = getRateLimiter(clientIp, routePath, limit);
+
+      // Check if the request should be rejected
+      if (rateLimiter.shouldReject()) {
+        // Log the rate limit exceeded event
+        auditLogService.logRateLimitExceeded({
+          context,
+          limit,
+          metadata: {
+            ip: clientIp,
             limit,
-            metadata: {
-              ip: clientIp,
-              limit,
-              path,
-            },
-          });
+            path,
+            routePath,
+          },
+        });
 
-          // Return a 429 Too Many Requests response
-          throw error('Too Many Requests');
-        }
+        // Return a 429 Too Many Requests response
+        return context.text('Too Many Requests', 429);
+      }
 
-        return;
-      });
-    },
-  }));
-};
+      await next();
+    });
+  };

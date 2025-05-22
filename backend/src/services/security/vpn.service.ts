@@ -1,3 +1,5 @@
+import { logger } from '@logger';
+
 interface NordVpnIpInsightsResponse {
   ip: string;
   country: string;
@@ -110,7 +112,7 @@ export class VpnDetectionService {
 
     this.monitoringInterval = setInterval(() => {
       this.checkVpnStatus().catch(error => {
-        console.error('Error checking VPN status:', error);
+        logger.error('VPN', 'Error checking VPN status:', error);
       });
     }, this.checkIntervalMs);
   }

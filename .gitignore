@@ -1,6 +1,9 @@
 # Dependencies
 node_modules
 
+# Data files
+data
+
 # Environment files
 .env
 .env.local

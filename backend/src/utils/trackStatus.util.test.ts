@@ -1,5 +1,3 @@
-import { describe, expect, it } from 'bun:test';
-
 import { groupTimestampsByInterval } from './trackStatus.util';
 
 describe('groupTimestampsByInterval', () => {

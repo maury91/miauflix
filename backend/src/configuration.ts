@@ -1,14 +1,14 @@
 import { confirm, input, password } from '@inquirer/prompts';
 import chalk from 'chalk';
-import { writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
+import { isatty } from 'tty';
+
 import {
   type ServiceConfiguration,
   serviceConfiguration,
   type VariableInfo,
-} from 'src/types/configuration';
-import { isatty } from 'tty';
-
+} from '@mytypes/configuration';
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
@@ -17,6 +17,8 @@ import { ytsConfigurationDefinition } from '@trackers/yts/yts.configuration';
 function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
 }
+
+const err = console.error;
 
 const serverConfigurationDefinition = serviceConfiguration({
   name: 'Server',
@@ -33,6 +35,12 @@ const serverConfigurationDefinition = serviceConfiguration({
       required: false,
       defaultValue: '3000',
       example: '3000',
+    },
+    DATA_DIR: {
+      description: 'Directory for storing data files',
+      required: false,
+      defaultValue: path.resolve(process.cwd(), './data'),
+      example: '/path/to/data',
     },
     REVERSE_PROXY_SECRET: {
       description:
@@ -79,19 +87,19 @@ type ServiceKey = keyof typeof services;
 const testService = async (
   service: ServiceConfiguration<string>
 ): Promise<{ success: boolean; message?: string }> => {
-  const err = console.error;
   console.error = () => {};
   try {
     await service.test();
 
+    console.error = err;
+
     return { success: true };
   } catch (error) {
+    console.error = err;
     return {
       success: false,
       message: error instanceof Error ? error.message : String(error),
     };
-  } finally {
-    console.error = err;
   }
 };
 
@@ -220,8 +228,7 @@ async function saveEnvironmentVariables(envValues: Record<string, string>): Prom
 
     // Read existing .env if available
     try {
-      const fileContent = await Bun.file(envFilePath).text();
-      envContent = fileContent;
+      envContent = readFileSync(envFilePath, 'utf-8');
     } catch {
       // File doesn't exist, start with empty content
     }

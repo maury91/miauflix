@@ -1,3 +1,5 @@
+import type { Cache } from 'cache-manager';
+
 import { RateLimiter } from '@utils/rateLimiter';
 import { groupTimestampsByInterval } from '@utils/trackStatus.util';
 
@@ -10,9 +12,13 @@ export abstract class Api {
   protected readonly rateLimiter: RateLimiter;
 
   constructor(
+    protected cache: Cache,
     protected apiUrl: string,
     rateLimit: number
   ) {
+    if (!cache) {
+      throw new Error('Cache is required');
+    }
     this.rateLimiter = new RateLimiter(rateLimit);
   }
 

@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    // Enable latest features
     "lib": ["ESNext"],
     "target": "ES2021",
     "module": "ES2022",
     "moduleResolution": "node",
     "moduleDetection": "force",
     "allowJs": true,
+    "resolveJsonModule": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -18,6 +18,7 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
+      "@database": ["src/database"],
       "@database/*": ["src/database/*"],
       "@entities/*": ["src/entities/*"],
       "@errors/*": ["src/errors/*"],
@@ -28,9 +29,18 @@
       "@services/*": ["src/services/*"],
       "@trackers/*": ["src/trackers/*"],
       "@utils/*": ["src/utils/*"],
-      "@logger": ["src/logger"]
+      "@logger": ["src/logger"],
+      "@constants": ["src/constants"],
+      "@__test-utils__/*": ["src/__test-utils__/*"]
     }
   },
   "include": ["src/**/*"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true,
+    "logError": true,
+    "require": ["tsconfig-paths/register"]
+  },
   "exclude": ["node_modules", "dist"]
 }

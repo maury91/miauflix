@@ -45,10 +45,10 @@ export class MovieSource {
   videoCodec: string; // e.g. "x264", "x265", "HVEC"
 
   @Column({ nullable: true })
-  seeds: number | null;
+  seeds?: number;
 
   @Column({ nullable: true })
-  leechers: number | null;
+  leechers?: number;
 
   @Column()
   source: string; // Which tracker provided this source

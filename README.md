@@ -5,7 +5,7 @@
 ![Miauflix Logo](./logo.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Bun](https://img.shields.io/badge/Powered%20by-Bun-orange)](https://bun.sh/)
+[![Node.js](https://img.shields.io/badge/Powered%20by-Node.js-green)](https://nodejs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
 [![CI Status](https://github.com/maury91/miauflix-bun/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix-bun/actions/workflows/ci.yml)
 
@@ -28,7 +28,7 @@
 
 ## 🔍 Overview
 
-Miauflix is a comprehensive media platform that empowers you to manage and stream your media collection with ease and security. Built with Bun.js and designed to be self-hosted, it gives you full control over your streaming experience.
+Miauflix is a comprehensive media platform that empowers you to manage and stream your media collection with ease and security. Built with Node.js and designed to be self-hosted, it gives you full control over your streaming experience.
 
 ## ✨ Features
 
@@ -38,13 +38,13 @@ Miauflix is a comprehensive media platform that empowers you to manage and strea
 - **VPN Integration**: Ensure downloads always happen behind a VPN (optional)
 - **Content Encryption**: Encrypt your downloaded content (optional)
 
-The application is a self-contained Bun.js application. Docker image and docker-compose files are provided for easy server setup. Note: Docker and docker-compose are not mandatory but are recommended as they provide pre-configured VPN and reverse proxy setup.
+The application is a self-contained Node.js application. Docker image and docker-compose files are provided for easy server setup. Note: Docker and docker-compose are not mandatory but are recommended as they provide pre-configured VPN and reverse proxy setup.
 
 ## 🏗️ Project Architecture
 
 ```
-miauflix-bun/
-├── backend/                  # Bun.js TypeScript backend
+miauflix/
+├── backend/                  # Node.js TypeScript backend
 │   ├── src/                  # Source code
 │   └── docs/                 # API documentation
 ├── frontend/                 # Client application
@@ -85,14 +85,13 @@ cd miauflix-bun
 Run the configuration wizard directly on your system:
 
 ```bash
-cd backend
-bun start
+npm run start:backend
 ```
 
 Or run it in Docker's interactive mode:
 
 ```bash
-docker compose run --rm backend bun --pwd backend start
+docker compose run --rm backend npm run start:backend
 ```
 
 <p align="center">

@@ -1,90 +1,87 @@
-import { Elysia } from 'elysia';
+import { type MiddlewareHandler } from 'hono';
 
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import type { AuditLogService } from '@services/security/audit-log.service';
 
-export function createAuditLogMiddleware(auditLogService: AuditLogService) {
-  return new Elysia({
-    name: 'auditLogMiddleware',
-  })
-    .onRequest(async ({ request, server }) => {
-      // Skip logging for certain paths (like health checks)
-      const path = new URL(request.url).pathname;
-      if (path === '/health') {
-        return;
-      }
+export function createAuditLogMiddleware(auditLogService: AuditLogService): MiddlewareHandler {
+  return async (context, next) => {
+    // Skip logging for certain paths (like health checks)
+    const path = new URL(context.req.url).pathname;
+    if (path === '/health') {
+      return await next();
+    }
 
-      // Log the API access
-      await auditLogService.logSecurityEvent({
-        eventType: AuditEventType.API_ACCESS,
-        severity: AuditEventSeverity.INFO,
-        description: `${request.method} ${path}`,
-        server,
-        request,
-        metadata: { path },
-      });
-    })
-    .onError({ as: 'global' }, async ({ request, error, server, set }) => {
-      if (error instanceof LoginError) {
-        set.status = 401;
+    // Log the API access
+    await auditLogService.logSecurityEvent({
+      eventType: AuditEventType.API_ACCESS,
+      severity: AuditEventSeverity.INFO,
+      description: `${context.req.method} ${path}`,
+      context: context,
+      metadata: { path },
+    });
+
+    await next();
+
+    if (context.error) {
+      if (context.error instanceof LoginError) {
+        context.status(401);
         await auditLogService.logLoginAttempt({
           success: false,
-          userEmail: error.email,
-          request,
-          server,
+          userEmail: context.error.email,
+          context: context,
         });
-        return;
+
+        return context.json({ error: 'Unauthorized' }, 401);
       }
 
-      if (error instanceof AuthError || error instanceof InvalidTokenError) {
-        set.status = 401;
+      if (context.error instanceof AuthError || context.error instanceof InvalidTokenError) {
+        context.status(401);
         await auditLogService.logUnauthorizedAccess({
-          request,
-          server,
-          reason: error.message,
+          context: context,
+          reason: context.error.message,
         });
-        return;
+
+        return context.json({ error: 'Unauthorized' }, 401);
       }
 
-      if (error instanceof RoleError) {
-        set.status = 401;
+      if (context.error instanceof RoleError) {
+        context.status(401);
         await auditLogService.logUnauthorizedAccess({
-          request,
-          server,
-          reason: error.message,
-          userEmail: error.email,
+          context: context,
+          reason: context.error.message,
+          userEmail: context.error.email,
           metadata: {
-            role: error.role,
+            role: context.error.role,
           },
         });
-        return;
+
+        return context.json({ error: 'Unauthorized' }, 401);
       }
 
-      const path = new URL(request.url).pathname;
-
       // Log API errors
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        context.error instanceof Error ? context.error.message : String(context.error);
 
       const errorDetails =
-        error instanceof Error
+        context.error instanceof Error
           ? {
-              message: error.message,
-              stack: error.stack,
-              name: error.name,
+              message: context.error.message,
+              stack: context.error.stack,
+              name: context.error.name,
             }
-          : { message: String(error) };
+          : { message: String(context.error) };
 
       await auditLogService.logSecurityEvent({
         eventType: AuditEventType.API_ERROR,
         severity: AuditEventSeverity.ERROR,
         description: `API Error: ${errorMessage}`,
-        request,
-        server,
+        context: context,
         metadata: {
-          error: errorDetails,
           path,
+          error: errorDetails,
         },
       });
-    });
+    }
+  };
 }

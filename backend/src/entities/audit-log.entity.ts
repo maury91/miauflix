@@ -53,11 +53,11 @@ export class AuditLog {
   })
   severity: AuditEventSeverity;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({ nullable: true, type: 'varchar', length: 500 })
+  description: string | null;
 
-  @Column({ nullable: true })
-  ipAddress: string;
+  @Column({ nullable: true, type: 'varchar', length: 50 })
+  ipAddress: string | null;
 
   @Column({ nullable: true })
   userAgent: string;

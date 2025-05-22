@@ -1,4 +1,3 @@
-import { beforeEach, mock } from 'bun:test';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { dirname } from 'path';
@@ -11,7 +10,7 @@ import { HTTP_VCR_CONFIG } from './http-vcr.config';
 const originalFetch = global.fetch;
 
 // Replace global fetch with our implementation
-const fetchMock = mock(async function (
+const fetchMock = jest.fn(async function (
   url: Request | URL | string,
   init?: RequestInit
 ): Promise<Response> {

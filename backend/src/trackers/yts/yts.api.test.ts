@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'bun:test';
+import { MockCache } from '@__test-utils__/cache.mock';
 
 import { YTSApi } from './yts.api';
 
@@ -8,8 +8,10 @@ describe('YTSApi', () => {
   let api: YTSApi;
 
   beforeEach(() => {
-    // Create a new API instance before each test
-    api = new YTSApi();
+    // Create a minimal mock cache with just the required methods
+    const mockCache = new MockCache();
+
+    api = new YTSApi(mockCache);
   });
 
   describe('test', () => {
@@ -24,13 +26,13 @@ describe('YTSApi', () => {
       const result = await api.searchMovies(imdbId);
       expect(result.status).toBe('ok');
       expect(result.data.movie_count).toBe(1);
-      expect(result.data.movies).toBeArrayOfSize(1);
+      expect(result.data.movies).toHaveLength(1);
 
       const movie = result.data.movies[0];
       expect(movie.imdb_code).toBe(imdbId);
-      expect(movie.title).toBeString();
+      expect(typeof movie.title).toBe('string');
       expect(movie.year).toBeGreaterThan(2000);
-      expect(movie.torrents).toBeArray();
+      expect(Array.isArray(movie.torrents)).toBe(true);
       expect(movie.torrents.length).toBeGreaterThan(0);
     });
 
@@ -48,7 +50,7 @@ describe('YTSApi', () => {
       const result = await api.getMovieByImdbId(imdbId);
       expect(result.status).toBe('ok');
       expect(result.data.movie.imdb_code).toBe(imdbId);
-      expect(result.data.movie.title).toBeString();
+      expect(typeof result.data.movie.title).toBe('string');
       expect(result.data.movie.year).toBeGreaterThan(2000);
     });
   });
@@ -64,7 +66,7 @@ describe('YTSApi', () => {
         expect(movie.id).toBeDefined();
         expect(movie.title).toBeDefined();
         expect(movie.year).toBeDefined();
-        expect(movie.torrents).toBeArray();
+        expect(Array.isArray(movie.torrents)).toBe(true);
       });
     });
   });
@@ -76,8 +78,8 @@ describe('YTSApi', () => {
 
       if (result) {
         expect(result.imdbCode).toBe(imdbId);
-        expect(result.title).toBeString();
-        expect(result.torrents).toBeArray();
+        expect(typeof result.title).toBe('string');
+        expect(Array.isArray(result.torrents)).toBe(true);
         expect(result.torrents.length).toBeGreaterThan(0);
 
         const torrent = result.torrents[0];
@@ -85,7 +87,7 @@ describe('YTSApi', () => {
         expect(torrent.resolution).toBeDefined();
         expect(torrent.videoCodec).toBeDefined();
         expect(torrent.size).toBeDefined();
-        expect(torrent.magnetLink).toStartWith('magnet:?xt=urn:btih:');
+        expect(torrent.magnetLink.startsWith('magnet:?xt=urn:btih:')).toBe(true);
       }
     });
 

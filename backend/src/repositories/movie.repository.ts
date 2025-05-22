@@ -1,9 +1,9 @@
-import { objectKeys } from 'src/utils/object.util';
 import type { DataSource, Repository } from 'typeorm';
 import { IsNull, Not } from 'typeorm';
 
 import type { Genre } from '@entities/genre.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
+import { objectKeys } from '@utils/object.util';
 
 export class MovieRepository {
   private readonly movieRepository: Repository<Movie>;
@@ -57,7 +57,11 @@ export class MovieRepository {
     await this.movieTranslationRepository.upsert(newTranslation, ['movieId', 'language']);
   }
 
-  async checkForChangesAndUpdate(movie: Movie, updatedMovie: Partial<Movie>): Promise<void> {
+  async checkForChangesAndUpdate(
+    movie: Movie,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    { genres: _, ...updatedMovie }: Partial<Movie>
+  ): Promise<void> {
     const hasChanges = objectKeys(updatedMovie).some(key => {
       return movie[key] !== updatedMovie[key];
     });

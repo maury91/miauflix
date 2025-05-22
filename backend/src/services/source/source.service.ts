@@ -14,6 +14,7 @@ export class SourceService {
 
   private vpnConnected = false;
   private readonly searchOnlyBehindVpn = true;
+  private readonly startPromise: Promise<void>;
 
   constructor(
     db: Database,
@@ -23,7 +24,7 @@ export class SourceService {
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
     if (this.searchOnlyBehindVpn) {
-      vpnService.isVpnActive().then(connected => {
+      this.startPromise = vpnService.isVpnActive().then(connected => {
         this.vpnConnected = connected;
       });
       vpnService.on('connect', () => {
@@ -42,6 +43,8 @@ export class SourceService {
    * This method is designed to be run by the scheduler
    */
   public async searchSourcesForMovies(): Promise<void> {
+    await this.startPromise;
+
     if (!this.vpnConnected) {
       logger.warn('SourceService', 'VPN is not connected, skipping source search');
       await sleep(2000);
@@ -73,6 +76,8 @@ export class SourceService {
     imdbId: string | null;
     title: string;
   }): Promise<void> {
+    await this.startPromise;
+
     if (!this.vpnConnected && this.searchOnlyBehindVpn) {
       logger.warn(
         'SourceService',

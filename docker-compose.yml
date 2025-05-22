@@ -4,9 +4,6 @@ services:
     hostname: nordvpn
     container_name: nordvpn
     env_file: .env
-    ports:
-      - '3000:3000' # Expose port 3000 directly
-      - '6499:6499' # Expose port 6499 directly
     cap_add:
       - NET_ADMIN # Required
       - SYS_MODULE # Maybe required
@@ -27,13 +24,16 @@ services:
     container_name: miauflix-backend
     depends_on:
       - nordvpn
+    environment:
+      - DATA_DIR=/usr/data
+      - DEBUG=SourceService,App,MovieSync,ListService,Cache
     volumes:
       - ./:/usr/src/app/
+      - ./data:/usr/data/
       - backend_node_modules:/usr/src/app/node_modules
     network_mode: service:nordvpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service
     restart: unless-stopped
-    command: ['bun', '--inspect', 'backend/src/app.ts']
 
   nginx:
     image: nginx:alpine

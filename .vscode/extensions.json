@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "yy0931.vscode-sqlite3-editor",
-    "oven.bun-vscode",
     "ms-azuretools.vscode-docker",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint"

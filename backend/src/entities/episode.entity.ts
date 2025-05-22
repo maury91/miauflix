@@ -29,8 +29,12 @@ export class Episode {
   @Column()
   overview: string;
 
-  @Column()
-  airDate: string;
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: true,
+  })
+  airDate: string | null;
 
   @Column()
   stillPath: string;

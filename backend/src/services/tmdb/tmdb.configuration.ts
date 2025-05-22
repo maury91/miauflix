@@ -1,3 +1,5 @@
+import { createCache } from 'cache-manager';
+
 import { serviceConfiguration } from '@mytypes/configuration';
 
 import { TMDBApi } from './tmdb.api';
@@ -24,7 +26,8 @@ export const tmdbConfigurationDefinition = serviceConfiguration({
   },
   test: async () => {
     try {
-      const tmdbApi = new TMDBApi();
+      const cache = createCache();
+      const tmdbApi = new TMDBApi(cache);
 
       // Use test because it doesn't use cache
       await tmdbApi.test();

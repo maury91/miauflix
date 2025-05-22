@@ -1,8 +1,11 @@
+import { logger } from '@logger';
+import { Cache } from 'cache-manager';
+
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
 import { TrackStatus } from '@utils/trackStatus.util';
+import { ENV } from '@constants';
 
-import { ENV } from '../../constants';
 import type {
   ChangeItem,
   ChangeResult,
@@ -50,8 +53,12 @@ export class TMDBApi extends Api {
   private readonly apiKey = ENV('TMDB_API_ACCESS_TOKEN');
   private readonly configuration: Promise<ConfigurationResponse>;
 
-  constructor(private readonly language = 'en') {
+  constructor(
+    cache: Cache,
+    private readonly language = 'en'
+  ) {
     super(
+      cache,
       ENV('TMDB_API_URL'),
       50 // 50 requests per second, TMDB's documented rate limit
     );
@@ -72,7 +79,7 @@ export class TMDBApi extends Api {
       },
     });
     if (!response.ok) {
-      console.error(url, response);
+      logger.error('TMDB', url, response);
       throw response;
     }
     return response.json() as Promise<T>;

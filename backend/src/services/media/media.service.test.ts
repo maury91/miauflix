@@ -1,33 +1,4 @@
-import { sleep } from 'bun';
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  jest,
-  type Mock,
-  mock,
-  setSystemTime,
-  spyOn,
-} from 'bun:test';
-
-// Mock the logger module using bun:test's mock.module for the module,
-// and jest.fn() for the methods within the factory.
-mock.module('@logger', () => ({
-  logger: {
-    debug: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}));
-
-mock.module('@utils/time', () => ({
-  sleep: () => new Promise(resolve => setTimeout(resolve, 0)),
-}));
-
-// Import the mocked logger
+import { MockCache } from '@__test-utils__/cache.mock';
 import { logger as mockLogger } from '@logger';
 
 import type { Movie } from '@entities/movie.entity';
@@ -36,7 +7,8 @@ import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { MediaService } from './media.service';
 
-// Mock database repositories (using bun:test's mock for repo methods, jest.fn for others)
+const mockCache = new MockCache();
+
 const mockMovieRepo = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   findByTMDBId: jest.fn((_tmdbId: number | string): Promise<Movie | null> => Promise.resolve(null)),
@@ -89,14 +61,17 @@ const mockDb = {
   getSeasonRepository: () => ({}),
 } as unknown as Database;
 
-const mockFetch = global.fetch as unknown as Mock<typeof global.fetch>;
+const mockFetch = global.fetch as unknown as jest.Mock<typeof global.fetch>;
 
 describe('MediaService', () => {
   let mediaService: MediaService;
 
   beforeEach(async () => {
-    mediaService = new MediaService(mockDb);
-    await sleep(0);
+    // Create the MediaService with the mock DB and a new TMDBApi instance
+    const tmdbApi = new TMDBApi(mockCache);
+    mediaService = new MediaService(mockDb, tmdbApi);
+
+    await Promise.resolve();
     jest.clearAllMocks();
   });
 
@@ -199,12 +174,8 @@ describe('MediaService', () => {
     }); // End of getMovie describe block
 
     describe('syncMovies', () => {
-      let getAllChangedMovieIdsSpy: Mock<typeof TMDBApi.prototype.getAllChangedMovieIds>;
+      const getAllChangedMovieIdsSpy = jest.spyOn(TMDBApi.prototype, 'getAllChangedMovieIds');
       const MOVIE_SYNC_NAME = 'TMDB_Movies';
-
-      beforeEach(() => {
-        getAllChangedMovieIdsSpy = spyOn(TMDBApi.prototype, 'getAllChangedMovieIds');
-      });
 
       afterEach(() => {
         getAllChangedMovieIdsSpy.mockClear();
@@ -230,7 +201,7 @@ describe('MediaService', () => {
 
       it('should proceed with sync if no last sync state exists', async () => {
         const now = new Date('2025-05-11T10:00:00Z');
-        setSystemTime(now);
+        jest.useFakeTimers({ now });
         (mockSyncStateRepo.getLastSync as jest.Mock).mockResolvedValue(null); // No last sync
 
         mockMovieRepo.findByTMDBId.mockImplementation(tmdbId => {

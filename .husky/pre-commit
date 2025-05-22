@@ -1,2 +1,4 @@
-cd backend && bun run lint -- --fix && bun run tsc --noEmit
-cd ../ && bun run format:check --write && bun test
+npm -w backend run lint -- --fix
+npm -w backend run check:ts
+npm run format:check --write
+npm run test:backend

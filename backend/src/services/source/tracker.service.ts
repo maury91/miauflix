@@ -1,3 +1,5 @@
+import type { Cache } from 'cache-manager';
+
 import { YTSApi } from '@trackers/yts/yts.api';
 
 /**
@@ -6,8 +8,8 @@ import { YTSApi } from '@trackers/yts/yts.api';
 export class TrackerService {
   private readonly ytsApi: YTSApi;
 
-  constructor() {
-    this.ytsApi = new YTSApi();
+  constructor(cache: Cache) {
+    this.ytsApi = new YTSApi(cache);
   }
 
   /**

@@ -9,10 +9,10 @@ import type { GenreRepository } from '@repositories/genre.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type { SyncStateRepository } from '@repositories/syncState.repository';
 import type { TVShowRepository } from '@repositories/tvshow.repository';
+import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { MovieMediaSummary, TVShowMediaSummary } from '@services/tmdb/tmdb.types';
 import { sleep } from '@utils/time';
 
-import { TMDBApi } from '../tmdb/tmdb.api';
 import type { GenreWithLanguages, TranslatedMedia } from './media.types';
 
 // ToDo: Move to configuration
@@ -23,7 +23,6 @@ const TV_SYNC_NAME = 'TMDB_TVShows';
 const oneHourMs = 1 * 60 * 60 * 1000;
 
 export class MediaService {
-  private readonly tmdbApi = new TMDBApi();
   private readonly movieRepository: MovieRepository;
   private readonly tvShowRepository: TVShowRepository;
   private readonly genreRepository: GenreRepository;
@@ -32,6 +31,7 @@ export class MediaService {
 
   constructor(
     db: Database,
+    private readonly tmdbApi: TMDBApi,
     private readonly defaultLanguage: string = 'en'
   ) {
     this.movieRepository = db.getMovieRepository();

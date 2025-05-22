@@ -1,4 +1,4 @@
-import { ENV } from 'src/constants';
+import { ENV } from '@constants';
 
 import type { TraktList, TraktListItem, TraktPagination } from './trakt.types';
 

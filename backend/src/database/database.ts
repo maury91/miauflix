@@ -22,6 +22,7 @@ import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { SyncStateRepository } from '@repositories/syncState.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
+import { ENV } from '@constants';
 
 export class Database {
   private readonly dataSource: DataSource;
@@ -38,7 +39,7 @@ export class Database {
   constructor() {
     this.dataSource = new DataSource({
       type: 'sqlite',
-      database: path.resolve(process.cwd(), 'database.sqlite'),
+      database: path.resolve(ENV('DATA_DIR'), 'database.sqlite'),
       entities: [
         Movie,
         MovieTranslation,
