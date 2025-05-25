@@ -12,6 +12,7 @@ import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { createAuthRoutes } from '@routes/auth.routes';
+import { createTraktRoutes } from '@routes/trakt.routes';
 import { AuthService } from '@services/auth/auth.service';
 import { ListService } from '@services/media/list.service';
 import { ListSynchronizer } from '@services/media/list.syncronizer';
@@ -23,6 +24,7 @@ import { MagnetService, SourceService } from '@services/source';
 import { TrackerService } from '@services/source/tracker.service';
 import { WebTorrentService } from '@services/source/webtorrent.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
+import { TraktService } from '@services/trakt/trakt.service';
 import { buildCache } from '@utils/caching';
 
 import { validateConfiguration } from './configuration';
@@ -55,7 +57,15 @@ process.on('uncaughtException', error => {
 });
 
 try {
-  await validateConfiguration();
+  const args = process.argv.slice(2);
+  const forceReconfigure = args.includes('--config');
+  const configOnly = args.includes('--only-config');
+
+  await validateConfiguration({
+    // If --only-config is used, it implies --config as well
+    forceReconfigure: forceReconfigure || configOnly,
+    configOnly,
+  });
 
   const db = new Database();
   await db.initialize();
@@ -65,6 +75,7 @@ try {
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
   const authService = new AuthService(db, auditLogService);
+  const traktService = new TraktService(db);
   const mediaService = new MediaService(db, tmdbApi);
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
@@ -155,11 +166,12 @@ try {
       tmdb: tmdbApi.status(),
       vpn: vpnDetectionService.status(),
       trackers: trackerService.status(),
-      magnetResolvers: magnetService.getServiceStatistics(),
+      magnetResolvers: magnetService.status(),
     });
   });
 
   app.route('/auth', createAuthRoutes(authService, auditLogService));
+  app.route('/trakt', createTraktRoutes(traktService, auditLogService));
 
   app.get('/lists', rateLimitGuard(5), authGuard(), async c => {
     const lists = await listService.getLists();

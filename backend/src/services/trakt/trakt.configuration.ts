@@ -14,8 +14,15 @@ export const traktConfigurationDefinition = serviceConfiguration({
     },
     TRAKT_CLIENT_ID: {
       description: 'Client ID for the Trakt API',
-      example: 'abc123def456ghi789',
       link: 'https://trakt.tv/oauth/applications',
+      example: 'abc123def456ghi789',
+      required: true,
+      password: true,
+    },
+    TRAKT_CLIENT_SECRET: {
+      description: 'Client Secret for the Trakt API',
+      link: 'https://trakt.tv/oauth/applications',
+      example: 'secretkey123456789',
       required: true,
       password: true,
     },

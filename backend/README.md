@@ -116,6 +116,7 @@
   - [x] Service-specific configuration
   - [x] Configuration testing
   - [x] .env file generation
+  - [x] Command line configuration flags (`--config`, `--only-config`)
   - [ ] Trigger configuration for optional variables
   - [ ] Configuration UI for administrators
   - [ ] Configuration versioning

@@ -8,7 +8,13 @@ import { ENV } from '@constants';
 import { getTorrentFromITorrents } from './services/itorrents';
 import { getTorrentFromTorrage } from './services/torrage';
 import { ErrorWithStatus } from './services/utils';
-import type { Service, ServiceData, ServicePerformance, ServiceStats } from './types';
+import type {
+  Service,
+  ServiceData,
+  ServicePerformance,
+  ServiceShortStats,
+  ServiceStats,
+} from './types';
 import type { WebTorrentService } from './webtorrent.service';
 
 /**
@@ -408,6 +414,24 @@ export class MagnetService {
         performance.errors.push(error.status);
       }
     }
+  }
+
+  public status(): Record<string, ServiceShortStats> {
+    return Object.keys(this.services).reduce(
+      (status, serviceName) => {
+        const service = this.services[serviceName];
+        status[serviceName] = {
+          successRate: service.performance.successRate * 100,
+          queued: service.activeRequests.size,
+          avgResponseTime: service.performance.avgResponseTime,
+          totalCalls: service.performance.totalCalls,
+          successfulCalls: service.performance.successfulCalls,
+          failures: service.performance.failures,
+        };
+        return status;
+      },
+      {} as Record<string, ServiceShortStats>
+    );
   }
 
   /**

@@ -47,3 +47,12 @@ export interface ServiceStats {
   rank: number;
   errors: Record<string, number>;
 }
+
+export interface ServiceShortStats {
+  successRate: number;
+  queued: number;
+  avgResponseTime: number;
+  totalCalls: number;
+  successfulCalls: number;
+  failures: number;
+}

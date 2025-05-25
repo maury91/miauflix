@@ -10,6 +10,7 @@ import { MovieSource } from '@entities/movie-source.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { SyncState } from '@entities/sync-state.entity';
+import { TraktUser } from '@entities/trakt-user.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { TVShowTranslation } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
@@ -20,6 +21,7 @@ import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { SyncStateRepository } from '@repositories/syncState.repository';
+import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
 import { ENV } from '@constants';
@@ -35,6 +37,7 @@ export class Database {
   private refreshTokenRepository: RefreshTokenRepository;
   private auditLogRepository: AuditLogRepository;
   private syncStateRepository: SyncStateRepository;
+  private traktUserRepository: TraktUserRepository;
 
   constructor() {
     this.dataSource = new DataSource({
@@ -54,6 +57,7 @@ export class Database {
         RefreshToken,
         AuditLog,
         SyncState,
+        TraktUser,
         MovieSource,
       ],
       synchronize: true,
@@ -71,6 +75,7 @@ export class Database {
     this.refreshTokenRepository = new RefreshTokenRepository(this.dataSource);
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
     this.syncStateRepository = new SyncStateRepository(this.dataSource);
+    this.traktUserRepository = new TraktUserRepository(this.dataSource);
   }
 
   public getSyncStateRepository(): SyncStateRepository {
@@ -115,5 +120,9 @@ export class Database {
 
   public getMovieSourceRepository() {
     return this.movieSourceRepository;
+  }
+
+  public getTraktUserRepository() {
+    return this.traktUserRepository;
   }
 }

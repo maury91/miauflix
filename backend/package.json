@@ -4,7 +4,9 @@
   "main": "src/app.ts",
   "scripts": {
     "start": "node --env-file ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
-    "dev": "node --watch --env-file ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
+    "dev": "npm start --watch",
+    "config": "npm start -- --config",
+    "config-only": "npm start -- --only-config",
     "build": "tsc --project tsconfig.json",
     "check:ts": "tsc --noEmit",
     "lint": "eslint --ext .ts src/",
