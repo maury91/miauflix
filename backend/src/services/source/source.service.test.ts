@@ -1,6 +1,7 @@
 import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 
+import type { MagnetService } from './magnet.service';
 import { SourceService } from './source.service';
 import type { TrackerService } from './tracker.service';
 
@@ -80,6 +81,13 @@ const mockVpnService = {
   status: jest.fn(() => ({ connected: true })),
 } as unknown as VpnDetectionService;
 
+// Create mock MagnetService
+const mockMagnetService = {
+  getTorrent: jest.fn(() => Promise.resolve(Buffer.from('mock torrent file'))),
+  dispose: jest.fn(),
+  getServiceStatistics: jest.fn(() => ({})),
+} as unknown as MagnetService;
+
 // Create a mock database
 const mockDatabase = {
   getMovieRepository: () => mockMovieRepository,
@@ -98,7 +106,12 @@ describe('MovieSourceService', () => {
     mockTrackerService.searchTorrentsForMovie.mockClear();
 
     // Create service instance with direct injection of the mock tracker service
-    service = new SourceService(mockDatabase, mockVpnService, mockTrackerService);
+    service = new SourceService(
+      mockDatabase,
+      mockVpnService,
+      mockTrackerService,
+      mockMagnetService
+    );
   });
 
   describe('searchSourcesForMovies', () => {

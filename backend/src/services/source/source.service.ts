@@ -1,9 +1,12 @@
 import { logger } from '@logger';
 
+import type { MovieSource } from '@entities/movie-source.entity';
 import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { TrackerService } from '@services/source/tracker.service';
 import { sleep } from '@utils/time';
+
+import type { MagnetService } from './magnet.service';
 
 /**
  * Service for searching and managing sources
@@ -19,7 +22,8 @@ export class SourceService {
   constructor(
     db: Database,
     vpnService: VpnDetectionService,
-    private readonly trackerService: TrackerService
+    private readonly trackerService: TrackerService,
+    private readonly magnetService: MagnetService
   ) {
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
@@ -144,7 +148,146 @@ export class SourceService {
   /**
    * Find all sources for a specific movie
    */
-  public async getSourcesForMovie(movieId: number) {
+  public async getSourcesForMovie(movieId: number): Promise<MovieSource[]> {
     return this.movieSourceRepository.findByMovieId(movieId);
+  }
+
+  /**
+   * Find all sources with torrent files for a specific movie
+   */
+  public async getSourcesWithTorrentsForMovie(movieId: number): Promise<MovieSource[]> {
+    const sources = await this.movieSourceRepository.findByMovieId(movieId);
+    return sources.filter(source => source.torrentFile !== null);
+  }
+
+  /**
+   * Get a specific source with its torrent file by source ID
+   */
+  public async getSourceWithTorrent(sourceId: number): Promise<MovieSource | null> {
+    const source = await this.movieSourceRepository.findById(sourceId);
+
+    if (!source || !source.torrentFile) {
+      return null;
+    }
+
+    return source;
+  }
+
+  /**
+   * Find and download torrent files for sources that don't have them yet
+   * This method prioritizes by movie popularity and ensures fair distribution
+   */
+  public async searchTorrentFilesForSources(): Promise<void> {
+    await this.startPromise;
+
+    if (!this.vpnConnected && this.searchOnlyBehindVpn) {
+      logger.warn('SourceService', 'VPN is not connected, skipping torrent file search');
+      await sleep(2000);
+      return;
+    }
+
+    // 1. Find movies without sources ordered by popularity
+    // 2. Count how many sources each movie has
+    // 3. Prioritize by movie popularity and ensure fair distribution
+    // 4. Get a group of 50 sources that need torrent files
+    logger.info('SourceService', 'Searching torrent files for sources without them');
+
+    const batchSize = Math.max(2, this.magnetService.getAvailableConcurrency());
+    const moviesWithoutTorrents = await this.movieRepository.findMoviesWithoutTorrents(
+      batchSize * 3
+    );
+    const sourcesWithoutTorrents = moviesWithoutTorrents.map(movie => ({
+      id: movie.id,
+      title: movie.title,
+      sources: movie.sources.filter(source => source.torrentFile === null),
+    }));
+    const maxDepth = Math.max(...sourcesWithoutTorrents.map(movie => movie.sources.length));
+    const allSources: {
+      id: number;
+      hash: string;
+      magnetLink: string;
+      quality: string;
+      movieId: number;
+      title: string;
+    }[] = [];
+    for (let depth = 0; depth < maxDepth; depth++) {
+      for (const movie of sourcesWithoutTorrents) {
+        if (movie.sources[depth]) {
+          allSources.push({
+            id: movie.sources[depth].id,
+            title: movie.title,
+            hash: movie.sources[depth].hash,
+            magnetLink: movie.sources[depth].magnetLink,
+            quality: movie.sources[depth].quality,
+            movieId: movie.id,
+          });
+        }
+      }
+      if (allSources.length >= batchSize * 3) {
+        break;
+      }
+    }
+
+    console.log(
+      `Found ${moviesWithoutTorrents.length} movies without torrents to process, and a total of ${allSources.length} sources without torrent files`
+    );
+    const processSource = async (source: (typeof allSources)[number]) => {
+      logger.debug(
+        'SourceService',
+        `Processing source ${source.id} (${source.title}) with hash ${source.hash} and quality ${source.quality}`
+      );
+      await this.searchTorrentFileForSource(source);
+      if (this.magnetService.isIdle()) {
+        // If the magnet service is idle, we can process the next batch
+        const nextSource = allSources.shift();
+        if (nextSource) {
+          processSource(nextSource);
+        }
+      }
+    };
+
+    await Promise.all(allSources.splice(0, batchSize).map(processSource));
+  }
+
+  /**
+   * Search and save torrent file for a specific source
+   */
+  private async searchTorrentFileForSource(source: {
+    id: number;
+    hash: string;
+    magnetLink: string;
+    quality: string;
+    movieId: number;
+  }): Promise<void> {
+    logger.info(
+      'SourceService',
+      `Searching torrent file for source ${source.id} (hash: ${source.hash}, quality: ${source.quality})`
+    );
+
+    try {
+      const torrentFile = await this.magnetService.getTorrent(source.magnetLink, source.hash);
+
+      if (!torrentFile) {
+        logger.warn(
+          'SourceService',
+          `No torrent file found for source ${source.id} (hash: ${source.hash})`
+        );
+        return;
+      }
+
+      // Save the torrent file to the database
+      await this.movieSourceRepository.updateTorrentFile(source.id, torrentFile);
+
+      logger.info(
+        'SourceService',
+        `Successfully saved torrent file for source ${source.id} (hash: ${source.hash}, size: ${torrentFile.length} bytes)`
+      );
+    } catch (error) {
+      logger.error(
+        'SourceService',
+        `Error searching torrent file for source ${source.id} (hash: ${source.hash}):`,
+        error
+      );
+    }
   }
 }

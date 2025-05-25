@@ -19,8 +19,9 @@ import { MediaService } from '@services/media/media.service';
 import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
-import { SourceService } from '@services/source/source.service';
+import { MagnetService, SourceService } from '@services/source';
 import { TrackerService } from '@services/source/tracker.service';
+import { WebTorrentService } from '@services/source/webtorrent.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 import { buildCache } from '@utils/caching';
 
@@ -69,7 +70,9 @@ try {
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
   const trackerService = new TrackerService(cache);
-  const sourceService = new SourceService(db, vpnDetectionService, trackerService);
+  const webtorrentService = new WebTorrentService();
+  const magnetService = new MagnetService(webtorrentService);
+  const sourceService = new SourceService(db, vpnDetectionService, trackerService, magnetService);
 
   await authService.configureUsers();
 
@@ -102,6 +105,12 @@ try {
     'movieSourceSearch',
     0.1, // 0.1 second
     bind(sourceService, 'searchSourcesForMovies')
+  );
+
+  scheduler.scheduleTask(
+    'torrentFileSearch',
+    0.2, // 0.2 second (slightly slower than source search to prioritize finding new sources first)
+    bind(sourceService, 'searchTorrentFilesForSources')
   );
 
   const app = new Hono();
@@ -146,6 +155,7 @@ try {
       tmdb: tmdbApi.status(),
       vpn: vpnDetectionService.status(),
       trackers: trackerService.status(),
+      magnetResolvers: magnetService.getServiceStatistics(),
     });
   });
 

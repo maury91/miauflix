@@ -29,6 +29,26 @@ export const mockedTorrentInstance = {
   ratio: 0,
   torrents: [],
   uploadSpeed: 0,
+  peerId: 'mock-peer-id',
+  peerIdBuffer: Buffer.from('mock-peer-id'),
+  nodeId: 'mock-node-id',
+  nodeIdBuffer: Buffer.from('mock-node-id'),
+  destroyed: false,
+  listening: false,
+  ready: false,
+  torrentPort: 6881,
+  dhtPort: 6881,
+  tracker: false,
+  lsd: false,
+  utPex: false,
+  natUpnp: false,
+  natPmp: false,
+  maxConns: 55,
+  utp: false,
+  seedOutgoingConnections: false,
+  dht: false as const,
+  enableWebSeeds: false,
+  address: jest.fn(),
 };
 
 export const resetMocks = () => {
@@ -39,7 +59,7 @@ export const resetMocks = () => {
   });
 };
 
-export default class WebTorrent {
+export default class WebTorrentMock {
   constructor() {
     return mockedTorrentInstance;
   }

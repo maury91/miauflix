@@ -1,4 +1,6 @@
 import { logger } from '@logger';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import { dirname } from 'path';
 
 /**
  * Response statistics for tracking API rate limit behavior
@@ -42,6 +44,7 @@ export class DynamicRateLimit {
   // Configurable defaults
   private readonly initialWindowSize: number; // ms
   private readonly initialLimit: number; // requests per window
+  private readonly storageFile: string; // Optional file for persistent storage
 
   // Current estimates
   private windowSize: number; // ms
@@ -75,13 +78,16 @@ export class DynamicRateLimit {
    * @param options.windowSize Initial window size in milliseconds (default: 1000)
    * @param options.limit Initial limit within the window (default: 10)
    */
-  constructor(options: { windowSize?: number; limit?: number } = {}) {
+  constructor(options: { windowSize?: number; limit?: number; storageFile?: string } = {}) {
     // Set initial values
     this.initialWindowSize = options.windowSize || 1000; // Default 1 second
     this.initialLimit = options.limit || 10; // Default 10 requests per second
 
     this.windowSize = this.initialWindowSize;
     this.limit = this.initialLimit;
+    this.storageFile = options.storageFile || '';
+
+    this.loadStatus();
 
     logger.debug(
       'DynamicRateLimit',
@@ -182,6 +188,61 @@ export class DynamicRateLimit {
     this.checkForSporadicBehavior();
 
     return wasRateLimited;
+  }
+
+  private async loadStatus() {
+    if (this.storageFile) {
+      try {
+        const data = JSON.parse(await readFile(this.storageFile, 'utf-8'));
+        if (data) {
+          this.windowSize = data.windowSize || this.initialWindowSize;
+          this.limit = data.limit || this.initialLimit;
+          this.responseHistory = data.responseHistory || [];
+          this.rateLimitDetections = data.rateLimitDetections || [];
+          this.consecutiveSuccess = data.consecutiveSuccess || 0;
+          this.consecutiveFailures = data.consecutiveFailures || 0;
+          this.totalRequests = data.totalRequests || 0;
+          this.rateLimitedRequests = data.rateLimitedRequests || 0;
+          this.lastRateLimitDetected = data.lastRateLimitDetected || null;
+          this.lastSuccessfulRequest = data.lastSuccessfulRequest || null;
+          this.iterations = data.iterations || 0;
+          this.confidence = data.confidence || 0.1;
+          logger.debug(
+            'DynamicRateLimit',
+            `Loaded status from file: window=${this.windowSize}ms, limit=${this.limit} requests`
+          );
+        }
+      } catch (error) {
+        logger.error('DynamicRateLimit', 'Failed to load status from file:', error);
+      }
+    }
+  }
+
+  private async saveStatus() {
+    if (this.storageFile) {
+      try {
+        const data = {
+          windowSize: this.windowSize,
+          limit: this.limit,
+          responseHistory: this.responseHistory,
+          rateLimitDetections: this.rateLimitDetections,
+          consecutiveSuccess: this.consecutiveSuccess,
+          consecutiveFailures: this.consecutiveFailures,
+          totalRequests: this.totalRequests,
+          rateLimitedRequests: this.rateLimitedRequests,
+          lastRateLimitDetected: this.lastRateLimitDetected,
+          lastSuccessfulRequest: this.lastSuccessfulRequest,
+          iterations: this.iterations,
+          confidence: this.confidence,
+        };
+
+        await mkdir(dirname(this.storageFile), { recursive: true });
+        await writeFile(this.storageFile, JSON.stringify(data, null, 2), 'utf-8');
+        logger.debug('DynamicRateLimit', 'Saved status to file');
+      } catch (error) {
+        logger.error('DynamicRateLimit', 'Failed to save status to file:', error);
+      }
+    }
   }
 
   /**
@@ -303,13 +364,15 @@ export class DynamicRateLimit {
     }
 
     // Sometimes rate limits appear as other status codes
-    if (response.status === 403 || response.status === 503) {
+    if (response.status === 403 || response.status === 503 || response.status === 400) {
       // Look for rate limit keywords in the response body or headers
       const contentType = response.headers.get('content-type') || '';
       if (contentType.includes('json') || contentType.includes('text')) {
         // We'd check the body here, but since Response body can only be consumed once,
         // we'll rely on status codes and headers instead for now
       }
+
+      return true;
     }
 
     // Extract headers to check them
@@ -526,6 +589,7 @@ export class DynamicRateLimit {
     }
 
     this.checkForSporadicBehavior();
+    this.saveStatus();
   }
 
   /**

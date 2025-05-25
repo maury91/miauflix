@@ -34,7 +34,7 @@
       "@__test-utils__/*": ["src/__test-utils__/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/types/webtorrent.d.ts"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node",

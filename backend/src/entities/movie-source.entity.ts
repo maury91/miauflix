@@ -53,6 +53,12 @@ export class MovieSource {
   @Column()
   source: string; // Which tracker provided this source
 
+  @Column({
+    type: 'blob',
+    nullable: true,
+  })
+  torrentFile?: Buffer; // The actual torrent file data
+
   // Timestamps
   @CreateDateColumn()
   createdAt: Date;
