@@ -18,10 +18,19 @@
   },
   "devDependencies": {
     "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
     "typescript": "^4.5.0"
   },
   "type": "module",
+  "lint-staged": {
+    "*.{js,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ],
+    "backend/src/**/*.ts": [
+      "npm run lint:fix"
+    ]
+  },
   "workspaces": [
     "frontend",
     "backend"
