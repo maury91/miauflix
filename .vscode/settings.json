@@ -16,6 +16,7 @@
   "jest.rootPath": "backend",
   "prettier.requireConfig": true,
   "npm.packageManager": "npm",
+  "jestrunner.jestCommand": "npm run test --",
   "terminal.integrated.defaultProfile.linux": "zsh",
   "git.enableSmartCommit": true
 }

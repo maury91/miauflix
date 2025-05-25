@@ -10,6 +10,7 @@ import {
   type VariableInfo,
 } from '@mytypes/configuration';
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
+import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
 import { ytsConfigurationDefinition } from '@trackers/yts/yts.configuration';
@@ -62,6 +63,7 @@ export const services = {
   YTS: ytsConfigurationDefinition,
   JWT: jwtConfigurationDefinition,
   SERVER: serverConfigurationDefinition,
+  SOURCE: sourceConfigurationDefinition,
 };
 
 export type Variables = {

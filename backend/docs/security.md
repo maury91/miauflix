@@ -1,16 +1,32 @@
 # Security System
 
-The backend uses a secure authentication system with the following features:
+The backend implements a comprehensive security system with multiple layers of protection:
 
 ## Security Features
 
+### Authentication & Authorization
+
 - **Whitelist Approach**: All routes are protected by default unless explicitly whitelisted
-- **JWT-based Authentication**: Secure token-based authentication
+- **JWT-based Authentication**: Secure token-based authentication using industry-standard implementation
 - **Refresh Token Rotation**: Implements secure token refresh mechanism
 - **Role-based Access Control**: Supports different user roles (USER, ADMIN)
 - **Password Hashing**: Uses bcrypt for secure password storage
 - **Token Expiration**: Access tokens expire after 15 minutes, refresh tokens after 7 days
 - **Admin-Only User Creation**: Only administrators can create new user accounts
+
+### Security Monitoring & Detection
+
+- **VPN Detection**: Integrated NordVPN detection service for user monitoring
+- **Audit Logging**: Comprehensive audit trail system tracking all security events
+- **Rate Limiting**: Protection against brute force and DoS attacks
+- **Security Event Logging**: Detailed logging of authentication attempts, authorization failures, and suspicious activities
+
+### Infrastructure Security
+
+- **Input Sanitization**: Comprehensive input validation and sanitization
+- **CORS Configuration**: Properly configured Cross-Origin Resource Sharing
+- **Error Handling**: Secure error handling that doesn't leak sensitive information
+- **Session Management**: Secure token-based session management
 
 ## Authentication Flow
 
@@ -63,3 +79,44 @@ The authentication system uses industry-standard JWT handling, which provides:
 - **Fine-grained Control**: Detailed control over token claims and headers
 - **Type Safety**: Excellent TypeScript support
 - **Performance**: Optimized for performance with minimal dependencies
+
+## VPN Detection
+
+The system includes VPN detection capabilities:
+
+- **NordVPN Detection**: Monitors user connections for NordVPN usage
+- **IP Geolocation**: Uses IP geolocation services to detect VPN usage
+- **Automated Monitoring**: Continuous monitoring of user connections
+- **Security Logging**: All VPN detection events are logged for security analysis
+
+## Audit Logging
+
+Comprehensive audit logging system tracks:
+
+- **Authentication Events**: Login attempts, token refresh, logout events
+- **Authorization Failures**: Failed access attempts to protected resources
+- **User Management**: User creation, role changes, account modifications
+- **Security Events**: VPN detection, suspicious activity, rate limit violations
+- **System Events**: Configuration changes, service starts/stops
+- **API Access**: All API endpoint access with user context
+
+### Audit Log Structure
+
+Each audit log entry includes:
+
+- Timestamp
+- User ID (if authenticated)
+- Event type
+- Event details
+- IP address
+- User agent
+- Request metadata
+
+## Rate Limiting
+
+Protection against abuse:
+
+- **Authentication Endpoints**: Special rate limiting for login/register endpoints
+- **API Endpoints**: General rate limiting for all API access
+- **User-specific Limits**: Different limits based on user roles
+- **IP-based Limits**: Protection against distributed attacks

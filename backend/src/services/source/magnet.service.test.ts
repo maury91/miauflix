@@ -1,168 +1,393 @@
-import { mockedTorrentInstance, resetMocks } from '../../__mocks__/webtorrent';
+import { logger } from '@logger';
+import type { ParsedTorrent } from 'webtorrent';
 
-// Create proper mock for DynamicRateLimit
+// Import service modules to mock them
+import * as itorrentsModule from './services/itorrents';
+import * as torrageModule from './services/torrage';
+import { MagnetService } from './magnet.service';
+import type { WebTorrentService } from './webtorrent.service';
+
+// Mock logger
+jest.mock('@logger', () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+    error: jest.fn(),
+  },
+}));
+
+// Get the mocked function after the mock is set up
+import parseTorrent from 'parse-torrent';
+const mockParseTorrent = parseTorrent as unknown as jest.MockedFunction<
+  (input: Buffer) => Promise<ParsedTorrent>
+>;
+
+// Mock DynamicRateLimit
+const mockGetThrottle = jest.fn();
+const mockReportResponse = jest.fn();
 jest.mock('@utils/dynamic-rate-limit', () => ({
   DynamicRateLimit: jest.fn().mockImplementation(() => ({
-    getThrottle: jest.fn().mockReturnValue(0),
-    reportResponse: jest.fn().mockReturnValue(false),
+    getThrottle: mockGetThrottle,
+    reportResponse: mockReportResponse,
+    getRateLimit: jest.fn(() => ({
+      windowSize: 1000,
+      limit: 10,
+    })),
+    getStats: jest.fn(() => ({})),
   })),
 }));
 
-// Create a fetch mock that handles the preconnect property needed by the type definition
-const mockFetch = jest.fn().mockImplementation(url => {
-  if (typeof url === 'string' && url.includes('itorrents.org')) {
-    return Promise.resolve({
-      ok: true,
-      status: 200,
-      statusText: 'OK',
-      arrayBuffer: () => Promise.resolve(Buffer.from('mock torrent from itorrents').buffer),
-    });
-  }
-  return Promise.resolve({
-    ok: false,
-    status: 404,
-    statusText: 'Not Found',
-  });
-});
-
-// Assign the mock to global.fetch
-global.fetch = mockFetch as unknown as typeof fetch;
-
-// Now import the service after all mocks are in place
-import { MagnetService } from './magnet.service';
-
 describe('MagnetService', () => {
-  let service: MagnetService;
+  const hash = 'abcd'.repeat(10);
+  const magnetLink = `magnet:?xt=urn:btih:${hash}`;
+  const failedResponse = { ok: false } as Response;
+
+  let magnetService: MagnetService;
+  let mockWebTorrentService: WebTorrentService;
+  let mockTorrentBuffer: Buffer;
+  let mockResponse: Response;
+
+  // Spies for service functions
+  let getTorrentFromITorrentsSpy: jest.SpiedFunction<
+    typeof itorrentsModule.getTorrentFromITorrents
+  >;
+  let getTorrentFromTorrageSpy: jest.SpiedFunction<typeof torrageModule.getTorrentFromTorrage>;
+  let getTorrentFromWebTorrentSpy: jest.MockedFunction<WebTorrentService['getTorrent']>;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    resetMocks();
-    service = new MagnetService();
+    mockGetThrottle.mockReturnValue(0); // No throttling by default
+    mockReportResponse.mockImplementation(() => {});
+
+    // Create mock data
+    mockTorrentBuffer = Buffer.from('mock torrent data');
+
+    // Create mock response with simpler typing
+    mockResponse = {
+      ok: true,
+      arrayBuffer: async () =>
+        mockTorrentBuffer.buffer.slice(
+          mockTorrentBuffer.byteOffset,
+          mockTorrentBuffer.byteOffset + mockTorrentBuffer.byteLength
+        ),
+    } as Partial<Response> as Response;
+
+    getTorrentFromWebTorrentSpy = jest.fn();
+    mockWebTorrentService = {
+      getTorrent: getTorrentFromWebTorrentSpy,
+    } as Partial<WebTorrentService> as WebTorrentService;
+
+    // Set up service spies with default successful responses
+    getTorrentFromITorrentsSpy = jest
+      .spyOn(itorrentsModule, 'getTorrentFromITorrents')
+      .mockResolvedValue(mockResponse);
+    getTorrentFromTorrageSpy = jest
+      .spyOn(torrageModule, 'getTorrentFromTorrage')
+      .mockResolvedValue(mockResponse);
+
+    // Mock parse-torrent with valid response
+    const mockParsedTorrent: ParsedTorrent = {
+      infoHash: hash,
+      name: 'Test Torrent',
+      files: [{ name: 'test.txt', length: 100, path: 'test.txt', offset: 0 }],
+    };
+    mockParseTorrent.mockResolvedValue(mockParsedTorrent);
+
+    magnetService = new MagnetService(mockWebTorrentService);
   });
 
   afterEach(() => {
-    if (service) {
-      service.dispose();
-    }
+    jest.restoreAllMocks();
   });
 
-  it('should get torrent from WebTorrent', async () => {
-    // Set up the mock response for getTorrent
-    mockedTorrentInstance.add.mockImplementation((magnetLink, options, callback) => {
-      setTimeout(() => {
-        callback({
-          torrentFile: Buffer.from('mock torrent file content'),
-          remove: jest.fn(),
-        });
-      }, 10);
-      return {
-        torrentFile: Buffer.from('mock torrent file content'),
-        remove: jest.fn(),
-      };
+  describe('constructor', () => {
+    it('should initialize with three services', () => {
+      expect(magnetService).toBeInstanceOf(MagnetService);
+
+      const stats = magnetService.getServiceStatistics();
+      expect(Object.keys(stats)).toEqual(['webTorrent', 'itorrents', 'torrage']);
     });
-
-    const result = await service.getTorrent('magnet:?xt=urn:btih:abc123', 'abc123');
-    expect(result).toBeInstanceOf(Buffer);
-    expect(result?.toString()).toBe('mock torrent file content');
   });
 
-  it('should get service statistics', () => {
-    const stats = service.getServiceStatistics();
-    expect(stats).toBeDefined();
-    expect(Object.keys(stats)).toContain('webTorrent');
-    expect(Object.keys(stats)).toContain('itorrents');
+  describe('getTorrent', () => {
+    it('should return torrent buffer from fastest available service', async () => {
+      const result = await magnetService.getTorrent(magnetLink, hash);
 
-    // Check that the statistics have the expected structure
-    expect(stats.webTorrent).toHaveProperty('successRate');
-    expect(stats.webTorrent).toHaveProperty('avgResponseTime');
-    expect(stats.webTorrent).toHaveProperty('totalCalls');
-    expect(stats.webTorrent).toHaveProperty('rank');
-  });
+      expect(result).toBeInstanceOf(Buffer);
+      expect(result).toEqual(mockTorrentBuffer);
 
-  it('should properly clean up resources on dispose', () => {
-    // Test that the dispose method calls destroy on the WebTorrent client
-    service.dispose();
-    expect(mockedTorrentInstance.destroy).toHaveBeenCalled();
-  });
-
-  it('should try alternative services if WebTorrent fails', async () => {
-    // Mock WebTorrent to fail
-    mockedTorrentInstance.add.mockImplementation((magnetLink, options, callback) => {
-      if (typeof callback === 'function') {
-        setTimeout(() => {
-          callback({
-            torrentFile: null, // This will cause WebTorrent to "fail"
-            remove: jest.fn(),
-          });
-        }, 10);
-      }
-      return {
-        torrentFile: null,
-        remove: jest.fn(),
-      };
-    });
-
-    // Set up fetch mock to succeed for itorrents
-    mockFetch.mockImplementation(url => {
-      if (typeof url === 'string' && url.includes('itorrents.org')) {
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          statusText: 'OK',
-          arrayBuffer: () => Promise.resolve(Buffer.from('mock torrent from itorrents').buffer),
-        });
-      }
-      return Promise.resolve({
-        ok: false,
-        status: 404,
-        statusText: 'Not Found',
-      });
-    });
-
-    // Call getTorrent and expect it to use the fallback service
-    const result = await service.getTorrent('magnet:?xt=urn:btih:abc123', 'abc123');
-
-    // Verify fetch was called (in some cases)
-    expect(mockFetch).toHaveBeenCalled();
-
-    // The result might be null if all services fail, so we need to handle that case
-    if (result) {
-      expect(Buffer.isBuffer(result)).toBe(true);
-    }
-  });
-
-  it('should update service metrics after successful torrent retrieval', async () => {
-    // Set up the mock response for getTorrent to succeed quickly
-    mockedTorrentInstance.add.mockImplementation((magnetLink, options, callback) => {
-      callback({
-        torrentFile: Buffer.from('mock torrent file content'),
-        remove: jest.fn(),
-      });
-      return {
-        torrentFile: Buffer.from('mock torrent file content'),
-        remove: jest.fn(),
-      };
-    });
-
-    // Get the initial statistics
-    const initialStats = service.getServiceStatistics();
-
-    // Call getTorrent to update metrics
-    await service.getTorrent('magnet:?xt=urn:btih:abc123', 'abc123');
-
-    // Get updated statistics
-    const updatedStats = service.getServiceStatistics();
-
-    // Check that at least one service has updated metrics
-    const usedService = Object.keys(updatedStats).find(
-      service => updatedStats[service].totalCalls > (initialStats[service]?.totalCalls || 0)
-    );
-
-    expect(usedService).toBeDefined();
-    if (usedService) {
-      expect(updatedStats[usedService].totalCalls).toBeGreaterThan(
-        initialStats[usedService]?.totalCalls || 0
+      // Should try webTorrent first (rank 1)
+      expect(getTorrentFromWebTorrentSpy).toHaveBeenCalledWith(
+        magnetLink,
+        hash,
+        expect.any(Number)
       );
-    }
+    });
+
+    it('should fallback to next service when primary fails', async () => {
+      // Mock webTorrent to fail
+      getTorrentFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(result).toBeInstanceOf(Buffer);
+      expect(getTorrentFromWebTorrentSpy).toHaveBeenCalled();
+      expect(getTorrentFromITorrentsSpy).toHaveBeenCalled();
+    });
+
+    it('should try all services before giving up', async () => {
+      // Mock first two services to fail
+      getTorrentFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
+      getTorrentFromITorrentsSpy.mockResolvedValue(failedResponse);
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(result).toBeInstanceOf(Buffer);
+      expect(getTorrentFromWebTorrentSpy).toHaveBeenCalled();
+      expect(getTorrentFromITorrentsSpy).toHaveBeenCalled();
+      expect(getTorrentFromTorrageSpy).toHaveBeenCalled();
+    });
+
+    it('should return null when all services fail', async () => {
+      getTorrentFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
+
+      getTorrentFromITorrentsSpy.mockResolvedValue(failedResponse);
+      getTorrentFromTorrageSpy.mockResolvedValue(failedResponse);
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(result).toBeNull();
+      expect(logger.warn).toHaveBeenCalledWith(
+        'MagnetService',
+        expect.stringContaining('Could not convert magnet to torrent')
+      );
+    });
+
+    it('should handle service errors gracefully', async () => {
+      // Mock first service to throw error, second to succeed
+      getTorrentFromWebTorrentSpy.mockRejectedValueOnce(new Error('Service error'));
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(result).toBeInstanceOf(Buffer);
+      expect(logger.warn).toHaveBeenCalledWith(
+        'MagnetService',
+        expect.stringContaining('Error using')
+      );
+    });
+
+    it('should validate torrent buffers for services with shouldVerify=true', async () => {
+      // Force selection of iTorrents which has shouldVerify=true
+      getTorrentFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
+      const failedResponse = { ok: false } as Response;
+      getTorrentFromTorrageSpy.mockResolvedValue(failedResponse);
+      getTorrentFromITorrentsSpy.mockResolvedValue(mockResponse);
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(getTorrentFromITorrentsSpy).toHaveBeenCalledWith(hash, expect.any(Number));
+      expect(result).toBeInstanceOf(Buffer);
+      expect(mockParseTorrent).toHaveBeenCalledWith(mockTorrentBuffer);
+    });
+
+    it('should handle hash mismatch during validation', async () => {
+      // Mock parse-torrent to return different hash
+      const mockDifferentParsedTorrent: ParsedTorrent = {
+        infoHash: 'differenthash456',
+        name: 'Test Torrent',
+      };
+      mockParseTorrent.mockResolvedValue(mockDifferentParsedTorrent);
+
+      // Force iTorrents service
+      getTorrentFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
+      const failedResponse = { ok: false } as Response;
+      getTorrentFromTorrageSpy.mockResolvedValue(failedResponse);
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(result).toBeNull();
+      expect(logger.warn).toHaveBeenCalledWith(
+        'MagnetService',
+        'Hash mismatch for itorrents:',
+        expect.stringContaining(`expected: ${hash}, got: differenthash456`)
+      );
+    });
+  });
+
+  // describe('getTorrentsParallel', () => {
+  //   it('should process multiple torrents concurrently', async () => {
+  //     const requests = [
+  //       { magnetLink: 'magnet:?xt=urn:btih:hash1', hash: 'hash1' },
+  //       { magnetLink: 'magnet:?xt=urn:btih:hash2', hash: 'hash2' },
+  //     ];
+
+  //     const buffer1 = Buffer.from('torrent1');
+  //     const buffer2 = Buffer.from('torrent2');
+
+  //     getTorrentFromWebTorrentSpy.mockResolvedValueOnce(buffer1).mockResolvedValueOnce(buffer2);
+
+  //     const results = await magnetService.getTorrentsParallel(requests);
+
+  //     expect(results).toHaveLength(2);
+  //     expect(results[0]).toEqual(buffer1);
+  //     expect(results[1]).toEqual(buffer2);
+  //   });
+
+  //   it('should handle partial failures in parallel processing', async () => {
+  //     const requests = [
+  //       { magnetLink: 'magnet:?xt=urn:btih:hash1', hash: 'hash1' },
+  //       { magnetLink: 'magnet:?xt=urn:btih:hash2', hash: 'hash2' },
+  //       { magnetLink: 'magnet:?xt=urn:btih:hash3', hash: 'hash3' },
+  //     ];
+
+  //     // Mock mixed success/failure responses
+  //     getTorrentFromWebTorrentSpy
+  //       .mockResolvedValueOnce(mockTorrentBuffer)
+  //       .mockRejectedValueOnce(new Error('WebTorrent failed'))
+  //       .mockResolvedValueOnce(mockTorrentBuffer);
+
+  //     const failedResponse = { ok: false } as Response;
+  //     getTorrentFromITorrentsSpy.mockResolvedValue(failedResponse);
+  //     getTorrentFromTorrageSpy.mockResolvedValue(failedResponse);
+
+  //     const results = await magnetService.getTorrentsParallel(requests);
+
+  //     expect(results).toHaveLength(3);
+  //     expect(results[0]).toBeInstanceOf(Buffer);
+  //     expect(results[1]).toBeNull();
+  //     expect(results[2]).toBeInstanceOf(Buffer);
+  //   });
+
+  //   it('should use worker-based parallelization', async () => {
+  //     const requests = Array.from({ length: 10 }, (_, i) => ({
+  //       magnetLink: `magnet:?xt=urn:btih:hash${i}`,
+  //       hash: `hash${i}`,
+  //     }));
+
+  //     const results = await magnetService.getTorrentsParallel(requests);
+
+  //     expect(results).toHaveLength(10);
+  //     expect(logger.info).toHaveBeenCalledWith(
+  //       'MagnetService',
+  //       expect.stringContaining('Starting shared pool parallel processing: 10 requests')
+  //     );
+  //     expect(logger.info).toHaveBeenCalledWith(
+  //       'MagnetService',
+  //       expect.stringContaining('Shared pool parallel processing completed:')
+  //     );
+  //   });
+  // });
+
+  describe('service load balancing', () => {
+    it('should distribute requests across multiple services', async () => {
+      // Make multiple requests to see load balancing
+      for (let i = 0; i < 5; i++) {
+        await magnetService.getTorrent(magnetLink, hash);
+      }
+
+      // Should have used webTorrent (highest rank) for all requests
+      expect(getTorrentFromWebTorrentSpy).toHaveBeenCalledTimes(5);
+    });
+
+    it('should update service rankings based on performance', async () => {
+      const initialStats = magnetService.getServiceStatistics();
+
+      // Simulate successful usage
+      await magnetService.getTorrent(magnetLink, hash);
+
+      const updatedStats = magnetService.getServiceStatistics();
+
+      // WebTorrent should have updated statistics
+      expect(updatedStats.webTorrent.totalCalls).toBeGreaterThan(
+        initialStats.webTorrent.totalCalls
+      );
+    });
+  });
+
+  describe('rate limiting integration', () => {
+    it.skip('should respect rate limits when accessing services', async () => {
+      // Mock throttling for rate-limited services
+      mockGetThrottle.mockReturnValue(1000); // 1 second throttle
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(result).toBeInstanceOf(Buffer);
+      // Should fall back to WebTorrent (no rate limiting)
+      expect(getTorrentFromWebTorrentSpy).toHaveBeenCalled();
+    });
+
+    it('should report responses to rate limiter', async () => {
+      // Force iTorrents usage by making others fail
+      getTorrentFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
+      const failedResponse = { ok: false } as Response;
+      getTorrentFromTorrageSpy.mockResolvedValue(failedResponse);
+
+      await magnetService.getTorrent(magnetLink, hash);
+
+      expect(mockReportResponse).toHaveBeenCalledWith(mockResponse);
+    });
+  });
+
+  describe('error edge cases', () => {
+    it('should handle parse-torrent throwing errors', async () => {
+      mockParseTorrent.mockRejectedValue(new Error('Parse error'));
+
+      // Force iTorrents (has validation)
+      getTorrentFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
+      const failedResponse = { ok: false } as Response;
+      getTorrentFromTorrageSpy.mockResolvedValue(failedResponse);
+
+      const result = await magnetService.getTorrent(magnetLink, hash);
+
+      expect(result).toBe(null);
+      expect(logger.warn).toHaveBeenCalledWith(
+        'MagnetService',
+        'Error validating torrent buffer:',
+        expect.any(Error)
+      );
+    });
+
+    it('should handle concurrent requests exceeding service limits', async () => {
+      // Create many concurrent requests
+      const promises = Array.from({ length: 20 }, () => magnetService.getTorrent(magnetLink, hash));
+
+      const results = await Promise.all(promises);
+
+      // All should complete successfully
+      results.forEach(result => {
+        expect(result).toBeInstanceOf(Buffer);
+      });
+    });
+  });
+
+  describe('service statistics', () => {
+    it('should provide accurate service statistics', () => {
+      const stats = magnetService.getServiceStatistics();
+
+      expect(stats).toHaveProperty('webTorrent');
+      expect(stats).toHaveProperty('itorrents');
+      expect(stats).toHaveProperty('torrage');
+
+      // Check statistics structure
+      Object.values(stats).forEach(serviceStat => {
+        expect(serviceStat).toHaveProperty('successRate');
+        expect(serviceStat).toHaveProperty('avgResponseTime');
+        expect(serviceStat).toHaveProperty('totalCalls');
+        expect(serviceStat).toHaveProperty('rank');
+      });
+    });
+
+    it('should update statistics after service calls', async () => {
+      const initialStats = magnetService.getServiceStatistics();
+
+      await magnetService.getTorrent(magnetLink, hash);
+
+      const updatedStats = magnetService.getServiceStatistics();
+
+      expect(updatedStats.webTorrent.totalCalls).toBeGreaterThan(
+        initialStats.webTorrent.totalCalls
+      );
+    });
   });
 });

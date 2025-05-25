@@ -1,5 +1,5 @@
 import type { DataSource, Repository } from 'typeorm';
-import { IsNull, Not } from 'typeorm';
+import { In, IsNull, Not } from 'typeorm';
 
 import type { Genre } from '@entities/genre.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
@@ -94,6 +94,53 @@ export class MovieRepository {
         popularity: 'DESC',
       },
       take: limit,
+    });
+  }
+
+  async findMoviesWithoutTorrents(
+    limit: number = 10
+  ): Promise<(Movie & { sourcesCount: number; missingCount: number })[]> {
+    // Get movies that have sources without torrent files
+    // This query prioritizes movies based on:
+    // - Movie popularity
+    // - Number of sources for the movie
+    // - Number of sources with missing torrent files
+
+    // First, find movie IDs with their source counts and missing torrent counts
+    const results = await this.movieRepository
+      .createQueryBuilder('movie')
+      .innerJoin('movie.sources', 'source')
+      .select('movie.id', 'id')
+      .addSelect('movie.popularity', 'popularity')
+      .addSelect('COUNT(source.id)', 'sources')
+      .addSelect('SUM(CASE WHEN source.torrentFile IS NULL THEN 1 ELSE 0 END)', 'missing')
+      .where('movie.sourceSearched = true')
+      .groupBy('movie.id')
+      .addGroupBy('movie.popularity')
+      .having('SUM(CASE WHEN source.torrentFile IS NULL THEN 1 ELSE 0 END) > 0')
+      .orderBy('"missing"/"sources"', 'DESC')
+      .addOrderBy('movie.popularity', 'DESC')
+      .limit(limit)
+      .getRawMany<{ id: number; popularity: number; sources: number; missing: number }>();
+
+    if (results.length === 0) {
+      return [];
+    }
+
+    // Map the results to Movie entities
+    const movieIds = results.map(result => result.id);
+    const movies = await this.movieRepository.find({
+      where: {
+        id: In(movieIds),
+      },
+      relations: {
+        sources: true,
+      },
+    });
+
+    return movies.map(movie => {
+      const result = results.find(r => r.id === movie.id) || { sources: 0, missing: 0 };
+      return { ...movie, sourcesCount: result.sources, missingCount: result.missing };
     });
   }
 
