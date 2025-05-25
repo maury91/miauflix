@@ -50,4 +50,18 @@ export class MovieSourceRepository {
   async deleteByMovieId(movieId: number): Promise<void> {
     await this.movieSourceRepository.delete({ movieId });
   }
+
+  /**
+   * Update a movie source with torrent file data
+   */
+  async updateTorrentFile(sourceId: number, torrentFile: Buffer): Promise<void> {
+    await this.movieSourceRepository.update(sourceId, { torrentFile });
+  }
+
+  /**
+   * Find a movie source by its ID
+   */
+  async findById(sourceId: number): Promise<MovieSource | null> {
+    return this.movieSourceRepository.findOne({ where: { id: sourceId } });
+  }
 }
