@@ -11,6 +11,33 @@ The backend includes an assisted configuration system that helps manage environm
 - **Default Values**: Provides sensible defaults for optional configuration
 - **Error Reporting**: Clear error messages when configuration is missing or invalid
 - **.env File Generation**: Automatically saves configuration to .env file
+- **Command Line Configuration Flags**: Force configuration prompts with `--config` and `--only-config` flags
+
+## Command Line Options
+
+### `--config` Flag
+
+Forces the configuration prompts to run for all services, even if they are already configured:
+
+```bash
+npm run config
+```
+
+This is useful when you want to reconfigure existing settings or update configuration values.
+
+### `--only-config` Flag
+
+Same as `--config` but exits after configuration is complete without starting the server:
+
+```bash
+npm run config-only
+```
+
+This is useful for:
+
+- Setting up configuration in deployment scripts
+- Updating configuration without starting the server
+- Initial setup workflows
 
 ## How It Works
 

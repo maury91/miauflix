@@ -1,6 +1,13 @@
 import { ENV } from '@constants';
 
-import type { TraktList, TraktListItem, TraktPagination } from './trakt.types';
+import type {
+  DeviceCodeResponse,
+  DeviceTokenResponse,
+  TraktList,
+  TraktListItem,
+  TraktPagination,
+  UserProfileResponse,
+} from './trakt.types';
 
 interface RateLimitInfo {
   name: 'AUTHED_API_GET_LIMIT' | 'AUTHED_API_POST_LIMIT' | 'UNAUTHED_API_GET_LIMIT';
@@ -13,6 +20,7 @@ interface RateLimitInfo {
 
 export class TraktApi {
   private readonly clientId = ENV('TRAKT_CLIENT_ID');
+  private readonly clientSecret = ENV('TRAKT_CLIENT_SECRET');
   private readonly apiUrl = ENV('TRAKT_API_URL');
   private rateLimits: Partial<Record<RateLimitInfo['name'], RateLimitInfo>> = {};
   private staticLimits: Record<RateLimitInfo['name'], [number, number]> = {
@@ -25,6 +33,9 @@ export class TraktApi {
   constructor() {
     if (!this.clientId) {
       throw new Error('TRAKT_CLIENT_ID is not set');
+    }
+    if (!this.clientSecret) {
+      throw new Error('TRAKT_CLIENT_SECRET is not set');
     }
   }
 
@@ -150,5 +161,92 @@ export class TraktApi {
     const url = `${this.apiUrl}/lists/${listId}/items`;
     const response = await this.request<TraktListItem>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response;
+  }
+
+  public async getDeviceCode() {
+    const response = await fetch(`${this.apiUrl}/oauth/device/code`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: this.clientId,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = (await response.json()) as DeviceCodeResponse;
+    return {
+      codeUrl: `${data.verification_url}/${data.user_code}`,
+      deviceCode: data.device_code,
+      expiresIn: data.expires_in,
+      interval: data.interval,
+      userCode: data.user_code,
+    };
+  }
+
+  public async checkDeviceCode(deviceCode: string): Promise<DeviceTokenResponse> {
+    const response = await fetch(`${this.apiUrl}/oauth/device/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code: deviceCode,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+      }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 400) {
+        const error = await response.text();
+        throw new Error(error);
+      }
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return (await response.json()) as DeviceTokenResponse;
+  }
+
+  public async getProfile(accessToken: string, slug = 'me'): Promise<UserProfileResponse> {
+    const response = await fetch(`${this.apiUrl}/users/${slug}`, {
+      headers: {
+        'trakt-api-version': '2',
+        'trakt-api-key': this.clientId,
+        Authorization: `bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return (await response.json()) as UserProfileResponse;
+  }
+
+  public async refreshToken(refreshTokenValue: string): Promise<DeviceTokenResponse> {
+    const response = await fetch(`${this.apiUrl}/oauth/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        refresh_token: refreshTokenValue,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        grant_type: 'refresh_token',
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return (await response.json()) as DeviceTokenResponse;
   }
 }

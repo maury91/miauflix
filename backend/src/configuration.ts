@@ -258,33 +258,44 @@ async function saveEnvironmentVariables(envValues: Record<string, string>): Prom
 /**
  * Main function to prompt for missing environment variables
  */
-export async function validateConfiguration(): Promise<void> {
+export async function validateConfiguration(
+  options: { forceReconfigure?: boolean; configOnly?: boolean } = {}
+): Promise<void> {
+  const { forceReconfigure = false, configOnly = false } = options;
   const servicesNeedingConfiguration = new Set<ServiceKey>();
   const changedEnvVariables = new Set<string>();
   const autoConfiguredVars = new Set<string>();
 
-  for (const [serviceKey, service] of Object.entries(services)) {
-    const missingRequiredVars = Object.entries(service.variables)
-      .filter(([varName, varInfo]) => {
-        // Auto-configure variables with skipUserInteraction set to true
-        if ('skipUserInteraction' in varInfo && varInfo.skipUserInteraction === true) {
-          if (!process.env[varName]) {
-            process.env[varName] = varInfo.defaultValue;
-            autoConfiguredVars.add(varName);
-            changedEnvVariables.add(varName);
-          }
-          return false; // Cause it's auto-configured is not missing
-        }
-        return varInfo.required && !process.env[varName];
-      })
-      .map(([varName]) => varName);
-
-    if (missingRequiredVars.length > 0) {
+  // If forceReconfigure is true, add all services to be configured
+  if (forceReconfigure) {
+    Object.keys(services).forEach(serviceKey => {
       servicesNeedingConfiguration.add(serviceKey as ServiceKey);
+    });
+  } else {
+    // Normal logic: only add services with missing required variables
+    for (const [serviceKey, service] of Object.entries(services)) {
+      const missingRequiredVars = Object.entries(service.variables)
+        .filter(([varName, varInfo]) => {
+          // Auto-configure variables with skipUserInteraction set to true
+          if ('skipUserInteraction' in varInfo && varInfo.skipUserInteraction === true) {
+            if (!process.env[varName]) {
+              process.env[varName] = varInfo.defaultValue;
+              autoConfiguredVars.add(varName);
+              changedEnvVariables.add(varName);
+            }
+            return false; // Cause it's auto-configured is not missing
+          }
+          return varInfo.required && !process.env[varName];
+        })
+        .map(([varName]) => varName);
+
+      if (missingRequiredVars.length > 0) {
+        servicesNeedingConfiguration.add(serviceKey as ServiceKey);
+      }
     }
   }
 
-  if (servicesNeedingConfiguration.size === 0) {
+  if (servicesNeedingConfiguration.size === 0 && !forceReconfigure) {
     console.log(chalk.cyan('Self testing...'));
 
     const invalidServices = await validateExistingConfiguration();
@@ -303,14 +314,18 @@ export async function validateConfiguration(): Promise<void> {
     }
   }
 
-  if (servicesNeedingConfiguration.size > 0) {
+  if (servicesNeedingConfiguration.size > 0 || forceReconfigure) {
     if (isNonInteractiveEnvironment()) {
       throw new Error(
         'Configuration is incomplete and cannot be completed in a non-interactive environment. Please set the required environment variables.'
       );
     }
 
-    console.log(chalk.yellow.bold('⚠️  Missing required environment variables!'));
+    if (forceReconfigure) {
+      console.log(chalk.yellow.bold('🔄 Reconfiguring all services as requested.'));
+    } else {
+      console.log(chalk.yellow.bold('⚠️  Missing required environment variables!'));
+    }
     console.log(chalk.cyan("Let's set up your configuration for each service."));
 
     for (const serviceKey of servicesNeedingConfiguration) {
@@ -326,8 +341,8 @@ export async function validateConfiguration(): Promise<void> {
         );
       await configureService(service);
 
-      for (const [varName, value] of Object.entries(service.variables)) {
-        if (value.required && process.env[varName] !== envVariablesBefore[varName]) {
+      for (const [varName] of Object.entries(service.variables)) {
+        if (process.env[varName] !== envVariablesBefore[varName]) {
           changedEnvVariables.add(varName);
         }
       }
@@ -365,6 +380,13 @@ export async function validateConfiguration(): Promise<void> {
       );
       await saveEnvironmentVariables(envValues);
     }
+  }
+
+  // If configOnly is true, exit the process after configuration
+  if (configOnly) {
+    console.log(chalk.green.bold('✅ Configuration completed successfully!'));
+    console.log(chalk.cyan('Exiting without starting the server as requested.'));
+    process.exit(0);
   }
 }
 
