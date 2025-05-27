@@ -1,0 +1,126 @@
+services:
+  # Backend service with hot reloading for development
+  backend:
+    build:
+      context: ../../
+      dockerfile: backend-e2e/docker/backend.dev.Dockerfile
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - TMDB_API_URL=http://tmdb-mock/3
+      - YTS_API_URL=http://yts-mock/api/v2
+      - TRAKT_API_URL=http://trakt-mock
+    networks:
+      - test-network
+    ports:
+      - '${PORT:-3000}:3000'
+    volumes:
+      # Mount the backend source code for hot reloading
+      - ../../backend/src:/usr/src/app/backend/src:ro
+      - ../../backend/package.json:/usr/src/app/backend/package.json:ro
+      - ../../backend/tsconfig.json:/usr/src/app/backend/tsconfig.json:ro
+      # Fresh database for each development session
+      - dev_database:/app/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    depends_on:
+      tmdb-mock:
+        condition: service_healthy
+      yts-mock:
+        condition: service_healthy
+      trakt-mock:
+        condition: service_healthy
+
+  # TMDB Mock Service
+  tmdb-mock:
+    build:
+      context: mock
+      dockerfile: mock.Dockerfile
+    env_file:
+      - ../../.env
+    environment:
+      - DATA_DIR=/app/data
+      - API_BASE_URL=https://api.themoviedb.org/3
+      - API_AUTH_HEADER_IS_BEARER=true
+      - API_KEY=$TMDB_API_ACCESS_TOKEN
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - ./tmdb/data:/app/data
+      - tmdb_node_modules:/usr/src/app/node_modules
+    networks:
+      - test-network
+
+  # Trakt Mock Service
+  trakt-mock:
+    build:
+      context: mock
+      dockerfile: mock.Dockerfile
+    env_file:
+      - ../../.env
+    environment:
+      - DATA_DIR=/app/data
+      - API_BASE_URL=https://api.trakt.tv
+      - API_AUTH_HEADER=trakt-api-key
+      - API_AUTH_HEADER_IS_BEARER=false
+      - API_KEY=$TRAKT_CLIENT_ID
+      - API_SECRET=$TRAKT_CLIENT_SECRET
+      - |
+        API_HEADERS={"trakt-api-version": "2"}
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - ./trakt/data:/app/data
+      - trakt_node_modules:/usr/src/app/node_modules
+    networks:
+      - test-network
+
+  # YTS Mock Service
+  yts-mock:
+    build:
+      context: mock
+      dockerfile: mock.Dockerfile
+    env_file:
+      - ../../.env
+    environment:
+      - DATA_DIR=/app/data
+      - API_BASE_URL=https://yts.mx/api/v2
+      - API_AUTH_HEADER_IS_BEARER=false
+      - API_KEY=none
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - ./yts/data:/app/data
+      - yts_node_modules:/usr/src/app/node_modules
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
+
+volumes:
+  dev_database:
+    name: miauflix_dev_database
+  tmdb_node_modules:
+    name: tmdb_node_modules
+  yts_node_modules:
+    name: yts_node_modules
+  trakt_node_modules:
+    name: trakt_node_modules

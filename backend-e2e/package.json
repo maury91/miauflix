@@ -1,0 +1,43 @@
+{
+  "name": "miauflix-backend-e2e",
+  "version": "1.0.0",
+  "description": "End-to-end integration tests for Miauflix backend",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:debug": "node --inspect-brk=0.0.0.0:9229 node_modules/.bin/jest --runInBand",
+    "test:only": "./scripts/test-only.sh",
+    "dev": "./scripts/dev.sh",
+    "dev:detached": "docker compose -f docker/docker-compose.dev.yml up --build -d",
+    "dev:stop": "docker compose -f docker/docker-compose.dev.yml down -v",
+    "clean": "docker compose -f docker/docker-compose.test.yml down -v --remove-orphans && docker compose -f docker/docker-compose.dev.yml down -v --remove-orphans"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.ts",
+      "**/src/**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/*.d.ts",
+      "!src/**/*.test.ts"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/test-setup.ts"
+    ],
+    "testTimeout": 30000
+  }
+}
