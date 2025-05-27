@@ -1,0 +1,33 @@
+# Exclude directories that may have permission issues
+nginx/
+frontend/node_modules/
+backend/node_modules/
+backend-e2e/node_modules/
+
+# Exclude development files
+.git/
+.gitignore
+*.log
+*.tmp
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Exclude test artifacts
+backend-e2e/test-fixtures/
+coverage/
+*.test.js
+*.spec.js
+
+# Exclude documentation
+docs/
+README.md
+*.md
+
+# Exclude cache files
+*.sqlite
+*.sqlite-journal
+cache.sqlite
+data/

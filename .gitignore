@@ -4,6 +4,9 @@ node_modules
 # Data files
 data
 
+# Test files
+backend-e2e/admin-credentials.json
+
 # Environment files
 .env
 .env.local

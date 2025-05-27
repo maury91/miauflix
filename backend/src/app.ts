@@ -8,6 +8,7 @@ import { cors } from 'hono/cors';
 import z from 'zod';
 
 import { Database } from '@database/database';
+import { AuthError, LoginError, RoleError } from '@errors/auth.errors';
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
@@ -126,9 +127,41 @@ try {
 
   const app = new Hono();
 
-  app.onError(async (err, c) => {
-    logger.error('App', 'An error occured:', err);
+  // Error handling middleware - must be added first
+  app.onError((err, c) => {
+    logger.error('App', `An error occured: ${err.name}: ${err.message}`);
 
+    if (err instanceof AuthError) {
+      return c.json(
+        {
+          error: 'Authentication required',
+          message: err.message,
+        },
+        401
+      );
+    }
+
+    if (err instanceof LoginError) {
+      return c.json(
+        {
+          error: 'Invalid credentials',
+          message: err.message,
+        },
+        401
+      );
+    }
+
+    if (err instanceof RoleError) {
+      return c.json(
+        {
+          error: 'Insufficient permissions',
+          message: err.message,
+        },
+        403
+      );
+    }
+
+    // For other errors, return 500
     return c.json(
       {
         success: false,

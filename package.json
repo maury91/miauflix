@@ -11,7 +11,8 @@
     "start": "npm run start:backend",
     "start:backend": "npm -w backend start",
     "test": "npm run test:backend",
-    "test:backend": "npm -w backend test"
+    "test:backend": "npm -w backend test",
+    "test:backend:e2e": "backend-e2e/scripts/run.sh"
   },
   "dependencies": {
     "concurrently": "latest"
