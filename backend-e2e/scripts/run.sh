@@ -34,6 +34,12 @@ cd "$(dirname "$0")/.."
 # Load environment variables if .env exists
 if [[ -f "../.env" ]]; then
     export $(grep -v '^#' ../.env | xargs)
+    echo "🔧 Loaded environment variables from .env file"
+else
+    echo "⚠️  No .env file found, using default environment variables"
+    export TMDB_API_ACCESS_TOKEN="mock-tmdb-token-for-testing"
+    export TRAKT_CLIENT_ID="mock-trakt-client-id"
+    export TRAKT_CLIENT_SECRET="mock-trakt-client-secret"
 fi
 
 # Make sure all previous containers are removed
