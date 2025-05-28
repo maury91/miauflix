@@ -262,6 +262,29 @@ Each service provides detailed logs:
 - Mock service logs show which endpoints are being called
 - Test logs show individual test results and any assertion failures
 
+### Debugging CI Failures
+
+If E2E tests fail in GitHub Actions:
+
+1. **Check the workflow run logs** in the GitHub Actions tab
+2. **Download artifacts** - Failed runs upload `e2e-test-logs` artifacts containing:
+   - `admin-credentials.json` - Shows if credential extraction worked
+   - `docker-logs.txt` - Container logs for debugging
+3. **Local reproduction**:
+
+   ```bash
+   # Validate CI setup locally
+   ./scripts/validate-e2e-ci.sh
+
+   # Run E2E tests with same environment as CI
+   npm run test:backend:e2e
+   ```
+
+4. **Common CI issues**:
+   - **Port conflicts**: CI runner may have different port availability
+   - **Docker resource limits**: Large Docker images may hit CI limits
+   - **Timeout issues**: Network-dependent steps may be slower in CI
+
 ## Adding New Tests
 
 1. Create test files in the appropriate subdirectory
@@ -272,10 +295,35 @@ Each service provides detailed logs:
 
 ## CI/CD Integration
 
-The test suite is designed to run in CI environments:
+The test suite is designed to run in CI environments and is integrated with GitHub Actions:
+
+### GitHub Actions
+
+The E2E tests run automatically on every push and pull request via the `e2e-tests` job in `.github/workflows/ci.yml`:
+
+```yaml
+e2e-tests:
+  runs-on: ubuntu-latest
+  needs: lint-and-type-check
+  steps:
+    # ... setup steps ...
+    - name: Run E2E tests
+      run: npm run test:backend:e2e
+```
+
+**Features:**
+
+- Runs in parallel with unit tests for faster CI feedback
+- Automatic environment setup with mock API credentials
+- Timeout protection (10 minutes max)
+- Artifact collection on test failures for debugging
+- Full Docker-based isolation
+
+### CI Environment Benefits
 
 - Uses Docker for consistent environments
 - Automatically handles port allocation and credential extraction
 - Provides detailed exit codes and logs
 - Cleans up resources automatically
 - No manual credential setup required - fully automated
+- Mock API tokens prevent external API dependencies

@@ -30,7 +30,11 @@ trap cleanup EXIT INT TERM
 
 # Navigate to the integration tests directory
 cd "$(dirname "$0")/.."
-export $(cat ../.env | xargs)
+
+# Load environment variables if .env exists
+if [[ -f "../.env" ]]; then
+    export $(grep -v '^#' ../.env | xargs)
+fi
 
 # Make sure all previous containers are removed
 echo "🧹 Removing any existing test containers..."
