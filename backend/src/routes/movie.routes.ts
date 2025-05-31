@@ -35,7 +35,7 @@ interface MovieResponse {
     seeds: number | undefined;
     leechers: number | undefined;
     source: string;
-    hasTorrentFile: boolean;
+    hasDataFile: boolean;
   }>;
 }
 
@@ -125,7 +125,7 @@ export const createMovieRoutes = (
             seeds: source.seeds,
             leechers: source.leechers,
             source: source.source,
-            hasTorrentFile: !!source.torrentFile,
+            hasDataFile: !!source.torrentFile,
           }));
         }
 

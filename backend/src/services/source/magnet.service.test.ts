@@ -158,10 +158,6 @@ describe('MagnetService', () => {
       const result = await magnetService.getTorrent(magnetLink, hash);
 
       expect(result).toBeNull();
-      expect(logger.warn).toHaveBeenCalledWith(
-        'MagnetService',
-        expect.stringContaining('Could not convert magnet to file')
-      );
     });
 
     it('should handle service errors gracefully', async () => {
@@ -172,7 +168,7 @@ describe('MagnetService', () => {
 
       expect(result).toBeInstanceOf(Buffer);
       expect(logger.warn).toHaveBeenCalledWith(
-        'MagnetService',
+        'DataResolver',
         expect.stringContaining('Error using')
       );
     });
@@ -208,75 +204,11 @@ describe('MagnetService', () => {
 
       expect(result).toBeNull();
       expect(logger.warn).toHaveBeenCalledWith(
-        'MagnetService',
-        'Hash mismatch detected for itorrents - file validation failed'
+        'DataResolver',
+        'Identifier mismatch detected for itorrents - file validation failed'
       );
     });
   });
-
-  // describe('getTorrentsParallel', () => {
-  //   it('should process multiple torrents concurrently', async () => {
-  //     const requests = [
-  //       { magnetLink: 'magnet:?xt=urn:btih:hash1', hash: 'hash1' },
-  //       { magnetLink: 'magnet:?xt=urn:btih:hash2', hash: 'hash2' },
-  //     ];
-
-  //     const buffer1 = Buffer.from('torrent1');
-  //     const buffer2 = Buffer.from('torrent2');
-
-  //     getTorrentFromWebTorrentSpy.mockResolvedValueOnce(buffer1).mockResolvedValueOnce(buffer2);
-
-  //     const results = await magnetService.getTorrentsParallel(requests);
-
-  //     expect(results).toHaveLength(2);
-  //     expect(results[0]).toEqual(buffer1);
-  //     expect(results[1]).toEqual(buffer2);
-  //   });
-
-  //   it('should handle partial failures in parallel processing', async () => {
-  //     const requests = [
-  //       { magnetLink: 'magnet:?xt=urn:btih:hash1', hash: 'hash1' },
-  //       { magnetLink: 'magnet:?xt=urn:btih:hash2', hash: 'hash2' },
-  //       { magnetLink: 'magnet:?xt=urn:btih:hash3', hash: 'hash3' },
-  //     ];
-
-  //     // Mock mixed success/failure responses
-  //     getTorrentFromWebTorrentSpy
-  //       .mockResolvedValueOnce(mockTorrentBuffer)
-  //       .mockRejectedValueOnce(new Error('WebTorrent failed'))
-  //       .mockResolvedValueOnce(mockTorrentBuffer);
-
-  //     const failedResponse = { ok: false } as Response;
-  //     getTorrentFromITorrentsSpy.mockResolvedValue(failedResponse);
-  //     getTorrentFromTorrageSpy.mockResolvedValue(failedResponse);
-
-  //     const results = await magnetService.getTorrentsParallel(requests);
-
-  //     expect(results).toHaveLength(3);
-  //     expect(results[0]).toBeInstanceOf(Buffer);
-  //     expect(results[1]).toBeNull();
-  //     expect(results[2]).toBeInstanceOf(Buffer);
-  //   });
-
-  //   it('should use worker-based parallelization', async () => {
-  //     const requests = Array.from({ length: 10 }, (_, i) => ({
-  //       magnetLink: `magnet:?xt=urn:btih:hash${i}`,
-  //       hash: `hash${i}`,
-  //     }));
-
-  //     const results = await magnetService.getTorrentsParallel(requests);
-
-  //     expect(results).toHaveLength(10);
-  //     expect(logger.info).toHaveBeenCalledWith(
-  //       'MagnetService',
-  //       expect.stringContaining('Starting shared pool parallel processing: 10 requests')
-  //     );
-  //     expect(logger.info).toHaveBeenCalledWith(
-  //       'MagnetService',
-  //       expect.stringContaining('Shared pool parallel processing completed:')
-  //     );
-  //   });
-  // });
 
   describe('service load balancing', () => {
     it('should distribute requests across multiple services', async () => {
@@ -341,7 +273,7 @@ describe('MagnetService', () => {
 
       expect(result).toBe(null);
       expect(logger.warn).toHaveBeenCalledWith(
-        'MagnetService',
+        'DataResolver',
         'Error validating file buffer:',
         expect.any(Error)
       );

@@ -25,7 +25,7 @@ const generateRequestId = (): string => {
 };
 
 /**
- * Service for getting torrent files from magnet links ( or hash )
+ * Service for getting data ( torrent ) files from URI ( magnet ) links ( or identifier )
  * Uses both WebTorrent and torrent cache services with adaptive optimization
  */
 export class MagnetService {
@@ -67,11 +67,11 @@ export class MagnetService {
           }
         }
         logger.warn(
-          'MagnetService',
-          `Failed to get torrent from iTorrents for hash: ${hash}, status code: ${response?.status}`
+          'DataResolver',
+          `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`
         );
         throw new ErrorWithStatus(
-          `Failed to get torrent from iTorrents for hash: ${hash}, status code: ${response?.status}`,
+          `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`,
           response?.status.toString(10) || 'unknown_error'
         );
       },
@@ -97,11 +97,11 @@ export class MagnetService {
           }
         }
         logger.warn(
-          'MagnetService',
-          `Failed to get torrent from Torrage for hash: ${hash}, status code: ${response?.status}`
+          'DataResolver',
+          `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`
         );
         throw new ErrorWithStatus(
-          `Failed to get torrent from Torrage for hash: ${hash}, status code: ${response?.status}`,
+          `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`,
           response?.status.toString(10) || 'unknown_error'
         );
       },
@@ -112,7 +112,7 @@ export class MagnetService {
     }, 0);
 
     logger.debug(
-      'MagnetService',
+      'DataResolver',
       `Initialized with ${Object.keys(this.services).length} services and concurrency: ${this.concurrency}`
     );
   }
@@ -130,8 +130,8 @@ export class MagnetService {
     preferIdle: boolean = false
   ): Promise<Buffer | null> {
     logger.info(
-      'MagnetService',
-      `Converting magnet link with hash: ${hash}${preferIdle ? ' (preferring idle services)' : ''}`
+      'DataResolver',
+      `Converting URI link with identifier: ${hash}${preferIdle ? ' (preferring idle services)' : ''}`
     );
     this.createWorker();
     // Wait for the worker to process it
@@ -187,12 +187,12 @@ export class MagnetService {
 
     if (service.activeRequests.size >= service.config.maxConcurrentRequests) {
       logger.debug(
-        'MagnetService',
+        'DataResolver',
         `Skipping ${serviceName} due to too many active requests (${service.activeRequests.size})`
       );
       return false;
     }
-    logger.debug('MagnetService', `Searching with ${serviceName}`);
+    logger.debug('DataResolver', `Searching with ${serviceName}`);
 
     if (service.rateLimiter) {
       // Check if we need to throttle requests
@@ -230,7 +230,7 @@ export class MagnetService {
       return torrent;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      logger.warn('MagnetService', `Error using ${serviceName}: ${errorMessage}`);
+      logger.warn('DataResolver', `Error using ${serviceName}: ${errorMessage}`);
 
       this.updateServiceMetrics(service.performance, false, start, error);
 
@@ -271,7 +271,7 @@ export class MagnetService {
 
       if (torrent === false) {
         // Service was throttled, continue to next service
-        logger.debug('MagnetService', `Service ${serviceName} was throttled, trying next service`);
+        logger.debug('DataResolver', `Service ${serviceName} was throttled, trying next service`);
         continue;
       }
 
@@ -284,7 +284,7 @@ export class MagnetService {
     }
 
     // All services failed
-    logger.warn('MagnetService', `Could not convert magnet to file after trying all services`);
+    logger.warn('DataResolver', `Could not convert URI to file after trying all services`);
     return onComplete(null);
   }
 
@@ -297,7 +297,7 @@ export class MagnetService {
   private createWorker(): void {
     if (this.activeWorkers < this.concurrency) {
       this.activeWorkers++;
-      logger.debug('MagnetService', `Creating new worker, active workers: ${this.activeWorkers}`);
+      logger.debug('DataResolver', `Creating new worker, active workers: ${this.activeWorkers}`);
       setImmediate(this.workerCycle);
     }
   }
@@ -320,22 +320,22 @@ export class MagnetService {
 
       // Verify that essential torrent properties exist
       if (!parsed || !parsed.infoHash) {
-        logger.warn('MagnetService', 'Invalid torrent: Missing info hash');
+        logger.warn('DataResolver', 'Invalid data: Missing identifier');
         return false;
       }
 
       // Verify the hash matches what we expect
       if (parsed.infoHash.toLowerCase() !== hash.toLowerCase()) {
         logger.warn(
-          'MagnetService',
-          `Hash mismatch detected for ${serviceName} - file validation failed`
+          'DataResolver',
+          `Identifier mismatch detected for ${serviceName} - file validation failed`
         );
         return false;
       }
 
       return true;
     } catch (error) {
-      logger.warn('MagnetService', `Error validating file buffer:`, error);
+      logger.warn('DataResolver', `Error validating file buffer:`, error);
       return false;
     }
   }

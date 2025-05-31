@@ -98,29 +98,29 @@ export class SourceService {
       return;
     }
 
-    logger.info(
+    logger.debug(
       'SourceService',
       `Searching sources for movie ${movie.id} (${movie.title}) with IMDb ID ${movie.imdbId}`
     );
 
     try {
-      // Search for torrents using the tracker service
+      // Search for sources using the tracker service
       const movieWithTorrents = await this.trackerService.searchTorrentsForMovie(movie.imdbId);
 
       if (!movieWithTorrents || !movieWithTorrents.torrents?.length) {
-        logger.info('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
+        logger.debug('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
         return;
       }
 
-      logger.info(
+      logger.debug(
         'SourceService',
         `Found ${movieWithTorrents.torrents.length} sources for movie ${movie.id} (${movie.title})`
       );
 
-      // Convert torrents to MovieSource objects and save them
+      // Convert sources to MovieSource objects and save them
       const sources = movieWithTorrents.torrents.map(torrent => ({
         movieId: movie.id,
-        hash: torrent.magnetLink.split('btih:')[1].split('&')[0], // Extract hash from magnet link
+        hash: torrent.magnetLink.split('btih:')[1].split('&')[0], // Extract identifier from URI link
         magnetLink: torrent.magnetLink,
         quality: torrent.quality,
         resolution: torrent.resolution.height,
@@ -132,7 +132,7 @@ export class SourceService {
       }));
 
       await this.movieSourceRepository.createMany(sources);
-      logger.info(
+      logger.debug(
         'SourceService',
         `Saved ${sources.length} sources for movie ${movie.id} (${movie.title})`
       );
@@ -153,7 +153,7 @@ export class SourceService {
   }
 
   /**
-   * Find all sources with torrent files for a specific movie
+   * Find all sources with data files for a specific movie
    */
   public async getSourcesWithTorrentsForMovie(movieId: number): Promise<MovieSource[]> {
     const sources = await this.movieSourceRepository.findByMovieId(movieId);
@@ -161,7 +161,7 @@ export class SourceService {
   }
 
   /**
-   * Get a specific source with its torrent file by source ID
+   * Get a specific source with its data file by source ID
    */
   public async getSourceWithTorrent(sourceId: number): Promise<MovieSource | null> {
     const source = await this.movieSourceRepository.findById(sourceId);
@@ -174,14 +174,14 @@ export class SourceService {
   }
 
   /**
-   * Find and download torrent files for sources that don't have them yet
+   * Find and download data files for sources that don't have them yet
    * This method prioritizes by movie popularity and ensures fair distribution
    */
   public async searchTorrentFilesForSources(): Promise<void> {
     await this.startPromise;
 
     if (!this.vpnConnected && this.searchOnlyBehindVpn) {
-      logger.warn('SourceService', 'VPN is not connected, skipping torrent file search');
+      logger.warn('SourceService', 'VPN is not connected, skipping data file search');
       await sleep(2000);
       return;
     }
@@ -189,8 +189,8 @@ export class SourceService {
     // 1. Find movies without sources ordered by popularity
     // 2. Count how many sources each movie has
     // 3. Prioritize by movie popularity and ensure fair distribution
-    // 4. Get a group of 50 sources that need torrent files
-    logger.info('SourceService', 'Searching torrent files for sources without them');
+    // 4. Get a group of 50 sources that need data files
+    logger.debug('SourceService', 'Searching data files for sources without them');
 
     const batchSize = Math.max(2, this.magnetService.getAvailableConcurrency());
     const moviesWithoutTorrents = await this.movieRepository.findMoviesWithoutTorrents(
@@ -228,9 +228,6 @@ export class SourceService {
       }
     }
 
-    console.log(
-      `Found ${moviesWithoutTorrents.length} movies without torrents to process, and a total of ${allSources.length} sources without torrent files`
-    );
     const processSource = async (source: (typeof allSources)[number]) => {
       logger.debug(
         'SourceService',
@@ -259,7 +256,7 @@ export class SourceService {
     quality: string;
     movieId: number;
   }): Promise<void> {
-    logger.info(
+    logger.debug(
       'SourceService',
       `Searching file for source ${source.id} (quality: ${source.quality})`
     );
@@ -278,7 +275,7 @@ export class SourceService {
       // Save the torrent file to the database
       await this.movieSourceRepository.updateTorrentFile(source.id, torrentFile);
 
-      logger.info(
+      logger.debug(
         'SourceService',
         `Successfully saved file for source ${source.id} (quality: ${source.quality}, size: ${torrentFile.length} bytes)`
       );
