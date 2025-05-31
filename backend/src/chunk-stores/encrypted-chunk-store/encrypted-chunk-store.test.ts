@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import fs from 'fs';
-import { readFile, unlink } from 'fs/promises';
+import { readdir, readFile, unlink } from 'fs/promises';
 import path from 'path';
 import { promisify } from 'util';
 
@@ -8,6 +8,7 @@ import { runAbstractTests } from '../abstract-chunk-store/create-test-suite';
 import EncryptedChunkStore from './encrypted-chunk-store';
 
 const encryptionKey = 'test-key-123';
+const TMP_DIR = 'tmp';
 
 // Run abstract tests with single backing file
 runAbstractTests(
@@ -56,13 +57,20 @@ describe('Encrypted Chunk Store', () => {
     it('should encrypt and decrypt data correctly', async () => {
       const storage = new EncryptedChunkStore(chunkLength, {
         encryptionKey,
+        path: path.join(TMP_DIR, 'encrypt_decrypt_correctly'),
         files: [{ path: 'tmp/test_file', length: 16 }],
       });
       const testData = Buffer.from('hello world test');
 
       try {
         await promisify(cb => storage.put(0, testData, cb))();
-        const encrypted = await readFile('tmp/test_file');
+        const dirContent = await readdir(path.join(TMP_DIR, 'encrypt_decrypt_correctly'));
+        expect(dirContent).toHaveLength(1);
+        const randomizedFilename = dirContent[0];
+        expect(randomizedFilename).not.toBe('test_file');
+        const encrypted = await readFile(
+          `${TMP_DIR}/encrypt_decrypt_correctly/${randomizedFilename}`
+        );
         expect(encrypted).not.toEqual(testData);
 
         const data = await promisify(cb => storage.get(0, cb))();
@@ -118,7 +126,9 @@ describe('Encrypted Chunk Store', () => {
 
   it('should work with Buffer encryption key', async () => {
     const keyBuffer = randomBytes(32);
-    const storage = new EncryptedChunkStore(chunkLength, { encryptionKey: keyBuffer });
+    const storage = new EncryptedChunkStore(chunkLength, {
+      encryptionKey: keyBuffer,
+    });
     const testData = Buffer.from('buffer key test ');
 
     try {
@@ -170,7 +180,12 @@ describe('Encrypted Chunk Store', () => {
         { path: 'file4', length: 800 },
         { path: 'file5', length: 784 },
       ];
-      const storage = new EncryptedChunkStore(chunkLength, { encryptionKey, length: 3200, files });
+      const storage = new EncryptedChunkStore(chunkLength, {
+        path: TMP_DIR,
+        encryptionKey,
+        length: 3200,
+        files,
+      });
       const testData = Buffer.from(Array.from({ length: 100 * chunkLength }, (_, i) => i % 256)); // Sequential 0-255 repeating pattern
 
       const putPromises = Array.from({ length: 100 }).map((_, i) => {
