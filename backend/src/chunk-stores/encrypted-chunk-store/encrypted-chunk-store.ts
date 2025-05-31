@@ -32,6 +32,7 @@ interface StorageOptions {
   files?: StorageFile[];
   length?: number;
   encryptionKey: Buffer | string;
+  filenameSalt?: string; // Salt used for deterministic filename generation
 }
 
 interface ChunkTarget {
@@ -49,6 +50,23 @@ interface GetOptions {
 type Callback<T = void> = (err: Error | null, value?: T) => void;
 
 const RESERVED_FILENAME_REGEX = getFileRegex();
+
+/**
+ * Generates a deterministic "randomized" filename based on the original filename and encryption key
+ * This ensures that the same inputs always produce the same output, but the output appears random
+ */
+function generateDeterministicFilename(
+  originalFilename: string,
+  encryptionKey: Buffer,
+  salt: string
+): string {
+  return createHash('sha256')
+    .update(originalFilename, 'utf8')
+    .update(encryptionKey)
+    .update(salt, 'utf8')
+    .digest('hex')
+    .substring(0, 24);
+}
 
 let TMP: string;
 try {
@@ -91,6 +109,7 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
       throw new Error('Encryption key must be a string or Buffer');
     }
 
+    const filenameSalt = opts.filenameSalt || 'encrypted-chunk-store-filename-salt';
     this.name = opts.name || path.join('fs-chunk-store', randomBytes(20).toString('hex'));
     this.addUID = opts.addUID;
 
@@ -119,8 +138,14 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
               file.offset = (prevFile.offset || 0) + prevFile.length;
             }
           }
-          let newPath = path.dirname(file.path!);
-          const filename = path.basename(file.path!);
+
+          const filename = generateDeterministicFilename(
+            path.basename(file.path!),
+            this.encryptionKey,
+            filenameSalt
+          );
+          let newPath = '';
+
           if (this.path) {
             newPath = this.addUID
               ? path.resolve(path.join(this.path, this.name, newPath))
