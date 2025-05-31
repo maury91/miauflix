@@ -24,7 +24,7 @@ export default {
   extensionsToTreatAsEsm: ['.ts'],
   // Transform chalk and other ESM modules
   transformIgnorePatterns: [
-    'node_modules/(?!(chalk|@inquirer|inquirer|figures|@chalk|ansi-styles|#ansi-styles|kleur|sisteransi)/)',
+    'node_modules/(?!(chalk|@inquirer|inquirer|figures|@chalk|ansi-styles|#ansi-styles|kleur|sisteransi|random-access-file|thunky|filename-reserved-regex)/)',
   ],
   setupFilesAfterEnv: ['./src/jest.setup.ts'],
   prettierPath: null,
