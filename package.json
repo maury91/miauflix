@@ -7,12 +7,21 @@
     "lint:fix": "npm -w backend run lint -- --fix",
     "format": "prettier --write \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "format:check": "prettier --check \"{backend,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
-    "prepare": "husky",
+    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){ process.exit(1)} \" || husky",
+    "build": "npm -w backend run build",
     "start": "npm run start:backend",
     "start:backend": "npm -w backend start",
+    "start:backend:prod": "npm -w backend run start:prod",
+    "start:backend:e2e": "backend-e2e/scripts/env.sh dev",
     "test": "npm run test:backend",
     "test:backend": "npm -w backend test",
-    "test:backend:e2e": "backend-e2e/scripts/run.sh"
+    "test:backend:e2e": "backend-e2e/scripts/env.sh test",
+    "test:backend:e2e:dev": "backend-e2e/scripts/test-only.sh",
+    "docker:build": "./scripts/docker-publish.sh latest build",
+    "docker:push": "./scripts/docker-publish.sh latest push",
+    "docker:deploy": "./scripts/docker-publish.sh latest deploy",
+    "docker:list": "./scripts/docker-publish.sh list",
+    "docker:cleanup": "./scripts/docker-publish.sh cleanup"
   },
   "dependencies": {
     "concurrently": "latest"

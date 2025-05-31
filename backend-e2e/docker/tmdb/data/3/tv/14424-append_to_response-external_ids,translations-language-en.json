@@ -1,0 +1,206 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19708",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ff57dc7f8be451df41a0de641f19fc1a\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "MM9cLBvb5IezV3sSkK2obcLaDQtvWsSsmRSgpypzLf-v_XftSVmENw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/arzEXF03COX1Yj39riYGSEfgNtY.jpg",
+    "created_by": [
+      {
+        "id": 1245040,
+        "credit_id": "5a78de5d92514177590185b1",
+        "name": "Ernest Ebert DVM",
+        "original_name": "Ernest Ebert DVM",
+        "gender": 1,
+        "profile_path": "/juhifsFjy9s2LWQshW5lMoTNcut.jpg"
+      },
+      {
+        "id": 1245041,
+        "credit_id": "5ef5717b27d9cc0038a97212",
+        "name": "Clifford Hodkiewicz",
+        "original_name": "Clifford Hodkiewicz",
+        "gender": 2,
+        "profile_path": "/o1J9fnslgbysJbsEyPYzeqyBLyf.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "1995-04-24",
+    "genres": [
+      {
+        "id": 10766,
+        "name": "Soap"
+      }
+    ],
+    "homepage": "https://dramatic-merchant.name",
+    "id": 14424,
+    "in_production": false,
+    "languages": ["pt"],
+    "last_air_date": "2020-04-03",
+    "last_episode_to_air": {
+      "id": 2324051,
+      "name": "Specified Swordtail",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2020-04-03",
+      "episode_number": 253,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 30,
+      "season_number": 5,
+      "show_id": 14424,
+      "still_path": null
+    },
+    "name": "Sick Junglefowl",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 60,
+        "logo_path": "/w5KLywO8bPe98prvv0UewMBAZHO.png",
+        "name": "Soft Ayla Secura Pictures",
+        "origin_country": "BR"
+      }
+    ],
+    "number_of_episodes": 979,
+    "number_of_seasons": 5,
+    "origin_country": ["BR"],
+    "original_language": "pt",
+    "original_name": "Fast Viper",
+    "overview": "Hic ea avaritia vulgo consectetur exercitationem vere.",
+    "popularity": 282.8171,
+    "poster_path": "/bF24r2FxsjzgkJcrbBU8RC9JVoU.jpg",
+    "production_companies": [
+      {
+        "id": 139958,
+        "logo_path": "/rKnRMd6HsVoyCnMVGuyFQnXcrzr.png",
+        "name": "Cultural Mas Amedda Pictures",
+        "origin_country": "BR"
+      },
+      {
+        "id": 46430,
+        "logo_path": "/tQZIt59BLw3b0b6rHJRqv4Dvrpd.png",
+        "name": "Fixed Wat Tambor Studios",
+        "origin_country": "BR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "BR",
+        "name": "Brazil"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 197470,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1995-04-24",
+        "episode_count": 204,
+        "id": 112418,
+        "name": "Malhação 1995",
+        "overview": "",
+        "poster_path": "/tmQfmvuvaWdd65QDqnzzs5Q8iZ4.jpg",
+        "season_number": 1,
+        "vote_average": 7
+      },
+      {
+        "air_date": "1996-04-07",
+        "episode_count": 195,
+        "id": 112419,
+        "name": "Malhação 1996",
+        "overview": "",
+        "poster_path": "/7YcjBwKQZP3D820P3OeLkRnmxuk.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1997-03-30",
+        "episode_count": 200,
+        "id": 112420,
+        "name": "Malhação 1997",
+        "overview": "",
+        "poster_path": "/aWx0pLWzp94oNW2GJHmRV8zOXUs.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1998-03-29",
+        "episode_count": 110,
+        "id": 146187,
+        "name": "Malhação 1998",
+        "overview": "",
+        "poster_path": "/ocCURCtNP3DXwFcorh2dW6p2wC8.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1998-10-05",
+        "episode_count": 270,
+        "id": 146188,
+        "name": "Malhação.com",
+        "overview": "",
+        "poster_path": "/wiuhDg8aTJM0NDi7oi09zfYSrtN.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Portuguese",
+        "iso_639_1": "pt",
+        "name": "Português"
+      }
+    ],
+    "status": "Canceled",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 6.1,
+    "vote_count": 31,
+    "external_ids": {
+      "imdb_id": "tt0144724",
+      "freebase_mid": "/m/07m6rl",
+      "freebase_id": "/en/malhacao",
+      "tvdb_id": 301838,
+      "tvrage_id": null,
+      "wikidata_id": "Q2091308",
+      "facebook_id": "malhacao",
+      "instagram_id": "malhacao",
+      "twitter_id": "malhacaogshow"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Nervous Koala",
+            "overview": "Odio vulnus magni accusamus ipsum speciosus dens crebro temporibus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

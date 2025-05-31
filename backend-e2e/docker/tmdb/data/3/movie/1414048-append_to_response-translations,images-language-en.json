@@ -1,0 +1,167 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23084",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"dd613702527bc903499dab4165c9f54c\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "5qjCIewTiwEnRTmZcMxBqowS2kshugDghxo0LMJLawqQ46rlUb1n4w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1hBtO9tXP60IFBZD27OsbaBmxs5.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 37,
+        "name": "Western"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "",
+    "id": 1414048,
+    "imdb_id": "tt35317668",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Complete Cricket",
+    "overview": "Tabgo perspiciatis universe. Tabula toties auctor ascisco.",
+    "popularity": 51.7874,
+    "poster_path": "/cVSjSQryFUERYSdOmdgJ2m0eBte.jpg",
+    "production_companies": [
+      {
+        "id": 79279,
+        "logo_path": "/gcCJ3eCR1bzw7IPQX3UoxqClpUP.png",
+        "name": "Printed Jar Jar Binks Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 186218,
+        "logo_path": "/4G1yai3i2nUmoBbz78BSP0TDh8l.png",
+        "name": "Flexible Wicket Systri Warrick Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 135299,
+        "logo_path": "/j7wNO03pluRj5WQQKVK0URm5upr.png",
+        "name": "Spectacular Rugor Nass Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-03-28",
+    "revenue": 0,
+    "runtime": 106,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Depressed Mammal",
+    "video": false,
+    "vote_average": 6.7,
+    "vote_count": 17,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Vesco voco casus titulus demulceo sufficio corroboro iste. Pecus aduro terminatio cervus.",
+            "runtime": 106,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Velut spectaculum utrimque una trucido rerum sto capto deludo trans. Sopor conforto impedit antiquus vinitor id.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/gdoOb0MrtCWgmWc4hhSQLaWZJNF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.349,
+          "height": 63,
+          "iso_639_1": "en",
+          "file_path": "/vJe3asCU8QGpuRKWsYiJSHB6aBL.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 400
+        },
+        {
+          "aspect_ratio": 6.645,
+          "height": 650,
+          "iso_639_1": "en",
+          "file_path": "/9fGLAOo89VXizY2nZ4lR7NjQnTm.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/cVSjSQryFUERYSdOmdgJ2m0eBte.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/vwwpEfG9WawlACTfYg9UisNMR9p.jpg",
+          "vote_average": 1.75,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

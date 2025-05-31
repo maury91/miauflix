@@ -1,0 +1,191 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19765",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"142eae35e8abe7c4ec9150ba662f27e0\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "lMuXzWLlPl3fcp2cDQsycKxrh8_Z0Ay5VUvEb2E4QcZM3L-TC-vMQQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "8b4e2f6569074cd88a533175c64bc4e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/jWXrQstj7p3Wl5MfYWY6IHqRpDb.jpg",
+    "created_by": [],
+    "episode_run_time": [15],
+    "first_air_date": "1952-12-26",
+    "genres": [
+      {
+        "id": 10763,
+        "name": "News"
+      }
+    ],
+    "homepage": "https://total-pack.org",
+    "id": 94722,
+    "in_production": true,
+    "languages": ["de"],
+    "last_air_date": "2025-05-14",
+    "last_episode_to_air": {
+      "id": 6218431,
+      "name": "Total Cardinal",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-29",
+      "episode_number": 1,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 94722,
+      "still_path": null
+    },
+    "name": "Nuclear Peafowl",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 308,
+        "logo_path": "/nGl2dDGonksWY4fTzPPdkK3oNyq.png",
+        "name": "Olympic C-3PO Productions",
+        "origin_country": "DE"
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 5,
+    "origin_country": ["DE"],
+    "original_language": "de",
+    "original_name": "Formidable Hookworm",
+    "overview": "Turbo depono acceptus nam admoveo conspergo cervus. Voluptas accusamus vomito suadeo verbera cibo terebro aveho comedo venio. Deficio temperantia vulgus calculus necessitatibus.",
+    "popularity": 289.6484,
+    "poster_path": "/7dFZJ2ZJJdcmkp05B9NWlqTJ5tq.jpg",
+    "production_companies": [
+      {
+        "id": 7201,
+        "logo_path": "/ljV8ZT3CIYCEIEDlTyBliXJVCZr.png",
+        "name": "Opposite Taun We Studios",
+        "origin_country": "DE"
+      },
+      {
+        "id": 1251,
+        "logo_path": "/fc0O0mvjl8PbHgZXXY2VgPYos1Z.png",
+        "name": "Conservative Jocasta Nu Entertainment",
+        "origin_country": "DE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1952-12-26",
+        "episode_count": 6,
+        "id": 134441,
+        "name": "Season 1952",
+        "overview": "",
+        "poster_path": "/lEOhLYxSlqYcAlSSunb0fbXkKM5.jpg",
+        "season_number": 1,
+        "vote_average": 3.5
+      },
+      {
+        "air_date": "1953-01-01",
+        "episode_count": 1,
+        "id": 170277,
+        "name": "Season 1953",
+        "overview": "",
+        "poster_path": "/irxJNLAXFNwkoARq62Aj4MBRxoG.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1954-01-01",
+        "episode_count": 1,
+        "id": 170278,
+        "name": "Season 1954",
+        "overview": "",
+        "poster_path": "/1rltcJ60qGJhCVavjLxU6pnBgda.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1955-01-01",
+        "episode_count": 1,
+        "id": 170279,
+        "name": "Season 1955",
+        "overview": "",
+        "poster_path": "/efXlmRCWwvJgeTyVrbMGkiTQdKw.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1956-01-01",
+        "episode_count": 1,
+        "id": 170280,
+        "name": "Season 1956",
+        "overview": "",
+        "poster_path": "/dXEXqPsyzKmXf055cX4EQxaAkpU.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "News",
+    "vote_average": 6.757,
+    "vote_count": 239,
+    "external_ids": {
+      "imdb_id": "tt0246393",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 252244,
+      "tvrage_id": null,
+      "wikidata_id": "Q703907",
+      "facebook_id": "tagesschau",
+      "instagram_id": "tagesschau",
+      "twitter_id": "tagesschau"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Mollitia uredo certe cibus vicissitudo. Tabernus ventito apud voluptate uterque tot culpo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Concerned Pelican",
+            "overview": "Apto nostrum appositus alioqui aut. Tripudio peccatus placeat tabella. Strues quia pel vitiosus repellat curis.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

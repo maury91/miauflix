@@ -3,10 +3,11 @@ services:
   backend:
     build:
       context: ../../
-      dockerfile: backend-e2e/docker/backend.Dockerfile
+      dockerfile: backend.Dockerfile
     environment:
       - PORT=3000
       - NODE_ENV=test
+      - RATE_LIMIT_TEST_MODE=true
       - TMDB_API_URL=http://tmdb-mock/3
       - YTS_API_URL=http://yts-mock/api/v2
       - TRAKT_API_URL=http://trakt-mock
@@ -15,6 +16,8 @@ services:
       - test-network
     ports:
       - '${PORT}:3000'
+    volumes:
+      - ../.env.test:/usr/src/app/.env:ro
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
       interval: 0.5s
@@ -33,7 +36,7 @@ services:
   tmdb-mock:
     build:
       context: mock
-      dockerfile: mock.Dockerfile
+      dockerfile: tmdb.Dockerfile
     env_file:
       - ../../.env
     environment:
@@ -85,7 +88,7 @@ services:
   yts-mock:
     build:
       context: mock
-      dockerfile: mock.Dockerfile
+      dockerfile: yts.Dockerfile
     env_file:
       - ../../.env
     environment:

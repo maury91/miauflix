@@ -1,0 +1,201 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8660",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d45f414d99b3c30ea39a2626e009ae81\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "SzsFVXe8yFMp2-Zk2Hx0Zs9bp2wMlCYa-u4Y3cM_61bdMATGQXqvMw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mu3lEhGovyhKHPJzb7HNYtZUCDT.jpg",
+    "created_by": [
+      {
+        "id": 4191118,
+        "credit_id": "64c8a4dd08cf8700e2778123",
+        "name": "Jeffrey Jaskolski",
+        "original_name": "Jeffrey Jaskolski",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 4191117,
+        "credit_id": "64c8a4d61fa1c800cdf649d3",
+        "name": "Dean Larkin V",
+        "original_name": "Dean Larkin V",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2005-10-13",
+    "genres": [
+      {
+        "id": 10766,
+        "name": "Soap"
+      }
+    ],
+    "homepage": "https://dark-insectarium.info",
+    "id": 206559,
+    "in_production": true,
+    "languages": ["af", "en"],
+    "last_air_date": "2025-05-23",
+    "last_episode_to_air": {
+      "id": 5360451,
+      "name": "Unacceptable Parrot",
+      "overview": "Denuo earum sophismata titulus ventito expedita venia talio. Aestas thesis alii torqueo patria cibus acervus turpis. Patria cribro confugo.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-29",
+      "episode_number": 237,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 206559,
+      "still_path": null
+    },
+    "name": "Previous Thrush",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 192,
+        "logo_path": "/dJ9KWprPx7AXMOxBrGJoadLhhZQ.png",
+        "name": "Painful Sly Moore Productions",
+        "origin_country": "ZA"
+      },
+      {
+        "id": 1826,
+        "logo_path": "/2tNeujuBe8MR40hoUE4FLYA7Knl.png",
+        "name": "Ordinary Ben Quadinaros Productions",
+        "origin_country": "ZA"
+      }
+    ],
+    "number_of_episodes": 897,
+    "number_of_seasons": 5,
+    "origin_country": ["ZA"],
+    "original_language": "af",
+    "original_name": "Legislative Seahorse",
+    "overview": "Cunae quasi sed capillus decimus trepide.",
+    "popularity": 220.27,
+    "poster_path": "/3bzECfllho8PphdYujLUIuhncJD.jpg",
+    "production_companies": [
+      {
+        "id": 240436,
+        "logo_path": "/uQbJVxmj5hhGWmym13JOs2rFAM8.png",
+        "name": "Melted Jocasta Nu Studios",
+        "origin_country": "ZA"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "ZA",
+        "name": "South Africa"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2005-10-13",
+        "episode_count": 52,
+        "id": 301848,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 3.8
+      },
+      {
+        "air_date": "2006-04-13",
+        "episode_count": 88,
+        "id": 301849,
+        "name": "Season 2",
+        "overview": "The first 16 episodes of the season were an hour long, airing on Thursdays at 18h30. The show became a daily half-hour soapy on 27 January 2007 with a further 72 half-hour episodes.",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2007-05-09",
+        "episode_count": 260,
+        "id": 301850,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-05-07",
+        "episode_count": 260,
+        "id": 301851,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-05-07",
+        "episode_count": 237,
+        "id": 301852,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Afrikaans",
+        "iso_639_1": "af",
+        "name": "Afrikaans"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 5.6,
+    "vote_count": 94,
+    "external_ids": {
+      "imdb_id": "tt1527854",
+      "freebase_mid": "/m/0zdk1kn",
+      "freebase_id": null,
+      "tvdb_id": 298158,
+      "tvrage_id": null,
+      "wikidata_id": "Q13034351",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Clibanus combibo solum xiphias adipiscor solium trepide annus. Aestas impedit laboriosam stips blandior temeritas. Truculenter tempore compono torrens usus demergo esse modi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

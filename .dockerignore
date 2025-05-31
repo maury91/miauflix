@@ -14,20 +14,30 @@ backend-e2e/node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+**/eslint.config.js
+**/jest.config.js
+**/*.test.ts
+**/*.spec.ts
 
-# Exclude test artifacts
+# Exclude test
 backend-e2e/test-fixtures/
 coverage/
 *.test.js
 *.spec.js
+**/__mocks__/
+**/__test-utils__/
+**/jest.setup.js
+**/test-preload.js
 
 # Exclude documentation
 docs/
+**/docs/
 README.md
 *.md
 
-# Exclude cache files
+# Exclude data files
 *.sqlite
 *.sqlite-journal
+**/*.sqlite
 cache.sqlite
 data/

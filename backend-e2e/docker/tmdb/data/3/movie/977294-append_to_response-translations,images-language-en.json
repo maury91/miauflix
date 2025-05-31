@@ -1,0 +1,290 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7775",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b36f2eef041e5dafd35cea0de0735992\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "9xGuy58wSd2BvBzsfqSsw1QiOfi2084rU6BrTDtROCiusEV6TyqP4w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/jRvhP4AfFnJ03lCQhp1fie7XPSd.jpg",
+    "belongs_to_collection": null,
+    "budget": 45000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "",
+    "id": 977294,
+    "imdb_id": "tt20258920",
+    "origin_country": ["US", "GB"],
+    "original_language": "en",
+    "original_title": "Certain Grouse",
+    "overview": "Ater aiunt admoveo iure spoliatio acsi creator iure vilicus. Demo tristis est votum vivo tabesco combibo denique vapulus vulgaris. Volo tergo coniuratio auditor velut aegre reprehenderit.",
+    "popularity": 172.8611,
+    "poster_path": "/lFFDrFLXywFhy6khHes1LCFVMsL.jpg",
+    "production_companies": [
+      {
+        "id": 13238,
+        "logo_path": "/kDNZz8imH866Mezx1YhLWljoQTV.png",
+        "name": "Tame Cordé Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 101339,
+        "logo_path": "/z6DzfKujoMRgiXAseuG9WphOGs7.png",
+        "name": "Adequate Adi Gallia Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 41032,
+        "logo_path": "/op8wxWMnyzuh3Aq3lsZnaQv9C5.png",
+        "name": "Fierce Mas Amedda Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 5322,
+        "logo_path": "/6Vk4WZnKJuC6z6HKBGFirbWwWwV.png",
+        "name": "Governing Nien Nunb Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 972,
+        "logo_path": null,
+        "name": "Manual Sly Moore Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 117747,
+        "logo_path": "/brD72VA95qgjCtGx0hJEAVUeldW.png",
+        "name": "Worldwide Shaak Ti Media",
+        "origin_country": "GB"
+      },
+      {
+        "id": 69639,
+        "logo_path": null,
+        "name": "Principal Luminara Unduli Media",
+        "origin_country": ""
+      },
+      {
+        "id": 231131,
+        "logo_path": null,
+        "name": "Desperate Jek Tono Porkins Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 162995,
+        "logo_path": null,
+        "name": "Creative R4-P17 Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 258800,
+        "logo_path": null,
+        "name": "Fluttering Darth Maul Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 230418,
+        "logo_path": "/evZJeG4zVVH7MuZClZuG6Zxi9sR.png",
+        "name": "Progressive Dormé Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2025-05-22",
+    "revenue": 0,
+    "runtime": 87,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Stingy Leech",
+    "video": false,
+    "vote_average": 5.024,
+    "vote_count": 42,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Corrupti tenus theologus trucido vado somnus eum caute.",
+            "runtime": 87,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Tempora consequuntur beatus demens celo alter deserunt.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Suffoco antepono beneficium vigilo acies absum adeptio. Cernuus sophismata contigo caelestis.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Suffoco antepono beneficium vigilo acies absum adeptio. Cernuus sophismata contigo caelestis.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/8GyX3Fuoez0NBtjQdQvar42kgAP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/60KkKDiLYBnGksTZf2Y7wUAyN02.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/kUzPNgDqfpnx9Wznh1wZjlUskwg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.825,
+          "height": 206,
+          "iso_639_1": "en",
+          "file_path": "/iN1tD2cAmuaFyQHAFZhwPgaKvJi.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 994
+        },
+        {
+          "aspect_ratio": 4.784,
+          "height": 125,
+          "iso_639_1": "en",
+          "file_path": "/krB4FY3TIpGOLgBP5YImhMNjAhW.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 598
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/lFFDrFLXywFhy6khHes1LCFVMsL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_639_1": "en",
+          "file_path": "/4fSv0cwXYSmC8Ac26VZBLu26jsR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/6HU667T8fxoIvgsgu2eyaznntsp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/y3ovJzlaNNcwNz5ynz6JWTqna0d.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 1194,
+          "iso_639_1": "en",
+          "file_path": "/qLkCGx2ksewuPIVJeMxqvaNBwJf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 842
+        }
+      ]
+    }
+  }
+}

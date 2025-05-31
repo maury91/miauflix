@@ -1,0 +1,308 @@
+{
+  "headers": {
+    "age": "254",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=27129",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d9afa9673c945e91b585e2176d5bdbed\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "KtI_7-so2tFgAAHikt9u3N0vOczCdimKwfeX54ySLkvr7uTgAW8KRg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "5ae9ef7c9edb4082a88f27237d27cbc2"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/hwlyY7LJdEFbCPaGNXiskKKmJ5X.jpg",
+    "belongs_to_collection": null,
+    "budget": 25000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://intrepid-declination.com",
+    "id": 1126166,
+    "imdb_id": "tt10078772",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Poor Gayal",
+    "overview": "Accusator teres arbor uberrime. Pecus una antepono.",
+    "popularity": 54.2893,
+    "poster_path": "/q0bCG4NX32iIEsRFZqRtuvzNCyZ.jpg",
+    "production_companies": [
+      {
+        "id": 1302,
+        "logo_path": "/zC3b70ixHh89qJIikLQPEvLqbPM.png",
+        "name": "Right Qui-Gon Jinn Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 152,
+        "logo_path": "/rC2pFo4IBQVSVZvucDLwMRvZHfi.png",
+        "name": "Harsh Mace Windu Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 106754,
+        "logo_path": "/1H4YyGx74OTzPtPIcuF3iAEjzz6.png",
+        "name": "Raw R5-D4 Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 221429,
+        "logo_path": "/7xNNmHcuDy0tOqZmsUMnZ6HcZ6E.png",
+        "name": "Eventual Ben Quadinaros Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1632,
+        "logo_path": "/cisLn1YAUuptXVBa0xjq7ST9cH0.png",
+        "name": "International Greedo Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-01-22",
+    "revenue": 40420193,
+    "runtime": 91,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Carcer accusator teres arbor uberrime.",
+    "title": "Biological Piranha",
+    "video": false,
+    "vote_average": 6.112,
+    "vote_count": 755,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://adolescent-bread.org",
+            "overview": "Tutamen vallum coepi.",
+            "runtime": 91,
+            "tagline": "Ambulo tutamen vallum.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tabgo alii optio curvo aetas brevis. Eaque cornu quaerat carus. Tertius theatrum accusator creo acer vix validus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Impressive Hyena"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tabgo alii optio curvo aetas brevis. Eaque cornu quaerat carus. Tertius theatrum accusator creo acer vix validus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Impressive Hyena"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Speculum amet commemoro via substantia adsidue vobis agnosco.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Sole Badger"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Umerus clamo cresco benevolentia anser virga vulpes comburo cetera. Utrum perspiciatis calcar curto derelinquo caveo non perspiciatis caveo.",
+            "runtime": 0,
+            "tagline": "Textor umerus clamo cresco benevolentia.",
+            "title": "Divine Hamster"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/rcMQRMjilqi7r7u1451vIQL9mf3.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/y8TmExeApmWseeGeUmRF1rGcn0c.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/t2padFxgNXkJ60Ay00LE5MHdA0C.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qt2BF68aOh0suNPOSTeFBsRNpHt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/24fltJuvBTMqAvaRJ1CQ9DjM3wD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.525,
+          "height": 748,
+          "iso_639_1": "en",
+          "file_path": "/vI1JyZQn2cJbiVJAWarQ2JNUWCq.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4133
+        },
+        {
+          "aspect_ratio": 5.525,
+          "height": 748,
+          "iso_639_1": "en",
+          "file_path": "/wZIbMTqWZCcAOgfuKRpSHNxhPBf.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4133
+        },
+        {
+          "aspect_ratio": 4.06,
+          "height": 1018,
+          "iso_639_1": "en",
+          "file_path": "/bM7kuNidf8osBTTuRKYrZxO7fN9.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4133
+        },
+        {
+          "aspect_ratio": 4.06,
+          "height": 1018,
+          "iso_639_1": "en",
+          "file_path": "/vSf7Nnm9R3ZVxLwErd4AED1ksuw.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4133
+        },
+        {
+          "aspect_ratio": 6.152,
+          "height": 696,
+          "iso_639_1": "en",
+          "file_path": "/yiufplx0lyE2CuNpFOd0dxrHDk6.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 4282
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/q0bCG4NX32iIEsRFZqRtuvzNCyZ.jpg",
+          "vote_average": 7,
+          "vote_count": 19,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/4cR3hImKd78dSs652PAkSAyJ5Cx.jpg",
+          "vote_average": 5.844,
+          "vote_count": 16,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/6TvAde82U6TyEO0BTcLp35jwVgJ.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/m1YJbJxZs0rJFIstdPVhrbWxFCJ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/voFyBVoLGDsqab3kySUR9qtwTTL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15148",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"446db082097c0a2d3c5735134b130710\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "RTYkecJ9aLkrKfp06pZLby93ficLUuzXephXsNDTHGAiHQqY-zM4YQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gl0jzn4BupSbL2qMVeqrjKkF9Js.jpg",
+    "belongs_to_collection": null,
+    "budget": 23500000,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      }
+    ],
+    "homepage": "https://rural-flour.biz",
+    "id": 128,
+    "imdb_id": "tt0119698",
+    "origin_country": ["JP"],
+    "original_language": "ja",
+    "original_title": "Unusual Haddock",
+    "overview": "Aspernatur ultio suasoria tantillus adstringo. Suscipit pectus vilicus catena coerceo baiulus. Super colligo avaritia ciminatio aut titulus substantia.",
+    "popularity": 13.5159,
+    "poster_path": "/cMYCDADoLKLbB83g4WnJegaZimC.jpg",
+    "production_companies": [
+      {
+        "id": 10342,
+        "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+        "name": "Squealing IG-88 Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12516,
+        "logo_path": null,
+        "name": "Jolly Adi Gallia Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2752,
+        "logo_path": "/qEGEoCAV9FWAuohymR5I0vjJMgM.png",
+        "name": "Ethnic Jek Tono Porkins Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 67681,
+        "logo_path": null,
+        "name": "Noisy Shmi Skywalker Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 1779,
+        "logo_path": "/41nGzTdCnORYZIZzaGZtfsBwQCl.png",
+        "name": "Quintessential Leia Organa Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/c0ENH8QeZLvCACpzCpwvYMy2SDr.png",
+        "name": "Uncertain Mon Mothma Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "Primitive Rugor Nass Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "1997-07-12",
+    "revenue": 176506186,
+    "runtime": 134,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Conservo aspernatur ultio suasoria tantillus adstringo defluo.",
+    "title": "Other Bandicoot",
+    "video": false,
+    "vote_average": 8.329,
+    "vote_count": 8360,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://illiterate-progress.com",
+            "overview": "Accedo virgo adicio occaecati vulnus atque aranea amplus. Ad cado ventus assentator vero damnatio omnis.",
+            "runtime": 134,
+            "tagline": "Sublime accedo virgo adicio occaecati.",
+            "title": "Gradual Koala"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Colligo subito eligendi suppellex tredecim absum corrigo. Attero deinde cohibeo pauci comminor a perferendis utique pel.",
+            "runtime": 134,
+            "tagline": "Perspiciatis colligo subito eligendi suppellex tredecim.",
+            "title": "Disciplinary Bovid"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Viriliter volutabrum conor. Spectaculum vulgaris pauper.",
+            "runtime": 134,
+            "tagline": "Aduro viriliter volutabrum conor absque spectaculum.",
+            "title": "Increased Bass"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Colligo subito eligendi suppellex tredecim absum corrigo. Attero deinde cohibeo pauci comminor a perferendis utique pel.",
+            "runtime": 134,
+            "tagline": "",
+            "title": "Disciplinary Bovid"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Crur deporto aequitas fuga convoco ademptio tepesco cuius agnosco blanditiis. Tondeo ratione adulatio cilicium cerno tabesco cogito vir. Veritatis ex cras adinventitias complectus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Sick Ocelot"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/rvH6a5B4thdjTldmf81DKds2e9u.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/uD6oPdLVucNUYJDG1g0mJ3Z4PSb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/9EXOVRt9j6Fy7RqhgU3CLtWkXPL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/1M64CE7t1g7acAMtFLRGmBbD4nO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/zRTt14tUuow1RZvT5o0HZIwHyOV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.011,
+          "height": 540,
+          "iso_639_1": "en",
+          "file_path": "/2GFShdtpRueyBKlUwv6OdFivzUk.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2166
+        },
+        {
+          "aspect_ratio": 5.092,
+          "height": 251,
+          "iso_639_1": "en",
+          "file_path": "/eUtKt4nQA4kZ6h1gxu0sg31yFrv.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 4.845,
+          "height": 373,
+          "iso_639_1": "en",
+          "file_path": "/zmLS3kmBxLlVS1yxRY4x9WiLMrw.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1807
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/cMYCDADoLKLbB83g4WnJegaZimC.jpg",
+          "vote_average": 6.676,
+          "vote_count": 20,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1600,
+          "iso_639_1": "en",
+          "file_path": "/kifrm5sCZNMa1GsSAANg040Hay5.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/pdtzEreKvKAlqa2YEBaGwiA45V8.jpg",
+          "vote_average": 5.25,
+          "vote_count": 27,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_639_1": "en",
+          "file_path": "/jHWmNr7m544fJ8eItsfNk8fs2Ed.jpg",
+          "vote_average": 4.5,
+          "vote_count": 19,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_639_1": "en",
+          "file_path": "/9RLmX3ATWzDRgXAa3PTrmBt4OU2.jpg",
+          "vote_average": 4.37,
+          "vote_count": 27,
+          "width": 1200
+        }
+      ]
+    }
+  }
+}

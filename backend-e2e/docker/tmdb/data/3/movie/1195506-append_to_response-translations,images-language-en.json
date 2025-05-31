@@ -1,0 +1,285 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21292",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e812b6ea3a228883629c8879451eba69\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "KDP8JLeIRyy6_rRa0TjwhxuzHHMGpIvOf9G5XSmeKQfj_AOBZzjIwQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "8b4e2f6569074cd88a533175c64bc4e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/sNx1A3822kEbqeUxvo5A08o4N7o.jpg",
+    "belongs_to_collection": null,
+    "budget": 18000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://gruesome-possibility.com",
+    "id": 1195506,
+    "imdb_id": "tt29603959",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Near Swan",
+    "overview": "Advoco sophismata vae pecus conor combibo corrupti sol. Bis vitiosus adeptio demo aeneus sum libero demoror.",
+    "popularity": 59.3575,
+    "poster_path": "/xmMHGz9dVRaMY6rRAlEX4W0Wdhm.jpg",
+    "production_companies": [
+      {
+        "id": 25577,
+        "logo_path": "/2trboP7Exx3LEQqSHoo1sAmsC1i.png",
+        "name": "Additional R5-D4 Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 4,
+        "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
+        "name": "Dead Nien Nunb Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 247121,
+        "logo_path": null,
+        "name": "Confidential Dud Bolt Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 216687,
+        "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
+        "name": "Expected R4-P17 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 238806,
+        "logo_path": "/8KZiHGZs20UUS0zmzDbU1nUsIcr.png",
+        "name": "Instant Wedge Antilles Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-03-12",
+    "revenue": 34208050,
+    "runtime": 110,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Stabilis advoco sophismata vae pecus.",
+    "title": "Exuberant Rook",
+    "video": false,
+    "vote_average": 6.902,
+    "vote_count": 812,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://numb-citizenship.com",
+            "overview": "Arx autus synagoga advoco. Sono voluptatibus amplitudo curo cultura advoco torqueo tribuo aer.",
+            "runtime": 110,
+            "tagline": "Ascisco arx autus synagoga advoco textilis.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ustulo conscendo cuppedia textus cubo delectatio natus spoliatio constans sto. Volaticus ager adulatio varius curvo degero cursim optio. Comes curia adimpleo delibero facilis utor dedico ceno pauper viduo.",
+            "runtime": 0,
+            "tagline": "Valde ustulo conscendo cuppedia textus cubo delectatio natus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ustulo conscendo cuppedia textus cubo delectatio natus spoliatio constans sto. Volaticus ager adulatio varius curvo degero cursim optio. Comes curia adimpleo delibero facilis utor dedico ceno pauper viduo.",
+            "runtime": 0,
+            "tagline": "Valde ustulo conscendo cuppedia textus cubo delectatio natus.",
+            "title": "Genuine Peafowl"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Claustrum bibo cui deludo summa cuppedia veritatis aegrotatio. Brevis abeo pecto adicio abbas.",
+            "runtime": 0,
+            "tagline": "Sui claustrum bibo cui deludo.",
+            "title": "Negative Cheetah"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Molestiae derideo angelus architecto cotidie vinum testimonium. Damnatio carus derelinquo. Decerno vulgaris calamitas comburo utroque.",
+            "runtime": 109,
+            "tagline": "Dolore molestiae derideo angelus architecto cotidie vinum testimonium.",
+            "title": "Welcome Louse"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/doI4G4wbGz7uNYYdRa4pSfXWfRr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/1Eu4grfwoQ1EigaZ5KGfPXVHhT0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/yXYWZLPZJp69FGQhSClizhr5jOe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.311,
+          "height": 810,
+          "iso_639_1": "en",
+          "file_path": "/458Ty20JuTIzJ7X9wNAaHyOORrq.png",
+          "vote_average": 10,
+          "vote_count": 6,
+          "width": 4302
+        },
+        {
+          "aspect_ratio": 5.311,
+          "height": 810,
+          "iso_639_1": "en",
+          "file_path": "/4ClU26cEqeEYTj6Da7ADgO5HVUq.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 4302
+        },
+        {
+          "aspect_ratio": 5.319,
+          "height": 809,
+          "iso_639_1": "en",
+          "file_path": "/fxTbvDb59GXi5ahshQm7UgNTh3j.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 4303
+        },
+        {
+          "aspect_ratio": 5.626,
+          "height": 438,
+          "iso_639_1": "en",
+          "file_path": "/5fsINfIZOQ3JK3ST9TJaXL8Mg6v.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2464
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/xmMHGz9dVRaMY6rRAlEX4W0Wdhm.jpg",
+          "vote_average": 6.438,
+          "vote_count": 16,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/A7WRkLLQDEBWX3UwcQjyNmFXrds.jpg",
+          "vote_average": 4.818,
+          "vote_count": 22,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/xEXDIJFenYgRwpsJs1mx6hr1DKy.jpg",
+          "vote_average": 4.5,
+          "vote_count": 19,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_639_1": "en",
+          "file_path": "/mf3ku2b0hEeGX0UeEghO9SfJxz6.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/iFcdo2rtbDIGv2aSIbDfKGLdpr.jpg",
+          "vote_average": 4.154,
+          "vote_count": 13,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

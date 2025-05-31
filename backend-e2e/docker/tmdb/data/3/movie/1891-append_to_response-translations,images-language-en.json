@@ -1,0 +1,293 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25579",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d9966b2eacd6bb9c339440d2efbe795c\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "F6ENGW85y9zbhuw9FVpi6K7YLxjjKFWrCcDXKNZfCOX8urQQ_-PDHQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dMZxEdrWIzUmUoOz2zvmFuutbj7.jpg",
+    "belongs_to_collection": {
+      "id": 10,
+      "name": "Mathematical Wasp",
+      "poster_path": "/aSrMJYmQX8kpF26LijkCsYhBMvm.jpg",
+      "backdrop_path": "/zZDkgOmFMVYpGAkR9Tkxw0CRnxX.jpg"
+    },
+    "budget": 18000000,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://humble-sake.com",
+    "id": 1891,
+    "imdb_id": "tt0080684",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Uninterested Clownfish",
+    "overview": "Aptus cribro quas deludo deficio decimus ago sto adamo. Adulescens civitas vilicus umbra utor tenuis ultra totam degero.",
+    "popularity": 9.3503,
+    "poster_path": "/nNAeTmF4CtdSgMDplXTDPOpYzsX.jpg",
+    "production_companies": [
+      {
+        "id": 1,
+        "logo_path": "/tlVSws0RvvtPBwViUyOFAO0vcQS.png",
+        "name": "Eager Eeth Koth Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1980-05-20",
+    "revenue": 538400000,
+    "runtime": 124,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Teneo aptus cribro quas deludo.",
+    "title": "Operational Pinniped",
+    "video": false,
+    "vote_average": 8.4,
+    "vote_count": 17422,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://growling-wiring.net",
+            "overview": "Tego vinculum veritas comptus celo neque versus comminor adfectus turba. Eaque cibus demonstro conicio quaerat.",
+            "runtime": 124,
+            "tagline": "Voro tego vinculum veritas comptus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://whimsical-quest.net",
+            "overview": "Testimonium aliquid autem delinquo comminor conicio absconditus spero. Coerceo ultra adfectus vivo cuius volubilis beneficium canis. Quos altus tam audax tonsor desolo vestrum appono atrocitas conservo.",
+            "runtime": 124,
+            "tagline": "Summisse testimonium aliquid autem delinquo comminor conicio absconditus.",
+            "title": "Rigid Flyingfish"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Vicinus vindico voro conatus cui aduro approbo velum cauda.",
+            "runtime": 124,
+            "tagline": "Urbanus vicinus vindico voro.",
+            "title": "Raw Perch"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Vicinus vindico voro conatus cui aduro approbo velum cauda.",
+            "runtime": 124,
+            "tagline": "Urbanus vicinus vindico voro.",
+            "title": "Raw Perch"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Rerum fuga somnus tutis summisse thema vulgo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Normal Basilisk"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/thMAxMjwzRIJ7xZy3ZbVJsVPVlS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/dLhhwyTn8jp8nGGX48WW5abXzHx.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/6jycQtEorKgmcsi9AeYBrRxlpqu.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/bR906MlKV84XRYl6lCSzhvF13A4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/qntE8dDhD4bi4qKsPjzSBh0ZnHs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.473,
+          "height": 1299,
+          "iso_639_1": "en",
+          "file_path": "/ypMOFyWHB07F60qEbpYlndtjlWT.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3212
+        },
+        {
+          "aspect_ratio": 2.473,
+          "height": 1299,
+          "iso_639_1": "en",
+          "file_path": "/ajmgPQjHAiEw4TL0u1cUuevgCKk.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3212
+        },
+        {
+          "aspect_ratio": 2.107,
+          "height": 290,
+          "iso_639_1": "en",
+          "file_path": "/wWKNWk1yGXj1QlGh5yx3wRGyb89.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 611
+        },
+        {
+          "aspect_ratio": 3.308,
+          "height": 237,
+          "iso_639_1": "en",
+          "file_path": "/p9v8diDazDWeYRzwmhyBv7Ugkk0.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 784
+        },
+        {
+          "aspect_ratio": 3.408,
+          "height": 228,
+          "iso_639_1": "en",
+          "file_path": "/2gjxKA5o5QoGOyL8XWTMGjDkvVK.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 777
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/nNAeTmF4CtdSgMDplXTDPOpYzsX.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1067,
+          "iso_639_1": "en",
+          "file_path": "/1IHkpzEYK25puLJU9JsCprcx9Np.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.663,
+          "height": 2709,
+          "iso_639_1": "en",
+          "file_path": "/2l05cFWJacyIsTpsqSgH0wQXe4V.jpg",
+          "vote_average": 6.088,
+          "vote_count": 17,
+          "width": 1797
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 831,
+          "iso_639_1": "en",
+          "file_path": "/iYund5AEdZfJEZ5Awy4LQWFswl3.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 555
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/s12hAKDCui6S8GIyRIaz6oKe5OW.jpg",
+          "vote_average": 5.616,
+          "vote_count": 26,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

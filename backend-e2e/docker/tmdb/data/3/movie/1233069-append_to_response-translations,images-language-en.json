@@ -1,0 +1,250 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13170",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"fc534e2f17c2d8dd604346a1f1ca0c94\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "GooT3_DAr7VOXT7cjJYunntmMkpqSzdHReNNbAdo7Zu8f_YxqAr-mg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/14UFWFJsGeInCbhTiehRLTff4Yx.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://insidious-typhoon.net",
+    "id": 1233069,
+    "imdb_id": "tt30876483",
+    "origin_country": ["AT", "DE"],
+    "original_language": "de",
+    "original_title": "Married Jay",
+    "overview": "Spargo tyrannus clarus socius contego confugo caries clementia condico capitulus. Suasoria calcar summopere tui combibo trepide.",
+    "popularity": 134.5884,
+    "poster_path": "/jM2uqCZNKbiyStyzXOERpMqAbdx.jpg",
+    "production_companies": [
+      {
+        "id": 114791,
+        "logo_path": "/jeTQ9G3haIbLn8Shrc9OxPafST6.png",
+        "name": "Overall Luminara Unduli Pictures",
+        "origin_country": "DE"
+      },
+      {
+        "id": 1833,
+        "logo_path": "/6Ot5X5xRv0PvZ9cUUD5ZymSruLi.png",
+        "name": "Natural Ayla Secura Productions",
+        "origin_country": "AT"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      },
+      {
+        "iso_3166_1": "AT",
+        "name": "Austria"
+      }
+    ],
+    "release_date": "2025-04-29",
+    "revenue": 0,
+    "runtime": 109,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Pretty Anglerfish",
+    "video": false,
+    "vote_average": 6.74,
+    "vote_count": 411,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://utter-gripper.org",
+            "overview": "Varius coerceo adicio accusamus confero suscipio. Minus accendo aer termes alo basium acervus arcesso. Repellat adduco cimentarius corona vomica sortitus accommodo delibero tribuo convoco.",
+            "runtime": 109,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://innocent-grouse.name",
+            "overview": "Sollers sordeo arbor deleo amo amplus. Adinventitias defendo solvo valetudo tracto cometes varietas virtus aqua reprehenderit.",
+            "runtime": 109,
+            "tagline": "",
+            "title": "Definite Louse"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://innocent-grouse.name",
+            "overview": "Sollers sordeo arbor deleo amo amplus. Adinventitias defendo solvo valetudo tracto cometes varietas virtus aqua reprehenderit.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Definite Louse"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://faraway-public.org",
+            "overview": "Valens aiunt comedo pauper amiculum tandem advenio videlicet.",
+            "runtime": 109,
+            "tagline": "",
+            "title": "Victorious Gopher"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/yUS6J13zpR1qx3baYaflhIMUJ16.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/pOsO5yd4lI19rNwxEEPy0rw33gT.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1034,
+          "iso_639_1": "en",
+          "file_path": "/ijwI9WC0EtiBZ6Pg8wXcwvOGIcp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1838
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/fAPKi3tVjDMSgeZdWCXzBsbmOgh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.897,
+          "height": 649,
+          "iso_639_1": "en",
+          "file_path": "/10cDOKNwMe5HnItZwebth15Dg6U.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3827
+        },
+        {
+          "aspect_ratio": 7.435,
+          "height": 46,
+          "iso_639_1": "en",
+          "file_path": "/dkGY1gtAxrft3XSJTT9cPaxkJLz.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 342
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/jM2uqCZNKbiyStyzXOERpMqAbdx.jpg",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_639_1": "en",
+          "file_path": "/qWTfHG8KdXwr0bqypYbNZLenh0J.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/80MTIDp5Q3f1bwlfPLWtZu6UGn6.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/irgeQM31g6e59CY2CQsIsA8YMWK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/micQGmD3K7Ni0wzyaSgBKGxrFWn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

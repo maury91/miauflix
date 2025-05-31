@@ -1,0 +1,313 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14528",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9fa1a8e03c43ed8a326c7f448cc736e2\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "JVP-ac7eQ4yoG6HQeR5Ci1PQDBtIwCnojyovUd4buKKW9flf0X6HFA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "c48e0a81c0964062b5f95e61bfbac73e"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/uIpJPDNFoeX0TVml9smPrs9KUVx.jpg",
+    "belongs_to_collection": {
+      "id": 8864,
+      "name": "Philosophical Mammal",
+      "poster_path": "/nr4MXTXK2in9gxYhFMQGni66KRJ.jpg",
+      "backdrop_path": "/y3aWOInifbGKXM34KjtcMITrZRZ.jpg"
+    },
+    "budget": 50000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://hidden-bead.biz",
+    "id": 574475,
+    "imdb_id": "tt9619824",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Vast Marlin",
+    "overview": "Audax aegrotatio ocer. Credo tubineus suppono timidus cumque pecus suffragium.",
+    "popularity": 394.4219,
+    "poster_path": "/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg",
+    "production_companies": [
+      {
+        "id": 12,
+        "logo_path": "/2ycs64eqV5rqKYHyQK0GVoKGvfX.png",
+        "name": "Operational Nien Nunb Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 48788,
+        "logo_path": null,
+        "name": "Willing Han Solo Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 252366,
+        "logo_path": null,
+        "name": "Suspicious Roos Tarpals Entertainment",
+        "origin_country": ""
+      },
+      {
+        "id": 252367,
+        "logo_path": null,
+        "name": "Squealing Zam Wesell Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 216687,
+        "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
+        "name": "Expected R4-P17 Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-05-14",
+    "revenue": 191658534,
+    "runtime": 110,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Aer audax aegrotatio ocer harum.",
+    "title": "Stuck Otter",
+    "video": false,
+    "vote_average": 7,
+    "vote_count": 482,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://slushy-canopy.org",
+            "overview": "Utrum subito solus adopto. Super alienus despecto capio amor. Volutabrum cursim vespillo cultura via ago.",
+            "runtime": 110,
+            "tagline": "Antea utrum subito solus adopto cohaero super.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://electric-wish.org",
+            "overview": "Unus vorago antiquus asporto ratione spero sortitus subito volo apud.",
+            "runtime": 100,
+            "tagline": "Voro unus vorago antiquus.",
+            "title": "Given Fowl"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Unus vorago antiquus asporto ratione spero sortitus subito volo apud.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Given Fowl"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Copia solium denuo tepidus addo aureus degero. Cura angulus depopulo temporibus omnis arceo.",
+            "runtime": 0,
+            "tagline": "Pauper copia solium denuo tepidus.",
+            "title": "Present Wolf"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Autem iusto corpus somnus deleniti sufficio suscipio voluntarius. Utrimque sperno textilis tabesco aduro aestivus pauci.",
+            "runtime": 110,
+            "tagline": "",
+            "title": "Sorry Mandrill"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/74eUkF72aQonomvpAe1JEqukZUI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 1123,
+          "iso_639_1": "en",
+          "file_path": "/xiUTHBPmP5czAT8aMbGfR1ebzMz.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_639_1": "en",
+          "file_path": "/kgYOvKoQD8leYqSY1fwbhu5ONHx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_639_1": "en",
+          "file_path": "/rsAZqVQS7sGCMLDO3QNJEfm11nO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 1123,
+          "iso_639_1": "en",
+          "file_path": "/yTYjuY34cVmtc1c3Sle7lYo5es4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.466,
+          "height": 1246,
+          "iso_639_1": "en",
+          "file_path": "/v1qnIVyG8wvMOsJyHCLrGJwqvlX.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 3.391,
+          "height": 1851,
+          "iso_639_1": "en",
+          "file_path": "/49yULE2PACIl931PfYEnnAgflfR.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 6276
+        },
+        {
+          "aspect_ratio": 3.468,
+          "height": 434,
+          "iso_639_1": "en",
+          "file_path": "/fNSADtnvvcZZyNxVKYOikFzv0pI.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1505
+        },
+        {
+          "aspect_ratio": 3.434,
+          "height": 99,
+          "iso_639_1": "en",
+          "file_path": "/qGRTetguyrPegXHqLTEecI2z7Mf.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 340
+        },
+        {
+          "aspect_ratio": 3.466,
+          "height": 1246,
+          "iso_639_1": "en",
+          "file_path": "/7KH3GTySTfQsEp5LBFlvolBn6ce.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg",
+          "vote_average": 8.362,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/7vygX4ObgOmZn7E2P95mCeqCmqV.jpg",
+          "vote_average": 7.542,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_639_1": "en",
+          "file_path": "/txr6i5Y6nbx7t0dDx1xyzfdFum5.jpg",
+          "vote_average": 5.844,
+          "vote_count": 16,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1442,
+          "iso_639_1": "en",
+          "file_path": "/cAoktVUBhGyULRoxV6mZ2LB3x7I.jpg",
+          "vote_average": 4.412,
+          "vote_count": 17,
+          "width": 961
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/zuq6hLhhdiF2lKkRs9iXFtjNJtE.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

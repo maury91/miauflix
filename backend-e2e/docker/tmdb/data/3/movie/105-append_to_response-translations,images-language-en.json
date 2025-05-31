@@ -1,0 +1,299 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20985",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"82d1c49521af14d0ab1e0f5a320ede61\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "g7Wy6qa6a9E7ew01auUkQCQDfWK6U_THpEPnjDYxXSynveew0YD0Kw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yz8QL8WFD8yj0LA5zIlNOgcHvZK.jpg",
+    "belongs_to_collection": {
+      "id": 264,
+      "name": "Apparent Tiger",
+      "poster_path": "/5Xsu2o5IsZRuuxCEVZ9nVve21FP.jpg",
+      "backdrop_path": "/c9C9Pg2QctyjZHRmS0P8rZg1OTA.jpg"
+    },
+    "budget": 19000000,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://scratchy-gazebo.info",
+    "id": 105,
+    "imdb_id": "tt0088763",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Underground Blackbird",
+    "overview": "Curvo ratione aureus capillus earum ater. Ago cometes acies audentia celo vir tempora thermae. Creta dignissimos denego illo nostrum.",
+    "popularity": 16.4976,
+    "poster_path": "/vN5B5WgYscRGcQpVhHl6p9DDTP0.jpg",
+    "production_companies": [
+      {
+        "id": 33,
+        "logo_path": "/3wwjVpkZtnog6lSKzWDjvw2Yi00.png",
+        "name": "Illegal Bossk Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 56,
+        "logo_path": "/cEaxANEisCqeEoRvODv2dO1I0iI.png",
+        "name": "Olympic Shaak Ti Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1985-07-03",
+    "revenue": 381109762,
+    "runtime": 116,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Crapula curvo ratione aureus capillus earum ater.",
+    "title": "Magic Marlin",
+    "video": false,
+    "vote_average": 8.32,
+    "vote_count": 20551,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://twin-field.biz",
+            "overview": "Audacia canto coerceo curatio demo. Solio suffragium consuasor dolor. Creta amiculum cura aetas.",
+            "runtime": 116,
+            "tagline": "Congregatio audacia canto coerceo curatio demo approbo solio.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://honored-kohlrabi.info",
+            "overview": "Denuo esse vinum facere vado cohaero. Administratio stipes commemoro caput.",
+            "runtime": 116,
+            "tagline": "Depromo denuo esse vinum facere.",
+            "title": "Entire Marten"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Autus sufficio vomer harum ulterius. Argentum vitium vicissitudo ceno tardus exercitationem.",
+            "runtime": 116,
+            "tagline": "Corona autus sufficio vomer harum ulterius.",
+            "title": "Shaggy Woodpecker"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Autus sufficio vomer harum ulterius. Argentum vitium vicissitudo ceno tardus exercitationem.",
+            "runtime": 117,
+            "tagline": "Corona autus sufficio vomer harum ulterius.",
+            "title": "Shaggy Woodpecker"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Acquiro candidus cinis sol quaerat depono. Tempora vae cursim suus cumque.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Awake Walrus"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/wkcGb8ZiOF27T9OLqGr9CHQ3ooC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/4rPDCsbZBGD8l9rBflmJt42NleV.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_639_1": "en",
+          "file_path": "/r6uvRozSY7DITG48ndFHvTjh8hc.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/exxBtPghfz2arHqEGlhACjBjU2v.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/xrMfju0BNhwIHQD4IcdFBP2q3vs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.17,
+          "height": 1283,
+          "iso_639_1": "en",
+          "file_path": "/jyhwiYJ05nhIkgx9UDVpUCrQ8Hm.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2784
+        },
+        {
+          "aspect_ratio": 1.833,
+          "height": 540,
+          "iso_639_1": "en",
+          "file_path": "/dddmNfxOnRngt9dGcUaRAlqlmAi.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 990
+        },
+        {
+          "aspect_ratio": 1.824,
+          "height": 295,
+          "iso_639_1": "en",
+          "file_path": "/pE419OnGeejH3DmMVQoZhhqTFCF.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 538
+        },
+        {
+          "aspect_ratio": 2.172,
+          "height": 647,
+          "iso_639_1": "en",
+          "file_path": "/eavFQWsHxYploXqNVePbLJgvBsV.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1405
+        },
+        {
+          "aspect_ratio": 2.222,
+          "height": 1214,
+          "iso_639_1": "en",
+          "file_path": "/hQDdpVQvgRm2WM0ZNYASlE6Ffvn.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2697
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/vN5B5WgYscRGcQpVhHl6p9DDTP0.jpg",
+          "vote_average": 6.722,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/rej4R5DIdlx29I2soNePfInICG3.jpg",
+          "vote_average": 6.2,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/fNOH9f1aA7XRTzl1sAOx9iF553Q.jpg",
+          "vote_average": 5.87,
+          "vote_count": 23,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/7lyBcpYB0Qt8gYhXYaEZUNlNQAv.jpg",
+          "vote_average": 4.458,
+          "vote_count": 24,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/xlBivetfrtF84Yx0zISShnNtHYe.jpg",
+          "vote_average": 3.666,
+          "vote_count": 12,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

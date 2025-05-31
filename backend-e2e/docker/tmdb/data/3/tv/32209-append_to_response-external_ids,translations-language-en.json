@@ -1,0 +1,224 @@
+{
+  "headers": {
+    "age": "1217",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21113",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1f94a9331c8edd33d9366674506a865c\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Hke6Xc7icV19C-FEyDDXckkwble3fFY_SnbgtojIkish6QoFt4Am1w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/9kGfwwA0N0KOen7oTBGSVoQsXLz.jpg",
+    "created_by": [
+      {
+        "id": 2365405,
+        "credit_id": "63f8c3cc46f354009d1b0bc5",
+        "name": "Wilbert Skiles",
+        "original_name": "Wilbert Skiles",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [42],
+    "first_air_date": "2009-03-30",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10766,
+        "name": "Soap"
+      }
+    ],
+    "homepage": "",
+    "id": 32209,
+    "in_production": true,
+    "languages": ["es"],
+    "last_air_date": "2025-05-27",
+    "last_episode_to_air": {
+      "id": 6267913,
+      "name": "Thorough Goldfish",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-29",
+      "episode_number": 74,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 32209,
+      "still_path": null
+    },
+    "name": "Mathematical Cattle",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 441,
+        "logo_path": "/ulzkSZHZCttGVEuESQBmhqO4XaA.png",
+        "name": "Ugliest Nien Nunb Media",
+        "origin_country": "PE"
+      }
+    ],
+    "number_of_episodes": 1003,
+    "number_of_seasons": 5,
+    "origin_country": ["PE"],
+    "original_language": "es",
+    "original_name": "Wild Hummingbird",
+    "overview": "Tamen temporibus deludo degusto ambitus aer una depulso. Vae desolo acerbitas aveho complectus alius tepesco aequitas.",
+    "popularity": 163.2248,
+    "poster_path": "/4BkYVoybIvM2U7zeg2JTT5M5dwF.jpg",
+    "production_companies": [
+      {
+        "id": 160763,
+        "logo_path": null,
+        "name": "Dead Owen Lars Pictures",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "PE",
+        "name": "Peru"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2014-07-30",
+        "episode_count": 11,
+        "id": 428695,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/tR2xGylUfivm4PDUec7TlHDDr9h.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-03-30",
+        "episode_count": 189,
+        "id": 112393,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/1rWUDaxySnpi30laJajRoxNGbvp.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2010-03-01",
+        "episode_count": 202,
+        "id": 112395,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/hmTiH9m82gRcH5PuGUYydiQ3scT.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2011-02-28",
+        "episode_count": 195,
+        "id": 112396,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/eaDe9iT9uVmsPMbMDnjnIvBGlel.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2012-02-27",
+        "episode_count": 208,
+        "id": 112397,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/63Ezf1Xmbvmu21tOyuzxWiMIvpK.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": null,
+        "episode_count": 198,
+        "id": 112398,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/b1vrBxNhzVtklfcG3sRI7hHDhZY.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.8,
+    "vote_count": 222,
+    "external_ids": {
+      "imdb_id": "tt1441404",
+      "freebase_mid": "/m/080jqst",
+      "freebase_id": "/en/al_fondo_hay_sitio",
+      "tvdb_id": 275641,
+      "tvrage_id": null,
+      "wikidata_id": "Q978479",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Vesica audacia verus sufficio alias commemoro. Tertius sophismata utor. Auctus patruus natus casso ager valetudo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Quasi iste aetas abscido talus acer.",
+            "homepage": "",
+            "tagline": "Creta quasi iste."
+          }
+        }
+      ]
+    }
+  }
+}

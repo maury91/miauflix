@@ -97,7 +97,7 @@ describe('MediaService', () => {
 
       // Check movie properties
       expect(movie).not.toBeNull();
-      expect(movie.tmdbId).toBe(theWildRobotTMDBID);
+      expect(movie!.tmdbId).toBe(theWildRobotTMDBID);
     });
 
     it('should return a movie from the database if it exists', async () => {

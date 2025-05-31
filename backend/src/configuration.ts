@@ -70,12 +70,16 @@ export type Variables = {
   [K in keyof typeof services]: keyof (typeof services)[K]['variables'];
 }[keyof typeof services];
 
+const getDefaultValue = (defaultValue: string | (() => string)): string | undefined => {
+  return typeof defaultValue === 'function' ? defaultValue() : defaultValue;
+};
+
 export const variablesDefaultValues = Object.values(services).reduce(
   (acc, service) => {
     (Object.entries(service.variables) as [Variables, VariableInfo][]).forEach(
       ([varName, varInfo]) => {
         if ('defaultValue' in varInfo) {
-          acc[varName] = varInfo.defaultValue;
+          acc[varName] = getDefaultValue(varInfo.defaultValue);
         }
       }
     );
@@ -170,7 +174,7 @@ async function promptForVariable(
   varInfo: VariableInfo,
   optional: boolean
 ): Promise<string> {
-  const defaultValue = 'defaultValue' in varInfo ? varInfo.defaultValue : '';
+  const defaultValue = 'defaultValue' in varInfo ? getDefaultValue(varInfo.defaultValue) : '';
   const currentValue = process.env[varName] || defaultValue;
 
   console.log();
@@ -180,7 +184,7 @@ async function promptForVariable(
   console.log(chalk.white(varInfo.description));
 
   if ('defaultValue' in varInfo) {
-    console.log(chalk.dim(`Default: ${varInfo.defaultValue}`));
+    console.log(chalk.dim(`Default: ${defaultValue}`));
   }
 
   if (varInfo.example) {
@@ -279,7 +283,7 @@ export async function validateConfiguration(
           // Auto-configure variables with skipUserInteraction set to true
           if ('skipUserInteraction' in varInfo && varInfo.skipUserInteraction === true) {
             if (!process.env[varName]) {
-              process.env[varName] = varInfo.defaultValue;
+              process.env[varName] = getDefaultValue(varInfo.defaultValue);
               autoConfiguredVars.add(varName);
               changedEnvVariables.add(varName);
             }

@@ -43,26 +43,31 @@ export class MediaService {
   public async getMovie(
     movieId: number | string,
     movieSummary?: MovieMediaSummary
-  ): Promise<Movie> {
+  ): Promise<Movie | null> {
     // Check if the movie is available in the local DB
     let movie = await this.movieRepository.findByTMDBId(Number(movieId));
     if (!movie) {
-      // If not, fetch from TMDB and save it to the local DB
-      const { translations, ...movieDetails } = await this.getMovieDetails(movieId);
-      movie = await this.movieRepository.create(movieDetails);
+      try {
+        // If not, fetch from TMDB and save it to the local DB
+        const { translations, ...movieDetails } = await this.getMovieDetails(movieId);
+        movie = await this.movieRepository.create(movieDetails);
 
-      await Promise.all(
-        translations.map(translation => {
-          if (movie) {
-            return this.movieRepository.addTranslation(movie, {
-              title: translation.data.title,
-              overview: translation.data.overview,
-              tagline: translation.data.tagline,
-              language: translation.iso_639_1,
-            });
-          }
-        })
-      );
+        await Promise.all(
+          translations.map(translation => {
+            if (movie) {
+              return this.movieRepository.addTranslation(movie, {
+                title: translation.data.title,
+                overview: translation.data.overview,
+                tagline: translation.data.tagline,
+                language: translation.iso_639_1,
+              });
+            }
+          })
+        );
+      } catch {
+        // If TMDB returns 404 or any error, return null
+        return null;
+      }
     }
     if (movieSummary) {
       const genres = await this.getGenres(movieSummary.genres);

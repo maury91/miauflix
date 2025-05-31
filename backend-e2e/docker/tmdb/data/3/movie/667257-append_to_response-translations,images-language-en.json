@@ -1,0 +1,161 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9127",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"10f589c0ed89524854c340b482f255e1\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "uK54vZKNS4KK2ZjtVexR7yEUsgpbrHj7gpgT_ym8UMcEkjWH34S_1Q==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "03e2018322f74fe8b973ddf1bd673363"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/bxSBOAD8AuMHYMdW3jso9npAkgt.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "",
+    "id": 667257,
+    "imdb_id": "tt10032342",
+    "origin_country": ["MX"],
+    "original_language": "es",
+    "original_title": "Bumpy Gazelle",
+    "overview": "Confero vesica uterque curvo auctor soluta cubo virgo cauda aliqua. Curis constans vindico nostrum condico cohibeo.",
+    "popularity": 1.4355,
+    "poster_path": "/t2Ew8NZ8Ci2kqmoecZUNQUFDJnQ.jpg",
+    "production_companies": [
+      {
+        "id": 96929,
+        "logo_path": null,
+        "name": "Stuck Grievous Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 12487,
+        "logo_path": "/wUKVwhE1CWpgwNcL5x88zcWjJMI.png",
+        "name": "Annoyed Ki-Adi-Mundi Productions",
+        "origin_country": "MX"
+      },
+      {
+        "id": 7570,
+        "logo_path": "/gW8dfVtl1JsGIiLnvglea1OHHVr.png",
+        "name": "Equal Finis Valorum Productions",
+        "origin_country": "MX"
+      },
+      {
+        "id": 5153,
+        "logo_path": "/d4BySWBlcGBBY58FG78DWMi9nrs.png",
+        "name": "Magic Ben Quadinaros Productions",
+        "origin_country": "MX"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      }
+    ],
+    "release_date": "2021-06-17",
+    "revenue": 0,
+    "runtime": 88,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Volaticus confero vesica uterque curvo auctor.",
+    "title": "Disabled Antelope",
+    "video": false,
+    "vote_average": 8.419,
+    "vote_count": 407,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Vitae pecus absorbeo collum textus deorsum.",
+            "runtime": 88,
+            "tagline": "Creptio vitae pecus absorbeo.",
+            "title": "Worried Lungfish"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Magni fugiat temeritas auxilium beatae videlicet. Ambitus titulus caste supra dens deputo. Iusto amoveo saepe thymum peccatus balbus civitas.",
+            "runtime": 0,
+            "tagline": "Degusto magni fugiat temeritas auxilium beatae videlicet.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Magni fugiat temeritas auxilium beatae videlicet. Ambitus titulus caste supra dens deputo. Iusto amoveo saepe thymum peccatus balbus civitas.",
+            "runtime": 0,
+            "tagline": "Degusto magni fugiat temeritas auxilium beatae videlicet.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.666,
+          "height": 1600,
+          "iso_639_1": "en",
+          "file_path": "/t2Ew8NZ8Ci2kqmoecZUNQUFDJnQ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1066
+        }
+      ]
+    }
+  }
+}

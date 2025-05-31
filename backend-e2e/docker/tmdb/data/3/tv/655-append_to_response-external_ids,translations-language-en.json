@@ -1,0 +1,258 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7640",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c54d5da2f93c9964623762fce1a56e0a\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Oh6bU92XM8ySmYFvp70DMC175OwZnMJGRTtItLSFjTqrXRjKC1NZAA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "4f745164c16646a89207e9f5074053e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5uxpTGMvH0taHAkMYxOQHYJcsws.jpg",
+    "created_by": [
+      {
+        "id": 1745,
+        "credit_id": "52538dc119c295794026909e",
+        "name": "Angelina Marks",
+        "original_name": "Angelina Marks",
+        "gender": 2,
+        "profile_path": "/qY3gWqAMDrrvNVUrwZ8lSa4IKtS.jpg"
+      }
+    ],
+    "episode_run_time": [45],
+    "first_air_date": "1987-09-28",
+    "genres": [
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://passionate-barometer.info",
+    "id": 655,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "1994-05-23",
+    "last_episode_to_air": {
+      "id": 37208,
+      "name": "Productive Crane",
+      "overview": "Ad clam crudelis. Tamisium quia caelum adicio stips odio. Tot angelus admoveo.",
+      "vote_average": 8.214,
+      "vote_count": 42,
+      "air_date": "1994-05-23",
+      "episode_number": 25,
+      "episode_type": "finale",
+      "production_code": "40277-747",
+      "runtime": 92,
+      "season_number": 5,
+      "show_id": 655,
+      "still_path": "/jtIgLmDaLpJ8WDMfjdUNEjPojrU.jpg"
+    },
+    "name": "Distinguished Possum",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 184,
+        "logo_path": null,
+        "name": "Ok Wat Tambor Studios",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 266,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Positive Lion",
+    "overview": "Defessus tot pecto. Amplitudo suspendo color cotidie aeternus vesco amicitia ustulo spiritus.",
+    "popularity": 170.373,
+    "poster_path": "/vkLzXddgUKH5VcpnYiRzpJFrZhz.jpg",
+    "production_companies": [
+      {
+        "id": 9223,
+        "logo_path": "/40qzTBM38vokoWhLKurficZ5syV.png",
+        "name": "Yammering Yoda Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 57121,
+        "logo_path": null,
+        "name": "Kind Sly Moore Entertainment",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2012-07-24",
+        "episode_count": 141,
+        "id": 1996,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/eg2cYEp74IyWM6gDC6y7g3dDbu.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1987-09-28",
+        "episode_count": 25,
+        "id": 1989,
+        "name": "Season 1",
+        "overview": "Picking up decades after the original Star Trek series, season one begins the intergalactic adventures of Capt. Jean-Luc Picard and his loyal crew aboard the all-new USS Enterprise NCC-1701D, as they explore new worlds.",
+        "poster_path": "/cqfhZiCBqryQjo7s0cqZJOssE7d.jpg",
+        "season_number": 1,
+        "vote_average": 6.5
+      },
+      {
+        "air_date": "1988-11-21",
+        "episode_count": 22,
+        "id": 1990,
+        "name": "Season 2",
+        "overview": "In season two, the Enterprise continues on its journey across the galaxy with the birth of a new member. Picard once again leads the team as unknown civilizations take notice of the ship and wishes to know more about the crew and their operations. Riker struggles with his loyalty to the Enterprise as his life is threatened and Data tries to become more human to understand his role upon the Enterprise. This season looks closer into the relationship of man vs. machine as Q once again tries to test Picard against a new enemy. The Ferengi threatens the Enterprise and the mystery of the holodeck pits the crew against the clock as lives hang in the balance.",
+        "poster_path": "/i5WIVkgnZk1qyE42xujMOkb1q15.jpg",
+        "season_number": 2,
+        "vote_average": 6.6
+      },
+      {
+        "air_date": "1989-09-25",
+        "episode_count": 26,
+        "id": 1995,
+        "name": "Season 3",
+        "overview": "With the disappearance of a Federation colony, the Enterprise warp speeds to action to uncover if the reason was political or something much more sinister. Along their travels, the crew must escort a scientist who may hold the key to a malfunction that places the crew in danger. Prime Directives are broken as Picard is taken for a god on a primitive world. The Romulans continue to notice Federation intrusion into the Neutral Zone and threatens war against the Enterprise. Things become much more complex as an old enemy stops by and Picard must decide if he should offer solace or choose to remain enemies as a precaution. All leading up to finally answering the motives of Starfleet and the Federation as the Enterprise continues on its mission to explore the galaxy.",
+        "poster_path": "/gu8FUHyVp65zxm3DS0Z1HhB6BFK.jpg",
+        "season_number": 3,
+        "vote_average": 7.1
+      },
+      {
+        "air_date": "1990-09-24",
+        "episode_count": 26,
+        "id": 1991,
+        "name": "Season 4",
+        "overview": "As Riker tries to save the Enterprise and the Earth from a powerful alien race, Captain Picard's life hangs in the balance. The crew faces their own demons and must overcome their own obstacles to continue their mission. This leads Data to return to his creator to better understand emotions. Worf must accept his Klingon heritage and face his former family. A power struggle threatens the Federation as the Romulans try to make peace with their universe and the Klingons deal with a potential successor to their empire. Political relations are strained within the Enterprise as a rogue ship attacks former enemies of the Federation, ultimately leading up to a civil war where one member of the Enterprise must decide where his loyalty lies.",
+        "poster_path": "/hYdHSFEUSw3KnwcDNzOBscSQ1FL.jpg",
+        "season_number": 4,
+        "vote_average": 7.1
+      },
+      {
+        "air_date": "1991-09-23",
+        "episode_count": 26,
+        "id": 1992,
+        "name": "Season 5",
+        "overview": "In season five, Starfleet becomes involved in a vast conspiracy amidst a Klingon civil war which forces the Enterprise to become an unwilling pawn against the Romulans as Starfleet's motives are unknown. This leads Picard and Data to undertake a journey to seek out a mysterious member who is trying to make peace between the Romulans and the Vulcans. Meanwhile, a visitor from the future arrives on the Enterprise as Wolf struggles with his own handicap. The crew becomes even more conflicted as an injured enemy arrives. Peace is seen on the horizon but at what cost?",
+        "poster_path": "/brHkkwUWSamamS7G23wBY7VLYcw.jpg",
+        "season_number": 5,
+        "vote_average": 7.1
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Aegre defessus tot pecto ustilo amplitudo.",
+    "type": "Scripted",
+    "vote_average": 8.369,
+    "vote_count": 1575,
+    "external_ids": {
+      "imdb_id": "tt0092455",
+      "freebase_mid": "/m/06qv_",
+      "freebase_id": "/en/star_trek_the_next_generation",
+      "tvdb_id": 71470,
+      "tvrage_id": 5337,
+      "wikidata_id": "Q16290",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Decipio soluta charisma stabilis voluptates possimus comminor titulus cruciamentum. Sequi ancilla adeptio conduco causa clibanus suus bene turba.",
+            "homepage": "",
+            "tagline": "Turbo decipio soluta charisma stabilis voluptates."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Like Landfowl",
+            "overview": "Cubo solus alius adamo auctus amaritudo demitto tantillus. Demum dolores sint ciminatio suppono acidus. Correptius venia clementia creptio aetas tempora depulso vae.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Still Flamingo",
+            "overview": "Suffoco autem cilicium commodo aegrus. Deficio defleo cariosus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Classical Finch",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Still Flamingo",
+            "overview": "Suffoco autem cilicium commodo aegrus. Deficio defleo cariosus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

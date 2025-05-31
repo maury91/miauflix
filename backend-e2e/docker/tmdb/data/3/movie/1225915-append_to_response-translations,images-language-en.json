@@ -1,0 +1,199 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16842",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7212116efe58f703a2728fbb36dd9861\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 fa8c9f29fb8ef5c537a2a53f4de05240.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "USvoIWuM6V3mN_3ORsmMWUA3B2jpl1FOwmNkS1O915PloUouuL5ong==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kFXtAwJYbRTqiyQpE9kDc8qEP3X.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://clever-pastry.name",
+    "id": 1225915,
+    "imdb_id": "tt27843798",
+    "origin_country": ["IN"],
+    "original_language": "hi",
+    "original_title": "Useless Snipe",
+    "overview": "Solio tyrannus reprehenderit cum optio atrocitas sperno civis.",
+    "popularity": 95.5737,
+    "poster_path": "/eujLbO0kf1eqWC8XpHUJdtAVW2J.jpg",
+    "production_companies": [
+      {
+        "id": 147147,
+        "logo_path": null,
+        "name": "Puny Sly Moore Media",
+        "origin_country": "IN"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IN",
+        "name": "India"
+      }
+    ],
+    "release_date": "2025-04-24",
+    "revenue": 0,
+    "runtime": 118,
+    "spoken_languages": [
+      {
+        "english_name": "Hindi",
+        "iso_639_1": "hi",
+        "name": "हिन्दी"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Heavy Bedbug",
+    "video": false,
+    "vote_average": 6.575,
+    "vote_count": 53,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://simple-coat.org",
+            "overview": "Victoria vespillo ulterius vestrum. Depopulo vergo delectus cura bene. Dicta color adsidue voluptate.",
+            "runtime": 118,
+            "tagline": "",
+            "title": "Ambitious Possum"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://impure-geography.name",
+            "overview": "Ea accommodo tunc cinis soluta dolorum. Pecus concedo odio totidem sapiente dolores creo fugiat decipio.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Skinny Sawfish"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://impure-geography.name",
+            "overview": "Ea accommodo tunc cinis soluta dolorum. Pecus concedo odio totidem sapiente dolores creo fugiat decipio.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Skinny Sawfish"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://gruesome-gnu.com",
+            "overview": "Advenio terror conspergo vox a surgo. Dolores vado beatae placeat cohors.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Preliminary Gibbon"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/4i5a1LrLyQ3u9ER1i79HEzir9wj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.859,
+          "height": 205,
+          "iso_639_1": "en",
+          "file_path": "/lbjl58fACFh4RltCl44y0iUdOT0.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 586
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/eujLbO0kf1eqWC8XpHUJdtAVW2J.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/tgwtFNWWOMlM7BZ6QQRZTDjUyFB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/gtUdX5c2vO0Cwxppebd9744ElGC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/cQiDXkPg6NyojJ9eooRfIoN9aKe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/mv35VxbnRjOCB9FwAJTAsZ8rAn3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

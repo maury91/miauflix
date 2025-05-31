@@ -1,0 +1,180 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1417",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"dbd95916f1b792be17f3f9546aba3d40\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "8s_6bU3OkEqGzEuriWPpbKnkpndstWsUT7dwb4FDGv2nFjt2AIIPEg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/m0bV3qBiJBBlpFaaKjwHo13MVjm.jpg",
+    "created_by": [],
+    "episode_run_time": [60],
+    "first_air_date": "2005-01-03",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "",
+    "id": 14981,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2014-12-19",
+    "last_episode_to_air": {
+      "id": 2763686,
+      "name": "Rough Sparrow",
+      "overview": "Aspicio curo valde cupio. Ter inventore subseco blandior arguo appono currus. Venustas barba vester nesciunt thymum spargo chirographum.",
+      "vote_average": 9,
+      "vote_count": 1,
+      "air_date": "2014-12-19",
+      "episode_number": 73,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 60,
+      "season_number": 5,
+      "show_id": 14981,
+      "still_path": null
+    },
+    "name": "Single Pheasant",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Architectural Saesee Tiin Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 935,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Determined Lark",
+    "overview": "Valens vivo combibo iste cicuta crepusculum uredo. Accusamus crur urbanus summa in cum texo repellat adaugeo. Vinco absens alius adficio audio vulgivagus arbor modi capitulus.",
+    "popularity": 633.4477,
+    "poster_path": "/gGC7zSDgG0FY0MbM1pjfhTCWQBI.jpg",
+    "production_companies": [],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2007-02-04",
+        "episode_count": 1,
+        "id": 426218,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-01-03",
+        "episode_count": 141,
+        "id": 61527,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 9
+      },
+      {
+        "air_date": "2005-09-12",
+        "episode_count": 205,
+        "id": 61526,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2006-09-11",
+        "episode_count": 207,
+        "id": 61525,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 9
+      },
+      {
+        "air_date": "2007-09-10",
+        "episode_count": 171,
+        "id": 183638,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2008-09-01",
+        "episode_count": 210,
+        "id": 183639,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 7.5
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Talk Show",
+    "vote_average": 6.814,
+    "vote_count": 102,
+    "external_ids": {
+      "imdb_id": "tt0437729",
+      "freebase_mid": "/m/02vk7yz",
+      "freebase_id": "/en/the_late_late_show_with_craig_ferguson",
+      "tvdb_id": 73387,
+      "tvrage_id": null,
+      "wikidata_id": "Q2700116",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Canonicus textor argumentum.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

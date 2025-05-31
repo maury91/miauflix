@@ -13,8 +13,10 @@ import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { createAuthRoutes } from '@routes/auth.routes';
+import { createMovieRoutes } from '@routes/movie.routes';
 import { createTraktRoutes } from '@routes/trakt.routes';
 import { AuthService } from '@services/auth/auth.service';
+import { EncryptionService } from '@services/encryption/encryption.service';
 import { ListService } from '@services/media/list.service';
 import { ListSynchronizer } from '@services/media/list.syncronizer';
 import { MediaService } from '@services/media/media.service';
@@ -68,7 +70,8 @@ try {
     configOnly,
   });
 
-  const db = new Database();
+  const encryptionService = new EncryptionService();
+  const db = new Database(encryptionService);
   await db.initialize();
 
   const cache = buildCache();
@@ -204,6 +207,7 @@ try {
   });
 
   app.route('/auth', createAuthRoutes(authService, auditLogService));
+  app.route('/movies', createMovieRoutes(mediaService, sourceService, auditLogService));
   app.route('/trakt', createTraktRoutes(traktService, auditLogService));
 
   app.get('/lists', rateLimitGuard(5), authGuard(), async c => {

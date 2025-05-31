@@ -1,0 +1,293 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4340",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"27034b1f29c5e2c9225a5303d9512f80\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "dJhl_47MjOZy6moQarKFJ9jg0wPfe_mhyt-cD6hLVL7TFTAxCWrkUw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1pmXyN3sKeYoUhu5VBZiDU4BX21.jpg",
+    "belongs_to_collection": {
+      "id": 1370345,
+      "name": "Dominant Wallaby",
+      "poster_path": "/vm94OwAJdVE62BnNdrkM0aAgnEi.jpg",
+      "backdrop_path": "/f6G8QPeod5ngQMs5Fe1O4LdphB7.jpg"
+    },
+    "budget": 78000000,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://meaty-fav.org",
+    "id": 1184918,
+    "imdb_id": "tt29623480",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Literary Asp",
+    "overview": "Ventito tertius timidus convoco aequus. Sollers tyrannus ulterius alioqui natus terreo tener subnecto.",
+    "popularity": 57.4794,
+    "poster_path": "/9w0Vh9eizfBXrcomiaFWTIPdboo.jpg",
+    "production_companies": [
+      {
+        "id": 521,
+        "logo_path": "/3BPX5VGBov8SDqTV7wC1L1xShAS.png",
+        "name": "Disappointed Grievous Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2024-09-12",
+    "revenue": 331982078,
+    "runtime": 102,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Condico ventito tertius timidus convoco aequus.",
+    "title": "Available Marmot",
+    "video": false,
+    "vote_average": 8.314,
+    "vote_count": 4970,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://similar-maintenance.info",
+            "overview": "Depromo inflammatio non victoria stultus excepturi reprehenderit. Compello charisma defero speculum. Communis attonbitus desipio conduco creber.",
+            "runtime": 102,
+            "tagline": "Expedita depromo inflammatio non victoria stultus excepturi.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Votum aveho cum cetera amplexus commodi adfectus conventus.",
+            "runtime": 101,
+            "tagline": "Talio votum aveho.",
+            "title": "Ready Hoverfly"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Agnitio aegre sunt exercitationem ter temperantia votum subito.",
+            "runtime": 102,
+            "tagline": "Tabernus agnitio aegre sunt.",
+            "title": "Hurt Rooster"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://bad-rescue.org",
+            "overview": "Votum aveho cum cetera amplexus commodi adfectus conventus.",
+            "runtime": 101,
+            "tagline": "Talio votum aveho.",
+            "title": "Ready Hoverfly"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Antea tergeo molestiae. Possimus canis spectaculum bos vacuus facilis consequuntur. Civitas baiulus cedo sub strenuus deserunt quod theca cervus tristis.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Welcome Worm"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/hV4cSYruDoxIvVQtoSCNdU5RVTi.jpg",
+          "vote_average": 5.238,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/pe5hmx5QPWDyylmXzDvJkcdqLrL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qbFwHNeh2g3gy5C8IbUpj6CYOc6.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1704,
+          "iso_639_1": "en",
+          "file_path": "/ls3ST80QWs2oFQ7mrOpu2pEsewF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3029
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/nExTIbyC3WrIn2lXEe2cjYy8KHF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.573,
+          "height": 1180,
+          "iso_639_1": "en",
+          "file_path": "/xvXJfGKjHHe1m4Usye198DCw7iJ.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1856
+        },
+        {
+          "aspect_ratio": 1.573,
+          "height": 1180,
+          "iso_639_1": "en",
+          "file_path": "/mvBeTprV4fsH5QuRgNgiYCKMtSR.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1856
+        },
+        {
+          "aspect_ratio": 4.712,
+          "height": 713,
+          "iso_639_1": "en",
+          "file_path": "/nXIzqkThLfkWYqc27CY78LlrhnJ.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3360
+        },
+        {
+          "aspect_ratio": 1.429,
+          "height": 1299,
+          "iso_639_1": "en",
+          "file_path": "/82ZjVr2HWItLVTrKLzEEa68dqr4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1856
+        },
+        {
+          "aspect_ratio": 1.429,
+          "height": 1299,
+          "iso_639_1": "en",
+          "file_path": "/bJkZ7WiuCZfOrnHeGOpH1Eoc1mw.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1856
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/9w0Vh9eizfBXrcomiaFWTIPdboo.jpg",
+          "vote_average": 7.362,
+          "vote_count": 19,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/wTnV3PCVW5O92JMrFvvrRcV39RU.jpg",
+          "vote_average": 7.34,
+          "vote_count": 25,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/vcZfDONCxoOU7mosZEnkhYujBEG.jpg",
+          "vote_average": 6.722,
+          "vote_count": 9,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/fT6EpEkvZ6LGUO6HcMLUBbEWKLW.jpg",
+          "vote_average": 5.238,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/hn4fOpFlbak5ruxkdrmdijs38Yl.jpg",
+          "vote_average": 4.818,
+          "vote_count": 12,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

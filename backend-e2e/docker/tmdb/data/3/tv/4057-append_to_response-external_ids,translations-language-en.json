@@ -1,0 +1,296 @@
+{
+  "headers": {
+    "age": "1217",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16309",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c9cbaf2deed3a699dfa4b30b0c5a7464\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "CcXfaZdYtOJqoEY1NFIQVqX9rASB0ay9LBRX8Wp9TGu9n0V8Tthq_A==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/w88B4ooZ2LSYPw5107JOkjvI8PI.jpg",
+    "created_by": [
+      {
+        "id": 1235310,
+        "credit_id": "52575b4d19c29531db186270",
+        "name": "Dr. Cedric Carroll Sr.",
+        "original_name": "Dr. Cedric Carroll Sr.",
+        "gender": 2,
+        "profile_path": "/c3M3mdKxFM2uTKHSVapRhWs93kY.jpg"
+      }
+    ],
+    "episode_run_time": [42],
+    "first_air_date": "2005-09-22",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://ragged-sequence.com",
+    "id": 4057,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-22",
+    "last_episode_to_air": {
+      "id": 6047490,
+      "name": "Yearling Hornet",
+      "overview": "Ager dolores demens abbas succedo sursum tener.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-29",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 55,
+      "season_number": 5,
+      "show_id": 4057,
+      "still_path": "/c7bkRPz2mHmcocKNtUAIcRx9NWE.jpg"
+    },
+    "name": "Lesser Cobra",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Architectural Saesee Tiin Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 4330,
+        "logo_path": "/fi83B1oztoS47xxcemFdPMhIzK.png",
+        "name": "Decent Ric Olié Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 114,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Conservative Armadillo",
+    "overview": "Adficio casso spes tametsi conturbo verus tenus sui apud. Agnosco suadeo dicta timidus. Infit conspergo aestivus.",
+    "popularity": 198.886,
+    "poster_path": "/wLMQebhTApmn4F6Fzg6FovdwVvL.jpg",
+    "production_companies": [
+      {
+        "id": 1558,
+        "logo_path": "/wwaKUcOENHix2jxLfFBfNkCtOEQ.png",
+        "name": "Mobile IG-88 Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1557,
+        "logo_path": "/ccz9bqCu3jSFKbPFnfWmjAKZLBL.png",
+        "name": "Eerie Anakin Skywalker Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 9223,
+        "logo_path": "/40qzTBM38vokoWhLKurficZ5syV.png",
+        "name": "Yammering Yoda Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 1081,
+        "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
+        "name": "Graceful Jek Tono Porkins Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 173121,
+        "logo_path": null,
+        "name": "Furious Ben Quadinaros Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 19366,
+        "logo_path": "/vOH8dyQhLK01pg5fYkgiS31jlFm.png",
+        "name": "Motionless Wilhuff Tarkin Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 236613,
+        "logo_path": "/9DTggoZARHzATCRewGRs9XSNOWP.png",
+        "name": "Single Roos Tarpals Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 51848,
+        "logo_path": "/jmrRZgqHnYmJC4uePQI2sLijpSk.png",
+        "name": "Constant Palpatine Studios",
+        "origin_country": "CA"
+      },
+      {
+        "id": 28523,
+        "logo_path": "/zzULw9w7d50BHR8fE30PZT3zJ1D.png",
+        "name": "Rotten Grievous Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2005-09-22",
+        "episode_count": 22,
+        "id": 12013,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/7igSTed2htAIEXAMuUJSrk05ERV.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2006-09-20",
+        "episode_count": 23,
+        "id": 12014,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/5RkngSb1jo4DpFfTkxCdFGZtubO.jpg",
+        "season_number": 2,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2007-09-26",
+        "episode_count": 20,
+        "id": 12015,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/iAMSBqbzn6sL1n2b5KM1INlBqko.jpg",
+        "season_number": 3,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2008-09-24",
+        "episode_count": 26,
+        "id": 12012,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/yNZ2AJpahtcAytB5IYdLpRmiDsZ.jpg",
+        "season_number": 4,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2009-09-23",
+        "episode_count": 23,
+        "id": 12016,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/1iwDVIK9Nc87dLZjJ52q7vs3qMB.jpg",
+        "season_number": 5,
+        "vote_average": 7.9
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Testimonium adficio casso spes tametsi conturbo verus.",
+    "type": "Scripted",
+    "vote_average": 8.3,
+    "vote_count": 3835,
+    "external_ids": {
+      "imdb_id": "tt0452046",
+      "freebase_mid": "/m/06x5rm",
+      "freebase_id": "/en/criminal_minds",
+      "tvdb_id": 75710,
+      "tvrage_id": 3171,
+      "wikidata_id": "Q202141",
+      "facebook_id": "CriminalMinds",
+      "instagram_id": "criminalminds",
+      "twitter_id": "criminalminds"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Spoliatio fugiat vado.",
+            "homepage": "",
+            "tagline": "Aliquid spoliatio fugiat."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Deludo creo dapifer laborum tamdiu agnitio. Quasi accusamus eveniet desolo amaritudo. Antepono conor vomica aspernatur vulgaris clarus minima.",
+            "homepage": "",
+            "tagline": "Crebro deludo creo dapifer laborum tamdiu agnitio claustrum."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Unpleasant Bedbug",
+            "overview": "Excepturi sponte casso caelum suus.",
+            "homepage": "",
+            "tagline": "Caterva excepturi sponte casso."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Scary Marsupial",
+            "overview": "Aer acerbitas adnuo viridis.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Unpleasant Bedbug",
+            "overview": "Excepturi sponte casso caelum suus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

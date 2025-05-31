@@ -1,0 +1,329 @@
+{
+  "headers": {
+    "age": "1224",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3118",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3b42015460f08c6aa582d4c9bca863ff\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 ca8cb14c76df16342491237cea8cfed6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "CzkJTamltNE7lNlXNfgCQb7VPafT3hq8bf3ymVUwDuGLb7VKff8aXA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fTrQsdMS2MUw00RnzH0r3JWHhts.jpg",
+    "belongs_to_collection": null,
+    "budget": 40000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://variable-attitude.info",
+    "id": 1197306,
+    "imdb_id": "tt9150192",
+    "origin_country": ["GB", "US"],
+    "original_language": "en",
+    "original_title": "Temporary Mockingbird",
+    "overview": "Considero sufficio temptatio. Praesentium unus communis compello perferendis curtus adulatio tantum rem. Vacuus saepe correptius adinventitias dolorum ancilla ex amo terebro.",
+    "popularity": 315.0435,
+    "poster_path": "/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg",
+    "production_companies": [
+      {
+        "id": 118475,
+        "logo_path": "/x8mwqWGZK2gQvrp5QlYQho1VgXj.png",
+        "name": "Ltd Jek Tono Porkins Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 219295,
+        "logo_path": null,
+        "name": "Vicarious Barriss Offee Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 218150,
+        "logo_path": null,
+        "name": "Magnetic Cliegg Lars Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 166120,
+        "logo_path": "/fRuHQF9DB4Zl3ha62D5Bpu1a5TL.png",
+        "name": "Defensive Lobot Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 22146,
+        "logo_path": "/v37N1mFeXNQfvPankg3feBhVvM7.png",
+        "name": "Extended Adi Gallia Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 181874,
+        "logo_path": "/crrgXvLhDO9c57HYrbO4H58Vxmb.png",
+        "name": "Aggressive Taun We Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 253169,
+        "logo_path": null,
+        "name": "Very Jabba Desilijic Tiure Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-03-26",
+    "revenue": 98652557,
+    "runtime": 116,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Russian",
+        "iso_639_1": "ru",
+        "name": "Pусский"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Admoveo considero sufficio temptatio triumphus praesentium unus communis.",
+    "title": "Divine Kite",
+    "video": false,
+    "vote_average": 6.663,
+    "vote_count": 1050,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://tidy-sailor.info",
+            "overview": "Conforto capillus summisse vilis fugiat antea asperiores sollicito ver. Abutor succurro demens celo atavus vinitor dicta coruscus beneficium coma. Voluptatibus validus vigor supra illum.",
+            "runtime": 116,
+            "tagline": "Teneo conforto capillus summisse vilis fugiat antea asperiores.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://shadowy-thermals.com",
+            "overview": "Antea catena auxilium hic tenax vicissitudo incidunt atqui contabesco canto. Coma ipsam acsi explicabo ipsa vulgaris cursus error earum. Vitiosus delectatio aveho demitto adfectus solitudo ubi collum.",
+            "runtime": 0,
+            "tagline": "Venia antea catena auxilium hic tenax vicissitudo.",
+            "title": "Yappy Cicada"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://shadowy-thermals.com",
+            "overview": "Antea catena auxilium hic tenax vicissitudo incidunt atqui contabesco canto. Coma ipsam acsi explicabo ipsa vulgaris cursus error earum. Vitiosus delectatio aveho demitto adfectus solitudo ubi collum.",
+            "runtime": 0,
+            "tagline": "Venia antea catena auxilium hic tenax vicissitudo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Absconditus cruentus terra auxilium consequuntur.",
+            "runtime": 116,
+            "tagline": "Correptius absconditus cruentus.",
+            "title": "Established Fox"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Vindico id ancilla copia.",
+            "runtime": 0,
+            "tagline": "Autem vindico id ancilla.",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/mQ6lIqblLT1uXunxLRZ0BIcPN3g.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ykqxDnRquOZI4wBFfbcPgNyz3ys.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/pAB7bpX0H2A7xZTgP4PQAlVuFgo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/79lV1TdqD7YxLhdZ4DbvmnFOLWw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/tqBkTirZaVXjgUBjfWYm8XdieaX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.634,
+          "height": 609,
+          "iso_639_1": "en",
+          "file_path": "/uRl9C4ZeLKEZHeZlStKwHIuv0Km.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2213
+        },
+        {
+          "aspect_ratio": 3.768,
+          "height": 586,
+          "iso_639_1": "en",
+          "file_path": "/lmg6DAyXx17BNqSy8TSyqOyIES8.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2208
+        },
+        {
+          "aspect_ratio": 3.737,
+          "height": 400,
+          "iso_639_1": "en",
+          "file_path": "/82qeorMh0DjIiyHhFffU17JV8bY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1495
+        },
+        {
+          "aspect_ratio": 3.443,
+          "height": 289,
+          "iso_639_1": "en",
+          "file_path": "/s3wVpKhQWTABWKrGut0R1yWy3zO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 995
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg",
+          "vote_average": 7.466,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/bkbmInoAnEaMH4oxpXAXWwKr8Kd.jpg",
+          "vote_average": 7.73,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/u5MyKwfrrWYbgwsUcJS9xgwKN5v.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/xycusHgMwmHNt7t3d9daD6zmJJ7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/t0yBvZTdJOBaSQxyEJnu5C9N3Pj.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}
