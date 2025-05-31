@@ -1,4 +1,6 @@
 import { logger } from '@logger';
+import type IPSet from 'ip-set';
+import loadIPSet from 'load-ip-set';
 import type { Torrent } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
@@ -10,16 +12,16 @@ import { bestTrackersURL, blacklistedTrackersURL, extra_trackers } from './track
 export class WebTorrentService {
   public readonly client: WebTorrent;
   private bestTrackers: string[] = [];
-  private blacklistedTrackers: string[] = [];
 
   constructor() {
     this.client = new WebTorrent({
       maxConns: ENV.number('WEBTORRENT_MAX_CONNS'),
       downloadLimit: ENV.number('WEBTORRENT_DOWNLOAD_LIMIT') << 20, // Convert MB/s to bytes/s
       uploadLimit: ENV.number('WEBTORRENT_UPLOAD_LIMIT') << 20, // Convert MB/s to bytes/s
+      blocklist: [blacklistedTrackersURL],
     });
     this.client.on('error', (error: Error) => {
-      logger.error('WebTorrent', 'Error:', error.message);
+      logger.error('DataService', 'Error:', error.message);
     });
     this.loadTrackers();
   }
@@ -39,15 +41,33 @@ export class WebTorrentService {
         }
       }
     } catch (error) {
-      logger.error('WebTorrent', 'Error fetching trackers:', error);
+      logger.error('DataService', 'Error fetching trackers:', error);
     }
     return [];
+  }
+
+  private getIpSet(url: string): Promise<IPSet | null> {
+    return new Promise(resolve => {
+      loadIPSet(
+        url,
+        {
+          'user-agent': 'Miauflix/1.0.0',
+        },
+        (err, ipSet) => {
+          if (err) {
+            logger.error('DataService', 'Error loading IP set:', err);
+            return resolve(null);
+          }
+          resolve(ipSet);
+        }
+      );
+    });
   }
 
   private async loadTrackers() {
     const [bestTrackers, blacklistedTrackers] = await Promise.all([
       this.getTrackers(bestTrackersURL),
-      this.getTrackers(blacklistedTrackersURL),
+      this.getIpSet(blacklistedTrackersURL),
     ]);
 
     if (bestTrackers.length) {
@@ -55,8 +75,8 @@ export class WebTorrentService {
     }
     this.bestTrackers = [...new Set([...this.bestTrackers, ...extra_trackers])];
 
-    if (blacklistedTrackers.length) {
-      this.blacklistedTrackers = blacklistedTrackers;
+    if (blacklistedTrackers) {
+      this.client.blocked = blacklistedTrackers;
     }
   }
 
@@ -93,7 +113,7 @@ export class WebTorrentService {
           onTorrent
         );
       } catch (error: unknown) {
-        console.error(`Error adding torrent`, error);
+        console.error(`Error adding data source`, error);
         reject(new ErrorWithStatus(`Error adding file to client`, 'add_error'));
       }
     });

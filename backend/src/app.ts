@@ -123,7 +123,7 @@ try {
   );
 
   scheduler.scheduleTask(
-    'torrentFileSearch',
+    'dataFileSearch',
     0.2, // 0.2 second (slightly slower than source search to prioritize finding new sources first)
     bind(sourceService, 'searchTorrentFilesForSources')
   );

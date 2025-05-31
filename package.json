@@ -24,12 +24,19 @@
     "docker:cleanup": "./scripts/docker-publish.sh cleanup"
   },
   "dependencies": {
-    "concurrently": "latest"
+    "concurrently": "latest",
+    "filename-reserved-regex": "^3.0.0",
+    "load-ip-set": "^3.0.1",
+    "thunky": "^1.1.0"
   },
   "devDependencies": {
+    "@types/filename-reserved-regex": "^3.0.0",
+    "@types/random-access-file": "^4.0.0",
+    "@types/thunky": "^1.1.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
+    "random-access-file": "^4.1.2",
     "typescript": "^4.5.0"
   },
   "type": "module",

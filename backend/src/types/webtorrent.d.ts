@@ -585,6 +585,8 @@ declare module 'webtorrent' {
     readonly dht: false | { nodeId: string; listening: boolean };
     /** Web seeds enabled */
     readonly enableWebSeeds: boolean;
+    /** Blocklist of IP ranges */
+    blocked: IPSet | undefined;
 
     constructor(opts?: WebTorrentOptions);
 
@@ -800,4 +802,68 @@ declare module 'memory-chunk-store' {
   }
 
   export = MemoryChunkStore;
+}
+
+declare module 'ip-set' {
+  interface IPSetOptions {
+    /** Array of IP ranges to initialize with */
+    ranges?: Array<{ start: string; end?: string }>;
+  }
+
+  class IPSet {
+    constructor(options?: IPSetOptions);
+    constructor(ranges?: Array<{ start: string; end?: string }>);
+
+    /** Check if an IP address is in the set */
+    contains(ip: string): boolean;
+    /** Add an IP range to the set */
+    add(start: string, end?: string): void;
+    /** Remove an IP range from the set */
+    remove(start: string, end?: string): void;
+    /** Get the number of IP ranges in the set */
+    length: number;
+  }
+
+  export = IPSet;
+}
+
+declare module 'load-ip-set' {
+  import type { IPSet } from 'ip-set';
+
+  interface LoadIPSetOptions {
+    /** User agent string for HTTP requests */
+    'user-agent'?: string;
+    /** Request timeout in milliseconds */
+    timeout?: number;
+    /** Custom headers for HTTP requests */
+    headers?: Record<string, string>;
+    /** Additional request options */
+    [key: string]: Record<string, string> | number | string | undefined;
+  }
+
+  interface IPRange {
+    start: string;
+    end?: string;
+  }
+
+  type LoadIPSetInput = IPRange[] | string[] | string | null | undefined;
+
+  type LoadIPSetCallback = (error: Error | null, ipSet?: IPSet) => void;
+
+  /**
+   * Load an IP set from various sources
+   * @param input - File path, HTTP URL, array of IP ranges, or null/undefined
+   * @param opts - Options object (optional)
+   * @param cb - Callback function
+   */
+  function loadIPSet(input: LoadIPSetInput, opts: LoadIPSetOptions, cb: LoadIPSetCallback): void;
+
+  /**
+   * Load an IP set from various sources (with default options)
+   * @param input - File path, HTTP URL, array of IP ranges, or null/undefined
+   * @param cb - Callback function
+   */
+  function loadIPSet(input: LoadIPSetInput, cb: LoadIPSetCallback): void;
+
+  export default loadIPSet;
 }
