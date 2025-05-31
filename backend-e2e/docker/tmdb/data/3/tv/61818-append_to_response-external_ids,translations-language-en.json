@@ -1,0 +1,189 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22027",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d21873c3cfb363ef7b81eff7e6b53930\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "DeIjCYnybARtVNdwNcajnmJdNcVnnMpXYBLiL99gKvK_1yK1Un1PTg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "8b4e2f6569074cd88a533175c64bc4e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/iEg2LHsFV3vC6LywkBAL3c1n9PP.jpg",
+    "created_by": [],
+    "episode_run_time": [45],
+    "first_air_date": "2014-02-25",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://nutty-bondsman.com",
+    "id": 61818,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-02",
+    "last_episode_to_air": {
+      "id": 6222177,
+      "name": "Naked Aardwolf",
+      "overview": "Claudeo praesentium callide autus agnosco bos consequuntur. Templum sodalitas thema cribro alveus conspergo civis patior ullus blanditiis.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-16",
+      "episode_number": 95,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 41,
+      "season_number": 5,
+      "show_id": 61818,
+      "still_path": null
+    },
+    "name": "Promising Mammal",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Convincing R5-D4 Media",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 736,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Early Wren",
+    "overview": "Amet vicinus altus. Acceptus truculenter summopere.",
+    "popularity": 507.4619,
+    "poster_path": "/rw0QaegwgKbRoB2CZe2lfewltT9.jpg",
+    "production_companies": [
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Nasty Bail Prestor Organa Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 170657,
+        "logo_path": null,
+        "name": "Interested R2-D2 Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 1756,
+        "logo_path": "/d7YyNzysIF0lSb4lJRf1ar6MHxi.png",
+        "name": "Invisible R2-D2 Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2014-02-25",
+        "episode_count": 99,
+        "id": 64330,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/6aTObv741nQNeIrNhevVw3OlVQw.jpg",
+        "season_number": 1,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2014-09-23",
+        "episode_count": 161,
+        "id": 64331,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/9YWItv0lGK3y9ntfh1W4BGujgbS.jpg",
+        "season_number": 2,
+        "vote_average": 10
+      },
+      {
+        "air_date": "2015-09-22",
+        "episode_count": 160,
+        "id": 73521,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/orQvRPb1z9kn5RVLSsgho12ewdT.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2016-09-20",
+        "episode_count": 162,
+        "id": 86459,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/70HgdTd69cRnOacgMIASbZQxN3E.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2017-09-26",
+        "episode_count": 154,
+        "id": 140202,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/v1fAG12xYzL3kffiafg0bKRyaQE.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Aliquid amet vicinus altus accusator acceptus.",
+    "type": "Talk Show",
+    "vote_average": 5.317,
+    "vote_count": 104,
+    "external_ids": {
+      "imdb_id": "tt3513388",
+      "freebase_mid": "/m/0zbvj3d",
+      "freebase_id": null,
+      "tvdb_id": 270262,
+      "tvrage_id": 35852,
+      "wikidata_id": "Q15274593",
+      "facebook_id": "LateNightSeth",
+      "instagram_id": "latenightseth",
+      "twitter_id": "LateNightSeth"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Utrum cruciamentum usque. Sophismata soleo pecto stultus harum. Vulgivagus vilis cavus recusandae vae pauci.",
+            "homepage": "",
+            "tagline": "Aiunt utrum cruciamentum usque commodo sophismata soleo."
+          }
+        }
+      ]
+    }
+  }
+}

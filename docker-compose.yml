@@ -27,7 +27,7 @@ services:
     environment:
       - DATA_DIR=/usr/data
     volumes:
-      - ./:/usr/src/app/
+      - ./.env:/usr/src/app/.env
       - ./data:/usr/data/
       - backend_node_modules:/usr/src/app/node_modules
     network_mode: service:nordvpn # Route traffic through NordVPN

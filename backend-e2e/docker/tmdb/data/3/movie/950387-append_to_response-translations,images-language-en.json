@@ -1,0 +1,331 @@
+{
+  "headers": {
+    "age": "1221",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14029",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9f09436248a79e55a213431f0a1d4962\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "dRMPXOjPl-TD_JaW7yHa6yS9j-IxEiQ6xV74fLDYggQnLlB4hhp-Hg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2Nti3gYAX513wvhp8IiLL6ZDyOm.jpg",
+    "belongs_to_collection": {
+      "id": 1461530,
+      "name": "Ready Fox",
+      "poster_path": "/8jMQ2sVZ1RRiYSpcb7Yommo7V4r.jpg",
+      "backdrop_path": "/gvR8XaxV3wZlh1LKpReAjaTWhA2.jpg"
+    },
+    "budget": 150000000,
+    "genres": [
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://frosty-fixture.name",
+    "id": 950387,
+    "imdb_id": "tt3566834",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Hissing Coyote",
+    "overview": "Quas barba veniam ver quos.",
+    "popularity": 501.4662,
+    "poster_path": "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
+    "production_companies": [
+      {
+        "id": 174,
+        "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
+        "name": "Gastric Rugor Nass Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 923,
+        "logo_path": "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png",
+        "name": "Autonomous Ayla Secura Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 110691,
+        "logo_path": "/i0D9b0veZbValgEFiJjSd0mbb9C.png",
+        "name": "Handicapped Greedo Entertainment",
+        "origin_country": "SE"
+      },
+      {
+        "id": 829,
+        "logo_path": "/aXqwCvJSCDbTclkxAYfsT1l4Dsa.png",
+        "name": "Scary Shaak Ti Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 159602,
+        "logo_path": "/e3KodIPxOSC6xpzgIBISB4COQcu.png",
+        "name": "Innocent Ayla Secura Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 216687,
+        "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
+        "name": "Expected R4-P17 Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "SE",
+        "name": "Sweden"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-03-31",
+    "revenue": 940583805,
+    "runtime": 101,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Conscendo quas barba veniam.",
+    "title": "Ill Cardinal",
+    "video": false,
+    "vote_average": 6.498,
+    "vote_count": 1530,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://feminine-slang.com",
+            "overview": "Artificiose tutis creta colligo trans accusator tubineus ustulo blandior.",
+            "runtime": 101,
+            "tagline": "Torqueo artificiose tutis creta.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Fugiat cibo conitor substantia ter tricesimus adeo est. Censura conicio video tubineus cometes tantum celo tristis desipio auctus.",
+            "runtime": 101,
+            "tagline": "Repudiandae fugiat cibo conitor substantia.",
+            "title": "Royal Harrier"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://kindly-patent.name",
+            "overview": "Fugiat cibo conitor substantia ter tricesimus adeo est. Censura conicio video tubineus cometes tantum celo tristis desipio auctus.",
+            "runtime": 0,
+            "tagline": "Repudiandae fugiat cibo conitor substantia.",
+            "title": "Royal Harrier"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Conscendo annus succurro undique succedo error. Facilis tum voveo cohibeo.",
+            "runtime": 101,
+            "tagline": "Damno conscendo annus succurro undique succedo.",
+            "title": "Xerothermic Tapir"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Suasoria spectaculum natus. Rem laboriosam coerceo defero. Depopulo neque caecus voluptate carmen speculum vigilo.",
+            "runtime": 101,
+            "tagline": "",
+            "title": "Impressed Limpet"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qnhe3LdMSDtHh5ZZQdafu7umF9R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/cgmua7GxrjtVSPNgXC8Gk32ti7f.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/vdprV0mY4s7ZY6zi6S74oak5Ai8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/dVpjJgKHXybH4WIay1KzP7OA5Kb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/hC286bJxWQWWrmQ7VVKSG5kURiw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.474,
+          "height": 418,
+          "iso_639_1": "en",
+          "file_path": "/5gFN6sNEuzTwx2BY2BrN795JwZl.png",
+          "vote_average": 8.596,
+          "vote_count": 7,
+          "width": 1452
+        },
+        {
+          "aspect_ratio": 2.373,
+          "height": 1299,
+          "iso_639_1": "en",
+          "file_path": "/c7BxG2a8Vi2JJAWeohgAfV6FocK.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3082
+        },
+        {
+          "aspect_ratio": 2.372,
+          "height": 1299,
+          "iso_639_1": "en",
+          "file_path": "/8jwTezqjEhN0d2lCrruakx2Ev5u.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3081
+        },
+        {
+          "aspect_ratio": 2.501,
+          "height": 1232,
+          "iso_639_1": "en",
+          "file_path": "/iX081pTaNyhbaUm9GbUx9N5A6kx.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3081
+        },
+        {
+          "aspect_ratio": 2.496,
+          "height": 1235,
+          "iso_639_1": "en",
+          "file_path": "/clA5tt4VBruK15UrpomPr2nb4yt.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3082
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
+          "vote_average": 5.97,
+          "vote_count": 33,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/wTxYZNj3NselE9H9dST2GUn4UYE.jpg",
+          "vote_average": 5.476,
+          "vote_count": 21,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/gYe89YJ2GtyPIN9jlFvBlLRO4tK.jpg",
+          "vote_average": 5.25,
+          "vote_count": 13,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/iPPTGh2OXuIv6d7cwuoPkw8govp.jpg",
+          "vote_average": 4.934,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/tldIoZNsAkEkppQwXGuw3aWVWyL.jpg",
+          "vote_average": 4.412,
+          "vote_count": 17,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

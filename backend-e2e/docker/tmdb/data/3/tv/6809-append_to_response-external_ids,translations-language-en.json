@@ -1,0 +1,242 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21430",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7cec6caec874587733bc8ebc45151a8d\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "uVyQzIKPESMHvt-3Cqark3uBDi_MztLF9R7mTJPQTOc7PkZcx-yObw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "4f745164c16646a89207e9f5074053e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3hOxwqn1P2AY0d20VVtxN2f3Lfh.jpg",
+    "created_by": [
+      {
+        "id": 1423069,
+        "credit_id": "5bc0fa2992514179c701f373",
+        "name": "Adrienne Cormier",
+        "original_name": "Adrienne Cormier",
+        "gender": 2,
+        "profile_path": "/6qOYKmcEm1o7Lf80JBFHqf8FL0t.jpg"
+      }
+    ],
+    "episode_run_time": [50],
+    "first_air_date": "2006-09-24",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "https://sociable-coat.com",
+    "id": 6809,
+    "in_production": true,
+    "languages": ["es"],
+    "last_air_date": "2025-03-20",
+    "last_episode_to_air": {
+      "id": 6054896,
+      "name": "Unique Swordtail",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-03-20",
+      "episode_number": 2,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 6809,
+      "still_path": "/6zx71dN9tjO6nkLiUt7r3lZdRuR.jpg"
+    },
+    "name": "Subjective Chicken",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 378,
+        "logo_path": "/pZtmQfr0z82ODDxZsqGzORZJJux.png",
+        "name": "Valid Cordé Entertainment",
+        "origin_country": "ES"
+      },
+      {
+        "id": 400,
+        "logo_path": "/l7MngINTyv0O6mNlwNsUlhQ9iwZ.png",
+        "name": "Organic Barriss Offee Productions",
+        "origin_country": "ES"
+      }
+    ],
+    "number_of_episodes": 21,
+    "number_of_seasons": 5,
+    "origin_country": ["ES"],
+    "original_language": "es",
+    "original_name": "Magnificent Opossum",
+    "overview": "Appono virgo admoveo catena. Capitulus asper iure amitto sapiente uterque amplitudo. Summopere censura alius vulgivagus conatus.",
+    "popularity": 214.6245,
+    "poster_path": "/K6tzvTqHFULV5cr5dsWTSmh4Zj.jpg",
+    "production_companies": [
+      {
+        "id": 61864,
+        "logo_path": null,
+        "name": "Busy Mas Amedda Media",
+        "origin_country": ""
+      },
+      {
+        "id": 150330,
+        "logo_path": null,
+        "name": "Coming Yarael Poof Studios",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "ES",
+        "name": "Spain"
+      },
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2006-09-24",
+        "episode_count": 9,
+        "id": 67790,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2007-09-17",
+        "episode_count": 2,
+        "id": 69928,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-09-01",
+        "episode_count": 2,
+        "id": 69929,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-08-31",
+        "episode_count": 6,
+        "id": 67791,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2010-08-26",
+        "episode_count": 2,
+        "id": 69930,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Talk Show",
+    "vote_average": 4.77,
+    "vote_count": 37,
+    "external_ids": {
+      "imdb_id": "tt0870872",
+      "freebase_mid": "/m/02zb9w5",
+      "freebase_id": "/en/el_hormiguero",
+      "tvdb_id": 296984,
+      "tvrage_id": null,
+      "wikidata_id": "Q1324265",
+      "facebook_id": "@elhormiguero",
+      "instagram_id": "@elhormiguero",
+      "twitter_id": "@El_Hormiguero"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Textor sophismata quos vehemens.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Cuius deduco vere auctus subito curis vitiosus patruus. Debeo deporto viridis corrupti. Eius virtus acquiro bellicus tabella corona vae ullus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Cuius deduco vere auctus subito curis vitiosus patruus. Debeo deporto viridis corrupti. Eius virtus acquiro bellicus tabella corona vae ullus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

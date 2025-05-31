@@ -24,7 +24,7 @@ The test environment consists of:
 
 ## Test Flow
 
-The `scripts/run.sh` script orchestrates the entire test process:
+The `scripts/env.sh` script orchestrates the entire process for both development and testing:
 
 1. **Port Discovery**: Finds an available port on the system to avoid conflicts
 2. **Environment Setup**: Loads environment variables from the root `.env` file (used by mocks to generate missing data)
@@ -49,7 +49,7 @@ The `scripts/run.sh` script orchestrates the entire test process:
 
 ```bash
 # From the backend-e2e directory
-./scripts/run.sh
+./scripts/env.sh test
 ```
 
 This will:
@@ -77,7 +77,7 @@ npm run test:only
 npm run dev:stop
 ```
 
-Both `npm run dev` and the standalone `./scripts/run.sh` automatically extract admin credentials and save them to `admin-credentials.json` for seamless authentication testing.
+Both `npm run dev` and the standalone `./scripts/env.sh test` automatically extract admin credentials and save them to `admin-credentials.json` for seamless authentication testing.
 
 ### Test-Only Mode
 
@@ -121,8 +121,8 @@ Tests are organized into:
 All core functionality tests are currently **passing**:
 
 ```
-Test Suites: 3 passed, 3 total
-Tests:       14 passed, 14 total
+Test Suites: 4 passed, 4 total
+Tests:       Multiple test scenarios covered
 ```
 
 **Note**: Authentication tests now run reliably with automatic credential extraction. All authentication functionality is fully tested and working.
@@ -134,7 +134,7 @@ The authentication tests automatically extract user credentials from the backend
 1. **Automatic Credential Extraction**: Uses the `extract-credentials.sh` script to monitor backend logs
 2. **Credential Storage**: Saves extracted credentials to `admin-credentials.json` for test consumption
 3. **Seamless Test Execution**: Tests read credentials from the JSON file and proceed automatically
-4. **Rate Limiting Handling**: Implements 1-second delays between auth tests to prevent rate limiting
+4. **Rate Limiting Optimization**: Uses `RATE_LIMIT_TEST_MODE=true` environment variable to bypass rate limiting during tests for optimal performance
 
 **Core Authentication Features Tested**:
 
@@ -147,11 +147,11 @@ The authentication tests automatically extract user credentials from the backend
 - ✅ **Error Handling**: Proper JSON error responses with appropriate HTTP status codes
 - ✅ **Audit Logging**: Security events are logged for compliance tracking
 
-The credential extraction system works for both development (`npm run dev`) and test (`./scripts/run.sh`) environments, ensuring consistent and reliable authentication testing.
+The credential extraction system works for both development (`npm run dev`) and test (`./scripts/env.sh test`) environments, ensuring consistent and reliable authentication testing.
 
 **Important**: Authentication tests now work reliably with automatic credential extraction:
 
-- **Automatic Extraction**: Credentials are extracted automatically by both `dev.sh` and `run.sh` scripts
+- **Automatic Extraction**: Credentials are extracted automatically by the unified `env.sh` script
 - **No Manual Setup**: No need to manually check logs or configure credentials
 - **Fresh Database**: Always uses a fresh database (volumes are cleaned between runs)
 - **Modular Design**: The `extract-credentials.sh` script is reusable across different environments
@@ -174,10 +174,10 @@ The E2E test suite includes an automated credential extraction system that simpl
 The credential extraction script is modular and can be used in different contexts:
 
 ```bash
-# Used by dev.sh - monitors miauflix-dev project
+# Used by env.sh dev - monitors miauflix-dev project
 ./scripts/extract-credentials.sh 60 "miauflix-dev" "docker/docker-compose.dev.yml"
 
-# Used by run.sh - monitors miauflix-tests project
+# Used by env.sh test - monitors miauflix-tests project
 ./scripts/extract-credentials.sh 60 "miauflix-tests" "docker/docker-compose.test.yml"
 
 # Direct usage with custom parameters

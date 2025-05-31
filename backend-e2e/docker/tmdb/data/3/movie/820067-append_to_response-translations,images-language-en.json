@@ -1,0 +1,261 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25310",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f8d19feee385431c44063f3dd1001e5f\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "AYd0ZytethhXzDabm-NEyyENTSiq2B2mjnnnFOFlebS0iVm-V7G0HQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gcgKSyE2iqwfKWMDZ8TJPxeIu0P.jpg",
+    "belongs_to_collection": {
+      "id": 1287339,
+      "name": "Early Squirrel",
+      "poster_path": "/oLGApDkJ5rucU5qxMM2DDwIFBkQ.jpg",
+      "backdrop_path": "/cRaIJ8ndLhz9d4HBV5dnTp2XOcO.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "https://traumatic-observatory.name",
+    "id": 820067,
+    "imdb_id": "tt15721650",
+    "origin_country": ["JP"],
+    "original_language": "ja",
+    "original_title": "Strange Lungfish",
+    "overview": "Laboriosam thorax deporto consequuntur adeptio adnuo bis. Desipio peior voluptatibus stultus adeo tempus utique consequuntur. Apto corrumpo optio.",
+    "popularity": 4.0194,
+    "poster_path": "/sg7klpt1xwK1IJirBI9EHaqQwJ5.jpg",
+    "production_companies": [
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Successful Bail Prestor Organa Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157471,
+        "logo_path": "/sWoNzrlMtRH8p3zKayLfOaTNmiG.png",
+        "name": "Actual Gasgano Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118286,
+        "logo_path": "/uANGoTEOifjrGSQd4IxoV89PJjl.png",
+        "name": "Front Wicket Systri Warrick Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "Yammering Dexter Jettster Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 41861,
+        "logo_path": "/iQ9Av0fDGKDUInp4I5czxhz5fVj.png",
+        "name": "Increasing Finis Valorum Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Hon Han Solo Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 187769,
+        "logo_path": "/hBhVw60TAa5qAT1pNELq1HjpZQ9.png",
+        "name": "Condemned Anakin Skywalker Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 42196,
+        "logo_path": "/nQNmHvcmaT0zk1Rf0TYtLYO5MpI.png",
+        "name": "Economic Nien Nunb Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 187770,
+        "logo_path": "/wrBqL7qMHPOBheZRTlA0Jpz0POF.png",
+        "name": "Concrete R4-P17 Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1393,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "Magnificent Shaak Ti Productions",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "2022-05-20",
+    "revenue": 17288993,
+    "runtime": 136,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Afraid Primate",
+    "video": false,
+    "vote_average": 8.322,
+    "vote_count": 411,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://welcome-sword.name",
+            "overview": "Doloribus spiculum summopere callide velociter ater supplanto cenaculum aranea ater. Auctor taedium cilicium argumentum paulatim textor eligendi. Altus tempus laborum alii bonus.",
+            "runtime": 136,
+            "tagline": "Utrum doloribus spiculum summopere callide velociter ater supplanto.",
+            "title": "Profound Owl"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://popular-gong.biz",
+            "overview": "Comitatus deporto acerbitas conqueror campana strenuus. Vespillo coniuratio officia conventus in vigor defero caput.",
+            "runtime": 136,
+            "tagline": "",
+            "title": "Causal Kite"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://welcome-sword.name",
+            "overview": "Doloribus spiculum summopere callide velociter ater supplanto cenaculum aranea ater. Auctor taedium cilicium argumentum paulatim textor eligendi. Altus tempus laborum alii bonus.",
+            "runtime": 136,
+            "tagline": "",
+            "title": "Profound Owl"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Argentum aurum aggero titulus vorax celer usitas dolorem facere villa. Delibero delibero numquam tot communis conitor claudeo vigilo brevis acerbitas. Id comis magni ager.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Everyday Cobra"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 1.642,
+          "height": 584,
+          "iso_639_1": "en",
+          "file_path": "/wT45TqWKuy2EeAazTU3dMMSmEwi.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 959
+        },
+        {
+          "aspect_ratio": 1.67,
+          "height": 537,
+          "iso_639_1": "en",
+          "file_path": "/mmtznac7mdYxTB7yIedzy1eI0a3.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 897
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1512,
+          "iso_639_1": "en",
+          "file_path": "/sg7klpt1xwK1IJirBI9EHaqQwJ5.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1008
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_639_1": "en",
+          "file_path": "/gGacKjMi4S1PynBtr8p3rCzohMo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/9uYC7QQfMyBwd4O8uRSQXHQu3FV.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/gRGTvhbJfp8cTlnZAkk206sLRVs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_639_1": "en",
+          "file_path": "/xTlAhTivEObHRFBKjAMVSyRQGv2.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1064
+        }
+      ]
+    }
+  }
+}

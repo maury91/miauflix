@@ -1,9 +1,18 @@
+import { randomBytes } from 'crypto';
+
 import { serviceConfiguration } from '@mytypes/configuration';
 
 export const sourceConfigurationDefinition = serviceConfiguration({
   name: 'Source Service',
   description: 'Configuration for the source service',
   variables: {
+    TORRENT_KEY: {
+      description: 'Base64 AES-256 encryption key for torrent identifiers',
+      example: 'dGhpc19pc19hX3NhbXBsZV8yNTZfYml0X2tleQ==',
+      defaultValue: () => randomBytes(32).toString('base64'),
+      skipUserInteraction: true,
+      required: false,
+    },
     WEBTORRENT_MAX_CONNS: {
       description: 'Maximum number of connections for WebTorrent',
       example: '100',

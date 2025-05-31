@@ -1,0 +1,249 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1524",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"45a6632e955eaf0494a451cc1618fa70\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "uLQG8N0bTPbnQU5Y0HizJwWtvmfI9GerbEl78zBCVj4Zy-I036PHsQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "108979e82b494b21a1e63d45841dacff"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/12tEzU0bNYKIjXXEwI5abuOotHF.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 37,
+        "name": "Western"
+      }
+    ],
+    "homepage": "",
+    "id": 710258,
+    "imdb_id": "tt11001074",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Alleged Swordtail",
+    "overview": "Vero versus cubo molestias itaque.",
+    "popularity": 97.0708,
+    "poster_path": "/tbJ3RkA2s6X5qrBzrYHYTxvDBui.jpg",
+    "production_companies": [
+      {
+        "id": 23034,
+        "logo_path": null,
+        "name": "Moderate Wilhuff Tarkin Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 130016,
+        "logo_path": "/mqwiWprZXdHKx4J8Dj4PNPACTR9.png",
+        "name": "Cool Taun We Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 121204,
+        "logo_path": "/vbtvY4IxgUZk713rkmoTO4MHIac.png",
+        "name": "Stable Jabba Desilijic Tiure Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 76991,
+        "logo_path": "/pQjdvbv4y9yuIDSHDEHc9ijJKaS.png",
+        "name": "Yappiest Darth Maul Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-05-01",
+    "revenue": 0,
+    "runtime": 0,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Charisma vero versus cubo.",
+    "title": "Global Fowl",
+    "video": false,
+    "vote_average": 6.345,
+    "vote_count": 55,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Creptio appello pecus tantum eum.",
+            "runtime": 0,
+            "tagline": "Ciminatio creptio appello pecus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Usitas chirographum aut. Delectus dolores solium atrocitas bibo peior apto conor.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Consuasor triduana ademptio solutio circumvenio tabesco cultura. Modi consuasor taceo suasoria crastinus synagoga aperiam aliquam debitis.",
+            "runtime": 133,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Consuasor triduana ademptio solutio circumvenio tabesco cultura. Modi consuasor taceo suasoria crastinus synagoga aperiam aliquam debitis.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/zqzqLymMi2sM7EnHkKnm3llFHR3.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/AqG1qB4uTURJWCfkmOgoLc4wZLq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.478,
+          "height": 138,
+          "iso_639_1": "en",
+          "file_path": "/xXcAQ1CiIRC9RzryXNV9lyfEClr.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 480
+        },
+        {
+          "aspect_ratio": 1.645,
+          "height": 691,
+          "iso_639_1": "en",
+          "file_path": "/8tV1dBN6Z7qkll3DwzuHe1gbjNX.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1137
+        },
+        {
+          "aspect_ratio": 3.479,
+          "height": 892,
+          "iso_639_1": "en",
+          "file_path": "/ycRlEXRGC5jGKORbR1G5pOTkcGt.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3103
+        },
+        {
+          "aspect_ratio": 1.64,
+          "height": 414,
+          "iso_639_1": "en",
+          "file_path": "/8m5oJiIkmP5CXSBPXZePswbmD5B.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 679
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/tbJ3RkA2s6X5qrBzrYHYTxvDBui.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/4pRZulxWOr3iVKT5q2tVOWPCMA9.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/iqnwxuWZuprIjyZ8th0Rz6BWPT0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/wfJSSYcnbM4PhcccfJLSf2jpEuf.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2963,
+          "iso_639_1": "en",
+          "file_path": "/6Z4WnRFhnjITUeMnvDM9NvLce5y.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

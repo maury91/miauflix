@@ -1,0 +1,238 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18880",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"528bd5c5073b2ee5158985b72c00a7dc\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "W_aWFhjB6AvR9DacLv3WjQgd_gehQdNBkK3tQ9UuzpLSckwm3MuIMg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "ec744e2834f1415aae57fbd47ef01c38"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/uQ4lG7E7mlyKsGvbASftQ6Hu2IX.jpg",
+    "created_by": [
+      {
+        "id": 1295692,
+        "credit_id": "5e84f03598f1f10016a985c0",
+        "name": "Traci Rolfson I",
+        "original_name": "Traci Rolfson I",
+        "gender": 2,
+        "profile_path": "/bVUsM4aYiHbeSYE1xAw2H5Z1ANU.jpg"
+      },
+      {
+        "id": 35796,
+        "credit_id": "5e84f06a3344c600153f6a57",
+        "name": "Jamie Kunde",
+        "original_name": "Jamie Kunde",
+        "gender": 2,
+        "profile_path": "/uEhna6qcMuyU5TP7irpTUZ2ZsZc.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2023-01-15",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://dangerous-statistic.info",
+    "id": 100088,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-25",
+    "last_episode_to_air": {
+      "id": 5994273,
+      "name": "Convergence",
+      "overview": "As the Wolves and the Scars prepare for a battle that could potentially end their longstanding feud, Ellie's search draws her away from her friends and toward a devastating confrontation.",
+      "vote_average": 5.844,
+      "vote_count": 32,
+      "air_date": "2025-05-25",
+      "episode_number": 7,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 50,
+      "season_number": 2,
+      "show_id": 100088,
+      "still_path": "/4IZqCZRmBq9LifHFQkYA1QqqE0x.jpg"
+    },
+    "name": "Dutch Spider",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Silent C-3PO Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 16,
+    "number_of_seasons": 2,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Overseas Beetle",
+    "overview": "Cupio benigne constans turba commemoro adipiscor somnus vel usus.",
+    "popularity": 343.9299,
+    "poster_path": "/dmo6TYuuJgaYinXBPjrgG9mB5od.jpg",
+    "production_companies": [
+      {
+        "id": 125281,
+        "logo_path": "/3hV8pyxzAJgEjiSYVv1WZ0ZYayp.png",
+        "name": "Hollow Ben Quadinaros Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 11073,
+        "logo_path": "/aCbASRcI1MI7DXjPbSW9Fcv9uGR.png",
+        "name": "Nursing C-3PO Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 23217,
+        "logo_path": "/kXBZdQigEf6QiTLzo6TFLAa7jKD.png",
+        "name": "Unknown Kit Fisto Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 119645,
+        "logo_path": null,
+        "name": "Low Gasgano Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 115241,
+        "logo_path": null,
+        "name": "Soft Mace Windu Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Total Padmé Amidala Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-01-14",
+        "episode_count": 9,
+        "id": 144593,
+        "name": "Season 1",
+        "overview": "After a global pandemic destroys civilization, a hardened survivor takes charge of a 14-year-old girl who may be humanity's last hope.",
+        "poster_path": "/pMfG5XIlmvCL9bQQiJKdTvmF2FW.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2025-04-13",
+        "episode_count": 7,
+        "id": 405376,
+        "name": "Season 2",
+        "overview": "After five years of peace following the events of the first season, Joel and Ellie's collective past catches up to them, drawing them into conflict with each other and a world even more dangerous and unpredictable than the one they left behind.",
+        "poster_path": "/dmo6TYuuJgaYinXBPjrgG9mB5od.jpg",
+        "season_number": 2,
+        "vote_average": 6.4
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Ulciscor cupio benigne.",
+    "type": "Scripted",
+    "vote_average": 8.541,
+    "vote_count": 6081,
+    "external_ids": {
+      "imdb_id": "tt3581920",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 392256,
+      "tvrage_id": null,
+      "wikidata_id": "Q87131973",
+      "facebook_id": "TheLastOfUsHBO",
+      "instagram_id": "thelastofus",
+      "twitter_id": "TheLastofUsHBO"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Caste censura cupiditas atrocitas.",
+            "homepage": "",
+            "tagline": "Calamitas caste censura cupiditas."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Aestus recusandae cohaero facere textor thesis eligendi adsidue ducimus bardus. Turba canonicus uberrime pariatur aggredior bibo trans. Eveniet aequitas conqueror temptatio comprehendo deporto crux spiritus soluta catena.",
+            "homepage": "",
+            "tagline": "Voluntarius aestus recusandae cohaero facere textor thesis."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Caste censura cupiditas atrocitas.",
+            "homepage": "",
+            "tagline": "Calamitas caste censura cupiditas."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Ipsum arbitro est animadverto corrigo degero.",
+            "homepage": "",
+            "tagline": "Creator ipsum arbitro."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Keen Hummingbird",
+            "overview": "Velut vinco colo vel crapula ustilo amissio victoria. Amplus abbas peccatus tardus soleo adicio thermae sumo spero concido. Statim creator cerno.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

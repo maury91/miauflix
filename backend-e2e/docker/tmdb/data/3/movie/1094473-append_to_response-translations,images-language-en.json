@@ -1,0 +1,169 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9247",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"5e54467d25a3fea63c129afc563717cf\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "7WOLv9HwybQmHdPaZICwDnsRukDvcgS4WKMIIOICZApqYUU157U9sQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/bIh56F8e5EaZ3r2nD1hXAOisItZ.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://measly-disagreement.com",
+    "id": 1094473,
+    "imdb_id": "tt32373637",
+    "origin_country": ["FR"],
+    "original_language": "fr",
+    "original_title": "Conservation Iguana",
+    "overview": "Aer tamen odit ducimus angulus. Aliquam amissio abutor tergum custodia tyrannus.",
+    "popularity": 113.2598,
+    "poster_path": "/vWNVHtwOhcoOEUSrY1iHRGbgH8O.jpg",
+    "production_companies": [
+      {
+        "id": 2668,
+        "logo_path": "/wXmehIpEfAaJk7eU6GpBERpK3m1.png",
+        "name": "Frantic IG-88 Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 4621,
+        "logo_path": "/hEKBTnDXH49trohO1NtI2JT0e5g.png",
+        "name": "Dutch Raymus Antilles Media",
+        "origin_country": "FR"
+      },
+      {
+        "id": 18626,
+        "logo_path": "/gb0xmYIKvNy2LnUOfLVglww7U0g.png",
+        "name": "Key Padmé Amidala Entertainment",
+        "origin_country": "FR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      }
+    ],
+    "release_date": "2024-10-16",
+    "revenue": 1419154,
+    "runtime": 77,
+    "spoken_languages": [
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Small Jaguar",
+    "video": false,
+    "vote_average": 5.9,
+    "vote_count": 23,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cibo aegre vicinus debeo pectus altus terreo esse sodalitas. Eius caute administratio cervus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Total Hamster"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://firsthand-watch.com",
+            "overview": "Arguo talio curia usitas vehemens exercitationem vallum tego triduana recusandae.",
+            "runtime": 77,
+            "tagline": "",
+            "title": "Yodelling Tortoise"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cibo aegre vicinus debeo pectus altus terreo esse sodalitas. Eius caute administratio cervus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Total Hamster"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Testimonium cerno triduana tertius.",
+            "runtime": 85,
+            "tagline": "",
+            "title": "Zestful Marlin"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 1.657,
+          "height": 569,
+          "iso_639_1": "en",
+          "file_path": "/smobOZW90pposG0g1blMVDDrYD3.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 943
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.666,
+          "height": 2560,
+          "iso_639_1": "en",
+          "file_path": "/vWNVHtwOhcoOEUSrY1iHRGbgH8O.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1706
+        }
+      ]
+    }
+  }
+}

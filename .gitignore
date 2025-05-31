@@ -1,8 +1,11 @@
 # Dependencies
 node_modules
 
+# Builds
+dist
+
 # Data files
-data
+/data
 
 # Test files
 backend-e2e/admin-credentials.json

@@ -1,0 +1,229 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21322",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"03b71c3379234bb3394e71b74abffe0f\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "BRdSiQx4DlGt6vAYzcqtQHqOS-7Mth1ilFfJJvcIpnJCtp-s05wlaQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/cs4wxElH1XPgRLFq1FOtIFpeKqz.jpg",
+    "created_by": [],
+    "episode_run_time": [60],
+    "first_air_date": "2003-02-21",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "https://yummy-min.org",
+    "id": 4419,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-02",
+    "last_episode_to_air": {
+      "id": 6083105,
+      "name": "Perfect Roadrunner",
+      "overview": "Venio dolore quidem astrum approbo angustus socius cimentarius amitto deleo. Utroque brevis arbor fugit. Tredecim vulnus crebro.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-16",
+      "episode_number": 16,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 60,
+      "season_number": 5,
+      "show_id": 4419,
+      "still_path": "/jeKOim51ZjWjEB1Q0TkAdhmSUwr.jpg"
+    },
+    "name": "National Sturgeon",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Silent C-3PO Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 59,
+        "logo_path": "/2EIKV6SomKx8L52HoSViKyJO87m.png",
+        "name": "Voluminous Eeth Koth Media",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 306,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Loose Galliform",
+    "overview": "Turpis stella antepono tabesco curo canto blandior. Thermae aureus coniuratio tepesco degusto. Celer comis verto creta.",
+    "popularity": 320.8809,
+    "poster_path": "/pbpoLLp4kvnYVfnEGiEhagpJuVZ.jpg",
+    "production_companies": [
+      {
+        "id": 21203,
+        "logo_path": null,
+        "name": "Embarrassed Anakin Skywalker Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 21199,
+        "logo_path": "/freGVtYt766cJ6HollWKl8RO64a.png",
+        "name": "Tasteless Poggle the Lesser Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 56394,
+        "logo_path": null,
+        "name": "Clean Jango Fett Productions",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-01-17",
+        "episode_count": 192,
+        "id": 13195,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/b9pp8Po1aMpQDRpDhpfvh2hQq1R.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2003-02-21",
+        "episode_count": 20,
+        "id": 13187,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/6lt2qjIrxpF2lizb6D9ix3MRKid.jpg",
+        "season_number": 1,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2004-01-16",
+        "episode_count": 23,
+        "id": 13188,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/k79yJEFOZob2OzDi7mo9B7VAbus.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-02-18",
+        "episode_count": 23,
+        "id": 13189,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/4DpiKt57NniKkRQexCixGohe5nq.jpg",
+        "season_number": 3,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2006-02-17",
+        "episode_count": 24,
+        "id": 13190,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/lKISsekmDGkk9j9Lz8Q21NMxxLy.jpg",
+        "season_number": 4,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2007-02-16",
+        "episode_count": 24,
+        "id": 13191,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/iwav3GC7ONiLhYoqixPIP2AZNeD.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Magnam turpis stella antepono tabesco curo canto blandior.",
+    "type": "Talk Show",
+    "vote_average": 6.002,
+    "vote_count": 217,
+    "external_ids": {
+      "imdb_id": "tt0350448",
+      "freebase_mid": "/m/04sv_8",
+      "freebase_id": "/en/real_time_with_bill_maher",
+      "tvdb_id": 72231,
+      "tvrage_id": 4950,
+      "wikidata_id": "Q2030903",
+      "facebook_id": null,
+      "instagram_id": "realtimers",
+      "twitter_id": "RealTimers"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Sunt solvo vestrum trans similique ago eaque abeo conduco capio.",
+            "homepage": "",
+            "tagline": "Victoria sunt solvo vestrum."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Architecto labore caecus casus viriliter sub acervus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Architecto labore caecus casus viriliter sub acervus.",
+            "homepage": "",
+            "tagline": "Pectus architecto labore."
+          }
+        }
+      ]
+    }
+  }
+}

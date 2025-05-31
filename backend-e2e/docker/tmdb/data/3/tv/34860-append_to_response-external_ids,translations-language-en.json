@@ -1,0 +1,220 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17042",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9b3e2a12a6efb80a8586799eb078899e\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "veJ3s6y1WrZOhGGKmy1-cl8hJ5Fd_qutt0QmfxShPbu7yCtUC_kYwQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "03e2018322f74fe8b973ddf1bd673363"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/4fVwc77cov2q9i0szzYhlkAaqza.jpg",
+    "created_by": [
+      {
+        "id": 1253154,
+        "credit_id": "5258dbb8760ee34661751265",
+        "name": "Lucas Lakin",
+        "original_name": "Lucas Lakin",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [30],
+    "first_air_date": "1993-04-10",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10762,
+        "name": "Kids"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "",
+    "id": 34860,
+    "in_production": true,
+    "languages": ["ja"],
+    "last_air_date": "2008-01-01",
+    "last_episode_to_air": {
+      "id": 3069297,
+      "name": "Yummy Sloth",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2008-01-01",
+      "episode_number": 50,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 20,
+      "season_number": 5,
+      "show_id": 34860,
+      "still_path": null
+    },
+    "name": "Encouraging Zebra",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 219,
+        "logo_path": "/yggDLcQ3huw76ee2tQRfsMrt0Yh.png",
+        "name": "Enthusiastic Finis Valorum Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 570,
+    "number_of_seasons": 5,
+    "origin_country": ["JP"],
+    "original_language": "ja",
+    "original_name": "Useful Newt",
+    "overview": "Sustineo angelus est auxilium absorbeo sopor bene soluta. Deinde vito desipio usque cras verbera. Tenetur argumentum cognomen voluptas villa cursim demens maiores.",
+    "popularity": 241.9779,
+    "poster_path": "/raKlXyICQBeTxYavErIRybR6g8d.jpg",
+    "production_companies": [],
+    "production_countries": [],
+    "seasons": [
+      {
+        "air_date": null,
+        "episode_count": 18,
+        "id": 313769,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1993-04-10",
+        "episode_count": 91,
+        "id": 45673,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/k5CuBy00DQCuAg5pPWtyQWOcy3P.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": null,
+        "episode_count": 120,
+        "id": 45674,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": null,
+        "episode_count": 81,
+        "id": 45675,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2003-04-07",
+        "episode_count": 130,
+        "id": 45676,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2003-10-15",
+        "episode_count": 130,
+        "id": 45677,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 6.4,
+    "vote_count": 19,
+    "external_ids": {
+      "imdb_id": "tt0306365",
+      "freebase_mid": "/m/026bxks",
+      "freebase_id": "/en/nintama_rantarou",
+      "tvdb_id": 286895,
+      "tvrage_id": null,
+      "wikidata_id": null,
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Efficient Squirrel",
+            "overview": "Teres ascit cunae color acies alter asperiores amita video basium. Amitto tergiversatio aer vulgaris suadeo animus clibanus commodi derideo trado.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Heavy Gamefowl",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Absolute Lizard",
+            "overview": "Tepesco terreo ea aro temperantia. Confugo conturbo auctor amo admoveo fuga deorsum. Vapulus possimus inflammatio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

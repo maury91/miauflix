@@ -1,0 +1,174 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11110",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"55cf061aec9e5f019d4010a3294c14d1\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "mjDZDoTllM2yydpRc3wci40u75-4DVSk7T4MfIbNf5Nz5ozdRpqMtw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "283fac73c39b44e1aa291ef328a8fc79"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tLmyP7akYmxLwyfTEt2qyj2sOR3.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      }
+    ],
+    "homepage": "https://tedious-simple.com",
+    "id": 372754,
+    "imdb_id": "tt5526028",
+    "origin_country": ["JP"],
+    "original_language": "ja",
+    "original_title": "Medical Flyingfish",
+    "overview": "Apparatus cubo nesciunt conor demonstro adinventitias capillus altus cohaero. Vilicus textus argentum aurum iure quis. Pel coepi thorax tenuis tandem.",
+    "popularity": 1.7795,
+    "poster_path": "/cIfRCA5wEvj9tApca4UDUagQEiM.jpg",
+    "production_companies": [
+      {
+        "id": 13113,
+        "logo_path": "/xV5tPYKZhP2Ko9dOh5A3FahuKsx.png",
+        "name": "Major Bossk Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Local Gasgano Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "2016-02-20",
+    "revenue": 1397526,
+    "runtime": 61,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Titulus apparatus cubo nesciunt conor demonstro adinventitias capillus.",
+    "title": "Giant Tarsier",
+    "video": false,
+    "vote_average": 8.339,
+    "vote_count": 404,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://alarmed-heaven.org",
+            "overview": "Voco acies color averto cavus vilis.",
+            "runtime": 61,
+            "tagline": "Curiositas voco acies.",
+            "title": "Steady Caribou"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Amused Bug"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Alo tamdiu comminor.",
+            "runtime": 60,
+            "tagline": "",
+            "title": "Jolly Shark"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/y5O1i2GInV7nQnF3sgcXHif0uaQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.143,
+          "height": 363,
+          "iso_639_1": "en",
+          "file_path": "/qT17vqXFOcSQrsHO2GChhsDwna6.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1504
+        },
+        {
+          "aspect_ratio": 4.143,
+          "height": 363,
+          "iso_639_1": "en",
+          "file_path": "/uboC8o1EJhl4qMLErzb2D4NJNas.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1504
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_639_1": "en",
+          "file_path": "/cIfRCA5wEvj9tApca4UDUagQEiM.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/pCcDtuseskSsJfC7RwaR8xkySkZ.jpg",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

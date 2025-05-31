@@ -7,6 +7,7 @@ services:
     environment:
       - PORT=3000
       - NODE_ENV=development
+      - RATE_LIMIT_TEST_MODE=true
       - TMDB_API_URL=http://tmdb-mock/3
       - YTS_API_URL=http://yts-mock/api/v2
       - TRAKT_API_URL=http://trakt-mock
@@ -39,7 +40,7 @@ services:
   tmdb-mock:
     build:
       context: mock
-      dockerfile: mock.Dockerfile
+      dockerfile: tmdb.Dockerfile
     env_file:
       - ../../.env
     environment:
@@ -91,7 +92,7 @@ services:
   yts-mock:
     build:
       context: mock
-      dockerfile: mock.Dockerfile
+      dockerfile: yts.Dockerfile
     env_file:
       - ../../.env
     environment:

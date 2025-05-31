@@ -1,0 +1,268 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21028",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"128bffba9635b010ea17ee5e48e138ad\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "U3IlYi3N4Akr6yDFFTx_fKo56-jeszj035MhhakH0Uj-sMzYMJh3lQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "8b4e2f6569074cd88a533175c64bc4e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/uvitbjFU4JqvMwIkMWHp69bmUzG.jpg",
+    "belongs_to_collection": null,
+    "budget": 3300000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://indolent-sousaphone.info",
+    "id": 598,
+    "imdb_id": "tt0317248",
+    "origin_country": ["BR"],
+    "original_language": "pt",
+    "original_title": "Married Tapir",
+    "overview": "Decor valetudo vivo vitium alo turbo caritas conturbo tumultus. Caelum vacuus inflammatio carmen consequuntur annus.",
+    "popularity": 9.6864,
+    "poster_path": "/k7eYdWvhYQyRQoU2TB2A2Xu2TfD.jpg",
+    "production_companies": [
+      {
+        "id": 345,
+        "logo_path": "/hj2nqoG2F9COm16fqvM0YpY3jL4.png",
+        "name": "Stable R4-P17 Pictures",
+        "origin_country": "BR"
+      },
+      {
+        "id": 346,
+        "logo_path": "/ymwuRMQkrQojx55MeMO861Rdecz.png",
+        "name": "Unnecessary Taun We Entertainment",
+        "origin_country": "BR"
+      },
+      {
+        "id": 856,
+        "logo_path": "/3tfzS2CrX6Ntbu927XzHXEPDA6y.png",
+        "name": "Unnecessary Qui-Gon Jinn Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 11445,
+        "logo_path": null,
+        "name": "Resonant R4-P17 Productions",
+        "origin_country": "DE"
+      },
+      {
+        "id": 13969,
+        "logo_path": "/bEpiJ2zXGIH70JT16asjWNFtOEv.png",
+        "name": "Relative Gregar Typho Entertainment",
+        "origin_country": "BR"
+      },
+      {
+        "id": 11793,
+        "logo_path": null,
+        "name": "Lovely Nute Gunray Pictures",
+        "origin_country": "FR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "BR",
+        "name": "Brazil"
+      },
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      },
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      }
+    ],
+    "release_date": "2002-08-30",
+    "revenue": 30641770,
+    "runtime": 129,
+    "spoken_languages": [
+      {
+        "english_name": "Portuguese",
+        "iso_639_1": "pt",
+        "name": "Português"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Tricesimus decor valetudo vivo vitium.",
+    "title": "Dutch Camel",
+    "video": false,
+    "vote_average": 8.429,
+    "vote_count": 7655,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://guilty-fugato.info",
+            "overview": "Creator suffragium toties consequatur aspernatur. Canonicus cado timor caritas dolorum.",
+            "runtime": 129,
+            "tagline": "Corpus creator suffragium toties consequatur.",
+            "title": "Zeroth Starfish"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Accusamus decerno coaegresco accusantium chirographum atavus vis accendo. Inventore aro animus voluptatem.",
+            "runtime": 130,
+            "tagline": "Strenuus accusamus decerno coaegresco accusantium chirographum.",
+            "title": "Advanced Galliform"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Cultellus acervus blanditiis colligo circumvenio. Tantum strues auctor absconditus vomica corpus.",
+            "runtime": 130,
+            "tagline": "",
+            "title": "Maximum Chinchilla"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Aegrotatio utpote amoveo asperiores cognomen fugit. Demens balbus succurro thymbra patruus theca cunctatio suffoco crinis quia.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Experienced Quail"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Accusamus decerno coaegresco accusantium chirographum atavus vis accendo. Inventore aro animus voluptatem.",
+            "runtime": 130,
+            "tagline": "Strenuus accusamus decerno coaegresco accusantium chirographum.",
+            "title": "Advanced Galliform"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/q19ouDlpaOuY5QT1HKzU0FCriYv.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/Nmg3nSoh8o2tAMS5oKjcoiCRja.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.628,
+          "height": 274,
+          "iso_639_1": "en",
+          "file_path": "/jTgUNDqwWIpzqqLliFENRRKLHRp.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1816
+        },
+        {
+          "aspect_ratio": 5.036,
+          "height": 745,
+          "iso_639_1": "en",
+          "file_path": "/e64Q552jasMQlCt2TZwUMUAv2ZT.png",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3752
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/k7eYdWvhYQyRQoU2TB2A2Xu2TfD.jpg",
+          "vote_average": 3.09,
+          "vote_count": 22,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/2Gaz7F36akiFzI7Nx5XLl8l31ju.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_639_1": "en",
+          "file_path": "/4YEX7qUfg6kN2tHm84CMt2CEq9n.jpg",
+          "vote_average": 6.088,
+          "vote_count": 18,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2700,
+          "iso_639_1": "en",
+          "file_path": "/4wga3nAnHEFZPZr62H2g3YDA8XZ.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/pwKAsZoLysd2PT50h9wsl6W4bDa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

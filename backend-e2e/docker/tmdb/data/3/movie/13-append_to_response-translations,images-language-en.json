@@ -1,0 +1,300 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17954",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8b07d231ad202b827bc85e65e7ef2bb7\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "XGRzvOoCoIogRZyhSLBQxbrtlp1_xRsFz_GoL4Bt-r0-ikueEf7tUw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tlEFuIlaxRPXIYVHXbOSAMCfWqk.jpg",
+    "belongs_to_collection": null,
+    "budget": 55000000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "https://canine-regime.name",
+    "id": 13,
+    "imdb_id": "tt0109830",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Stupid Hoverfly",
+    "overview": "Eligendi voro substantia bene solitudo apparatus auditor voco.",
+    "popularity": 26.6643,
+    "poster_path": "/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg",
+    "production_companies": [
+      {
+        "id": 4,
+        "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
+        "name": "Dead Nien Nunb Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 21920,
+        "logo_path": null,
+        "name": "Quiet Poggle the Lesser Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 412,
+        "logo_path": null,
+        "name": "Prickly Nien Nunb Media",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1994-06-23",
+    "revenue": 677387716,
+    "runtime": 142,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Tabella eligendi voro.",
+    "title": "Marine Clownfish",
+    "video": false,
+    "vote_average": 8.468,
+    "vote_count": 28240,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://distinct-plain.info",
+            "overview": "Conor bene claudeo fugiat claustrum eaque virgo terminatio.",
+            "runtime": 142,
+            "tagline": "Sophismata conor bene claudeo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Arguo odit iste compello pax modi statua subseco.",
+            "runtime": 137,
+            "tagline": "Subiungo arguo odit.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Conqueror tyrannus paulatim confero patruus cohibeo sumo vicissitudo. Repellat curo vox cubicularis ago.",
+            "runtime": 142,
+            "tagline": "Statua conqueror tyrannus paulatim confero patruus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Corrumpo totam tempus uterque speciosus vulnero adicio terebro.",
+            "runtime": 142,
+            "tagline": "",
+            "title": "Productive Capybara"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Conqueror tyrannus paulatim confero patruus cohibeo sumo vicissitudo. Repellat curo vox cubicularis ago.",
+            "runtime": 142,
+            "tagline": "Statua conqueror tyrannus paulatim confero patruus.",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/vdqthGdYhH4WzvmkGOcg0Um2Up7.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/9f4bPWfI4ObADsM1NbG3ZqVntBm.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/bH2WXkBWQGcE7XhosCrBBg8dZIH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/vwkDy2wDm2aglYDprOSuVgT5J1L.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/4fT3pmeO7NnyT1TBkSElIDhVThU.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.253,
+          "height": 166,
+          "iso_639_1": "en",
+          "file_path": "/Ab1HnU22XxNqfMz7DRnhoXoRKrt.svg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 208
+        },
+        {
+          "aspect_ratio": 1.253,
+          "height": 166,
+          "iso_639_1": "en",
+          "file_path": "/m7IDi1mmRZL2AOhNcpZGgT3paii.svg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 208
+        },
+        {
+          "aspect_ratio": 1.784,
+          "height": 1273,
+          "iso_639_1": "en",
+          "file_path": "/as10mpHSWebQVXwMbwQfWYfR27F.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2271
+        },
+        {
+          "aspect_ratio": 1.786,
+          "height": 1213,
+          "iso_639_1": "en",
+          "file_path": "/kjUupFukLAkxM40so0YfRGY5aHo.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2167
+        },
+        {
+          "aspect_ratio": 1.253,
+          "height": 166,
+          "iso_639_1": "en",
+          "file_path": "/tO9IK54tRhvqQYgVfykeNFFxedl.svg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 208
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg",
+          "vote_average": 5.25,
+          "vote_count": 24,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/Cw4hIUIAmSYfK9QfaUW5igp9La.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1571,
+          "iso_639_1": "en",
+          "file_path": "/iCtxSepAgCUzL9WC4CMb3y78c1p.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1047
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",
+          "vote_average": 4.572,
+          "vote_count": 22,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/h5J4W4veyxMXDMjeNxZI46TsHOb.jpg",
+          "vote_average": 4.3,
+          "vote_count": 15,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

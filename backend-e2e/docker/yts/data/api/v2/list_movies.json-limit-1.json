@@ -1,0 +1,104 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "947ee3a11adc3683-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=Tevrng6nzetm%2F7j7Dzx%2BZoeF6slXU1oesswHkg6DRiyWuaButlujzoPzZ4y5Zvr16prgsM0lHE3uix5Hjf9bNURoHvvj7Gi3TQ0pEvIjvfevX%2B3hTzVc%2Fg%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+    "server": "cloudflare",
+    "server-timing": "cfL4;desc=\"?proto=TCP&rtt=642&min_rtt=637&rtt_var=250&sent=5&recv=6&lost=0&retrans=0&sent_bytes=3173&recv_bytes=830&delivery_rate=6378854&cwnd=33&unsent_bytes=0&cid=d009cc45f3cd1fcf&ts=249&x=0\"",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "12977367",
+    "set-cookie": "PHPSESSID=uop3on4kjmu7pqc6bjmfobfo6h; Path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 50,
+      "limit": 1,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 69406,
+          "url": "https://grimy-consulting.biz/home/user",
+          "imdb_code": "tt02287095",
+          "title": "Harsh Eel",
+          "title_english": "Smoggy Albatross",
+          "title_long": "Wonderful Sparrow",
+          "slug": "harsh-eel-2025",
+          "year": 2025,
+          "rating": 0,
+          "runtime": 96,
+          "genres": ["Animation", "Comedy", "Drama", "Romance", "Sci-Fi"],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "qwOWctFJ99s",
+          "language": "ko",
+          "mpa_rating": "",
+          "background_image": "https://loose-pair.name/boot",
+          "background_image_original": "https://immediate-trumpet.org/Users",
+          "small_cover_image": "https://long-standardization.name/opt/sbin",
+          "medium_cover_image": "https://numb-bid.com/usr/sbin",
+          "large_cover_image": "https://gray-theme.biz/private/tmp",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "hash": "1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "906.46 MB",
+              "size_bytes": 950492201,
+              "date_uploaded": "2025-05-30 10:52:25",
+              "date_uploaded_unix": 1748595145
+            },
+            {
+              "url": "https://yts.mx/torrent/download/A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
+              "hash": "A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
+              "quality": "1080p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "5.1",
+              "seeds": 0,
+              "peers": 0,
+              "size": "1.82 GB",
+              "size_bytes": 1954210120,
+              "date_uploaded": "2025-05-30 11:56:01",
+              "date_uploaded_unix": 1748598961
+            }
+          ],
+          "date_uploaded": "2025-05-30 10:52:25",
+          "date_uploaded_unix": 1748595145
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1748615004,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

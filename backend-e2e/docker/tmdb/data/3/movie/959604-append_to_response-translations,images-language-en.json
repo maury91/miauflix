@@ -1,0 +1,212 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20821",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0d26a3fea00f4cd5d110acc3645e8cba\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "cFtMiAk7mTH4jQtM5RjDT2UCdR-QperqzIjkDWNhVaxlF2ZGuHTU4Q==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "283fac73c39b44e1aa291ef328a8fc79"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/lBcXozUeABairkTavz3X3ZAtOL0.jpg",
+    "belongs_to_collection": null,
+    "budget": 37315205,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "",
+    "id": 959604,
+    "imdb_id": "tt27490099",
+    "origin_country": ["BE", "FR"],
+    "original_language": "fr",
+    "original_title": "Top Minnow",
+    "overview": "Claro acceptus adicio cum aliqua turpis stips abscido utrimque aer.",
+    "popularity": 55.8184,
+    "poster_path": "/yu9dRyKcUHTfKcqsomUtpord4t3.jpg",
+    "production_companies": [
+      {
+        "id": 120768,
+        "logo_path": "/ccHWgGgU03FvvhPNgGmdzddNLTN.png",
+        "name": "Zesty Barriss Offee Entertainment",
+        "origin_country": "FR"
+      },
+      {
+        "id": 34780,
+        "logo_path": "/ahgzFRXKF2fkOV0WfB0RCxEmxki.png",
+        "name": "Imaginative Raymus Antilles Entertainment",
+        "origin_country": "FR"
+      },
+      {
+        "id": 694,
+        "logo_path": "/5LEHONGkZBIoWvp1ygHOF8iyi1M.png",
+        "name": "Neat Quarsh Panaka Media",
+        "origin_country": "FR"
+      },
+      {
+        "id": 26172,
+        "logo_path": null,
+        "name": "Variable Bib Fortuna Productions",
+        "origin_country": "FR"
+      },
+      {
+        "id": 83,
+        "logo_path": "/9OQ0rm55xtlgX7KcAKMUePJSrQc.png",
+        "name": "Colorful Arvel Crynyd Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 11773,
+        "logo_path": "/8fCjsqh43LbPV6pm3SfR5Jx64GU.png",
+        "name": "Intensive Mace Windu Productions",
+        "origin_country": "BE"
+      },
+      {
+        "id": 92187,
+        "logo_path": "/yrAyYme1zlZtHuhlWS3DlFAj762.png",
+        "name": "Classic Yoda Media",
+        "origin_country": "BE"
+      },
+      {
+        "id": 119267,
+        "logo_path": "/b9Gw1Oz0d7rdxmpbJPQC0zQpmxw.png",
+        "name": "Homely Quarsh Panaka Pictures",
+        "origin_country": "BE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "BE",
+        "name": "Belgium"
+      },
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      }
+    ],
+    "release_date": "2024-10-16",
+    "revenue": 36010728,
+    "runtime": 166,
+    "spoken_languages": [
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Disciplinary Horse",
+    "video": false,
+    "vote_average": 7.2,
+    "vote_count": 792,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Vix venustas in voco. Tripudio virtus ustulo.",
+            "runtime": 166,
+            "tagline": "",
+            "title": "Ancient Marmot"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Qui cunabula pecto nesciunt inflammatio tamquam demum optio. Culpo sursum angustus. Admitto viridis videlicet triumphus calculus contego.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Odd Panther"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Vere eveniet terror cedo delinquo deludo. Accusamus amplus soluta nihil optio tersus corona. Vigilo rem turba verecundia amissio accedo utilis quaerat aegre.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Small Ocelot"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Vere eveniet terror cedo delinquo deludo. Accusamus amplus soluta nihil optio tersus corona. Vigilo rem turba verecundia amissio accedo utilis quaerat aegre.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Small Ocelot"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 2.311,
+          "height": 180,
+          "iso_639_1": "en",
+          "file_path": "/yMJ7fIZxfqekAJR1xZOi5YLRaGW.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 416
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yu9dRyKcUHTfKcqsomUtpord4t3.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/rEssyCs9w1uzXnIKEn5NvVmAvDS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

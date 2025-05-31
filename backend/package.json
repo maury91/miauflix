@@ -4,10 +4,11 @@
   "main": "src/app.ts",
   "scripts": {
     "start": "node --env-file ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
+    "start:prod": "node --env-file ../.env dist/app.js",
     "dev": "npm start --watch",
     "config": "npm start -- --config",
     "config-only": "npm start -- --only-config",
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json --resolve-full-paths",
     "check:ts": "tsc --noEmit",
     "lint": "eslint --ext .ts src/",
     "test": "jest"
@@ -30,6 +31,7 @@
     "sqlite3": "^5.0.11",
     "typeorm": "^0.3.10",
     "uuid": "^11.1.0",
+    "webtorrent": "^2.6.7",
     "zod": "^3.25.20"
   },
   "devDependencies": {
@@ -51,10 +53,10 @@
     "nodemon": "^2.0.20",
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
     "tsconfig-paths": "4.2.0",
     "tsx": "^4.19.4",
-    "typescript": "^5.8.3",
-    "webtorrent": "^2.6.7"
+    "typescript": "^5.8.3"
   },
   "type": "module"
 }

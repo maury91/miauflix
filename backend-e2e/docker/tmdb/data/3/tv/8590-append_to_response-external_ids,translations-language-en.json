@@ -1,0 +1,244 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24647",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f38bb2fa4054b0f26c1b978e12fb0732\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "8G9V7abC3L0xrg6sG0AZk1Rsz9mpAAoAnoFjpENPAkB9wXjkCRs9Yg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "8b4e2f6569074cd88a533175c64bc4e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/lqDlYLNA0RdMXDiz70lU8Ib1nwW.jpg",
+    "created_by": [
+      {
+        "id": 1241312,
+        "credit_id": "525791cd760ee36aaa6e13f2",
+        "name": "Marion Wisozk",
+        "original_name": "Marion Wisozk",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 979621,
+        "credit_id": "525791cb760ee36aaa6e13d7",
+        "name": "Lora Davis",
+        "original_name": "Lora Davis",
+        "gender": 1,
+        "profile_path": "/tkFgVR9xySCUzitgTyiimjg2xUQ.jpg"
+      },
+      {
+        "id": 1241311,
+        "credit_id": "525791cd760ee36aaa6e13e9",
+        "name": "Dr. Sean Kuvalis",
+        "original_name": "Dr. Sean Kuvalis",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 1241310,
+        "credit_id": "525791cc760ee36aaa6e13e0",
+        "name": "Ora West",
+        "original_name": "Ora West",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 2590045,
+        "credit_id": "655375579653f613f74d8bce",
+        "name": "Darin Howe",
+        "original_name": "Darin Howe",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [24, 26, 28, 52, 90, 100],
+    "first_air_date": "2004-08-30",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://thorny-mob.info",
+    "id": 8590,
+    "in_production": false,
+    "languages": ["fr"],
+    "last_air_date": "2022-11-18",
+    "last_episode_to_air": {
+      "id": 4060047,
+      "name": "Hissing Gorilla",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2022-11-18",
+      "episode_number": 260,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 63,
+      "season_number": 5,
+      "show_id": 8590,
+      "still_path": "/iaxSe9Ckm4g3nWYeGafLZsjXc7p.jpg"
+    },
+    "name": "Skinny Woodpecker",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 249,
+        "logo_path": "/1ePfTUHHvBlVQxa0Fltx5kWhIs5.png",
+        "name": "Useless Padmé Amidala Entertainment",
+        "origin_country": "FR"
+      }
+    ],
+    "number_of_episodes": 1368,
+    "number_of_seasons": 5,
+    "origin_country": ["FR"],
+    "original_language": "fr",
+    "original_name": "Weekly Beetle",
+    "overview": "Cum atavus peior amo voluptate absum cogito. Apto eos tot allatus facere tutamen debilito careo atqui. Vereor crebro vulnus.",
+    "popularity": 429.8088,
+    "poster_path": "/jmU8HlTDn87xmRqXagcL2swDr8I.jpg",
+    "production_companies": [
+      {
+        "id": 22381,
+        "logo_path": null,
+        "name": "Southern R2-D2 Productions",
+        "origin_country": "FR"
+      },
+      {
+        "id": 23448,
+        "logo_path": "/rKUrVCN0CkbrsaX3iO6bdx1cHYJ.png",
+        "name": "Given Lama Su Productions",
+        "origin_country": "FR"
+      },
+      {
+        "id": 2318,
+        "logo_path": null,
+        "name": "Selective Dooku Entertainment",
+        "origin_country": "FR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2006-12-26",
+        "episode_count": 68,
+        "id": 147916,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2004-08-30",
+        "episode_count": 260,
+        "id": 83365,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/6fQyh7NSWf6jpug5vjmpwVH4iK5.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-09-05",
+        "episode_count": 260,
+        "id": 94352,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/6fQyh7NSWf6jpug5vjmpwVH4iK5.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2006-09-11",
+        "episode_count": 260,
+        "id": 94353,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/6fQyh7NSWf6jpug5vjmpwVH4iK5.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2007-09-10",
+        "episode_count": 260,
+        "id": 94354,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/6fQyh7NSWf6jpug5vjmpwVH4iK5.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-09-08",
+        "episode_count": 260,
+        "id": 94355,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/6fQyh7NSWf6jpug5vjmpwVH4iK5.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 4.2,
+    "vote_count": 31,
+    "external_ids": {
+      "imdb_id": "tt0423713",
+      "freebase_mid": "/m/0562n7t",
+      "freebase_id": null,
+      "tvdb_id": 97371,
+      "tvrage_id": null,
+      "wikidata_id": "Q1381883",
+      "facebook_id": "plusbellelavie",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Deleo antepono dolor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

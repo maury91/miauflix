@@ -17,6 +17,10 @@
 
 - [Overview](#overview)
 - [Features](#features)
+  - [Currently Available](#currently-available)
+  - [In Development](#in-development)
+  - [Planned Features](#planned-features)
+- [Implementation Status](#implementation-status)
 - [Project Architecture](#project-architecture)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -32,11 +36,29 @@ Miauflix is a comprehensive media platform that empowers you to manage and strea
 
 ## ✨ Features
 
-- **Rich Media Library**: Browse and manage movies and TV shows with detailed metadata
-- **Consumption Tracking**: Track your media consumption through integration with popular services
-- **Security-Focused**: Securely access your content with robust authentication
-- **VPN Integration**: Ensure downloads always happen behind a VPN (optional)
-- **Content Encryption**: Encrypt your downloaded content (optional)
+### 🚀 Currently Available
+
+- **🔐 Secure Authentication**: JWT-based user authentication system
+- **🎬 Media Metadata**: Rich movie and TV show information via TMDB integration
+- **🔍 Content Discovery**: Movie search and torrent finding through YTS tracker
+- **🛡️ Security Features**: VPN detection, audit logging, and comprehensive security middleware
+- **📊 Health Monitoring**: System health checks and monitoring endpoints
+- **🐳 Docker Ready**: Full containerization with nginx reverse proxy and SSL support
+
+### 🔄 In Development
+
+- **📺 Media Streaming**: WebTorrent-based content streaming (foundation complete)
+- **📱 Frontend Interface**: Web application for browsing and playing content
+- **📋 Trakt.tv Integration**: Watch list synchronization and progress tracking
+
+### 🎯 Planned Features
+
+- **📚 Media Library Management**: Organize and manage your content collection
+- **🔒 Content Encryption**: Optional encryption for downloaded content
+- **📱 Mobile Apps**: Native iOS and Android applications
+- **🎵 Multi-format Support**: Support for various media formats and quality options
+
+> **Current Status**: Backend API is production-ready (~75% complete), frontend is in early development. See [Implementation Status](IMPLEMENTATION_STATUS.md) for detailed progress tracking.
 
 The application is a self-contained Node.js application. Docker image and docker-compose files are provided for easy server setup. Note: Docker and docker-compose are not mandatory but are recommended as they provide pre-configured VPN and reverse proxy setup.
 

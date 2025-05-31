@@ -10,10 +10,29 @@ RUN apt-get update && apt-get install -y curl python3 make g++ && rm -rf /var/li
 # Copy package.json and package-lock.json (if available)
 COPY package.json package-lock.json ./
 COPY backend/package.json ./backend/
-COPY frontend/package.json ./frontend/
 
-# Install dependencies using npm
-RUN npm install
+# Install all dependencies for building
+RUN npm ci && npm cache clean --force
+
+# Copy application source code
+COPY backend/ ./backend/
+
+# Build the application (compile TypeScript, etc.)
+RUN npm run build --workspace=backend
+
+# Remove dev dependencies to reduce image size
+RUN npm ci --only=production && npm cache clean --force
+
+# Move node_modules to the dist directory
+RUN mv ./backend/node_modules ./dist/backend/node_modules && \
+    rm -rf ./backend && \
+    mv ./dist/backend ./backend && \
+    rm -rf ./dist
+
+# Create a non-root user for security
+RUN groupadd -r miauflix && useradd -r -g miauflix miauflix
+RUN chown -R miauflix:miauflix /usr/src/app
+USER miauflix
 
 # Expose the port the app runs on
 EXPOSE 3000
@@ -23,5 +42,5 @@ EXPOSE 6499
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:3000/health || exit 1
 
-# Start the backend service in debug mode
-CMD ["npm", "run", "start", "--workspace=backend"]
+# Start the backend service using the built JavaScript files
+CMD ["node", "--env-file", ".env", "./backend/app.js"]

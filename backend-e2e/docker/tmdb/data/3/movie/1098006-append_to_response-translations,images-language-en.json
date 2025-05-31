@@ -1,0 +1,298 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8457",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e46da13087eb3348d083e130b1253431\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "zCT5s1Gt6-YcBddbcqzGiQdvwUP1IC-KQGDNnD4nn1Cz5IWfKRKGNw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/aESb695wTIF0tB7RTGRebnYrjFK.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://ordinary-acquisition.org",
+    "id": 1098006,
+    "imdb_id": "tt27075958",
+    "origin_country": ["GB", "US"],
+    "original_language": "en",
+    "original_title": "Lovely Raccoon",
+    "overview": "Velut abstergo correptius. Solitudo ratione sum crux virtus demergo vulpes thema sapiente.",
+    "popularity": 259.0023,
+    "poster_path": "/4iWjGghUj2uyHo2Hyw8NFBvsNGm.jpg",
+    "production_companies": [
+      {
+        "id": 82819,
+        "logo_path": "/gXfFl9pRPaoaq14jybEn1pHeldr.png",
+        "name": "Inclined Lama Su Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 130448,
+        "logo_path": "/yHWTTGKbOGZKUd1cp6l3uLyDeiv.png",
+        "name": "Complicated Cliegg Lars Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 126588,
+        "logo_path": "/cNhOITS96oOV7SCgUHxvZlWRecx.png",
+        "name": "Comparative Cordé Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 19367,
+        "logo_path": null,
+        "name": "Concerned C-3PO Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 2900,
+        "logo_path": null,
+        "name": "Presidential Jek Tono Porkins Media",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2025-05-19",
+    "revenue": 0,
+    "runtime": 126,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Absconditus velut abstergo correptius thorax solitudo.",
+    "title": "Deep Wombat",
+    "video": false,
+    "vote_average": 6.491,
+    "vote_count": 292,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://thorough-general.biz",
+            "overview": "Collum cattus ventosus taedium quibusdam adeptio. Cunctatio accommodo torqueo. Perferendis sui abeo suppono quod suscipio demoror adipiscor adsuesco.",
+            "runtime": 126,
+            "tagline": "Crastinus collum cattus ventosus taedium quibusdam adeptio a.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://plain-spree.name",
+            "overview": "Rerum sophismata quam curiositas thermae cilicium supellex canis demergo. Defungo thymum celebrer.",
+            "runtime": 0,
+            "tagline": "Turba rerum sophismata quam curiositas thermae.",
+            "title": "Symbolic Primate"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://buoyant-look.net",
+            "overview": "Tam ipsum ipsum mollitia cum accommodo aegre.",
+            "runtime": 0,
+            "tagline": "Eos tam ipsum.",
+            "title": "Surviving Wolverine"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://plain-spree.name",
+            "overview": "Rerum sophismata quam curiositas thermae cilicium supellex canis demergo. Defungo thymum celebrer.",
+            "runtime": 0,
+            "tagline": "Turba rerum sophismata quam curiositas thermae.",
+            "title": "Symbolic Primate"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Vulgo suggero carbo credo patria apud. Stips conor celebrer supellex absens inflammatio somniculosus amplus. Adsum aranea aveho tabernus uter adsum amissio totus aestus aedificium.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ds48ouJHcOfLuYJN6ChCEwCuA8r.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/eSPBmrl1K5DobOq4FOMyvJA7YYe.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/q9cpUqNBHEkQzZc1n5KqIKffB6B.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/erPfje6Q9noJvio6GVf1JH03wh4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/nEdUiHDxDASz6vmZr3qhcca05Bq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.562,
+          "height": 1071,
+          "iso_639_1": "en",
+          "file_path": "/nKN4upqK6Zthn0R9FMeBJdKJrFY.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2744
+        },
+        {
+          "aspect_ratio": 2.556,
+          "height": 311,
+          "iso_639_1": "en",
+          "file_path": "/bRPUuZDldnWKlJiqkgG1rpk4fpr.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 795
+        },
+        {
+          "aspect_ratio": 2.562,
+          "height": 1071,
+          "iso_639_1": "en",
+          "file_path": "/sBb7K2fWApG5Zh5YvpgcsGwA3qb.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2744
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/4iWjGghUj2uyHo2Hyw8NFBvsNGm.jpg",
+          "vote_average": 6.2,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/9lUeNpg4LZ2v7EETsx3mjxRLRI7.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/5s5U8rDF4FN0USJ8TteHREiFpUZ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/zwZ63GUxrez0OoWSGJMN7PvSfNZ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/v62Sbj3quOcGu1jKlQtr2WbEXac.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

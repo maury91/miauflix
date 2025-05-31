@@ -185,7 +185,7 @@ export const testData = {
 };
 
 /**
- * Extract user credentials from credentials file created by dev.sh script
+ * Extract user credentials from credentials file created by env.sh script
  */
 export async function extractUserCredentialsFromLogs(): Promise<{
   email: string;
@@ -200,7 +200,7 @@ export async function extractUserCredentialsFromLogs(): Promise<{
     // Check if credentials file exists
     if (!fs.existsSync(credentialsPath)) {
       console.log('⚠️ Admin credentials file not found at:', credentialsPath);
-      console.log('   Make sure the dev.sh script has been run and credentials were extracted');
+      console.log('   Make sure the env.sh script has been run and credentials were extracted');
       return null;
     }
 

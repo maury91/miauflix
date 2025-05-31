@@ -1,0 +1,220 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9008",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a17543cd80614af07fa79b8f35e19722\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "4tjK4_CcAZJYY5V_njDrwkj5kSrPg7GIs_u1gnONEIiH1iqq9cPtnw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "4f745164c16646a89207e9f5074053e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kA50bkSC6bw5ZkutYrN9sLD9CZ9.jpg",
+    "created_by": [
+      {
+        "id": 54772,
+        "credit_id": "551da459c3a3683a18000dbe",
+        "name": "Juana Windler",
+        "original_name": "Juana Windler",
+        "gender": 2,
+        "profile_path": "/eZrNjW7RQgkhwfcBw0qGTLPVgf4.jpg"
+      }
+    ],
+    "episode_run_time": [30],
+    "first_air_date": "2009-07-16",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://insignificant-advancement.info",
+    "id": 22980,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-25",
+    "last_episode_to_air": {
+      "id": 6255231,
+      "name": "Glamorous Lemur",
+      "overview": "Explicabo caritas capitulus modi tendo aequus non. Tantillus terra speculum conturbo sublime harum demens sordeo.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-25",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 21,
+      "season_number": 5,
+      "show_id": 22980,
+      "still_path": "/kEVxGLJsZ00V5I3PReRoQnHL9kX.jpg"
+    },
+    "name": "Nasty Cattle",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 74,
+        "logo_path": "/wX5HsfS47u6UUCSpYXqaQ1x2qdu.png",
+        "name": "Ltd Mace Windu Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 3353,
+        "logo_path": "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png",
+        "name": "Many Luke Skywalker Productions",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 103,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Daily Falcon",
+    "overview": "Delinquo sursum tabgo. Barba ater depromo vado theatrum.",
+    "popularity": 577.2105,
+    "poster_path": "/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg",
+    "production_companies": [
+      {
+        "id": 23601,
+        "logo_path": "/jZYnbLWzOGhRDrvLWOOpoQZnuAB.png",
+        "name": "Juicy Jocasta Nu Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 11073,
+        "logo_path": "/aCbASRcI1MI7DXjPbSW9Fcv9uGR.png",
+        "name": "Nursing C-3PO Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2012-08-26",
+        "episode_count": 6,
+        "id": 32935,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-07-16",
+        "episode_count": 22,
+        "id": 32928,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 9
+      },
+      {
+        "air_date": "2010-01-14",
+        "episode_count": 29,
+        "id": 32929,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2010-09-09",
+        "episode_count": 40,
+        "id": 32930,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": null,
+        "episode_count": 1,
+        "id": 32931,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2011-09-25",
+        "episode_count": 5,
+        "id": 32932,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Talk Show",
+    "vote_average": 5.092,
+    "vote_count": 71,
+    "external_ids": {
+      "imdb_id": "tt2057880",
+      "freebase_mid": "/m/07cf2_r",
+      "freebase_id": "/en/watch_what_happens_live",
+      "tvdb_id": 230991,
+      "tvrage_id": 23346,
+      "wikidata_id": "Q17049499",
+      "facebook_id": "WatchWhatHappensLive",
+      "instagram_id": "bravowwhl",
+      "twitter_id": "BravoWWHL"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Degusto pel vado ambitus turbo. Viscus sursum accusamus charisma.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

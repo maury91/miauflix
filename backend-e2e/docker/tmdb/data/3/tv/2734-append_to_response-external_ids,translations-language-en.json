@@ -1,0 +1,266 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24728",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"113be1f536a7c3638ac88f74b37b1231\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "KdRuGjQHYd6pz4y-du_Q4ZK-_Gp0OZyhYoNlRJ0ot9DXmsSx4ZioKw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oRdc2nn7jLOYy4fBdvmFKPsKzZE.jpg",
+    "created_by": [
+      {
+        "id": 117443,
+        "credit_id": "525743f5760ee36aaa0e0ff8",
+        "name": "Arnold Wilkinson",
+        "original_name": "Arnold Wilkinson",
+        "gender": 2,
+        "profile_path": "/tRMEuYNVFjXYJ7gh1sGJSxq9Vwq.jpg"
+      }
+    ],
+    "episode_run_time": [43],
+    "first_air_date": "1999-09-20",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://oily-arm.biz",
+    "id": 2734,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-15",
+    "last_episode_to_air": {
+      "id": 6114965,
+      "name": "Mid Starfish",
+      "overview": "Sursum thermae textor venio cetera cometes abeo tripudio cohibeo valde. Una constans comedo blanditiis cohors argentum calculus utrum condico.",
+      "vote_average": 8,
+      "vote_count": 2,
+      "air_date": "2025-05-15",
+      "episode_number": 22,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 2734,
+      "still_path": "/w4c2FjXtI77uwRIMkq8FDbbWZvf.jpg"
+    },
+    "name": "Net Vole",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Convincing R5-D4 Media",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 122,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Running Cephalopod",
+    "overview": "Beatae spoliatio tactus. Tubineus eveniet cras comptus conturbo tunc victoria admitto.",
+    "popularity": 504.0258,
+    "poster_path": "/abWOCrIo7bbAORxcQyOFNJdnnmR.jpg",
+    "production_companies": [
+      {
+        "id": 25545,
+        "logo_path": "/8Lqf0okunSPAwBBL08Ua1IRe1xi.png",
+        "name": "Imperial Zam Wesell Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Nasty Bail Prestor Organa Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 56401,
+        "logo_path": null,
+        "name": "Unique Luke Skywalker Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 8301,
+        "logo_path": "/zrcVDabl14MNfPwxL8DC2IyR12t.png",
+        "name": "Outrageous Jar Jar Binks Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": null,
+        "episode_count": 6,
+        "id": 8888,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/3pLGDNuFGdpgMd7IjfTznLDAl0.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1999-09-20",
+        "episode_count": 22,
+        "id": 8878,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/fMcB4Kznfz3sR4Jkg1lOtf5blCp.jpg",
+        "season_number": 1,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2000-10-19",
+        "episode_count": 21,
+        "id": 8877,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/9yyzbzZuPUPlnvhuyi4VmDac1SL.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2001-09-27",
+        "episode_count": 23,
+        "id": 8876,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/9S59DS9XpzrBRcDhrEsurHxaTwD.jpg",
+        "season_number": 3,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2002-09-26",
+        "episode_count": 25,
+        "id": 8885,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/iIlD5l14GbVPDGcVqFXB7XObGlp.jpg",
+        "season_number": 4,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2003-09-22",
+        "episode_count": 25,
+        "id": 8881,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/vowmLggLYRC75DpEttts7ej2FBM.jpg",
+        "season_number": 5,
+        "vote_average": 7.8
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Adhuc beatae spoliatio tactus recusandae tubineus.",
+    "type": "Scripted",
+    "vote_average": 7.938,
+    "vote_count": 3947,
+    "external_ids": {
+      "imdb_id": "tt0203259",
+      "freebase_mid": "/m/01b_lz",
+      "freebase_id": "/en/law_order_special_victims_unit",
+      "tvdb_id": 75692,
+      "tvrage_id": 4204,
+      "wikidata_id": "Q218567",
+      "facebook_id": "nbclawandorder",
+      "instagram_id": "nbclawandorder",
+      "twitter_id": "lawandordertv"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Vulgo tum quod culpo currus theologus incidunt delibero. Odio cicuta aperte dolor corpus tenuis ullam delectatio cunae ea.",
+            "homepage": "",
+            "tagline": "Sodalitas vulgo tum quod culpo."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Valid Caribou",
+            "overview": "Volaticus turpis carmen audentia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Interested Elephant",
+            "overview": "Adnuo deripio defaeco. Ciminatio eligendi apparatus vivo defluo aveho. Debilito pauci tremo subseco tenax socius admoneo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Collective Raven",
+            "overview": "Et eum delibero adiuvo video deinde nam aggredior.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Valid Caribou",
+            "overview": "Volaticus turpis carmen audentia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

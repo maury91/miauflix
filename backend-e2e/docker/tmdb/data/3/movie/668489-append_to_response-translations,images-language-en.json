@@ -1,0 +1,291 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12377",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"be06c930c42ccb5414aa497dc341be6a\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "k4gjt4b9OXyCnvfSGGKFyjUoED3boAe2C3W_Q1myNL9mB9ibR6CoFA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/65MVgDa6YjSdqzh7YOA04mYkioo.jpg",
+    "belongs_to_collection": null,
+    "budget": 90000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://smug-term.name",
+    "id": 668489,
+    "imdb_id": "tt14123284",
+    "origin_country": ["GB"],
+    "original_language": "en",
+    "original_title": "Adjacent Mandrill",
+    "overview": "Itaque audio velum facilis trepide vacuus colo auditor atqui distinctio. Cresco careo ter temptatio in ventus fuga ipsum creo. Accusantium aro cibus appono soleo autem aegrus alius valetudo.",
+    "popularity": 103.7759,
+    "poster_path": "/ubP2OsF3GlfqYPvXyLw9d78djGX.jpg",
+    "production_companies": [
+      {
+        "id": 12142,
+        "logo_path": "/rPnEeMwxjI6rYMGqkWqIWwIJXxi.png",
+        "name": "Obliged Raymus Antilles Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 93637,
+        "logo_path": "/aW4weh0t8yUm2e62w4t3KlKJsLX.png",
+        "name": "Giant Dormé Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 110036,
+        "logo_path": null,
+        "name": "Shared Ackbar Productions",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-25",
+    "revenue": 0,
+    "runtime": 107,
+    "spoken_languages": [
+      {
+        "english_name": "Cantonese",
+        "iso_639_1": "cn",
+        "name": "广州话 / 廣州話"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Velit itaque audio velum facilis trepide vacuus.",
+    "title": "Vicarious Rattlesnake",
+    "video": false,
+    "vote_average": 6.538,
+    "vote_count": 726,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://murky-ingrate.biz",
+            "overview": "Attonbitus tribuo vacuus utpote acquiro claro. Magnam vitiosus curriculum uredo tristis.",
+            "runtime": 107,
+            "tagline": "Degero attonbitus tribuo vacuus utpote acquiro.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://ripe-laparoscope.com",
+            "overview": "Abbas rem callide cui cunabula explicabo. Bestia caute vestrum. Creta absens caritas.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Profound Firefly"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://ripe-laparoscope.com",
+            "overview": "Abbas rem callide cui cunabula explicabo. Bestia caute vestrum. Creta absens caritas.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Profound Firefly"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://similar-hygienic.name",
+            "overview": "Peior suppellex antepono cur adulatio claro. Dapifer beatus cohibeo. Beatae depromo conduco conturbo modi autem comis aspicio cruentus.",
+            "runtime": 105,
+            "tagline": "Decor peior suppellex antepono cur adulatio claro.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Corona communis approbo. Tamen subvenio adinventitias creo vitium voluntarius contabesco tergo coniecto delego. Atrocitas iusto asper vallum toties vinitor tamquam spargo utrum.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Marginal Swift"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/hZ8aIhGOfmdh4RWZ2bzbvOdjOdO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/yqJ9RJiDjC8HtX4JkebgcVHco3w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/tFjS9m1oWJ0wP11s916eZD9HMdY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/7HiXatnvq9Kw8Td0URE69DoWH9J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/f9p5FdP8CAjm4VujEIS5EJYqiCb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.546,
+          "height": 205,
+          "iso_639_1": "en",
+          "file_path": "/qammxyQhPXaXqEnPWMmnkllGrI7.png",
+          "vote_average": 10,
+          "vote_count": 6,
+          "width": 522
+        },
+        {
+          "aspect_ratio": 2.142,
+          "height": 325,
+          "iso_639_1": "en",
+          "file_path": "/jHXNutdZNjw8nB5YbvRcwoQrzp3.png",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 696
+        },
+        {
+          "aspect_ratio": 2.546,
+          "height": 205,
+          "iso_639_1": "en",
+          "file_path": "/mA3KeOzv5AfnXc303CLA3H1rLK9.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 522
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/ubP2OsF3GlfqYPvXyLw9d78djGX.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1583,
+          "iso_639_1": "en",
+          "file_path": "/r46leE6PSzLR3pnVzaxx5Q30yUF.jpg",
+          "vote_average": 7.052,
+          "vote_count": 29,
+          "width": 1056
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_639_1": "en",
+          "file_path": "/gmQbkSi9hg271Avgjrq7VqtEkgR.jpg",
+          "vote_average": 6.346,
+          "vote_count": 26,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/1rQojOSHiGQgAxzZfBJpQux7bGv.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/bEiJBcwdR4oOTCgstLkqTUja58p.jpg",
+          "vote_average": 4.572,
+          "vote_count": 21,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}
