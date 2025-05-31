@@ -1,0 +1,175 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19185",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"82bda16a7398599e13289f65a5c9bc64\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "GPIs1UiTEk6Bq9z8mT5U6m9aa4EkmTN55v0LHsMvO0BHzXOCsWVwXw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/deUWVEgNh2IGjShyymZhaYP40ye.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://enlightened-cytoplasm.net",
+    "id": 1356039,
+    "imdb_id": "tt23648788",
+    "origin_country": ["MX"],
+    "original_language": "es",
+    "original_title": "Prior Junglefowl",
+    "overview": "Suadeo labore quisquam adsidue.",
+    "popularity": 33.4748,
+    "poster_path": "/38I76hGcFY6xB47pjm7pZwkfuAF.jpg",
+    "production_companies": [
+      {
+        "id": 84651,
+        "logo_path": "/o7gUREdtNzQ3Alrck13tlvcNKvv.png",
+        "name": "Injured Arvel Crynyd Entertainment",
+        "origin_country": "MX"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      }
+    ],
+    "release_date": "2025-02-27",
+    "revenue": 0,
+    "runtime": 85,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Mid Bandicoot",
+    "video": false,
+    "vote_average": 8.341,
+    "vote_count": 687,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://trivial-boom.name",
+            "overview": "Solvo sumo fugiat. Talus titulus crinis subvenio deinde commodi sto quibusdam. Adversus bene terror complectus verto quidem capillus substantia tremo harum.",
+            "runtime": 85,
+            "tagline": "",
+            "title": "Uneven Pike"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://punctual-blight.name",
+            "overview": "Et vox deleo. Aestivus terra quis.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://punctual-blight.name",
+            "overview": "Et vox deleo. Aestivus terra quis.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://flickering-synthesis.org",
+            "overview": "Veritas ventito aurum curiositas qui acervus culpo usitas tertius esse.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Curious Cuckoo"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 5.534,
+          "height": 206,
+          "iso_639_1": "en",
+          "file_path": "/x4XNYmknLosDwfwuCbEzuuXYXFj.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1140
+        },
+        {
+          "aspect_ratio": 5.481,
+          "height": 208,
+          "iso_639_1": "en",
+          "file_path": "/ijVWY2IhMOsjvVzGZT9LnHX2roY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1140
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.681,
+          "height": 1280,
+          "iso_639_1": "en",
+          "file_path": "/38I76hGcFY6xB47pjm7pZwkfuAF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 872
+        },
+        {
+          "aspect_ratio": 0.681,
+          "height": 1575,
+          "iso_639_1": "en",
+          "file_path": "/8JK8VD6FUP1Ylke6KE7gWpW7heG.jpg",
+          "vote_average": 2.278,
+          "vote_count": 4,
+          "width": 1073
+        }
+      ]
+    }
+  }
+}

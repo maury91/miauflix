@@ -1,0 +1,177 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17148",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"14af5f60edfee492f818cba6fc6ea3f3\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "2isRVWu1C1g6-oaOiRZ00wkfBQsrIRnJURp189g9GCD59XCxqb8wmg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/hHMWfDlqKisD5zVcZfz3KEw5U3v.jpg",
+    "created_by": [],
+    "episode_run_time": [12],
+    "first_air_date": "1998-10-26",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://realistic-caravan.org",
+    "id": 50821,
+    "in_production": false,
+    "languages": ["hu"],
+    "last_air_date": "2021-07-17",
+    "last_episode_to_air": {
+      "id": 4191290,
+      "name": "Gentle Cricket",
+      "overview": "",
+      "vote_average": 10,
+      "vote_count": 1,
+      "air_date": "2021-07-17",
+      "episode_number": 434,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 12,
+      "season_number": 5,
+      "show_id": 50821,
+      "still_path": null
+    },
+    "name": "Male Cow",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 833,
+        "logo_path": "/r3GEPOAXaREH765QVreesBK9mE0.png",
+        "name": "Yielding Ric Olié Media",
+        "origin_country": "HU"
+      }
+    ],
+    "number_of_episodes": 2134,
+    "number_of_seasons": 5,
+    "origin_country": ["HU"],
+    "original_language": "hu",
+    "original_name": "Xenophobic Anteater",
+    "overview": "Tum tamen aperte video. Tego abscido circumvenio titulus confido vobis umbra tantum sollicito arbustum. Uterque vestigium calcar arbor tergiversatio appello admiratio ab.",
+    "popularity": 349.1828,
+    "poster_path": "/kBBbSgNchtMvsgD6z1oI1RRluHP.jpg",
+    "production_companies": [
+      {
+        "id": 56902,
+        "logo_path": "/uVFsyoIrj5IakdsaLWkZn13ef5x.png",
+        "name": "Curious Nien Nunb Media",
+        "origin_country": "HU"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "HU",
+        "name": "Hungary"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1998-10-26",
+        "episode_count": 368,
+        "id": 239008,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1999-08-23",
+        "episode_count": 450,
+        "id": 319727,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2000-08-21",
+        "episode_count": 444,
+        "id": 322087,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2001-08-21",
+        "episode_count": 438,
+        "id": 322097,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2002-08-21",
+        "episode_count": 434,
+        "id": 324430,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Hungarian",
+        "iso_639_1": "hu",
+        "name": "Magyar"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 3.2,
+    "vote_count": 14,
+    "external_ids": {
+      "imdb_id": "tt0175383",
+      "freebase_mid": "/m/0vsy3dy",
+      "freebase_id": null,
+      "tvdb_id": 274211,
+      "tvrage_id": 28608,
+      "wikidata_id": null,
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Welcome Bison",
+            "overview": "Degusto crur conventus tactus calculus apparatus spoliatio votum vulnero. Thema usque comburo vilis adeptio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

@@ -27,4 +27,5 @@ export default {
     'node_modules/(?!(chalk|@inquirer|inquirer|figures|@chalk|ansi-styles|#ansi-styles|kleur|sisteransi)/)',
   ],
   setupFilesAfterEnv: ['./src/jest.setup.ts'],
+  prettierPath: null,
 };

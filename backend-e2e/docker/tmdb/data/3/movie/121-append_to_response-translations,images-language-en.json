@@ -1,0 +1,309 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8983",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"28cf80b68c80d869a48843bf827c8c13\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "nuAeFoj3ue1unuRD5LeJlKMGSh8pk5dWoupOPKrEEE_AenkLaap6pg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/jfEOzpsjc6JDlKhUHb4toWQPt.jpg",
+    "belongs_to_collection": {
+      "id": 119,
+      "name": "Psychological Skink",
+      "poster_path": "/249qw7r9E31vvOSeMQoOrjxMjfm.jpg",
+      "backdrop_path": "/bccR2CGTWVVSZAG0yqmy3DIvhTX.jpg"
+    },
+    "budget": 79000000,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://anchored-technology.net",
+    "id": 121,
+    "imdb_id": "tt0167261",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Zippy Panda",
+    "overview": "Tot sto nam synagoga cornu acidus abutor aegrotatio dolor uberrime.",
+    "popularity": 16.8274,
+    "poster_path": "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg",
+    "production_companies": [
+      {
+        "id": 12,
+        "logo_path": "/2ycs64eqV5rqKYHyQK0GVoKGvfX.png",
+        "name": "Operational Nien Nunb Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 11,
+        "logo_path": "/6FAuASQHybRkZUk08p9PzSs9ezM.png",
+        "name": "Valid Cliegg Lars Studios",
+        "origin_country": "NZ"
+      },
+      {
+        "id": 5237,
+        "logo_path": "/mlnr7vsBHvLye8oEb5A76C0t8x9.png",
+        "name": "Unknown Dooku Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "NZ",
+        "name": "New Zealand"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2002-12-18",
+    "revenue": 926287400,
+    "runtime": 179,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Vapulus tot sto.",
+    "title": "Sudden Lamprey",
+    "video": false,
+    "vote_average": 8.405,
+    "vote_count": 22598,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://hungry-walnut.info",
+            "overview": "Curtus terebro defungo complectus civitas attero creta defaeco veniam adaugeo. Custodia sonitus verecundia.",
+            "runtime": 179,
+            "tagline": "Volaticus curtus terebro defungo complectus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://subtle-scholarship.org",
+            "overview": "Verumtamen vicissitudo sortitus umerus beneficium nulla vergo conduco denuncio. Sumo comprehendo tepidus cunctatio abutor spero. Clam venia velit vorax abutor tot acidus.",
+            "runtime": 180,
+            "tagline": "Terga verumtamen vicissitudo sortitus umerus beneficium nulla.",
+            "title": "Heavy Gazelle"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Capto maiores calculus aspicio vulgaris summisse amissio culpo.",
+            "runtime": 180,
+            "tagline": "Subnecto capto maiores calculus.",
+            "title": "Frozen Jellyfish"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://equatorial-prompt.biz",
+            "overview": "Capto maiores calculus aspicio vulgaris summisse amissio culpo.",
+            "runtime": 180,
+            "tagline": "Subnecto capto maiores calculus.",
+            "title": "Frozen Jellyfish"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Porro ullam vulnus demonstro dignissimos ceno usus consuasor tamen vobis. Magnam laboriosam necessitatibus spargo. Video aegrotatio tunc.",
+            "runtime": 180,
+            "tagline": "",
+            "title": "Specific Raccoon"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/9KCiWyhFJlN2v0y3O7YAWvlgkvE.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/tb9ZtbjJH14hgOr0f2IVUUuDmsr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/d6x64DHmlYubXLSrB3jwwOYt2tK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/stYSVQ8svLI6jWhq8WjonFt2OiX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/wBO1HTTZBado3bhmDON22mCIyky.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.825,
+          "height": 895,
+          "iso_639_1": "en",
+          "file_path": "/wQKPueRWijP8kxqVvT4KtkjFHJ0.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 4318
+        },
+        {
+          "aspect_ratio": 4.738,
+          "height": 42,
+          "iso_639_1": "en",
+          "file_path": "/yfWoQQhUouASiULWtGNhHj1wRsL.svg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 199
+        },
+        {
+          "aspect_ratio": 4.738,
+          "height": 42,
+          "iso_639_1": "en",
+          "file_path": "/czgZ8NDMVdH1zxdj7hYnSoU3uWz.svg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 199
+        },
+        {
+          "aspect_ratio": 2.301,
+          "height": 869,
+          "iso_639_1": "en",
+          "file_path": "/hzUsnJlhtP9TCdskUibdRoZWgQR.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 4.738,
+          "height": 42,
+          "iso_639_1": "en",
+          "file_path": "/5vYC4rRf3FT1LvH9qtJQywOMRKt.svg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 199
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg",
+          "vote_average": 5.372,
+          "vote_count": 39,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 755,
+          "iso_639_1": "en",
+          "file_path": "/bZxXMWYPC3vYLZKIVpA8mtcO414.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 511
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/ffUCCX8kPkhfQ3DgW0huo0eygDc.jpg",
+          "vote_average": 7.814,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/ik2nMLo5jDLnziGPcKXRSioZ9WB.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 1007
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/b0KHdsR8LIOWwEjbD1um8zOMBIL.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

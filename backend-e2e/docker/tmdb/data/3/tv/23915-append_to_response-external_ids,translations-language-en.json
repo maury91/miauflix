@@ -1,0 +1,210 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13266",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"2c7880124ab48c7f9f84c80af4d35d25\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "2gNfd6j9jYalaWCgNGgU-WhgEk8SqjEFrJsP1htV5uoJ_tWPg5tXZw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "4f745164c16646a89207e9f5074053e0"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qJnjJXBLgG4tummCm792nvNz7u1.jpg",
+    "created_by": [
+      {
+        "id": 1472137,
+        "credit_id": "65e18373daf57c01859dc066",
+        "name": "Howard Herman",
+        "original_name": "Howard Herman",
+        "gender": 2,
+        "profile_path": "/xxayvzBbRIpZt4Aow3zf7uYQulm.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2008-06-03",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "https://feisty-pseudocode.name",
+    "id": 23915,
+    "in_production": true,
+    "languages": ["de"],
+    "last_air_date": "2025-03-27",
+    "last_episode_to_air": {
+      "id": 6234033,
+      "name": "Lively Octopus",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-29",
+      "episode_number": 64,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 23915,
+      "still_path": null
+    },
+    "name": "Strong Elk",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 31,
+        "logo_path": "/2OHAgbf6QUj4cWjmFkFKu4jIsq1.png",
+        "name": "Wandering Taun We Pictures",
+        "origin_country": "DE"
+      }
+    ],
+    "number_of_episodes": 533,
+    "number_of_seasons": 5,
+    "origin_country": ["DE"],
+    "original_language": "de",
+    "original_name": "Cloudy Catshark",
+    "overview": "Dicta verecundia natus cur ago somniculosus causa civis.",
+    "popularity": 213.8174,
+    "poster_path": "/tr4cLn4ecRASV0SPM9FRv0AJOQF.jpg",
+    "production_companies": [
+      {
+        "id": 160224,
+        "logo_path": "/xurZxqEA2P1vygOeDqa8Gll6V9N.png",
+        "name": "External Lando Calrissian Pictures",
+        "origin_country": "DE"
+      },
+      {
+        "id": 251939,
+        "logo_path": "/zfuX4J4psa4krBzuHqpdtCZoJtD.png",
+        "name": "Early Greedo Studios",
+        "origin_country": "DE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2010-10-05",
+        "episode_count": 17,
+        "id": 215725,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-06-03",
+        "episode_count": 29,
+        "id": 33978,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-06-16",
+        "episode_count": 103,
+        "id": 67272,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2010-08-04",
+        "episode_count": 115,
+        "id": 133053,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2011-08-17",
+        "episode_count": 134,
+        "id": 133054,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2012-08-21",
+        "episode_count": 135,
+        "id": 133055,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Talk Show",
+    "vote_average": 5.536,
+    "vote_count": 14,
+    "external_ids": {
+      "imdb_id": "tt1239083",
+      "freebase_mid": "/m/07cfgkl",
+      "freebase_id": "/en/markus_lanz",
+      "tvdb_id": 301189,
+      "tvrage_id": null,
+      "wikidata_id": "Q1499182",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Ab optio ante clementia comparo cui artificiose non voveo clamo. Qui viridis terreo patrocinor tonsor velit sulum tolero tredecim.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Suasoria chirographum audeo defaeco porro vicissitudo tricesimus cursus aduro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

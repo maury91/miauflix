@@ -1,0 +1,257 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20201",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d8445788f7bb69ff3f2fb02f7a7a5c75\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "GaoqWkrpLS5HJSZzbj1CJvOGAaEZ9nO48OjEJQyje08LrTn-CpyOQw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/k32XKMjmXMGeydykD32jfER3BVI.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://visible-loneliness.org",
+    "id": 1045938,
+    "imdb_id": "tt23476986",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Notable Rhinoceros",
+    "overview": "Video templum conscendo facere acerbitas voveo neque. Eligendi civis cumque decretum aegre. Curvo tempora caelum uxor amplus tabernus.",
+    "popularity": 49.703,
+    "poster_path": "/wv6oWAleCJZUk5htrGg413t3GCy.jpg",
+    "production_companies": [
+      {
+        "id": 64469,
+        "logo_path": "/fbV9H2jwdlPBPVU6gnP4knfJMMT.png",
+        "name": "Loyal Shaak Ti Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1757,
+        "logo_path": "/fc9qw5GoTbyWGa0QcfbsZFzuMKQ.png",
+        "name": "Exotic R2-D2 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 2531,
+        "logo_path": "/9MfCJ2G6Nrf9yyRj4tAgPmMiDcn.png",
+        "name": "Intense Lobot Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 210099,
+        "logo_path": "/d6HwljzlOzxJ4tXlrpRkNZaZMWL.png",
+        "name": "Lively R4-P17 Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-10",
+    "revenue": 0,
+    "runtime": 108,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Eos video templum conscendo facere acerbitas voveo neque.",
+    "title": "Nutty Kite",
+    "video": false,
+    "vote_average": 6.6,
+    "vote_count": 503,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://raw-development.org",
+            "overview": "Voro libero tot adeo adhaero. Appositus sustineo sono caelum communis blanditiis. Arto aestus atrox.",
+            "runtime": 108,
+            "tagline": "Caterva voro libero tot adeo adhaero delicate.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://jealous-macro.info",
+            "overview": "Corpus vesica comedo animus utilis dolores viriliter. Vomer absum chirographum vere demo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://jealous-macro.info",
+            "overview": "Corpus vesica comedo animus utilis dolores viriliter. Vomer absum chirographum vere demo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://inconsequential-ideal.org",
+            "overview": "Volo ustilo sed curia odio vinum. Cavus surculus tactus suppono adaugeo bos acsi sapiente ultra quidem.",
+            "runtime": 108,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/tqhKWu3oRAgy9HP17KdT7JUbuSy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/8uVJlsLEf7wqzvIjjV4gsRoSvGR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_639_1": "en",
+          "file_path": "/lL27hqSsSnrX1QJ2kdjD5aqstLn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qhWarNSiuOD4X1egtN6FGHc4syO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.68,
+          "height": 600,
+          "iso_639_1": "en",
+          "file_path": "/iPITIm26Qpt5dFhaLIXxCg7z7zy.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1608
+        },
+        {
+          "aspect_ratio": 3.067,
+          "height": 326,
+          "iso_639_1": "en",
+          "file_path": "/jHBFlmxezQgEvYKwNb6RtZk6sXm.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/wv6oWAleCJZUk5htrGg413t3GCy.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/5EKH6vtNzAvvTjkquT0wQ4lM3JA.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/tSee9gbGLfqwvjoWoCQgRZ4Sfky.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/nWRL0pcva45b5RqKLE1QiwuIOgi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/6rTwKqwgjbaPI3y6l0Y4P9DYhwW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

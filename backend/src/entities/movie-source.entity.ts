@@ -15,7 +15,7 @@ import { Movie } from './movie.entity';
  * Movie source entity to store information about available sources for movies
  */
 @Entity()
-@Unique(['movieId', 'hash']) // Avoid duplicates of the same source for a movie
+@Unique(['movieId', 'ih']) // Avoid duplicates of the same source for a movie
 export class MovieSource {
   @PrimaryGeneratedColumn()
   id: number;
@@ -26,11 +26,11 @@ export class MovieSource {
   @Column()
   movieId: number;
 
-  @Column()
-  hash: string;
+  @Column({ length: 92 })
+  ih: string;
 
   @Column()
-  magnetLink: string;
+  ml: string;
 
   @Column()
   quality: string;
@@ -57,7 +57,7 @@ export class MovieSource {
     type: 'blob',
     nullable: true,
   })
-  torrentFile?: Buffer; // The actual torrent file data
+  file?: Buffer;
 
   // Timestamps
   @CreateDateColumn()

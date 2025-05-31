@@ -1,5 +1,36 @@
 # Miauflix Backend
 
+## Documentation Hub
+
+### 📖 Essential Docs
+
+| File                                                     | Purpose                      |
+| -------------------------------------------------------- | ---------------------------- |
+| [architecture.md](../docs/architecture.md)               | Technical stack snapshot     |
+| [directory-structure.md](../docs/directory-structure.md) | Directory tree               |
+| [coding-conventions.md](../docs/coding-conventions.md)   | Code style guide             |
+| [run-and-debug.md](../docs/run-and-debug.md)             | Commands & environment setup |
+
+### 🔄 Development Workflow
+
+| File                                                   | Purpose                                      |
+| ------------------------------------------------------ | -------------------------------------------- |
+| [workflow.md](../docs/workflow.md)                     | Adaptive development loop for Copilot        |
+| [request-life-cycle.md](../docs/request-life-cycle.md) | Client→Hono→WebTorrent diagram               |
+| [extension-recipes.md](../docs/extension-recipes.md)   | Add route / tracker / encrypted field guides |
+| [task-file-mapping.md](../docs/task-file-mapping.md)   | Roadmap tags ↔ source files                 |
+
+### 🔧 System-Specific
+
+| File                                                | Purpose                                  |
+| --------------------------------------------------- | ---------------------------------------- |
+| [authentication.md](docs/authentication.md)         | Authentication system details            |
+| [security.md](docs/security.md)                     | Security features & VPN detection        |
+| [media-services.md](docs/media-services.md)         | TMDB, Trakt.tv, YTS integration          |
+| [streaming-services.md](docs/streaming-services.md) | WebTorrent streaming                     |
+| [configuration.md](docs/configuration.md)           | Environment variables                    |
+| [security-logging.md](docs/security-logging.md)     | Security logging system and audit trails |
+
 ## Implementation Plan
 
 ### Core Features
@@ -286,14 +317,3 @@ npm run migration:run
 # Start development server
 npm run dev
 ```
-
-## Documentation
-
-For detailed documentation about specific features, please refer to the following files:
-
-- [Security System](docs/security.md) - Details about the authentication system, security features, VPN detection, and audit logging
-- [Authentication System](docs/authentication.md) - Comprehensive guide to the authentication flow and API endpoints
-- [Media Services](docs/media-services.md) - Information about TMDB integration, Trakt.tv setup, YTS tracker, and content discovery
-- [Streaming Services](docs/streaming-services.md) - WebTorrent integration, streaming capabilities, and planned features
-- [Assisted Configuration](docs/configuration.md) - Information about the configuration system and environment variable management
-- [Security Logging](docs/security-logging.md) - Comprehensive guide to the security logging system and audit trails

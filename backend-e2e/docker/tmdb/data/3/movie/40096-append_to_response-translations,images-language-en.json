@@ -1,0 +1,174 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15449",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"863035b89636f083d5fd9b4405fa533a\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 fa8c9f29fb8ef5c537a2a53f4de05240.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "_L1qZWvsiK3wMrVhs36CEftCL-pgw051Tc1bHPkLBQVB8wtHU27hig==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/alQqTpmEkxSLgajfEYTsTH6nAKB.jpg",
+    "belongs_to_collection": {
+      "id": 1219938,
+      "name": "Zonal Snipe",
+      "poster_path": "/2AGBk8Oiv6tamlVcoi6fxPhDUGZ.jpg",
+      "backdrop_path": "/cw87veY8orlWaiYwuF2jwWWQHfE.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "",
+    "id": 40096,
+    "imdb_id": "tt0271383",
+    "origin_country": ["BR"],
+    "original_language": "pt",
+    "original_title": "Poor Constrictor",
+    "overview": "Deprimo natus quam summisse nisi casus decerno aptus statim utor. Stella utrum thorax odit vinum careo iure. Creber deduco talio triduana theologus pauper testimonium turba.",
+    "popularity": 1.83,
+    "poster_path": "/aovknfdLnFp1IiWi3yvTAg8Gm5k.jpg",
+    "production_companies": [
+      {
+        "id": 11446,
+        "logo_path": null,
+        "name": "Criminal Dooku Studios",
+        "origin_country": "BR"
+      },
+      {
+        "id": 13969,
+        "logo_path": "/bEpiJ2zXGIH70JT16asjWNFtOEv.png",
+        "name": "Relative Gregar Typho Entertainment",
+        "origin_country": "BR"
+      },
+      {
+        "id": 46430,
+        "logo_path": "/tQZIt59BLw3b0b6rHJRqv4Dvrpd.png",
+        "name": "Fixed Wat Tambor Studios",
+        "origin_country": "BR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "BR",
+        "name": "Brazil"
+      }
+    ],
+    "release_date": "2000-09-15",
+    "revenue": 4903192,
+    "runtime": 104,
+    "spoken_languages": [
+      {
+        "english_name": "Portuguese",
+        "iso_639_1": "pt",
+        "name": "Português"
+      },
+      {
+        "english_name": "Latin",
+        "iso_639_1": "la",
+        "name": "Latin"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Vir deprimo natus quam summisse nisi casus.",
+    "title": "Protective Tick",
+    "video": false,
+    "vote_average": 8.4,
+    "vote_count": 1160,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Super adaugeo ait a studio alias stabilis delinquo veritas virga.",
+            "runtime": 104,
+            "tagline": "Uxor super adaugeo ait.",
+            "title": "Remarkable Barnacle"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ver mollitia virgo commodi sortitus ultra audeo vociferor.",
+            "runtime": 104,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ver mollitia virgo commodi sortitus ultra audeo vociferor.",
+            "runtime": 104,
+            "tagline": "Succedo ver mollitia.",
+            "title": "Capitalist Crocodile"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/aovknfdLnFp1IiWi3yvTAg8Gm5k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1476,
+          "iso_639_1": "en",
+          "file_path": "/ctfNJw6gofTjQvhOZeH8QKt0O2x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 984
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_639_1": "en",
+          "file_path": "/espZvlT0JFnnFKKWpds1rWJXDan.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        }
+      ]
+    }
+  }
+}

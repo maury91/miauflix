@@ -1,0 +1,315 @@
+{
+  "headers": {
+    "age": "1224",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8972",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"39b27a4c3f41d16535150db1ad6613f6\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "5Sl9m-MBhYRY2B25XFj8xO3Ysdq4IHl1BzK1m-UgF3yAyEeK4akE5w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1p5aI299YBnqrEEvVGJERk2MXXb.jpg",
+    "belongs_to_collection": {
+      "id": 87359,
+      "name": "Satisfied Tapir",
+      "poster_path": "/geEjCGfdmRAA1skBPwojcdvnZ8A.jpg",
+      "backdrop_path": "/mroWh717g0Ah2c0rrPGW6f3EWMM.jpg"
+    },
+    "budget": 400000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://thunderous-squeegee.com",
+    "id": 575265,
+    "imdb_id": "tt9603208",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Obvious Turtle",
+    "overview": "Abutor subvenio comminor aureus tener arbustum vito tandem trucido. Vestigium quaerat valde cras doloremque communis sollers conicio thymbra canonicus. Caritas deleniti iure calco.",
+    "popularity": 319.5509,
+    "poster_path": "/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg",
+    "production_companies": [
+      {
+        "id": 4,
+        "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
+        "name": "Dead Nien Nunb Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 82819,
+        "logo_path": "/gXfFl9pRPaoaq14jybEn1pHeldr.png",
+        "name": "Inclined Lama Su Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 21777,
+        "logo_path": null,
+        "name": "Medieval Lando Calrissian Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-05-17",
+    "revenue": 206041120,
+    "runtime": 170,
+    "spoken_languages": [
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Inuktitut",
+        "iso_639_1": "iu",
+        "name": ""
+      }
+    ],
+    "status": "Released",
+    "tagline": "Turpis abutor subvenio comminor aureus tener arbustum vito.",
+    "title": "Socialist Fowl",
+    "video": false,
+    "vote_average": 7.116,
+    "vote_count": 430,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://next-tolerant.name",
+            "overview": "Fuga aperio audentia atavus comburo vulariter illo basium decimus comburo. Cognomen caelestis trepide succurro vociferor trepide.",
+            "runtime": 170,
+            "tagline": "Verecundia fuga aperio audentia atavus comburo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://coarse-airspace.name",
+            "overview": "Eveniet virtus demum.",
+            "runtime": 0,
+            "tagline": "Accusamus eveniet virtus.",
+            "title": "Leading Barracuda"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Eveniet virtus demum.",
+            "runtime": 169,
+            "tagline": "Accusamus eveniet virtus.",
+            "title": "Leading Barracuda"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://disastrous-spider.biz",
+            "overview": "Civis causa rem agnosco debeo deprecator despecto tyrannus velit.",
+            "runtime": 170,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Deinde caput adsum. Libero subvenio usque. Caelum avarus casus cursus nam teres tamquam tenetur pariatur.",
+            "runtime": 169,
+            "tagline": "",
+            "title": "Technological Asp"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/5Aw7FDLYt3faiZeUb4Rc5RPfdPJ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/rQTW9oQZFsujMlvyYBjbwa8LYkD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 860,
+          "iso_639_1": "en",
+          "file_path": "/plTkVLVkta9PT0ViQ6LLC5Ur2kn.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1529
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/kJW5QKB2mZZBDOmwi0UqGt2GJQ5.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 920,
+          "iso_639_1": "en",
+          "file_path": "/uON3UHpKzUw60SDSIguV0bl8XLS.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1636
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.712,
+          "height": 910,
+          "iso_639_1": "en",
+          "file_path": "/7yXEfWFDGpqIfq9wdpMOHcHbi8g.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4288
+        },
+        {
+          "aspect_ratio": 5.197,
+          "height": 208,
+          "iso_639_1": "en",
+          "file_path": "/5TOnJAPQlAFYdHSpVj9gLv6h85v.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1081
+        },
+        {
+          "aspect_ratio": 3.692,
+          "height": 312,
+          "iso_639_1": "en",
+          "file_path": "/me0FcUuZEYdEIElc2xh28Du7FD6.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1152
+        },
+        {
+          "aspect_ratio": 2.649,
+          "height": 536,
+          "iso_639_1": "en",
+          "file_path": "/9c0iUhnmMFBi4mJwxY1D3A2h0x6.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1420
+        },
+        {
+          "aspect_ratio": 3.028,
+          "height": 144,
+          "iso_639_1": "en",
+          "file_path": "/ljbusPoaePn00iej5bEyGV1xzGE.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 436
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg",
+          "vote_average": 4.91,
+          "vote_count": 28,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/iKPsC9EFUafRP9SrUznI61getVP.jpg",
+          "vote_average": 6.696,
+          "vote_count": 23,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/odcyBL9R2pD3EdTGNYzzFoX2tAz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/hnJb08MfgQAJ3OfZ3mSJkufzjuF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/5eN3QTjaBbBGoHHa0sSfuItvhm8.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

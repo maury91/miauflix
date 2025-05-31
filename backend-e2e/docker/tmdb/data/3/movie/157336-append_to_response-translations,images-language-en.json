@@ -1,0 +1,304 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20413",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"193131009fa90569d1f8cf491cdd8162\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "pJYxBumgqKNHHrzLhvUvuP7gEK8QgcuE8giJWOfNSqhIW5jeGmH29w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/vgnoBSVzWAV9sNQUORaDGvDp7wx.jpg",
+    "belongs_to_collection": null,
+    "budget": 165000000,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://original-archives.info",
+    "id": 157336,
+    "imdb_id": "tt0816692",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Calm Swift",
+    "overview": "Cubo depulso alienus. Debeo censura adipiscor aro delego altus vinum usitas et.",
+    "popularity": 37.044,
+    "poster_path": "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    "production_companies": [
+      {
+        "id": 923,
+        "logo_path": "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png",
+        "name": "Autonomous Ayla Secura Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 9996,
+        "logo_path": "/3tvBqYsBhxWeHlu62SIJ1el93O7.png",
+        "name": "Polite Roos Tarpals Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 13769,
+        "logo_path": null,
+        "name": "Vitreous Luke Skywalker Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2014-11-05",
+    "revenue": 746606706,
+    "runtime": 169,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Adhaero cubo depulso alienus texo debeo.",
+    "title": "Interim Barracuda",
+    "video": false,
+    "vote_average": 8.5,
+    "vote_count": 37194,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://shocking-characteristic.com",
+            "overview": "Antepono victoria assumenda terra. Suppellex abutor spero custodia suus canis addo territo. Blandior decipio laudantium unus.",
+            "runtime": 169,
+            "tagline": "Arceo antepono victoria assumenda terra soleo suppellex.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://unhealthy-jumpsuit.info",
+            "overview": "Deprimo conduco illo tenuis subito totidem. Patruus molestiae audeo conscendo cupiditas in teneo universe volo. Crur videlicet vulnus voluntarius.",
+            "runtime": 169,
+            "tagline": "Denuncio deprimo conduco illo tenuis subito totidem ut.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://thorny-destruction.com",
+            "overview": "Adaugeo verumtamen varius comptus pauci. Eos saepe contabesco ipsum usus demoror enim cognomen arceo. Crebro color quisquam.",
+            "runtime": 169,
+            "tagline": "Casus adaugeo verumtamen varius comptus pauci tempus eos.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Sopor vicissitudo terra versus theca quo vehemens cohibeo territo.",
+            "runtime": 0,
+            "tagline": "Thymbra sopor vicissitudo terra.",
+            "title": "Operational Anaconda"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Deprimo conduco illo tenuis subito totidem. Patruus molestiae audeo conscendo cupiditas in teneo universe volo. Crur videlicet vulnus voluntarius.",
+            "runtime": 169,
+            "tagline": "Denuncio deprimo conduco illo tenuis subito totidem ut.",
+            "title": "Ready Dove"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/Ys8UIGWJpd2TMuQk8fU77W3mBz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1071,
+          "iso_639_1": "en",
+          "file_path": "/rFvnZYcJzLoC2l6cTFLQRUgYSgL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1904
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/b3yyWxAopoCLYEMMtNbMvZkG6f1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 2159,
+          "iso_639_1": "en",
+          "file_path": "/j9XoRre2yvFjGOJckEqWjjUvm8f.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/yUa0iCocBPsGJ79BwrshHqz45Qc.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.9,
+          "height": 390,
+          "iso_639_1": "en",
+          "file_path": "/rf5sspdsudNSITHMNNcJyvb1LBv.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2301
+        },
+        {
+          "aspect_ratio": 4.734,
+          "height": 169,
+          "iso_639_1": "en",
+          "file_path": "/v6PLrz2a4Fcr2X1h1OmdCfwWaRU.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 3.555,
+          "height": 218,
+          "iso_639_1": "en",
+          "file_path": "/5D906VVYYKrIvN7WpoH8gt97Huf.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 775
+        },
+        {
+          "aspect_ratio": 24.531,
+          "height": 32,
+          "iso_639_1": "en",
+          "file_path": "/k0uIL5tKg4qMsm89U7qkR9yLtPK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 785
+        },
+        {
+          "aspect_ratio": 15.451,
+          "height": 51,
+          "iso_639_1": "en",
+          "file_path": "/bxp4NhUZ1GxjdrGF8szOlsL4g0d.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 788
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+          "vote_average": 6.658,
+          "vote_count": 54,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/sR1Wh1rNQCrGr6Qs47DCdXxEC0S.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/2GqRAbc6Xcak2ZYrIdTQGbHyTsl.jpg",
+          "vote_average": 8.77,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/7uCL4gbdmokTWyeYbJxwBo5pbVT.jpg",
+          "vote_average": 7.076,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 1124,
+          "iso_639_1": "en",
+          "file_path": "/mS4EvhsrT0SQZOlWrQEzWI5KiUa.jpg",
+          "vote_average": 6.834,
+          "vote_count": 42,
+          "width": 751
+        }
+      ]
+    }
+  }
+}

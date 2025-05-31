@@ -1,0 +1,203 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17088",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"07842a902b45e90bbd7554c18f39aef1\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "kq7kWwykbyUvxTITSSj3jC7J5c1kmCy8c3_t3H1z-qRx1ysRfMZ6hw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3SWOj8ydFrxiuZdLg63fDAt4jYR.jpg",
+    "created_by": [
+      {
+        "id": 1215602,
+        "credit_id": "66f1580e7300a5ba213b8fc1",
+        "name": "Terri Wilkinson-Kessler",
+        "original_name": "Terri Wilkinson-Kessler",
+        "gender": 2,
+        "profile_path": "/w6I4OZDHnSQsmpMvoRvfz1BvVpr.jpg"
+      }
+    ],
+    "episode_run_time": [60],
+    "first_air_date": "2000-07-18",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://husky-magic.biz",
+    "id": 11366,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2018-11-05",
+    "last_episode_to_air": {
+      "id": 1613375,
+      "name": "Zealous Quail",
+      "overview": "",
+      "vote_average": 10,
+      "vote_count": 1,
+      "air_date": "2018-11-05",
+      "episode_number": 45,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 60,
+      "season_number": 5,
+      "show_id": 11366,
+      "still_path": null
+    },
+    "name": "Prior Elephant",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 26,
+        "logo_path": "/hbifXPpM55B1fL5wPo7t72vzN78.png",
+        "name": "Expected Jabba Desilijic Tiure Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 99,
+        "logo_path": "/tAOMutfVve2or2LTYQfIa42sc33.png",
+        "name": "Following R5-D4 Productions",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 398,
+    "number_of_seasons": 5,
+    "origin_country": ["GB"],
+    "original_language": "en",
+    "original_name": "Rich Pinniped",
+    "overview": "Celer debitis asporto vestigium demens consectetur contabesco. Varietas vespillo tego pel xiphias crinis alveus vaco odio sed.",
+    "popularity": 179.6953,
+    "poster_path": "/cx0YldpEMh1EBpwwdgY1Awcg6ty.jpg",
+    "production_companies": [],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2000-09-16",
+        "episode_count": 44,
+        "id": 21855,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/9AsSsbMah4iYB8bPjOxv33FDuV.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2000-07-18",
+        "episode_count": 53,
+        "id": 21856,
+        "name": "Series 1",
+        "overview": "Big Brother 2000, also known as Big Brother 1, was the first series of the British reality television series Big Brother. It is based upon the Dutch series of the same name, which gained notoriety in 1999 and 2000. The series debuted on Channel 4 on 18 July 2000, running for nine weeks until 15 September 2000. Early in its run, the series was met with controversy for numerous reasons, including its use of professional psychiatrists who analyzed the personalities and actions of the contestants. Despite the large amount of controversy, the series was a major success. Forty thousand people applied to participate in the first series. The first week of the series had over 400,000 voters call in to choose to evict someone, while the final week had 7.8 million voters. The series averaged 4.5 million viewers, with a series high of 10 million viewers on the final night. This series featured a total of eleven housemates competing to win the grand prize. The show lasted for a total of 64 days, culminating in housemate Craig Phillips winning the grand prize, and Anna Nolan coming in second place.\n\nThe series revolves around ten strangers living in a house together with no communication with the outside world. They are filmed constantly during their time in the House, and can have no communication with those filming them. Each week, each contestant, referred to as \"housemates\", chooses two people to be up for eviction. The two or more people with the most votes will be nominated to leave the House. The viewers then decide which of the nominees should leave, with the selected person leaving during a live show. This process continued until only three housemates remained, in which the viewers would decide which of the housemates would win the £70,000 grand prize. A housemate can be ejected from the show for breaking rules, such as discussing nominations when not permitted. If a housemate were to be ejected from the game - as in the fifth week - then a replacement housemate would enter the House in a matter of days.",
+        "poster_path": "/g4CjIMM5YHYHjvDVwsMg4xH7nV.jpg",
+        "season_number": 1,
+        "vote_average": 5.2
+      },
+      {
+        "air_date": "2001-05-26",
+        "episode_count": 66,
+        "id": 21857,
+        "name": "Series 2",
+        "overview": "Big Brother 2001, also known as Big Brother 2, was the second series of the British reality television series Big Brother. It is based upon the Netherlands series of the same name, which gained notoriety in 1999 and 2000. The series premiered on Channel 4 on 25 May 2001 and lasted nine weeks until the live finale on 27 July 2001. The second series continued the success of the original, being a ratings success for the company. There was a total of 7.3 million votes in the final week. In terms of ratings, it matched the success of the first with a series average of 4.6 million viewers.\n\nThe premise of the series remained largely unchanged from the previous installment in the series. The series revolves around ten strangers living in a house together with no communication with the outside world. They are filmed constantly during their time in the house, and can have no communication with those filming them. Each week, each contestant, referred to as \"housemates\", choose two people to be up for nomination. The two or more people with the most votes will be nominated to leave the house. The viewers then decide which of the nominees should leave, with the selected person leaving during a live show. This process continued until only three housemates remained, in which the viewers would decide which of the housemates would win the £70,000 grand prize. A housemate can be ejected from the show for breaking rules, such as discussing nominations when not permitted. Later in the season, an intruder entered the game, the first in Big Brother history, bringing the total number of housemates to 11. The series ended after 64 days, in which housemate Brian Dowling was crowned the Winner, and Helen Adams the Runner-Up.",
+        "poster_path": "/xFf2CZ1UcUKZ2SZbmJDDggKUTEb.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2002-05-24",
+        "episode_count": 75,
+        "id": 21858,
+        "name": "Series 3",
+        "overview": "Big Brother 2002, also known as Big Brother 3, was the third series of the British reality television series Big Brother. It is based upon the Netherlands series of the same name, which gained notoriety in 1999 and 2000. The series premiered on Channel 4 on 24 May 2002 and lasted nine weeks until the live finale on 26 July 2002. The third edition saw a ratings increase for the series. The finale had a total of 10 million viewers which is not only the most watched episode of Big Brother to date but, based on Live +7 data supplied by BARB, is Channel 4's most watched broadcast since the channel's inception in 1982. In total, over 8.6 million votes were cast to determine the winner of the series. In terms of average viewers, Big Brother 3 is the highest rated series of the show to date, averaging 5.9 million viewers throughout the whole season. It is one of only two seasons of the main series to have over five million average viewers. More than 150,000 viewers applied to be on this season, more than double the amount of applicants from the previous edition. Davina McCall returned as host.\n\nThis series saw a number of changes and a number of firsts which would continue in future series: it was the first series to be filmed at Elstree Studios, where it still operates as of 2013, interviews with the housemates took place inside the George Lucas Stage and remained here until Ultimate Big Brother in 2010. It was the first and only series to issue a 'three strikes and you're out' form of disciplinary, all succeeding series have simply issued formal warnings to a housemate who breaks the rules. Big Brother 3 also started the eviction process not being limited to housemate nominations, in Week 1, the public made the nominations and the housemates made the final decision on who would go, in Week 7, two housemates faced eviction simply for being given video messages from home, future series also began experimenting with the eviction process. The first eviction took place a week earlier than the previous two series', rather than wait two weeks to evict a housemate, the first eviction took place just one week after the housemates entered, evictions in the first week have since become common in subsequent seasons. It was the first non-celebrity series to feature a Live Launch Show - although the previous celebrity series featured one. Previously, 10 housemates would enter the house on Day 1, usually with one other housemate arriving later on in the series, Big Brother 3, saw the arrival of 12 housemates on launch night, two housemates left the house voluntarily - this was the first time this happened, but quitting has become more common over the years - both were replaced by standby contestants, making it the first time to feature more than one non-original housemate, again late entry housemates have become more common in subsequent series. Big Brother 3 saw the house divided into 'Rich/Poor' for four weeks, a live task broadcast on Saturday nights would determine which side the housemates would end up living for the week. The Rich/Poor divide was not used again until the ninth series in 2008, where it was renamed Heaven/Hell.",
+        "poster_path": "/sXSeEAi0q5CWOdjWTkwho02FGEO.jpg",
+        "season_number": 3,
+        "vote_average": 9
+      },
+      {
+        "air_date": "2003-05-23",
+        "episode_count": 78,
+        "id": 21859,
+        "name": "Series 4",
+        "overview": "Big Brother 2003, also known as Big Brother 4, was the fourth series of the British reality television series Big Brother. It was based upon the Netherlands series of the same name, which gained notoriety in 1999 and 2000. The series premiered on Channel 4 on 23 May 2003 and lasted nine weeks, ending on 25 July 2003. The housemates were competing for a grand prize of £70,000, with Cameron being crowned the winner of the series on Day 64.",
+        "poster_path": "/pWOUgAoXXDBnioaiN1fjE4sVTYG.jpg",
+        "season_number": 4,
+        "vote_average": 1
+      },
+      {
+        "air_date": "2004-05-28",
+        "episode_count": 82,
+        "id": 21860,
+        "name": "Series 5",
+        "overview": "Big Brother 2004, also known as Big Brother 5, was the fifth series of the British reality television series Big Brother, which premiered on Channel 4 on 28 May 2004 and lasted 71 days until the live finale on 6 August 2004.\n\nFollowing the poor reception and ratings for Big Brother 4, producers decided to cast a more controversial set of housemates and introduced an 'evil' Big Brother. This saw an increase in ratings when compared to the previous edition. In total, the series averaged 5.1 million viewers, thus making it the second highest rated so far, only behind Big Brother 3.\n\nThe premise of the series remained largely unchanged from the previous instalment in the series, in which a certain number of strangers lived in a house together with no communication with the outside world, filmed constantly during their time in the house, trying to stay in the house for as long as possible in hopes of being voted the winner by the viewing public. It was the first series to feature a prize fund of up to £100,000. Certain elements of the show which had been there present since Big Brother's inception in 2000 were removed, such as the hot water only being present for one hour in the morning, the vegetable patch and the chickens.",
+        "poster_path": "/6lcsxGRe8tLwpAyH7J9aL02DhIn.jpg",
+        "season_number": 5,
+        "vote_average": 10
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Reality",
+    "vote_average": 4.18,
+    "vote_count": 61,
+    "external_ids": {
+      "imdb_id": "tt0257295",
+      "freebase_mid": "/m/03j6q8",
+      "freebase_id": "/en/big_brother",
+      "tvdb_id": 72549,
+      "tvrage_id": null,
+      "wikidata_id": "Q549337",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "bbuk"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Alo dolores unde est demulceo eos unde ventosus tui trucido. Solium aer stips thermae autem nisi terebro animus cito sollicito. Nisi decerno volutabrum quia dedico mollitia tabgo vicissitudo desipio supplanto.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

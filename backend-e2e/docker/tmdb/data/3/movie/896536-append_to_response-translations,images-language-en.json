@@ -1,0 +1,301 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2635",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d6138c3cf7ae49112779439ee301376e\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Cvzv4yk0mIe-3wBT_TB9AzP9Q0dJC_1HN16opG_cFIdY1VA0ujJPiw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dJ1JpHuTCRxtGpRq8bQzk2jBqTi.jpg",
+    "belongs_to_collection": null,
+    "budget": 10000000,
+    "genres": [
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      }
+    ],
+    "homepage": "https://elliptical-circumstance.com",
+    "id": 896536,
+    "imdb_id": "tt8866456",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Protestant Ferret",
+    "overview": "Abundans ipsa patria vulariter.",
+    "popularity": 211.9469,
+    "poster_path": "/wVujUVvY4qvKARAslItQ4ARKqtz.jpg",
+    "production_companies": [
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Pregnant Shmi Skywalker Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 77458,
+        "logo_path": "/t6TQhUJubf2uxpDuqhFTaXOzPKL.png",
+        "name": "Appalling Han Solo Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 22700,
+        "logo_path": "/tQQa3NfcOlmMpG0is5JGFQYn48q.png",
+        "name": "Attractive Zam Wesell Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 161506,
+        "logo_path": null,
+        "name": "Tremendous Obi-Wan Kenobi Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 106544,
+        "logo_path": "/psd84iF7PTGrKf4yFOStKj8JbAh.png",
+        "name": "Brilliant Sly Moore Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 103376,
+        "logo_path": "/zAyfGEx1LJOkwNTrHugnWHzLRE.png",
+        "name": "Grotesque Bossk Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 142269,
+        "logo_path": "/ggrWFqk5mPMks0vE3aCy3l9e0dv.png",
+        "name": "Neat Ackbar Pictures",
+        "origin_country": "FI"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FI",
+        "name": "Finland"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-18",
+    "revenue": 4588865,
+    "runtime": 95,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Ascisco abundans ipsa patria.",
+    "title": "Crucial Angelfish",
+    "video": false,
+    "vote_average": 6.304,
+    "vote_count": 92,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://alarming-redhead.info",
+            "overview": "Confido constans appositus numquam aeneus ustilo una amaritudo.",
+            "runtime": 95,
+            "tagline": "Sustineo confido constans.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Valens arbitro aveho. Usitas advenio creber cum odio vester.",
+            "runtime": 0,
+            "tagline": "Aliqua valens arbitro aveho derideo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Velit alias tantum nesciunt ocer. Utpote vicinus avarus. Vindico dolorem vae vestrum ocer acer utrum.",
+            "runtime": 96,
+            "tagline": "Certus velit alias tantum nesciunt ocer adhaero.",
+            "title": "Prior Antelope"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Velit alias tantum nesciunt ocer. Utpote vicinus avarus. Vindico dolorem vae vestrum ocer acer utrum.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Possimus aestivus verto taceo utique soleo pax demitto nostrum.",
+            "runtime": 96,
+            "tagline": "",
+            "title": "Practical Alpaca"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/8AkphEML5QRsMGjAkSDeskDeIQG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/A2IBTXYCm3BLNaCRo4EXBEJxEwF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.13,
+          "height": 1165,
+          "iso_639_1": "en",
+          "file_path": "/kCFcQGxwgpb5LQXYFBsZxM38a5h.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1316
+        },
+        {
+          "aspect_ratio": 5.992,
+          "height": 1285,
+          "iso_639_1": "en",
+          "file_path": "/z4zL6ZZnEQrMNQ6vmHdbybmLMKI.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 7700
+        },
+        {
+          "aspect_ratio": 1.13,
+          "height": 4143,
+          "iso_639_1": "en",
+          "file_path": "/nGBqqpJurRy64ydEyBebuaUMzEP.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 4680
+        },
+        {
+          "aspect_ratio": 1.13,
+          "height": 4143,
+          "iso_639_1": "en",
+          "file_path": "/1ngSGyu2LxHdy3UOFEVbwjxUv6s.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 4680
+        },
+        {
+          "aspect_ratio": 5.992,
+          "height": 1285,
+          "iso_639_1": "en",
+          "file_path": "/9U10ZHlkW534SPKTUXlNso82VZo.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 7700
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/wVujUVvY4qvKARAslItQ4ARKqtz.jpg",
+          "vote_average": 7.19,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/xtVq4o07fqbIZ4JgBgkd8BQ6Qp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2884,
+          "iso_639_1": "en",
+          "file_path": "/oWiP3svQ2Voz5sVrMB2iTowFVAL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1922
+        },
+        {
+          "aspect_ratio": 0.681,
+          "height": 2937,
+          "iso_639_1": "en",
+          "file_path": "/nGRoSfR0gxNlC8vk4c0qkNKduXE.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2963,
+          "iso_639_1": "en",
+          "file_path": "/qLXQhCqQN56zr6t0Pd6ID6yXM1t.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

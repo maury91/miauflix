@@ -1,0 +1,278 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12696",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"08e3309c0825dcef0c1b920dfa7cb837\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 fa8c9f29fb8ef5c537a2a53f4de05240.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Wr1EQHg2kwdn6ZaMc0A0eq8DOFX0xQAeMtJAsBdVlqOYHqxYuHRvPA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fRGxZuo7jJUWQsVg9PREb98Aclp.jpg",
+    "belongs_to_collection": null,
+    "budget": 3300000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10402,
+        "name": "Music"
+      }
+    ],
+    "homepage": "https://biodegradable-floor.name",
+    "id": 244786,
+    "imdb_id": "tt2582802",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Little Swan",
+    "overview": "Desino vulgaris arceo concido vito.",
+    "popularity": 22.8286,
+    "poster_path": "/7fn624j5lj3xTme2SgiLCeuedmO.jpg",
+    "production_companies": [
+      {
+        "id": 2266,
+        "logo_path": "/owzVs2mguyyJ3vIn7EbgowpUPnk.png",
+        "name": "Apparent Yarael Poof Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 3172,
+        "logo_path": "/rzKluDcRkIwHZK2pHsiT667A2Kw.png",
+        "name": "Lovely R4-P17 Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 32157,
+        "logo_path": "/4hOCk25Ce8s242NItnwtV7aKRWY.png",
+        "name": "Ytterbic Ki-Adi-Mundi Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2014-10-10",
+    "revenue": 50307484,
+    "runtime": 107,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Conservo desino vulgaris.",
+    "title": "Magnificent Macaw",
+    "video": false,
+    "vote_average": 8.376,
+    "vote_count": 15651,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://worst-nitrogen.com",
+            "overview": "Ademptio stipes basium usque clamo defaeco depulso. Angulus supplanto cervus uterque ea. Ubi calcar vigor ater ipsum atrox bellicus.",
+            "runtime": 107,
+            "tagline": "Patior ademptio stipes basium usque clamo defaeco depulso.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://inborn-toga.name",
+            "overview": "Dolor attonbitus crinis itaque succurro vito accusantium attollo capillus vesper. Truculenter custodia termes amicitia.",
+            "runtime": 107,
+            "tagline": "Verecundia dolor attonbitus crinis itaque.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Adsum quibusdam excepturi umbra illum.",
+            "runtime": 105,
+            "tagline": "Consequatur adsum quibusdam excepturi.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Adflicto solitudo atque denique infit voro delectus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Acute Cricket"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Adsum quibusdam excepturi umbra illum.",
+            "runtime": 107,
+            "tagline": "Consequatur adsum quibusdam excepturi.",
+            "title": "Sole Cat"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/lHTxDYso04WyDo5x4Vzxgi9EHJN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/xH5P06rKAeUQX58JQSiviW0FpJP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_639_1": "en",
+          "file_path": "/ckdrOi4ra4fsKAUXEHVqs9Pnj1u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/nnUVThqr2jBOlTQeEUT9P7c5GzN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/xlnGlvU13ZuxoiKJpfCXQH2L1dx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.58,
+          "height": 357,
+          "iso_639_1": "en",
+          "file_path": "/kTmh3W4iWQnNUcnYNgxgOVhpzCe.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 3.611,
+          "height": 149,
+          "iso_639_1": "en",
+          "file_path": "/uNV0cmBpUqHKaI1pPFbTuebNFcg.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 538
+        },
+        {
+          "aspect_ratio": 6.377,
+          "height": 669,
+          "iso_639_1": "en",
+          "file_path": "/g21a7BXefri5qQCuRhcO55MrxKZ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4266
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_639_1": "en",
+          "file_path": "/7fn624j5lj3xTme2SgiLCeuedmO.jpg",
+          "vote_average": 4.3,
+          "vote_count": 25,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1594,
+          "iso_639_1": "en",
+          "file_path": "/E1fpfU9cMCgFYL3QPvJr3vt20X.jpg",
+          "vote_average": 6.2,
+          "vote_count": 45,
+          "width": 1076
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/9E949mB5NEq3BZu9nHQgWF2uGGN.jpg",
+          "vote_average": 6.114,
+          "vote_count": 44,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2700,
+          "iso_639_1": "en",
+          "file_path": "/6qEonhmVYZO7vUkvJzdti3NttOf.jpg",
+          "vote_average": 5.786,
+          "vote_count": 8,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2998,
+          "iso_639_1": "en",
+          "file_path": "/mh6vEkev7d2F5uirRN8BGrfmOy7.jpg",
+          "vote_average": 5.778,
+          "vote_count": 18,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

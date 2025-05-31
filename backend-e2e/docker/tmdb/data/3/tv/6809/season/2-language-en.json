@@ -1,0 +1,66 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16945",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d410fb98cc13c07ae1e25a8546415e9f\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "ndjblUeZ8y6HiaEcvGKkPHOiYoibkMohJNLoGKiIedw_YFir-7kINQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "RefreshHit from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "25042",
+    "x-memc-expires": "121",
+    "x-memc-key": "525160ddcc1cc8c8a60a52495584288d",
+    "x-task-id": "283fac73c39b44e1aa291ef328a8fc79"
+  },
+  "data": {
+    "_id": "55df1c9f9251414727002386",
+    "air_date": "2007-09-17",
+    "episodes": [
+      {
+        "air_date": "2007-09-17",
+        "episode_number": 1,
+        "episode_type": "standard",
+        "id": 1101461,
+        "name": "Coloured Mockingbird",
+        "overview": "",
+        "production_code": "",
+        "runtime": 50,
+        "season_number": 2,
+        "show_id": 6809,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [],
+        "guest_stars": []
+      },
+      {
+        "air_date": "2008-06-09",
+        "episode_number": 152,
+        "episode_type": "finale",
+        "id": 1101462,
+        "name": "Unchanged Hyena",
+        "overview": "",
+        "production_code": "",
+        "runtime": 50,
+        "season_number": 2,
+        "show_id": 6809,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [],
+        "guest_stars": []
+      }
+    ],
+    "name": "Season 2",
+    "overview": "",
+    "id": 69928,
+    "poster_path": null,
+    "season_number": 2,
+    "vote_average": 0
+  }
+}

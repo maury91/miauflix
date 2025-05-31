@@ -1,0 +1,174 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8210",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a28e819e0f4f5e64e4c57af5805cfd57\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "xLD6JyHfYfMz6iLLLTLaVBysowrxkcu1lEGvwraEdzPYrYhZOWyFEg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "0091e8d404bb4c579424a9eabac49dd4"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/jmLfuMFn6o4Rkp7dzT57Vp2GpoQ.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "",
+    "id": 897160,
+    "imdb_id": "tt22505214",
+    "origin_country": ["KR"],
+    "original_language": "ko",
+    "original_title": "Forward Platypus",
+    "overview": "Acceptus comprehendo crebro ventus tot vigilo torrens calco ars adiuvo. Subito tergo stips totus venustas cuius non concedo. Aer repellendus thesaurus.",
+    "popularity": 128.8376,
+    "poster_path": "/zR9j2auEEQIaBbi7uTIFtDChmmA.jpg",
+    "production_companies": [
+      {
+        "id": 119174,
+        "logo_path": "/hLiXjOBvOlEA0IdTveoR7MsZwbj.png",
+        "name": "Negative Jek Tono Porkins Pictures",
+        "origin_country": "KR"
+      },
+      {
+        "id": 119754,
+        "logo_path": "/v8nvXqLkNmPKTE7JlSdJmGcnrK4.png",
+        "name": "Blank Sebulba Productions",
+        "origin_country": "KR"
+      },
+      {
+        "id": 142745,
+        "logo_path": null,
+        "name": "Shared Shaak Ti Media",
+        "origin_country": "KR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      }
+    ],
+    "release_date": "2023-10-25",
+    "revenue": 2116112,
+    "runtime": 112,
+    "spoken_languages": [
+      {
+        "english_name": "Korean",
+        "iso_639_1": "ko",
+        "name": "한국어/조선말"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Vulpes acceptus comprehendo crebro ventus tot vigilo.",
+    "title": "Vulnerable Antelope",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 43,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Thermae volo solium aveho defetiscor deduco eos.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Given Mite"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Cuius terror deduco centum defendo ipsa. Aiunt inflammatio tempore verbum paens atavus sufficio antiquus conqueror adipiscor.",
+            "runtime": 112,
+            "tagline": "Cras cuius terror deduco centum.",
+            "title": "Dull Pinniped"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Thermae volo solium aveho defetiscor deduco eos.",
+            "runtime": 92,
+            "tagline": "",
+            "title": "Given Mite"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/jBlUbql7gbQ8Dg5h1vnTJpmrX3w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.681,
+          "height": 1672,
+          "iso_639_1": "en",
+          "file_path": "/zR9j2auEEQIaBbi7uTIFtDChmmA.jpg",
+          "vote_average": 5.928,
+          "vote_count": 14,
+          "width": 1139
+        },
+        {
+          "aspect_ratio": 0.702,
+          "height": 2835,
+          "iso_639_1": "en",
+          "file_path": "/xWZVd1A6vPrjKVk11SgvkJ6ZvvC.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 1989
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2835,
+          "iso_639_1": "en",
+          "file_path": "/5FAcokdOnsIkwhKJUb6gDPn08yC.jpg",
+          "vote_average": 5.25,
+          "vote_count": 16,
+          "width": 1890
+        }
+      ]
+    }
+  }
+}

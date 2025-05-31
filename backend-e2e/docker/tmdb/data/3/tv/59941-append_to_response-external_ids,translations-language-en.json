@@ -1,0 +1,228 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10831",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"38841cc3a8841739de158cdace463dba\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "FR0rTz1shKPh3xqK3wybhlsSjK93wbTEde1liGUELc9RwR5QCFLiJA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6jGVOu5NvnmSKh28ByWAJrTOEH2.jpg",
+    "created_by": [
+      {
+        "id": 11669,
+        "credit_id": "6090606f9a6435006d0f01a2",
+        "name": "Jessie Jast Sr.",
+        "original_name": "Jessie Jast Sr.",
+        "gender": 2,
+        "profile_path": "/h9kYouEP6VrM8GkS2jl7jMDKbwu.jpg"
+      }
+    ],
+    "episode_run_time": [45, 41],
+    "first_air_date": "2014-02-17",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "https://innocent-cayenne.org",
+    "id": 59941,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-01",
+    "last_episode_to_air": {
+      "id": 6213230,
+      "name": "Thoughtless Quelea",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-22",
+      "episode_number": 7,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 42,
+      "season_number": 5,
+      "show_id": 59941,
+      "still_path": null
+    },
+    "name": "Nasty Tern",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Convincing R5-D4 Media",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 561,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Poor Urial",
+    "overview": "Ventus arca temporibus uterque. Tardus impedit solio subiungo.",
+    "popularity": 348.0823,
+    "poster_path": "/g4amxJvtpnY79J77xeamnAEUO8r.jpg",
+    "production_companies": [
+      {
+        "id": 1756,
+        "logo_path": "/d7YyNzysIF0lSb4lJRf1ar6MHxi.png",
+        "name": "Invisible R2-D2 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Nasty Bail Prestor Organa Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 157329,
+        "logo_path": null,
+        "name": "Innovative Dud Bolt Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 104278,
+        "logo_path": null,
+        "name": "Statutory Jabba Desilijic Tiure Media",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2014-02-17",
+        "episode_count": 191,
+        "id": 61601,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/jZ4lEt1vT260afMQIwVQcVFsAys.jpg",
+        "season_number": 1,
+        "vote_average": 6.5
+      },
+      {
+        "air_date": "2015-01-05",
+        "episode_count": 223,
+        "id": 67030,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/4K6wA4raiWSNRL7AWMM0oPbVr8m.jpg",
+        "season_number": 2,
+        "vote_average": 10
+      },
+      {
+        "air_date": "2015-09-21",
+        "episode_count": 86,
+        "id": 73778,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/xFOVcKxo7SSexJiLsTw2PrbNGcZ.jpg",
+        "season_number": 3,
+        "vote_average": 8.5
+      },
+      {
+        "air_date": "2016-09-19",
+        "episode_count": 54,
+        "id": 83758,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/xFOVcKxo7SSexJiLsTw2PrbNGcZ.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2017-09-25",
+        "episode_count": 7,
+        "id": 110825,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/a8ZFFnuZsvRTNGbyqL3WKXNdMEn.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Apud ventus arca temporibus uterque.",
+    "type": "Talk Show",
+    "vote_average": 5.837,
+    "vote_count": 338,
+    "external_ids": {
+      "imdb_id": "tt3444938",
+      "freebase_mid": "/m/0wy6b10",
+      "freebase_id": null,
+      "tvdb_id": 270261,
+      "tvrage_id": 35853,
+      "wikidata_id": "Q15303732",
+      "facebook_id": "FallonTonight",
+      "instagram_id": "fallontonight",
+      "twitter_id": "FallonTonight"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Tot abscido dolore stultus chirographum conventus textilis averto. Deprimo substantia asper minus est corporis cernuus. Corrigo tergo victus.",
+            "homepage": "",
+            "tagline": "Suasoria tot abscido dolore stultus chirographum conventus."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Provident desidero amicitia facilis. Sit tonsor aurum.",
+            "homepage": "",
+            "tagline": "At provident desidero amicitia facilis."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

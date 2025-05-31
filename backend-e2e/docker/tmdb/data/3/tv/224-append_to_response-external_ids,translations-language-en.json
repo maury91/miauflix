@@ -1,0 +1,183 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23510",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"6e4cf44293e10c5f0e52d147e220aa15\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "v6O-zUpsDReH1VAM1Q9BNNkqEdrBP-NSIna-dzG5lbNRrwLvnEbe2Q==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3EGjqKhVHGsvNHvBIbxmqS17Aal.jpg",
+    "created_by": [],
+    "episode_run_time": [80],
+    "first_air_date": "1964-08-22",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 10763,
+        "name": "News"
+      }
+    ],
+    "homepage": "https://circular-past.name",
+    "id": 224,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-03-15",
+    "last_episode_to_air": {
+      "id": 6030566,
+      "name": "Comprehensive Walrus",
+      "overview": "Clementia architecto caute conservo talis vorago cupiditas. Aliquid vulariter aggero cubitum amaritudo alter cornu apto.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-03-15",
+      "episode_number": 29,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 72,
+      "season_number": 5,
+      "show_id": 224,
+      "still_path": "/E4hzA3503m9r8oBzoflSHp9RRv.jpg"
+    },
+    "name": "Mature Goat",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 4,
+        "logo_path": "/uJjcCg3O4DMEjM0xtno9OWFciRP.png",
+        "name": "Dead Nien Nunb Media",
+        "origin_country": "GB"
+      },
+      {
+        "id": 332,
+        "logo_path": "/7HVPn1p2w1nC5oRKBehXVHpss7e.png",
+        "name": "Educational Ackbar Media",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 190,
+    "number_of_seasons": 5,
+    "origin_country": ["GB"],
+    "original_language": "en",
+    "original_name": "Retired Leopard",
+    "overview": "Maiores autus valens vulpes aperte utrimque patria vetus.",
+    "popularity": 273.7579,
+    "poster_path": "/paRFRd11WlFOxVbGnzjjCBym7FW.jpg",
+    "production_companies": [
+      {
+        "id": 16986,
+        "logo_path": "/nBWSAxcnFYeh5xYWoGtZoEWk8a.png",
+        "name": "Illegal Padmé Amidala Entertainment",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1964-08-22",
+        "episode_count": 37,
+        "id": 151809,
+        "name": "Season 1964/65",
+        "overview": "Match of the Day begins on 22 August 1964, for coverage of Liverpool versus Arsenal. Kenneth Wolstenholme opens the programme with the words: \"Welcome to Match of the Day, the first of a weekly series coming to you every Saturday on BBC TWO. As you can hear we're in Beatleville for this Liverpool versus Arsenal match.\" The programme began on BBC TWO where it remained until 1966.",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1965-10-02",
+        "episode_count": 33,
+        "id": 152088,
+        "name": "Season 1965/66",
+        "overview": "Despite attempts by some clubs to prevent its return due to fear over ticket sales, Match of the Day returned to the BBC in October 1965 two months after the start of the new season.\n\nThe duration of each programme had been reduced to 45 minutes in length and it could no longer be broadcast before 10.00pm.",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1966-08-20",
+        "episode_count": 40,
+        "id": 152762,
+        "name": "Season 1966/67",
+        "overview": "In the year that saw England win the World Cup, Match of the Day moves to BBC ONE.",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1967-08-05",
+        "episode_count": 42,
+        "id": 153185,
+        "name": "Season 1967/68",
+        "overview": "Once again, protracted negotiations during the summer ensured the return of the show. In order to secure the deal the BBC had to agree to broadcast five matches from Division Two and two from Divisions Three or Four as well as the 23 Division One games that they wanted.",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1968-08-03",
+        "episode_count": 38,
+        "id": 153193,
+        "name": "Season 1968/69",
+        "overview": "Grandstand presenter David Coleman begins regularly presenting Match of the Day.",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Documentary",
+    "vote_average": 7.467,
+    "vote_count": 45,
+    "external_ids": {
+      "imdb_id": "tt0135733",
+      "freebase_mid": "/m/03r0f7",
+      "freebase_id": "/en/match_of_the_day",
+      "tvdb_id": 109411,
+      "tvrage_id": 7342,
+      "wikidata_id": "Q1908130",
+      "facebook_id": "BBCMOTD",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Textus amplus comis suasoria vulgivagus vix delinquo. Pectus tepesco officia. Cogito timor vulticulus coepi candidus corroboro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

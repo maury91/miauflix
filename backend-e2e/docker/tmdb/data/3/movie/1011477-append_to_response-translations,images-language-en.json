@@ -1,0 +1,263 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15096",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3b9937ea464a07a5e3813cccf962e121\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "NsvRoGTjWI8e-hqR0zXAo7nvbxyRP6IEOyzWp6BdghWgvYrOlPJngA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/lAnkMSDISzMYLWICS7m16rSTUHD.jpg",
+    "belongs_to_collection": {
+      "id": 8580,
+      "name": "Divine Cow",
+      "poster_path": "/7tuwH4tZZy4BHe7mivXmmSYg3kx.jpg",
+      "backdrop_path": "/wVG4aeLvlDmjAA9voP87u2qdEWv.jpg"
+    },
+    "budget": 45000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://flippant-simple.info",
+    "id": 1011477,
+    "imdb_id": "tt1674782",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Unable Ladybug",
+    "overview": "Cubicularis attonbitus victoria tracto suppono arguo textilis teneo consuasor.",
+    "popularity": 84.7688,
+    "poster_path": "/AEgggzRr1vZCLY86MAp93li43z.jpg",
+    "production_companies": [
+      {
+        "id": 5,
+        "logo_path": "/71BqEFAF4V3qjjMPCpLuyJFB9A.png",
+        "name": "Sound Sebulba Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 5219,
+        "logo_path": null,
+        "name": "Cold Jango Fett Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-05-08",
+    "revenue": 13500000,
+    "runtime": 94,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Titulus cubicularis attonbitus victoria.",
+    "title": "Compact Koi",
+    "video": false,
+    "vote_average": 7.6,
+    "vote_count": 47,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://voluminous-salmon.org",
+            "overview": "Virtus deinde auctus summisse videlicet a verbum addo denuo. Adflicto careo pecus. Angustus subito voro quia basium audax.",
+            "runtime": 94,
+            "tagline": "Tener virtus deinde auctus summisse videlicet a verbum.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tredecim ascit ait doloribus corpus sum studio. Casso bene amor. Cogito tot acerbitas sub vulgus vetus tener tabesco.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://skeletal-offence.net",
+            "overview": "Tredecim ascit ait doloribus corpus sum studio. Casso bene amor. Cogito tot acerbitas sub vulgus vetus tener tabesco.",
+            "runtime": 0,
+            "tagline": "Pecus tredecim ascit ait doloribus corpus sum.",
+            "title": "Uncomfortable Egret"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Sol perferendis theologus bibo tendo cuius cado. Sint surgo coniuratio beatae alter mollitia. Cimentarius accusantium odio subseco terror voco vetus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Crepusculum amitto quia. Cupio adicio complectus virgo. Minima tergum placeat.",
+            "runtime": 118,
+            "tagline": "",
+            "title": "Zestful Guineafowl"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/bS9forQsFHi1jSkPiwZiCgPcjmk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/tZL5DUSio2swBsQNXUvZVvPx7hK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/kT06Z2tww4BVDJlI5AhE5GGGWcR.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.785,
+          "height": 1296,
+          "iso_639_1": "en",
+          "file_path": "/vx9D7Onnt6tPs9PneVZqOHOJXBE.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3610
+        },
+        {
+          "aspect_ratio": 2.792,
+          "height": 1296,
+          "iso_639_1": "en",
+          "file_path": "/8bxFzKrclKJDJsNZ1hZxeVbZvg1.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3618
+        },
+        {
+          "aspect_ratio": 2.559,
+          "height": 930,
+          "iso_639_1": "en",
+          "file_path": "/8cikNpzpU8eYQnX4cKVrQMWfdhw.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2380
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/AEgggzRr1vZCLY86MAp93li43z.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/c90Lt7OQGsOmhv6x4JoFdoHzw5l.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/ckI6bmQDvvGy20FPTIW1kfGKGRK.jpg",
+          "vote_average": 2.278,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/eXQNVeTEEWkGmTbxVNyOsvgpQq.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/1GZcCJXGk4i1jnDQuyn1rsj3wEP.jpg",
+          "vote_average": 2.278,
+          "vote_count": 4,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

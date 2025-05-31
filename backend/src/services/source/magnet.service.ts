@@ -192,7 +192,7 @@ export class MagnetService {
       );
       return false;
     }
-    logger.debug('MagnetService', `Searching ${hash} with ${serviceName}`);
+    logger.debug('MagnetService', `Searching with ${serviceName}`);
 
     if (service.rateLimiter) {
       // Check if we need to throttle requests
@@ -284,7 +284,7 @@ export class MagnetService {
     }
 
     // All services failed
-    logger.warn('MagnetService', `Could not convert magnet to torrent for hash: ${hash}`);
+    logger.warn('MagnetService', `Could not convert magnet to file after trying all services`);
     return onComplete(null);
   }
 
@@ -328,15 +328,14 @@ export class MagnetService {
       if (parsed.infoHash.toLowerCase() !== hash.toLowerCase()) {
         logger.warn(
           'MagnetService',
-          `Hash mismatch for ${serviceName}:`,
-          `expected: ${hash}, got: ${parsed.infoHash}`
+          `Hash mismatch detected for ${serviceName} - file validation failed`
         );
         return false;
       }
 
       return true;
     } catch (error) {
-      logger.warn('MagnetService', `Error validating torrent buffer:`, error);
+      logger.warn('MagnetService', `Error validating file buffer:`, error);
       return false;
     }
   }

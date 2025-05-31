@@ -24,6 +24,7 @@ import { SyncStateRepository } from '@repositories/syncState.repository';
 import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
+import type { EncryptionService } from '@services/encryption/encryption.service';
 import { ENV } from '@constants';
 
 export class Database {
@@ -39,7 +40,7 @@ export class Database {
   private syncStateRepository: SyncStateRepository;
   private traktUserRepository: TraktUserRepository;
 
-  constructor() {
+  constructor(private readonly encryptionService: EncryptionService) {
     this.dataSource = new DataSource({
       type: 'sqlite',
       database: path.resolve(ENV('DATA_DIR'), 'database.sqlite'),
@@ -67,8 +68,8 @@ export class Database {
   public async initialize() {
     await this.dataSource.initialize();
     this.mediaListRepository = new MediaListRepository(this.dataSource);
-    this.movieRepository = new MovieRepository(this.dataSource);
-    this.movieSourceRepository = new MovieSourceRepository(this.dataSource);
+    this.movieSourceRepository = new MovieSourceRepository(this.dataSource, this.encryptionService);
+    this.movieRepository = new MovieRepository(this.dataSource, this.movieSourceRepository);
     this.tvShowRepository = new TVShowRepository(this.dataSource);
     this.genreRepository = new GenreRepository(this.dataSource);
     this.userRepository = new UserRepository(this.dataSource);

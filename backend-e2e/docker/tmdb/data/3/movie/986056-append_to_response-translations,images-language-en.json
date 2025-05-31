@@ -1,0 +1,303 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=27999",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1a1e1073d079297286e485714ba323e6\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "ow00R4IcvIXoIB0gra-ISQ8T_JkfEbXYBU6r3AK5JGZrL-pVDYRzZw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rthMuZfFv4fqEU4JVbgSW9wQ8rs.jpg",
+    "belongs_to_collection": null,
+    "budget": 180000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      }
+    ],
+    "homepage": "https://stupendous-sarong.info",
+    "id": 986056,
+    "imdb_id": "tt20969586",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Severe Gerbil",
+    "overview": "Derelinquo autus vorax benevolentia abduco tego esse contego cauda. Addo architecto tertius tantum. Subnecto amita amplus adopto cubitum sequi debilito aperiam angulus distinctio.",
+    "popularity": 137.6102,
+    "poster_path": "/m9EtP1Yrzv6v7dMaC9mRaGhd1um.jpg",
+    "production_companies": [
+      {
+        "id": 420,
+        "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
+        "name": "Dying Lama Su Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 176762,
+        "logo_path": null,
+        "name": "Beneficial Zam Wesell Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-30",
+    "revenue": 355507728,
+    "runtime": 127,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Italian",
+        "iso_639_1": "it",
+        "name": "Italiano"
+      },
+      {
+        "english_name": "Russian",
+        "iso_639_1": "ru",
+        "name": "Pусский"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Tenus derelinquo autus vorax benevolentia abduco tego.",
+    "title": "Causal Rat",
+    "video": false,
+    "vote_average": 7.443,
+    "vote_count": 1024,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://ironclad-doorpost.info",
+            "overview": "Curatio amiculum eos votum alioqui. Voluptate degenero amissio stips cena adopto animi.",
+            "runtime": 127,
+            "tagline": "Charisma curatio amiculum eos votum.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Occaecati caritas uterque desolo adicio umerus sopor vereor. Tabella admoneo odit vivo defero sollers sodalitas. Sopor volo crebro delectus subiungo totus deprimo a itaque cunctatio.",
+            "runtime": 127,
+            "tagline": "Sono occaecati caritas uterque desolo adicio umerus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Occaecati caritas uterque desolo adicio umerus sopor vereor. Tabella admoneo odit vivo defero sollers sodalitas. Sopor volo crebro delectus subiungo totus deprimo a itaque cunctatio.",
+            "runtime": 0,
+            "tagline": "Sono occaecati caritas uterque desolo adicio umerus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 126,
+            "tagline": "",
+            "title": "Unknown Hookworm"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://cruel-chorus.name",
+            "overview": "Error adulatio uberrime amoveo.",
+            "runtime": 126,
+            "tagline": "Articulus error adulatio.",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_639_1": "en",
+          "file_path": "/mqQYJV9lCGY2xITUCHnCxwGX6QV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/xdPBt2kPKPAdqV7uv9MSKl5MdSr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1239,
+          "iso_639_1": "en",
+          "file_path": "/rFlhHiYjMym6WGAdr4KuKVAPBqr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2202
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/9RaQBrvapyxisCHL5bAnoU4rAGF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/3Ym8diDGcHqtsTSo53xwiWJk38U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.371,
+          "height": 585,
+          "iso_639_1": "en",
+          "file_path": "/majLMXfIqGaoQS3K66aKrNld0Vg.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 4312
+        },
+        {
+          "aspect_ratio": 3.47,
+          "height": 317,
+          "iso_639_1": "en",
+          "file_path": "/uEAkfkPOveKWhUe3xqmqxaPpAgR.png",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 1100
+        },
+        {
+          "aspect_ratio": 4.271,
+          "height": 384,
+          "iso_639_1": "en",
+          "file_path": "/13GorshypVTKx0ft6QHyljHarPX.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1640
+        },
+        {
+          "aspect_ratio": 3.554,
+          "height": 325,
+          "iso_639_1": "en",
+          "file_path": "/asl8IgZFcJsXdv1Ps5gwZfk8eWJ.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1155
+        },
+        {
+          "aspect_ratio": 3.435,
+          "height": 131,
+          "iso_639_1": "en",
+          "file_path": "/lxSKMZc8EIj7LMTCNjdSZSJCYsv.png",
+          "vote_average": 1.75,
+          "vote_count": 1,
+          "width": 450
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/m9EtP1Yrzv6v7dMaC9mRaGhd1um.jpg",
+          "vote_average": 3.138,
+          "vote_count": 18,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2997,
+          "iso_639_1": "en",
+          "file_path": "/ympR2GNOMrJLzoqcCQYFAU9bNvf.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/vnfgoohSwKNOcRfJOPULXTvX0cu.jpg",
+          "vote_average": 5.928,
+          "vote_count": 28,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yBdljcPFFaj54aWVgj36MB47Pb6.jpg",
+          "vote_average": 5.566,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/hqcexYHbiTBfDIdDWxrxPtVndBX.jpg",
+          "vote_average": 5.414,
+          "vote_count": 29,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

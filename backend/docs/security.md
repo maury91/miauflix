@@ -21,6 +21,14 @@ The backend implements a comprehensive security system with multiple layers of p
 - **Rate Limiting**: Protection against brute force and DoS attacks
 - **Security Event Logging**: Detailed logging of authentication attempts, authorization failures, and suspicious activities
 
+### Data Encryption
+
+- **Database Field Encryption**: All sensitive torrent data is encrypted at rest using AES-256-GCM
+- **Torrent Identifier Protection**: Hash values, magnet links, and torrent files are automatically encrypted
+- **Deterministic Encryption**: Searchable fields use deterministic encryption for uniqueness constraints
+- **Key Management**: Secure encryption key handling via environment variables
+- **Migration Support**: Automated scripts to encrypt existing data during upgrades
+
 ### Infrastructure Security
 
 - **Input Sanitization**: Comprehensive input validation and sanitization
@@ -39,7 +47,7 @@ The backend implements a comprehensive security system with multiple layers of p
 
 The following environment variables are required:
 
-```
+```env
 JWT_SECRET=your-secure-secret-key
 ```
 
@@ -65,10 +73,11 @@ app.get('/admin', ({ user }) => {
 1. Always use HTTPS in production
 2. Store sensitive environment variables securely
 3. Implement rate limiting for authentication endpoints
-4. Regularly rotate JWT secrets
+4. Regularly rotate JWT secrets and encryption keys
 5. Monitor for suspicious activity
 6. Implement proper error handling
 7. Use secure password policies
+8. Verify database encryption is working (only ciphertext should be visible in raw DB)
 
 ## JWT Implementation
 

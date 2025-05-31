@@ -62,12 +62,8 @@ export class WebTorrentService {
 
   async getTorrent(magnetLink: string, hash: string, timeout: number): Promise<Buffer> {
     return new Promise((resolve, rejectRaw) => {
-      console.log(`Adding torrent with hash: ${hash} and magnet link: ${magnetLink}`);
       const remove = () => {
-        console.log(`Removing torrent with hash: ${hash}`);
-        this.client.remove(hash, () => {
-          console.log(`Torrent with hash: ${hash} removed`);
-        });
+        this.client.remove(hash, () => {});
       };
       const reject = (error: unknown) => {
         clearTimeout(timeoutId);
@@ -76,20 +72,12 @@ export class WebTorrentService {
       };
 
       const timeoutId = setTimeout(() => {
-        reject(
-          new ErrorWithStatus(
-            `Timeout after ${timeout} ms while adding torrent with hash: ${hash}`,
-            'timeout'
-          )
-        );
+        reject(new ErrorWithStatus(`Timeout after ${timeout} ms while adding file`, 'timeout'));
       }, timeout);
       try {
         const onTorrent = (torrent: Torrent) => {
-          console.log(`Torrent added: ${torrent.infoHash}`);
           if (!torrent.torrentFile) {
-            return reject(
-              new ErrorWithStatus(`Torrent file not found for hash: ${hash}`, 'added_but_no_file')
-            );
+            return reject(new ErrorWithStatus(`File not found`, 'added_but_no_file'));
           }
           clearTimeout(timeoutId);
           remove();
@@ -106,7 +94,7 @@ export class WebTorrentService {
         );
       } catch (error: unknown) {
         console.error(`Error adding torrent`, error);
-        reject(new ErrorWithStatus(`Error adding torrent with hash: ${hash}`, 'add_error'));
+        reject(new ErrorWithStatus(`Error adding file to client`, 'add_error'));
       }
     });
   }

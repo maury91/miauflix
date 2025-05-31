@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
-import type { MovieSource } from '@entities/movie-source.entity';
 import type { Database } from '@database/database';
+import type { MovieSource } from '@repositories/movie-source.repository';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { TrackerService } from '@services/source/tracker.service';
 import { sleep } from '@utils/time';
@@ -234,7 +234,7 @@ export class SourceService {
     const processSource = async (source: (typeof allSources)[number]) => {
       logger.debug(
         'SourceService',
-        `Processing source ${source.id} (${source.title}) with hash ${source.hash} and quality ${source.quality}`
+        `Processing source ${source.id} for movie "${source.title}" with quality ${source.quality}`
       );
       await this.searchTorrentFileForSource(source);
       if (this.magnetService.isIdle()) {
@@ -261,7 +261,7 @@ export class SourceService {
   }): Promise<void> {
     logger.info(
       'SourceService',
-      `Searching torrent file for source ${source.id} (hash: ${source.hash}, quality: ${source.quality})`
+      `Searching file for source ${source.id} (quality: ${source.quality})`
     );
 
     try {
@@ -270,7 +270,7 @@ export class SourceService {
       if (!torrentFile) {
         logger.warn(
           'SourceService',
-          `No torrent file found for source ${source.id} (hash: ${source.hash})`
+          `No file found for source ${source.id} (quality: ${source.quality})`
         );
         return;
       }
@@ -280,12 +280,12 @@ export class SourceService {
 
       logger.info(
         'SourceService',
-        `Successfully saved torrent file for source ${source.id} (hash: ${source.hash}, size: ${torrentFile.length} bytes)`
+        `Successfully saved file for source ${source.id} (quality: ${source.quality}, size: ${torrentFile.length} bytes)`
       );
     } catch (error) {
       logger.error(
         'SourceService',
-        `Error searching torrent file for source ${source.id} (hash: ${source.hash}):`,
+        `Error searching file for source ${source.id} (quality: ${source.quality}):`,
         error
       );
     }

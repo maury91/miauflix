@@ -1,0 +1,311 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6094",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1f636f0420f23b0954de643d3e4e65ad\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "pzpLomtzOqOnYU5cpvc97c7EgRDPfI9Xt6boWA2LR0NOQKyuLDJIXA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/eQV9rSQ6S1ja4lGTwHTnQuVhoG.jpg",
+    "belongs_to_collection": null,
+    "budget": 4250000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://positive-silly.biz",
+    "id": 1284120,
+    "imdb_id": "tt29344903",
+    "origin_country": ["NO"],
+    "original_language": "no",
+    "original_title": "Lazy Horse",
+    "overview": "Claudeo asporto voco conturbo absconditus compono caecus avarus crustulum. Adflicto conscendo viridis volva at angelus viscus torqueo antiquus vestigium.",
+    "popularity": 51.0794,
+    "poster_path": "/crX9rSg9EohybhkEe8iTQUCe55y.jpg",
+    "production_companies": [
+      {
+        "id": 21979,
+        "logo_path": "/mQiRPXZxFNNvrbX8FgayoTLrg7x.png",
+        "name": "Primary Shmi Skywalker Entertainment",
+        "origin_country": "NO"
+      },
+      {
+        "id": 51112,
+        "logo_path": "/kWLbDFg6koYqFMYjmjcifeBFB8F.png",
+        "name": "Excessive Raymus Antilles Studios",
+        "origin_country": "PL"
+      },
+      {
+        "id": 162093,
+        "logo_path": "/f9KIm9oEcVXMROucR8s3XKjXOZk.png",
+        "name": "Left Wicket Systri Warrick Media",
+        "origin_country": "DK"
+      },
+      {
+        "id": 171066,
+        "logo_path": "/tjNpvJOTCwvPL2faaj3r2RR3dTs.png",
+        "name": "International Bail Prestor Organa Entertainment",
+        "origin_country": "DK"
+      },
+      {
+        "id": 8288,
+        "logo_path": "/5THcBZP0ad7hXPjtPTxld5sVJQp.png",
+        "name": "Striking Sebulba Media",
+        "origin_country": "SE"
+      },
+      {
+        "id": 129370,
+        "logo_path": "/c7OFocnzGIZ86DrcNAzosYNssKZ.png",
+        "name": "Big Plo Koon Studios",
+        "origin_country": "PL"
+      },
+      {
+        "id": 218924,
+        "logo_path": null,
+        "name": "Voluntary Chewbacca Studios",
+        "origin_country": "NO"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "DK",
+        "name": "Denmark"
+      },
+      {
+        "iso_3166_1": "NO",
+        "name": "Norway"
+      },
+      {
+        "iso_3166_1": "PL",
+        "name": "Poland"
+      },
+      {
+        "iso_3166_1": "SE",
+        "name": "Sweden"
+      }
+    ],
+    "release_date": "2025-03-07",
+    "revenue": 884602,
+    "runtime": 109,
+    "spoken_languages": [
+      {
+        "english_name": "Norwegian",
+        "iso_639_1": "no",
+        "name": "Norsk"
+      },
+      {
+        "english_name": "Polish",
+        "iso_639_1": "pl",
+        "name": "Polski"
+      },
+      {
+        "english_name": "Swedish",
+        "iso_639_1": "sv",
+        "name": "svenska"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Timor claudeo asporto voco conturbo absconditus.",
+    "title": "Damaged Hummingbird",
+    "video": false,
+    "vote_average": 6.932,
+    "vote_count": 96,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://rectangular-trolley.name",
+            "overview": "Iure amplus denego allatus coniecto conor curriculum civitas tepidus valetudo. Volo amissio cibo denuncio substantia contabesco ipsa. Doloremque caries velum canto delego utpote coruscus occaecati crinis.",
+            "runtime": 109,
+            "tagline": "Via iure amplus denego allatus coniecto conor.",
+            "title": "Implicit Alpaca"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Growing Loon"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Dedico dolor casso voluptatibus ulciscor deludo delego balbus ait summisse. Cattus amplexus deprecator tumultus quo collum dapifer attonbitus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Tory Coyote"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Deporto comminor sint solus sit delinquo cerno statim attero vetus. Vis crastinus cresco comis pecto. Natus volubilis dolorem stipes advoco blanditiis ventosus adduco.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ntBqSlSfho6xsN6GhdnMjK0AbLr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/9W91FlHXg5dnA8LEnCuw1T6jpcA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/gmer10XzmHjHNcGQuLzvqFu5SUq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.075,
+          "height": 2169,
+          "iso_639_1": "en",
+          "file_path": "/6giXIEmDZTQi0TfpfBEE9XP0QnR.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4500
+        },
+        {
+          "aspect_ratio": 1.747,
+          "height": 2489,
+          "iso_639_1": "en",
+          "file_path": "/gBg3j37HFvizbViAgxey3XmLo0j.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4349
+        },
+        {
+          "aspect_ratio": 2.668,
+          "height": 1874,
+          "iso_639_1": "en",
+          "file_path": "/8hhge37VWMvM1Ozl88ouavjgzuv.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 5000
+        },
+        {
+          "aspect_ratio": 2.075,
+          "height": 2169,
+          "iso_639_1": "en",
+          "file_path": "/pMcUNyatMfE2to8HbPSyd7BNaIy.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4500
+        },
+        {
+          "aspect_ratio": 1.747,
+          "height": 2489,
+          "iso_639_1": "en",
+          "file_path": "/vqd6VYS41tUHjlftByo9qPO66X2.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4349
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/crX9rSg9EohybhkEe8iTQUCe55y.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/rayAREIKtSinuov10GvrZHyXfXH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/rSXVc4MB62XQ6PpPkF4zfdvv3aP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/cr8AqbYkCvts2CpYnceOVMRB1Nn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/mhln5lma7i4fYWJpoN3vjPyJnGu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}
