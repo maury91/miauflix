@@ -20,9 +20,20 @@ export const createRateLimitMiddlewareFactory =
   (auditLogService: AuditLogService) => (limit: number) => {
     return createMiddleware(async (context, next) => {
       const request = context.req.raw;
+      const url = new URL(request.url);
+
+      // Check if rate limiting should be bypassed
+      const rateLimitTestMode = process.env.RATE_LIMIT_TEST_MODE === 'true';
+      const forceRateLimit = url.searchParams.get('_forceRateLimit') === 'true';
+
+      // In test mode, bypass rate limiting unless explicitly forced
+      if (rateLimitTestMode && !forceRateLimit) {
+        await next();
+        return;
+      }
 
       const clientIp = getRealClientIp(context) || 'unknown';
-      const path = new URL(request.url).pathname;
+      const path = url.pathname;
       const routePath = context.req.routePath;
       const rateLimiter = getRateLimiter(clientIp, routePath, limit);
 

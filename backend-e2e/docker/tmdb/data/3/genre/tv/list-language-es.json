@@ -1,0 +1,88 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4553",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"37244d54ccd63e0b002bf996a8ed58f9\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 372875ad1ec20daf24f3f29f14a73cd0.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "rVPKhS7sY5u8jOblO0MaqONqqYbPesldB_ZXdON8C-66zqwdQr0h0g==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "RefreshHit from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "3849",
+    "x-memc-expires": "24577",
+    "x-memc-key": "86601ca023ae1f027f9f5064b90bf473",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+  },
+  "data": {
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animación"
+      },
+      {
+        "id": 35,
+        "name": "Comedia"
+      },
+      {
+        "id": 80,
+        "name": "Crimen"
+      },
+      {
+        "id": 99,
+        "name": "Documental"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10751,
+        "name": "Familia"
+      },
+      {
+        "id": 10762,
+        "name": "Kids"
+      },
+      {
+        "id": 9648,
+        "name": "Misterio"
+      },
+      {
+        "id": 10763,
+        "name": "News"
+      },
+      {
+        "id": 10764,
+        "name": "Reality"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10766,
+        "name": "Soap"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 10768,
+        "name": "War & Politics"
+      },
+      {
+        "id": 37,
+        "name": "Western"
+      }
+    ]
+  }
+}

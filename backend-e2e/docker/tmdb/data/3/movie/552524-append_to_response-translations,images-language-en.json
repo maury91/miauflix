@@ -1,0 +1,281 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17614",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a5d3b460ad39f2f8d6c38cad42f0d858\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 fa8c9f29fb8ef5c537a2a53f4de05240.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "sBVg3JzxiJ_O8gF6M3HVCQy0YhcvC_5dpNBI-1nKH0PGmc9hQIdFvA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7Zx3wDG5bBtcfk8lcnCWDOLM4Y4.jpg",
+    "belongs_to_collection": {
+      "id": 97461,
+      "name": "Minor Cat",
+      "poster_path": "/bstyyXaLinnYwoyvo5HaDceJN07.jpg",
+      "backdrop_path": "/2bQIDuinsMUXjcBZq8hbyPxjhvz.jpg"
+    },
+    "budget": 100000000,
+    "genres": [
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://masculine-staircase.biz",
+    "id": 552524,
+    "imdb_id": "tt11655566",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Drunk Aardwolf",
+    "overview": "Claro volaticus incidunt civitas cicuta ut repellendus tristis tantillus. Tertius totidem tremo vigor.",
+    "popularity": 755.7423,
+    "poster_path": "/Y6pjszkKQUZ5uBbiGg7KWiCksJ.jpg",
+    "production_companies": [
+      {
+        "id": 2,
+        "logo_path": "/wdrCwmRnLFJhEoH8GSfymY85KHT.png",
+        "name": "Accused R4-P17 Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 118854,
+        "logo_path": "/g9LPNlQFoDcHjfnvrEqFmeIaDrZ.png",
+        "name": "Given Plo Koon Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-05-17",
+    "revenue": 421400000,
+    "runtime": 108,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Tutis claro volaticus incidunt civitas cicuta.",
+    "title": "Increased Limpet",
+    "video": false,
+    "vote_average": 7.1,
+    "vote_count": 299,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://bogus-stew.info",
+            "overview": "Damnatio utroque officiis validus tactus una conor aufero odio.",
+            "runtime": 108,
+            "tagline": "Ultra damnatio utroque.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Amoveo tot vix ventosus comprehendo decretum averto antiquus. Suppellex subito atrocitas sufficio aut curtus. Corroboro vaco crapula defetiscor casus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Fast Kingfisher"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Amoveo tot vix ventosus comprehendo decretum averto antiquus. Suppellex subito atrocitas sufficio aut curtus. Corroboro vaco crapula defetiscor casus.",
+            "runtime": 108,
+            "tagline": "",
+            "title": "Fast Kingfisher"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Autem urbs assentator talio timidus solvo abscido cruciamentum theatrum. Uxor doloribus confugo eos vesper cogo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Accusator carbo modi vilis socius decet defleo. Pauci cohibeo taceo pel sperno voluntarius cur. Molestiae delectus tactus pauper tabgo minima arbitro.",
+            "runtime": 108,
+            "tagline": "",
+            "title": "Genetic Chinchilla"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/4DYrZevpUpMsKv6XCraOeLlQtJ7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/pZ7vlKJqaBaUGcJDBp08T1gJ0UB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2666
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 810,
+          "iso_639_1": "en",
+          "file_path": "/pHiRD5hVVECkUKEJdWqn3xrF5tV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1440
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.319,
+          "height": 1293,
+          "iso_639_1": "en",
+          "file_path": "/dGp0rj6kyqwzyu36RPl4YtQ6Gp.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1706
+        },
+        {
+          "aspect_ratio": 1.32,
+          "height": 1298,
+          "iso_639_1": "en",
+          "file_path": "/nr2NCKPY5is5RleIUlVzJ2pEAww.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1713
+        },
+        {
+          "aspect_ratio": 1.953,
+          "height": 1391,
+          "iso_639_1": "en",
+          "file_path": "/lkN6Jnnvjk5ZDSfV9gkDFBKbp3B.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2716
+        },
+        {
+          "aspect_ratio": 1.325,
+          "height": 1140,
+          "iso_639_1": "en",
+          "file_path": "/ulBRv0uzMKIWtYmEKnNDxfvs3jy.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1511
+        },
+        {
+          "aspect_ratio": 1.619,
+          "height": 1054,
+          "iso_639_1": "en",
+          "file_path": "/hvi0C2A1YBOvRoWPX5WGQZk9dsC.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1706
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/mKKqV23MQ0uakJS8OCE2TfV5jNS.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/Y6pjszkKQUZ5uBbiGg7KWiCksJ.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1962,
+          "iso_639_1": "en",
+          "file_path": "/3bN675X0K2E5QiAZVChzB5wq90B.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 1308
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/ckQzKpQJO4ZQDCN5evdpKcfm7Ys.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/7c5VBuCbjZOk7lSfj9sMpmDIaKX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -7,14 +7,11 @@ describe('Health Endpoint', () => {
     client = new TestClient();
 
     // Wait for the backend to be ready before running tests
-    console.log('⏳ Waiting for backend service to be ready...');
-
     try {
       await waitForService(client);
-      console.log('✅ Backend service is ready');
     } catch (error) {
       console.log('❌ Backend service is not available. Ensure the Docker environment is running.');
-      console.log('Run: ./scripts/run.sh to start the full test environment');
+      console.log('Run: ./scripts/env.sh test to start the full test environment');
       throw error;
     }
   }, 60000); // 60 second timeout for service startup

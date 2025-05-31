@@ -1,0 +1,19 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "content-type": "application/json;charset=utf-8",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 68b2682a924ac399aa2724b5b439e75c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "UBD-ht70C7ddtsxwbxdTm1EyTTiMQufqYYikKiA_6APIIH0KKjPv2A==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Error from cloudfront",
+    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+  },
+  "data": {
+    "success": false,
+    "status_code": 34,
+    "status_message": "The resource you requested could not be found."
+  }
+}

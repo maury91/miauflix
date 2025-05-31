@@ -1,3 +1,5 @@
+import { sanitize } from './sanitize';
+
 const PORT = 80;
 const DATA_DIR = process.env.DATA_DIR;
 const API_KEY = process.env.API_KEY || '';
@@ -143,14 +145,17 @@ Bun.serve({
       });
       const data = await apiResponse.json();
 
+      // Apply sanitization
+      const sanitizedData = sanitize(data, path);
+
       // Save the response for future use
       await saveResponse(filePath, {
         headers: omitHeaders(apiResponse.headers),
-        data,
+        data: sanitizedData,
       });
 
-      // Return the response
-      return new Response(JSON.stringify(data), {
+      // Apply sanitization and return the response
+      return new Response(JSON.stringify(sanitizedData), {
         headers: omitHeaders(apiResponse.headers),
         status: apiResponse.status,
       });

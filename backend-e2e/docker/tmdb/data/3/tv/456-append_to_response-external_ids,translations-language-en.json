@@ -1,0 +1,266 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14452",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9b9d3b4073c45676116544877f888ee7\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "9K6RhkDnMPeek1cW8k8UKmLKipr4L9n8Q5eneTx08WTpjLZri5Stjw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/pxeqQX4qFQ0cVxPt5SWZENV5BH3.jpg",
+    "created_by": [
+      {
+        "id": 5741,
+        "credit_id": "5256bdc619c2956ff6001be4",
+        "name": "Dianne Fisher",
+        "original_name": "Dianne Fisher",
+        "gender": 2,
+        "profile_path": "/2HmAw3AN93DGESPi3ibLZgBa8cT.jpg"
+      }
+    ],
+    "episode_run_time": [22],
+    "first_air_date": "1989-12-17",
+    "genres": [
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://gullible-special.name",
+    "id": 456,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-18",
+    "last_episode_to_air": {
+      "id": 6210189,
+      "name": "Necessary Otter",
+      "overview": "Cinis sonitus repudiandae. Dapifer decimus valde theatrum spiculum vigilo varius utilis.",
+      "vote_average": 6,
+      "vote_count": 2,
+      "air_date": "2025-05-18",
+      "episode_number": 18,
+      "episode_type": "finale",
+      "production_code": "36ABF11",
+      "runtime": 22,
+      "season_number": 5,
+      "show_id": 456,
+      "still_path": "/qhEdjiDr5Ttxx0vSZR88XVPsVl4.jpg"
+    },
+    "name": "Average Seahorse",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 19,
+        "logo_path": "/1DSpHrWyOORkL9N2QHX7Adt31mQ.png",
+        "name": "Sacred Chewbacca Studios",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 185,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Original Tapir",
+    "overview": "Minima coma nobis adfero degusto vinculum autem attollo veritas. Solum atrocitas sollers.",
+    "popularity": 222.7483,
+    "poster_path": "/vHqeLzYl3dEAutojCO26g0LIkom.jpg",
+    "production_companies": [
+      {
+        "id": 18,
+        "logo_path": "/uqhagSwM7NAkQWVCQhKTyoqF8XH.png",
+        "name": "Confident Dormé Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 1556,
+        "logo_path": "/31h94rG9hzjprXoYNy3L1ErUya2.png",
+        "name": "Proud Dexter Jettster Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 154887,
+        "logo_path": "/wLFPu95hIMmyLR5hdtvYaMuK0tG.png",
+        "name": "Quickest Anakin Skywalker Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 236166,
+        "logo_path": "/8rFlu5iytnjsciYXZDw90ktllCI.png",
+        "name": "Roasted Anakin Skywalker Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1987-04-17",
+        "episode_count": 82,
+        "id": 3581,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/oICoFoPJuEk5VJbEP2HYLEmEQi3.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1989-12-17",
+        "episode_count": 13,
+        "id": 3582,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/t544zSFUNyvmyeP4sHotlcEX3zH.jpg",
+        "season_number": 1,
+        "vote_average": 7.1
+      },
+      {
+        "air_date": "1990-10-11",
+        "episode_count": 22,
+        "id": 3583,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/bRyDlUQQafSoIT052jpjLBMe8TH.jpg",
+        "season_number": 2,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "1991-09-19",
+        "episode_count": 24,
+        "id": 3584,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/9ghmIhWJJuTx3UHyfVVBXQoUGvI.jpg",
+        "season_number": 3,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "1992-09-24",
+        "episode_count": 22,
+        "id": 3585,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/voqu5a4drV1CXMjjZ0Mkw35n26l.jpg",
+        "season_number": 4,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "1993-09-30",
+        "episode_count": 22,
+        "id": 3586,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/9O7tIcS2KZk1ukMq3aOvoj8KIJZ.jpg",
+        "season_number": 5,
+        "vote_average": 7.6
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.016,
+    "vote_count": 10207,
+    "external_ids": {
+      "imdb_id": "tt0096697",
+      "freebase_mid": "/m/07c72",
+      "freebase_id": "/en/the_simpsons",
+      "tvdb_id": 71663,
+      "tvrage_id": 6190,
+      "wikidata_id": "Q886",
+      "facebook_id": "TheSimpsons",
+      "instagram_id": "thesimpsonsfox",
+      "twitter_id": "thesimpsons"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Amaritudo vulticulus spectaculum vomito.",
+            "homepage": "https://exotic-condor.com",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Lucky Woodpecker",
+            "overview": "Demum conitor articulus vilicus vulnero arto.",
+            "homepage": "",
+            "tagline": "Deserunt demum conitor articulus."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Hon Condor",
+            "overview": "Conculco officiis thalassinus alienus aro ver. Ab allatus via cotidie. Acidus appono defungo aspicio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Thorough Rooster",
+            "overview": "Cunae denego carbo communis sed allatus stabilis. Adsum acies bestia arbitro tamen conatus atqui cognatus decerno.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Lucky Woodpecker",
+            "overview": "Demum conitor articulus vilicus vulnero arto.",
+            "homepage": "https://flickering-larder.info",
+            "tagline": "Deserunt demum conitor articulus."
+          }
+        }
+      ]
+    }
+  }
+}

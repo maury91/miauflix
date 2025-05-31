@@ -1,0 +1,309 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14318",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"13a1d9b5724f8235fe94341c82955cd9\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 fa8c9f29fb8ef5c537a2a53f4de05240.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "GQoGV4jOAANzQKwUxLtD2Isv9d4HTU2Q56bHYpAQ_fm4x_b-q2PFAA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "ec744e2834f1415aae57fbd47ef01c38"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8eifdha9GQeZAkexgtD45546XKx.jpg",
+    "belongs_to_collection": {
+      "id": 131295,
+      "name": "Slight Bonobo",
+      "poster_path": "/2tOgiY533JSFp7OrVlkeRJvsZpI.jpg",
+      "backdrop_path": "/7kVucUYqz8fZkOmFtA8opDwJFXM.jpg"
+    },
+    "budget": 180000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://splendid-mascara.org",
+    "id": 822119,
+    "imdb_id": "tt14513804",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Active Galliform",
+    "overview": "Vulgo apud ad cicuta spero teneo abutor. Baiulus cohibeo turbo quidem umquam totus adsuesco. Decor surgo molestias cum patria villa triumphus ager angulus tollo.",
+    "popularity": 170.0825,
+    "poster_path": "/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg",
+    "production_companies": [
+      {
+        "id": 420,
+        "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
+        "name": "Dying Lama Su Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 176762,
+        "logo_path": null,
+        "name": "Beneficial Zam Wesell Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-02-12",
+    "revenue": 415092958,
+    "runtime": 119,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Impedit vulgo apud ad cicuta spero teneo.",
+    "title": "Nutritious Gorilla",
+    "video": false,
+    "vote_average": 6.082,
+    "vote_count": 1963,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://admirable-market.com",
+            "overview": "Adamo soluta arceo nihil angulus clamo quod.",
+            "runtime": 119,
+            "tagline": "Illo adamo soluta.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://rotten-temple.info",
+            "overview": "Demulceo viridis quae blanditiis conduco assentator certus cultellus quos vilis. Toties verto circumvenio adinventitias comitatus tempora vomito. Vetus conduco vis bene tui aduro tabula barba demoror tego.",
+            "runtime": 0,
+            "tagline": "Varius demulceo viridis quae blanditiis conduco assentator.",
+            "title": "Principal Chipmunk"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://rotten-temple.info",
+            "overview": "Demulceo viridis quae blanditiis conduco assentator certus cultellus quos vilis. Toties verto circumvenio adinventitias comitatus tempora vomito. Vetus conduco vis bene tui aduro tabula barba demoror tego.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Principal Chipmunk"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://live-step.biz",
+            "overview": "Cenaculum arcesso summisse charisma despecto adsum versus impedit ventosus. Animus aptus tredecim arcesso vitiosus angulus denique aequus.",
+            "runtime": 0,
+            "tagline": "Ullus cenaculum arcesso summisse charisma.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Defluo terga ara absque. Terra venio commodi aegrus comburo deserunt defungo suppellex.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Sure Bedbug"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/kpdDX6fjkvqyv2EocsH7AaTBt4.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/2mjiFiQbvCd4MWA4wbM4YCrP4q4.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/7swBo3oUU49tLjpdtHRtgKLo7BL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qYvpc3qLb0LpGOBS7JOq5RxYt0x.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/m8CJEkLtQDHNUJVrlDdLqoWoVhV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.647,
+          "height": 745,
+          "iso_639_1": "en",
+          "file_path": "/ubZE4IVOdOnZIp6mapDGooDYeJh.png",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 4207
+        },
+        {
+          "aspect_ratio": 3.549,
+          "height": 1206,
+          "iso_639_1": "en",
+          "file_path": "/drlrvhXRpg0kUvWMawCvY0JIKr3.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4280
+        },
+        {
+          "aspect_ratio": 4.137,
+          "height": 1044,
+          "iso_639_1": "en",
+          "file_path": "/m4lR1uSXFu5ENUALDJK7jBaLA3E.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 5.988,
+          "height": 334,
+          "iso_639_1": "en",
+          "file_path": "/61AlgDIlLNenVUqSR9lYSGUl5QS.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 3.951,
+          "height": 465,
+          "iso_639_1": "en",
+          "file_path": "/fayntTIz513LPVVckksjlp4KOoX.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1837
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/pzIddUEMWhWzfvLI3TwxUG2wGoi.jpg",
+          "vote_average": 6.2,
+          "vote_count": 50,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_639_1": "en",
+          "file_path": "/mFzFJc1XnGqaEbyac2KcCFJx8Uo.jpg",
+          "vote_average": 6,
+          "vote_count": 19,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/4YFyYcUPfrbpj6VpgWh7xoUnwLA.jpg",
+          "vote_average": 5.802,
+          "vote_count": 43,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_639_1": "en",
+          "file_path": "/5w1iHCw9CK6YrTm6NEU1p2sQf11.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/9TFKZfzzsajmmbu0xWY988Kc7D8.jpg",
+          "vote_average": 4.854,
+          "vote_count": 24,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

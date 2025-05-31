@@ -1,0 +1,287 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7773",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8f60b6df753f4b8ec07940058cd8df93\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "O_V1EKqy74mCFkulBSe5OGv75V0g67_KCsj5LPcpwodExRC-RZ5Adg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/9nhjGaFLKtddDPtPaX5EmKqsWdH.jpg",
+    "belongs_to_collection": null,
+    "budget": 70000000,
+    "genres": [
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://jaded-time.name",
+    "id": 950396,
+    "imdb_id": "tt13654226",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Temporary Ape",
+    "overview": "Dolores creator spero magnam tenuis terror temperantia thymbra territo subito. Strues suscipit turpis stella utique auditor admoneo vobis virgo.",
+    "popularity": 60.9042,
+    "poster_path": "/7iMBZzVZtG0oBug4TfqDb9ZxAOa.jpg",
+    "production_companies": [
+      {
+        "id": 82819,
+        "logo_path": "/gXfFl9pRPaoaq14jybEn1pHeldr.png",
+        "name": "Inclined Lama Su Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 162439,
+        "logo_path": "/h9hG1svKeylr9KqUOGmO4i3wRP0.png",
+        "name": "Helpful Luke Skywalker Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 194232,
+        "logo_path": "/oE7H93u8sy5vvW5EH3fpCp68vvB.png",
+        "name": "Juicy Han Solo Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-02-13",
+    "revenue": 0,
+    "runtime": 127,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Lithuanian",
+        "iso_639_1": "lt",
+        "name": "Lietuvių"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Ver dolores creator spero magnam.",
+    "title": "Genetic Dingo",
+    "video": false,
+    "vote_average": 7.708,
+    "vote_count": 2630,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://popular-sand.info",
+            "overview": "Deficio surgo auxilium odit clamo ventus suppono adulescens tabella. Acerbitas casso odit causa terminatio vulticulus.",
+            "runtime": 127,
+            "tagline": "Tenuis deficio surgo auxilium odit clamo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://attentive-education.net",
+            "overview": "Stips deleniti ea minima crinis.",
+            "runtime": 127,
+            "tagline": "Clementia stips deleniti.",
+            "title": "Zealous Flea"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://attentive-education.net",
+            "overview": "Stips deleniti ea minima crinis.",
+            "runtime": 0,
+            "tagline": "Clementia stips deleniti.",
+            "title": "Zealous Flea"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://total-celery.net",
+            "overview": "Sustineo ciminatio sit pauper. Damno conscendo umbra ulciscor commodo nostrum cibus strenuus decet ager. Tepidus carpo turpis spectaculum vetus trucido aegrus.",
+            "runtime": 0,
+            "tagline": "Aqua sustineo ciminatio sit pauper volaticus damno conscendo.",
+            "title": "Sole Jaguar"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Vomica defero aperte. Conqueror ambitus strues ventus aspicio vociferor. Tonsor circumvenio ullus cruentus aeger caries.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/lnfqVouQznv6ulvqpcmlcSVteOy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/yZDTcOExRBypyrTdwmGAgcDQ25D.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/4TYR93ME6f1jqp15SZiLmrTwj6B.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qydo1tRb55bbivbVi2AxHw9zIxe.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/nDM6vIzulVKwvXBORxrzeUntIYJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.856,
+          "height": 2309,
+          "iso_639_1": "en",
+          "file_path": "/iuCgpPWt4TZF1rwWyhHBK0XRycV.png",
+          "vote_average": 8.596,
+          "vote_count": 7,
+          "width": 4285
+        },
+        {
+          "aspect_ratio": 1.817,
+          "height": 1084,
+          "iso_639_1": "en",
+          "file_path": "/yS9MTrTI3cyumHk8ZYN5bG4Vqmc.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1970
+        },
+        {
+          "aspect_ratio": 1.856,
+          "height": 2309,
+          "iso_639_1": "en",
+          "file_path": "/y9vpkQoEakFolgx3dM9wXmrLYEP.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 4285
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/7iMBZzVZtG0oBug4TfqDb9ZxAOa.jpg",
+          "vote_average": 6.14,
+          "vote_count": 32,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/xj63YtNo9NlnspYpLR29A9fuxBb.jpg",
+          "vote_average": 5.426,
+          "vote_count": 27,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/6xuPvqv8VAsXXACCwLjUgsIDe05.jpg",
+          "vote_average": 5,
+          "vote_count": 19,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/cG7m6fmMFykDsXXAXrlZ7IhBj4L.jpg",
+          "vote_average": 4.232,
+          "vote_count": 28,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/h7qe3epa0f1VhIw3QASaWSZlQsI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

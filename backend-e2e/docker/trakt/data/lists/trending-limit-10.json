@@ -1,0 +1,389 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "max-age=300, public",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "9464ad1acc31dbb3-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "etag": "W/\"fb3a890ae4d47940ec0c0d2a26574053\"",
+    "expires": "Tue, 27 May 2025 10:07:21 GMT",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "vary": "Accept-Encoding",
+    "x-content-type-options": "nosniff",
+    "x-download-options": "noopen",
+    "x-frame-options": "SAMEORIGIN",
+    "x-pagination-item-count": "21795",
+    "x-pagination-limit": "10",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "2180",
+    "x-permitted-cross-domain-policies": "none",
+    "x-ratelimit": "{\"name\":\"UNAUTHED_API_GET_LIMIT\",\"period\":300,\"limit\":1000,\"remaining\":999,\"until\":\"2025-05-27T10:05:00Z\"}",
+    "x-request-id": "38cb6143-a1ec-4815-8cd4-a63d0946a15e",
+    "x-runtime": "0.526724",
+    "x-xss-protection": "0"
+  },
+  "data": [
+    {
+      "like_count": 49,
+      "comment_count": 0,
+      "list": {
+        "name": "Latest releases",
+        "description": "",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/5308818",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "added",
+        "sort_how": "desc",
+        "created_at": "2018-07-29T10:16:22.000Z",
+        "updated_at": "2025-05-27T07:04:53.000Z",
+        "item_count": 382,
+        "comment_count": 5,
+        "likes": 4555,
+        "ids": {
+          "trakt": 5308818,
+          "slug": "latest-releases"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 44,
+      "comment_count": 0,
+      "list": {
+        "name": "Latest TV Shows",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/latest-tv-shows\nUpdated at 2025-05-27 10:22:13",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20370350",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2020-12-12T22:50:52.000Z",
+        "updated_at": "2025-05-27T07:22:13.000Z",
+        "item_count": 300,
+        "comment_count": 1,
+        "likes": 3002,
+        "ids": {
+          "trakt": 20370350,
+          "slug": "latest-tv-shows"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 36,
+      "comment_count": 0,
+      "list": {
+        "name": "Top Movies of the week",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/top-movies-of-the-week\nUpdated at 2025-05-27 01:48:17",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20388873",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2020-12-15T10:02:24.000Z",
+        "updated_at": "2025-05-27T01:47:20.000Z",
+        "item_count": 10,
+        "comment_count": 0,
+        "likes": 1408,
+        "ids": {
+          "trakt": 20388873,
+          "slug": "top-movies-of-the-week"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 30,
+      "comment_count": 0,
+      "list": {
+        "name": "Netflix Shows",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/netflix-shows\nUpdated at 2025-05-27 10:04:12",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20764471",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2021-01-28T22:23:30.000Z",
+        "updated_at": "2025-05-27T07:04:12.000Z",
+        "item_count": 300,
+        "comment_count": 0,
+        "likes": 1566,
+        "ids": {
+          "trakt": 20764471,
+          "slug": "netflix-shows"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 29,
+      "comment_count": 0,
+      "list": {
+        "name": "HBO Shows",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/hbo-shows\nUpdated at 2025-05-27 12:20:25",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20764504",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2021-01-28T22:31:06.000Z",
+        "updated_at": "2025-05-27T09:20:26.000Z",
+        "item_count": 300,
+        "comment_count": 0,
+        "likes": 1186,
+        "ids": {
+          "trakt": 20764504,
+          "slug": "hbo-shows"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 26,
+      "comment_count": 0,
+      "list": {
+        "name": "Netflix Movies",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/netflix-movies\nUpdated at 2025-05-27 04:02:12",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20764770",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2021-01-28T23:24:17.000Z",
+        "updated_at": "2025-05-27T01:02:12.000Z",
+        "item_count": 200,
+        "comment_count": 1,
+        "likes": 1277,
+        "ids": {
+          "trakt": 20764770,
+          "slug": "netflix-movies"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 26,
+      "comment_count": 0,
+      "list": {
+        "name": "Latest Releases",
+        "description": "",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/3837211",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": false,
+        "sort_by": "added",
+        "sort_how": "desc",
+        "created_at": "2017-06-07T13:22:46.000Z",
+        "updated_at": "2025-05-27T09:01:35.000Z",
+        "item_count": 99,
+        "comment_count": 0,
+        "likes": 9721,
+        "ids": {
+          "trakt": 3837211,
+          "slug": "latest-releases"
+        },
+        "user": {
+          "username": "giladg",
+          "private": false,
+          "deleted": false,
+          "name": "G&A",
+          "vip": false,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "giladg"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 24,
+      "comment_count": 0,
+      "list": {
+        "name": "Amazon Prime Movies",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/amazon-prime-movies\nUpdated at 2025-05-27 09:50:08",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20764771",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2021-01-28T23:24:57.000Z",
+        "updated_at": "2025-05-27T06:50:08.000Z",
+        "item_count": 200,
+        "comment_count": 1,
+        "likes": 1046,
+        "ids": {
+          "trakt": 20764771,
+          "slug": "amazon-prime-movies"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 24,
+      "comment_count": 0,
+      "list": {
+        "name": "Disney+ Shows",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/disney-shows\nUpdated at 2025-05-27 03:56:46",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20764592",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2021-01-28T22:46:18.000Z",
+        "updated_at": "2025-05-27T00:56:46.000Z",
+        "item_count": 300,
+        "comment_count": 1,
+        "likes": 1075,
+        "ids": {
+          "trakt": 20764592,
+          "slug": "disney-shows"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    },
+    {
+      "like_count": 24,
+      "comment_count": 0,
+      "list": {
+        "name": "Amazon Prime Shows",
+        "description": "This list is maintained by mdblist.com\nCreate your own: https://mdblist.com/lists/garycrawfordgc/amazon-prime-shows\nUpdated at 2025-05-27 11:24:09",
+        "privacy": "public",
+        "share_link": "https://trakt.tv/lists/20764575",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2021-01-28T22:42:22.000Z",
+        "updated_at": "2025-05-27T08:24:09.000Z",
+        "item_count": 300,
+        "comment_count": 0,
+        "likes": 1194,
+        "ids": {
+          "trakt": 20764575,
+          "slug": "amazon-prime-shows"
+        },
+        "user": {
+          "username": "garycrawfordgc",
+          "private": false,
+          "deleted": false,
+          "name": "Gary",
+          "vip": true,
+          "vip_ep": false,
+          "director": false,
+          "ids": {
+            "slug": "garycrawfordgc"
+          }
+        }
+      }
+    }
+  ]
+}

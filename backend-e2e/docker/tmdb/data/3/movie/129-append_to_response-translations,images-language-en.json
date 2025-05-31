@@ -1,0 +1,288 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21966",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c1cf0bc20e02c0c7ae5deb511f3e7837\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "JYv3gb41LsrtSNYJ0X_PudOfLGt91FTm4jcrrXQ9qhfvpTZ207Lczw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "ca8bd6c20dff440c935fd568c903018a"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/m4TUa2ciEWSlk37rOsjiSIvZDXE.jpg",
+    "belongs_to_collection": null,
+    "budget": 19000000,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://lonely-school.net",
+    "id": 129,
+    "imdb_id": "tt0245429",
+    "origin_country": ["JP"],
+    "original_language": "ja",
+    "original_title": "Characteristic Ostrich",
+    "overview": "Substantia collum audio cilicium cupressus acquiro pecto certus conventus. Video asper bestia.",
+    "popularity": 23.5265,
+    "poster_path": "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+    "production_companies": [
+      {
+        "id": 10342,
+        "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+        "name": "Squealing IG-88 Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "2001-07-20",
+    "revenue": 274925095,
+    "runtime": 125,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Terga substantia collum audio cilicium.",
+    "title": "Neutral Mink",
+    "video": false,
+    "vote_average": 8.5,
+    "vote_count": 17164,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://thin-relish.info",
+            "overview": "Delibero dens timor voluptatum supra conculco civis abscido. Tibi molestias aggredior. Succurro cogo minus damnatio virga theca degenero sub itaque curis.",
+            "runtime": 125,
+            "tagline": "Tabgo delibero dens timor voluptatum supra conculco civis.",
+            "title": "Unique Mastodon"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://organic-hubris.com",
+            "overview": "Ad occaecati nulla conatus delego succedo. Velit sum conatus asper tubineus.",
+            "runtime": 122,
+            "tagline": "Decens ad occaecati nulla conatus delego.",
+            "title": "Neutral Kiwi"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Speculum audacia congregatio nulla ver denique cometes sto verecundia.",
+            "runtime": 125,
+            "tagline": "Tempore speculum audacia.",
+            "title": "Convenient Hummingbird"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ad occaecati nulla conatus delego succedo. Velit sum conatus asper tubineus.",
+            "runtime": 125,
+            "tagline": "",
+            "title": "Neutral Kiwi"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Subnecto vis abscido accedo rem tabgo. Conduco adfero cuius crastinus corroboro aer deprimo arceo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Thoughtful Aardwolf"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/sRDfWh1x7qVi9R6Y86XVCQzSjVH.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/gp9QOoqsUgoOFqntpbKjeefdK48.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/aQDiKWHWeUhJq9jWkfC6iyuO7Uc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/7ZMrzMZUMBSoY8N94v51w9EJkS1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/fuAyIPfkYnH6VPdIvpb7oBOUVA5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.187,
+          "height": 401,
+          "iso_639_1": "en",
+          "file_path": "/hkUi1Z15Ymj9GNamWQkzUhehLuy.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 9.585,
+          "height": 176,
+          "iso_639_1": "en",
+          "file_path": "/iXlYeSfA0ZZhqFoSsA8uSX4iaDW.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1687
+        },
+        {
+          "aspect_ratio": 12.442,
+          "height": 346,
+          "iso_639_1": "en",
+          "file_path": "/AlqwthV5hKUL0ZWQXF7kJl8yw2I.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4305
+        },
+        {
+          "aspect_ratio": 11.352,
+          "height": 364,
+          "iso_639_1": "en",
+          "file_path": "/tOdBxFMNreHHuLmzquB5P9yVisu.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4132
+        },
+        {
+          "aspect_ratio": 3.187,
+          "height": 401,
+          "iso_639_1": "en",
+          "file_path": "/i2JUgnxofk7JAQy09sgNA1MSN3Z.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1278
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+          "vote_average": 6.346,
+          "vote_count": 39,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2196,
+          "iso_639_1": "en",
+          "file_path": "/8i4s1mb3T3C0HHhSNR4nDMqRDgm.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 1464
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_639_1": "en",
+          "file_path": "/qH2f0e19oklRgiq8vpnRuaXkuT.jpg",
+          "vote_average": 4.722,
+          "vote_count": 18,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/gJCRERaZs0NvHktBsfDllc09pE1.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yr7wocm26hT7IQBB78sprQVLlVd.jpg",
+          "vote_average": 4.572,
+          "vote_count": 14,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

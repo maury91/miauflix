@@ -1,0 +1,116 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23880",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d7705ad48127f800b3d54666e2939003\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "X_jjzgZX17O5Q4SXIV38CxTRZRbqFbbaxIOVfiGiXAV6d4BWjC3zbg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "ec744e2834f1415aae57fbd47ef01c38"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8FmvRL0XPAdCFRs4w2wcYBwuKUO.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "",
+    "id": 1233620,
+    "imdb_id": "tt34723784",
+    "origin_country": ["MX"],
+    "original_language": "es",
+    "original_title": "Gradual Iguana",
+    "overview": "Molestiae debeo maiores reiciendis cubo truculenter abduco uberrime ultio desparatus.",
+    "popularity": 67.9871,
+    "poster_path": "/hhfWpdNmPwU1VV7zhNA1nOMbHkH.jpg",
+    "production_companies": [
+      {
+        "id": 159756,
+        "logo_path": null,
+        "name": "Smoggy Wedge Antilles Media",
+        "origin_country": "MX"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      }
+    ],
+    "release_date": "2025-02-27",
+    "revenue": 0,
+    "runtime": 106,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Metropolitan Flyingfish",
+    "video": false,
+    "vote_average": 8.7,
+    "vote_count": 22,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Stella tergeo via eaque adinventitias celer claro ulciscor cura.",
+            "runtime": 106,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Fuga decet annus accusator fuga culpo terga tabula.",
+            "runtime": 106,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": []
+    }
+  }
+}

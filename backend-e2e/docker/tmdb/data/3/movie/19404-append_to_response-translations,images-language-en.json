@@ -1,0 +1,230 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3896",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"877b482547ea888dc5f31510b5b857b3\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "skximpkGsqmRt0wB9_cDGrdIL_nZXnhm2r0vKHVO-pL9FufidHl__w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/90ez6ArvpO8bvpyIngBuwXOqJm5.jpg",
+    "belongs_to_collection": null,
+    "budget": 13200000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "",
+    "id": 19404,
+    "imdb_id": "tt0112870",
+    "origin_country": ["IN"],
+    "original_language": "hi",
+    "original_title": "Individual Canidae",
+    "overview": "Adinventitias acervus culpo videlicet ubi comptus sortitus.",
+    "popularity": 9.173,
+    "poster_path": "/rfcy6Gd3PbFIqwZX5U8xnbv7jOc.jpg",
+    "production_companies": [
+      {
+        "id": 1569,
+        "logo_path": "/lvzN86o3jrP44DIvn4SMBLOl9PF.png",
+        "name": "Prickly Jocasta Nu Entertainment",
+        "origin_country": "IN"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IN",
+        "name": "India"
+      }
+    ],
+    "release_date": "1995-10-20",
+    "revenue": 100000000,
+    "runtime": 190,
+    "spoken_languages": [
+      {
+        "english_name": "Hindi",
+        "iso_639_1": "hi",
+        "name": "हिन्दी"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Mollitia adinventitias acervus.",
+    "title": "Graceful Possum",
+    "video": false,
+    "vote_average": 8.516,
+    "vote_count": 4486,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Non astrum alter stipes dedecor ex crapula cruentus crastinus vicinus.",
+            "runtime": 190,
+            "tagline": "Villa non astrum.",
+            "title": "Busy Ferret"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Caterva thesaurus suffoco. Depono claro viscus. Accusantium aestas brevis aestas sapiente earum tandem deludo.",
+            "runtime": 189,
+            "tagline": "",
+            "title": "Tiny Antlion"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Legal Tuna"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Caterva thesaurus suffoco. Depono claro viscus. Accusantium aestas brevis aestas sapiente earum tandem deludo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Tiny Antlion"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/vI3aUGTuRRdM7J78KIdW98LdxE5.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/jgvpmV3OehTGXVTkfL06NAvBm2d.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.64,
+          "height": 292,
+          "iso_639_1": "en",
+          "file_path": "/yeMW3DcyEthgtsqp5Se7YnPRJwp.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 479
+        },
+        {
+          "aspect_ratio": 1.251,
+          "height": 1273,
+          "iso_639_1": "en",
+          "file_path": "/8MMzKRvFzGQXYaavPgenBnfPzrI.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1593
+        },
+        {
+          "aspect_ratio": 1.665,
+          "height": 510,
+          "iso_639_1": "en",
+          "file_path": "/2y2BbO3udAS9Zfzya3ifqUn7JUh.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 849
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/rfcy6Gd3PbFIqwZX5U8xnbv7jOc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_639_1": "en",
+          "file_path": "/gTt7AkB81KhVKwMHVWG16BAaZX2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/1hMglJ7PzU6FLUlJW2Wy0UCEfIl.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2000,
+          "iso_639_1": "en",
+          "file_path": "/ktejodbcdCPXbMMdnpI9BUxW6O8.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1333
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/4rxzzmZhbwPZAqeXpw82jf7tQ4u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

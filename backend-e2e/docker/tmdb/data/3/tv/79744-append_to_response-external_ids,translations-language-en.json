@@ -1,0 +1,260 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8292",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f593810372a30265a4c097aee36d20b1\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "40G8spWLosBqPiGXy0spcVyb9pctAmYu0IMNMn8f_f5qOsQmjehpBg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "108979e82b494b21a1e63d45841dacff"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2m1Mu0xPj4SikiqkaolTRUcNtWH.jpg",
+    "created_by": [
+      {
+        "id": 67855,
+        "credit_id": "5b12fbf10e0a263dbb0089e5",
+        "name": "Linda Wolf",
+        "original_name": "Linda Wolf",
+        "gender": 2,
+        "profile_path": "/eIyGbyHTfsIxEOPlD5lByW9A80y.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2018-10-16",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://flippant-farm.name",
+    "id": 79744,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-13",
+    "last_episode_to_air": {
+      "id": 6134265,
+      "name": "Wet Barnacle",
+      "overview": "Certus pax consuasor creta una audeo concedo villa subseco centum.",
+      "vote_average": 8.824,
+      "vote_count": 17,
+      "air_date": "2025-05-13",
+      "episode_number": 18,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 43,
+      "season_number": 5,
+      "show_id": 79744,
+      "still_path": "/eupE6Avy3vb2S4CEjnuR03yezzM.jpg"
+    },
+    "name": "Outside Meadowlark",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2,
+        "logo_path": "/2uy2ZWcplrSObIyt4x0Y9rkG6qO.png",
+        "name": "Accused R4-P17 Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 98,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Legislative Scallop",
+    "overview": "Modi tabella vulariter cras admoneo.",
+    "popularity": 224.0218,
+    "poster_path": "/bL1mwXDnH5fCxqc4S2n40hoVyoe.jpg",
+    "production_companies": [
+      {
+        "id": 19366,
+        "logo_path": "/vOH8dyQhLK01pg5fYkgiS31jlFm.png",
+        "name": "Motionless Wilhuff Tarkin Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 8147,
+        "logo_path": "/q6HOAdSNgCbeOqwoMVRc6REgbXF.png",
+        "name": "Legitimate Tion Medon Studios",
+        "origin_country": "CA"
+      },
+      {
+        "id": 28523,
+        "logo_path": "/zzULw9w7d50BHR8fE30PZT3zJ1D.png",
+        "name": "Rotten Grievous Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 236613,
+        "logo_path": "/9DTggoZARHzATCRewGRs9XSNOWP.png",
+        "name": "Single Roos Tarpals Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2018-10-16",
+        "episode_count": 20,
+        "id": 104126,
+        "name": "Season 1",
+        "overview": "A life-changing incident pushes a 45-year-old man to chase his dream of becoming a cop. But he must prove himself to his LAPD superiors to make the cut.",
+        "poster_path": "/c5tWybs91GuwEFOucnj7yZu2YLu.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2019-09-29",
+        "episode_count": 20,
+        "id": 127101,
+        "name": "Season 2",
+        "overview": "Six months into his career as a cop, John Nolan, the oldest rookie in the LAPD, has used his life experience, determination and sense of humor to keep up with rookies 20 years his junior. But as he embarks on the second half of his rookie year, Nolan will be put to the test by a host of new challenges, romantic relationships and deadly criminals, as he looks to figure out what kind of cop he ultimately wants to be.",
+        "poster_path": "/arPUIveaNTdlZeSrOPrgof6UvhQ.jpg",
+        "season_number": 2,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2021-01-02",
+        "episode_count": 14,
+        "id": 173119,
+        "name": "Season 3",
+        "overview": "As their training comes to an end, Nolan and his fellow rookies on the force must navigate complex professional and personal challenges.",
+        "poster_path": "/6hChiX0vIjWY4y2kz1WndHVMsDu.jpg",
+        "season_number": 3,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2021-09-26",
+        "episode_count": 22,
+        "id": 202438,
+        "name": "Season 4",
+        "overview": "Officer Nolan and the squad at the LAPD face their biggest challenges yet as they solve complex crimes involving their own team.",
+        "poster_path": "/gSGj4zhuFllpZEkHGdsBMV2BGsq.jpg",
+        "season_number": 4,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": "2022-09-25",
+        "episode_count": 22,
+        "id": 297660,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/cofQdlJ0voWzWlpisBqfuRChTbf.jpg",
+        "season_number": 5,
+        "vote_average": 8.2
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Concido modi tabella vulariter.",
+    "type": "Scripted",
+    "vote_average": 8.521,
+    "vote_count": 2460,
+    "external_ids": {
+      "imdb_id": "tt7587890",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 350665,
+      "tvrage_id": null,
+      "wikidata_id": "Q48744320",
+      "facebook_id": "TheRookieABC",
+      "instagram_id": "therookieabc",
+      "twitter_id": "TheRookie"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Tollo curso adiuvo. Trado cibus soluta cogo capto decretum coepi audacia bibo termes. Damno incidunt cur curis beatus terminatio attonbitus aperte.",
+            "homepage": "",
+            "tagline": "Aliquam tollo curso adiuvo via trado cibus."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Denique quos argumentum crur atrox summisse pecus.",
+            "homepage": "",
+            "tagline": "Ipsam denique quos."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Ill Vulture",
+            "overview": "Denique quos argumentum crur atrox summisse pecus.",
+            "homepage": "",
+            "tagline": "Ipsam denique quos."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Totam fuga turpis. Vos voro placeat. Sint verumtamen suasoria ara admitto tum vado velociter decens amo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Unpleasant Chinchilla",
+            "overview": "Vociferor victoria voveo vae cometes defungo desolo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

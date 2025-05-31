@@ -1,0 +1,260 @@
+{
+  "headers": {
+    "age": "1217",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8225",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1bc219c2688af53224f80b23c3183eeb\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Fj40Ue9H2snl6pZotmSoLf5H82bdVwXJeXPQjUy-TfWH2Yf_FNRStQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2eIlCirgcvEwmCSYh2wDfz5Sxvz.jpg",
+    "created_by": [
+      {
+        "id": 52001,
+        "credit_id": "5259743a760ee34661a5a053",
+        "name": "Darlene Dietrich-Dooley",
+        "original_name": "Darlene Dietrich-Dooley",
+        "gender": 2,
+        "profile_path": "/dhH9oElislVwxUUyt9jTT7jA3OK.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2013-09-23",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://miserable-talk.net",
+    "id": 46952,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2023-07-13",
+    "last_episode_to_air": {
+      "id": 4406558,
+      "name": "Oral Koala",
+      "overview": "Accendo impedit vilitas thema crebro talio delibero canis vergo blandior.",
+      "vote_average": 7.6,
+      "vote_count": 10,
+      "air_date": "2023-07-13",
+      "episode_number": 22,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 43,
+      "season_number": 5,
+      "show_id": 46952,
+      "still_path": "/qOlHi2z7cGY9dY7RhhGaWIKnMgk.jpg"
+    },
+    "name": "Querulous Panda",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Convincing R5-D4 Media",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 122,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Rude Gibbon",
+    "overview": "Tot curiositas capitulus colligo audio nam cultura solio cras arbustum. Certe ipsa nemo tempore depraedor attonbitus.",
+    "popularity": 188.0128,
+    "poster_path": "/4HTfd1PhgFUenJxVuBDNdLmdr0c.jpg",
+    "production_companies": [
+      {
+        "id": 11073,
+        "logo_path": "/aCbASRcI1MI7DXjPbSW9Fcv9uGR.png",
+        "name": "Nursing C-3PO Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 1302,
+        "logo_path": "/zC3b70ixHh89qJIikLQPEvLqbPM.png",
+        "name": "Right Qui-Gon Jinn Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Nasty Bail Prestor Organa Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2013-09-10",
+        "episode_count": 11,
+        "id": 55083,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/5ZeJIlhrYO3zgW2JN62mi6mXkSM.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2013-09-22",
+        "episode_count": 22,
+        "id": 55082,
+        "name": "Season 1",
+        "overview": "For decades, ex-government agent Raymond \"Red\" Reddington has been one of the FBI’s Most Wanted fugitives. Brokering shadowy deals for criminals across the globe, Red was known by many as the \"Concierge of Crime.\" Now, he’s mysteriously surrendered to the FBI with an explosive offer: he will help catch the world’s most elusive criminals, under the condition that he speaks only to Elizabeth \"Liz\" Keen, an FBI profiler fresh out of Quantico. For Liz, it’s going to be one hell of a first day on the job.",
+        "poster_path": "/kDEItvTUVpDOMQzPqNxgX5ihAWQ.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2014-09-21",
+        "episode_count": 22,
+        "id": 61357,
+        "name": "Season 2",
+        "overview": "For decades, ex-government agent Raymond \"Red\" Reddington has been one of the FBI's Most Wanted fugitives. He mysteriously surrendered to the FBI but now the FBI works for him as he identifies a \"blacklist\" of politicians, mobsters, spies and international terrorists. He will help catch them all... with the caveat that Elizabeth \"Liz\" Keen continues to work as his partner. Red will teach Liz to think like a criminal and \"see the bigger picture\"... whether she wants to or not.",
+        "poster_path": "/4q6rIEn62nqxxgeuF9rDdDkUnl1.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2015-09-30",
+        "episode_count": 23,
+        "id": 70935,
+        "name": "Season 3",
+        "overview": "Now a fugitive on the run, Liz must figure out how to protect herself from the fallout of her actions in the explosive season two finale.",
+        "poster_path": "/mivR9jhIye1XT4vdGL5pWC28cYz.jpg",
+        "season_number": 3,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2016-09-21",
+        "episode_count": 22,
+        "id": 80082,
+        "name": "Season 4",
+        "overview": "A mysterious man claiming to be Liz’s real father targets her, but first she must resolve the mystery of her lost childhood and reconcile her true identity with the elusive memories corrupted by Reddington. Without the truth, every day holds more danger for herself, her baby and her husband Tom. Meanwhile, the Task Force reels from Liz’s resurrection and friendships are fractured. Betrayed by those closest to him, Reddington’s specific moral code demands justice, all the while battling an army of new and unexpected blacklisters.",
+        "poster_path": "/d5AJOxPzGkAHiaCHcESVCim1vHu.jpg",
+        "season_number": 4,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2017-09-27",
+        "episode_count": 22,
+        "id": 91328,
+        "name": "Season 5",
+        "overview": "Feeling surprisingly unencumbered, Raymond Reddington is back, and in the process of rebuilding his criminal empire. His lust for life is ever-present as he lays the foundation for this new enterprise - one that he'll design with Elizabeth Keen by his side. Living with the reality that Red is her father, Liz finds herself torn between her role as an FBI agent and the temptation to act on her more criminal instincts. In a world where the search for Blacklisters has become a family trade, Red will undoubtedly reclaim his moniker as the “Concierge of Crime.”",
+        "poster_path": "/rl3yjCHmTIFKOkHtBjtxw4H18K0.jpg",
+        "season_number": 5,
+        "vote_average": 7.6
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Valde tot curiositas capitulus colligo audio.",
+    "type": "Scripted",
+    "vote_average": 7.638,
+    "vote_count": 3280,
+    "external_ids": {
+      "imdb_id": "tt2741602",
+      "freebase_mid": "/m/0s8xvyw",
+      "freebase_id": null,
+      "tvdb_id": 266189,
+      "tvrage_id": 35048,
+      "wikidata_id": "Q13148212",
+      "facebook_id": "NBCBlacklist",
+      "instagram_id": "nbcblacklist",
+      "twitter_id": "NBCBlacklist"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Collum deripio adnuo dolore. Adflicto cultura necessitatibus auctus amplus victoria tui vinculum alo ustilo. Ipsa autem verbera acceptus ancilla territo sodalitas summa sulum.",
+            "homepage": "",
+            "tagline": "Barba collum deripio adnuo dolore vox adflicto."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Secure Rabbit",
+            "overview": "Callide necessitatibus inflammatio dicta pecus deludo tam contigo adinventitias cupiditate. Cedo vetus acquiro auctus quibusdam. Creptio coruscus agnosco saepe capitulus summopere centum vetus aliqua ad.",
+            "homepage": "",
+            "tagline": "Vigilo callide necessitatibus inflammatio dicta pecus deludo."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Theoretical Mite",
+            "overview": "Depulso vespillo amet tenuis amplexus consequuntur. Adnuo tergiversatio suppono adflicto dens cavus comprehendo ad comminor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Occupational Barnacle",
+            "overview": "Solium deorsum vero tripudio truculenter uredo statim.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Secure Rabbit",
+            "overview": "Callide necessitatibus inflammatio dicta pecus deludo tam contigo adinventitias cupiditate. Cedo vetus acquiro auctus quibusdam. Creptio coruscus agnosco saepe capitulus summopere centum vetus aliqua ad.",
+            "homepage": "",
+            "tagline": "Vigilo callide necessitatibus inflammatio dicta pecus deludo."
+          }
+        }
+      ]
+    }
+  }
+}

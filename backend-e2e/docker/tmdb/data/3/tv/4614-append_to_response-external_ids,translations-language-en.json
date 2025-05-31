@@ -1,0 +1,268 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20977",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"02873aa72683beae9692bb2ac8188c98\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "FhtDvC79SfzNMTWqG1OrDoQUhIJQHfwzlc8B5jIz_kwOzg-hVGfAtw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/c1aBrG5s5xFa6Tbnihu2Hhj4t2q.jpg",
+    "created_by": [
+      {
+        "id": 1218788,
+        "credit_id": "525776ce760ee36aaa5306f0",
+        "name": "Derek Kilback",
+        "original_name": "Derek Kilback",
+        "gender": 2,
+        "profile_path": "/9QMLJDoA3hYlWdOhQyTVqimPok9.jpg"
+      },
+      {
+        "id": 160145,
+        "credit_id": "540dcbbf0e0a262b3d0069a8",
+        "name": "Alice Hyatt",
+        "original_name": "Alice Hyatt",
+        "gender": 2,
+        "profile_path": "/8xjZRZvWfn0aaZVHlYxRUtlqJIR.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2003-09-23",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://terrible-swivel.info",
+    "id": 4614,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-05",
+    "last_episode_to_air": {
+      "id": 6063449,
+      "name": "Convenient Seahorse",
+      "overview": "Tonsor non bestia arx.",
+      "vote_average": 8,
+      "vote_count": 3,
+      "air_date": "2025-05-05",
+      "episode_number": 19,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 43,
+      "season_number": 5,
+      "show_id": 4614,
+      "still_path": "/gVibhEdIR3hpAfrkQcW17RY1nhV.jpg"
+    },
+    "name": "Wasteful Crawdad",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Architectural Saesee Tiin Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 239,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Cheap Cardinal",
+    "overview": "Demum adsidue charisma tergo crur pectus eligendi cubitum solitudo denique. Undique crudelis coaegresco utrimque cruentus ventus decipio deduco vester. Amitto correptius aurum vergo depraedor sumptus vos.",
+    "popularity": 246.9009,
+    "poster_path": "/mBcu8d6x6zB1el3MPNl7cZQEQ31.jpg",
+    "production_companies": [
+      {
+        "id": 9223,
+        "logo_path": "/40qzTBM38vokoWhLKurficZ5syV.png",
+        "name": "Yammering Yoda Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 23341,
+        "logo_path": null,
+        "name": "Selfish Gregar Typho Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1081,
+        "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
+        "name": "Graceful Jek Tono Porkins Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2003-04-22",
+        "episode_count": 126,
+        "id": 14081,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/FlzeiA7DV0KQQ6FOExjTaHWBjs.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2003-09-22",
+        "episode_count": 23,
+        "id": 14073,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/ruiOyO3M47kM4TSpsuwyxr1HnSR.jpg",
+        "season_number": 1,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2004-09-27",
+        "episode_count": 23,
+        "id": 14076,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/xuHMeqMludcvuc044p1KK8P0khI.jpg",
+        "season_number": 2,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2005-09-19",
+        "episode_count": 24,
+        "id": 14077,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/oODrsSxzOkk7ODM2D13OVSdhhGM.jpg",
+        "season_number": 3,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2006-09-18",
+        "episode_count": 24,
+        "id": 14075,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/g8ITNivPqH4oO6DooQyTXpV4k7O.jpg",
+        "season_number": 4,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2007-09-24",
+        "episode_count": 19,
+        "id": 14074,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/TuaO9cUbFMoUvWXozQDBXxk0jX.jpg",
+        "season_number": 5,
+        "vote_average": 7.3
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Utrum demum adsidue charisma tergo crur pectus eligendi.",
+    "type": "Scripted",
+    "vote_average": 7.622,
+    "vote_count": 2358,
+    "external_ids": {
+      "imdb_id": "tt0364845",
+      "freebase_mid": "/m/03m8sg",
+      "freebase_id": "/en/ncis",
+      "tvdb_id": 72108,
+      "tvrage_id": 4628,
+      "wikidata_id": "Q4525",
+      "facebook_id": "NCISverse",
+      "instagram_id": "ncisverse",
+      "twitter_id": "ncisverse"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Pax cuppedia sui.",
+            "homepage": "https://ecstatic-alternative.name",
+            "tagline": "Acervus pax cuppedia sui."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Conservative Rabbit",
+            "overview": "Victus turba tergiversatio eaque defleo combibo territo molestiae infit alias. Depraedor depopulo certe audentia ustilo venio eius aut adfero apparatus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Repulsive Emu",
+            "overview": "Cicuta decretum comparo temeritas decimus acsi error creptio vicissitudo anser. Apparatus cuppedia sodalitas dedico cotidie compono charisma. Incidunt sub capto uredo arcus tertius paens defungo tergum callide.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Bizarre Turkey",
+            "overview": "Triumphus una caveo corrupti cumque volva. Solus collum virtus curatio. Taceo studio textus nobis solvo civis certe ab defungo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Conservative Rabbit",
+            "overview": "Victus turba tergiversatio eaque defleo combibo territo molestiae infit alias. Depraedor depopulo certe audentia ustilo venio eius aut adfero apparatus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1589",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"50f89dc1ea33dbe47428b9f90c58ea18\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "OmTmY0lwhQd9jaAqViRBSSYPCMS6cexpNLpRcnaiALoh9LSt-ZmxYg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fQq1FWp1rC89xDrRMuyFJdFUdMd.jpg",
+    "belongs_to_collection": {
+      "id": 729322,
+      "name": "Interesting Lemming",
+      "poster_path": "/LdSn17U6ybhtPJT3S6fTNRni5Y.jpg",
+      "backdrop_path": "/hXF55codODfnzTZDExbUbfFmA9y.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "",
+    "id": 761053,
+    "imdb_id": "tt13535456",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Intermediate Platypus",
+    "overview": "Callide atqui volo quam spoliatio aperiam dolorum speciosus.",
+    "popularity": 2.2118,
+    "poster_path": "/fYtHxTxlhzD4QWfEbrC1rypysSD.jpg",
+    "production_companies": [
+      {
+        "id": 92153,
+        "logo_path": "/psjvYkjjgAPtS8utnFYDM8t8yi7.png",
+        "name": "Responsible Finis Valorum Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2020-11-19",
+    "revenue": 0,
+    "runtime": 102,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Eerie Harrier",
+    "video": false,
+    "vote_average": 8.376,
+    "vote_count": 1058,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Derelinquo ver carmen aestivus. Volup adopto theca. Cavus angulus totus vetus pecco bonus vulnus suscipit.",
+            "runtime": 102,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Scientific Silverfish"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/fYtHxTxlhzD4QWfEbrC1rypysSD.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/qtX2Fg9MTmrbgN1UUvGoCsImTM8.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

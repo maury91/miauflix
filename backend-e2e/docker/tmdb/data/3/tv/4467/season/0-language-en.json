@@ -1,0 +1,76 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21427",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3e1489eaced7ba977437e384b5469fc0\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "pQXuXDGo3hfYSgzCOY-hQ58YEcUiriT7joAJQ_VJ1N3bEQxzg8Vcdw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "6261",
+    "x-memc-expires": "21427",
+    "x-memc-key": "a5bd52ba360b9546335e3b3a478a5555",
+    "x-task-id": "03e2018322f74fe8b973ddf1bd673363"
+  },
+  "data": {
+    "_id": "52576a8e760ee36aaa3d6971",
+    "air_date": "1992-02-06",
+    "episodes": [
+      {
+        "air_date": "1992-02-06",
+        "episode_number": 1,
+        "episode_type": "standard",
+        "id": 312737,
+        "name": "Chubby Dove",
+        "overview": "Quo curso bellum amiculum benigne statua.",
+        "production_code": "",
+        "runtime": 60,
+        "season_number": 0,
+        "show_id": 4467,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "department": "Directing",
+            "job": "Director",
+            "credit_id": "52576a8e760ee36aaa3d698d",
+            "adult": false,
+            "gender": 0,
+            "id": 1217251,
+            "known_for_department": "Production",
+            "name": "Danielle Langworth-Schowalter",
+            "original_name": "Danielle Langworth-Schowalter",
+            "popularity": 0.7869,
+            "profile_path": null
+          },
+          {
+            "department": "Writing",
+            "job": "Writer",
+            "credit_id": "52576ae6760ee36aaa3e03b9",
+            "adult": false,
+            "gender": 2,
+            "id": 1217235,
+            "known_for_department": "Writing",
+            "name": "Lucas Mraz Sr.",
+            "original_name": "Lucas Mraz Sr.",
+            "popularity": 0.1445,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": []
+      }
+    ],
+    "name": "Specials",
+    "overview": "",
+    "id": 13386,
+    "poster_path": null,
+    "season_number": 0,
+    "vote_average": 0
+  }
+}

@@ -8,7 +8,7 @@
     "test:coverage": "jest --coverage",
     "test:debug": "node --inspect-brk=0.0.0.0:9229 node_modules/.bin/jest --runInBand",
     "test:only": "./scripts/test-only.sh",
-    "dev": "./scripts/dev.sh",
+    "dev": "./scripts/env.sh dev",
     "dev:detached": "docker compose -f docker/docker-compose.dev.yml up --build -d",
     "dev:stop": "docker compose -f docker/docker-compose.dev.yml down -v",
     "clean": "docker compose -f docker/docker-compose.test.yml down -v --remove-orphans && docker compose -f docker/docker-compose.dev.yml down -v --remove-orphans"

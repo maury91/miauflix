@@ -1,0 +1,241 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19510",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c4526da41f7fc6ab826dc91284fb5469\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "FuCOj0HShvWxOJ1L8jYmkiAHeHc01DOAbnIwi37i06e62Qnf9GR6_A==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tKtxE1KzqKDg3HIXNnlr7VpuWzd.jpg",
+    "created_by": [],
+    "episode_run_time": [22],
+    "first_air_date": "2007-04-23",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://present-province.biz",
+    "id": 4086,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-09",
+    "last_episode_to_air": {
+      "id": 6223004,
+      "name": "Awful Swallow",
+      "overview": "Adulatio debitis combibo abduco vulgivagus confugo tego curtus officia natus. Via acerbitas truculenter tergeo quos.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-23",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 22,
+      "season_number": 5,
+      "show_id": 4086,
+      "still_path": null
+    },
+    "name": "Managing Locust",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 143,
+        "logo_path": "/tm2UclPxfamHyFuILLq4jNxsi8v.png",
+        "name": "Shaky Darth Vader Productions",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 112,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Rude Junglefowl",
+    "overview": "Cena stips conculco thesaurus undique sulum cui depraedor. Astrum tutis aurum qui dedico defetiscor virtus accommodo depromo.",
+    "popularity": 239.8233,
+    "poster_path": "/zeTYGOpVDI68gw47A5EmNhGDP7c.jpg",
+    "production_companies": [
+      {
+        "id": 134690,
+        "logo_path": "/irfF0sDNJDS3wFjflgfRLZUoMmF.png",
+        "name": "Pregnant Finis Valorum Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 26784,
+        "logo_path": "/p3qLEuW57lelJkmC9TIuwIYgsg3.png",
+        "name": "Complex Dud Bolt Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 200761,
+        "logo_path": null,
+        "name": "Spotless Leia Organa Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 200762,
+        "logo_path": null,
+        "name": "Mute Arvel Crynyd Studios",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2008-11-23",
+        "episode_count": 48,
+        "id": 12077,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2007-04-23",
+        "episode_count": 12,
+        "id": 12068,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/du5qUGifFbdqtS8WQwmSJVwoQh8.jpg",
+        "season_number": 1,
+        "vote_average": 0.5
+      },
+      {
+        "air_date": "2007-10-01",
+        "episode_count": 13,
+        "id": 12069,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/bcFlFqiuCPrRYvfRJJ3lY2mSQqi.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-03-10",
+        "episode_count": 13,
+        "id": 12070,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/oUB9bui7Uz0uQguSRBMB9qdx0eX.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-07-14",
+        "episode_count": 13,
+        "id": 12071,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/ng3rqTB6TYTJyde6HmBpTSy4Io.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-10-27",
+        "episode_count": 13,
+        "id": 12072,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/8617Y2XJ8FtkxZvqhKMhLyb1wZ6.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Reality",
+    "vote_average": 6.727,
+    "vote_count": 64,
+    "external_ids": {
+      "imdb_id": "tt1020913",
+      "freebase_mid": "/m/02r827y",
+      "freebase_id": "/en/diners_drive_ins_and_dives",
+      "tvdb_id": 82918,
+      "tvrage_id": null,
+      "wikidata_id": "Q3028299",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Civitas adopto viriliter vestigium optio summisse torrens decerno commodi excepturi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Grieving Pelican",
+            "overview": "Deserunt decumbo voluptatem vulpes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Skilled Tortoise",
+            "overview": "Contigo consequuntur corporis non apostolus tristis colo tondeo. Aer veritas attollo ipsa vado arcesso somniculosus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+services:
+  nordvpn:
+    image: ghcr.io/bubuntux/nordlynx
+    hostname: nordvpn
+    container_name: nordvpn
+    env_file: .env
+    cap_add:
+      - NET_ADMIN # Required
+      - SYS_MODULE # Maybe required
+    environment:
+      - PRIVATE_KEY=$NORDVPN_PRIVATE_KEY # Using token from .env file
+      - CONNECT=United_States # Optional - Change to your preferred server location
+      - NET_LOCAL=192.168.0.0/16 # Optional - Your local network
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1 # Maybe required
+      - net.ipv4.conf.all.rp_filter=2 # Set reverse path filter to loose mode
+      - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
+    restart: unless-stopped
+
+  backend:
+    image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}:${MIAUFLIX_VERSION:-latest}
+    container_name: miauflix-backend
+    depends_on:
+      - nordvpn
+    environment:
+      - DATA_DIR=/usr/data
+      - DEBUG=SourceService,App,MovieSync,ListService,Cache,MagnetService
+    volumes:
+      - ./data:/usr/data/
+    network_mode: service:nordvpn # Route traffic through NordVPN
+    # No ports section here as they're defined in the nordvpn service
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: miauflix-nginx
+    ports:
+      - '80:80' # Expose HTTP port
+      - '443:443' # Expose HTTPS port
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    env_file: .env
+    environment:
+      - REVERSE_PROXY_SECRET=${REVERSE_PROXY_SECRET}
+      - DOMAIN=${DOMAIN}
+      - WWW_DOMAIN=${WWW_DOMAIN}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_CERTIFICATE_KEY=${SSL_CERTIFICATE_KEY}
+      - SSL_DHPARAM=${SSL_DHPARAM}
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot
+    container_name: miauflix-certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx

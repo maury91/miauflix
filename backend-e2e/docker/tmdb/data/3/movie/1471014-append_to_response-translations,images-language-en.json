@@ -1,0 +1,104 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4240",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"98984aaa073164f8cf877b23bb81bab7\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "gbAX81TViVttVNKHGbe-c5Vn1GSdDtOoaEfmtiXUc7wtRy5KirNPhA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1AWjIUgbZYaKbwUH5qoJaKCcRkf.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://sane-passive.name",
+    "id": 1471014,
+    "imdb_id": "tt36364552",
+    "origin_country": ["US"],
+    "original_language": "fr",
+    "original_title": "Top Toucan",
+    "overview": "Minima absconditus confido animi ambitus deludo sollers beatus. Attollo caries ambulo ipsa cunae utilis aegre. Dens amor claustrum comparo synagoga.",
+    "popularity": 51.0671,
+    "poster_path": "/z73X4WKZghBh5fri31o8P6vBEB2.jpg",
+    "production_companies": [
+      {
+        "id": 134080,
+        "logo_path": null,
+        "name": "Extreme Yarael Poof Entertainment",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2025-03-26",
+    "revenue": 0,
+    "runtime": 46,
+    "spoken_languages": [],
+    "status": "Released",
+    "tagline": "",
+    "title": "Instant Amphibian",
+    "video": false,
+    "vote_average": 6,
+    "vote_count": 16,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://green-valley.net",
+            "overview": "Subito tot sto spargo tristis approbo calamitas debitis ipsum cunabula. Dolores defungo vulgus aufero ciminatio cervus cognomen sublime victoria defendo.",
+            "runtime": 46,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/1AWjIUgbZYaKbwUH5qoJaKCcRkf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/z73X4WKZghBh5fri31o8P6vBEB2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

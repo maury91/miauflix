@@ -160,7 +160,7 @@ describe('MagnetService', () => {
       expect(result).toBeNull();
       expect(logger.warn).toHaveBeenCalledWith(
         'MagnetService',
-        expect.stringContaining('Could not convert magnet to torrent')
+        expect.stringContaining('Could not convert magnet to file')
       );
     });
 
@@ -209,8 +209,7 @@ describe('MagnetService', () => {
       expect(result).toBeNull();
       expect(logger.warn).toHaveBeenCalledWith(
         'MagnetService',
-        'Hash mismatch for itorrents:',
-        expect.stringContaining(`expected: ${hash}, got: differenthash456`)
+        'Hash mismatch detected for itorrents - file validation failed'
       );
     });
   });
@@ -343,7 +342,7 @@ describe('MagnetService', () => {
       expect(result).toBe(null);
       expect(logger.warn).toHaveBeenCalledWith(
         'MagnetService',
-        'Error validating torrent buffer:',
+        'Error validating file buffer:',
         expect.any(Error)
       );
     });

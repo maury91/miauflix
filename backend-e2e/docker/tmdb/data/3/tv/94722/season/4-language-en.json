@@ -1,0 +1,50 @@
+{
+  "headers": {
+    "age": "291",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21482",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"39ddafc9daa5bcc3d5618a040564c97b\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "WwVTXk098HfXYXxjJxAT_ThQV4Jh890CAUud4hm1C0T8Wmk4Jl-UFg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "20950",
+    "x-memc-expires": "2328",
+    "x-memc-key": "71fcb51b7a0463fbd33cb4e9dd2c1675",
+    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+  },
+  "data": {
+    "_id": "5fc1738f9f51af003de9e89c",
+    "air_date": "1955-01-01",
+    "episodes": [
+      {
+        "air_date": "1955-01-01",
+        "episode_number": 1,
+        "episode_type": "finale",
+        "id": 2533024,
+        "name": "Enchanting Krill",
+        "overview": "",
+        "production_code": "",
+        "runtime": 15,
+        "season_number": 4,
+        "show_id": 94722,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [],
+        "guest_stars": []
+      }
+    ],
+    "name": "Season 1955",
+    "overview": "",
+    "id": 170279,
+    "poster_path": "/efXlmRCWwvJgeTyVrbMGkiTQdKw.jpg",
+    "season_number": 4,
+    "vote_average": 0
+  }
+}

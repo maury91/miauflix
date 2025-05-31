@@ -1,0 +1,308 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19216",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"147180fe9c26dd2c8d03fbd371aa25d1\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "492hGoZjISAfZHhrwrhhzkmiVZDB-sLjttSTu8aMs0gnxetDP9hong==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/icFWIk1KfkWLZnugZAJEDauNZ94.jpg",
+    "belongs_to_collection": null,
+    "budget": 15000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://optimal-euphonium.name",
+    "id": 1232546,
+    "imdb_id": "tt30955489",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Sunny Chimpanzee",
+    "overview": "Sapiente tergeo vesco cognomen surculus. Illum nihil beneficium adulescens vinitor decumbo.",
+    "popularity": 341.3584,
+    "poster_path": "/juA4IWO52Fecx8lhAsxmDgy3M3.jpg",
+    "production_companies": [
+      {
+        "id": 125281,
+        "logo_path": "/3hV8pyxzAJgEjiSYVv1WZ0ZYayp.png",
+        "name": "Hollow Ben Quadinaros Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 149696,
+        "logo_path": "/w0ARek3q2bIKGfoM2WRsFOqyYCB.png",
+        "name": "Closed Ki-Adi-Mundi Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 125060,
+        "logo_path": "/9giIHcLFMEQhYByHBvPB2ZuQSM8.png",
+        "name": "Bewildered R5-D4 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 829,
+        "logo_path": "/aXqwCvJSCDbTclkxAYfsT1l4Dsa.png",
+        "name": "Scary Shaak Ti Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 3287,
+        "logo_path": "/bz6GbCQQXGNE56LTW9dwgksW0Iw.png",
+        "name": "Relative Arvel Crynyd Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-23",
+    "revenue": 50023607,
+    "runtime": 103,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Comes sapiente tergeo vesco cognomen surculus.",
+    "title": "Tense Rat",
+    "video": false,
+    "vote_average": 6.46,
+    "vote_count": 475,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://expert-airline.org",
+            "overview": "Vilicus sperno tenetur.",
+            "runtime": 103,
+            "tagline": "Accommodo vilicus sperno tenetur.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://unused-damage.com",
+            "overview": "Ad crastinus admitto antea. Demens degusto cultellus dolorum quia terreo. Turba vallum attollo absque circumvenio uxor sublime repellat est provident.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Temperantia clibanus solitudo. Aperio quod tergum accedo tenetur denuncio xiphias laborum. Catena basium canto turbo eos surgo territo voco sed.",
+            "runtime": 0,
+            "tagline": "Alii temperantia clibanus solitudo tabesco aperio quod tergum.",
+            "title": "Invisible Mollusk"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ad crastinus admitto antea. Demens degusto cultellus dolorum quia terreo. Turba vallum attollo absque circumvenio uxor sublime repellat est provident.",
+            "runtime": 0,
+            "tagline": "Capillus ad crastinus admitto antea decet demens degusto.",
+            "title": "Improved Snail"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Ante claustrum trado artificiose curia quae vir molestiae video. Decimus callide atavus administratio ademptio. Arceo quam subiungo cruciamentum adduco atavus torqueo spectaculum sulum.",
+            "runtime": 0,
+            "tagline": "Ulciscor ante claustrum trado artificiose curia quae.",
+            "title": "Decent Marmot"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/zr9IbIP6fXGvuHct3Ixniibp9kI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/cAFBvddp3PWO9JlcvU2xDyxSnOf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/Mg9Swc5d6SgHKd6wh12zq4w8ZI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/4jSWNbNvqKIn1tn4MPKh1wYnuPx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/9CcuIGQN8mUTx9Z7AslbHwHJVEa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.816,
+          "height": 1297,
+          "iso_639_1": "en",
+          "file_path": "/dBx3azQIseqRr2ZUCNpVjsDSOK6.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2355
+        },
+        {
+          "aspect_ratio": 1.808,
+          "height": 1297,
+          "iso_639_1": "en",
+          "file_path": "/3IiL0AWDbVsrog76Kq0ma8KFnAW.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2345
+        },
+        {
+          "aspect_ratio": 1.771,
+          "height": 655,
+          "iso_639_1": "en",
+          "file_path": "/fELFWskmVTrRHSoD9uUILiBqAoQ.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1160
+        },
+        {
+          "aspect_ratio": 1.806,
+          "height": 129,
+          "iso_639_1": "en",
+          "file_path": "/xDBtAR6fd8ohxyJkz7lCPk6TIDn.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 233
+        },
+        {
+          "aspect_ratio": 1.769,
+          "height": 657,
+          "iso_639_1": "en",
+          "file_path": "/yLs133cf5MssOqMV79vsbvmWf8F.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1162
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/juA4IWO52Fecx8lhAsxmDgy3M3.jpg",
+          "vote_average": 7.05,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_639_1": "en",
+          "file_path": "/6O9nkcmZBymDXtxOGJmulqcxJdv.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/hEOLFrTDu1LLqSpp3m6toatwixn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/s7oUnKFtLQhTt7A9pIcVSIC31mw.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_639_1": "en",
+          "file_path": "/6lNGQOoVN5nzoJ0BgtwiqhiolA9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1400
+        }
+      ]
+    }
+  }
+}

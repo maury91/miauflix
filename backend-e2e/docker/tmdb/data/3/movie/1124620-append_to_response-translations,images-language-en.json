@@ -1,0 +1,273 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17427",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"6159bcf2147036c9b00d728234593c64\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "yGNQu3gZ-B9fnXPGj6O4uTV42D_8Ztv99lgFE-UMl1t4HK7zEtVLcg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "8687c6abae7b48fe8ca0b4465ada06ac"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6dC7ULfiutxwEAs7LjWHL2Tc7Zv.jpg",
+    "belongs_to_collection": null,
+    "budget": 10000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://kooky-in-laws.name",
+    "id": 1124620,
+    "imdb_id": "tt27714946",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Ridiculous Mammal",
+    "overview": "Sollicito coniecto demulceo curso aiunt dedico. Cedo astrum aestivus verbera condico necessitatibus.",
+    "popularity": 64.1327,
+    "poster_path": "/yYa8Onk9ow7ukcnfp2QWVvjWYel.jpg",
+    "production_companies": [
+      {
+        "id": 76907,
+        "logo_path": "/ygMQtjsKX7BZkCQhQZY82lgnCUO.png",
+        "name": "Cognitive Grievous Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 184518,
+        "logo_path": "/lOouI8ibBzhLI4qvku74FPUVT8t.png",
+        "name": "Moaning Mon Mothma Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 167684,
+        "logo_path": "/kzQwU2H6woBFti9cqjr9BrVXrst.png",
+        "name": "Poised Nute Gunray Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 85465,
+        "logo_path": "/oxx1bmXDQxeBsvYZmCxMtfJ5wa3.png",
+        "name": "Amateur Lobot Entertainment",
+        "origin_country": "CA"
+      },
+      {
+        "id": 11565,
+        "logo_path": "/S74cHHbIrdmb5M51Pft72Uo9Gz.png",
+        "name": "Fun Roos Tarpals Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 169756,
+        "logo_path": "/fGjWUCSz9MaMgx8VvxKQuNmIbYu.png",
+        "name": "Tremendous Dooku Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-02-14",
+    "revenue": 68811247,
+    "runtime": 97,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Defessus sollicito coniecto demulceo curso.",
+    "title": "Notable Toucan",
+    "video": false,
+    "vote_average": 5.905,
+    "vote_count": 663,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://delightful-notepad.com",
+            "overview": "Amoveo vulticulus cena certe tamen libero tersus.",
+            "runtime": 97,
+            "tagline": "Patruus amoveo vulticulus cena.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cibus succedo aro aer voluptate degero tandem totam sublime repudiandae. Commemoro cognomen decens desidero tantum. Minima tabula minus vesper ducimus eius adicio ustulo verbera.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Amateur Yak"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cibus succedo aro aer voluptate degero tandem totam sublime repudiandae. Commemoro cognomen decens desidero tantum. Minima tabula minus vesper ducimus eius adicio ustulo verbera.",
+            "runtime": 0,
+            "tagline": "Vere cibus succedo aro aer voluptate degero tandem.",
+            "title": "Amateur Yak"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Agnosco cavus bestia sumptus summopere venustas magnam alius desipio. Tergiversatio triumphus caelestis colo.",
+            "runtime": 98,
+            "tagline": "Tantum agnosco cavus bestia sumptus summopere.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Vomito accusamus tabula caput cultura ater officiis xiphias fugit cupiditate. Mollitia desparatus correptius cur consequuntur veritas subseco vester. Vir corrigo statim corona adopto.",
+            "runtime": 95,
+            "tagline": "",
+            "title": "Payable Buzzard"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/270hd3fc6mlfr7rRAr5CROaJ43h.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/dqRP9dsh09goAgWKuGveNkA1kyB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/fyfVfgu8fUJIqlDIfXO065AJ1OV.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.927,
+          "height": 1270,
+          "iso_639_1": "en",
+          "file_path": "/4ErxI9hrCWYewkZODZHOwmn43xe.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3717
+        },
+        {
+          "aspect_ratio": 2.927,
+          "height": 1270,
+          "iso_639_1": "en",
+          "file_path": "/6Iyl06AOfAqbKXzDmZmdesbiuRm.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3717
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yYa8Onk9ow7ukcnfp2QWVvjWYel.jpg",
+          "vote_average": 5.616,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1247,
+          "iso_639_1": "en",
+          "file_path": "/2i3KrQdUAbMgSQAnSqeienj04mQ.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 831
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/2nZE6f86GiJRGUGmIsBdVZVr5fx.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/d80cr4xWfMecc8TIPsIhMCfqbjd.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_639_1": "en",
+          "file_path": "/5prmzEx87zjB8U8YUTfxbZNkFuf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 900
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3431",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"87dd3d4e3d1b799598b788454136a662\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "qVj8a_gtdmsSmshSSaJ-YaqQi1RHx_VncN8_DnZVQ3cedE9jitNVcg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dVr11o9or7AS8AMPfwjSpEU83iU.jpg",
+    "belongs_to_collection": null,
+    "budget": 35000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10752,
+        "name": "War"
+      }
+    ],
+    "homepage": "https://awful-zoo.name",
+    "id": 423,
+    "imdb_id": "tt0253474",
+    "origin_country": ["FR", "DE", "PL", "GB"],
+    "original_language": "en",
+    "original_title": "Good Leopon",
+    "overview": "Inflammatio defero nesciunt pariatur alioqui conitor pariatur avaritia aiunt nemo.",
+    "popularity": 12.9046,
+    "poster_path": "/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg",
+    "production_companies": [
+      {
+        "id": 250,
+        "logo_path": "/evWKasiElVQywuKv2dI72P9twz8.png",
+        "name": "Vast Jar Jar Binks Pictures",
+        "origin_country": "PL"
+      },
+      {
+        "id": 208,
+        "logo_path": "/bxQYlRhQu6nbohBEL0SWz8xIAGy.png",
+        "name": "Xerothermic Wedge Antilles Studios",
+        "origin_country": "FR"
+      },
+      {
+        "id": 260,
+        "logo_path": null,
+        "name": "Sunny Kit Fisto Studios",
+        "origin_country": "PL"
+      },
+      {
+        "id": 264,
+        "logo_path": "/fA90qwUKgPhMONqtwY60GaHRyrW.png",
+        "name": "Maximum Ki-Adi-Mundi Productions",
+        "origin_country": "DE"
+      },
+      {
+        "id": 266,
+        "logo_path": null,
+        "name": "Administrative Jango Fett Studios",
+        "origin_country": "PL"
+      },
+      {
+        "id": 355,
+        "logo_path": null,
+        "name": "Blushing Tarfful Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 694,
+        "logo_path": "/5LEHONGkZBIoWvp1ygHOF8iyi1M.png",
+        "name": "Neat Quarsh Panaka Media",
+        "origin_country": "FR"
+      },
+      {
+        "id": 104,
+        "logo_path": "/9aotxauvc9685tq9pTcRJszuT06.png",
+        "name": "Frightened Shaak Ti Studios",
+        "origin_country": "FR"
+      },
+      {
+        "id": 6480,
+        "logo_path": "/qJUUNzFYXNUDaisssBTV3Zdki9R.png",
+        "name": "Colossal Leia Organa Entertainment",
+        "origin_country": "PL"
+      },
+      {
+        "id": 265,
+        "logo_path": null,
+        "name": "Awake Beru Whitesun lars Entertainment",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      },
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      },
+      {
+        "iso_3166_1": "PL",
+        "name": "Poland"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2002-09-17",
+    "revenue": 120098945,
+    "runtime": 150,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "Polish",
+        "iso_639_1": "pl",
+        "name": "Polski"
+      },
+      {
+        "english_name": "Russian",
+        "iso_639_1": "ru",
+        "name": "Pусский"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Xiphias inflammatio defero.",
+    "title": "Elated Wombat",
+    "video": false,
+    "vote_average": 8.379,
+    "vote_count": 9537,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://light-worship.org",
+            "overview": "Umquam somniculosus templum audio accusantium addo abeo optio campana adhaero. Carbo adsum itaque adeptio vestigium vereor tego cribro.",
+            "runtime": 150,
+            "tagline": "Vulariter umquam somniculosus templum audio.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Articulus sperno absens. Adficio verumtamen agnosco labore vulgivagus ater. Amitto creber accusator.",
+            "runtime": 150,
+            "tagline": "",
+            "title": "Continental Quelea"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cras colo ut carmen tendo thesis tepidus cilicium. Beatus censura stillicidium curiositas suscipio. Ait vulariter turba terminatio fuga admitto contego.",
+            "runtime": 150,
+            "tagline": "Sublime cras colo ut carmen tendo thesis.",
+            "title": "Tasty Walrus"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cras colo ut carmen tendo thesis tepidus cilicium. Beatus censura stillicidium curiositas suscipio. Ait vulariter turba terminatio fuga admitto contego.",
+            "runtime": 148,
+            "tagline": "Sublime cras colo ut carmen tendo thesis.",
+            "title": "Tasty Walrus"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Decumbo depono optio.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Gleaming Magpie"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/hg84hWpEQFjXMsoIPgskFFAtE2e.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/818DcV3GLGbTWCnfdK3SIIihNbQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/A3WoE8l6ym5Zy4x9Mx2zEotNgl9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/ybUO1qKCvGBUoleKIgVKcqjACpg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/kzPPpg5zmbVjkkT2wvgnhNSbn5y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.409,
+          "height": 1197,
+          "iso_639_1": "en",
+          "file_path": "/xLresrupcXIq7AfeMc5V6XHCxd5.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4081
+        },
+        {
+          "aspect_ratio": 5.581,
+          "height": 229,
+          "iso_639_1": "en",
+          "file_path": "/cwJGgUtZUQcq8pPGqyJRU4CWS97.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 3.379,
+          "height": 232,
+          "iso_639_1": "en",
+          "file_path": "/x8tRjHEWwznxLNQns7lfXqPZru2.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 784
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/2hFvxCCWrTmCYwfy7yum0GKRi3Y.jpg",
+          "vote_average": 6.834,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/enFfoFd3TYs6ttTxrBIfmecQPnz.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_639_1": "en",
+          "file_path": "/gGzlyG6SWKHG8SbIvUtl6rkHoTA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_639_1": "en",
+          "file_path": "/53uKI02aTMFYHhEde5c1O43fWxl.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_639_1": "en",
+          "file_path": "/3DzePKMbLMIM636S6syCy3cLPqj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1280
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "headers": {
+    "age": "1217",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3432",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"82223e32b282f7b2c88911a602181010\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "_tXH3SdpY6OMqUhoY9RT2-7KonajtJNsxS4VBCPWuVT_DhRh5XE9mA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/cFZYtCx54BmFXe4wExts2tPnPHh.jpg",
+    "created_by": [
+      {
+        "id": 117443,
+        "credit_id": "52598d80760ee34661b4d2e0",
+        "name": "Arnold Wilkinson",
+        "original_name": "Arnold Wilkinson",
+        "gender": 2,
+        "profile_path": "/tRMEuYNVFjXYJ7gh1sGJSxq9Vwq.jpg"
+      },
+      {
+        "id": 1214477,
+        "credit_id": "61529b83e18b97002c3919e2",
+        "name": "April Bogan",
+        "original_name": "April Bogan",
+        "gender": 2,
+        "profile_path": "/3tK3c9pZlGFBJaOxwH00svHtu8U.jpg"
+      }
+    ],
+    "episode_run_time": [42],
+    "first_air_date": "2014-01-08",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://uncomfortable-toaster.org",
+    "id": 58841,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-21",
+    "last_episode_to_air": {
+      "id": 6108931,
+      "name": "Capitalist Crow",
+      "overview": "Infit veniam tamdiu temeritas tutis. Versus umbra tendo.",
+      "vote_average": 8,
+      "vote_count": 1,
+      "air_date": "2025-05-21",
+      "episode_number": 22,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 43,
+      "season_number": 5,
+      "show_id": 58841,
+      "still_path": "/hcsBh5DVKi8hOka2Ut5J8YkL4W4.jpg"
+    },
+    "name": "Native Whitefish",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Convincing R5-D4 Media",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 106,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Concerned Bear",
+    "overview": "Velit vinitor caelestis ambulo veniam inventore tactus cariosus hic vociferor. Pax volup terga. Sursum at beneficium est vestigium bonus tersus demulceo validus.",
+    "popularity": 168.3864,
+    "poster_path": "/2nHdAW7MUMuXMJO6ev0mFMhEq8P.jpg",
+    "production_companies": [
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Nasty Bail Prestor Organa Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 25545,
+        "logo_path": "/8Lqf0okunSPAwBBL08Ua1IRe1xi.png",
+        "name": "Imperial Zam Wesell Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2014-01-08",
+        "episode_count": 15,
+        "id": 59224,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/A1rwtojFg3ClDEs55RGDt6243sx.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2014-09-24",
+        "episode_count": 23,
+        "id": 62050,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/afq2obuEF6h1PTmK4Ayl3ePZuU7.jpg",
+        "season_number": 2,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": "2015-09-30",
+        "episode_count": 23,
+        "id": 71060,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/r4JpxAZzVBu5ISbYZRNZypehVaN.jpg",
+        "season_number": 3,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2016-09-21",
+        "episode_count": 23,
+        "id": 79794,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/3BudYVodgWVlSMFN0aCRsmJlBTU.jpg",
+        "season_number": 4,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2017-09-27",
+        "episode_count": 22,
+        "id": 91757,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/2Jt1gCNhFoMCINekfMKzdg7PDq5.jpg",
+        "season_number": 5,
+        "vote_average": 8
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Vere velit vinitor caelestis ambulo veniam inventore tactus.",
+    "type": "Scripted",
+    "vote_average": 8.4,
+    "vote_count": 2466,
+    "external_ids": {
+      "imdb_id": "tt2805096",
+      "freebase_mid": "/m/0vpwrs3",
+      "freebase_id": null,
+      "tvdb_id": 269641,
+      "tvrage_id": 35802,
+      "wikidata_id": "Q13218686",
+      "facebook_id": "NBCOneChicago",
+      "instagram_id": "NBCOneChicago",
+      "twitter_id": "NBCOneChicago"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Eveniet earum territo vesco supellex.",
+            "homepage": "",
+            "tagline": "Color eveniet earum territo."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Aware Dormouse",
+            "overview": "Beatae repellendus conscendo quisquam desipio suppono.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Aut dapifer cruentus clementia solium ventosus dedecor adeptio cohibeo. Vitae solvo tergum vicissitudo. Vomito summa aureus tabesco voveo amitto velum timor minus magnam.",
+            "homepage": "",
+            "tagline": "Triumphus aut dapifer cruentus clementia solium ventosus."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Coloured Constrictor",
+            "overview": "Aut dapifer cruentus clementia solium ventosus dedecor adeptio cohibeo. Vitae solvo tergum vicissitudo. Vomito summa aureus tabesco voveo amitto velum timor minus magnam.",
+            "homepage": "",
+            "tagline": "Triumphus aut dapifer cruentus clementia solium ventosus."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Present Tiglon",
+            "overview": "Averto dedico vesica voveo virga claro tempus neque varius. Conculco voluptates animadverto demitto urbanus terreo sono cultura. Quia despecto suppono quaerat aggredior deprimo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

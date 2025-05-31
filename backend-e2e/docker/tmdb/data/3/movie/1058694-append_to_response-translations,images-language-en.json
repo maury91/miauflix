@@ -1,0 +1,170 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6881",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0da9dcc2d399134071d8571a3ef305ca\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "BevIrc4QV_zFxesI3TItYhlt-jPnjHmYnfnTVh-ZadXqyGk_px1Blw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gutU32BiBxJvJdzLv5RWC9hQhNh.jpg",
+    "belongs_to_collection": null,
+    "budget": 10000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://creepy-earmuffs.name",
+    "id": 1058694,
+    "imdb_id": "tt14570440",
+    "origin_country": ["MX"],
+    "original_language": "es",
+    "original_title": "Scrawny Muskox",
+    "overview": "Quisquam claudeo barba confugo theca.",
+    "popularity": 3.1878,
+    "poster_path": "/eGMkkbG85JUyXQEsbZKSnBrymts.jpg",
+    "production_companies": [
+      {
+        "id": 105116,
+        "logo_path": "/rVDFo9kaSYnMlFjoSz6y4nV5RPH.png",
+        "name": "Tough Roos Tarpals Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 173035,
+        "logo_path": "/tNky2GBy0sWaG4StgWn8oGegZaY.png",
+        "name": "Yelping Ki-Adi-Mundi Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 79714,
+        "logo_path": "/dQfYJjl4wb9RYcD017WPNDbUSnd.png",
+        "name": "Unhappy Lando Calrissian Pictures",
+        "origin_country": "MX"
+      },
+      {
+        "id": 210842,
+        "logo_path": "/osAelnShU5bBUCd2Od0L6ExSuv4.png",
+        "name": "Cheerful Gasgano Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2023-10-19",
+    "revenue": 21761164,
+    "runtime": 126,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Clamo quisquam claudeo.",
+    "title": "Theoretical Koala",
+    "video": false,
+    "vote_average": 8.35,
+    "vote_count": 453,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://lavish-poverty.net",
+            "overview": "Sortitus dignissimos virgo casus error comparo defaeco tyrannus. Patior demergo vestrum.",
+            "runtime": 126,
+            "tagline": "Stella sortitus dignissimos virgo casus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Statua curiositas laboriosam victus cumque ait curia adopto virgo. Absum vapulus temptatio administratio depromo surculus adinventitias deorsum conscendo debeo. Curvo stips architecto statim cado tergum infit carcer bellicus circumvenio.",
+            "runtime": 127,
+            "tagline": "Termes statua curiositas laboriosam victus cumque ait.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Statua curiositas laboriosam victus cumque ait curia adopto virgo. Absum vapulus temptatio administratio depromo surculus adinventitias deorsum conscendo debeo. Curvo stips architecto statim cado tergum infit carcer bellicus circumvenio.",
+            "runtime": 127,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Succurro adstringo cognomen. Ad taedium vivo traho quibusdam allatus credo. Suggero audeo trucido.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.7,
+          "height": 2857,
+          "iso_639_1": "en",
+          "file_path": "/eGMkkbG85JUyXQEsbZKSnBrymts.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2929,
+          "iso_639_1": "en",
+          "file_path": "/lOAJYpX608aT0ApIv63ZTnol27Y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1953
+        }
+      ]
+    }
+  }
+}

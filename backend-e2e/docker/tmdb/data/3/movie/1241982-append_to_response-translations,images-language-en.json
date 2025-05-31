@@ -1,0 +1,313 @@
+{
+  "headers": {
+    "age": "1220",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16435",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"00d42726a71655ae2d9644abe4a5936c\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "MSJII0CQe8GPvGeLojR4AL8U8PcQc99BvYjvyK2y_Ld23Mw1v6MBSA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/zo8CIjJ2nfNOevqNajwMRO6Hwka.jpg",
+    "belongs_to_collection": {
+      "id": 1241984,
+      "name": "Obvious Dog",
+      "poster_path": "/wuU5y8Jd5GWVcf71uv1nyoNkgwR.jpg",
+      "backdrop_path": "/4OgaftFNqtE1UvfDDb2Eov7A5Rz.jpg"
+    },
+    "budget": 150000000,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://male-switch.net",
+    "id": 1241982,
+    "imdb_id": "tt13622970",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Distinctive Quail",
+    "overview": "Statua commodo assumenda deprimo utique debilito sto vinculum autus carus. Suppono dedico decimus.",
+    "popularity": 114.6447,
+    "poster_path": "/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg",
+    "production_companies": [
+      {
+        "id": 2,
+        "logo_path": "/wdrCwmRnLFJhEoH8GSfymY85KHT.png",
+        "name": "Accused R4-P17 Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 6125,
+        "logo_path": "/tzsMJBJZINu7GHzrpYzpReWhh66.png",
+        "name": "Steep Grievous Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 158526,
+        "logo_path": "/tzsMJBJZINu7GHzrpYzpReWhh66.png",
+        "name": "Grateful Saesee Tiin Media",
+        "origin_country": "CA"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2024-11-21",
+    "revenue": 1059544057,
+    "runtime": 100,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Utroque statua commodo assumenda deprimo utique.",
+    "title": "Mere Goldfish",
+    "video": false,
+    "vote_average": 7.079,
+    "vote_count": 2407,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://itchy-mainstream.name",
+            "overview": "Natus approbo peior quidem vigilo non ipsum. Sonitus ager debeo ver iure depromo pectus arbitro pecus.",
+            "runtime": 100,
+            "tagline": "Expedita natus approbo peior quidem.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Averto cultellus degero voluptatum.",
+            "runtime": 100,
+            "tagline": "Capitulus averto cultellus.",
+            "title": "Outdoor Cockroach"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Unde stultus versus saepe. Teres ratione cattus usus.",
+            "runtime": 0,
+            "tagline": "Basium unde stultus versus saepe.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Unde stultus versus saepe. Teres ratione cattus usus.",
+            "runtime": 0,
+            "tagline": "Basium unde stultus versus saepe.",
+            "title": "Fragile Tapir"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Succedo ambulo inflammatio arcesso derelinquo corrigo. Demens ea crapula subvenio tempus. Nobis claro nulla capio.",
+            "runtime": 100,
+            "tagline": "",
+            "title": "Smooth Fowl"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/5CAf9N4EfFYBJQPh3J4cbJxM088.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/rMrfAeUa0KL1EVuPzcq9LpsKPE4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qk4zM7uy7T0AJMMyhOL5dueJoX4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/i9aoMJqpHs5DMWReTJ4snSDk9l.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/eWht396DtkYp9trfMYMyfCiirUS.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1919
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.172,
+          "height": 383,
+          "iso_639_1": "en",
+          "file_path": "/9BXuuOa8b9AX5NalFg5LEzPqrq0.png",
+          "vote_average": 8.034,
+          "vote_count": 6,
+          "width": 1598
+        },
+        {
+          "aspect_ratio": 4.198,
+          "height": 1027,
+          "iso_639_1": "en",
+          "file_path": "/mLcFQQ1NuhkT3TycMT49IXrCkcC.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4311
+        },
+        {
+          "aspect_ratio": 4.197,
+          "height": 1028,
+          "iso_639_1": "en",
+          "file_path": "/rVfYZCvS6JxUOPESVh6TWSYwmIy.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4315
+        },
+        {
+          "aspect_ratio": 5.596,
+          "height": 2050,
+          "iso_639_1": "en",
+          "file_path": "/sFzVGobXVnazwttzOo34nx0c4vF.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 11472
+        },
+        {
+          "aspect_ratio": 4.466,
+          "height": 814,
+          "iso_639_1": "en",
+          "file_path": "/w3VxtldVo4c77jBxVtJBGH4ps3f.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3635
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg",
+          "vote_average": 8.688,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/m0SbwFNCa9epW1X60deLqTHiP7x.jpg",
+          "vote_average": 6.834,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_639_1": "en",
+          "file_path": "/bRlgp6T11RDrMUaB2jbvtBaE9Kk.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yh64qw9mgXBvlaWDi7Q9tpUBAvH.jpg",
+          "vote_average": 5.87,
+          "vote_count": 23,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/4YZpsylmjHbqeWzjKpUEF8gcLNW.jpg",
+          "vote_average": 5.844,
+          "vote_count": 16,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

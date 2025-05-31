@@ -1,0 +1,228 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15303",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"32c7f46a1760c061032c6f75c7d42edf\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "O30xm2gnxp1hCtZTF3gLIg3SnS6OjyiSpip3u4wrhF9CE0a9VykpQQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qLMfcvdCcCGD2BNLH8b6ZCBuO7D.jpg",
+    "created_by": [
+      {
+        "id": 1230175,
+        "credit_id": "52572b63760ee3776a2dbc6d",
+        "name": "Francis White DVM",
+        "original_name": "Francis White DVM",
+        "gender": 1,
+        "profile_path": null
+      },
+      {
+        "id": 1230176,
+        "credit_id": "52572b64760ee3776a2dbc75",
+        "name": "Luis Schumm",
+        "original_name": "Luis Schumm",
+        "gender": 1,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [30, 22],
+    "first_air_date": "1996-07-22",
+    "genres": [
+      {
+        "id": 10763,
+        "name": "News"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://improbable-originality.com",
+    "id": 2224,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-20",
+    "last_episode_to_air": {
+      "id": 6110499,
+      "name": "Inquisitive Antlion",
+      "overview": "Confero surgo appositus amplitudo decimus deludo. Civis voluptatem esse theca cauda ullus balbus. Abundans cinis dignissimos sophismata crinis tametsi patrocinor cui.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-22",
+      "episode_number": 68,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 33,
+      "season_number": 5,
+      "show_id": 2224,
+      "still_path": "/cLXWkHiIaQ0hNYGSpCPp2b9TVta.jpg"
+    },
+    "name": "Objective Marmot",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 47,
+        "logo_path": "/6ooPjtXufjsoskdJqj6pxuvHEno.png",
+        "name": "Desirable Wilhuff Tarkin Studios",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 478,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Eerie Anteater",
+    "overview": "Aegre varius vitium utpote comburo tero acceptus. Bos acer antepono acidus subseco tot cibo.",
+    "popularity": 352.2278,
+    "poster_path": "/ixcfyK7it6FjRM36Te4OdblAq4X.jpg",
+    "production_companies": [
+      {
+        "id": 8136,
+        "logo_path": "/zHS0wY1haJ3GOvkHFOf8Dfjkyt3.png",
+        "name": "Qualified Zam Wesell Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1999-12-15",
+        "episode_count": 98,
+        "id": 6869,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1996-07-22",
+        "episode_count": 6,
+        "id": 6853,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/yCk9E4zzDi5W9zpDc2L8vCeLA.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "1997-01-06",
+        "episode_count": 16,
+        "id": 6854,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/w7sob0PFeYV0S2Q8v1PMhge8qQS.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "1998-03-09",
+        "episode_count": 33,
+        "id": 6855,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/jXrc4QyW1berVN4ZaX2eX0jOPsq.jpg",
+        "season_number": 3,
+        "vote_average": 5.2
+      },
+      {
+        "air_date": "1999-01-11",
+        "episode_count": 159,
+        "id": 6856,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/5geFJYuUrQPdNSiKPvJAfw1xCAu.jpg",
+        "season_number": 4,
+        "vote_average": 5.2
+      },
+      {
+        "air_date": "2000-01-04",
+        "episode_count": 166,
+        "id": 6857,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/qd87rtrifcts3nV9pza1N17xWtU.jpg",
+        "season_number": 5,
+        "vote_average": 5.1
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Provident aegre varius vitium utpote.",
+    "type": "Talk Show",
+    "vote_average": 6.4,
+    "vote_count": 573,
+    "external_ids": {
+      "imdb_id": "tt0115147",
+      "freebase_mid": "/m/01j7mr",
+      "freebase_id": "/en/the_daily_show",
+      "tvdb_id": 71256,
+      "tvrage_id": 5714,
+      "wikidata_id": "Q20735553",
+      "facebook_id": "thedailyshow",
+      "instagram_id": "thedailyshow",
+      "twitter_id": "TheDailyShow"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Deripio temeritas custodia certus sum deripio perferendis. Facere porro deleo ventito theatrum. Aestus a bestia termes decimus vitae tandem.",
+            "homepage": "",
+            "tagline": "Patria deripio temeritas custodia certus sum deripio perferendis."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Quasi ago dapifer. Theatrum derideo recusandae commodi. Talis utilis casso benevolentia accusantium uter ab demum.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

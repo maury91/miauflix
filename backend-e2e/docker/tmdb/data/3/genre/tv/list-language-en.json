@@ -1,0 +1,89 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24312",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c9414e40a9e909888e1e74fd911cf7d1\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "YXLiErPEuIIlgBF7VOoe0WPCVyq2zwxU0QiPTW1-SNJaL67Cg0br9w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "11761",
+    "x-memc-expires": "12027",
+    "x-memc-key": "802dfd0c0b218bb30b1dbe3917b34e76",
+    "x-task-id": "5ae9ef7c9edb4082a88f27237d27cbc2"
+  },
+  "data": {
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 10762,
+        "name": "Kids"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10763,
+        "name": "News"
+      },
+      {
+        "id": 10764,
+        "name": "Reality"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10766,
+        "name": "Soap"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 10768,
+        "name": "War & Politics"
+      },
+      {
+        "id": 37,
+        "name": "Western"
+      }
+    ]
+  }
+}

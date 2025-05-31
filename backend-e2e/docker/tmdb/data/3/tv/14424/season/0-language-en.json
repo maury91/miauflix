@@ -1,0 +1,31 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23724",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9edee78892891e22ade44c3c35abbb23\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Gxa6YCzmTUtxBESgOzG_BWvanCsJ_Gt6LeBqLyxeqNZLH7nhIv4EZA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "RefreshHit from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "15196",
+    "x-memc-expires": "10097",
+    "x-memc-key": "d61c915a21a6de9c670f17d5ca49f4c1",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+  },
+  "data": {
+    "_id": "60b46f6057d378004285e33d",
+    "air_date": null,
+    "episodes": [],
+    "name": "Specials",
+    "overview": "",
+    "id": 197470,
+    "poster_path": null,
+    "season_number": 0,
+    "vote_average": 0
+  }
+}

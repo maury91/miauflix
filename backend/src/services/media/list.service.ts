@@ -66,15 +66,17 @@ export class ListService {
       `List ${slug} has ${totalItems} results and ${totalPages} pages, obtained page ${page}`
     );
 
+    const mediaResults = await Promise.all(
+      medias.map(async mediaData => {
+        if (mediaData._type === 'movie') {
+          return this.mediaService.getMovie(mediaData.id, mediaData);
+        }
+        return this.mediaService.getTVShow(mediaData.id, mediaData);
+      })
+    );
+
     return {
-      medias: await Promise.all(
-        medias.map(async mediaData => {
-          if (mediaData._type === 'movie') {
-            return this.mediaService.getMovie(mediaData.id, mediaData);
-          }
-          return this.mediaService.getTVShow(mediaData.id, mediaData);
-        })
-      ),
+      medias: mediaResults.filter((media): media is Movie | TVShow => media !== null),
       pages: totalPages,
       total: totalItems,
     };

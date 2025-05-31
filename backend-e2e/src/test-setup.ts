@@ -11,18 +11,6 @@ const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.P
 // Make backend URL available globally
 global.BACKEND_URL = BACKEND_URL;
 
-console.log(`🧪 Running E2E tests against backend at: ${BACKEND_URL}`);
-
-// Global beforeAll setup
-beforeAll(async () => {
-  console.log('🚀 Starting E2E test suite...');
-});
-
-// Global afterAll cleanup
-afterAll(async () => {
-  console.log('✅ E2E test suite completed');
-});
-
 // Add custom matchers if needed
 expect.extend({
   toBeHttpStatus(received: number, expected: number) {

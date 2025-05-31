@@ -1,0 +1,300 @@
+{
+  "headers": {
+    "age": "1219",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1508",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"07e88566acac58443fd5954164386041\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "25eh6PA7Ie5seBWS_oYvL6fltO2PIR1Zj8g3bJE6OEB7hmz1Y1TENQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tmU7GeKVybMWFButWEGl2M4GeiP.jpg",
+    "belongs_to_collection": {
+      "id": 230,
+      "name": "Sensitive Nightingale",
+      "poster_path": "/zVb22YOMgljCEYbXlvCvEiN4VwT.jpg",
+      "backdrop_path": "/mDMCET9Ens5ANvZAWRpluBsMAtS.jpg"
+    },
+    "budget": 6000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://sore-ringworm.com",
+    "id": 238,
+    "imdb_id": "tt0068646",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Relevant Shrew",
+    "overview": "Addo suffragium censura tondeo succurro constans utroque repudiandae summisse. Deprimo tremo baiulus. Curia dolore eaque anser voluptatem via coepi cetera arto.",
+    "popularity": 31.9184,
+    "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+    "production_companies": [
+      {
+        "id": 4,
+        "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
+        "name": "Dead Nien Nunb Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 10211,
+        "logo_path": null,
+        "name": "Crude Lando Calrissian Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [],
+    "release_date": "1972-03-14",
+    "revenue": 245066411,
+    "runtime": 175,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Italian",
+        "iso_639_1": "it",
+        "name": "Italiano"
+      },
+      {
+        "english_name": "Latin",
+        "iso_639_1": "la",
+        "name": "Latin"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Tantum addo suffragium censura tondeo succurro constans.",
+    "title": "Awkward Tick",
+    "video": false,
+    "vote_average": 8.686,
+    "vote_count": 21476,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://front-orator.info",
+            "overview": "Corrumpo tamen ago admoneo somniculosus admoneo modi.",
+            "runtime": 175,
+            "tagline": "Porro corrumpo tamen ago.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tenax ullus alveus. Tardus abduco bibo aggredior. Stipes vae paens adhaero constans degenero cupressus minus viridis.",
+            "runtime": 175,
+            "tagline": "Adnuo tenax ullus alveus aspicio tardus abduco.",
+            "title": "Precious Iguana"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://judicious-underestimate.net",
+            "overview": "Torrens degenero urbanus alioqui decimus cunae acidus sophismata amicitia aduro. Amicitia caute vitae volubilis campana conatus conspergo cultellus.",
+            "runtime": 175,
+            "tagline": "Vilicus torrens degenero urbanus alioqui.",
+            "title": "Proud Dragonfly"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tenax ullus alveus. Tardus abduco bibo aggredior. Stipes vae paens adhaero constans degenero cupressus minus viridis.",
+            "runtime": 175,
+            "tagline": "Adnuo tenax ullus alveus aspicio tardus abduco.",
+            "title": "Precious Iguana"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Valens amitto commodi accedo concedo. Velociter acervus nobis bis adimpleo collum ventus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Maximum Rodent"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/AbgEQO2mneCSOc8CSnOMa8pBS8I.jpg",
+          "vote_average": 7.542,
+          "vote_count": 8,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/4vG2j7IgMvoILP71AmefPM8Ts6f.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/dlrKPqRi9R248d5wAqOALsLH90B.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/9cuuw3287U3h5UwAknDpTGQYlao.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/jiTiRWEZDOoggZsOpM7t7WEMDym.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.077,
+          "height": 928,
+          "iso_639_1": "en",
+          "file_path": "/f6YA8R8pd1Vd8dqZamBlDnWsIfS.svg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 999
+        },
+        {
+          "aspect_ratio": 1.303,
+          "height": 1227,
+          "iso_639_1": "en",
+          "file_path": "/qM3ijO4nlgATOPtXci6hkKRccI7.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1599
+        },
+        {
+          "aspect_ratio": 1.306,
+          "height": 1271,
+          "iso_639_1": "en",
+          "file_path": "/kysDTCloxUPJ1BILI4f8gs74fcr.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1660
+        },
+        {
+          "aspect_ratio": 1.301,
+          "height": 1639,
+          "iso_639_1": "en",
+          "file_path": "/oGVTUZE80Hkm8VwdrhjPq2xfNzG.svg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2132
+        },
+        {
+          "aspect_ratio": 1.077,
+          "height": 928,
+          "iso_639_1": "en",
+          "file_path": "/uuf1qb1CQFB5aAoNvWsg5Ely5CB.svg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 999
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_639_1": "en",
+          "file_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+          "vote_average": 5.854,
+          "vote_count": 55,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/3Tf8vXykYhzHdT0BtsYTp570JGQ.jpg",
+          "vote_average": 7.06,
+          "vote_count": 42,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/hMTncCsOwZZCNOo5SBhE1wQKpid.jpg",
+          "vote_average": 5.646,
+          "vote_count": 24,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/d6LbJZO8ruvXgOjjGRgjtdYpJS4.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/gk1IvgCYg6v5H5cps21ILSOrYER.jpg",
+          "vote_average": 4.97,
+          "vote_count": 17,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

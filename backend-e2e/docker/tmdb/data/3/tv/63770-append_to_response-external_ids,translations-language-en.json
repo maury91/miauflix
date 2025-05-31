@@ -1,0 +1,216 @@
+{
+  "headers": {
+    "age": "1218",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3795",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3d46aa0a85427e99d9ca918d4ed1db75\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "IFzm6MfHmAK8o2FR0UmG2-4cKLf82ZGrmLDPi4l4a9880RUvnv4HZQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gMMnf8VRg3Z98WaFmOLr9Jk8pIs.jpg",
+    "created_by": [
+      {
+        "id": 1944474,
+        "credit_id": "6311a64b3a340b0092198518",
+        "name": "Glenn Fritsch",
+        "original_name": "Glenn Fritsch",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 1236609,
+        "credit_id": "6311a653c048a9007d0f006d",
+        "name": "Lyle Goyette",
+        "original_name": "Lyle Goyette",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 58769,
+        "credit_id": "6311a63b8c7b0f007ab0be1a",
+        "name": "Herman Luettgen",
+        "original_name": "Herman Luettgen",
+        "gender": 2,
+        "profile_path": "/zQ6pvfqIqYiV4TB7lDoaJL52H93.jpg"
+      },
+      {
+        "id": 12219,
+        "credit_id": "6311a645ba131b0081d0213a",
+        "name": "Mary Murphy",
+        "original_name": "Mary Murphy",
+        "gender": 2,
+        "profile_path": "/jmnRMhkms5YAHNb5ZK5ro750vKk.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2015-09-08",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "https://suspicious-penicillin.name",
+    "id": 63770,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-01",
+    "last_episode_to_air": {
+      "id": 6238034,
+      "name": "Stale Loon",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-22",
+      "episode_number": 122,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 41,
+      "season_number": 5,
+      "show_id": 63770,
+      "still_path": null
+    },
+    "name": "Typical Constrictor",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Architectural Saesee Tiin Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 970,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Visiting Goldfish",
+    "overview": "Pauci varius sophismata thesis depopulo coadunatio dolore in. Contra depraedor amor vomer suspendo. Charisma condico tenus articulus succurro patior aestus absconditus.",
+    "popularity": 544.0928,
+    "poster_path": "/9jkThAGYj2yp8jsS6Nriy5mzKFT.jpg",
+    "production_companies": [
+      {
+        "id": 90191,
+        "logo_path": null,
+        "name": "Worried Plo Koon Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1081,
+        "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
+        "name": "Graceful Jek Tono Porkins Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2015-09-08",
+        "episode_count": 202,
+        "id": 69936,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/cbJunCfhH2QmaDnAxM30UhX47G0.jpg",
+        "season_number": 1,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2016-09-06",
+        "episode_count": 206,
+        "id": 80003,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/3mYUDshg9VNLjQQpdi1aocRn8mq.jpg",
+        "season_number": 2,
+        "vote_average": 6.2
+      },
+      {
+        "air_date": "2017-09-05",
+        "episode_count": 194,
+        "id": 94448,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/kn4PK9Pa5rLH6GitXFHtlDO04nI.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2018-09-04",
+        "episode_count": 195,
+        "id": 110065,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/wT72vl9J4dE7i8NBy9vkxg6KkLo.jpg",
+        "season_number": 4,
+        "vote_average": 5.9
+      },
+      {
+        "air_date": "2019-09-03",
+        "episode_count": 173,
+        "id": 131654,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/wT72vl9J4dE7i8NBy9vkxg6KkLo.jpg",
+        "season_number": 5,
+        "vote_average": 6
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Talk Show",
+    "vote_average": 6.344,
+    "vote_count": 308,
+    "external_ids": {
+      "imdb_id": "tt3697842",
+      "freebase_mid": "/m/0119ldhl",
+      "freebase_id": null,
+      "tvdb_id": 289574,
+      "tvrage_id": 41941,
+      "wikidata_id": "Q18151598",
+      "facebook_id": "colbertlateshow",
+      "instagram_id": "colbertlateshow",
+      "twitter_id": "colbertlateshow"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Beatae debeo arma audax utpote. Arguo demens via aggero stultus. Animadverto coma molestiae cultura torqueo maxime conforto subnecto.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

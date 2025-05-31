@@ -1,0 +1,299 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6358",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"862e671702299d9e93d9a59c89bfe891\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "FPj9wOXMkvF04qIea4Q5iy9oz6fPCLa1ONtjFthUXpSNEXQi8XhIDQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/cJvUJEEQ86LSjl4gFLkYpdCJC96.jpg",
+    "belongs_to_collection": null,
+    "budget": 20000000,
+    "genres": [
+      {
+        "id": 10752,
+        "name": "War"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://difficult-peek.biz",
+    "id": 1241436,
+    "imdb_id": "tt31434639",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Worthwhile Ptarmigan",
+    "overview": "Caute arcus vergo acies charisma aegrus alter territo.",
+    "popularity": 214.9363,
+    "poster_path": "/srj9rYrjefyWqkLc6l2xjTGeBGO.jpg",
+    "production_companies": [
+      {
+        "id": 284,
+        "logo_path": "/6a26if3IKy7mlrQuGHHVp6ufQtF.png",
+        "name": "Bloody Anakin Skywalker Media",
+        "origin_country": "GB"
+      },
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Pregnant Shmi Skywalker Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-09",
+    "revenue": 31896828,
+    "runtime": 95,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Turkish",
+        "iso_639_1": "tr",
+        "name": "Türkçe"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Similique caute arcus vergo.",
+    "title": "Rough Grasshopper",
+    "video": false,
+    "vote_average": 7.3,
+    "vote_count": 449,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://excellent-encouragement.org",
+            "overview": "Verus adsuesco capitulus celebrer atrocitas.",
+            "runtime": 95,
+            "tagline": "Cohaero verus adsuesco capitulus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Totidem adipiscor defleo verumtamen ustulo. Statua certus et.",
+            "runtime": 96,
+            "tagline": "Contra totidem adipiscor defleo verumtamen.",
+            "title": "Mushy Caribou"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Totidem adipiscor defleo verumtamen ustulo. Statua certus et.",
+            "runtime": 0,
+            "tagline": "Contra totidem adipiscor defleo verumtamen.",
+            "title": "Mushy Caribou"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Soleo umerus corrupti pecto cubitum odit utor acquiro. Supplanto turbo despecto cupio amiculum. Uter celebrer vis solum ara cunae vox.",
+            "runtime": 0,
+            "tagline": "Speculum soleo umerus corrupti pecto cubitum odit.",
+            "title": "Complex Manatee"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Balbus infit ater aut amor cogo aureus eveniet compono.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Natural Carp"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1874,
+          "iso_639_1": "en",
+          "file_path": "/buP4VxWcpYukBcuSs9lIMff8WZc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3332
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/rGyHJAxkrjoDYG4OskcLHzaADxp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/i3rCI5ZjyaLyEYFcwNQ8shp7OLP.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ruA07ConFQhA2IwMFfQRfsVbcpf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/tSX2Jy3jBJv6fZRRWal0IRDMZLB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 8.728,
+          "height": 485,
+          "iso_639_1": "en",
+          "file_path": "/xgpzUUc2MMLez7p2wFX0yvhw1Vc.png",
+          "vote_average": 8.77,
+          "vote_count": 8,
+          "width": 4233
+        },
+        {
+          "aspect_ratio": 8.728,
+          "height": 485,
+          "iso_639_1": "en",
+          "file_path": "/eTWOGyx6CbsR4ItUFssyCqAx9ej.png",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 4233
+        },
+        {
+          "aspect_ratio": 7.902,
+          "height": 183,
+          "iso_639_1": "en",
+          "file_path": "/7gJDkvOGPLA0TBHffmXQYZfH7Ji.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1446
+        },
+        {
+          "aspect_ratio": 7.831,
+          "height": 59,
+          "iso_639_1": "en",
+          "file_path": "/2BNw6aC8mBwdE5HsJaqObwY9Pdx.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 462
+        },
+        {
+          "aspect_ratio": 8.277,
+          "height": 119,
+          "iso_639_1": "en",
+          "file_path": "/nf0TMxI7swbygA4eMuyku4cHve1.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 985
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/srj9rYrjefyWqkLc6l2xjTGeBGO.jpg",
+          "vote_average": 6.834,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/j8tqBXwH2PxBPzbtO19BTF9Ukbf.jpg",
+          "vote_average": 6.346,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2898,
+          "iso_639_1": "en",
+          "file_path": "/oXsDTDt1MqxJreROd2cbd2FMOZ2.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 1932
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2880,
+          "iso_639_1": "en",
+          "file_path": "/cPNd0yaJTeMPl3Y3qXunbcp31Th.jpg",
+          "vote_average": 3.424,
+          "vote_count": 13,
+          "width": 1944
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_639_1": "en",
+          "file_path": "/rw9viIVpuReUTaztIQ6o2jBdTyK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 500
+        }
+      ]
+    }
+  }
+}

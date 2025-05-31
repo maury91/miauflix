@@ -11,14 +11,14 @@ type PasswordVariableInfo = BaseVariableInfo & {
 };
 
 type DefaultVariableInfo = BaseVariableInfo & {
-  defaultValue: string;
+  defaultValue: string | (() => string);
   password?: false;
   skipUserInteraction?: boolean;
 };
 
 type SkipUserInteractionVariableInfo = BaseVariableInfo & {
   skipUserInteraction: true;
-  defaultValue: string;
+  defaultValue: string | (() => string);
   password?: false;
 };
 

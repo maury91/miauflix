@@ -1,0 +1,290 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23940",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"185cb9215f487f9700f6632897152f48\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "jGaAT9sP3IibT_3d11LwvXFBd2vh3sF4h2qWhGacU56oEf0_JNKQAA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/op3qmNhvwEvyT7UFyPbIfQmKriB.jpg",
+    "belongs_to_collection": null,
+    "budget": 55000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      }
+    ],
+    "homepage": "https://satisfied-planter.net",
+    "id": 324544,
+    "imdb_id": "tt4419684",
+    "origin_country": ["DE", "CH"],
+    "original_language": "en",
+    "original_title": "Weak Echidna",
+    "overview": "Toties varius inflammatio turbo aestas aliqua cicuta compello. Clam trans comes tantillus cohibeo canonicus ut curto. Usitas bibo spes tondeo sed trucido cubicularis.",
+    "popularity": 125.3602,
+    "poster_path": "/dDlfjR7gllmr8HTeN6rfrYhTdwX.jpg",
+    "production_companies": [
+      {
+        "id": 47,
+        "logo_path": "/i7Z9ot2o3N5Sa3HrF09kniFs2y8.png",
+        "name": "Desirable Wilhuff Tarkin Studios",
+        "origin_country": "DE"
+      },
+      {
+        "id": 187303,
+        "logo_path": "/5CJA1Ej3gJxosjkzz2T7AeLw1SQ.png",
+        "name": "Coastal Rugor Nass Media",
+        "origin_country": "CH"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      },
+      {
+        "iso_3166_1": "CH",
+        "name": "Switzerland"
+      }
+    ],
+    "release_date": "2025-02-27",
+    "revenue": 4755330,
+    "runtime": 102,
+    "spoken_languages": [
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Ndebele",
+        "iso_639_1": "nd",
+        "name": ""
+      }
+    ],
+    "status": "Released",
+    "tagline": "Sopor toties varius inflammatio turbo aestas aliqua.",
+    "title": "Eager Crow",
+    "video": false,
+    "vote_average": 6.4,
+    "vote_count": 398,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://creamy-atom.com",
+            "overview": "Amissio tamisium urbanus.",
+            "runtime": 102,
+            "tagline": "Admitto amissio tamisium.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ultio comis suasoria aurum una audentia tenuis aequitas placeat.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Marxist Coral"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Ultio comis suasoria aurum una audentia tenuis aequitas placeat.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Marxist Coral"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Certus vorago clam crinis officiis synagoga supplanto.",
+            "runtime": 101,
+            "tagline": "",
+            "title": "Zeroth Rabbit"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Vereor tamdiu maiores. Certus praesentium complectus. Crastinus conturbo circumvenio audeo vado usus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/gdoBV3noBB5veT1x8qzCB3fkBKy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/9o5Z82tgu9hRhcxB35ogh7zWWiS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/qegmjRNzQKLHPBhjx5RcwTj7Xst.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.896,
+          "height": 1288,
+          "iso_639_1": "en",
+          "file_path": "/gyasKnWyeoPvL7q3Opaod8GKcUu.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3730
+        },
+        {
+          "aspect_ratio": 2.896,
+          "height": 1288,
+          "iso_639_1": "en",
+          "file_path": "/huTt00t6u3lzODvhC5C7qEhiDAL.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3730
+        },
+        {
+          "aspect_ratio": 3.058,
+          "height": 257,
+          "iso_639_1": "en",
+          "file_path": "/94tw7mkTlPmxudR4QhyQWSTNtjP.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 786
+        },
+        {
+          "aspect_ratio": 3.072,
+          "height": 1145,
+          "iso_639_1": "en",
+          "file_path": "/nuZ9wxg9JAhurJI3bZp0OyefrRp.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3517
+        },
+        {
+          "aspect_ratio": 3.072,
+          "height": 1145,
+          "iso_639_1": "en",
+          "file_path": "/1bPY351sLNIDNvvxzcpsRQ100mg.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3517
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/dDlfjR7gllmr8HTeN6rfrYhTdwX.jpg",
+          "vote_average": 7.542,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/hfD5EDQpxOhMikXT6nmq3L1beRt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1767,
+          "iso_639_1": "en",
+          "file_path": "/5DKyuz8aPuyXrJPPksd5BQMB6PA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1178
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/twy1IVJFgaZWA21Sr6kohEOmdFW.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/oIwTJOm6MHaC7eUyIcQPw07nI71.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "headers": {
+    "age": "1223",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11271",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"77f254c3521e7803880f2daca5fd3771\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "1fugjiWB5UOs17mEcdOOOGJU4VIAeBQ1QXuT8I5tufVzgI6A96e5kA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Hit from cloudfront",
+    "x-task-id": "8687c6abae7b48fe8ca0b4465ada06ac"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tyfO9jHgkhypUFizRVYD0bytPjP.jpg",
+    "belongs_to_collection": null,
+    "budget": 270000000,
+    "genres": [
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://puzzled-jungle.info",
+    "id": 447273,
+    "imdb_id": "tt6208148",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Bored Angelfish",
+    "overview": "Constans sonitus tergo vitiosus atque decimus. Defetiscor tamisium accusamus caritas denuncio censura sub denego paens.",
+    "popularity": 178.6799,
+    "poster_path": "/oLxWocqheC8XbXbxqJ3x422j9PW.jpg",
+    "production_companies": [
+      {
+        "id": 2,
+        "logo_path": "/wdrCwmRnLFJhEoH8GSfymY85KHT.png",
+        "name": "Accused R4-P17 Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 2527,
+        "logo_path": "/osO7TGmlRMistSQ5JZusPhbKUHk.png",
+        "name": "Fatal Sly Moore Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-03-12",
+    "revenue": 205176583,
+    "runtime": 109,
+    "spoken_languages": [
+      {
+        "english_name": "Portuguese",
+        "iso_639_1": "pt",
+        "name": "Português"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Denuncio constans sonitus tergo vitiosus atque.",
+    "title": "Intellectual Aphid",
+    "video": false,
+    "vote_average": 4.3,
+    "vote_count": 968,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://grizzled-code.com",
+            "overview": "Aiunt doloremque summa tergeo. Avaritia tondeo amoveo celer quia terror tredecim.",
+            "runtime": 109,
+            "tagline": "Atque aiunt doloremque summa tergeo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Aiunt thalassinus ullam cauda auctor confido doloremque vulgivagus. Tredecim tempora hic aduro crinis curto natus vos. Volo maiores pel termes similique ubi delectus.",
+            "runtime": 99,
+            "tagline": "Quo aiunt thalassinus ullam cauda auctor confido.",
+            "title": "Single Echidna"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Aiunt thalassinus ullam cauda auctor confido doloremque vulgivagus. Tredecim tempora hic aduro crinis curto natus vos. Volo maiores pel termes similique ubi delectus.",
+            "runtime": 0,
+            "tagline": "Quo aiunt thalassinus ullam cauda auctor confido.",
+            "title": "Single Echidna"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Cui sono acsi solio modi vero una aduro vesica adfectus. Corrupti traho eveniet demitto doloribus atqui atavus. Acerbitas temeritas angustus molestias caecus cotidie surculus calco conatus.",
+            "runtime": 0,
+            "tagline": "Vinum cui sono acsi solio modi vero.",
+            "title": "Proposed Sole"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/4SWY9APLedH0PckN5hlmFQfa0EQ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/s7mPRDIGfnw6uybiSdtSy9PzyVV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/nsKsZeuZgkFM9puEOU4YAnDeP1b.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/6xsZmS2T27XEyr6DvaBIvHUnoJI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/2vnskf7Oh43Nt3wiPMKypLtTxNd.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.965,
+          "height": 1046,
+          "iso_639_1": "en",
+          "file_path": "/6kVPQPfVGRBhybtDVNrqhtrsTIH.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3101
+        },
+        {
+          "aspect_ratio": 2.964,
+          "height": 1296,
+          "iso_639_1": "en",
+          "file_path": "/vd8SXRni59dFapf8eqRDdxBQ1A6.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3841
+        },
+        {
+          "aspect_ratio": 3.899,
+          "height": 985,
+          "iso_639_1": "en",
+          "file_path": "/e7ExkHNFrEtNBRxUg8u49bypH9i.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3841
+        },
+        {
+          "aspect_ratio": 2.955,
+          "height": 1265,
+          "iso_639_1": "en",
+          "file_path": "/bImPwScklSyL7Zx2B3H1oX0b3PB.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3738
+        },
+        {
+          "aspect_ratio": 2.969,
+          "height": 1040,
+          "iso_639_1": "en",
+          "file_path": "/8vImWxAnwe0Z6toDCynV4A5qWQi.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3088
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/oLxWocqheC8XbXbxqJ3x422j9PW.jpg",
+          "vote_average": 6.608,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/xWWg47tTfparvjK0WJNX4xL8lW2.jpg",
+          "vote_average": 6.38,
+          "vote_count": 21,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/Iqs2WwhusBHNuwPowDB7ki6ook.jpg",
+          "vote_average": 5.25,
+          "vote_count": 24,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1935,
+          "iso_639_1": "en",
+          "file_path": "/xYqFJdnuOk5xXlAh7sOMP2nVYzt.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1290
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/zLV0dqa806c3iMvsg4hwSCkCX2I.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

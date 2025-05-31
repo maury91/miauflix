@@ -5,11 +5,16 @@ import type { Genre } from '@entities/genre.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
 import { objectKeys } from '@utils/object.util';
 
+import type { MovieSource, MovieSourceRepository } from './movie-source.repository';
+
 export class MovieRepository {
   private readonly movieRepository: Repository<Movie>;
   private readonly movieTranslationRepository: Repository<MovieTranslation>;
 
-  constructor(datasource: DataSource) {
+  constructor(
+    datasource: DataSource,
+    private readonly movieSourceRepository: MovieSourceRepository
+  ) {
     this.movieRepository = datasource.getRepository(Movie);
     this.movieTranslationRepository = datasource.getRepository(MovieTranslation);
   }
@@ -97,9 +102,13 @@ export class MovieRepository {
     });
   }
 
-  async findMoviesWithoutTorrents(
-    limit: number = 10
-  ): Promise<(Movie & { sourcesCount: number; missingCount: number })[]> {
+  async findMoviesWithoutTorrents(limit: number = 10): Promise<
+    (Omit<Movie, 'sources'> & {
+      sources: MovieSource[];
+      sourcesCount: number;
+      missingCount: number;
+    })[]
+  > {
     // Get movies that have sources without torrent files
     // This query prioritizes movies based on:
     // - Movie popularity
@@ -113,11 +122,11 @@ export class MovieRepository {
       .select('movie.id', 'id')
       .addSelect('movie.popularity', 'popularity')
       .addSelect('COUNT(source.id)', 'sources')
-      .addSelect('SUM(CASE WHEN source.torrentFile IS NULL THEN 1 ELSE 0 END)', 'missing')
+      .addSelect('SUM(CASE WHEN source.file IS NULL THEN 1 ELSE 0 END)', 'missing')
       .where('movie.sourceSearched = true')
       .groupBy('movie.id')
       .addGroupBy('movie.popularity')
-      .having('SUM(CASE WHEN source.torrentFile IS NULL THEN 1 ELSE 0 END) > 0')
+      .having('SUM(CASE WHEN source.file IS NULL THEN 1 ELSE 0 END) > 0')
       .orderBy('"missing"/"sources"', 'DESC')
       .addOrderBy('movie.popularity', 'DESC')
       .limit(limit)
@@ -140,7 +149,12 @@ export class MovieRepository {
 
     return movies.map(movie => {
       const result = results.find(r => r.id === movie.id) || { sources: 0, missing: 0 };
-      return { ...movie, sourcesCount: result.sources, missingCount: result.missing };
+      return {
+        ...movie,
+        sources: movie.sources.map(source => this.movieSourceRepository.decryptSource(source)),
+        sourcesCount: result.sources,
+        missingCount: result.missing,
+      };
     });
   }
 

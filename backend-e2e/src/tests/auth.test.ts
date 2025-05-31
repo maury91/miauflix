@@ -16,14 +16,7 @@ describe('Authentication Endpoints', () => {
       await waitForService(client);
 
       // Try to extract user credentials from Docker logs
-      console.log('🔍 Extracting user credentials from backend logs...');
       userCredentials = await extractUserCredentialsFromLogs();
-
-      if (userCredentials) {
-        console.log(`✅ Found admin user: ${userCredentials.email}`);
-      } else {
-        console.log('⚠️ No user credentials found in logs - some tests will be skipped');
-      }
     } catch (error) {
       console.log('❌ Backend service is not available. Ensure the Docker environment is running.');
       throw error;
@@ -33,9 +26,6 @@ describe('Authentication Endpoints', () => {
   afterEach(async () => {
     // Clear any auth tokens after each test
     client.clearAuth();
-
-    // Add delay to prevent rate limiting between auth tests
-    await new Promise(resolve => setTimeout(resolve, 1000));
   });
 
   it('should reject login with invalid credentials', async () => {
@@ -57,8 +47,9 @@ describe('Authentication Endpoints', () => {
 
   it('should login with valid credentials', async () => {
     if (!userCredentials) {
-      console.log('⚠️ Skipping login test - no user credentials available');
-      return;
+      throw new Error(
+        'No user credentials available for testing - ensure backend is running and generating admin user'
+      );
     }
 
     const response = await client.login(userCredentials);
@@ -71,8 +62,9 @@ describe('Authentication Endpoints', () => {
 
   it('should access protected endpoints when authenticated', async () => {
     if (!userCredentials) {
-      console.log('⚠️ Skipping protected endpoint test - no user credentials available');
-      return;
+      throw new Error(
+        'No user credentials available for testing - ensure backend is running and generating admin user'
+      );
     }
 
     // Login first
@@ -87,8 +79,9 @@ describe('Authentication Endpoints', () => {
 
   it('should refresh access token', async () => {
     if (!userCredentials) {
-      console.log('⚠️ Skipping token refresh test - no user credentials available');
-      return;
+      throw new Error(
+        'No user credentials available for testing - ensure backend is running and generating admin user'
+      );
     }
 
     // Login first to get tokens
@@ -109,8 +102,9 @@ describe('Authentication Endpoints', () => {
 
   it('should logout successfully', async () => {
     if (!userCredentials) {
-      console.log('⚠️ Skipping logout test - no user credentials available');
-      return;
+      throw new Error(
+        'No user credentials available for testing - ensure backend is running and generating admin user'
+      );
     }
 
     // Login first to get tokens
@@ -133,10 +127,11 @@ describe('Authentication Endpoints', () => {
     };
 
     // Make multiple rapid login attempts to trigger rate limiting
+    // Use _forceRateLimit=true to enable rate limiting for this specific test
     const promises = [];
     for (let i = 0; i < 6; i++) {
       promises.push(
-        client.post('/auth/login', invalidCredentials).catch(err => ({
+        client.post('/auth/login?_forceRateLimit=true', invalidCredentials).catch(err => ({
           status: err.response?.status || 500,
           data: err.response?.data || {},
         }))
@@ -148,9 +143,5 @@ describe('Authentication Endpoints', () => {
     // At least one response should be rate limited (429)
     const rateLimitedResponses = responses.filter(r => r.status === 429);
     expect(rateLimitedResponses.length).toBeGreaterThan(0);
-
-    console.log(
-      `✅ Rate limiting working: ${rateLimitedResponses.length} out of ${responses.length} requests were rate limited`
-    );
   });
 });
