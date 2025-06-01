@@ -1,22 +1,18 @@
-import type { DataSource, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 import { In, IsNull, Not } from 'typeorm';
 
 import type { Genre } from '@entities/genre.entity';
-import { Movie, MovieTranslation } from '@entities/movie.entity';
+import type { Movie, MovieSource, MovieTranslation } from '@entities/movie.entity';
+import type { Database } from '@database/database';
 import { objectKeys } from '@utils/object.util';
-
-import type { MovieSource, MovieSourceRepository } from './movie-source.repository';
 
 export class MovieRepository {
   private readonly movieRepository: Repository<Movie>;
   private readonly movieTranslationRepository: Repository<MovieTranslation>;
 
-  constructor(
-    datasource: DataSource,
-    private readonly movieSourceRepository: MovieSourceRepository
-  ) {
-    this.movieRepository = datasource.getRepository(Movie);
-    this.movieTranslationRepository = datasource.getRepository(MovieTranslation);
+  constructor(db: Database) {
+    this.movieRepository = db.getRepository(db.Movie);
+    this.movieTranslationRepository = db.getRepository(db.MovieTranslation);
   }
 
   async findByTMDBId(tmdbId: number): Promise<Movie | null> {
@@ -151,7 +147,6 @@ export class MovieRepository {
       const result = results.find(r => r.id === movie.id) || { sources: 0, missing: 0 };
       return {
         ...movie,
-        sources: movie.sources.map(source => this.movieSourceRepository.decryptSource(source)),
         sourcesCount: result.sources,
         missingCount: result.missing,
       };

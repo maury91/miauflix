@@ -76,7 +76,7 @@ describe('Encrypted Chunk Store', () => {
         const data = await promisify(cb => storage.get(0, cb))();
         expect(data).toEqual(testData);
       } finally {
-        await promisify(cb => storage.close(cb))();
+        await promisify(cb => storage.destroy(cb))();
       }
     });
   });
@@ -97,7 +97,7 @@ describe('Encrypted Chunk Store', () => {
       const data0 = await promisify(cb => storage.get(0, cb))();
       expect(data0).toEqual(testData1);
     } finally {
-      await promisify(cb => storage.close(cb))();
+      await promisify(cb => storage.destroy(cb))();
     }
   });
 
@@ -120,7 +120,7 @@ describe('Encrypted Chunk Store', () => {
       const data3 = await promisify(cb => storage.get(0, { offset: 12, length: 4 }, cb))();
       expect(data3).toEqual(Buffer.from('cdef'));
     } finally {
-      await promisify(cb => storage.close(cb))();
+      await promisify(cb => storage.destroy(cb))();
     }
   });
 
@@ -137,7 +137,7 @@ describe('Encrypted Chunk Store', () => {
       const data = await promisify(cb => storage.get(0, cb))();
       expect(data).toEqual(testData);
     } finally {
-      await promisify(cb => storage.close(cb))();
+      await promisify(cb => storage.destroy(cb))();
     }
   });
 
@@ -167,7 +167,7 @@ describe('Encrypted Chunk Store', () => {
         const data1 = await promisify(cb => storage.get(1, cb))();
         expect(data1).toEqual(testData2);
       } finally {
-        await promisify(cb => storage.close(cb))();
+        await promisify(cb => storage.destroy(cb))();
       }
     });
 
@@ -201,7 +201,7 @@ describe('Encrypted Chunk Store', () => {
 
         expect(data).toEqual(testData.subarray(18, 18 + 8));
       } finally {
-        await promisify(cb => storage.close(cb))();
+        await promisify(cb => storage.destroy(cb))();
       }
     });
   });
