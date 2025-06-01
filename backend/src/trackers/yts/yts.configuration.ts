@@ -10,8 +10,8 @@ export const ytsConfigurationDefinition = serviceConfiguration({
   variables: {
     YTS_API_URL: {
       description: 'URL for the YTS API',
-      example: 'https://yts.mx/api/v2',
-      defaultValue: 'https://yts.mx/api/v2',
+      example: 'https://yts.mx',
+      defaultValue: 'https://yts.mx',
       required: false,
     },
   },

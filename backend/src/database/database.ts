@@ -1,12 +1,14 @@
 import path from 'path';
+import type { EntityTarget, ObjectLiteral, Repository } from 'typeorm';
 import { DataSource } from 'typeorm';
 
 import { AuditLog } from '@entities/audit-log.entity';
 import { Episode } from '@entities/episode.entity';
 import { Genre, GenreTranslation } from '@entities/genre.entity';
-import { MediaList } from '@entities/list.entity';
-import { Movie, MovieTranslation } from '@entities/movie.entity';
-import { MovieSource } from '@entities/movie-source.entity';
+import type { MediaListClass } from '@entities/list.entity';
+import { createMediaListEntity } from '@entities/list.entity';
+import type { MovieClass, MovieSourceClass, MovieTranslationClass } from '@entities/movie.entity';
+import { createMovieEntity } from '@entities/movie.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { SyncState } from '@entities/sync-state.entity';
@@ -39,14 +41,25 @@ export class Database {
   private auditLogRepository: AuditLogRepository;
   private syncStateRepository: SyncStateRepository;
   private traktUserRepository: TraktUserRepository;
+  public MovieSource: MovieSourceClass;
+  public Movie: MovieClass;
+  public MovieTranslation: MovieTranslationClass;
+  public MediaList: MediaListClass;
 
   constructor(private readonly encryptionService: EncryptionService) {
+    const { Movie, MovieTranslation, MovieSource } = createMovieEntity(this.encryptionService);
+    const MediaList = createMediaListEntity(Movie);
+    this.MovieSource = MovieSource;
+    this.Movie = Movie;
+    this.MovieTranslation = MovieTranslation;
+    this.MediaList = MediaList;
     this.dataSource = new DataSource({
       type: 'sqlite',
       database: path.resolve(ENV('DATA_DIR'), 'database.sqlite'),
       entities: [
         Movie,
         MovieTranslation,
+        MovieSource,
         TVShow,
         TVShowTranslation,
         Season,
@@ -59,7 +72,6 @@ export class Database {
         AuditLog,
         SyncState,
         TraktUser,
-        MovieSource,
       ],
       synchronize: true,
     });
@@ -67,9 +79,9 @@ export class Database {
 
   public async initialize() {
     await this.dataSource.initialize();
-    this.mediaListRepository = new MediaListRepository(this.dataSource);
-    this.movieSourceRepository = new MovieSourceRepository(this.dataSource, this.encryptionService);
-    this.movieRepository = new MovieRepository(this.dataSource, this.movieSourceRepository);
+    this.mediaListRepository = new MediaListRepository(this);
+    this.movieSourceRepository = new MovieSourceRepository(this);
+    this.movieRepository = new MovieRepository(this);
     this.tvShowRepository = new TVShowRepository(this.dataSource);
     this.genreRepository = new GenreRepository(this.dataSource);
     this.userRepository = new UserRepository(this.dataSource);
@@ -77,6 +89,10 @@ export class Database {
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
     this.syncStateRepository = new SyncStateRepository(this.dataSource);
     this.traktUserRepository = new TraktUserRepository(this.dataSource);
+  }
+
+  public getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
+    return this.dataSource.getRepository<T>(entity);
   }
 
   public getSyncStateRepository(): SyncStateRepository {
