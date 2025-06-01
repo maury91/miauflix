@@ -128,6 +128,12 @@ try {
     bind(sourceService, 'searchTorrentFilesForSources')
   );
 
+  scheduler.scheduleTask(
+    'updateSourcesStats',
+    2, // 1 second
+    bind(sourceService, 'syncStatsForSources')
+  );
+
   const app = new Hono();
 
   // Error handling middleware - must be added first

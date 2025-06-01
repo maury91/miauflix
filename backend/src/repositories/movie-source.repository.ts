@@ -1,4 +1,4 @@
-import type { Repository } from 'typeorm';
+import { In, IsNull, LessThan, Or, type Repository } from 'typeorm';
 
 import type { MovieSource } from '@entities/movie.entity';
 import type { Database } from '@database/database';
@@ -23,20 +23,15 @@ CASE
 END
 `;
 
-// export interface MovieSource extends Omit<MovieSourceEntity, 'file' | 'ih' | 'ml'> {
-//   hash: string;
-//   magnetLink: string;
-//   torrentFile?: Buffer; // Optional torrent file data
-// }
+export type SourceProcessingResult = Omit<MovieSource, 'movie'> & SourceToProcessMetadata;
 
-export interface SourceProcessingResult {
+interface SourceToProcessMetadata {
   id: number;
-  movieId: number;
-  isPlayable: number;
   total_src: number;
-  linked_src: number;
+  done_src: number;
   completion_ratio: number;
-  rn_best_missing: number;
+  is_playable: number;
+  within_movie_rank: number;
 }
 
 export class MovieSourceRepository {
@@ -91,16 +86,36 @@ export class MovieSourceRepository {
   /**
    * Delete all sources for a movie
    */
-  async deleteByMovieId(movieId: number): Promise<void> {
-    await this.movieSourceRepository.delete({ movieId });
+  deleteByMovieId(movieId: number) {
+    return this.movieSourceRepository.delete({ movieId });
   }
 
   /**
    * Update a movie source with torrent file data
    */
-  async updateTorrentFile(sourceId: number, torrentFile: Buffer): Promise<void> {
-    await this.movieSourceRepository.update(sourceId, {
+  updateTorrentFile(sourceId: number, torrentFile: Buffer) {
+    return this.movieSourceRepository.update(sourceId, {
       file: torrentFile,
+    });
+  }
+
+  updateStats(sourceId: number, seeders: number, leechers: number) {
+    return this.movieSourceRepository.update(sourceId, {
+      broadcasters: seeders,
+      watchers: leechers,
+      lastStatsCheck: new Date(),
+    });
+  }
+
+  findSourceThatNeedsStatsUpdate(batchSize: number): Promise<MovieSource[]> {
+    return this.movieSourceRepository.find({
+      where: {
+        lastStatsCheck: Or(LessThan(new Date(Date.now() - 6 * 60 * 60 * 1000)), IsNull()),
+      },
+      order: {
+        lastStatsCheck: 'ASC',
+      },
+      take: batchSize,
     });
   }
 
@@ -148,48 +163,91 @@ export class MovieSourceRepository {
   /**
    * Get next batch of sources that need link processing
    */
-  async getNextSourcesToProcess(batchSize = 1): Promise<SourceProcessingResult[]> {
-    const repo = this.movieSourceRepository;
+  async getNextSourcesToProcess(
+    batchSize = 50,
+    minBrPerGb = 20,
+    minBcWcRatio = 1.0
+  ): Promise<SourceProcessingResult[]> {
+    const rawRows: SourceToProcessMetadata[] = await this.movieSourceRepository.query(
+      `
+WITH params(min_broadcasters_per_gb , min_bc_wc_ratio) AS (VALUES (?, ?)),
+movie_progress AS (
+  SELECT
+    movieId,
+    COUNT(*)                     AS total_src,
+    SUM(file IS NOT NULL)        AS done_src
+  FROM movie_source
+  GROUP BY movieId
+),
+ranked AS (
+  SELECT
+    ms.id,                       -- keep only PK here
+    ms.movieId,
+    mp.total_src,
+    mp.done_src,
+    1.0 * mp.done_src / mp.total_src AS completion_ratio,
+    CASE
+      WHEN ms.broadcasters IS NULL OR ms.broadcasters = 0 THEN 0
+      WHEN ms.size IS NULL        OR ms.size        = 0 THEN 0
+      WHEN (1.0 * ms.broadcasters * 1000000000.0) / ms.size
+           < (SELECT min_broadcasters_per_gb FROM params)      THEN 0
+      WHEN ms.watchers IS NOT NULL AND ms.watchers > 0 AND
+           (1.0 * ms.broadcasters) / ms.watchers
+           < (SELECT min_bc_wc_ratio FROM params)              THEN 0
+      ELSE 1
+    END AS is_playable,
+    ROW_NUMBER() OVER (
+      PARTITION BY ms.movieId
+      ORDER BY
+        CASE
+          WHEN ms.broadcasters IS NULL OR ms.broadcasters = 0 THEN 0
+          WHEN ms.size IS NULL        OR ms.size        = 0 THEN 0
+          WHEN (1.0 * ms.broadcasters * 1000000000.0) / ms.size
+            < (SELECT min_broadcasters_per_gb FROM params)    THEN 0
+          WHEN ms.watchers IS NOT NULL AND ms.watchers > 0 AND
+            (1.0 * ms.broadcasters) / ms.watchers
+              < (SELECT min_bc_wc_ratio FROM params)          THEN 0
+          ELSE 1
+        END DESC,
+        ms.resolution   DESC,
+        ms.broadcasters DESC,
+        ms.size         ASC
+    ) AS within_movie_rank
+  FROM movie_source ms
+  JOIN movie_progress mp USING (movieId)
+  WHERE ms.file IS NULL
+)
+SELECT *
+FROM ranked
+ORDER BY
+  within_movie_rank ASC,
+  completion_ratio  ASC,
+  is_playable       DESC
+LIMIT ?
+`,
+      [minBrPerGb, minBcWcRatio, batchSize]
+    );
 
-    // Sub-query: overall link-fetch progress per film
-    const completionQb = repo
-      .createQueryBuilder('ms2')
-      .select('ms2.movieId', 'movieId')
-      .addSelect('COUNT(*)', 'total_src')
-      .addSelect('SUM(CASE WHEN ms2.file IS NOT NULL THEN 1 ELSE 0 END)', 'linked_src')
-      .groupBy('ms2.movieId');
+    /* === 2. Hydrate entities (runs all transformers) ============== */
+    const ids = rawRows.map((r: SourceToProcessMetadata) => r.id);
+    const entities = await this.movieSourceRepository.find({ where: { id: In(ids) } });
+    const entityById = new Map<number, MovieSource>(entities.map(e => [e.id, e]));
 
-    // Main query
-    return repo
-      .createQueryBuilder('ms')
-      .innerJoin('(' + completionQb.getQuery() + ')', 'c', 'c.movieId = ms.movieId')
-      .addSelect(playabilityExpr, 'isPlayable')
-      .addSelect('c.total_src', 'total_src')
-      .addSelect('c.linked_src', 'linked_src')
-      .addSelect('(1.0 * c.linked_src) / c.total_src', 'completion_ratio')
-      .addSelect(
-        `ROW_NUMBER() OVER (
-           PARTITION BY ms.movieId
-           ORDER BY
-             ${playabilityExpr} DESC,
-             ms.resolution      DESC,
-             ms.broadcasters    DESC,
-             ms.size            ASC
-         )`,
-        'rn_best_missing'
-      )
-      .setParameters({
-        minBroadcastersPerGb: MIN_BROADCASTERS_PER_GB,
-        minBroadcasterWatcherRatio: MIN_BROADCASTER_WATCHER_RATIO,
-        ...completionQb.getParameters(),
-      })
-      .where('ms.file IS NULL') // still needs torrent file fetching
-      .andWhere('c.linked_src BETWEEN 1 AND c.total_src - 1') // skip 0% / 100% completion
-      .having('rn_best_missing = 1') // best missing source per film
-      .orderBy('completion_ratio', 'ASC') // least-complete movie first
-      .addOrderBy('isPlayable', 'DESC')
-      .addOrderBy('ms.broadcasters', 'DESC')
-      .limit(batchSize)
-      .getRawMany();
+    /* === 3. Merge & keep original order =========================== */
+    const merged: (MovieSource & SourceToProcessMetadata)[] = rawRows.map(
+      (r: SourceToProcessMetadata) => {
+        const base = entityById.get(r.id)!; // transformers applied
+        return {
+          ...base,
+          total_src: r.total_src,
+          done_src: r.done_src,
+          completion_ratio: r.completion_ratio,
+          is_playable: r.is_playable,
+          within_movie_rank: r.within_movie_rank,
+        };
+      }
+    );
+
+    return merged;
   }
 }
