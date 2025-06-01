@@ -1,4 +1,6 @@
 import { logger } from '@logger';
+import type { ScrapeData } from 'bittorrent-tracker';
+import { Client as TrackerClient } from 'bittorrent-tracker';
 import type IPSet from 'ip-set';
 import loadIPSet from 'load-ip-set';
 import type { Torrent } from 'webtorrent';
@@ -12,6 +14,8 @@ import { bestTrackersURL, blacklistedTrackersURL, extra_trackers } from './track
 export class WebTorrentService {
   public readonly client: WebTorrent;
   private bestTrackers: string[] = [];
+  private bestTrackersOriginal: string[] = ['udp://tracker.opentrackr.org:1337'];
+  private readonly ready: Promise<void>;
 
   constructor() {
     this.client = new WebTorrent({
@@ -23,7 +27,7 @@ export class WebTorrentService {
     this.client.on('error', (error: Error) => {
       logger.error('DataService', 'Error:', error.message);
     });
-    this.loadTrackers();
+    this.ready = this.loadTrackers();
   }
 
   private async getTrackers(url: string) {
@@ -72,6 +76,7 @@ export class WebTorrentService {
 
     if (bestTrackers.length) {
       this.bestTrackers = bestTrackers;
+      this.bestTrackersOriginal = [...bestTrackers];
     }
     this.bestTrackers = [...new Set([...this.bestTrackers, ...extra_trackers])];
 
@@ -117,5 +122,42 @@ export class WebTorrentService {
         reject(new ErrorWithStatus(`Error adding file to client`, 'add_error'));
       }
     });
+  }
+
+  private async scrape(infoHash: string): Promise<ScrapeData> {
+    return new Promise((resolve, reject) => {
+      const client = new TrackerClient({
+        infoHash: infoHash.toLowerCase(),
+        announce: this.bestTrackersOriginal,
+        peerId: Buffer.from('01234567890123456789'), // 20-byte dummy peer ID
+        port: 6881, // arbitrary port for scrape
+      });
+
+      client.once('scrape', data => {
+        resolve(data);
+        client.destroy();
+      });
+
+      client.once('error', err => {
+        reject(err);
+        client.destroy();
+      });
+
+      client.scrape();
+
+      setTimeout(() => {
+        reject(new ErrorWithStatus(`Scrape request timed out for ${infoHash}`, 'scrape_timeout'));
+        client.destroy();
+      }, 5000); // 5 seconds timeout
+    });
+  }
+
+  async getStats(infoHash: string): Promise<{ seeders: number; leechers: number }> {
+    await this.ready;
+    const result = await this.scrape(infoHash);
+    return {
+      seeders: result.complete || 0,
+      leechers: result.incomplete || 0,
+    };
   }
 }
