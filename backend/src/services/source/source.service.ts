@@ -4,8 +4,10 @@ import type { MovieSource } from '@entities/movie.entity';
 import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { TrackerService } from '@services/source/tracker.service';
+import { RateLimiter } from '@utils/rateLimiter';
 import { sleep } from '@utils/time';
 
+import { enhancedFetch } from './services/utils';
 import type { MagnetService } from './magnet.service';
 
 /**
@@ -14,10 +16,12 @@ import type { MagnetService } from './magnet.service';
 export class SourceService {
   private readonly movieRepository;
   private readonly movieSourceRepository;
+  private readonly sourceRateLimiters = new Map<string, RateLimiter>();
 
   private vpnConnected = false;
   private readonly searchOnlyBehindVpn = true;
   private readonly startPromise: Promise<void>;
+  private lastNoSourcesLogTime = 0;
 
   constructor(
     db: Database,
@@ -177,6 +181,35 @@ export class SourceService {
     return source;
   }
 
+  public async syncStatsForSources(): Promise<void> {
+    const sourcesToUpdate = await this.movieSourceRepository.findSourceThatNeedsStatsUpdate(5);
+    if (sourcesToUpdate.length === 0) {
+      return;
+    }
+    logger.debug('SourceService', `Updating stats for ${sourcesToUpdate.length} sources`);
+    await Promise.all(
+      sourcesToUpdate.map(async source => {
+        try {
+          if (!source.file) {
+            return;
+          }
+          const { seeders, leechers } = await this.magnetService.getStats(source.hash);
+          await this.movieSourceRepository.updateStats(source.id, seeders, leechers);
+          logger.debug(
+            'SourceService',
+            `Updated stats for source ${source.id} (quality: ${source.quality})`
+          );
+        } catch (error) {
+          logger.error(
+            'SourceService',
+            `Error updating stats for source ${source.id} (quality: ${source.quality}):`,
+            error
+          );
+        }
+      })
+    );
+  }
+
   /**
    * Find and download data files for sources that don't have them yet
    * This method prioritizes by movie popularity and ensures fair distribution
@@ -194,60 +227,44 @@ export class SourceService {
     // 2. Count how many sources each movie has
     // 3. Prioritize by movie popularity and ensure fair distribution
     // 4. Get a group of 50 sources that need data files
-    logger.debug('SourceService', 'Searching data files for sources without them');
 
     const batchSize = Math.max(2, this.magnetService.getAvailableConcurrency());
-    const moviesWithoutTorrents = await this.movieRepository.findMoviesWithoutTorrents(
-      batchSize * 3
-    );
-    const sourcesWithoutTorrents = moviesWithoutTorrents.map(movie => ({
-      id: movie.id,
-      title: movie.title,
-      sources: movie.sources.filter(source => source.file === null),
-    }));
-    const maxDepth = Math.max(...sourcesWithoutTorrents.map(movie => movie.sources.length));
-    const allSources: {
-      id: number;
-      hash: string;
-      magnetLink: string;
-      quality: string;
-      movieId: number;
-      title: string;
-    }[] = [];
-    for (let depth = 0; depth < maxDepth; depth++) {
-      for (const movie of sourcesWithoutTorrents) {
-        if (movie.sources[depth]) {
-          allSources.push({
-            id: movie.sources[depth].id,
-            title: movie.title,
-            hash: movie.sources[depth].hash,
-            magnetLink: movie.sources[depth].magnetLink,
-            quality: movie.sources[depth].quality,
-            movieId: movie.id,
-          });
-        }
-      }
-      if (allSources.length >= batchSize * 3) {
-        break;
-      }
-    }
+    const sourcesToProcess = await this.movieSourceRepository.getNextSourcesToProcess(batchSize);
 
-    const processSource = async (source: (typeof allSources)[number]) => {
+    // Early exit if no movies need processing - avoid log spam
+    if (sourcesToProcess.length === 0) {
+      const now = Date.now();
+      const timeSinceLastLog = now - this.lastNoSourcesLogTime;
+      // Only log once every 30 seconds when there are no sources to process
+      if (timeSinceLastLog > 30000) {
+        logger.debug('SourceService', 'No sources requiring data files found');
+        this.lastNoSourcesLogTime = now;
+      }
+      return;
+    }
+    logger.debug('SourceService', 'Searching data files for sources without them');
+
+    const processSource = async (source: (typeof sourcesToProcess)[number]) => {
       logger.debug(
         'SourceService',
-        `Processing source ${source.id} for movie "${source.title}" with quality ${source.quality}`
+        `Processing source ${source.id} with quality ${source.quality}`
       );
       await this.searchTorrentFileForSource(source);
-      if (this.magnetService.isIdle()) {
+      const potentialNextSource = sourcesToProcess[0];
+      if (
+        potentialNextSource &&
+        ((potentialNextSource.url && this.canMakeSourceRequest(potentialNextSource.source)) ||
+          this.magnetService.isIdle())
+      ) {
         // If the magnet service is idle, we can process the next batch
-        const nextSource = allSources.shift();
+        const nextSource = sourcesToProcess.shift();
         if (nextSource) {
           processSource(nextSource);
         }
       }
     };
 
-    await Promise.all(allSources.splice(0, batchSize).map(processSource));
+    await Promise.all(sourcesToProcess.splice(0, batchSize).map(processSource));
   }
 
   /**
@@ -259,6 +276,8 @@ export class SourceService {
     magnetLink: string;
     quality: string;
     movieId: number;
+    url?: string;
+    source: string;
   }): Promise<void> {
     logger.debug(
       'SourceService',
@@ -266,7 +285,33 @@ export class SourceService {
     );
 
     try {
-      const torrentFile = await this.magnetService.getTorrent(source.magnetLink, source.hash);
+      let torrentFile: Buffer | null = null;
+
+      if (source.url && this.canMakeSourceRequest(source.source)) {
+        torrentFile = await this.downloadTorrentFromUrl(source.url, source.source);
+
+        if (torrentFile) {
+          logger.debug(
+            'SourceService',
+            `Successfully downloaded torrent via direct URL for source ${source.id}`
+          );
+        } else {
+          logger.debug(
+            'SourceService',
+            `Direct URL download failed for source ${source.id}, falling back to magnet service`
+          );
+        }
+      } else if (source.url) {
+        logger.debug(
+          'SourceService',
+          `Rate limit reached for ${source.source}, using magnet service for source ${source.id}`
+        );
+      }
+
+      // Fall back to magnet service if direct download failed or wasn't available
+      if (!torrentFile) {
+        torrentFile = await this.magnetService.getTorrent(source.magnetLink, source.hash);
+      }
 
       if (!torrentFile) {
         logger.warn(
@@ -289,6 +334,61 @@ export class SourceService {
         `Error searching file for source ${source.id} (quality: ${source.quality}):`,
         error
       );
+    }
+  }
+
+  /**
+   * Get or create a rate limiter for a specific source
+   */
+  private getSourceRateLimiter(source: string): RateLimiter {
+    if (!this.sourceRateLimiters.has(source)) {
+      // Set rate limits per source (requests per second)
+      const rateLimit = source === 'YTS' ? 0.5 : 0.2; // YTS: 30 req/min, others: 12 req/min
+      this.sourceRateLimiters.set(source, new RateLimiter(rateLimit));
+    }
+    return this.sourceRateLimiters.get(source)!;
+  }
+
+  /**
+   * Check if we can make a request to a source without rate limiting
+   */
+  private canMakeSourceRequest(source: string): boolean {
+    const rateLimiter = this.getSourceRateLimiter(source);
+    return !rateLimiter.shouldReject();
+  }
+
+  /**
+   * Download torrent file from direct URL
+   */
+  private async downloadTorrentFromUrl(url: string, source: string): Promise<Buffer | null> {
+    try {
+      logger.debug('SourceService', `Downloading torrent from URL: ${url} (source: ${source})`);
+
+      // Throttle the request
+      const rateLimiter = this.getSourceRateLimiter(source);
+      await rateLimiter.throttle();
+
+      const response = await enhancedFetch(url);
+
+      if (!response.ok) {
+        logger.warn(
+          'SourceService',
+          `Failed to download torrent from URL: ${response.status} ${response.statusText}`
+        );
+        return null;
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType?.includes('application/')) {
+        logger.warn('SourceService', `Invalid content type for torrent file: ${contentType}`);
+        return null;
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer);
+    } catch (error) {
+      logger.error('SourceService', `Error downloading torrent from URL: ${url}`, error);
+      return null;
     }
   }
 }

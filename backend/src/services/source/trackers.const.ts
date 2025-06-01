@@ -1,5 +1,5 @@
 export const bestTrackersURL =
-  'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ws.txt';
+  'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt';
 export const blacklistedTrackersURL =
   'https://raw.githubusercontent.com/ngosang/trackerslist/master/blacklist.txt';
 

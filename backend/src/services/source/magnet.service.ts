@@ -38,7 +38,7 @@ export class MagnetService {
   }> = [];
   private activeWorkers = 0;
 
-  constructor(webTorrentService: WebTorrentService) {
+  constructor(private readonly webTorrentService: WebTorrentService) {
     this.createService('webTorrent', {
       maxConcurrentRequests: 50,
       shouldVerify: false,
@@ -138,6 +138,10 @@ export class MagnetService {
     return new Promise<Buffer | null>(resolve => {
       this.queue.push({ magnetLink, hash, onComplete: resolve });
     });
+  }
+
+  public async getStats(hash: string): Promise<{ seeders: number; leechers: number }> {
+    return this.webTorrentService.getStats(hash);
   }
 
   /**

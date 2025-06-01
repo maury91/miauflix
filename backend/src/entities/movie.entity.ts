@@ -224,6 +224,9 @@ export const createMovieEntity = (encryptionService: EncryptionService) => {
     @Column({ type: 'datetime', nullable: true })
     sourceUploadedAt?: Date;
 
+    @Column({ type: 'datetime', nullable: true })
+    lastStatsCheck?: Date;
+
     @CreateDateColumn()
     createdAt: Date;
 

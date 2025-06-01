@@ -867,3 +867,344 @@ declare module 'load-ip-set' {
 
   export default loadIPSet;
 }
+
+declare module 'bittorrent-tracker' {
+  import type { Socket as UDPSocket } from 'dgram';
+  import type { EventEmitter } from 'events';
+  import type { Server as HTTPServer } from 'http';
+  import type { WebSocketServer } from 'ws';
+
+  // Common types
+  type InfoHash = Buffer | Uint8Array | string;
+  type PeerId = Buffer | Uint8Array | string;
+  type AnnounceURL = string[] | string;
+
+  // Peer information interface
+  interface Peer {
+    /** Peer ID */
+    id: string;
+    /** Peer IP address */
+    ip: string;
+    /** Peer port */
+    port: number;
+    /** Optional socket for WebSocket peers */
+    socket?: WebSocket;
+  }
+
+  // Client announce options
+  interface AnnounceOptions {
+    /** Number of bytes uploaded */
+    uploaded?: number;
+    /** Number of bytes downloaded */
+    downloaded?: number;
+    /** Number of bytes left to download */
+    left?: number;
+    /** Number of peers wanted (default: 50) */
+    numwant?: number;
+    /** Event type for announce */
+    event?: 'completed' | 'started' | 'stopped';
+    /** Additional custom announce parameters */
+    [key: string]: unknown;
+  }
+
+  // Scrape response data
+  export interface ScrapeData {
+    /** Info hash */
+    infoHash: string;
+    /** Number of complete peers (seeders) */
+    complete: number;
+    /** Number of incomplete peers (leechers) */
+    incomplete: number;
+    /** Number of times the torrent has been downloaded */
+    downloaded: number;
+    /** Announce URL */
+    announce: string;
+  }
+
+  // Client constructor options
+  interface ClientOptions {
+    /** Torrent info hash */
+    infoHash: InfoHash;
+    /** Peer ID */
+    peerId: PeerId;
+    /** Tracker announce URLs */
+    announce: AnnounceURL;
+    /** Port for incoming connections */
+    port?: number;
+    /** Callback to provide additional announce options */
+    getAnnounceOpts?: () => Record<string, number | string>;
+    /** RTCPeerConnection configuration for WebRTC */
+    rtcConfig?: RTCConfiguration;
+    /** User-Agent header for HTTP requests */
+    userAgent?: string;
+    /** WebRTC implementation (useful in Node.js) */
+    wrtc?: unknown;
+    /** Proxy options for HTTP requests */
+    proxyOpts?: {
+      /** SOCKS proxy host */
+      host?: string;
+      /** SOCKS proxy port */
+      port?: number;
+      /** SOCKS proxy type */
+      type?: 4 | 5;
+      /** Username for proxy authentication */
+      userId?: string;
+      /** Password for proxy authentication */
+      password?: string;
+    };
+  }
+
+  // Static scrape options
+  interface StaticScrapeOptions {
+    /** Info hash or array of info hashes */
+    infoHash: InfoHash | InfoHash[];
+    /** Tracker announce URL */
+    announce: string;
+  }
+
+  // BitTorrent tracker client
+  class Client extends EventEmitter {
+    /** Peer ID as hex string */
+    readonly peerId: string;
+    /** Info hash as hex string */
+    readonly infoHash: string;
+    /** Whether client is destroyed */
+    readonly destroyed: boolean;
+
+    constructor(opts: ClientOptions);
+
+    /** Send a 'start' announce to trackers */
+    start(opts?: AnnounceOptions): void;
+
+    /** Send a 'stop' announce to trackers */
+    stop(opts?: AnnounceOptions): void;
+
+    /** Send a 'complete' announce to trackers */
+    complete(opts?: AnnounceOptions): void;
+
+    /** Send an 'update' announce to trackers */
+    update(opts?: AnnounceOptions): void;
+
+    /** Send a scrape request to trackers */
+    scrape(opts?: Record<string, unknown>): void;
+
+    /** Set announce interval for all trackers */
+    setInterval(intervalMs: number): void;
+
+    /** Destroy the client and close all tracker connections */
+    destroy(callback?: (err?: Error) => void): void;
+
+    /** Static method to scrape a tracker without creating a client instance */
+    static scrape(
+      opts: StaticScrapeOptions,
+      callback: (err: Error | null, data?: Record<string, ScrapeData> | ScrapeData) => void
+    ): Client;
+
+    // Events
+    on(event: 'peer', listener: (peer: Peer) => void): this;
+    on(event: 'scrape', listener: (data: ScrapeData) => void): this;
+    on(event: 'error', listener: (err: Error) => void): this;
+    on(event: 'warning', listener: (err: Error) => void): this;
+    on(
+      event: 'update',
+      listener: (data: { announce: string; complete: number; incomplete: number }) => void
+    ): this;
+
+    once(event: 'peer', listener: (peer: Peer) => void): this;
+    once(event: 'scrape', listener: (data: ScrapeData) => void): this;
+    once(event: 'error', listener: (err: Error) => void): this;
+    once(event: 'warning', listener: (err: Error) => void): this;
+    once(
+      event: 'update',
+      listener: (data: { announce: string; complete: number; incomplete: number }) => void
+    ): this;
+  }
+
+  // Server options interface
+  interface ServerOptions {
+    /** Announce interval in milliseconds (default: 600000 = 10 minutes) */
+    interval?: number;
+    /** Trust 'x-forwarded-for' header from reverse proxy */
+    trustProxy?: boolean;
+    /** HTTP server options or false to disable */
+    http?: boolean | object;
+    /** UDP server options or false to disable */
+    udp?: boolean | object;
+    /** WebSocket server options or false to disable */
+    ws?: boolean | { noServer?: boolean; [key: string]: unknown };
+    /** Enable web-based statistics (default: true) */
+    stats?: boolean;
+    /** Filter function for allowing/blocking torrents */
+    filter?: (
+      infoHash: string,
+      params: Record<string, unknown>,
+      callback: (err?: Error | null) => void
+    ) => void;
+    /** Peers cache length */
+    peersCacheLength?: number;
+    /** Peers cache TTL in milliseconds */
+    peersCacheTtl?: number;
+  }
+
+  // Torrent swarm statistics
+  interface SwarmStats {
+    /** Number of seeders */
+    complete: number;
+    /** Number of leechers */
+    incomplete: number;
+    /** Number of times downloaded */
+    downloaded: number;
+  }
+
+  // Server-side peer information
+  interface ServerPeer {
+    /** Peer ID */
+    peerId: string;
+    /** IP address */
+    ip: string;
+    /** Port number */
+    port: number;
+    /** Whether peer is a seeder */
+    complete: boolean;
+    /** Last announce time */
+    lastAnnounce: number;
+    /** Bytes uploaded */
+    uploaded?: number;
+    /** Bytes downloaded */
+    downloaded?: number;
+    /** Bytes left */
+    left?: number;
+    /** Client information */
+    client: {
+      client: string;
+      version: string;
+    };
+  }
+
+  // Swarm interface (used internally by Server)
+  interface Swarm {
+    /** Info hash */
+    readonly infoHash: string;
+    /** Number of complete peers (seeders) */
+    complete: number;
+    /** Number of incomplete peers (leechers) */
+    incomplete: number;
+    /** LRU cache of peers */
+    peers: { get(key: string): ServerPeer | undefined; set(key: string, value: ServerPeer): void };
+
+    /** Handle announce request */
+    announce(
+      params: Record<string, unknown>,
+      callback?: (err?: Error | null, response?: unknown) => void
+    ): void;
+
+    /** Handle scrape request */
+    scrape(
+      params: Record<string, unknown>,
+      callback?: (err?: Error | null, response?: unknown) => void
+    ): void;
+  }
+
+  // BitTorrent tracker server
+  class Server extends EventEmitter {
+    /** Announce interval in milliseconds */
+    readonly intervalMs: number;
+    /** Whether server is listening */
+    readonly listening: boolean;
+    /** Whether server is destroyed */
+    readonly destroyed: boolean;
+    /** HTTP server instance */
+    readonly http: HTTPServer | null;
+    /** UDP4 server instance */
+    readonly udp4: UDPSocket | null;
+    /** UDP6 server instance */
+    readonly udp6: UDPSocket | null;
+    /** WebSocket server instance */
+    readonly ws: WebSocketServer | null;
+    /** All torrents being tracked */
+    readonly torrents: Record<string, SwarmStats>;
+
+    constructor(opts?: ServerOptions);
+
+    /** Start listening on specified port */
+    listen(port?: number, hostname?: string, callback?: () => void): void;
+
+    /** Get server address information */
+    address(): { address: string; family: string; port: number } | null;
+
+    /** Close the server */
+    close(callback?: (err?: Error) => void): void;
+
+    /** Get torrent swarm */
+    getSwarm(infoHash: string): Swarm | null;
+
+    /** Create a new swarm (for advanced usage) */
+    createSwarm(infoHash: string): Swarm;
+
+    /** Handle HTTP announce/scrape request */
+    onHttpRequest(
+      req: {
+        url?: string;
+        method?: string;
+        headers?: Record<string, string>;
+        connection?: { remoteAddress?: string };
+      },
+      res: {
+        writeHead(statusCode: number, headers?: Record<string, string>): void;
+        end(data?: string): void;
+      },
+      options?: { action?: string; trustProxy?: boolean }
+    ): void;
+
+    /** Handle UDP message */
+    onUdpRequest(
+      msg: Buffer,
+      rinfo: { address: string; port: number; family: string; size: number }
+    ): void;
+
+    /** Handle WebSocket connection */
+    onWebSocketConnection(
+      socket: WebSocket & { upgradeReq?: { url?: string; headers?: Record<string, string> } }
+    ): void;
+
+    // Events
+    on(event: 'start', listener: (peer: ServerPeer, params: Record<string, unknown>) => void): this;
+    on(
+      event: 'complete',
+      listener: (peer: ServerPeer, params: Record<string, unknown>) => void
+    ): this;
+    on(
+      event: 'update',
+      listener: (peer: ServerPeer, params: Record<string, unknown>) => void
+    ): this;
+    on(event: 'stop', listener: (peer: ServerPeer, params: Record<string, unknown>) => void): this;
+    on(event: 'warning', listener: (err: Error) => void): this;
+    on(event: 'error', listener: (err: Error) => void): this;
+    on(event: 'listening', listener: () => void): this;
+
+    once(
+      event: 'start',
+      listener: (peer: ServerPeer, params: Record<string, unknown>) => void
+    ): this;
+    once(
+      event: 'complete',
+      listener: (peer: ServerPeer, params: Record<string, unknown>) => void
+    ): this;
+    once(
+      event: 'update',
+      listener: (peer: ServerPeer, params: Record<string, unknown>) => void
+    ): this;
+    once(
+      event: 'stop',
+      listener: (peer: ServerPeer, params: Record<string, unknown>) => void
+    ): this;
+    once(event: 'warning', listener: (err: Error) => void): this;
+    once(event: 'error', listener: (err: Error) => void): this;
+    once(event: 'listening', listener: () => void): this;
+  }
+
+  // Default export is Client
+  const BitTorrentTracker: typeof Client;
+  export default BitTorrentTracker;
+  export { Client, Server, Swarm };
+}
