@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
+import type { MovieSource } from '@entities/movie.entity';
 import type { Database } from '@database/database';
-import type { MovieSource } from '@repositories/movie-source.repository';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { TrackerService } from '@services/source/tracker.service';
 import { sleep } from '@utils/time';
@@ -118,18 +118,22 @@ export class SourceService {
       );
 
       // Convert sources to MovieSource objects and save them
-      const sources = movieWithTorrents.torrents.map(torrent => ({
-        movieId: movie.id,
-        hash: torrent.magnetLink.split('btih:')[1].split('&')[0], // Extract identifier from URI link
-        magnetLink: torrent.magnetLink,
-        quality: torrent.quality,
-        resolution: torrent.resolution.height,
-        size: torrent.size.bytes,
-        videoCodec: torrent.videoCodec.toString(),
-        seeds: torrent.seeders,
-        leechers: torrent.leechers,
-        source: 'YTS', // Currently only using YTS as a source
-      }));
+      const sources = movieWithTorrents.torrents.map(
+        (torrent): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
+          movieId: movie.id,
+          hash: torrent.magnetLink.split('btih:')[1].split('&')[0], // Extract identifier from URI link
+          magnetLink: torrent.magnetLink,
+          quality: torrent.quality,
+          resolution: torrent.resolution.height,
+          size: torrent.size.bytes,
+          videoCodec: torrent.videoCodec.toString(),
+          broadcasters: torrent.seeders,
+          watchers: torrent.leechers,
+          sourceUploadedAt: torrent.uploadDate,
+          url: torrent.url,
+          source: 'YTS', // Currently only using YTS as a source
+        })
+      );
 
       await this.movieSourceRepository.createMany(sources);
       logger.debug(
@@ -157,7 +161,7 @@ export class SourceService {
    */
   public async getSourcesWithTorrentsForMovie(movieId: number): Promise<MovieSource[]> {
     const sources = await this.movieSourceRepository.findByMovieId(movieId);
-    return sources.filter(source => source.torrentFile !== null);
+    return sources.filter(source => source.file !== null);
   }
 
   /**
@@ -166,7 +170,7 @@ export class SourceService {
   public async getSourceWithTorrent(sourceId: number): Promise<MovieSource | null> {
     const source = await this.movieSourceRepository.findById(sourceId);
 
-    if (!source || !source.torrentFile) {
+    if (!source || !source.file) {
       return null;
     }
 
@@ -199,7 +203,7 @@ export class SourceService {
     const sourcesWithoutTorrents = moviesWithoutTorrents.map(movie => ({
       id: movie.id,
       title: movie.title,
-      sources: movie.sources.filter(source => source.torrentFile === null),
+      sources: movie.sources.filter(source => source.file === null),
     }));
     const maxDepth = Math.max(...sourcesWithoutTorrents.map(movie => movie.sources.length));
     const allSources: {

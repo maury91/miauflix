@@ -169,6 +169,7 @@ export function normalizeYTSTorrent(
   leechers: number;
   uploadDate: Date;
   approximateBitrate: number;
+  url: string;
 } {
   const resolution = getResolutionFromQuality(torrent.quality);
   const videoCodec = mapYTSVideoCodec(torrent.video_codec, torrent.bit_depth);
@@ -202,5 +203,6 @@ export function normalizeYTSTorrent(
     leechers: torrent.peers,
     uploadDate: new Date(torrent.date_uploaded),
     approximateBitrate: bitrate,
+    url: torrent.url,
   };
 }

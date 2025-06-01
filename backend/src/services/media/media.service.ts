@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
 import type { Genre } from '@entities/genre.entity';
-import { Movie } from '@entities/movie.entity';
+import type { Movie } from '@entities/movie.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow, TVShowTranslation } from '@entities/tvshow.entity';
 import type { Database } from '@database/database';
@@ -30,7 +30,7 @@ export class MediaService {
   private genreCache = new Map<number, GenreWithLanguages>();
 
   constructor(
-    db: Database,
+    private readonly db: Database,
     private readonly tmdbApi: TMDBApi,
     private readonly defaultLanguage: string = 'en'
   ) {
@@ -355,7 +355,7 @@ export class MediaService {
     );
 
     return medias.map(media => {
-      if (media instanceof Movie) {
+      if (media instanceof this.db.Movie) {
         const { genres, translations, ...movie } = media;
         const translation = translations.find(translation => translation.language === language);
         const translatedGenres = genres.map(genre => genreMap[genre.id]);

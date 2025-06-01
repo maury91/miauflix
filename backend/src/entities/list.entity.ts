@@ -1,34 +1,41 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Movie } from './movie.entity';
+import { Movie, MovieClass } from './movie.entity';
 import { Season } from './season.entity';
 import { TVShow } from './tvshow.entity';
 
-@Entity()
-export class MediaList {
-  @PrimaryGeneratedColumn()
-  id: number;
+export const createMediaListEntity = (Movie: MovieClass) => {
+  @Entity()
+  class MediaList {
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  name: string;
+    @Column()
+    name: string;
 
-  @Column({
-    unique: true,
-  })
-  slug: string;
+    @Column({
+      unique: true,
+    })
+    slug: string;
 
-  @Column({ nullable: true })
-  description?: string;
+    @Column({ nullable: true })
+    description?: string;
 
-  @ManyToMany(() => Movie)
-  @JoinTable()
-  movies: Movie[];
+    @ManyToMany(() => Movie)
+    @JoinTable()
+    movies: Movie[];
 
-  @ManyToMany(() => TVShow)
-  @JoinTable()
-  tvShows: TVShow[];
+    @ManyToMany(() => TVShow)
+    @JoinTable()
+    tvShows: TVShow[];
 
-  @ManyToMany(() => Season)
-  @JoinTable()
-  seasons: Season[];
-}
+    @ManyToMany(() => Season)
+    @JoinTable()
+    seasons: Season[];
+  }
+
+  return MediaList;
+};
+
+export type MediaListClass = ReturnType<typeof createMediaListEntity>;
+export type MediaList = InstanceType<MediaListClass>;

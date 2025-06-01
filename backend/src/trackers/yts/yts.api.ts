@@ -29,7 +29,7 @@ export class YTSApi extends Api {
   constructor(cache: Cache) {
     super(
       cache,
-      ENV('YTS_API_URL') || `https://${domainMirrors[0]}/api/v2`,
+      ENV('YTS_API_URL') || `https://${domainMirrors[0]}`,
       // YTS doesn't document rate limits specifically, but we'll implement
       // a conservative rate limiter (20 requests per minute) to be safe
       20 / 60 // 20 requests per minute
@@ -62,6 +62,17 @@ export class YTSApi extends Api {
         throw new Error(`YTS API error: ${response.status} ${response.statusText}`);
       }
 
+      if (response.headers.get('content-type')?.includes('application/octet-stream')) {
+        return response.arrayBuffer() as unknown as T; // Handle non-JSON responses (e.g., torrent downloads)
+      }
+      if (response.headers.get('content-type')?.includes('text/html')) {
+        // This is most likely the 404 page or an error page
+        logger.error(
+          'YTS',
+          `Received HTML response for ${url}. This may indicate an error or a 404 page.`
+        );
+        throw new Error(`YTS API returned HTML response for ${url}`);
+      }
       const data = (await response.json()) as T;
       return data;
     } catch (error) {
@@ -72,7 +83,7 @@ export class YTSApi extends Api {
         this.currentDomainIndex++;
         const newDomain = domainMirrors[this.currentDomainIndex];
         console.log(`Trying alternative YTS domain: ${newDomain}`);
-        this.apiUrl = `https://${newDomain}/api/v2`;
+        this.apiUrl = `https://${newDomain}`;
         return this.request<T>(endpoint, params);
       }
 
@@ -85,7 +96,9 @@ export class YTSApi extends Api {
    */
   public async test(): Promise<boolean> {
     try {
-      const response = await this.request<MovieListResponse>('list_movies.json', { limit: 1 });
+      const response = await this.request<MovieListResponse>('api/v2/list_movies.json', {
+        limit: 1,
+      });
       return response.status === 'ok';
     } catch {
       // Ignore the error and just return false to indicate the test failed
@@ -102,7 +115,7 @@ export class YTSApi extends Api {
     page: number = 1,
     limit: number = 20
   ): Promise<MovieListResponse> {
-    return this.request<MovieListResponse>('list_movies.json', {
+    return this.request<MovieListResponse>('api/v2/list_movies.json', {
       query_term: queryTerm,
       page,
       limit,
@@ -118,7 +131,7 @@ export class YTSApi extends Api {
     withImages: boolean = true,
     withCast: boolean = true
   ): Promise<MovieDetailsResponse> {
-    return this.request<MovieDetailsResponse>('movie_details.json', {
+    return this.request<MovieDetailsResponse>('api/v2/movie_details.json', {
       imdb_id: imdbId,
       with_images: withImages,
       with_cast: withCast,
@@ -134,7 +147,7 @@ export class YTSApi extends Api {
     withImages: boolean = true,
     withCast: boolean = true
   ): Promise<MovieDetailsResponse> {
-    return this.request<MovieDetailsResponse>('movie_details.json', {
+    return this.request<MovieDetailsResponse>('api/v2/movie_details.json', {
       movie_id: movieId,
       with_images: withImages,
       with_cast: withCast,
@@ -146,7 +159,7 @@ export class YTSApi extends Api {
    */
   @Cacheable(36e5 /* 1 hour */)
   public async getMovieSuggestions(movieId: number): Promise<MovieSuggestionResponse> {
-    return this.request<MovieSuggestionResponse>('movie_suggestions.json', {
+    return this.request<MovieSuggestionResponse>('api/v2/movie_suggestions.json', {
       movie_id: movieId,
     });
   }
@@ -156,7 +169,7 @@ export class YTSApi extends Api {
    */
   @Cacheable(36e5 /* 1 hour */)
   public async getParentalGuides(movieId: number): Promise<MovieParentalGuidesResponse> {
-    return this.request<MovieParentalGuidesResponse>('movie_parental_guides.json', {
+    return this.request<MovieParentalGuidesResponse>('api/v2/movie_parental_guides.json', {
       movie_id: movieId,
     });
   }
@@ -184,7 +197,7 @@ export class YTSApi extends Api {
       order_by?: 'asc' | 'desc';
     } = {}
   ): Promise<MovieListResponse> {
-    return this.request<MovieListResponse>('list_movies.json', options);
+    return this.request<MovieListResponse>('api/v2/list_movies.json', options);
   }
 
   /**
@@ -314,5 +327,15 @@ export class YTSApi extends Api {
       trailerCode: movie.yt_trailer_code,
       torrents: this.getNormalizedTorrents(movie),
     };
+  }
+
+  public async download(hash: string): Promise<Buffer | null> {
+    const result = await this.request<ArrayBuffer>(`torrent/download/${hash}`, {});
+    if (result instanceof ArrayBuffer) {
+      return Buffer.from(result);
+    } else {
+      logger.error('YTS', `Unexpected response type for torrent download: ${typeof result}`);
+      return null;
+    }
   }
 }

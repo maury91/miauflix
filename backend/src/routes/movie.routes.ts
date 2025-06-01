@@ -122,10 +122,10 @@ export const createMovieRoutes = (
             resolution: source.resolution,
             size: source.size,
             videoCodec: source.videoCodec,
-            seeds: source.seeds,
-            leechers: source.leechers,
+            seeds: source.broadcasters,
+            leechers: source.watchers,
             source: source.source,
-            hasDataFile: !!source.torrentFile,
+            hasDataFile: !!source.file,
           }));
         }
 

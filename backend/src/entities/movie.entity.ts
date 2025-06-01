@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinTable,
   ManyToMany,
   ManyToOne,
@@ -12,131 +13,230 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { EncryptionService } from '@services/encryption/encryption.service';
+
 import { Genre } from './genre.entity';
-import { MovieSource } from './movie-source.entity';
 
-@Entity()
-export class Movie {
-  /** IDs */
-  @PrimaryGeneratedColumn()
-  id: number;
+export const createMovieEntity = (encryptionService: EncryptionService) => {
+  @Entity()
+  class Movie {
+    /** IDs */
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({
-    unique: true,
-  })
-  tmdbId: number;
+    @Column({
+      unique: true,
+    })
+    tmdbId: number;
 
-  @Column({
-    unique: true,
-    nullable: true,
-    type: 'varchar',
-    length: 11,
-  })
-  imdbId: string | null;
+    @Column({
+      unique: true,
+      nullable: true,
+      type: 'varchar',
+      length: 11,
+    })
+    imdbId: string | null;
 
-  /** Metadata */
+    /** Metadata */
 
-  @Column()
-  title: string;
+    @Column()
+    title: string;
 
-  @Column('text')
-  overview: string;
+    @Column('text')
+    overview: string;
 
-  @Column()
-  runtime: number;
+    @Column()
+    runtime: number;
 
-  @Column()
-  tagline: string;
+    @Column()
+    tagline: string;
 
-  // ToDo: Obtain data
-  @Column({
-    type: 'varchar',
-    length: 500,
-    nullable: true,
-  })
-  trailer: string;
+    // ToDo: Obtain data
+    @Column({
+      type: 'varchar',
+      length: 500,
+      nullable: true,
+    })
+    trailer: string;
 
-  @Column({
-    type: 'decimal',
-    precision: 4,
-    scale: 2,
-    default: 0,
-  })
-  rating: number;
+    @Column({
+      type: 'decimal',
+      precision: 4,
+      scale: 2,
+      default: 0,
+    })
+    rating: number;
 
-  @Column({
-    type: 'float',
-    default: 0,
-  })
-  popularity: number;
+    @Column({
+      type: 'float',
+      default: 0,
+    })
+    popularity: number;
 
-  @Column()
-  releaseDate: string;
+    @Column()
+    releaseDate: string;
 
-  @ManyToMany(() => Genre, {
-    eager: true,
-  })
-  @JoinTable()
-  genres: Relation<Genre>[];
+    @ManyToMany(() => Genre, {
+      eager: true,
+    })
+    @JoinTable()
+    genres: Relation<Genre>[];
 
-  @OneToMany(() => MovieTranslation, translation => translation.movie, {
-    eager: true,
-  })
-  translations: Relation<MovieTranslation>[];
+    @OneToMany(() => MovieTranslation, translation => translation.movie, {
+      eager: true,
+    })
+    translations: Relation<MovieTranslation>[];
 
-  /** Images */
+    /** Images */
 
-  @Column()
-  poster: string;
+    @Column()
+    poster: string;
 
-  @Column()
-  backdrop: string;
+    @Column()
+    backdrop: string;
 
-  @Column()
-  logo: string;
+    @Column()
+    logo: string;
 
-  @Column({ default: false })
-  sourceSearched: boolean;
+    @Column({ default: false })
+    sourceSearched: boolean;
 
-  @OneToMany(() => MovieSource, source => source.movie)
-  sources: Relation<MovieSource>[];
+    @OneToMany(() => MovieSource, source => source.movie)
+    sources: Relation<MovieSource>[];
 
-  /** Time */
+    /** Time */
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
-}
+    @UpdateDateColumn()
+    updatedAt: Date;
+  }
 
-@Unique(['movie', 'language'])
-@Entity()
-export class MovieTranslation {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @Unique(['movie', 'language'])
+  @Entity()
+  class MovieTranslation {
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  language: string;
+    @Column()
+    language: string;
 
-  @ManyToOne(() => Movie, movie => movie.translations)
-  movie: Relation<Movie>;
+    @ManyToOne(() => Movie, movie => movie.translations)
+    movie: Relation<Movie>;
 
-  @Column()
-  movieId: number;
+    @Column()
+    movieId: number;
 
-  @Column('text')
-  overview: string;
+    @Column('text')
+    overview: string;
 
-  @Column()
-  title: string;
+    @Column()
+    title: string;
 
-  @Column()
-  tagline: string;
+    @Column()
+    tagline: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
-}
+    @UpdateDateColumn()
+    updatedAt: Date;
+  }
+
+  /**
+   * Movie source entity to store information about available sources for movies
+   */
+  @Entity()
+  @Unique(['movieId', 'hash']) // avoid duplicates per film
+  @Index('idx_movie_rank', ['movieId', 'resolution', 'broadcasters', 'size'])
+  @Index('idx_movie_file', ['movieId', 'file']) // fast “file IS NULL” scans
+  class MovieSource {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @ManyToOne(() => Movie, movie => movie.sources, { onDelete: 'CASCADE' })
+    movie: Relation<Movie>;
+
+    @Column()
+    movieId: number;
+
+    @Column({
+      length: 92,
+      name: 'ih',
+      transformer: {
+        to: (value: string) => encryptionService.encryptString(value, true),
+        from: (value: string) => encryptionService.decryptString(value),
+      },
+    })
+    hash: string;
+
+    @Column({
+      name: 'ml',
+      transformer: {
+        to: (value: string) => encryptionService.encryptString(value),
+        from: (value: string) => encryptionService.decryptString(value),
+      },
+    })
+    magnetLink: string;
+
+    @Column({
+      nullable: true,
+      name: 'u',
+      transformer: {
+        to: (value?: string) => (value ? encryptionService.encryptString(value) : undefined),
+        from: (value?: string) => (value ? encryptionService.decryptString(value) : undefined),
+      },
+    })
+    url?: string; // URI link to the source, if available
+
+    @Column()
+    quality: string;
+
+    @Column()
+    resolution: number; // Vertical resolution in pixels ( used for sorting and filtering )
+
+    @Column()
+    size: number; // Size in bytes
+
+    @Column()
+    videoCodec: string; // e.g. "x264", "x265", "HVEC"
+
+    @Column({ nullable: true })
+    broadcasters?: number;
+
+    @Column({ nullable: true })
+    watchers?: number;
+
+    @Column()
+    source: string;
+
+    @Column({
+      type: 'blob',
+      nullable: true,
+      transformer: {
+        to: (value?: Buffer) => (value ? encryptionService.encryptBuffer(value) : undefined),
+        from: (value?: Buffer) => (value ? encryptionService.decryptBuffer(value) : undefined),
+      },
+    })
+    file?: Buffer;
+
+    @Column({ type: 'datetime', nullable: true })
+    sourceUploadedAt?: Date;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+  }
+
+  return { Movie, MovieTranslation, MovieSource };
+};
+
+export type MovieClass = ReturnType<typeof createMovieEntity>['Movie'];
+export type MovieTranslationClass = ReturnType<typeof createMovieEntity>['MovieTranslation'];
+export type MovieSourceClass = ReturnType<typeof createMovieEntity>['MovieSource'];
+export type Movie = InstanceType<MovieClass>;
+export type MovieTranslation = InstanceType<MovieTranslationClass>;
+export type MovieSource = InstanceType<MovieSourceClass>;
