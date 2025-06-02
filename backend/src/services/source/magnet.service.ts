@@ -5,6 +5,7 @@ import path from 'path';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 import { ENV } from '@constants';
 
+import type { DownloadService } from '../download/download.service';
 import { getTorrentFromITorrents } from './services/itorrents';
 import { getTorrentFromTorrage } from './services/torrage';
 import { ErrorWithStatus } from './services/utils';
@@ -15,7 +16,6 @@ import type {
   ServiceShortStats,
   ServiceStats,
 } from './types';
-import type { WebTorrentService } from './webtorrent.service';
 
 /**
  * Generate a unique request ID
@@ -38,12 +38,12 @@ export class MagnetService {
   }> = [];
   private activeWorkers = 0;
 
-  constructor(private readonly webTorrentService: WebTorrentService) {
+  constructor(private readonly downloadService: DownloadService) {
     this.createService('webTorrent', {
       maxConcurrentRequests: 50,
       shouldVerify: false,
       getTorrent: async (magnetLink: string, hash: string): Promise<Buffer> => {
-        return webTorrentService.getTorrent(magnetLink, hash, 120000);
+        return downloadService.getTorrent(magnetLink, hash, 120000);
       },
     });
 
@@ -131,7 +131,7 @@ export class MagnetService {
   ): Promise<Buffer | null> {
     logger.info(
       'DataResolver',
-      `Converting URI link with identifier: ${hash}${preferIdle ? ' (preferring idle services)' : ''}`
+      `Converting URI link with identifier: ${hash.substring(0, 6)}-redacted-${preferIdle ? ' (preferring idle services)' : ''}`
     );
     this.createWorker();
     // Wait for the worker to process it
@@ -141,7 +141,7 @@ export class MagnetService {
   }
 
   public async getStats(hash: string): Promise<{ seeders: number; leechers: number }> {
-    return this.webTorrentService.getStats(hash);
+    return this.downloadService.getStats(hash);
   }
 
   /**
