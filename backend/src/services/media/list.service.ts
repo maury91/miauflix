@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
 import type { MediaList } from '@entities/list.entity';
-import type { Movie } from '@entities/movie.entity';
+import { Movie } from '@entities/movie.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import type { Database } from '@database/database';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
@@ -106,7 +106,7 @@ export class ListService {
     mediaList.tvShows = [];
 
     for (const media of medias) {
-      if (media instanceof this.db.Movie) {
+      if (media instanceof Movie) {
         mediaList.movies.push(media);
       }
       if (media instanceof TVShow) {

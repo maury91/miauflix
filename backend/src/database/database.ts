@@ -5,12 +5,11 @@ import { DataSource } from 'typeorm';
 import { AuditLog } from '@entities/audit-log.entity';
 import { Episode } from '@entities/episode.entity';
 import { Genre, GenreTranslation } from '@entities/genre.entity';
-import type { MediaListClass } from '@entities/list.entity';
-import { createMediaListEntity } from '@entities/list.entity';
-import type { MovieClass, MovieSourceClass, MovieTranslationClass } from '@entities/movie.entity';
-import { createMovieEntity } from '@entities/movie.entity';
+import { MediaList } from '@entities/list.entity';
+import { Movie, MovieSource, MovieTranslation } from '@entities/movie.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
+import { Storage } from '@entities/storage.entity';
 import { SyncState } from '@entities/sync-state.entity';
 import { TraktUser } from '@entities/trakt-user.entity';
 import { TVShow } from '@entities/tvshow.entity';
@@ -22,6 +21,7 @@ import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
+import { StorageRepository } from '@repositories/storage.repository';
 import { SyncStateRepository } from '@repositories/syncState.repository';
 import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
@@ -41,18 +41,13 @@ export class Database {
   private auditLogRepository: AuditLogRepository;
   private syncStateRepository: SyncStateRepository;
   private traktUserRepository: TraktUserRepository;
-  public MovieSource: MovieSourceClass;
-  public Movie: MovieClass;
-  public MovieTranslation: MovieTranslationClass;
-  public MediaList: MediaListClass;
+  private storageRepository: StorageRepository;
 
   constructor(private readonly encryptionService: EncryptionService) {
-    const { Movie, MovieTranslation, MovieSource } = createMovieEntity(this.encryptionService);
-    const MediaList = createMediaListEntity(Movie);
-    this.MovieSource = MovieSource;
-    this.Movie = Movie;
-    this.MovieTranslation = MovieTranslation;
-    this.MediaList = MediaList;
+    // Set up static encryption services for entities
+    Movie.encryptionService = this.encryptionService;
+    MovieSource.encryptionService = this.encryptionService;
+
     this.dataSource = new DataSource({
       type: 'sqlite',
       database: path.resolve(ENV('DATA_DIR'), 'database.sqlite'),
@@ -72,6 +67,7 @@ export class Database {
         AuditLog,
         SyncState,
         TraktUser,
+        Storage,
       ],
       synchronize: true,
     });
@@ -89,6 +85,13 @@ export class Database {
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
     this.syncStateRepository = new SyncStateRepository(this.dataSource);
     this.traktUserRepository = new TraktUserRepository(this.dataSource);
+    this.storageRepository = new StorageRepository(this);
+  }
+
+  public async close(): Promise<void> {
+    if (this.dataSource.isInitialized) {
+      await this.dataSource.destroy();
+    }
   }
 
   public getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
@@ -141,5 +144,9 @@ export class Database {
 
   public getTraktUserRepository() {
     return this.traktUserRepository;
+  }
+
+  public getStorageRepository() {
+    return this.storageRepository;
   }
 }
