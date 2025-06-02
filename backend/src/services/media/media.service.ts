@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
 import type { Genre } from '@entities/genre.entity';
-import type { Movie } from '@entities/movie.entity';
+import { Movie } from '@entities/movie.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow, TVShowTranslation } from '@entities/tvshow.entity';
 import type { Database } from '@database/database';
@@ -355,7 +355,7 @@ export class MediaService {
     );
 
     return medias.map(media => {
-      if (media instanceof this.db.Movie) {
+      if (media instanceof Movie) {
         const { genres, translations, ...movie } = media;
         const translation = translations.find(translation => translation.language === language);
         const translatedGenres = genres.map(genre => genreMap[genre.id]);
