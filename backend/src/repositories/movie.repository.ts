@@ -2,7 +2,7 @@ import type { Repository } from 'typeorm';
 import { In, IsNull, Not } from 'typeorm';
 
 import type { Genre } from '@entities/genre.entity';
-import type { Movie, MovieSource, MovieTranslation } from '@entities/movie.entity';
+import { Movie, type MovieSource, MovieTranslation } from '@entities/movie.entity';
 import type { Database } from '@database/database';
 import { objectKeys } from '@utils/object.util';
 
@@ -11,8 +11,8 @@ export class MovieRepository {
   private readonly movieTranslationRepository: Repository<MovieTranslation>;
 
   constructor(db: Database) {
-    this.movieRepository = db.getRepository(db.Movie);
-    this.movieTranslationRepository = db.getRepository(db.MovieTranslation);
+    this.movieRepository = db.getRepository(Movie);
+    this.movieTranslationRepository = db.getRepository(MovieTranslation);
   }
 
   async findByTMDBId(tmdbId: number): Promise<Movie | null> {
