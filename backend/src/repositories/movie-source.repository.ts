@@ -1,6 +1,6 @@
 import { In, IsNull, LessThan, Or, type Repository } from 'typeorm';
 
-import type { MovieSource } from '@entities/movie.entity';
+import { MovieSource } from '@entities/movie.entity';
 import type { Database } from '@database/database';
 
 /* ------------------------------------------------------------------------- */
@@ -38,7 +38,7 @@ export class MovieSourceRepository {
   private readonly movieSourceRepository: Repository<MovieSource>;
 
   constructor(db: Database) {
-    this.movieSourceRepository = db.getRepository(db.MovieSource);
+    this.movieSourceRepository = db.getRepository(MovieSource);
   }
 
   /**

@@ -1,13 +1,13 @@
 import type { Repository } from 'typeorm';
 
-import type { MediaList } from '@entities/list.entity';
+import { MediaList } from '@entities/list.entity';
 import type { Database } from '@database/database';
 
 export class MediaListRepository {
   private readonly repository: Repository<MediaList>;
 
   constructor(db: Database) {
-    this.repository = db.getRepository(db.MediaList);
+    this.repository = db.getRepository(MediaList);
   }
 
   async findByName(name: string): Promise<MediaList | null> {
