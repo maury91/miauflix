@@ -8,10 +8,10 @@ import WebTorrent from 'webtorrent';
 
 import { ENV } from '@constants';
 
-import { enhancedFetch, ErrorWithStatus } from './services/utils';
-import { bestTrackersURL, blacklistedTrackersURL, extra_trackers } from './trackers.const';
+import { enhancedFetch, ErrorWithStatus } from '../source/services/utils';
+import { bestTrackersURL, blacklistedTrackersURL, extra_trackers } from '../source/trackers.const';
 
-export class WebTorrentService {
+export class DownloadService {
   public readonly client: WebTorrent;
   private bestTrackers: string[] = [];
   private bestTrackersOriginal: string[] = ['udp://tracker.opentrackr.org:1337'];

@@ -77,6 +77,7 @@ describe('VpnDetectionService', () => {
     });
 
     it('should handle timeout errors', async () => {
+      jest.useFakeTimers();
       // Mock provider to timeout
       mockFetch
         .mockImplementationOnce(
@@ -88,7 +89,9 @@ describe('VpnDetectionService', () => {
           json: jest.fn().mockResolvedValue({ ip: '192.168.1.1' }),
         } as unknown as Response);
 
-      const ip = await vpnService['getIpAddress']();
+      const ipPromise = vpnService['getIpAddress']();
+      jest.advanceTimersByTime(200); // Fast-forward time to trigger timeout
+      const ip = await ipPromise;
 
       expect(ip).toBe('192.168.1.1');
     });

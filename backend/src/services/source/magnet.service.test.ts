@@ -1,11 +1,11 @@
 import { logger } from '@logger';
 import type { ParsedTorrent } from 'webtorrent';
 
+import type { DownloadService } from '../download/download.service';
 // Import service modules to mock them
 import * as itorrentsModule from './services/itorrents';
 import * as torrageModule from './services/torrage';
 import { MagnetService } from './magnet.service';
-import type { WebTorrentService } from './webtorrent.service';
 
 // Mock logger
 jest.mock('@logger', () => ({
@@ -44,7 +44,7 @@ describe('MagnetService', () => {
   const failedResponse = { ok: false } as Response;
 
   let magnetService: MagnetService;
-  let mockWebTorrentService: WebTorrentService;
+  let mockWebTorrentService: DownloadService;
   let mockTorrentBuffer: Buffer;
   let mockResponse: Response;
 
@@ -53,7 +53,7 @@ describe('MagnetService', () => {
     typeof itorrentsModule.getTorrentFromITorrents
   >;
   let getTorrentFromTorrageSpy: jest.SpiedFunction<typeof torrageModule.getTorrentFromTorrage>;
-  let getTorrentFromWebTorrentSpy: jest.MockedFunction<WebTorrentService['getTorrent']>;
+  let getTorrentFromWebTorrentSpy: jest.MockedFunction<DownloadService['getTorrent']>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -76,7 +76,7 @@ describe('MagnetService', () => {
     getTorrentFromWebTorrentSpy = jest.fn();
     mockWebTorrentService = {
       getTorrent: getTorrentFromWebTorrentSpy,
-    } as Partial<WebTorrentService> as WebTorrentService;
+    } as Partial<DownloadService> as DownloadService;
 
     // Set up service spies with default successful responses
     getTorrentFromITorrentsSpy = jest
