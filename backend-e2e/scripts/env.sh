@@ -46,9 +46,13 @@ export PORT
 
 # Function to cleanup on exit
 cleanup() {
+    TERM_SIGNAL=$?
+    if [[ $TERM_SIGNAL -ne 0 ]]; then
+        echo "⚠️  Script terminated with signal $TERM_SIGNAL"
+    fi
     echo "🧹 Cleaning up $MODE environment..."
     docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE down -v --remove-orphans
-    exit 0
+    exit $TERM_SIGNAL
 }
 
 # Set trap to cleanup on script exit

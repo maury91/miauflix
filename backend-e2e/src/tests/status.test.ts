@@ -24,6 +24,10 @@ describe('Status Endpoint', () => {
     expect(response.data).toHaveProperty('magnetResolvers');
   });
 
+  it('should fail', () => {
+    expect(true).toBe(false); // This is a placeholder for a failing test
+  });
+
   it('should return service status information', async () => {
     const response = await client.get('/status');
 
