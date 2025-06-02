@@ -16,6 +16,7 @@ import { createAuthRoutes } from '@routes/auth.routes';
 import { createMovieRoutes } from '@routes/movie.routes';
 import { createTraktRoutes } from '@routes/trakt.routes';
 import { AuthService } from '@services/auth/auth.service';
+import { DownloadService } from '@services/download/download.service';
 import { EncryptionService } from '@services/encryption/encryption.service';
 import { ListService } from '@services/media/list.service';
 import { ListSynchronizer } from '@services/media/list.syncronizer';
@@ -25,7 +26,6 @@ import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { MagnetService, SourceService } from '@services/source';
 import { TrackerService } from '@services/source/tracker.service';
-import { WebTorrentService } from '@services/source/webtorrent.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 import { TraktService } from '@services/trakt/trakt.service';
 import { buildCache } from '@utils/caching';
@@ -85,8 +85,8 @@ try {
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
   const trackerService = new TrackerService(cache);
-  const webtorrentService = new WebTorrentService();
-  const magnetService = new MagnetService(webtorrentService);
+  const downloadService = new DownloadService();
+  const magnetService = new MagnetService(downloadService);
   const sourceService = new SourceService(db, vpnDetectionService, trackerService, magnetService);
 
   await authService.configureUsers();

@@ -22,6 +22,7 @@ export class SourceService {
   private readonly searchOnlyBehindVpn = true;
   private readonly startPromise: Promise<void>;
   private lastNoSourcesLogTime = 0;
+  private noSourcesLogInterval = 30000; // Start with 30 seconds, will increase exponentially
 
   constructor(
     db: Database,
@@ -136,6 +137,7 @@ export class SourceService {
           sourceUploadedAt: torrent.uploadDate,
           url: torrent.url,
           source: 'YTS', // Currently only using YTS as a source
+          nextStatsCheckAt: new Date(),
         })
       );
 
@@ -194,7 +196,9 @@ export class SourceService {
             return;
           }
           const { seeders, leechers } = await this.magnetService.getStats(source.hash);
-          await this.movieSourceRepository.updateStats(source.id, seeders, leechers);
+          const nextCheckTime = this.calculateNextStatsCheckTime(source, seeders, leechers);
+
+          await this.movieSourceRepository.updateStats(source.id, seeders, leechers, nextCheckTime);
           logger.debug(
             'SourceService',
             `Updated stats for source ${source.id} (quality: ${source.quality})`
@@ -231,17 +235,25 @@ export class SourceService {
     const batchSize = Math.max(2, this.magnetService.getAvailableConcurrency());
     const sourcesToProcess = await this.movieSourceRepository.getNextSourcesToProcess(batchSize);
 
-    // Early exit if no movies need processing - avoid log spam
+    // Early exit if no movies need processing - avoid log spam with exponential backoff
     if (sourcesToProcess.length === 0) {
       const now = Date.now();
       const timeSinceLastLog = now - this.lastNoSourcesLogTime;
-      // Only log once every 30 seconds when there are no sources to process
-      if (timeSinceLastLog > 30000) {
+
+      // Use exponential backoff for logging when consistently no sources found
+      if (timeSinceLastLog > this.noSourcesLogInterval) {
         logger.debug('SourceService', 'No sources requiring data files found');
         this.lastNoSourcesLogTime = now;
+
+        // Increase the log interval exponentially (double it, but cap at 10 minutes)
+        this.noSourcesLogInterval = Math.min(this.noSourcesLogInterval * 2, 600000); // Max 10 minutes
       }
       return;
     }
+
+    // Reset log interval when sources are found again
+    this.noSourcesLogInterval = 30000; // Reset to 30 seconds
+
     logger.debug('SourceService', 'Searching data files for sources without them');
 
     const processSource = async (source: (typeof sourcesToProcess)[number]) => {
@@ -362,7 +374,7 @@ export class SourceService {
    */
   private async downloadTorrentFromUrl(url: string, source: string): Promise<Buffer | null> {
     try {
-      logger.debug('SourceService', `Downloading torrent from URL: ${url} (source: ${source})`);
+      logger.debug('SourceService', `Downloading from URL (source: ${source})`);
 
       // Throttle the request
       const rateLimiter = this.getSourceRateLimiter(source);
@@ -373,22 +385,102 @@ export class SourceService {
       if (!response.ok) {
         logger.warn(
           'SourceService',
-          `Failed to download torrent from URL: ${response.status} ${response.statusText}`
+          `Failed to download from URL: ${response.status} ${response.statusText}`
         );
         return null;
       }
 
       const contentType = response.headers.get('content-type');
       if (!contentType?.includes('application/')) {
-        logger.warn('SourceService', `Invalid content type for torrent file: ${contentType}`);
+        logger.warn('SourceService', `Invalid content type for file: ${contentType}`);
         return null;
       }
 
       const arrayBuffer = await response.arrayBuffer();
       return Buffer.from(arrayBuffer);
     } catch (error) {
-      logger.error('SourceService', `Error downloading torrent from URL: ${url}`, error);
+      logger.error('SourceService', `Error downloading from URL: ${url}`, error);
       return null;
     }
+  }
+
+  /**
+   * Calculate the next stats check time using exponential backoff based on changes
+   */
+  private calculateNextStatsCheckTime(
+    source: {
+      broadcasters?: number;
+      watchers?: number;
+      lastStatsCheck?: Date;
+      nextStatsCheckAt: Date;
+    },
+    newSeeders: number,
+    newLeechers: number
+  ): Date {
+    const currentSeeders = source.broadcasters ?? 0;
+    const currentLeechers = source.watchers ?? 0;
+
+    // Calculate percentage change for both seeders and leechers
+    const seedersChange =
+      currentSeeders === 0
+        ? newSeeders > 0
+          ? 100
+          : 0
+        : Math.abs((newSeeders - currentSeeders) / currentSeeders) * 100;
+
+    const leechersChange =
+      currentLeechers === 0
+        ? newLeechers > 0
+          ? 100
+          : 0
+        : Math.abs((newLeechers - currentLeechers) / currentLeechers) * 100;
+
+    // Use the maximum change between seeders and leechers
+    const maxChange = Math.max(seedersChange, leechersChange);
+
+    // Base intervals in hours
+    const MIN_INTERVAL = 6; // 6 hours
+    const MAX_INTERVAL = 72; // 3 days
+
+    // Calculate the current interval from the last check time to remember the backoff state
+    let currentInterval = MIN_INTERVAL;
+    if (source.lastStatsCheck && source.nextStatsCheckAt) {
+      const intervalMs = source.nextStatsCheckAt.getTime() - source.lastStatsCheck.getTime();
+      currentInterval = intervalMs / (1000 * 60 * 60); // Convert milliseconds to hours (preserving fractions)
+      currentInterval = Math.max(MIN_INTERVAL, Math.min(currentInterval, MAX_INTERVAL));
+    }
+
+    let nextInterval: number;
+
+    if (maxChange < 5) {
+      // Very small change - increase backoff (double it, but cap at max)
+      nextInterval = Math.min(currentInterval * 2, MAX_INTERVAL);
+    } else if (maxChange < 10) {
+      // Small change - keep constant
+      nextInterval = currentInterval;
+    } else if (maxChange > 50) {
+      // Huge change - reset to minimum
+      nextInterval = MIN_INTERVAL;
+    } else if (maxChange > 20) {
+      // Considerable change - reduce backoff
+      nextInterval = Math.max(currentInterval / 2, MIN_INTERVAL);
+    } else {
+      // 10-20% change - slight reduction
+      nextInterval = Math.max(currentInterval * 0.75, MIN_INTERVAL);
+    }
+
+    // Add randomness (±20% of the interval)
+    const randomFactor = 0.8 + Math.random() * 0.4; // 0.8 to 1.2
+    nextInterval *= randomFactor;
+
+    // Ensure bounds
+    nextInterval = Math.max(MIN_INTERVAL, Math.min(nextInterval, MAX_INTERVAL));
+
+    // Calculate next check time (convert hours to milliseconds for precision)
+    const nextCheckTime = new Date();
+    const intervalMs = nextInterval * 60 * 60 * 1000; // Convert hours to milliseconds
+    nextCheckTime.setTime(nextCheckTime.getTime() + intervalMs);
+
+    return nextCheckTime;
   }
 }

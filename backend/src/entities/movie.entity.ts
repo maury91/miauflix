@@ -235,6 +235,9 @@ export class MovieSource {
   @Column({ type: 'datetime', nullable: true })
   lastStatsCheck?: Date;
 
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  nextStatsCheckAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 

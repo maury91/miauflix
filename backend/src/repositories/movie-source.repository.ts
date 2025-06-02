@@ -1,4 +1,4 @@
-import { In, IsNull, LessThan, Or, type Repository } from 'typeorm';
+import { In, LessThan, type Repository } from 'typeorm';
 
 import { MovieSource } from '@entities/movie.entity';
 import type { Database } from '@database/database';
@@ -99,21 +99,22 @@ export class MovieSourceRepository {
     });
   }
 
-  updateStats(sourceId: number, seeders: number, leechers: number) {
+  updateStats(sourceId: number, seeders: number, leechers: number, nextStatsCheckAt: Date) {
     return this.movieSourceRepository.update(sourceId, {
       broadcasters: seeders,
       watchers: leechers,
       lastStatsCheck: new Date(),
+      nextStatsCheckAt,
     });
   }
 
   findSourceThatNeedsStatsUpdate(batchSize: number): Promise<MovieSource[]> {
     return this.movieSourceRepository.find({
       where: {
-        lastStatsCheck: Or(LessThan(new Date(Date.now() - 6 * 60 * 60 * 1000)), IsNull()),
+        nextStatsCheckAt: LessThan(new Date(Date.now())),
       },
       order: {
-        lastStatsCheck: 'ASC',
+        nextStatsCheckAt: 'ASC',
       },
       take: batchSize,
     });
