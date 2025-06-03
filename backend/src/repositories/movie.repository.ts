@@ -2,7 +2,8 @@ import type { Repository } from 'typeorm';
 import { In, IsNull, Not } from 'typeorm';
 
 import type { Genre } from '@entities/genre.entity';
-import { Movie, type MovieSource, MovieTranslation } from '@entities/movie.entity';
+import { Movie, MovieTranslation } from '@entities/movie.entity';
+import { type MovieSource } from '@entities/movie-source.entity';
 import type { Database } from '@database/database';
 import { objectKeys } from '@utils/object.util';
 
@@ -162,7 +163,42 @@ export class MovieRepository {
     });
   }
 
+  /**
+   * Update movie trailer if it doesn't already exist
+   */
+  async updateMovieTrailerIfDoesntExists(movieId: number, trailerCode: string): Promise<void> {
+    await this.movieRepository.update(
+      {
+        id: movieId,
+        trailer: IsNull(),
+      },
+      {
+        trailer: trailerCode,
+      }
+    );
+  }
+
   async saveMovie(movie: Movie): Promise<Movie> {
     return this.movieRepository.save(movie);
+  }
+
+  /**
+   * Find movies by IDs that have IMDb IDs, ordered by popularity
+   */
+  async findMoviesByIdsWithImdb(movieIds: number[], limit: number = 10): Promise<Movie[]> {
+    if (movieIds.length === 0) {
+      return [];
+    }
+
+    return this.movieRepository.find({
+      where: {
+        id: In(movieIds),
+        imdbId: Not(IsNull()),
+      },
+      order: {
+        popularity: 'DESC',
+      },
+      take: limit,
+    });
   }
 }

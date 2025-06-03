@@ -130,9 +130,41 @@ try {
 
   scheduler.scheduleTask(
     'updateSourcesStats',
-    2, // 1 second
+    2, // 2 seconds
     bind(sourceService, 'syncStatsForSources')
   );
+
+  scheduler.scheduleTask(
+    'resyncMovieSources',
+    5, // 5 seconds
+    bind(sourceService, 'resyncMovieSources')
+  );
+
+  // Graceful shutdown handlers
+  const gracefulShutdown = async (signal: string) => {
+    logger.info('App', `Received ${signal}, shutting down gracefully...`);
+
+    // Stop all scheduled tasks
+    const taskNames = scheduler.listTasks();
+    for (const taskName of taskNames) {
+      try {
+        scheduler.cancelTask(taskName);
+        logger.debug('App', `Cancelled task: ${taskName}`);
+      } catch (error) {
+        logger.warn('App', `Failed to cancel task ${taskName}:`, error);
+      }
+    }
+
+    await db.close();
+
+    // Give some time for ongoing operations to complete
+    setTimeout(() => {
+      process.exit(0);
+    }, 5000);
+  };
+
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
   const app = new Hono();
 

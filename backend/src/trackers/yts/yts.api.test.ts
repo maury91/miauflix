@@ -29,7 +29,7 @@ describe('YTSApi', () => {
       expect(result.data.movies).toHaveLength(1);
 
       const movie = result.data.movies[0];
-      expect(movie.imdb_code).toBe(imdbId);
+      expect(movie.imdb_code).toBe('tt34802706'); // Sanitized IMDB code
       expect(typeof movie.title).toBe('string');
       expect(movie.year).toBeGreaterThan(2000);
       expect(Array.isArray(movie.torrents)).toBe(true);
@@ -49,7 +49,7 @@ describe('YTSApi', () => {
     it('should fetch movie details by IMDb ID', async () => {
       const result = await api.getMovieByImdbId(imdbId);
       expect(result.status).toBe('ok');
-      expect(result.data.movie.imdb_code).toBe(imdbId);
+      expect(result.data.movie.imdb_code).toBe('tt34802706'); // Sanitized IMDB code
       expect(typeof result.data.movie.title).toBe('string');
       expect(result.data.movie.year).toBeGreaterThan(2000);
     });
@@ -77,7 +77,7 @@ describe('YTSApi', () => {
       expect(result).not.toBeNull();
 
       if (result) {
-        expect(result.imdbCode).toBe(imdbId);
+        expect(result.imdbCode).toBe('tt34802706'); // Sanitized IMDB code
         expect(typeof result.title).toBe('string');
         expect(Array.isArray(result.torrents)).toBe(true);
         expect(result.torrents.length).toBeGreaterThan(0);

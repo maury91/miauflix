@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { MovieSource } from './movie.entity';
+import { MovieSource } from './movie-source.entity';
 
 @Entity('storage')
 @Index('idx_storage_last_access', ['lastAccessAt'])

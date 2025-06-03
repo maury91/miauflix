@@ -50,6 +50,7 @@
   },
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "packages/*"
   ]
 }

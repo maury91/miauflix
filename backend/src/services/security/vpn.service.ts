@@ -1,5 +1,7 @@
 import { logger } from '@logger';
 
+import { ENV } from '@constants';
+
 interface NordVpnIpInsightsResponse {
   ip: string;
   country: string;
@@ -30,6 +32,7 @@ export class VpnDetectionService {
     ['connect', []],
     ['disconnect', []],
   ]);
+  private readonly disabled = ENV.boolean('DISABLE_VPN_CHECK');
   private monitoringInterval: ReturnType<typeof setInterval> | null = null;
   private lastVpnStatus: boolean | null = null;
   protected currentProviderIndex: number = 0;
@@ -73,10 +76,12 @@ export class VpnDetectionService {
     },
   ];
 
-  private providerFailures: Map<string, number> = new Map();
-
   constructor(private readonly checkIntervalMs: number = 500) {
-    this.startMonitoring();
+    if (this.disabled) {
+      this.lastVpnStatus = true;
+    } else {
+      this.startMonitoring();
+    }
   }
 
   protected async getIpAddress(): Promise<string> {
@@ -164,7 +169,8 @@ export class VpnDetectionService {
 
   public status() {
     return {
-      isVpnActive: this.lastVpnStatus,
+      isVpnActive: this.disabled ? null : this.lastVpnStatus,
+      disabled: this.disabled,
     };
   }
 
