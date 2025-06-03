@@ -11,7 +11,7 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       example: 'dGhpc19pc19hX3NhbXBsZV8yNTZfYml0X2tleQ==',
       defaultValue: () => randomBytes(32).toString('base64'),
       skipUserInteraction: true,
-      required: false,
+      required: true,
     },
     WEBTORRENT_MAX_CONNS: {
       description: 'Maximum number of connections for WebTorrent',

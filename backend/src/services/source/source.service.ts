@@ -1,11 +1,13 @@
 import { logger } from '@logger';
 
-import type { MovieSource } from '@entities/movie.entity';
+import type { Movie } from '@entities/movie.entity';
+import type { MovieSource } from '@entities/movie-source.entity';
 import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { TrackerService } from '@services/source/tracker.service';
 import { RateLimiter } from '@utils/rateLimiter';
 import { sleep } from '@utils/time';
+import { ENV } from '@constants';
 
 import { enhancedFetch } from './services/utils';
 import type { MagnetService } from './magnet.service';
@@ -19,7 +21,7 @@ export class SourceService {
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
 
   private vpnConnected = false;
-  private readonly searchOnlyBehindVpn = true;
+  private readonly searchOnlyBehindVpn = !ENV.boolean('DISABLE_VPN_CHECK');
   private readonly startPromise: Promise<void>;
   private lastNoSourcesLogTime = 0;
   private noSourcesLogInterval = 30000; // Start with 30 seconds, will increase exponentially
@@ -87,7 +89,7 @@ export class SourceService {
   }): Promise<void> {
     await this.startPromise;
 
-    if (!this.vpnConnected && this.searchOnlyBehindVpn) {
+    if (!this.vpnConnected) {
       logger.warn(
         'SourceService',
         `VPN is not connected, skipping source search for movie ${movie.id} (${movie.title})`
@@ -122,6 +124,14 @@ export class SourceService {
         `Found ${movieWithTorrents.torrents.length} sources for movie ${movie.id} (${movie.title})`
       );
 
+      if (movieWithTorrents.trailerCode) {
+        // If the movie has a trailer, update the movie record
+        await this.movieRepository.updateMovieTrailerIfDoesntExists(
+          movie.id,
+          movieWithTorrents.trailerCode
+        );
+      }
+
       // Convert sources to MovieSource objects and save them
       const sources = movieWithTorrents.torrents.map(
         (torrent): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
@@ -137,6 +147,7 @@ export class SourceService {
           sourceUploadedAt: torrent.uploadDate,
           url: torrent.url,
           source: 'YTS', // Currently only using YTS as a source
+          sourceType: torrent.type,
           nextStatsCheckAt: new Date(),
         })
       );
@@ -170,20 +181,15 @@ export class SourceService {
     return sources.filter(source => source.file !== null);
   }
 
-  /**
-   * Get a specific source with its data file by source ID
-   */
-  public async getSourceWithTorrent(sourceId: number): Promise<MovieSource | null> {
-    const source = await this.movieSourceRepository.findById(sourceId);
+  public async syncStatsForSources(): Promise<void> {
+    await this.startPromise;
 
-    if (!source || !source.file) {
-      return null;
+    if (!this.vpnConnected) {
+      logger.warn('SourceService', `VPN is not connected, skipping stats sync`);
+      await sleep(5000);
+      return;
     }
 
-    return source;
-  }
-
-  public async syncStatsForSources(): Promise<void> {
     const sourcesToUpdate = await this.movieSourceRepository.findSourceThatNeedsStatsUpdate(5);
     if (sourcesToUpdate.length === 0) {
       return;
@@ -482,5 +488,170 @@ export class SourceService {
     nextCheckTime.setTime(nextCheckTime.getTime() + intervalMs);
 
     return nextCheckTime;
+  }
+
+  /**
+   * Resync source metadata for movies that have sources with unknown or missing data
+   * This method is designed to be run by the scheduler
+   */
+  public async resyncMovieSources(): Promise<void> {
+    await this.startPromise;
+
+    if (!this.vpnConnected) {
+      logger.warn('SourceService', 'VPN is not connected, skipping source resync');
+      await sleep(2000);
+      return;
+    }
+
+    try {
+      // Find the next movie that needs processing
+      const movies = await this.findMoviesWithUnknownSourceType(1);
+
+      if (movies.length === 0) {
+        // No more movies to process, wait before checking again
+        await sleep(5000);
+        return;
+      }
+
+      const movie = movies[0];
+      await this.updateMovieSourcesFromYTS(movie);
+    } catch (error) {
+      logger.error('SourceService', 'Error in resyncMovieSources:', error);
+    }
+  }
+
+  /**
+   * Find movies that have sources with unknown sourceType or missing sourceUploadedAt
+   */
+  private async findMoviesWithUnknownSourceType(limit: number = 1): Promise<Movie[]> {
+    // Get movie IDs that have sources with unknown sourceType or missing upload date
+    const movieIds = await this.movieSourceRepository.findMovieIdsWithUnknownSourceType();
+
+    if (movieIds.length === 0) {
+      return [];
+    }
+
+    // Get the actual movies with imdbId, ordered by popularity
+    return this.movieRepository.findMoviesByIdsWithImdb(movieIds, limit);
+  }
+
+  /**
+   * Update sources for a movie with fresh data from YTS and update trailer if missing
+   */
+  private async updateMovieSourcesFromYTS(movie: Movie): Promise<void> {
+    if (!movie.imdbId) {
+      logger.warn(
+        'SourceService',
+        `Movie ${movie.id} (${movie.title}) has no IMDb ID, skipping resync`
+      );
+      return;
+    }
+
+    logger.info(
+      'SourceService',
+      `Resyncing sources for movie ${movie.id} (${movie.title}) with IMDb ID ${movie.imdbId}`
+    );
+
+    try {
+      // Get fresh data from tracker service
+      const movieWithTorrents = await this.trackerService.searchTorrentsForMovie(movie.imdbId);
+
+      if (!movieWithTorrents) {
+        logger.warn(
+          'SourceService',
+          `No movie data found for movie ${movie.id} (${movie.title}) via tracker service`
+        );
+        return;
+      }
+
+      // Update trailer if movie doesn't have one and YTS provides it
+      if (!movie.trailer && movieWithTorrents.trailerCode) {
+        await this.movieRepository.updateMovieTrailerIfDoesntExists(
+          movie.id,
+          movieWithTorrents.trailerCode
+        );
+        logger.debug(
+          'SourceService',
+          `Updated trailer for movie ${movie.id} with code: ${movieWithTorrents.trailerCode}`
+        );
+      }
+
+      if (!movieWithTorrents.torrents?.length) {
+        logger.warn(
+          'SourceService',
+          `No torrents found for movie ${movie.id} (${movie.title}) on YTS`
+        );
+        return;
+      }
+
+      logger.debug(
+        'SourceService',
+        `Found ${movieWithTorrents.torrents.length} torrents for movie ${movie.id} (${movie.title})`
+      );
+
+      // Get existing sources for this movie
+      const existingSources = await this.movieSourceRepository.findByMovieId(movie.id);
+
+      // Create a map of existing sources by hash for quick lookup
+      const existingSourcesMap = new Map(existingSources.map(source => [source.hash, source]));
+
+      let updatedCount = 0;
+
+      // Update existing sources with fresh data from YTS
+      for (const torrent of movieWithTorrents.torrents) {
+        const hash = torrent.magnetLink.split('btih:')[1]?.split('&')[0];
+        if (!hash) {
+          logger.warn(
+            'SourceService',
+            `Could not extract hash from magnet link: ${torrent.magnetLink}`
+          );
+          continue;
+        }
+
+        const existingSource = existingSourcesMap.get(hash);
+        if (!existingSource) {
+          logger.debug('SourceService', `Source with hash ${hash} not found in database, skipping`);
+          continue;
+        }
+
+        // Only update if sourceType is unknown or sourceUploadedAt is missing
+        const needsUpdate =
+          existingSource.sourceType === 'unknown' || !existingSource.sourceUploadedAt;
+
+        if (needsUpdate) {
+          const updateData: Partial<MovieSource> = {};
+
+          if (existingSource.sourceType === 'unknown') {
+            updateData.sourceType = torrent.type;
+          }
+
+          if (!existingSource.sourceUploadedAt && torrent.uploadDate) {
+            updateData.sourceUploadedAt = torrent.uploadDate;
+          }
+
+          if (Object.keys(updateData).length > 0) {
+            await this.movieSourceRepository.updateSourceMetadata(existingSource.id, updateData);
+            updatedCount++;
+
+            logger.debug(
+              'SourceService',
+              `Updated source ${existingSource.id} - sourceType: ${updateData.sourceType || 'unchanged'}, ` +
+                `sourceUploadedAt: ${updateData.sourceUploadedAt ? 'updated' : 'unchanged'}`
+            );
+          }
+        }
+      }
+
+      logger.info(
+        'SourceService',
+        `Updated ${updatedCount} sources for movie ${movie.id} (${movie.title})`
+      );
+    } catch (error) {
+      logger.error(
+        'SourceService',
+        `Error updating sources for movie ${movie.id} (${movie.title}):`,
+        error
+      );
+    }
   }
 }
