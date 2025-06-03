@@ -21,7 +21,9 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "axios": "^1.6.0"
+    "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
+    "axios": "^1.6.0",
+    "sqlite3": "^5.0.11"
   },
   "jest": {
     "preset": "ts-jest",

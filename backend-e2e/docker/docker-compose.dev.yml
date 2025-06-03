@@ -11,6 +11,7 @@ services:
       - TMDB_API_URL=http://tmdb-mock/3
       - YTS_API_URL=http://yts-mock
       - TRAKT_API_URL=http://trakt-mock
+      - DISABLE_VPN_CHECK=true
     networks:
       - test-network
     ports:

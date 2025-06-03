@@ -18,6 +18,7 @@
     "@hono/zod-validator": "^0.5.0",
     "@inquirer/prompts": "^7.4.0",
     "@keyv/sqlite": "^4.0.1",
+    "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
     "bcrypt": "^5.1.1",
     "cache-manager": "^6.4.1",
     "cacheable": "^1.8.9",
