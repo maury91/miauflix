@@ -1,0 +1,85 @@
+//@import url('https://fonts.googleapis.com/css?family=Oswald:400');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+@mixin flex {
+  display: flex;
+  justify-content: center;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: black;
+  color: #eee;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  z-index: 1000;
+  opacity: 1;
+}
+
+#logo {
+  @include flex;
+  align-items: center;
+  font: 7vw/1 sans-serif;
+  height: 100%;
+  width: 100%;
+  z-index: 1002;
+  position: fixed;
+  top: 0;
+  left: 0;
+  fill: #db202c;
+  stroke: #db202c;
+
+  h1 {
+    @include flex;
+    align-items: flex-start;
+    position: relative;
+    letter-spacing: 0;
+  }
+
+  svg {
+    height: 1em;
+
+    #logo svg:nth-child(1) {
+      margin: 0 0.04em 0 0;
+    }
+    &:nth-child(2) {
+      margin: 0 0.02em 0 0.065em;
+      height: 0.92em;
+    }
+    &:nth-child(3) {
+      margin: 0 0.04em;
+      height: 0.9em;
+    }
+    &:nth-child(4) {
+      margin: 0 0.045em;
+      height: 0.88em;
+    }
+    &:nth-child(5) {
+      margin: 0 0.045em;
+      height: 0.87em;
+    }
+    &:nth-child(6) {
+      margin: 0 0.04em;
+      height: 0.9em;
+    }
+    &:nth-child(7) {
+      margin: 0 0.045em;
+      height: 0.915em;
+    }
+    &:nth-child(8) {
+      margin: 0 0em 0 0.055em;
+    }
+  }
+}
