@@ -158,18 +158,19 @@ export function normalizeYTSTorrent(
   movieTitle: string,
   runtime: number
 ): {
+  approximateBitrate: number;
+  audioCodec: AudioCodec | null;
+  leechers: number;
+  magnetLink: string;
   quality: string;
   resolution: { width: number; height: number; label: string };
-  source: string;
-  videoCodec: VideoCodec;
-  audioCodec: AudioCodec | null;
-  size: { value: number; unit: string; bytes: number };
-  magnetLink: string;
   seeders: number;
-  leechers: number;
+  size: { value: number; unit: string; bytes: number };
+  source: string;
+  type: string;
   uploadDate: Date;
-  approximateBitrate: number;
   url: string;
+  videoCodec: VideoCodec;
 } {
   const resolution = getResolutionFromQuality(torrent.quality);
   const videoCodec = mapYTSVideoCodec(torrent.video_codec, torrent.bit_depth);
@@ -188,21 +189,22 @@ export function normalizeYTSTorrent(
   const bitrate = calculateApproximateBitrate(torrent.size_bytes, runtime);
 
   return {
+    approximateBitrate: bitrate,
+    audioCodec,
+    leechers: torrent.peers,
+    magnetLink: `magnet:?xt=urn:btih:${torrent.hash}&dn=${encodeURIComponent(movieTitle)}`,
     quality: torrent.quality,
     resolution,
-    source: torrent.type,
-    videoCodec,
-    audioCodec,
+    seeders: torrent.seeds,
     size: {
       value: sizeValue,
       unit: sizeUnit,
       bytes: torrent.size_bytes,
     },
-    magnetLink: `magnet:?xt=urn:btih:${torrent.hash}&dn=${encodeURIComponent(movieTitle)}`,
-    seeders: torrent.seeds,
-    leechers: torrent.peers,
+    source: torrent.type,
+    type: torrent.type,
     uploadDate: new Date(torrent.date_uploaded),
-    approximateBitrate: bitrate,
     url: torrent.url,
+    videoCodec,
   };
 }

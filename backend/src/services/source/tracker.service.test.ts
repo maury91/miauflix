@@ -21,7 +21,7 @@ describe('TrackerService', () => {
       expect(result).not.toBeNull();
 
       if (result) {
-        expect(result.imdbCode).toBe(imdbId);
+        expect(result.imdbCode).toBe('tt34802706'); // Sanitized IMDB code
         expect(typeof result.title).toBe('string');
         expect(Array.isArray(result.torrents)).toBe(true);
         expect(result.torrents.length).toBeGreaterThan(0);

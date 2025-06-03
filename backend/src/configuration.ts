@@ -10,6 +10,7 @@ import {
   type VariableInfo,
 } from '@mytypes/configuration';
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
+import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
@@ -64,6 +65,7 @@ export const services = {
   JWT: jwtConfigurationDefinition,
   SERVER: serverConfigurationDefinition,
   SOURCE: sourceConfigurationDefinition,
+  VPN: vpnConfigurationDefinition,
 };
 
 export type Variables = {

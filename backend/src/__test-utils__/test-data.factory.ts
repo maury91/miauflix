@@ -1,4 +1,5 @@
-import type { Movie, MovieSource } from '@entities/movie.entity';
+import type { Movie } from '@entities/movie.entity';
+import type { MovieSource } from '@entities/movie-source.entity';
 import type { Storage } from '@entities/storage.entity';
 import type { Database } from '@database/database';
 

@@ -4,44 +4,45 @@
   "headers": {
     "access-control-allow-origin": "*",
     "cache-control": "no-store, no-cache, must-revalidate",
+    "content-length": "759",
     "content-type": "application/json; charset=utf-8"
   },
   "body": {
     "status": "ok",
     "status_message": "Query was successful",
     "data": {
-      "movie_count": 67797,
+      "movie_count": 50,
       "limit": 1,
       "page_number": 1,
       "movies": [
         {
-          "id": 69006,
-          "url": "https://yts.mx/movies/the-friendly-path-2025",
-          "imdb_code": "tt32323148",
-          "title": "The Friendly Path",
-          "title_english": "The Friendly Path",
-          "title_long": "The Friendly Path Sweet (2025)",
-          "slug": "the-friendly-path-2025",
+          "id": 69484,
+          "url": "https://timely-flung.com/private/var",
+          "imdb_code": "tt71551990",
+          "title": "Spotless Chinchilla",
+          "title_english": "Flat Junglefowl",
+          "title_long": "Commercial Rattlesnake",
+          "slug": "spotless-chinchilla-2025",
           "year": 2025,
-          "rating": 0,
-          "runtime": 100,
-          "genres": ["Action", "Horror"],
+          "rating": 5.5,
+          "runtime": 116,
+          "genres": ["Action"],
           "summary": "",
           "description_full": "",
           "synopsis": "",
-          "yt_trailer_code": "MQudR1Gb7m4",
+          "yt_trailer_code": "",
           "language": "en",
           "mpa_rating": "",
-          "background_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/background.jpg",
-          "background_image_original": "https://yts.mx/assets/images/movies/the_friendly_path_2025/background.jpg",
-          "small_cover_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/small-cover.jpg",
-          "medium_cover_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/medium-cover.jpg",
-          "large_cover_image": "https://yts.mx/assets/images/movies/the_friendly_path_2025/large-cover.jpg",
+          "background_image": "https://carefree-eating.net/usr/ports",
+          "background_image_original": "https://crafty-full.name/usr/libexec",
+          "small_cover_image": "https://insecure-mallet.net/root",
+          "medium_cover_image": "https://growling-mangrove.name/usr/local/bin",
+          "large_cover_image": "https://glossy-sari.biz/opt/lib",
           "state": "ok",
           "torrents": [
             {
-              "url": "https://yts.mx/torrent/download/6658CD1528EAE23A5EBAA400105BC7A8783C3A00",
-              "hash": "6658CD1528EAE23A5EBAA400105BC7A8783C3A00",
+              "url": "https://yts.mx/torrent/download/A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
+              "hash": "A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
               "quality": "720p",
               "type": "web",
               "is_repack": "0",
@@ -50,14 +51,14 @@
               "audio_channels": "2.0",
               "seeds": 0,
               "peers": 0,
-              "size": "918.21 MB",
-              "size_bytes": 962812969,
-              "date_uploaded": "2025-05-16 06:34:41",
-              "date_uploaded_unix": 1747370081
+              "size": "1.03 GB",
+              "size_bytes": 1105954079,
+              "date_uploaded": "2025-06-03 12:14:36",
+              "date_uploaded_unix": 1748945676
             },
             {
-              "url": "https://yts.mx/torrent/download/196FCEC8287073808767C40404A4B3B6BF818000",
-              "hash": "196FCEC8287073808767C40404A4B3B6BF818000",
+              "url": "https://yts.mx/torrent/download/A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
+              "hash": "A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
               "quality": "1080p",
               "type": "web",
               "is_repack": "0",
@@ -66,19 +67,19 @@
               "audio_channels": "5.1",
               "seeds": 0,
               "peers": 0,
-              "size": "1.84 GB",
-              "size_bytes": 1975684956,
-              "date_uploaded": "2025-05-16 07:46:01",
-              "date_uploaded_unix": 1747374361
+              "size": "2.11 GB",
+              "size_bytes": 2265595249,
+              "date_uploaded": "2025-06-03 13:46:13",
+              "date_uploaded_unix": 1748951173
             }
           ],
-          "date_uploaded": "2025-05-16 06:34:41",
-          "date_uploaded_unix": 1747370081
+          "date_uploaded": "2025-06-03 12:14:36",
+          "date_uploaded_unix": 1748945676
         }
       ]
     },
     "@meta": {
-      "server_time": 1747388874,
+      "server_time": 1748954681,
       "server_timezone": "CET",
       "api_version": 2,
       "execution_time": "0 ms"

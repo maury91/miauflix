@@ -96,6 +96,7 @@ services:
       - API_BASE_URL=https://yts.mx/api/v2
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=none
+      - DISABLE_VPN_CHECK=true
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s
