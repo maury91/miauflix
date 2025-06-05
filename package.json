@@ -10,6 +10,8 @@
     "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){ process.exit(1)} \" || husky",
     "build": "npm -w backend run build && npm -w frontend run build",
     "build:frontend": "npm -w frontend run build",
+    "build:sanitizer": "npm -w packages/yts-sanitizer run build",
+    "build:libs": "npm run build:sanitizer",
     "start": "npm run start:backend",
     "start:backend": "npm -w backend start",
     "start:backend:prod": "npm -w backend run start:prod",

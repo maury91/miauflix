@@ -26,12 +26,13 @@ export class TrackerService {
    * Search torrents for a movie by its IMDb ID
    *
    * @param imdbId - The IMDb ID of the movie (format: ttXXXXXXX)
+   * @param highPriority - Whether to use high priority rate limit (default: false)
    * @returns A movie object with normalized torrents or null if not found
    */
-  public async searchTorrentsForMovie(imdbId: string) {
+  public async searchTorrentsForMovie(imdbId: string, highPriority = false) {
     try {
       // Currently only using YTS, but this can be extended to use multiple trackers
-      const movie = await this.ytsApi.getMovieWithTorrents(imdbId);
+      const movie = await this.ytsApi.getMovieWithTorrents(imdbId, highPriority);
       return movie;
     } catch (error) {
       console.error(`Error searching torrents for movie ${imdbId}:`, error);

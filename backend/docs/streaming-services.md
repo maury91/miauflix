@@ -42,8 +42,6 @@ The backend provides torrent-based streaming capabilities through WebTorrent int
 
 ### Current Endpoints
 
-- `POST /api/torrents/parse` - Parse magnet link and extract metadata
-- `GET /api/torrents/:hash/info` - Get torrent information
 - `POST /api/torrents/convert` - Convert magnet to torrent object
 
 ### Planned Endpoints
@@ -59,10 +57,10 @@ The backend provides torrent-based streaming capabilities through WebTorrent int
 
 ```env
 # WebTorrent Configuration
-WEBTORRENT_MAX_CONNS=100
+CONTENT_CONNECTION_LIMIT=100
 WEBTORRENT_DHT_PORT=6881
-WEBTORRENT_DOWNLOAD_LIMIT=0
-WEBTORRENT_UPLOAD_LIMIT=0
+CONTENT_DOWNLOAD_LIMIT=0
+CONTENT_UPLOAD_LIMIT=0
 
 # Streaming Configuration
 STREAM_PORT=8080

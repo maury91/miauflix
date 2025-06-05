@@ -58,7 +58,34 @@ export class MovieSourceRepository {
   /**
    * Create a new movie source
    */
-  create(source: Partial<MovieSource>): Promise<MovieSource> {
+  async create(source: Partial<MovieSource>): Promise<MovieSource> {
+    if (source.movieId && source.hash) {
+      const existing = await this.findByMovieAndHash(source.movieId, source.hash);
+      if (existing) {
+        const {
+          quality: existingQuality,
+          resolution: existingResolution,
+          size: existingSize,
+          videoCodec: existingVideoCodec,
+          source: existingSource,
+          sourceType: existingSourceType,
+        } = existing;
+        const { quality, resolution, size, videoCodec, source: srcSource, sourceType } = source;
+        const isDuplicate =
+          existingQuality === quality &&
+          existingResolution === resolution &&
+          existingSize === size &&
+          existingVideoCodec === videoCodec &&
+          existingSource === srcSource &&
+          existingSourceType === sourceType;
+        if (!isDuplicate) {
+          console.warn(
+            `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, resolution: existingResolution, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, resolution, size, videoCodec, source: srcSource, sourceType })}`
+          );
+        }
+        return existing;
+      }
+    }
     const newSource = this.movieSourceRepository.create(source);
     return this.movieSourceRepository.save(newSource);
   }
@@ -66,9 +93,42 @@ export class MovieSourceRepository {
   /**
    * Create multiple movie sources at once
    */
-  createMany(sources: Partial<MovieSource>[]): Promise<MovieSource[]> {
-    const newSources = sources.map(source => this.movieSourceRepository.create(source));
-    return this.movieSourceRepository.save(newSources);
+  async createMany(sources: Partial<MovieSource>[]): Promise<MovieSource[]> {
+    const results: MovieSource[] = [];
+    for (const source of sources) {
+      if (source.movieId && source.hash) {
+        const existing = await this.findByMovieAndHash(source.movieId, source.hash);
+        if (existing) {
+          const {
+            quality: existingQuality,
+            resolution: existingResolution,
+            size: existingSize,
+            videoCodec: existingVideoCodec,
+            source: existingSource,
+            sourceType: existingSourceType,
+          } = existing;
+          const { quality, resolution, size, videoCodec, source: srcSource, sourceType } = source;
+          const isDuplicate =
+            existingQuality === quality &&
+            existingResolution === resolution &&
+            existingSize === size &&
+            existingVideoCodec === videoCodec &&
+            existingSource === srcSource &&
+            existingSourceType === sourceType;
+          if (!isDuplicate) {
+            console.warn(
+              `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, resolution: existingResolution, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, resolution, size, videoCodec, source: srcSource, sourceType })}`
+            );
+          }
+          results.push(existing);
+          continue;
+        }
+      }
+      const newSource = this.movieSourceRepository.create(source);
+      const saved = await this.movieSourceRepository.save(newSource);
+      results.push(saved);
+    }
+    return results;
   }
 
   /**

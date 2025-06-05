@@ -24,7 +24,7 @@
 
 | Variable                | Required | Default | Description                         |
 | ----------------------- | -------- | ------- | ----------------------------------- |
-| TORRENT_KEY             | Yes      | -       | Base64 AES-256 key for encryption   |
+| SOURCE_SECURITY_KEY     | Yes      | -       | Base64 AES-256 key for encryption   |
 | MAX_PRELOAD_CONCURRENCY | No       | 3       | Max simultaneous preload operations |
 | STREAM_CHUNK_SIZE       | No       | 65536   | Streaming chunk size in bytes       |
 | STREAM_TIMEOUT_MS       | No       | 30000   | Stream connection timeout           |
@@ -191,7 +191,7 @@ Backend worker prioritises torrent search & metadata fetch based on viewport pay
 ## backend#encrypt‑blobs — Encrypt torrent identifiers (3 SP) ☑ **COMPLETED**
 
 **Summary**
-Store `infoHash`, `magnet`, and `torrentFile` ciphertext using AES‑256‑GCM under env `TORRENT_KEY`.
+Store `infoHash`, `magnet`, and `torrentFile` ciphertext using AES‑256‑GCM under env `SOURCE_SECURITY_KEY`.
 
 **Implementation Status: ✅ DONE**
 
@@ -209,7 +209,7 @@ Store `infoHash`, `magnet`, and `torrentFile` ciphertext using AES‑256‑GCM u
 
 **Error Scenarios**
 
-✅ Missing TORRENT_KEY → auto-generate with warning
+✅ Missing SOURCE_SECURITY_KEY → auto-generate with warning
 ✅ Corrupted ciphertext → log security alert, fallback to error response
 ✅ Key rotation without migration → detect and fail gracefully
 

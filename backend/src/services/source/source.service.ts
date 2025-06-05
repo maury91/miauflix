@@ -6,6 +6,7 @@ import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { TrackerService } from '@services/source/tracker.service';
 import { RateLimiter } from '@utils/rateLimiter';
+import { SingleFlight } from '@utils/singleflight.util';
 import { sleep } from '@utils/time';
 import { ENV } from '@constants';
 
@@ -82,11 +83,15 @@ export class SourceService {
   /**
    * Search for sources for a specific movie
    */
-  private async searchSourcesForMovie(movie: {
-    id: number;
-    imdbId: string | null;
-    title: string;
-  }): Promise<void> {
+  @SingleFlight(movie => movie.id)
+  private async searchSourcesForMovie(
+    movie: {
+      id: number;
+      imdbId: string | null;
+      title: string;
+    },
+    isOnDemand: boolean = false
+  ): Promise<MovieSource[] | void> {
     await this.startPromise;
 
     if (!this.vpnConnected) {
@@ -112,7 +117,10 @@ export class SourceService {
 
     try {
       // Search for sources using the tracker service
-      const movieWithTorrents = await this.trackerService.searchTorrentsForMovie(movie.imdbId);
+      const movieWithTorrents = await this.trackerService.searchTorrentsForMovie(
+        movie.imdbId,
+        isOnDemand
+      );
 
       if (!movieWithTorrents || !movieWithTorrents.torrents?.length) {
         logger.debug('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
@@ -152,11 +160,12 @@ export class SourceService {
         })
       );
 
-      await this.movieSourceRepository.createMany(sources);
+      const createdSources = await this.movieSourceRepository.createMany(sources);
       logger.debug(
         'SourceService',
         `Saved ${sources.length} sources for movie ${movie.id} (${movie.title})`
       );
+      return createdSources;
     } catch (error) {
       logger.error(
         'SourceService',
@@ -171,6 +180,65 @@ export class SourceService {
    */
   public async getSourcesForMovie(movieId: number): Promise<MovieSource[]> {
     return this.movieSourceRepository.findByMovieId(movieId);
+  }
+
+  /**
+   * Search for sources for a specific movie with timeout (for on-demand requests)
+   * If the movie has no sources and hasn't been searched yet, search immediately
+   * Returns sources within timeout, but continues search in background if needed
+   */
+  public async getSourcesForMovieWithOnDemandSearch(
+    movie: { id: number; imdbId: string | null; title: string; sourceSearched: boolean },
+    timeoutMs: number = 1200
+  ): Promise<MovieSource[]> {
+    // First check if we already have sources
+    const existingSources = await this.movieSourceRepository.findByMovieId(movie.id);
+    if (existingSources.length > 0) {
+      return existingSources;
+    }
+
+    // ImdbId is required for searching sources
+    if (movie.imdbId) {
+      logger.info(
+        'SourceService',
+        `On-demand source search triggered for movie ${movie.id} (${movie.title})`
+      );
+
+      let status: 'pending' | 'success' | 'timeout' = 'pending';
+      const searchPromise = (async () => {
+        const sources = await this.searchSourcesForMovie(movie, true);
+        // On purpose without await so it returns faster
+        this.movieRepository.markSourceSearched(movie.id);
+        if (status === 'pending') {
+          status = 'success';
+        } else {
+          logger.debug(
+            'SourceService',
+            `Background search completed for movie ${movie.id} (${movie.title})`
+          );
+        }
+        return sources;
+      })();
+      const timeoutPromise = (async () => {
+        await sleep(timeoutMs);
+        if (status === 'pending') {
+          status = 'timeout';
+          logger.debug(
+            'SourceService',
+            `On-demand search timed out for movie ${movie.id}, continuing in background`
+          );
+        }
+      })();
+      try {
+        // Wait for search with timeout
+        return (await Promise.race([searchPromise, timeoutPromise])) || [];
+      } catch (error) {
+        logger.error('SourceService', `On-demand search failed for movie ${movie.id}:`, error);
+      }
+    }
+
+    // Movie has been searched but no sources found, or no IMDb ID
+    return [];
   }
 
   /**

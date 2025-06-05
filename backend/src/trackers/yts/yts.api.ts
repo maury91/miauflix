@@ -42,10 +42,11 @@ export class YTSApi extends Api {
   @TrackStatus()
   private async request<T>(
     endpoint: string,
-    params: Record<string, boolean | number | string> = {}
+    params: Record<string, boolean | number | string> = {},
+    highPriority = false
   ): Promise<T> {
     // Apply rate limiting before making the request
-    await this.rateLimiter.throttle();
+    await this.throttle(highPriority);
 
     const queryParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
@@ -108,18 +109,29 @@ export class YTSApi extends Api {
 
   /**
    * Search for movies by query term (can be movie title or IMDb ID)
+   * @param queryTerm The search term (movie title or IMDb ID)
+   * @param page The page number for pagination (default: 1)
+   * @param limit The number of results per page (default: 20)
+   * @param highPriority Whether to use high priority rate limiting (default: false)
+   * @returns A promise that resolves to a MovieListResponse containing the search results
+   * @throws Error if the API request fails or returns an error
    */
   @Cacheable(36e5 /* 1 hour */)
   public async searchMovies(
     queryTerm: string,
     page: number = 1,
-    limit: number = 20
+    limit: number = 20,
+    highPriority = false
   ): Promise<MovieListResponse> {
-    return this.request<MovieListResponse>('api/v2/list_movies.json', {
-      query_term: queryTerm,
-      page,
-      limit,
-    });
+    return this.request<MovieListResponse>(
+      'api/v2/list_movies.json',
+      {
+        query_term: queryTerm,
+        page,
+        limit,
+      },
+      highPriority
+    );
   }
 
   /**
@@ -299,11 +311,12 @@ export class YTSApi extends Api {
   /**
    * Search for a movie by IMDb ID and return normalized data
    * @param imdbId The IMDb ID of the movie
+   * @param highPriority Whether to use high priority rate limiting
    * @returns The movie with normalized torrent data, or null if not found
    */
   @Cacheable(36e5 /* 1 hour */)
-  public async getMovieWithTorrents(imdbId: string) {
-    const response = await this.searchMovies(imdbId);
+  public async getMovieWithTorrents(imdbId: string, highPriority = false) {
+    const response = await this.searchMovies(imdbId, 1, 20, highPriority);
 
     if (!response.data.movie_count || !response.data.movies.length) {
       return null;

@@ -90,15 +90,6 @@ Bun.serve({
       return new Response('OK', { status: 200 });
     }
 
-    // Log request details
-    console.log({
-      timestamp: new Date().toISOString(),
-      method: req.method,
-      path: path,
-      query: queryParams,
-      headers: Object.fromEntries(req.headers.entries()),
-    });
-
     if (req.method !== 'GET') {
       return new Response('Method not supported', { status: 405 });
     }
@@ -128,7 +119,7 @@ Bun.serve({
         );
       }
 
-      console.log(`Calling real API for ${path}`);
+      console.log(`Calling real API for ${filePath}`);
 
       const apiUrl = new URL(path, API_BASE_URL);
       for (const [key, value] of Object.entries(queryParams)) {
@@ -146,7 +137,7 @@ Bun.serve({
       const data = await apiResponse.json();
 
       // Apply sanitization
-      const sanitizedData = sanitize(data, path);
+      const sanitizedData = sanitize(data, apiUrl.toString());
 
       // Save the response for future use
       await saveResponse(filePath, {
