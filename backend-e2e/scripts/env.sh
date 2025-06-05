@@ -10,6 +10,14 @@
 set -e
 
 MODE="$1"
+
+script_dir=$(dirname $(realpath "$0"))
+backend_e2e_dir=$(dirname "$script_dir")
+root_dir=$(dirname "$backend_e2e_dir")
+log_file="$backend_e2e_dir/logs/$(date +'%Y-%m-%d_%H-%M-%S').log"
+
+mkdir -p "$(dirname "$log_file")"
+
 shift # Remove first argument, rest are test arguments
 
 if [[ "$MODE" != "dev" && "$MODE" != "test" ]]; then
@@ -34,23 +42,45 @@ else
     DESCRIPTION="Docker-based Integration Test Environment"
 fi
 
+cd "$root_dir"
+
 echo "🚀 Starting $DESCRIPTION..."
 
 # Find available ports
 echo "🔍 Finding available ports..."
-eval $($(dirname "$0")/find-port.sh)
+eval $($script_dir/find-port.sh)
 echo "  🔌 Backend port: $PORT"
 
 # Export the ports for docker-compose
 export PORT
+
+# Function to cleanup artifacts
+cleanupArtifacts() {
+    echo "🧹 Cleaning up previous build artifacts..."
+    cd ${backend_e2e_dir}
+    rm -rf docker/dist
+}
 
 # Function to cleanup on exit
 cleanup() {
     TERM_SIGNAL=$?
     if [[ $TERM_SIGNAL -ne 0 ]]; then
         echo "⚠️  Script terminated with signal $TERM_SIGNAL"
+        # docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE logs --tail '5000'
+        if [[ -f $log_file ]]; then
+            tail -n 100 "$log_file"
+        fi
+    fi
+    if [[ -n $logged_pid ]]; then
+        kill $logged_pid || true
+    fi
+    if [[ -f $log_file ]]; then
+        echo "📜 Full Logs saved to $log_file"
+    else
+        echo "⚠️  No logs were generated"
     fi
     echo "🧹 Cleaning up $MODE environment..."
+    cleanupArtifacts
     docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE down -v --remove-orphans
     exit $TERM_SIGNAL
 }
@@ -58,8 +88,19 @@ cleanup() {
 # Set trap to cleanup on script exit
 trap cleanup EXIT INT TERM
 
+# Build libraries
+npm run build:libs
+
+# Clean up previous build artifacts
+cleanupArtifacts
+cd ${root_dir}
+mkdir -p backend-e2e/docker/dist
+
+# Copy new build artifacts
+cp -r packages/yts-sanitizer backend-e2e/docker/dist
+
 # Navigate to the integration tests directory
-cd "$(dirname "$0")/.."
+cd ${backend_e2e_dir}
 
 # Load environment variables if .env exists
 if [[ -f "../.env" ]]; then
@@ -83,6 +124,10 @@ if [[ "$MODE" == "dev" ]]; then
 else
     docker compose --env-file ../.env -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
 fi
+
+docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" logs --since 1m  --follow &> "$log_file" &
+logged_pid=$!
+cleanupArtifacts
 
 # Wait for services to start
 echo "⏳ Waiting for services to start..."

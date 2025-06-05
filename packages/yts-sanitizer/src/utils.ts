@@ -5,7 +5,7 @@
 import { faker } from '@faker-js/faker';
 import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import seedrandom from 'seedrandom';
-import { LEGAL_HASH_LIST } from './constants.js';
+import { LEGAL_HASH_LIST } from './constants';
 
 // Cache for consistent data across calls
 const cache = new Map<string, any>();

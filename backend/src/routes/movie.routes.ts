@@ -113,7 +113,16 @@ export const createMovieRoutes = (
 
         // Include sources if requested
         if (includeSources) {
-          const sources = await sourceService.getSourcesForMovie(movie.id);
+          // Use on-demand search if movie has no sources and hasn't been searched yet
+          const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
+            {
+              id: movie.id,
+              imdbId: movie.imdbId,
+              title: movie.title,
+              sourceSearched: movie.sourceSearched,
+            },
+            1200 // 1.2 second timeout - enough time for YTS API search but still reasonable for users
+          );
           response.sources = sources.map(source => ({
             id: source.id,
             hash: source.hash,

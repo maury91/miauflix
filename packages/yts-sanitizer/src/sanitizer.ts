@@ -8,8 +8,9 @@ import type {
   YTSCastMember,
   YTSApiResponse,
   SanitizationOptions,
-} from './types.js';
-import { DEFAULT_OPTIONS } from './constants.js';
+  YTSMovieDetails,
+} from './types';
+import { DEFAULT_OPTIONS } from './constants';
 import {
   generateTitle,
   generatePersonName,
@@ -20,14 +21,15 @@ import {
   replacementHash,
   getCached,
   initFaker,
-} from './utils.js';
+} from './utils';
 
 /**
  * Sanitize torrent data
  */
 export function sanitizeTorrent(
   torrent: YTSTorrent,
-  options: SanitizationOptions = {}
+  options: SanitizationOptions = {},
+  seen: Set<string>
 ): YTSTorrent {
   if (!torrent || typeof torrent !== 'object') return torrent;
 
@@ -37,12 +39,15 @@ export function sanitizeTorrent(
   // Sanitize hash
   if (sanitized.hash && typeof sanitized.hash === 'string' && sanitized.hash.length >= 20) {
     const originalHash = sanitized.hash;
-    sanitized.hash = replacementHash(sanitized.hash, legalHashProbability);
+    do {
+      sanitized.hash = replacementHash(sanitized.hash, legalHashProbability);
 
-    // Update URL to match the new hash if it contains the hash
-    if (sanitized.url && sanitized.url.includes(originalHash)) {
-      sanitized.url = sanitized.url.replace(originalHash, sanitized.hash);
-    }
+      // Update URL to match the new hash if it contains the hash
+      if (sanitized.url && sanitized.url.includes(originalHash)) {
+        sanitized.url = sanitized.url.replace(originalHash, sanitized.hash);
+      }
+    } while (seen.has(sanitized.hash));
+    seen.add(sanitized.hash);
   }
 
   return sanitized;
@@ -86,7 +91,10 @@ export function sanitizeCastMember(castMember: YTSCastMember): YTSCastMember {
 /**
  * Sanitize a single movie item
  */
-export function sanitizeMovie(movie: YTSMovie, options: SanitizationOptions = {}): YTSMovie {
+export function sanitizeMovie(
+  movie: YTSMovie | YTSMovieDetails,
+  options: SanitizationOptions = {}
+): YTSMovie {
   if (!movie || typeof movie !== 'object') {
     return movie;
   }
@@ -94,59 +102,40 @@ export function sanitizeMovie(movie: YTSMovie, options: SanitizationOptions = {}
   const sanitized = { ...movie };
   const id = `${sanitized.id}`;
 
-  // Sanitize titles
-  if (sanitized.title) {
-    sanitized.title = generateTitle(`title_${id}`);
-  }
-  if (sanitized.title_english) {
-    sanitized.title_english = generateTitle(`title_english_${id}`);
-  }
-  if (sanitized.title_long) {
-    sanitized.title_long = generateTitle(`title_long_${id}`);
+  const titleKeys = ['title', 'title_english', 'title_long'] as const;
+  for (const key of titleKeys) {
+    if (key in sanitized && typeof sanitized[key] === 'string') {
+      sanitized[key] = generateTitle(`${key}_${id}`);
+    }
   }
 
-  // Sanitize descriptions
-  if (sanitized.description_intro) {
+  const descriptionKeys = ['description_full', 'summary', 'synopsis'] as const;
+  for (const key of descriptionKeys) {
+    if (key in sanitized && typeof sanitized[key] === 'string') {
+      sanitized[key] = generateDescription(`${key}_${id}`, sanitized[key]);
+    }
+  }
+
+  // Special case for description_intro because TS is stupid
+  if ('description_intro' in sanitized) {
     sanitized.description_intro = generateDescription(
       `desc_intro_${id}`,
       sanitized.description_intro
     );
-  }
-  if (sanitized.description_full) {
-    sanitized.description_full = generateDescription(`desc_full_${id}`, sanitized.description_full);
-  }
-  if (sanitized.summary) {
-    sanitized.summary = generateDescription(`summary_${id}`, sanitized.summary);
-  }
-  if (sanitized.synopsis) {
-    sanitized.synopsis = generateDescription(`synopsis_${id}`, sanitized.synopsis);
   }
 
   // Sanitize URLs
   if (sanitized.url) {
     sanitized.url = generateUrl(`movie_url_${id}`, sanitized.url);
   }
-  if (sanitized.background_image) {
-    sanitized.background_image = generateUrl(`bg_${id}`, sanitized.background_image);
-  }
-  if (sanitized.background_image_original) {
-    sanitized.background_image_original = generateUrl(
-      `bg_orig_${id}`,
-      sanitized.background_image_original
-    );
-  }
-  if (sanitized.small_cover_image) {
-    sanitized.small_cover_image = generateUrl(`cover_small_${id}`, sanitized.small_cover_image);
-  }
-  if (sanitized.medium_cover_image) {
-    sanitized.medium_cover_image = generateUrl(`cover_medium_${id}`, sanitized.medium_cover_image);
-  }
-  if (sanitized.large_cover_image) {
-    sanitized.large_cover_image = generateUrl(`cover_large_${id}`, sanitized.large_cover_image);
-  }
 
   // Sanitize screenshot images
   const imageKeys = [
+    'background_image',
+    'background_image_original',
+    'small_cover_image',
+    'medium_cover_image',
+    'large_cover_image',
     'medium_screenshot_image1',
     'medium_screenshot_image2',
     'medium_screenshot_image3',
@@ -154,12 +143,14 @@ export function sanitizeMovie(movie: YTSMovie, options: SanitizationOptions = {}
     'large_screenshot_image2',
     'large_screenshot_image3',
   ] as const;
-
-  imageKeys.forEach(imageKey => {
-    if (sanitized[imageKey]) {
-      sanitized[imageKey] = generateUrl(`${imageKey}_${id}`, sanitized[imageKey] as string);
+  for (const imageKey of imageKeys) {
+    if (imageKey in sanitized && typeof (sanitized as YTSMovieDetails)[imageKey] === 'string') {
+      (sanitized as YTSMovieDetails)[imageKey] = generateUrl(
+        `${imageKey}_${id}`,
+        (sanitized as YTSMovieDetails)[imageKey]
+      );
     }
-  });
+  }
 
   // Sanitize trailer code
   if (sanitized.yt_trailer_code) {
@@ -181,13 +172,14 @@ export function sanitizeMovie(movie: YTSMovie, options: SanitizationOptions = {}
   }
 
   // Sanitize cast
-  if (sanitized.cast && Array.isArray(sanitized.cast)) {
+  if ('cast' in sanitized && Array.isArray(sanitized.cast)) {
     sanitized.cast = sanitized.cast.map(sanitizeCastMember);
   }
 
   // Sanitize torrents
   if (sanitized.torrents && Array.isArray(sanitized.torrents)) {
-    sanitized.torrents = sanitized.torrents.map(torrent => sanitizeTorrent(torrent, options));
+    const seen = new Set<string>();
+    sanitized.torrents = sanitized.torrents.map(torrent => sanitizeTorrent(torrent, options, seen));
   }
 
   return sanitized;
@@ -207,75 +199,38 @@ export function sanitize(
 
   const { maxMovies = DEFAULT_OPTIONS.maxMovies } = options;
 
-  // Handle wrapped HTTP response format
-  if ('body' in data && data.body && typeof data.body === 'object' && 'data' in data.body) {
-    const sanitized = {
-      ...data,
-      body: {
-        ...data.body,
-        data: sanitize(data.body.data, url, options),
-      },
-    };
-    return sanitized;
-  }
+  // A data field seems to be present in all the YTS API responses
+  if ('data' in data && data.data && typeof data.data === 'object') {
+    if ('movies' in data.data && Array.isArray(data.data.movies)) {
+      // Movie list response with nested data
+      const sanitized = {
+        ...data,
+        data: {
+          ...data.data,
+          movies: data.data.movies
+            .slice(0, maxMovies)
+            .map((movie: YTSMovie) => sanitizeMovie(movie, options)),
+        },
+      };
 
-  // Handle YTS API data structure with nested data property
-  if (
-    'data' in data &&
-    data.data &&
-    typeof data.data === 'object' &&
-    'movies' in data.data &&
-    Array.isArray(data.data.movies)
-  ) {
-    // Movie list response with nested data
-    const sanitized = {
-      ...data,
-      data: {
-        ...data.data,
-        movies: data.data.movies.map((movie: YTSMovie) => sanitizeMovie(movie, options)),
-      },
-    };
-
-    // Limit movie count to prevent too much test data
-    if ('movie_count' in data.data && typeof data.data.movie_count === 'number') {
-      sanitized.data.movie_count = Math.min(maxMovies, data.data.movie_count);
-
-      // Limit the actual movies array as well
-      if (sanitized.data.movies.length > maxMovies) {
-        sanitized.data.movies = sanitized.data.movies.slice(0, maxMovies);
+      // Limit movie count to prevent too much test data
+      if ('movie_count' in data.data && typeof data.data.movie_count === 'number') {
+        sanitized.data.movie_count = Math.min(maxMovies, data.data.movie_count);
       }
+
+      return sanitized;
     }
 
-    return sanitized;
-  }
-
-  // Handle YTS API data structure
-  if ('movies' in data && Array.isArray(data.movies)) {
-    // Movie list response
-    const sanitized = {
-      ...data,
-      movies: data.movies.map((movie: YTSMovie) => sanitizeMovie(movie, options)),
-    };
-
-    // Limit movie count to prevent too much test data
-    if ('movie_count' in data && typeof data.movie_count === 'number') {
-      sanitized.movie_count = Math.min(maxMovies, data.movie_count);
-
-      // Limit the actual movies array as well
-      if (sanitized.movies.length > maxMovies) {
-        sanitized.movies = sanitized.movies.slice(0, maxMovies);
-      }
+    if ('movie' in data.data && data.data.movie && typeof data.data.movie === 'object') {
+      // Single movie response
+      return {
+        ...data,
+        data: {
+          ...data.data,
+          movie: sanitizeMovie(data.data.movie, options),
+        },
+      };
     }
-
-    return sanitized;
-  }
-
-  // Handle single movie response
-  if ('movie' in data && data.movie && typeof data.movie === 'object') {
-    return {
-      ...data,
-      movie: sanitizeMovie(data.movie, options),
-    };
   }
 
   // Default: return data as-is if we don't recognize the format

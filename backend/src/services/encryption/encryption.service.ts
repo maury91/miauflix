@@ -10,7 +10,7 @@ export class EncryptionService {
   private readonly TAG_LENGTH = 16; // 128-bit auth tag
 
   constructor() {
-    const key = ENV('TORRENT_KEY');
+    const key = ENV('SOURCE_SECURITY_KEY');
     if (!key) {
       throw new Error('Encryption key is required');
     }

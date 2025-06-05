@@ -23,71 +23,73 @@ export interface YTSCastMember {
 }
 
 export interface YTSMovie {
-  id?: number;
-  url?: string;
-  imdb_code?: string;
-  title?: string;
-  title_english?: string;
-  title_long?: string;
-  slug?: string;
-  year?: number;
-  rating?: number;
-  runtime?: number;
-  genres?: string[];
-  summary?: string;
-  description_full?: string;
-  description_intro?: string;
-  synopsis?: string;
-  yt_trailer_code?: string;
-  language?: string;
-  mpa_rating?: string;
-  background_image?: string;
-  background_image_original?: string;
-  small_cover_image?: string;
-  medium_cover_image?: string;
-  large_cover_image?: string;
-  medium_screenshot_image1?: string;
-  medium_screenshot_image2?: string;
-  medium_screenshot_image3?: string;
-  large_screenshot_image1?: string;
-  large_screenshot_image2?: string;
-  large_screenshot_image3?: string;
-  cast?: YTSCastMember[];
-  torrents?: YTSTorrent[];
-  date_uploaded?: string;
-  date_uploaded_unix?: number;
-  like_count?: number;
-  download_count?: number;
+  id: number;
+  url: string;
+  imdb_code: string;
+  title: string;
+  title_english: string;
+  title_long: string;
+  slug: string;
+  year: number;
+  rating: number;
+  runtime: number;
+  genres: string[];
+  summary: string;
+  description_full: string;
+  synopsis: string;
+  yt_trailer_code: string;
+  language: string;
+  mpa_rating: string;
+  background_image: string;
+  background_image_original: string;
+  torrents: YTSTorrent[];
+  date_uploaded: string;
+  date_uploaded_unix: number;
+}
+
+export interface YTSMovieDetails extends YTSMovie {
+  like_count: number;
+  description_intro: string;
+  small_cover_image: string;
+  medium_cover_image: string;
+  large_cover_image: string;
+  medium_screenshot_image1: string;
+  medium_screenshot_image2: string;
+  medium_screenshot_image3: string;
+  large_screenshot_image1: string;
+  large_screenshot_image2: string;
+  large_screenshot_image3: string;
+  cast: YTSCastMember[];
 }
 
 export interface YTSMovieListResponse {
-  status?: string;
-  status_message?: string;
-  data?: {
-    movie_count?: number;
-    limit?: number;
-    page_number?: number;
-    movies?: YTSMovie[];
+  status: string;
+  status_message: string;
+  data: {
+    movie_count: number;
+    limit: number;
+    page_number: number;
+    movies: YTSMovie[];
   };
-  '@meta'?: {
-    server_time?: number;
-    server_timezone?: string;
-    api_version?: number;
-    execution_time?: string;
+  '@meta': {
+    server_time: number;
+    server_timezone: string;
+    api_version: number;
+    execution_time: string;
   };
 }
 
 export interface YTSMovieDetailsResponse {
-  status?: string;
-  status_message?: string;
-  data?: {
-    movie?: YTSMovie;
+  status: string;
+  status_message: string;
+  data: {
+    movie: YTSMovieDetails;
   };
-  '@meta'?: {
-    server_time?: number;
-    server_timezone?: string;
-    api_version?: number;
-    execution_time?: string;
+  '@meta': {
+    server_time: number;
+    server_timezone: string;
+    api_version: number;
+    execution_time: string;
   };
 }
 
