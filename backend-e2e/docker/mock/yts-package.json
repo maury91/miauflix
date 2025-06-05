@@ -1,0 +1,21 @@
+{
+  "name": "yts-mock",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "bun run index.ts"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@miauflix/yts-sanitizer": "file:./yts-sanitizer",
+    "seedrandom": "^3.0.5",
+    "unique-names-generator": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/seedrandom": "^3.0.8"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

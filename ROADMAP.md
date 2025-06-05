@@ -97,7 +97,7 @@ See `docs/stretch-goals.md` – watch‑party, offline PWA, server‑side HLS, p
 
 ```ts
 import { randomBytes, createCipheriv, createDecipheriv } from 'crypto';
-const key = Buffer.from(process.env.TORRENT_KEY!, 'base64');
+const key = Buffer.from(process.env.SOURCE_SECURITY_KEY!, 'base64');
 const ivLen = 12;
 export const enc = (buf: Buffer): Buffer => {
   const iv = randomBytes(ivLen);

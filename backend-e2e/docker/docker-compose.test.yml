@@ -11,6 +11,8 @@ services:
       - TMDB_API_URL=http://tmdb-mock/3
       - YTS_API_URL=http://yts-mock
       - TRAKT_API_URL=http://trakt-mock
+      - DISABLE_VPN_CHECK=true
+      - DISABLE_DISCOVERY=true
       - DEBUG=*
     networks:
       - test-network
@@ -52,7 +54,6 @@ services:
       start_period: 10s
     volumes:
       - ./tmdb/data:/app/data
-      - test_tmdb_node_modules:/usr/src/app/node_modules
     networks:
       - test-network
 
@@ -80,15 +81,14 @@ services:
       start_period: 10s
     volumes:
       - ./trakt/data:/app/data
-      - test_trakt_node_modules:/usr/src/app/node_modules
     networks:
       - test-network
 
   # YTS Mock Service
   yts-mock:
     build:
-      context: mock
-      dockerfile: yts.Dockerfile
+      context: .
+      dockerfile: mock/yts.Dockerfile
     env_file:
       - ../../.env
     environment:
@@ -105,18 +105,9 @@ services:
       start_period: 10s
     volumes:
       - ./yts/data:/app/data
-      - test_yts_node_modules:/usr/src/app/node_modules
     networks:
       - test-network
 
 networks:
   test-network:
     driver: bridge
-
-volumes:
-  test_tmdb_node_modules:
-    name: test_tmdb_node_modules
-  test_yts_node_modules:
-    name: test_yts_node_modules
-  test_trakt_node_modules:
-    name: test_trakt_node_modules

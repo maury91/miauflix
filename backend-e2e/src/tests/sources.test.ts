@@ -35,8 +35,7 @@ describe('Sources E2E Tests', () => {
       const response = await client.get('/movies/550', { includeSources: 'true' });
 
       if (response.status === 404) {
-        console.warn('Movie 550 not found - may need to wait for data to be loaded');
-        return;
+        throw new Error('Movie 550 not found - test data is required for source testing');
       }
 
       expect(response.status).toBe(200);
@@ -78,8 +77,8 @@ describe('Sources E2E Tests', () => {
         // Should have at least one source
         expect(sourcesSet.size).toBeGreaterThan(0);
       } else {
-        console.warn(
-          'No sources found for movie 550 - this may indicate missing data or configuration issues'
+        throw new Error(
+          'No sources found for movie 550 - test data is required for source validation'
         );
       }
     });
@@ -144,7 +143,18 @@ describe('Sources E2E Tests', () => {
         expect(source.size).toBeGreaterThan(0);
 
         // Test video codec is a known format
-        expect(['x264', 'x265', 'H.264', 'H.265', 'HEVC']).toContain(source.videoCodec);
+        expect([
+          'X264',
+          'X265',
+          'HEVC',
+          'AV1',
+          'XVID',
+          'VP9',
+          'MPEG2',
+          'MPEG4',
+          'VC1',
+          'UNKNOWN',
+        ]).toContain(source.videoCodec);
       }
     });
 

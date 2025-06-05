@@ -41,10 +41,7 @@ describe('Database Encryption E2E Tests', () => {
         !movieResponse.data.sources ||
         movieResponse.data.sources.length === 0
       ) {
-        console.warn(
-          'No sources available for encryption testing - skipping database encryption verification'
-        );
-        return;
+        throw new Error('No sources available for encryption testing - test data is required');
       }
 
       const source = movieResponse.data.sources[0];
@@ -56,10 +53,9 @@ describe('Database Encryption E2E Tests', () => {
         const dbPath = process.env.DATABASE_PATH || '/app/data/database.sqlite';
 
         if (!fs.existsSync(dbPath)) {
-          console.warn(
-            `Database file not found at ${dbPath} - skipping direct database verification`
+          throw new Error(
+            `Database file not found at ${dbPath} - cannot verify encryption at rest`
           );
-          return;
         }
 
         const db = new sqlite3.Database(dbPath);
@@ -91,7 +87,7 @@ describe('Database Encryption E2E Tests', () => {
             expect(rawSourceData.hash.length).toBeGreaterThan(source.hash.length);
             expect(rawSourceData.magnetLink.length).toBeGreaterThan(source.magnetLink.length);
           } else {
-            console.warn('Could not find source data in database for verification');
+            throw new Error('Could not find source data in database for verification');
           }
         } finally {
           await new Promise<void>(resolve => {
@@ -102,7 +98,7 @@ describe('Database Encryption E2E Tests', () => {
           });
         }
       } catch (error) {
-        console.warn(`Could not verify database encryption directly: ${error}`);
+        throw new Error(`Could not verify database encryption directly: ${error}`);
       }
     });
 
@@ -127,8 +123,7 @@ describe('Database Encryption E2E Tests', () => {
 
       // Skip if no sources available
       if (!responses[0].data.sources || responses[0].data.sources.length === 0) {
-        console.warn('No sources available for decryption testing');
-        return;
+        throw new Error('No sources available for decryption testing - test data is required');
       }
 
       // All responses should return identical decrypted data
@@ -146,8 +141,8 @@ describe('Database Encryption E2E Tests', () => {
         // Magnet link should be properly formatted
         expect(source.magnetLink).toMatch(/^magnet:\?xt=urn:btih:[a-fA-F0-9]{40}/);
 
-        // Data should be readable strings, not encrypted gibberish
-        expect(source.hash).not.toMatch(/^[A-Za-z0-9+/=]+$/); // Not base64
+        // Data should be readable strings, properly decrypted
+        expect(source.hash).toMatch(/^[a-fA-F0-9]{40}$/); // Valid 40-char hex hash
         expect(source.magnetLink).toContain('magnet:'); // Contains expected prefix
       });
     });
@@ -166,8 +161,9 @@ describe('Database Encryption E2E Tests', () => {
         !movieResponse.data.sources ||
         movieResponse.data.sources.length === 0
       ) {
-        console.warn('No sources available for testing all encrypted fields');
-        return;
+        throw new Error(
+          'No sources available for testing all encrypted fields - test data is required'
+        );
       }
 
       const source = movieResponse.data.sources[0];
@@ -245,8 +241,9 @@ describe('Database Encryption E2E Tests', () => {
       }
 
       if (responses.length < 2) {
-        console.warn('Insufficient responses for data integrity testing');
-        return;
+        throw new Error(
+          'Insufficient responses for data integrity testing - need at least 2 responses'
+        );
       }
 
       // All responses should have identical source data

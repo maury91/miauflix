@@ -149,7 +149,7 @@ describe('Movie Endpoints', () => {
         expect(source).toHaveProperty('size');
         expect(source).toHaveProperty('videoCodec');
         expect(source).toHaveProperty('source');
-        expect(source).toHaveProperty('hasTorrentFile');
+        expect(source).toHaveProperty('hasDataFile');
 
         // Validate source data types
         expect(typeof source.id).toBe('number');
@@ -160,7 +160,7 @@ describe('Movie Endpoints', () => {
         expect(typeof source.size).toBe('number');
         expect(typeof source.videoCodec).toBe('string');
         expect(typeof source.source).toBe('string');
-        expect(typeof source.hasTorrentFile).toBe('boolean');
+        expect(typeof source.hasDataFile).toBe('boolean');
       }
     });
 
