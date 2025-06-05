@@ -10,16 +10,19 @@ export abstract class Api {
   public lastRequest: number | null = null;
 
   protected readonly rateLimiter: RateLimiter;
+  protected readonly highPriorityRateLimiter: RateLimiter;
 
   constructor(
     protected cache: Cache,
     protected apiUrl: string,
-    rateLimit: number
+    rateLimit: number,
+    highPriorityRateLimit: number = rateLimit * 2 // Default to identical rate limit ( it's a secondary queue )
   ) {
     if (!cache) {
       throw new Error('Cache is required');
     }
     this.rateLimiter = new RateLimiter(rateLimit);
+    this.highPriorityRateLimiter = new RateLimiter(highPriorityRateLimit);
   }
 
   protected constructUrl(endpoint: string, params: Record<string, boolean | number | string> = {}) {
@@ -29,6 +32,10 @@ export abstract class Api {
     });
 
     return `${this.apiUrl}/${endpoint}?${queryParams.toString()}`;
+  }
+
+  protected throttle(highPriority: boolean = false) {
+    return highPriority ? this.highPriorityRateLimiter.throttle() : this.rateLimiter.throttle();
   }
 
   /**
