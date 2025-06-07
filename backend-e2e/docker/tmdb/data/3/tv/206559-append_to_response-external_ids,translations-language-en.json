@@ -1,22 +1,22 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=8660",
+    "cache-control": "public, max-age=23949",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"d45f414d99b3c30ea39a2626e009ae81\"",
+    "etag": "W/\"130637b16ba01fc7927d23df300a860b\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "SzsFVXe8yFMp2-Zk2Hx0Zs9bp2wMlCYa-u4Y3cM_61bdMATGQXqvMw==",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "D7IsZDJi3F_2ELthwcdbsvChhMzHv6_OExG19a_CZmfFI8LNEQjfcA==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "03e2018322f74fe8b973ddf1bd673363"
   },
+  "status": 200,
   "data": {
     "adult": false,
-    "backdrop_path": "/mu3lEhGovyhKHPJzb7HNYtZUCDT.jpg",
+    "backdrop_path": "/s1dTt4M31q2HwD5Fkl1tf5tQzJg.jpg",
     "created_by": [
       {
         "id": 4191118,
@@ -47,15 +47,15 @@
     "id": 206559,
     "in_production": true,
     "languages": ["af", "en"],
-    "last_air_date": "2025-05-23",
+    "last_air_date": "2025-05-30",
     "last_episode_to_air": {
-      "id": 5360451,
-      "name": "Unacceptable Parrot",
-      "overview": "Denuo earum sophismata titulus ventito expedita venia talio. Aestas thesis alii torqueo patria cibus acervus turpis. Patria cribro confugo.",
+      "id": 6247304,
+      "name": "Zygomorphic Antelope",
+      "overview": "Tardus surculus decor peior defessus. Cornu depopulo virtus voluptatum. Tepesco celer debeo amicitia crustulum audentia vita debeo vereor.",
       "vote_average": 0,
       "vote_count": 0,
-      "air_date": "2025-05-29",
-      "episode_number": 237,
+      "air_date": "2025-06-06",
+      "episode_number": 5,
       "episode_type": "standard",
       "production_code": "",
       "runtime": null,
@@ -63,19 +63,19 @@
       "show_id": 206559,
       "still_path": null
     },
-    "name": "Previous Thrush",
+    "name": "Willing Bonobo",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 192,
         "logo_path": "/dJ9KWprPx7AXMOxBrGJoadLhhZQ.png",
-        "name": "Painful Sly Moore Productions",
+        "name": "Rare Kit Fisto Productions",
         "origin_country": "ZA"
       },
       {
         "id": 1826,
         "logo_path": "/2tNeujuBe8MR40hoUE4FLYA7Knl.png",
-        "name": "Ordinary Ben Quadinaros Productions",
+        "name": "Acceptable Adi Gallia Productions",
         "origin_country": "ZA"
       }
     ],
@@ -83,15 +83,15 @@
     "number_of_seasons": 5,
     "origin_country": ["ZA"],
     "original_language": "af",
-    "original_name": "Legislative Seahorse",
+    "original_name": "Correct Ape",
     "overview": "Cunae quasi sed capillus decimus trepide.",
-    "popularity": 220.27,
+    "popularity": 626.438,
     "poster_path": "/3bzECfllho8PphdYujLUIuhncJD.jpg",
     "production_companies": [
       {
         "id": 240436,
         "logo_path": "/uQbJVxmj5hhGWmym13JOs2rFAM8.png",
-        "name": "Melted Jocasta Nu Studios",
+        "name": "Mixed Grievous Studios",
         "origin_country": "ZA"
       }
     ],
@@ -168,8 +168,8 @@
     "status": "Returning Series",
     "tagline": "",
     "type": "Scripted",
-    "vote_average": 5.6,
-    "vote_count": 94,
+    "vote_average": 5.578,
+    "vote_count": 96,
     "external_ids": {
       "imdb_id": "tt1527854",
       "freebase_mid": "/m/0zdk1kn",

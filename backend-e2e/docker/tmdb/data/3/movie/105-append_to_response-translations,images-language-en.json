@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=20985",
+    "cache-control": "public, max-age=4075",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"82d1c49521af14d0ab1e0f5a320ede61\"",
+    "etag": "W/\"251f9eac880a575d3c60a6da6402c6f2\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "g7Wy6qa6a9E7ew01auUkQCQDfWK6U_THpEPnjDYxXSynveew0YD0Kw==",
+    "via": "1.1 dc0aad619823d3400ef947433d0af8fa.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "1i6uKZxku4cGGOBDgbxfyi4-fOMacvU7QZnKgFcoN6NQVUfSClEf4w==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/yz8QL8WFD8yj0LA5zIlNOgcHvZK.jpg",
     "belongs_to_collection": {
       "id": 264,
-      "name": "Apparent Tiger",
+      "name": "Various Beaver",
       "poster_path": "/5Xsu2o5IsZRuuxCEVZ9nVve21FP.jpg",
       "backdrop_path": "/c9C9Pg2QctyjZHRmS0P8rZg1OTA.jpg"
     },
@@ -43,21 +43,21 @@
     "imdb_id": "tt0088763",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Underground Blackbird",
+    "original_title": "Foolish Hummingbird",
     "overview": "Curvo ratione aureus capillus earum ater. Ago cometes acies audentia celo vir tempora thermae. Creta dignissimos denego illo nostrum.",
-    "popularity": 16.4976,
+    "popularity": 13.324,
     "poster_path": "/vN5B5WgYscRGcQpVhHl6p9DDTP0.jpg",
     "production_companies": [
       {
         "id": 33,
         "logo_path": "/3wwjVpkZtnog6lSKzWDjvw2Yi00.png",
-        "name": "Illegal Bossk Pictures",
+        "name": "Bold Jango Fett Pictures",
         "origin_country": "US"
       },
       {
         "id": 56,
         "logo_path": "/cEaxANEisCqeEoRvODv2dO1I0iI.png",
-        "name": "Olympic Shaak Ti Media",
+        "name": "Detailed Taun We Media",
         "origin_country": "US"
       }
     ],
@@ -79,10 +79,10 @@
     ],
     "status": "Released",
     "tagline": "Crapula curvo ratione aureus capillus earum ater.",
-    "title": "Magic Marlin",
+    "title": "Helpful Monkey",
     "video": false,
-    "vote_average": 8.32,
-    "vote_count": 20551,
+    "vote_average": 8.3,
+    "vote_count": 20577,
     "translations": {
       "translations": [
         {
@@ -108,7 +108,7 @@
             "overview": "Denuo esse vinum facere vado cohaero. Administratio stipes commemoro caput.",
             "runtime": 116,
             "tagline": "Depromo denuo esse vinum facere.",
-            "title": "Entire Marten"
+            "title": "Stupid Vicuna"
           }
         },
         {
@@ -121,7 +121,7 @@
             "overview": "Autus sufficio vomer harum ulterius. Argentum vitium vicissitudo ceno tardus exercitationem.",
             "runtime": 116,
             "tagline": "Corona autus sufficio vomer harum ulterius.",
-            "title": "Shaggy Woodpecker"
+            "title": "Atomic Silkworm"
           }
         },
         {
@@ -134,7 +134,7 @@
             "overview": "Autus sufficio vomer harum ulterius. Argentum vitium vicissitudo ceno tardus exercitationem.",
             "runtime": 117,
             "tagline": "Corona autus sufficio vomer harum ulterius.",
-            "title": "Shaggy Woodpecker"
+            "title": "Atomic Silkworm"
           }
         },
         {
@@ -147,7 +147,7 @@
             "overview": "Acquiro candidus cinis sol quaerat depono. Tempora vae cursim suus cumque.",
             "runtime": 0,
             "tagline": "",
-            "title": "Awake Walrus"
+            "title": "Level Llama"
           }
         }
       ]

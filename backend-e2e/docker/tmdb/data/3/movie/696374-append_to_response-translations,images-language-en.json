@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=17125",
+    "cache-control": "public, max-age=4473",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"31100f6d55422b574b223f47f531eff8\"",
+    "etag": "W/\"e9b63181cacdebd154e709737c2b9fb1\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "2G7CuKujIs2BOwtqn3BNgCA0gUrTq1yeme_ztDWM2n0_IaT1qx1CGQ==",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "xQoO1w4fThEP3dhbkXWMEbDohduGFlMRjr0QD8L6jc7Q0UBfKkfScw==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "ca8bd6c20dff440c935fd568c903018a"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/w2uGvCpMtvRqZg6waC1hvLyZoJa.jpg",
     "belongs_to_collection": {
       "id": 729322,
-      "name": "Interesting Lemming",
+      "name": "Specified Condor",
       "poster_path": "/LdSn17U6ybhtPJT3S6fTNRni5Y.jpg",
       "backdrop_path": "/hXF55codODfnzTZDExbUbfFmA9y.jpg"
     },
@@ -39,15 +39,15 @@
     "imdb_id": "tt11316854",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Theoretical Anteater",
+    "original_title": "Invisible Booby",
     "overview": "Tepidus corpus sophismata nisi demonstro complectus aperio. Cogito soluta stella amplitudo. Caelestis auditor dolor.",
-    "popularity": 2.7158,
+    "popularity": 2.9815,
     "poster_path": "/yXRoyYzIo17HfANn07oXYdyBy4h.jpg",
     "production_companies": [
       {
         "id": 92153,
         "logo_path": "/psjvYkjjgAPtS8utnFYDM8t8yi7.png",
-        "name": "Responsible Finis Valorum Media",
+        "name": "Yawning Lama Su Media",
         "origin_country": "US"
       }
     ],
@@ -69,10 +69,10 @@
     ],
     "status": "Released",
     "tagline": "",
-    "title": "Poor Hare",
+    "title": "Amused Wren",
     "video": false,
     "vote_average": 8.411,
-    "vote_count": 2420,
+    "vote_count": 2422,
     "translations": {
       "translations": [
         {

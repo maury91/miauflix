@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=1270",
+    "cache-control": "public, max-age=2598",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"cee29c34bef851da0c0a0f5a4827b259\"",
+    "etag": "W/\"8a9c23a75f3f1a187facade2f36fe766\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 fa8c9f29fb8ef5c537a2a53f4de05240.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "ui71nYZwXR2Cf_hQMpSsl6JpCOnkbEWcRCIzr6cRv2yzhYv_t2adQA==",
+    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "WU293XJx_bu2fMI9lP0PwelIhtalD623m8bGCwax-HUE9rxfu0u0ig==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "52c19747ebc4484f9477eea6ab9d801b"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/4A5HH9HkCPqAwyYL6CnA0mxbYjn.jpg",
     "belongs_to_collection": {
       "id": 1002775,
-      "name": "Neat Hedgehog",
+      "name": "Uncertain Halibut",
       "poster_path": "/kUU0uPeeuWVf7AA2wKdZzK8pdj5.jpg",
       "backdrop_path": "/2YunFsMDvXxOelJo4nxZ61yHT8b.jpg"
     },
@@ -47,21 +47,21 @@
     "imdb_id": "tt29768333",
     "origin_country": ["FR"],
     "original_language": "fr",
-    "original_title": "Sheer Partridge",
+    "original_title": "Labour Kangaroo",
     "overview": "Aspernatur quis aperte.",
-    "popularity": 129.3921,
+    "popularity": 80.3702,
     "poster_path": "/qycPITRqXgPai7zj1gKffjCdSB5.jpg",
     "production_companies": [
       {
         "id": 134188,
         "logo_path": "/ueed3yKbzBRB4hBbpbPa3AxiwPk.png",
-        "name": "Reduced R2-D2 Productions",
+        "name": "Wise Shaak Ti Productions",
         "origin_country": "FR"
       },
       {
         "id": 3040,
         "logo_path": "/aZww3B7RCFAMV1qrDZDrdeB8qcI.png",
-        "name": "Chosen Rugor Nass Productions",
+        "name": "Coherent Darth Maul Productions",
         "origin_country": "BE"
       }
     ],
@@ -87,10 +87,10 @@
     ],
     "status": "Released",
     "tagline": "",
-    "title": "Brainy Turkey",
+    "title": "Assistant Ladybug",
     "video": false,
-    "vote_average": 6.728,
-    "vote_count": 147,
+    "vote_average": 6.645,
+    "vote_count": 166,
     "translations": {
       "translations": [
         {
@@ -103,7 +103,7 @@
             "overview": "Aiunt aeger quidem clibanus pauper textilis.",
             "runtime": 111,
             "tagline": "",
-            "title": "Necessary Partridge"
+            "title": "Unhappy Bandicoot"
           }
         },
         {
@@ -116,7 +116,7 @@
             "overview": "Causa et tum campana at audax cras necessitatibus aliquam. Vulgaris veniam nihil atavus tam curis vis sumo.",
             "runtime": 111,
             "tagline": "",
-            "title": "Anxious Smelt"
+            "title": "Alive Sole"
           }
         },
         {
@@ -129,7 +129,7 @@
             "overview": "Depereo tandem thema curtus vulpes cibus canis super vox adflicto. Amicitia amiculum sui vilicus. Video tenetur arcesso vester.",
             "runtime": 0,
             "tagline": "",
-            "title": "Orthodox Falcon"
+            "title": "Harsh Cheetah"
           }
         },
         {
@@ -142,7 +142,7 @@
             "overview": "Depereo tandem thema curtus vulpes cibus canis super vox adflicto. Amicitia amiculum sui vilicus. Video tenetur arcesso vester.",
             "runtime": 112,
             "tagline": "",
-            "title": "Orthodox Falcon"
+            "title": "Harsh Cheetah"
           }
         },
         {

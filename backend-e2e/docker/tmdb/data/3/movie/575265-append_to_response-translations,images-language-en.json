@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1224",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=8972",
+    "cache-control": "public, max-age=11872",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"39b27a4c3f41d16535150db1ad6613f6\"",
+    "etag": "W/\"d0f26c7e05112436653b6c0b03bb54d1\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "5Sl9m-MBhYRY2B25XFj8xO3Ysdq4IHl1BzK1m-UgF3yAyEeK4akE5w==",
+    "via": "1.1 b4904c5988fd0eaae341a12cc47f3766.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "YBDU_r9CR55Clw3t7lE2zuBjp7eY0Fl7hLX9iAAC3dejAS70X2GHqw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "c48e0a81c0964062b5f95e61bfbac73e"
   },
+  "status": 200,
   "data": {
     "adult": false,
-    "backdrop_path": "/1p5aI299YBnqrEEvVGJERk2MXXb.jpg",
+    "backdrop_path": "/aEG09hZZEDZ23Y9WYI701W6Gwnb.jpg",
     "belongs_to_collection": {
       "id": 87359,
-      "name": "Satisfied Tapir",
+      "name": "Mixed Wildfowl",
       "poster_path": "/geEjCGfdmRAA1skBPwojcdvnZ8A.jpg",
       "backdrop_path": "/mroWh717g0Ah2c0rrPGW6f3EWMM.jpg"
     },
@@ -43,27 +43,27 @@
     "imdb_id": "tt9603208",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Obvious Turtle",
+    "original_title": "Linear Giraffe",
     "overview": "Abutor subvenio comminor aureus tener arbustum vito tandem trucido. Vestigium quaerat valde cras doloremque communis sollers conicio thymbra canonicus. Caritas deleniti iure calco.",
-    "popularity": 319.5509,
+    "popularity": 214.5334,
     "poster_path": "/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg",
     "production_companies": [
       {
         "id": 4,
         "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
-        "name": "Dead Nien Nunb Media",
+        "name": "Intermediate Qui-Gon Jinn Media",
         "origin_country": "US"
       },
       {
         "id": 82819,
         "logo_path": "/gXfFl9pRPaoaq14jybEn1pHeldr.png",
-        "name": "Inclined Lama Su Entertainment",
+        "name": "Sunny Cliegg Lars Entertainment",
         "origin_country": "US"
       },
       {
         "id": 21777,
         "logo_path": null,
-        "name": "Medieval Lando Calrissian Studios",
+        "name": "Territorial Sebulba Studios",
         "origin_country": "US"
       }
     ],
@@ -74,7 +74,7 @@
       }
     ],
     "release_date": "2025-05-17",
-    "revenue": 206041120,
+    "revenue": 389533211,
     "runtime": 170,
     "spoken_languages": [
       {
@@ -95,10 +95,10 @@
     ],
     "status": "Released",
     "tagline": "Turpis abutor subvenio comminor aureus tener arbustum vito.",
-    "title": "Socialist Fowl",
+    "title": "Ratty Emu",
     "video": false,
-    "vote_average": 7.116,
-    "vote_count": 430,
+    "vote_average": 7.165,
+    "vote_count": 639,
     "translations": {
       "translations": [
         {
@@ -124,7 +124,7 @@
             "overview": "Eveniet virtus demum.",
             "runtime": 0,
             "tagline": "Accusamus eveniet virtus.",
-            "title": "Leading Barracuda"
+            "title": "Crude Turtle"
           }
         },
         {
@@ -137,7 +137,7 @@
             "overview": "Eveniet virtus demum.",
             "runtime": 169,
             "tagline": "Accusamus eveniet virtus.",
-            "title": "Leading Barracuda"
+            "title": "Crude Turtle"
           }
         },
         {
@@ -163,7 +163,7 @@
             "overview": "Deinde caput adsum. Libero subvenio usque. Caelum avarus casus cursus nam teres tamquam tenetur pariatur.",
             "runtime": 169,
             "tagline": "",
-            "title": "Technological Asp"
+            "title": "Frail Chinchilla"
           }
         }
       ]
@@ -269,8 +269,8 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg",
-          "vote_average": 4.91,
-          "vote_count": 28,
+          "vote_average": 5.096,
+          "vote_count": 32,
           "width": 2000
         },
         {
@@ -278,26 +278,17 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/iKPsC9EFUafRP9SrUznI61getVP.jpg",
-          "vote_average": 6.696,
-          "vote_count": 23,
+          "vote_average": 6.346,
+          "vote_count": 27,
           "width": 2000
         },
         {
           "aspect_ratio": 0.667,
           "height": 3000,
           "iso_639_1": "en",
-          "file_path": "/odcyBL9R2pD3EdTGNYzzFoX2tAz.jpg",
+          "file_path": "/zLsL6uB0OtuXvdD4wKvjhCsjBBP.jpg",
           "vote_average": 3.334,
-          "vote_count": 1,
-          "width": 2000
-        },
-        {
-          "aspect_ratio": 0.667,
-          "height": 3000,
-          "iso_639_1": "en",
-          "file_path": "/hnJb08MfgQAJ3OfZ3mSJkufzjuF.jpg",
-          "vote_average": 3.334,
-          "vote_count": 1,
+          "vote_count": 2,
           "width": 2000
         },
         {
@@ -306,7 +297,16 @@
           "iso_639_1": "en",
           "file_path": "/5eN3QTjaBbBGoHHa0sSfuItvhm8.jpg",
           "vote_average": 2.278,
-          "vote_count": 3,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/8iWqngJdnNL4Kb8J5ONbtCWYQIE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 5,
           "width": 2000
         }
       ]

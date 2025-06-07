@@ -1,0 +1,258 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=222",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"2ce381ea7d072d2214715a41a2e0055c\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 231be1c97cc722fa08b64d21072ebfac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "0Rr7_yQ2IWtkGRA1Ye4sWYiaAR1hkkSqT8SDMAhVr4KYR31ORzdtIw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qLYumObEHeRHFMC6N3SfCrnBFjp.jpg",
+    "created_by": [
+      {
+        "id": 117443,
+        "credit_id": "525774af760ee36aaa502e62",
+        "name": "Arnold Wilkinson",
+        "original_name": "Arnold Wilkinson",
+        "gender": 2,
+        "profile_path": "/tRMEuYNVFjXYJ7gh1sGJSxq9Vwq.jpg"
+      }
+    ],
+    "episode_run_time": [42],
+    "first_air_date": "2001-09-30",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://sane-radiator.name",
+    "id": 4601,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2011-06-26",
+    "last_episode_to_air": {
+      "id": 332920,
+      "name": "Minor Raccoon",
+      "overview": "Trepide aestus causa vitae decipio derideo porro varietas curatio. Turbo xiphias coerceo caute spero cauda correptius deludo conservo consectetur. Impedit cura subnecto pax aranea curtus.",
+      "vote_average": 6,
+      "vote_count": 1,
+      "air_date": "2011-06-26",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 43,
+      "season_number": 5,
+      "show_id": 4601,
+      "still_path": null
+    },
+    "name": "Disturbing Worm",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Unwilling San Hill Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 30,
+        "logo_path": "/g1e0H0Ka97IG5SyInMXdJkHGKiH.png",
+        "name": "Puny Bossk Productions",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 113,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Blank Caribou",
+    "overview": "Socius astrum chirographum debitis abscido aspicio tenetur expedita. Commodo arto solvo valens defleo strenuus id conatus texo. Alias commodo celo.",
+    "popularity": 370.7896,
+    "poster_path": "/zgBg8gTCELQg73awE7qAuV06c4Z.jpg",
+    "production_companies": [
+      {
+        "id": 25545,
+        "logo_path": "/8Lqf0okunSPAwBBL08Ua1IRe1xi.png",
+        "name": "Asleep Cordé Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Troubled Raymus Antilles Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 56401,
+        "logo_path": null,
+        "name": "Furious Darth Maul Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": null,
+        "episode_count": 2,
+        "id": 14006,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2001-09-30",
+        "episode_count": 22,
+        "id": 13997,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/uTRuNGqN6QWDTfhPrnKsGoPYta5.jpg",
+        "season_number": 1,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2002-09-29",
+        "episode_count": 23,
+        "id": 13998,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/1WXeeH8cPCTD4SQ2eDxf4AC5xi1.jpg",
+        "season_number": 2,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2003-09-28",
+        "episode_count": 21,
+        "id": 13999,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/zILn1LSIySlJzL0m6PMSf9xUPfF.jpg",
+        "season_number": 3,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2004-09-26",
+        "episode_count": 23,
+        "id": 14000,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/ziiGVfxB3HwqnFH10fqe1oyciH.jpg",
+        "season_number": 4,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2005-09-25",
+        "episode_count": 22,
+        "id": 14001,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/4UH4p1W8XfgUs4Vkpz7g9ikEKZH.jpg",
+        "season_number": 5,
+        "vote_average": 7.8
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.6,
+    "vote_count": 351,
+    "external_ids": {
+      "imdb_id": "tt0275140",
+      "freebase_mid": "/m/02sqkh",
+      "freebase_id": "/en/law_order_criminal_intent",
+      "tvdb_id": 71489,
+      "tvrage_id": 4203,
+      "wikidata_id": "Q1055728",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Voluptatibus civis timidus depereo canis vestigium eaque conspergo umerus caelum. Subvenio nihil valetudo architecto commodo custodia tenuis coniecto.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Abduco patruus conforto. Tametsi ambitus cunctatio decumbo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Marine Dove",
+            "overview": "Assentator subiungo thorax aequitas apostolus officiis synagoga utrum absconditus tantum.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Head Wasp",
+            "overview": "Via cattus usus valetudo iste tres umbra coniecto. Civis vacuus conor decipio carus suffragium.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Marine Dove",
+            "overview": "Assentator subiungo thorax aequitas apostolus officiis synagoga utrum absconditus tantum.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=9008",
+    "cache-control": "public, max-age=8232",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"a17543cd80614af07fa79b8f35e19722\"",
+    "etag": "W/\"9e6361029b8465811bafdae662ba01d6\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "4tjK4_CcAZJYY5V_njDrwkj5kSrPg7GIs_u1gnONEIiH1iqq9cPtnw==",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "dcnizSlbNvnSL2HFdlldZlQTsoxtNhdtJ9U67KDcSD5mlZsPZrGYlA==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "4f745164c16646a89207e9f5074053e0"
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "d88d71c87bd0404989825a6df248ee2b"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/kA50bkSC6bw5ZkutYrN9sLD9CZ9.jpg",
@@ -45,33 +45,33 @@
     "languages": ["en"],
     "last_air_date": "2025-05-25",
     "last_episode_to_air": {
-      "id": 6255231,
-      "name": "Glamorous Lemur",
-      "overview": "Explicabo caritas capitulus modi tendo aequus non. Tantillus terra speculum conturbo sublime harum demens sordeo.",
+      "id": 6279986,
+      "name": "Instant Bass",
+      "overview": "Demoror velit inventore sunt conscendo cilicium templum. Certus esse animus spiritus arbitro abundans terminatio curso sortitus.",
       "vote_average": 0,
       "vote_count": 0,
-      "air_date": "2025-05-25",
+      "air_date": "2025-06-05",
       "episode_number": 5,
       "episode_type": "standard",
       "production_code": "",
       "runtime": 21,
       "season_number": 5,
       "show_id": 22980,
-      "still_path": "/kEVxGLJsZ00V5I3PReRoQnHL9kX.jpg"
+      "still_path": "/eFuodKLB3VI0hfrjMR8EB1dPAij.jpg"
     },
-    "name": "Nasty Cattle",
+    "name": "Printed Caterpillar",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 74,
         "logo_path": "/wX5HsfS47u6UUCSpYXqaQ1x2qdu.png",
-        "name": "Ltd Mace Windu Pictures",
+        "name": "Giant Boba Fett Pictures",
         "origin_country": "US"
       },
       {
         "id": 3353,
         "logo_path": "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png",
-        "name": "Many Luke Skywalker Productions",
+        "name": "Exciting Mas Amedda Productions",
         "origin_country": "US"
       }
     ],
@@ -79,21 +79,21 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Daily Falcon",
+    "original_name": "Smiling Tick",
     "overview": "Delinquo sursum tabgo. Barba ater depromo vado theatrum.",
-    "popularity": 577.2105,
+    "popularity": 701.241,
     "poster_path": "/onSD9UXfJwrMXWhq7UY7hGF2S1h.jpg",
     "production_companies": [
       {
         "id": 23601,
         "logo_path": "/jZYnbLWzOGhRDrvLWOOpoQZnuAB.png",
-        "name": "Juicy Jocasta Nu Studios",
+        "name": "Nasty Yarael Poof Studios",
         "origin_country": "US"
       },
       {
         "id": 11073,
         "logo_path": "/aCbASRcI1MI7DXjPbSW9Fcv9uGR.png",
-        "name": "Nursing C-3PO Media",
+        "name": "Outrageous Dud Bolt Media",
         "origin_country": "US"
       }
     ],
@@ -175,7 +175,7 @@
     "status": "Returning Series",
     "tagline": "",
     "type": "Talk Show",
-    "vote_average": 5.092,
+    "vote_average": 5.1,
     "vote_count": 71,
     "external_ids": {
       "imdb_id": "tt2057880",

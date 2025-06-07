@@ -1,0 +1,305 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14588",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"19c744df20018396655e380eeaae7888\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 79272ab9b399ee696b329d4f677dca48.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "aV4zWXb1XenBw3uHRpmDjCrOa8PEekGoH_6IaFcv_9VvU3J5yJATww==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "d88d71c87bd0404989825a6df248ee2b"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yBDvgpyynDsbMyK21FoQu1c2wYR.jpg",
+    "belongs_to_collection": {
+      "id": 870339,
+      "name": "Marked Gerbil",
+      "poster_path": "/hHfiZBIxzMmkzFds6vkQEJIurIB.jpg",
+      "backdrop_path": "/wWqGxS0kL7Oba7m0UojJ87y3Cjn.jpg"
+    },
+    "budget": 80000000,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://whirlwind-bride.biz",
+    "id": 870028,
+    "imdb_id": "tt7068946",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Long Ptarmigan",
+    "overview": "Auxilium tutamen expedita. Sollers coepi adsidue. Arbor territo fugit.",
+    "popularity": 550.6126,
+    "poster_path": "/kMDUS7VmFhb2coRfVBoGLR8ADBt.jpg",
+    "production_companies": [
+      {
+        "id": 187968,
+        "logo_path": "/xdVAEg1biNrQw5nnMXKswPCRpkq.png",
+        "name": "Superb Bail Prestor Organa Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 106178,
+        "logo_path": null,
+        "name": "Neighbouring Biggs Darklighter Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 5357,
+        "logo_path": "/19A0Ilxeh1bWMlyMtMgGzcNBn07.png",
+        "name": "Agreed Luke Skywalker Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-23",
+    "revenue": 101449750,
+    "runtime": 133,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Amiculum auxilium tutamen expedita adulatio sollers coepi adsidue.",
+    "title": "Rapid Crow",
+    "video": false,
+    "vote_average": 7.189,
+    "vote_count": 339,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://tame-fulfillment.org",
+            "overview": "Ustilo ab conculco demum necessitatibus. Thermae admoneo verecundia cupio vesco molestias explicabo sonitus. Comedo attero aestus antiquus demum ciminatio casso damno sperno addo.",
+            "runtime": 133,
+            "tagline": "Corpus ustilo ab conculco demum necessitatibus repellat thermae.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Amplitudo spiculum voluptas uxor ut.",
+            "runtime": 0,
+            "tagline": "Corroboro amplitudo spiculum.",
+            "title": "Desirable Xerinae"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Amplitudo spiculum voluptas uxor ut.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Desirable Xerinae"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Uter adipiscor denique vociferor xiphias id.",
+            "runtime": 0,
+            "tagline": "Damnatio uter adipiscor denique.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Canto thorax cena. Vigilo subiungo comprehendo vomer ter denique.",
+            "runtime": 124,
+            "tagline": "",
+            "title": "Decent Wasp"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/boQhEvyu4l6OYVvRbvB0WHAhzFV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/r4kr2BYASA1RW3OoPAOUMKXlIaO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/u3PM6P0hX3YzoamIU7q3I4hlNBI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1103,
+          "iso_639_1": "en",
+          "file_path": "/2Brxi7YRDARaeajy2iF4SRjOa5M.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1960
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1284,
+          "iso_639_1": "en",
+          "file_path": "/jffxlllSLp3Ci3cBhdcEFEUi4Ts.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.587,
+          "height": 286,
+          "iso_639_1": "en",
+          "file_path": "/n4zshTv8HlHSzNrS1LS3a3Fz52p.png",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 740
+        },
+        {
+          "aspect_ratio": 3.768,
+          "height": 181,
+          "iso_639_1": "en",
+          "file_path": "/dnxZlc2CgejVMPjH5y3IKDr37Ie.png",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 682
+        },
+        {
+          "aspect_ratio": 2.689,
+          "height": 183,
+          "iso_639_1": "en",
+          "file_path": "/TxBoTPAldrqzqmKFA5FUnEoMJs.png",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 492
+        },
+        {
+          "aspect_ratio": 3.905,
+          "height": 126,
+          "iso_639_1": "en",
+          "file_path": "/dNZAN3YNlOT23tIaWlB6EBHVYG7.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 492
+        },
+        {
+          "aspect_ratio": 2.597,
+          "height": 385,
+          "iso_639_1": "en",
+          "file_path": "/pt0dezaOZ1fmssAXOxAiibrWbej.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/kMDUS7VmFhb2coRfVBoGLR8ADBt.jpg",
+          "vote_average": 7.892,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/ieYaJz2nzs4wcqpWaofagzGoGPi.jpg",
+          "vote_average": 4.154,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1600,
+          "iso_639_1": "en",
+          "file_path": "/4rxr2grcBfxwH4penSxndcPwyDp.jpg",
+          "vote_average": 3.424,
+          "vote_count": 13,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/fkOI1odvvyb0OBwcV0AqkQOpATj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1697,
+          "iso_639_1": "en",
+          "file_path": "/qvSEzrzTWgvnGcDuLfahySZbz5K.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1200
+        }
+      ]
+    }
+  }
+}

@@ -1,22 +1,23 @@
 {
   "headers": {
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=981",
+    "cache-control": "public, max-age=9634",
     "content-type": "application/json;charset=utf-8",
     "etag": "W/\"6d553404c7fad05fac75b7cdff1aabbd\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 68b2682a924ac399aa2724b5b439e75c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "JMztjGjANwLOWqgTZgixMgbrLS_iG0FT_cEnk66XI-Extx3NMi09fg==",
+    "via": "1.1 231be1c97cc722fa08b64d21072ebfac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "jRrCtcm_43tCtbq6rHip7vuN_4mwNNge8N9_Z16mLd5kjAjRGQczVg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1a",
-    "x-cache": "RefreshHit from cloudfront",
+    "x-cache": "Miss from cloudfront",
     "x-memc": "HIT",
-    "x-memc-age": "21495",
-    "x-memc-expires": "2418",
+    "x-memc-age": "13038",
+    "x-memc-expires": "9634",
     "x-memc-key": "aa71dbbedab3dfdec5f9283ba12954f7",
-    "x-task-id": "5ae9ef7c9edb4082a88f27237d27cbc2"
+    "x-task-id": "fa7e5a425c9543bbb7a85d8f3598ff2e"
   },
+  "status": 200,
   "data": {
     "genres": [
       {

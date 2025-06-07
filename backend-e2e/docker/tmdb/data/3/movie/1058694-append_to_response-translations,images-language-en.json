@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=6881",
+    "cache-control": "public, max-age=5504",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"0da9dcc2d399134071d8571a3ef305ca\"",
+    "etag": "W/\"05aee066e5f661d173e15263ce563e89\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "BevIrc4QV_zFxesI3TItYhlt-jPnjHmYnfnTVh-ZadXqyGk_px1Blw==",
+    "via": "1.1 231be1c97cc722fa08b64d21072ebfac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Ol5mHCTUKkcdKdyDR5mNR4udkgiO0i1OCqlnzMOPXId7iMHNuQr6jQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "d88d71c87bd0404989825a6df248ee2b"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/gutU32BiBxJvJdzLv5RWC9hQhNh.jpg",
@@ -30,33 +30,33 @@
     "imdb_id": "tt14570440",
     "origin_country": ["MX"],
     "original_language": "es",
-    "original_title": "Scrawny Muskox",
+    "original_title": "Difficult Worm",
     "overview": "Quisquam claudeo barba confugo theca.",
-    "popularity": 3.1878,
+    "popularity": 2.1133,
     "poster_path": "/eGMkkbG85JUyXQEsbZKSnBrymts.jpg",
     "production_companies": [
       {
         "id": 105116,
         "logo_path": "/rVDFo9kaSYnMlFjoSz6y4nV5RPH.png",
-        "name": "Tough Roos Tarpals Media",
+        "name": "Multiple Sebulba Media",
         "origin_country": "US"
       },
       {
         "id": 173035,
         "logo_path": "/tNky2GBy0sWaG4StgWn8oGegZaY.png",
-        "name": "Yelping Ki-Adi-Mundi Productions",
+        "name": "Burning R2-D2 Productions",
         "origin_country": "US"
       },
       {
         "id": 79714,
         "logo_path": "/dQfYJjl4wb9RYcD017WPNDbUSnd.png",
-        "name": "Unhappy Lando Calrissian Pictures",
+        "name": "Missing Gregar Typho Pictures",
         "origin_country": "MX"
       },
       {
         "id": 210842,
         "logo_path": "/osAelnShU5bBUCd2Od0L6ExSuv4.png",
-        "name": "Cheerful Gasgano Studios",
+        "name": "Fixed Luminara Unduli Studios",
         "origin_country": "US"
       }
     ],
@@ -82,10 +82,10 @@
     ],
     "status": "Released",
     "tagline": "Clamo quisquam claudeo.",
-    "title": "Theoretical Koala",
+    "title": "Mechanical Landfowl",
     "video": false,
-    "vote_average": 8.35,
-    "vote_count": 453,
+    "vote_average": 8.4,
+    "vote_count": 455,
     "translations": {
       "translations": [
         {

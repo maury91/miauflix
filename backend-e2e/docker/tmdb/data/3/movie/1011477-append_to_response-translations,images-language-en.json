@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=15096",
+    "cache-control": "public, max-age=15625",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"3b9937ea464a07a5e3813cccf962e121\"",
+    "etag": "W/\"17cb98f089fb74a98e458382aa2e3637\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
     "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "NsvRoGTjWI8e-hqR0zXAo7nvbxyRP6IEOyzWp6BdghWgvYrOlPJngA==",
+    "x-amz-cf-id": "qJ93XZVTlxhSnh7T8Gh05Od5b6WM-_V2eI4CUjMPiC4G1_a9bGHD9g==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "283fac73c39b44e1aa291ef328a8fc79"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/lAnkMSDISzMYLWICS7m16rSTUHD.jpg",
     "belongs_to_collection": {
       "id": 8580,
-      "name": "Divine Cow",
+      "name": "Interim Hippopotamus",
       "poster_path": "/7tuwH4tZZy4BHe7mivXmmSYg3kx.jpg",
       "backdrop_path": "/wVG4aeLvlDmjAA9voP87u2qdEWv.jpg"
     },
@@ -43,21 +43,21 @@
     "imdb_id": "tt1674782",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Unable Ladybug",
+    "original_title": "Solid Woodpecker",
     "overview": "Cubicularis attonbitus victoria tracto suppono arguo textilis teneo consuasor.",
-    "popularity": 84.7688,
-    "poster_path": "/AEgggzRr1vZCLY86MAp93li43z.jpg",
+    "popularity": 91.2151,
+    "poster_path": "/c90Lt7OQGsOmhv6x4JoFdoHzw5l.jpg",
     "production_companies": [
       {
         "id": 5,
         "logo_path": "/71BqEFAF4V3qjjMPCpLuyJFB9A.png",
-        "name": "Sound Sebulba Pictures",
+        "name": "Traditional Luminara Unduli Pictures",
         "origin_country": "US"
       },
       {
         "id": 5219,
         "logo_path": null,
-        "name": "Cold Jango Fett Media",
+        "name": "Wild Wat Tambor Media",
         "origin_country": "US"
       }
     ],
@@ -68,7 +68,7 @@
       }
     ],
     "release_date": "2025-05-08",
-    "revenue": 13500000,
+    "revenue": 51487036,
     "runtime": 94,
     "spoken_languages": [
       {
@@ -79,10 +79,10 @@
     ],
     "status": "Released",
     "tagline": "Titulus cubicularis attonbitus victoria.",
-    "title": "Compact Koi",
+    "title": "Poised Cat",
     "video": false,
-    "vote_average": 7.6,
-    "vote_count": 47,
+    "vote_average": 7.017,
+    "vote_count": 88,
     "translations": {
       "translations": [
         {
@@ -121,7 +121,7 @@
             "overview": "Tredecim ascit ait doloribus corpus sum studio. Casso bene amor. Cogito tot acerbitas sub vulgus vetus tener tabesco.",
             "runtime": 0,
             "tagline": "Pecus tredecim ascit ait doloribus corpus sum.",
-            "title": "Uncomfortable Egret"
+            "title": "Working Sheep"
           }
         },
         {
@@ -147,7 +147,7 @@
             "overview": "Crepusculum amitto quia. Cupio adicio complectus virgo. Minima tergum placeat.",
             "runtime": 118,
             "tagline": "",
-            "title": "Zestful Guineafowl"
+            "title": "Uncomfortable Catshark"
           }
         }
       ]
@@ -216,18 +216,9 @@
           "aspect_ratio": 0.667,
           "height": 3000,
           "iso_639_1": "en",
-          "file_path": "/AEgggzRr1vZCLY86MAp93li43z.jpg",
-          "vote_average": 3.334,
-          "vote_count": 1,
-          "width": 2000
-        },
-        {
-          "aspect_ratio": 0.667,
-          "height": 3000,
-          "iso_639_1": "en",
           "file_path": "/c90Lt7OQGsOmhv6x4JoFdoHzw5l.jpg",
-          "vote_average": 3.334,
-          "vote_count": 1,
+          "vote_average": 8.034,
+          "vote_count": 5,
           "width": 2000
         },
         {
@@ -235,7 +226,25 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/ckI6bmQDvvGy20FPTIW1kfGKGRK.jpg",
-          "vote_average": 2.278,
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/1GZcCJXGk4i1jnDQuyn1rsj3wEP.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/AEgggzRr1vZCLY86MAp93li43z.jpg",
+          "vote_average": 2.542,
           "vote_count": 4,
           "width": 2000
         },
@@ -244,16 +253,7 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/eXQNVeTEEWkGmTbxVNyOsvgpQq.jpg",
-          "vote_average": 2.278,
-          "vote_count": 3,
-          "width": 2000
-        },
-        {
-          "aspect_ratio": 0.667,
-          "height": 3000,
-          "iso_639_1": "en",
-          "file_path": "/1GZcCJXGk4i1jnDQuyn1rsj3wEP.jpg",
-          "vote_average": 2.278,
+          "vote_average": 1.75,
           "vote_count": 4,
           "width": 2000
         }

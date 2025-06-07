@@ -1,0 +1,242 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2110",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"27d90d531814f2a9987b4851ada14d24\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "kebQHhmApnfVZn48Zhq6IvzEkR3LEZ9mI-3IdlJVcdpu-nsGM61fLA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/v67tbCB03CMcJRWit8CS7JdJp6.jpg",
+    "belongs_to_collection": null,
+    "budget": 60000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://dependable-devastation.name",
+    "id": 757725,
+    "imdb_id": "tt11092020",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Rival Damselfly",
+    "overview": "Sollicito virga territo terra doloremque.",
+    "popularity": 335.1621,
+    "poster_path": "/uX6FaNE86a4Xnf1mFFEryvjqB1D.jpg",
+    "production_companies": [
+      {
+        "id": 1632,
+        "logo_path": "/cisLn1YAUuptXVBa0xjq7ST9cH0.png",
+        "name": "Extreme Chewbacca Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 144763,
+        "logo_path": "/4zwngbGiTftVOlBuqSKASByaGSF.png",
+        "name": "Naval IG-88 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 221429,
+        "logo_path": "/7xNNmHcuDy0tOqZmsUMnZ6HcZ6E.png",
+        "name": "Glad Wilhuff Tarkin Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 168705,
+        "logo_path": "/sUghThrRBgt2T1jewrauUcDBZtY.png",
+        "name": "Occupational R2-D2 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 115026,
+        "logo_path": "/2yASkMT2hM6vjz0Bt1TP2gN2Ed2.png",
+        "name": "Permanent R4-P17 Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-05-01",
+    "revenue": 4307562,
+    "runtime": 103,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Caterva sollicito virga territo.",
+    "title": "Glorious Wombat",
+    "video": false,
+    "vote_average": 6.315,
+    "vote_count": 46,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://chief-instruction.biz",
+            "overview": "Aureus calco colligo cetera reprehenderit vespillo.",
+            "runtime": 103,
+            "tagline": "Delego aureus calco.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cena sordeo caritas sollicito dens antepono. Tepesco asper collum suscipit. Tremo earum cedo cena undique amor cum.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cena sordeo caritas sollicito dens antepono. Tepesco asper collum suscipit. Tremo earum cedo cena undique amor cum.",
+            "runtime": 104,
+            "tagline": "",
+            "title": "Zesty Dormouse"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/6N8sKxm7JyAyFPAY0uNpiQz6H7F.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/gEhugpZ83SSUlCmAJPJFAMognGV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.307,
+          "height": 378,
+          "iso_639_1": "en",
+          "file_path": "/pbID1LtsgnquZfM4pL2Zy9NtxXH.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1250
+        },
+        {
+          "aspect_ratio": 4.118,
+          "height": 985,
+          "iso_639_1": "en",
+          "file_path": "/tJUBjCFvcP7ZBJjFiHjY0FVd8OA.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4056
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/uX6FaNE86a4Xnf1mFFEryvjqB1D.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_639_1": "en",
+          "file_path": "/7IEW24vBiZerZrDlgLVSUU3oT1C.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/l4aFy4NLnufIJi1uAmUzsxSlt4C.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/kX6aJ66ag2SU1k1hp9voIgeyKz3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/9UcbZERGlB1qlEiSRN147GZSDXb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

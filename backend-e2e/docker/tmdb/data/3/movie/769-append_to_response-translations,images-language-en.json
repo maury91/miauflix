@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=25878",
+    "cache-control": "public, max-age=16892",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"4787e138a851c171c7e42661fd6bfa8c\"",
+    "etag": "W/\"35d46f9fa878949489d05b7319ddc947\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "DuXa1CSVEP2gZWzV-TGyWWiediJAMP2xVot6WOJFB_kFAgUZM5xa-g==",
+    "via": "1.1 7395d1816622756cd6753f5e1281200c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "efg-pqMHXDYfVU-Av8PI_VlrKBziVIMo0I_9HCL0fpETLR_00slMcQ==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "8ba9fee787bd4a04a18018403aabe196"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/7TF4p86ZafnxFuNqWdhpHXFO244.jpg",
@@ -34,15 +34,15 @@
     "imdb_id": "tt0099685",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Sweet Guppy",
+    "original_title": "Foolish Bandicoot",
     "overview": "Avaritia ver currus ascit. Corrumpo tertius vallum tempus vere cruentus sodalitas arx quisquam civitas. Molestias ara degusto.",
-    "popularity": 31.6034,
+    "popularity": 16.2982,
     "poster_path": "/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
     "production_companies": [
       {
         "id": 8880,
         "logo_path": "/fE7LBw7Jz8R29EABFGCvWNriZxN.png",
-        "name": "Troubled Raymus Antilles Entertainment",
+        "name": "Remaining Adi Gallia Entertainment",
         "origin_country": "US"
       }
     ],
@@ -69,10 +69,10 @@
     ],
     "status": "Released",
     "tagline": "Blanditiis avaritia ver currus ascit valde corrumpo.",
-    "title": "Inclined Newt",
+    "title": "Bored Camel",
     "video": false,
     "vote_average": 8.455,
-    "vote_count": 13388,
+    "vote_count": 13405,
     "translations": {
       "translations": [
         {
@@ -98,7 +98,7 @@
             "overview": "Delicate umerus beatus textor. Fugit esse clementia truculenter amor minima degero callide demum. Casso qui aiunt tubineus capio.",
             "runtime": 145,
             "tagline": "Avaritia delicate umerus beatus textor tot fugit.",
-            "title": "Advisory Crab"
+            "title": "Special Cod"
           }
         },
         {
@@ -111,7 +111,7 @@
             "overview": "Ante tamdiu patior autus denique nostrum. Advenio delicate bellicus dens coniuratio vulpes cinis annus cibo voco. Demens apto claudeo sustineo deludo odio veritas coma caries.",
             "runtime": 146,
             "tagline": "Cultellus ante tamdiu patior autus denique nostrum vicinus.",
-            "title": "Informal Rattlesnake"
+            "title": "Civic Manatee"
           }
         },
         {
@@ -124,7 +124,7 @@
             "overview": "Conduco socius volutabrum vel tergiversatio tergiversatio cotidie caelestis absum ultio.",
             "runtime": 145,
             "tagline": "",
-            "title": "Surprised Wren"
+            "title": "Causal Armadillo"
           }
         },
         {
@@ -137,7 +137,7 @@
             "overview": "Ante tamdiu patior autus denique nostrum. Advenio delicate bellicus dens coniuratio vulpes cinis annus cibo voco. Demens apto claudeo sustineo deludo odio veritas coma caries.",
             "runtime": 145,
             "tagline": "",
-            "title": "Informal Rattlesnake"
+            "title": "Civic Manatee"
           }
         }
       ]
@@ -275,13 +275,13 @@
           "width": 2000
         },
         {
-          "aspect_ratio": 0.667,
+          "aspect_ratio": 0.677,
           "height": 1500,
           "iso_639_1": "en",
-          "file_path": "/Bm016SSgzCZ4abmqgvnPsedRyS.jpg",
-          "vote_average": 3.334,
-          "vote_count": 1,
-          "width": 1000
+          "file_path": "/wGagGF57oSC44WsSPSG1TVEwSRn.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1016
         }
       ]
     }
