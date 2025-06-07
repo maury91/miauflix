@@ -1,0 +1,11 @@
+{
+  "name": "@miauflix/backend-schema",
+  "description": "Hono client to make calls to the backend API",
+  "version": "1.0.0",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  }
+}
