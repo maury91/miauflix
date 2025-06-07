@@ -1,0 +1,293 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2143",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"30fbfe549026a9be1c2e3a2f3ea40bca\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 319f376925908156190f5fc160137b42.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "nGT7885woDbaUSBpY1d_cRpgjNSIzkXDzGfEEa1fDc0dBj_swg3Ftg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6baf574374274cd5a85ee544c125e4a7"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dq18nCTTLpy9PmtzZI6Y2yAgdw5.jpg",
+    "belongs_to_collection": null,
+    "budget": 200000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://trim-beating.info",
+    "id": 497698,
+    "imdb_id": "tt3480822",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Awake Snail",
+    "overview": "Cruciamentum vulnero vitiosus. Attero natus quibusdam xiphias cresco canto antea sufficio. Voluptatum aperio vaco clam venia sodalitas desipio cotidie concido.",
+    "popularity": 120.4967,
+    "poster_path": "/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg",
+    "production_companies": [
+      {
+        "id": 420,
+        "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
+        "name": "Urgent Sebulba Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2021-07-07",
+    "revenue": 379751131,
+    "runtime": 134,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Russian",
+        "iso_639_1": "ru",
+        "name": "Pусский"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Aestas cruciamentum vulnero vitiosus sublime attero natus quibusdam.",
+    "title": "Fantastic Hoverfly",
+    "video": false,
+    "vote_average": 7.2,
+    "vote_count": 10574,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://dismal-driver.org",
+            "overview": "Voluptatem vestigium truculenter suscipit suppellex.",
+            "runtime": 134,
+            "tagline": "Ciminatio voluptatem vestigium truculenter.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://drafty-cow.name",
+            "overview": "Paens amissio porro volva.",
+            "runtime": 134,
+            "tagline": "Bibo paens amissio porro.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://drafty-cow.name",
+            "overview": "Paens amissio porro volva.",
+            "runtime": 0,
+            "tagline": "Bibo paens amissio porro.",
+            "title": "Comfortable Otter"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Triduana solvo curis similique versus tergeo.",
+            "runtime": 133,
+            "tagline": "Depulso triduana solvo curis.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Minima carbo verbera subseco vero currus. Incidunt cupressus quisquam aliquam supra consequuntur turpis.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Detailed Pheasant"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/uT6W6g2M7v50YzMbCUivFj6cdnC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/w6omTnPkmARJANJi9Rs9N6KHAAr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ApH5y0E92GiAYzFJPNLDws3v5oK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/qwG7edopQSf7JpS7AgirUCK8bxM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/wr39kzRTOleG0kZG32ivijfHspv.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.195,
+          "height": 307,
+          "iso_639_1": "en",
+          "file_path": "/zvA336zpabTaFKfgdQc3rmWx3KD.png",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 1902
+        },
+        {
+          "aspect_ratio": 3.751,
+          "height": 507,
+          "iso_639_1": "en",
+          "file_path": "/nPAytGfFRMLE2b3iUzbSPWbt8mv.png",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 1902
+        },
+        {
+          "aspect_ratio": 3.657,
+          "height": 525,
+          "iso_639_1": "en",
+          "file_path": "/34hhMQMFszXMQoplFWP7rzLuObh.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 2.812,
+          "height": 640,
+          "iso_639_1": "en",
+          "file_path": "/AhoqYeM3RVlkSmJN477BEA6ux5Y.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 3.752,
+          "height": 1149,
+          "iso_639_1": "en",
+          "file_path": "/hf0U1hoyPX3LBTXPQtg9n4pQUDk.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 4311
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/qAZ0pzat24kLdO3o8ejmbLxyOac.jpg",
+          "vote_average": 6.016,
+          "vote_count": 62,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_639_1": "en",
+          "file_path": "/kwB7d51AIcyzPOBOHLCEZJkmPhQ.jpg",
+          "vote_average": 5.928,
+          "vote_count": 14,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/ytnhzdwtj0YfC5NVWrrPRGSGZb7.jpg",
+          "vote_average": 5.726,
+          "vote_count": 20,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/ukR9EDaoM8LqWnrhOa8ps6IppW5.jpg",
+          "vote_average": 5.25,
+          "vote_count": 14,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_639_1": "en",
+          "file_path": "/uAUCHOYwFKQvSRZByP8rCgWKwT.jpg",
+          "vote_average": 5.096,
+          "vote_count": 31,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1155",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0747fad4f6b9514264fdcf6823739442\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Q5WnN389EHQhbZGLTcv2n02uVjzP14dVHVODdyRUvXOqrTgt2cNY1w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "108979e82b494b21a1e63d45841dacff"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7HqLLVjdjhXS0Qoz1SgZofhkIpE.jpg",
+    "belongs_to_collection": {
+      "id": 1458864,
+      "name": "Added Guanaco",
+      "poster_path": null,
+      "backdrop_path": "/eKpWn8DwS6xpAKs4eLb4PmrXnhk.jpg"
+    },
+    "budget": 150000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://windy-riser.info",
+    "id": 1087192,
+    "imdb_id": "tt26743210",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Compatible Wildcat",
+    "overview": "Conforto tabesco dolorum talio vulpes canonicus officia qui cohibeo. Ambitus aetas comptus texo celebrer curtus. Urbs repudiandae curo nulla thesis succurro adaugeo natus.",
+    "popularity": 86.2909,
+    "poster_path": "/3lwlJL8aW6Wor9tKvME8VoMnBkn.jpg",
+    "production_companies": [
+      {
+        "id": 521,
+        "logo_path": "/3BPX5VGBov8SDqTV7wC1L1xShAS.png",
+        "name": "Worthy Poggle the Lesser Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 2527,
+        "logo_path": "/osO7TGmlRMistSQ5JZusPhbKUHk.png",
+        "name": "Certain Darth Maul Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-06-06",
+    "revenue": 0,
+    "runtime": 125,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Tardus conforto tabesco dolorum talio vulpes canonicus officia.",
+    "title": "Incredible Mackerel",
+    "video": false,
+    "vote_average": 7.6,
+    "vote_count": 18,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://staid-ambulance.info",
+            "overview": "Crastinus vulgo recusandae. Arto torrens adeo timidus. Armarium curiositas chirographum aequus cognatus vomica volva territo.",
+            "runtime": 125,
+            "tagline": "Acies crastinus vulgo recusandae bellicus arto torrens.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tergeo apostolus cilicium beatae confero vero patrocinor aliquam tredecim. Supellex chirographum canto crinis versus testimonium.",
+            "runtime": 125,
+            "tagline": "Tolero tergeo apostolus cilicium beatae.",
+            "title": "Rude Bug"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://inferior-sinuosity.net",
+            "overview": "Tergeo apostolus cilicium beatae confero vero patrocinor aliquam tredecim. Supellex chirographum canto crinis versus testimonium.",
+            "runtime": 0,
+            "tagline": "Tolero tergeo apostolus cilicium beatae.",
+            "title": "Rude Bug"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://bright-hourglass.com",
+            "overview": "Adaugeo vehemens trans tondeo virtus tener.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Empty Thrush"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/zIcZPq0flPhjp4C8v8O5p6Nyipw.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.148,
+          "height": 297,
+          "iso_639_1": "en",
+          "file_path": "/sEJ7d72IXxoktZeJ4V6z35Hhe4a.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1529
+        },
+        {
+          "aspect_ratio": 4.394,
+          "height": 348,
+          "iso_639_1": "en",
+          "file_path": "/94QrejddERGZutcSySpwJVr7t1N.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1529
+        },
+        {
+          "aspect_ratio": 4.415,
+          "height": 200,
+          "iso_639_1": "en",
+          "file_path": "/qJkzp7G5bMqfiXAEe5RSpGpDjKi.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 883
+        },
+        {
+          "aspect_ratio": 4.415,
+          "height": 200,
+          "iso_639_1": "en",
+          "file_path": "/oxfWBePMzrEJKpnNW7vU0ZdvqI4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 883
+        },
+        {
+          "aspect_ratio": 3.569,
+          "height": 360,
+          "iso_639_1": "en",
+          "file_path": "/6aipZJzOrlkMdgrQCMhMyanlsN0.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1285
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/3lwlJL8aW6Wor9tKvME8VoMnBkn.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/47HoQdGvW4Jy4ntUbsQ3bEnJHDh.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yISoscaDtvgBls8Us9GFx1lOyyU.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/uO3BVnV7RsuhZncYUMPhHTqsXgh.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/42bJFgdRqZGI9WBjWPkdPnEaY75.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

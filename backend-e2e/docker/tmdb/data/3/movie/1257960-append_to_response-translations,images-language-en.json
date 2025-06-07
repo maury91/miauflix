@@ -1,22 +1,22 @@
 {
   "headers": {
-    "age": "1224",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=23426",
+    "cache-control": "public, max-age=442",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"af844a41aec65ff4fce3dbc192c65c4a\"",
+    "etag": "W/\"bc66bd6cb7caf1629267b8f71846ea03\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "LfShGn36hcGIpmrDMuQo2sQVtb8uQfvuydkqiEQMu3iIIj_nUoQ1hA==",
+    "via": "1.1 231be1c97cc722fa08b64d21072ebfac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "L_I7kVfEKWfz2DBOAzZ6r1JU10AkcomUW4F4j9B7eDa4dttEie4CiQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
   },
+  "status": 200,
   "data": {
     "adult": false,
-    "backdrop_path": "/xLhVwypEHzgcUhRzpCweDUEvtzG.jpg",
+    "backdrop_path": "/4MNRH73XmwBK2ycv3qvLpa07O5F.jpg",
     "belongs_to_collection": null,
     "budget": 23500000,
     "genres": [
@@ -34,27 +34,27 @@
     "imdb_id": "tt31712434",
     "origin_country": ["IN"],
     "original_language": "hi",
-    "original_title": "Violent Monkey",
+    "original_title": "Supporting Fly",
     "overview": "Totus beneficium victoria velociter cursim defluo claudeo tamisium cavus sui. Vicinus contabesco crastinus tactus facere dicta terminatio id urbanus. Articulus carbo deludo terebro tactus casso demergo turbo.",
-    "popularity": 304.4705,
+    "popularity": 251.3997,
     "poster_path": "/t48miSSfe7COqgbgMyRIyPVTBoM.jpg",
     "production_companies": [
       {
         "id": 60536,
         "logo_path": "/chMIfiURhqvr6eWCrzxIwuaWVeN.png",
-        "name": "Professional Rugor Nass Entertainment",
+        "name": "Various Nute Gunray Entertainment",
         "origin_country": "IN"
       },
       {
         "id": 59294,
         "logo_path": "/eNG6SYSrJZgXpqo1l7UwvuWio76.png",
-        "name": "Likely Jabba Desilijic Tiure Studios",
+        "name": "Corresponding Beru Whitesun lars Studios",
         "origin_country": "IN"
       },
       {
         "id": 103329,
         "logo_path": "/bjJ6phaG9F8cGm3RYBjly8wYuH5.png",
-        "name": "Vulnerable Watto Pictures",
+        "name": "Peaceful Tion Medon Pictures",
         "origin_country": "IN"
       }
     ],
@@ -76,10 +76,10 @@
     ],
     "status": "Released",
     "tagline": "",
-    "title": "Aggregate Crow",
+    "title": "Objective Bear",
     "video": false,
-    "vote_average": 4.5,
-    "vote_count": 24,
+    "vote_average": 5.2,
+    "vote_count": 44,
     "translations": {
       "translations": [
         {
@@ -92,7 +92,7 @@
             "overview": "Creta peior tantillus accedo caelestis. Patior triumphus auxilium ater tres cibus cultellus curis sumo. Cursim strues velit utroque.",
             "runtime": 133,
             "tagline": "",
-            "title": "Witty Galliform"
+            "title": "Worthwhile Partridge"
           }
         },
         {
@@ -118,7 +118,7 @@
             "overview": "Amplexus laudantium ventosus tabgo uredo cras animadverto patruus. Tumultus et accusantium aequitas curriculum despecto. Cunctatio varietas tactus.",
             "runtime": 0,
             "tagline": "",
-            "title": "Aware Boar"
+            "title": "Overall Jay"
           }
         }
       ]

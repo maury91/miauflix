@@ -1,18 +1,19 @@
 {
   "headers": {
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=27999",
+    "cache-control": "public, max-age=10300",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"1a1e1073d079297286e485714ba323e6\"",
+    "etag": "W/\"11aec0ec23485acfd37b3b9ef4e99dea\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "ow00R4IcvIXoIB0gra-ISQ8T_JkfEbXYBU6r3AK5JGZrL-pVDYRzZw==",
+    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "qDcxejgEy48cblh6BtheRYRcBk5lESTKmDGTDTwz9xHPc_dS74AjKw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
+    "x-az": "us-east-1b",
     "x-cache": "Miss from cloudfront",
-    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+    "x-task-id": "16921a284f8149ff85d91cd4375dbdb5"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/rthMuZfFv4fqEU4JVbgSW9wQ8rs.jpg",
@@ -37,21 +38,21 @@
     "imdb_id": "tt20969586",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Severe Gerbil",
+    "original_title": "Dizzy Whale",
     "overview": "Derelinquo autus vorax benevolentia abduco tego esse contego cauda. Addo architecto tertius tantum. Subnecto amita amplus adopto cubitum sequi debilito aperiam angulus distinctio.",
-    "popularity": 137.6102,
+    "popularity": 100.8947,
     "poster_path": "/m9EtP1Yrzv6v7dMaC9mRaGhd1um.jpg",
     "production_companies": [
       {
         "id": 420,
         "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
-        "name": "Dying Lama Su Pictures",
+        "name": "Urgent Sebulba Pictures",
         "origin_country": "US"
       },
       {
         "id": 176762,
         "logo_path": null,
-        "name": "Beneficial Zam Wesell Studios",
+        "name": "Manual R5-D4 Studios",
         "origin_country": "US"
       }
     ],
@@ -62,7 +63,7 @@
       }
     ],
     "release_date": "2025-04-30",
-    "revenue": 355507728,
+    "revenue": 371669322,
     "runtime": 127,
     "spoken_languages": [
       {
@@ -83,10 +84,10 @@
     ],
     "status": "Released",
     "tagline": "Tenus derelinquo autus vorax benevolentia abduco tego.",
-    "title": "Causal Rat",
+    "title": "Continental Tahr",
     "video": false,
-    "vote_average": 7.443,
-    "vote_count": 1024,
+    "vote_average": 7.409,
+    "vote_count": 1081,
     "translations": {
       "translations": [
         {
@@ -138,7 +139,7 @@
             "overview": "",
             "runtime": 126,
             "tagline": "",
-            "title": "Unknown Hookworm"
+            "title": "Public Cardinal"
           }
         },
         {
@@ -275,8 +276,8 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/vnfgoohSwKNOcRfJOPULXTvX0cu.jpg",
-          "vote_average": 5.928,
-          "vote_count": 28,
+          "vote_average": 6.2,
+          "vote_count": 29,
           "width": 2000
         },
         {

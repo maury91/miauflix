@@ -1,0 +1,208 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9244",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9004bdcca50f6f7917f208512b313bb8\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 c43915e0cad14ee7685e5f74a99ce93c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "jh3PIX8ncsE59aTMQYY7L0F5nXKf8E0UrdbCGUkoIFV1hTLOH-CI4w==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16921a284f8149ff85d91cd4375dbdb5"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6MWmIGqZpyPO5fjBFII5gmBYsFX.jpg",
+    "created_by": [
+      {
+        "id": 1231245,
+        "credit_id": "52573549760ee3776a3a0762",
+        "name": "Nicole Kunze",
+        "original_name": "Nicole Kunze",
+        "gender": 2,
+        "profile_path": "/9o2NOx9P0ZUdBWnPKNUAL8OaKZf.jpg"
+      }
+    ],
+    "episode_run_time": [30, 60],
+    "first_air_date": "1979-01-01",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://productive-reform.biz",
+    "id": 2394,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-29",
+    "last_episode_to_air": {
+      "id": 5985019,
+      "name": "Female Eel",
+      "overview": "Credo decens curto auctus fuga eum. Aufero altus calculus conforto sopor tenus confugo amiculum. Ante ater minima tumultus voluptatum acidus deduco.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-29",
+      "episode_number": 26,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 25,
+      "season_number": 5,
+      "show_id": 2394,
+      "still_path": null
+    },
+    "name": "Weak Wildebeest",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 14,
+        "logo_path": "/4Fn4eQmEmJZ9YWjiIhZ6cF1QHAi.png",
+        "name": "Operational Jocasta Nu Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 107,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Dependent Scorpion",
+    "overview": "Cilicium provident vinculum nulla non deleo appono cerno. Enim statim altus vado cuppedia vulticulus audax.",
+    "popularity": 417.3769,
+    "poster_path": "/ecAOX4esywAXLF5I4X2gaTmhmAG.jpg",
+    "production_companies": [
+      {
+        "id": 36271,
+        "logo_path": null,
+        "name": "Solid Shmi Skywalker Productions",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2019-08-17",
+        "episode_count": 2,
+        "id": 190027,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/4WuNcaVnh5WOCGVJjuTMBk8ACLp.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1979-01-01",
+        "episode_count": 13,
+        "id": 7458,
+        "name": "Season 1",
+        "overview": "The Dorchester House",
+        "poster_path": "/u8BRNS1BByAgYa84rQ1wsKlEvnV.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1981-01-01",
+        "episode_count": 27,
+        "id": 7459,
+        "name": "Season 2",
+        "overview": "The Newton House",
+        "poster_path": "/e8ESRm264qGZNirjZ7QQcxU5zUN.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1982-01-01",
+        "episode_count": 13,
+        "id": 7487,
+        "name": "Season 3",
+        "overview": "The Woburn House",
+        "poster_path": "/nQX2rDH8r4ylLQiePRZKV8rOnXX.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1982-05-15",
+        "episode_count": 26,
+        "id": 7486,
+        "name": "Season 4",
+        "overview": "The Arlington House",
+        "poster_path": "/g6rpzkiD5eWt8GTMNGNaSYKvPds.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1983-10-01",
+        "episode_count": 26,
+        "id": 7483,
+        "name": "Season 5",
+        "overview": "The Brookline House",
+        "poster_path": "/71ehST7Kdfe6isGv8LUgiFYH0z1.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Documentary",
+    "vote_average": 5.4,
+    "vote_count": 34,
+    "external_ids": {
+      "imdb_id": "tt0078701",
+      "freebase_mid": "/m/02s39s",
+      "freebase_id": "/en/this_old_house",
+      "tvdb_id": 77444,
+      "tvrage_id": 6338,
+      "wikidata_id": null,
+      "facebook_id": "ThisOldHouse",
+      "instagram_id": "thisoldhouse",
+      "twitter_id": "ThisOldHouse"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Argentum urbs strenuus cultura constans valens attollo comptus. Tribuo campana tametsi causa adhaero cupiditate conduco succedo depraedor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Deinde pel creptio sonitus inflammatio. Sit animadverto utilis arcus talus acer. Crur consectetur molestias.",
+            "homepage": "https://rich-dragonfly.info",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=12581",
+    "cache-control": "public, max-age=664",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"ae4e5109efad8282078553e80cd47c05\"",
+    "etag": "W/\"99bd69e7a6d5a0e2ffc86791e97af964\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "w1tCLhBprSOJFzAMFAyVS_n46Tne7aQW9fGV2akX1tUMMW5uZKKJ0Q==",
+    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "JaLFodQkkGelRx26iou_s6kL-IDYW50SgFjMtPuPyo6jcbMd2haTCw==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/8mnXR9rey5uQ08rZAvzojKWbDQS.jpg",
     "belongs_to_collection": {
       "id": 573436,
-      "name": "Fast Bee",
+      "name": "Physical Koala",
       "poster_path": "/eD4bGQNfmqExIAzKdvX5gDHhI2.jpg",
       "backdrop_path": "/oC5S5pdfzPiQC4us05uDMT7v5Ng.jpg"
     },
@@ -47,45 +47,45 @@
     "imdb_id": "tt4633694",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Financial Gamefowl",
+    "original_title": "Gross Toucan",
     "overview": "Capto aptus voluptatem comburo tutis summa dolore aliqua. Armarium valens crastinus tergeo strues cura adfectus. Certe pauper careo vallum abduco communis conservo communis.",
-    "popularity": 19.08,
+    "popularity": 16.1167,
     "poster_path": "/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
     "production_companies": [
       {
         "id": 5,
         "logo_path": "/71BqEFAF4V3qjjMPCpLuyJFB9A.png",
-        "name": "Sound Sebulba Pictures",
+        "name": "Traditional Luminara Unduli Pictures",
         "origin_country": "US"
       },
       {
         "id": 77973,
         "logo_path": "/9y5lW86HnxKUZOFencYk3TIIRCM.png",
-        "name": "Shallow Plo Koon Entertainment",
+        "name": "Zygomorphic Lando Calrissian Entertainment",
         "origin_country": "US"
       },
       {
         "id": 84041,
         "logo_path": "/nw4kyc29QRpNtFbdsBHkRSFavvt.png",
-        "name": "Screeching R2-D2 Media",
+        "name": "Xerothermic Luminara Unduli Media",
         "origin_country": "US"
       },
       {
         "id": 2251,
         "logo_path": "/5ilV5mH3gxTEU7p5wjxptHvXkyr.png",
-        "name": "Developed Zam Wesell Media",
+        "name": "Qualified Quarsh Panaka Media",
         "origin_country": "US"
       },
       {
         "id": 14439,
         "logo_path": null,
-        "name": "Short Lando Calrissian Pictures",
+        "name": "Environmental Yarael Poof Pictures",
         "origin_country": "US"
       },
       {
         "id": 7505,
         "logo_path": "/837VMM4wOkODc1idNxGT0KQJlej.png",
-        "name": "Bottom Cordé Productions",
+        "name": "Chronic Sebulba Productions",
         "origin_country": "US"
       }
     ],
@@ -117,10 +117,10 @@
     ],
     "status": "Released",
     "tagline": "Suscipio capto aptus voluptatem comburo tutis summa.",
-    "title": "Latin Pig",
+    "title": "Gorgeous Lizard",
     "video": false,
     "vote_average": 8.398,
-    "vote_count": 16151,
+    "vote_count": 16171,
     "translations": {
       "translations": [
         {
@@ -133,7 +133,7 @@
             "overview": "Curtus via ullam adicio tribuo somniculosus vel. Tabgo cupressus adeo vaco synagoga accusamus.",
             "runtime": 117,
             "tagline": "Paulatim curtus via ullam adicio.",
-            "title": "Rising Kangaroo"
+            "title": "Confused Carp"
           }
         },
         {
@@ -159,7 +159,7 @@
             "overview": "Theatrum adipisci cubitum sponte bardus. Corroboro aureus adulatio nostrum totus.",
             "runtime": 117,
             "tagline": "Casus theatrum adipisci cubitum sponte.",
-            "title": "Running Lark"
+            "title": "Distinctive Albatross"
           }
         },
         {
@@ -172,7 +172,7 @@
             "overview": "Concedo eos pauci stella thema veniam urbs. Pauper altus eaque dolorum delectus quos recusandae totus. Adipisci illum distinctio careo crustulum comptus.",
             "runtime": 0,
             "tagline": "",
-            "title": "Equal Cod"
+            "title": "Upper Whale"
           }
         },
         {
@@ -185,7 +185,7 @@
             "overview": "Curtus via ullam adicio tribuo somniculosus vel. Tabgo cupressus adeo vaco synagoga accusamus.",
             "runtime": 117,
             "tagline": "Paulatim curtus via ullam adicio.",
-            "title": "Rising Kangaroo"
+            "title": "Confused Carp"
           }
         }
       ]
