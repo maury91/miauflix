@@ -29,7 +29,7 @@ export class RateLimiter {
    * Calculates the delay in milliseconds until the next request can be made
    * @returns The delay in milliseconds
    */
-  private calculateDelay(): number {
+  public getDelay(): number {
     const now = Date.now();
 
     this.filterOldTimestamps();
@@ -73,7 +73,7 @@ export class RateLimiter {
    */
   async throttle(): Promise<void> {
     const now = Date.now();
-    const delayMs = this.calculateDelay();
+    const delayMs = this.getDelay();
 
     logger.debug(
       'RateLimiter',
@@ -100,7 +100,7 @@ export class RateLimiter {
    * @returns true if the request should be rejected, false otherwise
    */
   shouldReject(): boolean {
-    if (this.calculateDelay() > 0) {
+    if (this.getDelay() > 0) {
       return true;
     }
 

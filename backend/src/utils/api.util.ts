@@ -38,7 +38,14 @@ export abstract class Api {
   }
 
   protected throttle(highPriority: boolean = false) {
-    return highPriority ? this.highPriorityRateLimiter.throttle() : this.rateLimiter.throttle();
+    if (highPriority) {
+      const defaultQWaitTime = this.rateLimiter.getDelay();
+      const highPriorityQWaitTime = this.highPriorityRateLimiter.getDelay();
+      if (highPriorityQWaitTime < defaultQWaitTime) {
+        return this.highPriorityRateLimiter.throttle();
+      }
+    }
+    return this.rateLimiter.throttle();
   }
 
   /**
