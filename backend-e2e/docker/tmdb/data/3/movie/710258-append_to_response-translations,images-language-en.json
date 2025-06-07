@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=1524",
+    "cache-control": "public, max-age=3676",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"45a6632e955eaf0494a451cc1618fa70\"",
+    "etag": "W/\"56efedc21b7dae0dcc73891d7ac572d7\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "uLQG8N0bTPbnQU5Y0HizJwWtvmfI9GerbEl78zBCVj4Zy-I036PHsQ==",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "BF5mK2HWsxCMkZsgWrd9c1pBoYcqz7rScE09mBaFLUe_COrjb3pqcQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "108979e82b494b21a1e63d45841dacff"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/12tEzU0bNYKIjXXEwI5abuOotHF.jpg",
@@ -30,33 +30,33 @@
     "imdb_id": "tt11001074",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Alleged Swordtail",
+    "original_title": "Occasional Fox",
     "overview": "Vero versus cubo molestias itaque.",
-    "popularity": 97.0708,
+    "popularity": 66.5735,
     "poster_path": "/tbJ3RkA2s6X5qrBzrYHYTxvDBui.jpg",
     "production_companies": [
       {
         "id": 23034,
         "logo_path": null,
-        "name": "Moderate Wilhuff Tarkin Pictures",
+        "name": "Universal R5-D4 Pictures",
         "origin_country": "US"
       },
       {
         "id": 130016,
         "logo_path": "/mqwiWprZXdHKx4J8Dj4PNPACTR9.png",
-        "name": "Cool Taun We Media",
+        "name": "Jittery Dud Bolt Media",
         "origin_country": "US"
       },
       {
         "id": 121204,
         "logo_path": "/vbtvY4IxgUZk713rkmoTO4MHIac.png",
-        "name": "Stable Jabba Desilijic Tiure Studios",
+        "name": "Necessary C-3PO Studios",
         "origin_country": "US"
       },
       {
         "id": 76991,
         "logo_path": "/pQjdvbv4y9yuIDSHDEHc9ijJKaS.png",
-        "name": "Yappiest Darth Maul Pictures",
+        "name": "Weak Anakin Skywalker Pictures",
         "origin_country": "US"
       }
     ],
@@ -68,7 +68,7 @@
     ],
     "release_date": "2025-05-01",
     "revenue": 0,
-    "runtime": 0,
+    "runtime": 139,
     "spoken_languages": [
       {
         "english_name": "English",
@@ -78,10 +78,10 @@
     ],
     "status": "Released",
     "tagline": "Charisma vero versus cubo.",
-    "title": "Global Fowl",
+    "title": "Colorful Finch",
     "video": false,
-    "vote_average": 6.345,
-    "vote_count": 55,
+    "vote_average": 6.3,
+    "vote_count": 57,
     "translations": {
       "translations": [
         {
@@ -92,7 +92,7 @@
           "data": {
             "homepage": "",
             "overview": "Creptio appello pecus tantum eum.",
-            "runtime": 0,
+            "runtime": 139,
             "tagline": "Ciminatio creptio appello pecus.",
             "title": ""
           }
@@ -146,7 +146,7 @@
           "iso_639_1": "en",
           "file_path": "/zqzqLymMi2sM7EnHkKnm3llFHR3.jpg",
           "vote_average": 3.334,
-          "vote_count": 1,
+          "vote_count": 2,
           "width": 1280
         },
         {
@@ -154,12 +154,21 @@
           "height": 2160,
           "iso_639_1": "en",
           "file_path": "/AqG1qB4uTURJWCfkmOgoLc4wZLq.jpg",
-          "vote_average": 0,
-          "vote_count": 0,
+          "vote_average": 3.334,
+          "vote_count": 2,
           "width": 3840
         }
       ],
       "logos": [
+        {
+          "aspect_ratio": 1.645,
+          "height": 691,
+          "iso_639_1": "en",
+          "file_path": "/8tV1dBN6Z7qkll3DwzuHe1gbjNX.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1137
+        },
         {
           "aspect_ratio": 3.478,
           "height": 138,
@@ -168,15 +177,6 @@
           "vote_average": 0,
           "vote_count": 0,
           "width": 480
-        },
-        {
-          "aspect_ratio": 1.645,
-          "height": 691,
-          "iso_639_1": "en",
-          "file_path": "/8tV1dBN6Z7qkll3DwzuHe1gbjNX.png",
-          "vote_average": 0,
-          "vote_count": 0,
-          "width": 1137
         },
         {
           "aspect_ratio": 3.479,

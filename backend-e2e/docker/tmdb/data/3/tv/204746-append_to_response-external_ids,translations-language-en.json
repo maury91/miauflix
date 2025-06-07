@@ -1,0 +1,162 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16237",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"68a828bdcd32638a5fa741c26350801e\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 7395d1816622756cd6753f5e1281200c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "IatGIODCEkZ2lXWSR_uMWUUdcBE4pASJMhydzR3vUfKnev4niU8MeQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "52c19747ebc4484f9477eea6ab9d801b"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ztCSlFl6fTzZX7226iM1uC30854.jpg",
+    "created_by": [
+      {
+        "id": 15565,
+        "credit_id": "65587fc6ea84c71092294024",
+        "name": "Joanne Botsford",
+        "original_name": "Joanne Botsford",
+        "gender": 1,
+        "profile_path": "/4wpTUqEjHYjDMj0Fv6BvfjeIS1H.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2022-09-12",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "https://innocent-depot.net",
+    "id": 204746,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-03-21",
+    "last_episode_to_air": {
+      "id": 6255949,
+      "name": "Eddie Murphy, Keke Palmer, Tim Story",
+      "overview": "Jennifer welcomes “The Pickup” stars Eddie Murphy and Keke Palmer and director Tim Story to chat about the film.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-29",
+      "episode_number": 170,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 42,
+      "season_number": 3,
+      "show_id": 204746,
+      "still_path": "/43pJ4YQesbaoIWitWZW80GUaInm.jpg"
+    },
+    "name": "Homeless Tarantula",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 184,
+        "logo_path": null,
+        "name": "Ancient Mas Amedda Studios",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 511,
+    "number_of_seasons": 3,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Hungry Echidna",
+    "overview": "Tabula subnecto aspernatur sui. Itaque solvo admoveo volubilis vito cruciamentum ratione turpis.",
+    "popularity": 469.2058,
+    "poster_path": "/6VBNeo8XG90sNKWYQ0yTEmVBXHJ.jpg",
+    "production_companies": [
+      {
+        "id": 115672,
+        "logo_path": "/lqV7pQ6lXUjDzbvRfI4eNiT1QDB.png",
+        "name": "Permanent Mon Mothma Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-09-12",
+        "episode_count": 169,
+        "id": 298527,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/Lp4UwnebsLUjUtL0XNPVWq6yTA.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2023-10-02",
+        "episode_count": 172,
+        "id": 354562,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/6VBNeo8XG90sNKWYQ0yTEmVBXHJ.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2024-09-16",
+        "episode_count": 170,
+        "id": 437502,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 1
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Carus tabula subnecto aspernatur sui.",
+    "type": "Talk Show",
+    "vote_average": 6.413,
+    "vote_count": 23,
+    "external_ids": {
+      "imdb_id": "tt15847104",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 421334,
+      "tvrage_id": null,
+      "wikidata_id": "Q112838685",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Coadunatio commodo uxor defessus distinctio aequus ut varius. Complectus vos toties taedium talus annus. Ducimus deinde compello utroque veritas bos barba.",
+            "homepage": "",
+            "tagline": "Sint coadunatio commodo uxor defessus distinctio aequus ut."
+          }
+        }
+      ]
+    }
+  }
+}

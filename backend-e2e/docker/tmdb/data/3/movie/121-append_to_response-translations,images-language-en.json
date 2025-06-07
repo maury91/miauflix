@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=8983",
+    "cache-control": "public, max-age=22264",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"28cf80b68c80d869a48843bf827c8c13\"",
+    "etag": "W/\"a170c03c3ca832d399611104c5bd79ac\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "nuAeFoj3ue1unuRD5LeJlKMGSh8pk5dWoupOPKrEEE_AenkLaap6pg==",
+    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "quQ-d1aGONJ8H_GVN2CSZgnWbduTxWYbIOPW9ZDWiWUxh2ue0fz6bA==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "108979e82b494b21a1e63d45841dacff"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/jfEOzpsjc6JDlKhUHb4toWQPt.jpg",
     "belongs_to_collection": {
       "id": 119,
-      "name": "Psychological Skink",
+      "name": "Agricultural Swordtail",
       "poster_path": "/249qw7r9E31vvOSeMQoOrjxMjfm.jpg",
       "backdrop_path": "/bccR2CGTWVVSZAG0yqmy3DIvhTX.jpg"
     },
@@ -43,27 +43,27 @@
     "imdb_id": "tt0167261",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Zippy Panda",
+    "original_title": "Yucky Slug",
     "overview": "Tot sto nam synagoga cornu acidus abutor aegrotatio dolor uberrime.",
-    "popularity": 16.8274,
+    "popularity": 16.977,
     "poster_path": "/5VTN0pR8gcqV3EPUHHfMGnJYN9L.jpg",
     "production_companies": [
       {
         "id": 12,
         "logo_path": "/2ycs64eqV5rqKYHyQK0GVoKGvfX.png",
-        "name": "Operational Nien Nunb Studios",
+        "name": "Striped Wicket Systri Warrick Studios",
         "origin_country": "US"
       },
       {
         "id": 11,
         "logo_path": "/6FAuASQHybRkZUk08p9PzSs9ezM.png",
-        "name": "Valid Cliegg Lars Studios",
+        "name": "Narrow Qui-Gon Jinn Studios",
         "origin_country": "NZ"
       },
       {
         "id": 5237,
         "logo_path": "/mlnr7vsBHvLye8oEb5A76C0t8x9.png",
-        "name": "Unknown Dooku Studios",
+        "name": "Misty Gasgano Studios",
         "origin_country": "US"
       }
     ],
@@ -89,10 +89,10 @@
     ],
     "status": "Released",
     "tagline": "Vapulus tot sto.",
-    "title": "Sudden Lamprey",
+    "title": "Genuine Cattle",
     "video": false,
     "vote_average": 8.405,
-    "vote_count": 22598,
+    "vote_count": 22618,
     "translations": {
       "translations": [
         {
@@ -118,7 +118,7 @@
             "overview": "Verumtamen vicissitudo sortitus umerus beneficium nulla vergo conduco denuncio. Sumo comprehendo tepidus cunctatio abutor spero. Clam venia velit vorax abutor tot acidus.",
             "runtime": 180,
             "tagline": "Terga verumtamen vicissitudo sortitus umerus beneficium nulla.",
-            "title": "Heavy Gazelle"
+            "title": "Exceptional Carp"
           }
         },
         {
@@ -131,7 +131,7 @@
             "overview": "Capto maiores calculus aspicio vulgaris summisse amissio culpo.",
             "runtime": 180,
             "tagline": "Subnecto capto maiores calculus.",
-            "title": "Frozen Jellyfish"
+            "title": "Civil Toad"
           }
         },
         {
@@ -144,7 +144,7 @@
             "overview": "Capto maiores calculus aspicio vulgaris summisse amissio culpo.",
             "runtime": 180,
             "tagline": "Subnecto capto maiores calculus.",
-            "title": "Frozen Jellyfish"
+            "title": "Civil Toad"
           }
         },
         {
@@ -157,7 +157,7 @@
             "overview": "Porro ullam vulnus demonstro dignissimos ceno usus consuasor tamen vobis. Magnam laboriosam necessitatibus spargo. Video aegrotatio tunc.",
             "runtime": 180,
             "tagline": "",
-            "title": "Specific Raccoon"
+            "title": "Slim Cougar"
           }
         }
       ]

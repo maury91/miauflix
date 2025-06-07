@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=24647",
+    "cache-control": "public, max-age=11482",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"f38bb2fa4054b0f26c1b978e12fb0732\"",
+    "etag": "W/\"0ef4148376844dabffc7730ef6ee4c91\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "8G9V7abC3L0xrg6sG0AZk1Rsz9mpAAoAnoFjpENPAkB9wXjkCRs9Yg==",
+    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "qPy-N7GAKgvFF_qm1oVYifpIvEVsQq60K9U4-xkzXYmGN2iUaysJ2g==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "8b4e2f6569074cd88a533175c64bc4e0"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/lqDlYLNA0RdMXDiz70lU8Ib1nwW.jpg",
@@ -82,7 +82,7 @@
     "last_air_date": "2022-11-18",
     "last_episode_to_air": {
       "id": 4060047,
-      "name": "Hissing Gorilla",
+      "name": "Beautiful Ape",
       "overview": "",
       "vote_average": 0,
       "vote_count": 0,
@@ -95,13 +95,13 @@
       "show_id": 8590,
       "still_path": "/iaxSe9Ckm4g3nWYeGafLZsjXc7p.jpg"
     },
-    "name": "Skinny Woodpecker",
+    "name": "Protestant Reptile",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 249,
         "logo_path": "/1ePfTUHHvBlVQxa0Fltx5kWhIs5.png",
-        "name": "Useless Padmé Amidala Entertainment",
+        "name": "Qualified Quarsh Panaka Entertainment",
         "origin_country": "FR"
       }
     ],
@@ -109,27 +109,27 @@
     "number_of_seasons": 5,
     "origin_country": ["FR"],
     "original_language": "fr",
-    "original_name": "Weekly Beetle",
+    "original_name": "Embarrassed Rook",
     "overview": "Cum atavus peior amo voluptate absum cogito. Apto eos tot allatus facere tutamen debilito careo atqui. Vereor crebro vulnus.",
-    "popularity": 429.8088,
+    "popularity": 571.0459,
     "poster_path": "/jmU8HlTDn87xmRqXagcL2swDr8I.jpg",
     "production_companies": [
       {
         "id": 22381,
         "logo_path": null,
-        "name": "Southern R2-D2 Productions",
+        "name": "Spatial Sly Moore Productions",
         "origin_country": "FR"
       },
       {
         "id": 23448,
         "logo_path": "/rKUrVCN0CkbrsaX3iO6bdx1cHYJ.png",
-        "name": "Given Lama Su Productions",
+        "name": "Present Grievous Productions",
         "origin_country": "FR"
       },
       {
         "id": 2318,
         "logo_path": null,
-        "name": "Selective Dooku Entertainment",
+        "name": "Scattered Nute Gunray Entertainment",
         "origin_country": "FR"
       }
     ],
@@ -211,8 +211,8 @@
     "status": "Ended",
     "tagline": "",
     "type": "Scripted",
-    "vote_average": 4.2,
-    "vote_count": 31,
+    "vote_average": 4.379,
+    "vote_count": 33,
     "external_ids": {
       "imdb_id": "tt0423713",
       "freebase_mid": "/m/0562n7t",

@@ -1,27 +1,27 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=22970",
+    "cache-control": "public, max-age=8028",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"52b816c6a0f842085c1644c10e314158\"",
+    "etag": "W/\"2d7727764f6739049d8f40b4724aec60\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "UO8oOO_XiczzCqnAncvnm691_gQEcgeX2EN7TjtGEyLcUwewgyrQAA==",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "nrCsbLAcv0gDnbJrnfgmFPHj-vOQH0zedxjyyWBZX2Xe9argN1FE7Q==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "8687c6abae7b48fe8ca0b4465ada06ac"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16921a284f8149ff85d91cd4375dbdb5"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/aYcnDyLMnpKce1FOYUpZrXtgUye.jpg",
     "belongs_to_collection": {
       "id": 9743,
-      "name": "Able Guppy",
+      "name": "Expensive Tiger",
       "poster_path": "/lTtnUnKVFLX10Ui19WGiL7CqZ1y.jpg",
-      "backdrop_path": "/qAtuvjXFkzUzFYn53I2vF1ueraA.jpg"
+      "backdrop_path": "/yiwhEr1BV3K9fCsZuFxUHtZezHZ.jpg"
     },
     "budget": 19000000,
     "genres": [
@@ -43,21 +43,21 @@
     "imdb_id": "tt0102926",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Aesthetic Hornet",
+    "original_title": "Spectacular Bug",
     "overview": "Calamitas vel arbitro sulum conservo iusto spiritus repellendus tot aperiam. Viscus quia taceo volutabrum ad degenero pecco viridis substantia dolores. Suppono tabula valde voluntarius.",
-    "popularity": 3.5688,
+    "popularity": 3.4851,
     "poster_path": "/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg",
     "production_companies": [
       {
         "id": 41,
         "logo_path": "/xAot4SSOIHiWQ2WEnVXYGR1lce9.png",
-        "name": "Minimum Bail Prestor Organa Pictures",
+        "name": "Numerous Lama Su Pictures",
         "origin_country": "US"
       },
       {
         "id": 55072,
         "logo_path": null,
-        "name": "Personal Darth Maul Pictures",
+        "name": "Yappiest Chewbacca Pictures",
         "origin_country": "US"
       }
     ],
@@ -79,10 +79,10 @@
     ],
     "status": "Released",
     "tagline": "Vesper calamitas vel arbitro sulum conservo iusto.",
-    "title": "Industrial Earthworm",
+    "title": "Embarrassed Dinosaur",
     "video": false,
     "vote_average": 8.347,
-    "vote_count": 16827,
+    "vote_count": 16844,
     "translations": {
       "translations": [
         {
@@ -108,7 +108,7 @@
             "overview": "Spoliatio spero antiquus abeo ratione timidus ocer suscipit accusantium. Ducimus cibus conforto strenuus id teres supplanto capio. Vomito demo derelinquo tepidus audeo terminatio sollicito coniecto.",
             "runtime": 118,
             "tagline": "Tenuis spoliatio spero antiquus abeo ratione timidus ocer.",
-            "title": "Appalling Buzzard"
+            "title": "Liberal Goat"
           }
         },
         {
@@ -121,7 +121,7 @@
             "overview": "Amiculum cur colo thermae terga pariatur. Vigor cunctatio aequitas canto patrocinor voluptas cedo textilis vinculum. Tamdiu aduro corrupti argentum sufficio admoneo causa triumphus vulgaris.",
             "runtime": 118,
             "tagline": "Degusto amiculum cur colo thermae terga pariatur.",
-            "title": "Ashamed Flea"
+            "title": "Defiant Lungfish"
           }
         },
         {
@@ -134,7 +134,7 @@
             "overview": "Cometes accusamus umerus vinitor torqueo incidunt cohibeo veritatis usus. Cupio timidus sublime cultellus in tui.",
             "runtime": 0,
             "tagline": "",
-            "title": "Blind Finch"
+            "title": "Wet Woodpecker"
           }
         },
         {
@@ -147,7 +147,7 @@
             "overview": "Amiculum cur colo thermae terga pariatur. Vigor cunctatio aequitas canto patrocinor voluptas cedo textilis vinculum. Tamdiu aduro corrupti argentum sufficio admoneo causa triumphus vulgaris.",
             "runtime": 115,
             "tagline": "Degusto amiculum cur colo thermae terga pariatur.",
-            "title": "Ashamed Flea"
+            "title": "Defiant Lungfish"
           }
         }
       ]

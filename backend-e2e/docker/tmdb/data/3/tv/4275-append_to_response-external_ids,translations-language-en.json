@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=9323",
+    "cache-control": "public, max-age=5211",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"492c3c8d6f1c05b26f056014654c9865\"",
+    "etag": "W/\"0fb3af16acf62bf94f36848229853bf9\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "rAyveFCKUs-EvqtWoB7XrrfyHNQsyoUg1FIKqOLF5k5GoqzvERXdbQ==",
+    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "8JVCgj-TeqSYToC-Jbqbqo7v_IIatnDmWhuPfcWx_7PAeWUyMEu1Cg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "86b57446a3124b41889ff0f4feacbabd"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/AqhMVAeGQNtBQbD2HJf2m2KrrUX.jpg",
@@ -46,7 +46,7 @@
     "last_air_date": "1986-12-11",
     "last_episode_to_air": {
       "id": 292776,
-      "name": "Consistent Louse",
+      "name": "Skinny Bison",
       "overview": "Summisse cometes aliquam.",
       "vote_average": 0,
       "vote_count": 0,
@@ -59,13 +59,13 @@
       "show_id": 4275,
       "still_path": null
     },
-    "name": "Uniform Woodpecker",
+    "name": "Supporting Bat",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 38,
         "logo_path": "/gHAm9zYjSX8IAJWuy2s4Du6onuo.png",
-        "name": "Confused Lama Su Pictures",
+        "name": "Fast Sebulba Pictures",
         "origin_country": "AU"
       }
     ],
@@ -73,27 +73,27 @@
     "number_of_seasons": 5,
     "origin_country": ["AU"],
     "original_language": "en",
-    "original_name": "Grand Cheetah",
+    "original_name": "Implicit Marmot",
     "overview": "Vereor teres aedificium vulgivagus.",
-    "popularity": 168.7319,
+    "popularity": 467.6772,
     "poster_path": "/9OSK44nb6ZZkMxkX6SLeQszVFke.jpg",
     "production_companies": [
       {
         "id": 28534,
         "logo_path": null,
-        "name": "Essential Plo Koon Media",
+        "name": "Excellent Yoda Media",
         "origin_country": "AU"
       },
       {
         "id": 55270,
         "logo_path": null,
-        "name": "Unhappy R5-D4 Studios",
+        "name": "Tasteless Jar Jar Binks Studios",
         "origin_country": ""
       },
       {
         "id": 2947,
         "logo_path": "/bCMlKa5tahC7Ma7Ai2VikgqEPWF.png",
-        "name": "Biological Kit Fisto Studios",
+        "name": "Fiscal Wat Tambor Studios",
         "origin_country": "AU"
       }
     ],
@@ -165,8 +165,8 @@
     "status": "Ended",
     "tagline": "",
     "type": "Scripted",
-    "vote_average": 7.6,
-    "vote_count": 30,
+    "vote_average": 7.645,
+    "vote_count": 31,
     "external_ids": {
       "imdb_id": "tt0077064",
       "freebase_mid": "/m/01kpr1",

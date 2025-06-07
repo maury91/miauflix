@@ -1,0 +1,206 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5277",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"79f48567951959368820e8d4b8e6237c\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 319f376925908156190f5fc160137b42.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "LOVghsK6R64IPsSQl6YnsZbZyIUrB7ulD-rzd95YtZDE7e1QOPFzmA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "52c19747ebc4484f9477eea6ab9d801b"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/vAHR5oY1jZLpyKFhnQf7Qj66mMp.jpg",
+    "created_by": [
+      {
+        "id": 157853,
+        "credit_id": "525338e619c2957940058d5e",
+        "name": "Horace Gleason",
+        "original_name": "Horace Gleason",
+        "gender": 2,
+        "profile_path": "/x0aZv9wfD7gZqsXSyxT4KgG24Y.jpg"
+      },
+      {
+        "id": 83349,
+        "credit_id": "525338e619c2957940058d64",
+        "name": "Hope Witting",
+        "original_name": "Hope Witting",
+        "gender": 2,
+        "profile_path": "/k2q4mpMhH0AlZVGvQwau2xSqjS3.jpg"
+      }
+    ],
+    "episode_run_time": [22, 30],
+    "first_air_date": "1995-09-13",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "",
+    "id": 97,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2004-09-08",
+    "last_episode_to_air": {
+      "id": 4591,
+      "name": "Inner Whale",
+      "overview": "Succedo curo ustilo deleniti argentum cibo atrocitas. Viduo adinventitias tunc adfero. Damno terminatio molestiae sublime cohaero depereo desino.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2004-09-08",
+      "episode_number": 26,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 97,
+      "still_path": null
+    },
+    "name": "Fortunate Dragonfly",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2,
+        "logo_path": "/2uy2ZWcplrSObIyt4x0Y9rkG6qO.png",
+        "name": "Mild R5-D4 Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 129,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Related Amphibian",
+    "overview": "Vita voluptas sapiente solium suffragium curso ambitus. Aperte contabesco tersus defetiscor tremo.",
+    "popularity": 425.5831,
+    "poster_path": "/cWboJ8Cfi5NgHoENAB0gYtgZHkR.jpg",
+    "production_companies": [
+      {
+        "id": 1957,
+        "logo_path": "/qIxtba5CbnJfHCA88czLfTNKW9M.png",
+        "name": "Widespread Nien Nunb Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 42358,
+        "logo_path": null,
+        "name": "Late Darth Maul Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": null,
+        "episode_count": 2,
+        "id": 293,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1995-09-13",
+        "episode_count": 22,
+        "id": 284,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/6nsrAJXFV2y81qD3VcckzuwqVRP.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "1996-09-18",
+        "episode_count": 24,
+        "id": 285,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/nfjlcAagQYpLHzDgc78vdlcsoMU.jpg",
+        "season_number": 2,
+        "vote_average": 7
+      },
+      {
+        "air_date": "1997-09-23",
+        "episode_count": 28,
+        "id": 286,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/7cGjgkqqkYntBIcrLpwGa4xrELY.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1998-09-23",
+        "episode_count": 27,
+        "id": 288,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/piziZGUGbagX5xcgRCeIsJGDH9h.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1999-09-22",
+        "episode_count": 26,
+        "id": 287,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/uZylgyhOakxWAekElAsNmWDoCjd.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 6.5,
+    "vote_count": 159,
+    "external_ids": {
+      "imdb_id": "tt0111945",
+      "freebase_mid": "/m/0h21w6",
+      "freebase_id": "/en/the_drew_carey_show",
+      "tvdb_id": 71355,
+      "tvrage_id": 5737,
+      "wikidata_id": "Q1258715",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Consequuntur canto laborum triumphus subseco arma dolores video video utor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

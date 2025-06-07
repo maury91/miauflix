@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=15303",
+    "cache-control": "public, max-age=17246",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"32c7f46a1760c061032c6f75c7d42edf\"",
+    "etag": "W/\"6877bcd517712764854fd2244f68bc7e\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "O30xm2gnxp1hCtZTF3gLIg3SnS6OjyiSpip3u4wrhF9CE0a9VykpQQ==",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "B27Kj2rO8dq0GGLF1zDvZU1jVF7MVGIVUEv28g78UMDwHuLh17c39A==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/qLMfcvdCcCGD2BNLH8b6ZCBuO7D.jpg",
@@ -51,29 +51,29 @@
     "id": 2224,
     "in_production": true,
     "languages": ["en"],
-    "last_air_date": "2025-05-20",
+    "last_air_date": "2025-05-22",
     "last_episode_to_air": {
-      "id": 6110499,
-      "name": "Inquisitive Antlion",
-      "overview": "Confero surgo appositus amplitudo decimus deludo. Civis voluptatem esse theca cauda ullus balbus. Abundans cinis dignissimos sophismata crinis tametsi patrocinor cui.",
+      "id": 6136796,
+      "name": "Unfair Minnow",
+      "overview": "Vestrum communis nemo absens thymum. Surgo repellat arguo.",
       "vote_average": 0,
       "vote_count": 0,
-      "air_date": "2025-05-22",
-      "episode_number": 68,
+      "air_date": "2025-06-05",
+      "episode_number": 72,
       "episode_type": "standard",
       "production_code": "",
-      "runtime": 33,
+      "runtime": null,
       "season_number": 5,
       "show_id": 2224,
-      "still_path": "/cLXWkHiIaQ0hNYGSpCPp2b9TVta.jpg"
+      "still_path": null
     },
-    "name": "Objective Marmot",
+    "name": "Corporate Ferret",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 47,
         "logo_path": "/6ooPjtXufjsoskdJqj6pxuvHEno.png",
-        "name": "Desirable Wilhuff Tarkin Studios",
+        "name": "Technological Quarsh Panaka Studios",
         "origin_country": "US"
       }
     ],
@@ -81,15 +81,15 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Eerie Anteater",
+    "original_name": "Multiple Rat",
     "overview": "Aegre varius vitium utpote comburo tero acceptus. Bos acer antepono acidus subseco tot cibo.",
-    "popularity": 352.2278,
+    "popularity": 471.527,
     "poster_path": "/ixcfyK7it6FjRM36Te4OdblAq4X.jpg",
     "production_companies": [
       {
         "id": 8136,
         "logo_path": "/zHS0wY1haJ3GOvkHFOf8Dfjkyt3.png",
-        "name": "Qualified Zam Wesell Pictures",
+        "name": "Sparkling Bossk Pictures",
         "origin_country": "US"
       }
     ],

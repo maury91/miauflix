@@ -1,0 +1,164 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7207",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0bdf03e900111cfd89cbe1723df6e599\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "jd_d17DU5JX7GK8xwgBbd06VvXWYMQ8quiE3DlgTll9ScNn_d4UspA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "283fac73c39b44e1aa291ef328a8fc79"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rRIz3KweJDjnJ4GtCZJT3JPEYgL.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      }
+    ],
+    "homepage": "",
+    "id": 1411773,
+    "imdb_id": "tt15682498",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Mixed Lobster",
+    "overview": "Pectus cavus cur acerbitas saepe. Somniculosus vir acies concido illum claudeo beneficium theatrum deficio.",
+    "popularity": 246.3657,
+    "poster_path": "/oq1pGVQ2t3Cy4v7sA4LRhNjtZuJ.jpg",
+    "production_companies": [
+      {
+        "id": 508,
+        "logo_path": "/7cxRWzi4LsVm4Utfpr1hfARNurT.png",
+        "name": "Helpless Dud Bolt Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 234133,
+        "logo_path": "/cC5yrLeOvQQS3WF0oWnEhpzFYqb.png",
+        "name": "Substantial Quarsh Panaka Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 7625,
+        "logo_path": "/kzq4ibnNeZrp00zpBWv3st1QCOh.png",
+        "name": "Magic Biggs Darklighter Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 85465,
+        "logo_path": "/oxx1bmXDQxeBsvYZmCxMtfJ5wa3.png",
+        "name": "Hilarious Nien Nunb Entertainment",
+        "origin_country": "CA"
+      },
+      {
+        "id": 84988,
+        "logo_path": "/rzpfuMEMDQnmqp0YTFMEqgfDrxY.png",
+        "name": "Sad Nute Gunray Media",
+        "origin_country": "GB"
+      },
+      {
+        "id": 62408,
+        "logo_path": null,
+        "name": "Developed Padmé Amidala Studios",
+        "origin_country": "FI"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "FI",
+        "name": "Finland"
+      }
+    ],
+    "release_date": "2024-10-18",
+    "revenue": 0,
+    "runtime": 92,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Famous Raccoon",
+    "video": false,
+    "vote_average": 8.281,
+    "vote_count": 16,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Vito cubitum compono nulla assumenda aeternus. Amicitia deprecator rerum depromo ater. Amor sol depulso debeo correptius timor tam vel praesentium usus.",
+            "runtime": 92,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/oq1pGVQ2t3Cy4v7sA4LRhNjtZuJ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_639_1": "en",
+          "file_path": "/bqQXmfhetEuAeOQorXkENaw9LCn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_639_1": "en",
+          "file_path": "/trScxYRg0XVyg2D2Z7DEqEuBVsC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

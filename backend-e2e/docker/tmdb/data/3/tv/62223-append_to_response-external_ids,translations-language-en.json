@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=12725",
+    "cache-control": "public, max-age=7548",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"58d1a1e17562d4600c77a5b42d50db16\"",
+    "etag": "W/\"14485ffbd128ba98d26096253f9e26bb\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "PiUDaXcvVOqjD9Feya-ImU6r8aw2LmzmIyG9On5QHyywFAfFjJ4LWQ==",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "LCIpuxBMoA3iHT5lJsyONBlF05PZZk0slzDp6TOO4wwLFx4_-THrzg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "5ae9ef7c9edb4082a88f27237d27cbc2"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "85a6078dcab74afaa4c1c2eb8c47b6a9"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/amtOltTVcK9vQtL1iQS6p3LBi05.jpg",
@@ -50,7 +50,7 @@
     "last_air_date": "2023-04-27",
     "last_episode_to_air": {
       "id": 4399075,
-      "name": "Worrying Pony",
+      "name": "Molecular Condor",
       "overview": "Torrens ustulo coruscus virga omnis venio.",
       "vote_average": 0,
       "vote_count": 0,
@@ -63,13 +63,13 @@
       "show_id": 62223,
       "still_path": null
     },
-    "name": "Interior Sole",
+    "name": "Dreadful Orangutan",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 16,
         "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
-        "name": "Architectural Saesee Tiin Pictures",
+        "name": "Many C-3PO Pictures",
         "origin_country": "US"
       }
     ],
@@ -77,21 +77,21 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Gross Finch",
+    "original_name": "Other Landfowl",
     "overview": "Curo dolore coniuratio sumo cohibeo comptus dicta combibo tribuo. Curia accusamus accedo vulnero.",
-    "popularity": 394.5499,
+    "popularity": 489.545,
     "poster_path": "/qPmVoG8G9tc1nN8ZwGV2zYcknit.jpg",
     "production_companies": [
       {
         "id": 1081,
         "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
-        "name": "Graceful Jek Tono Porkins Pictures",
+        "name": "Late Zam Wesell Pictures",
         "origin_country": "US"
       },
       {
         "id": 211069,
         "logo_path": "/lNSXnoZxWcqSFbjI62A7aRGZOPa.png",
-        "name": "Independent Saesee Tiin Entertainment",
+        "name": "Qualified Nien Nunb Entertainment",
         "origin_country": "US"
       }
     ],

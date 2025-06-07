@@ -1,0 +1,238 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13610",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e786ac6f2d7f9bb996649707dcaa0509\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "79WgVLpIvIc8pCa7s1MKH5igyAwP5BoMdxj-i6r1LIu2jY80sf9htw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "d88d71c87bd0404989825a6df248ee2b"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/x8W6sQ89q6WlbkGQDLZjkso8AjR.jpg",
+    "created_by": [
+      {
+        "id": 1226665,
+        "credit_id": "52577e1a19c29531db239a16",
+        "name": "Kimberly Kunze",
+        "original_name": "Kimberly Kunze",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [25],
+    "first_air_date": "1957-10-04",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "",
+    "id": 5133,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "1963-06-20",
+    "last_episode_to_air": {
+      "id": 353550,
+      "name": "Steep Fox",
+      "overview": "Truculenter aggredior stipes claustrum. Aggredior celebrer excepturi patrocinor correptius esse arguo tutis sumo molestiae. Vergo vesper thorax cicuta maiores.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "1963-06-20",
+      "episode_number": 39,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 30,
+      "season_number": 5,
+      "show_id": 5133,
+      "still_path": null
+    },
+    "name": "Personal Worm",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2,
+        "logo_path": "/2uy2ZWcplrSObIyt4x0Y9rkG6qO.png",
+        "name": "Mild R5-D4 Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Many C-3PO Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 202,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Empirical Skink",
+    "overview": "Adopto aeneus victus bibo vigilo.",
+    "popularity": 450.1748,
+    "poster_path": "/1Tl9FH0gFmaFDyW4J3eAowMwt8O.jpg",
+    "production_companies": [
+      {
+        "id": 57124,
+        "logo_path": null,
+        "name": "Excellent Kit Fisto Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 35869,
+        "logo_path": "/bCOCN4lrh9yN6qEuqADmC9LqZyn.png",
+        "name": "Resulting Mace Windu Media",
+        "origin_country": ""
+      },
+      {
+        "id": 10044,
+        "logo_path": null,
+        "name": "Random Yoda Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 55141,
+        "logo_path": null,
+        "name": "Weird Ayla Secura Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 56101,
+        "logo_path": null,
+        "name": "Massive Qui-Gon Jinn Pictures",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1957-04-23",
+        "episode_count": 7,
+        "id": 14993,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1957-10-04",
+        "episode_count": 39,
+        "id": 14987,
+        "name": "Season 1",
+        "overview": "The first season of the American television situation comedy Leave It to Beaver premiered on October 4, 1957 and concluded on July 16, 1958. It consisted of 39 episodes shot in black-and-white, each running approximately 25 minutes in length. This was the only season that the show originally aired on CBS.",
+        "poster_path": "/xv16u9BriaaZlVGxonhTBFJ59c9.jpg",
+        "season_number": 1,
+        "vote_average": 9
+      },
+      {
+        "air_date": "1958-10-02",
+        "episode_count": 39,
+        "id": 14988,
+        "name": "Season 2",
+        "overview": "The second season of the American television situation comedy Leave It to Beaver premiered on October 2, 1958 and concluded on June 25, 1959. It consisted of 39 episodes shot in black-and-white, each running approximately 25 minutes in length. This was the first season that the show was originally aired on ABC after the first season was televised in CBS.",
+        "poster_path": "/5dY0h4ppl9jhbVU0IBECpabntYh.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1959-10-03",
+        "episode_count": 39,
+        "id": 14989,
+        "name": "Season 3",
+        "overview": "The third season of the American television situation comedy Leave It to Beaver premiered on October 3, 1959 and concluded on June 25, 1960. It consisted of 39 episodes shot in black-and-white, each running approximately 25 minutes in length.",
+        "poster_path": "/j0438ScFucY6MmntBs2j5U4rCcr.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1960-10-01",
+        "episode_count": 39,
+        "id": 14990,
+        "name": "Season 4",
+        "overview": "The fourth season of the American television situation comedy Leave It to Beaver premiered on October 1, 1960 and concluded on June 24, 1961. It consisted of 39 episodes shot in black-and-white, each running approximately 25 minutes in length.",
+        "poster_path": "/zPgs76aDTS0wuyOpiVsZ5y8A8d5.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1961-09-30",
+        "episode_count": 39,
+        "id": 14991,
+        "name": "Season 5",
+        "overview": "The fifth season of the American television series Leave It to Beaver aired from September 30, 1961 to June 30, 1962 on ABC. It consisted of 39 black-and-white episodes, each running approximately 25 minutes.",
+        "poster_path": "/86wNgxso9kwO8p1MKU8fjmAHAl2.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7,
+    "vote_count": 76,
+    "external_ids": {
+      "imdb_id": "tt0050032",
+      "freebase_mid": "/m/01vpq1",
+      "freebase_id": "/en/leave_it_to_beaver",
+      "tvdb_id": 71575,
+      "tvrage_id": null,
+      "wikidata_id": "Q1247688",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Crastinus voro angustus aliquam vulpes cupio claro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Industrial Gopher",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

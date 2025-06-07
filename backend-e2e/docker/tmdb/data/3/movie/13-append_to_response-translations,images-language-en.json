@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=17954",
+    "cache-control": "public, max-age=12678",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"8b07d231ad202b827bc85e65e7ef2bb7\"",
+    "etag": "W/\"02a1bf260181bd42529e87c84f752c84\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "XGRzvOoCoIogRZyhSLBQxbrtlp1_xRsFz_GoL4Bt-r0-ikueEf7tUw==",
+    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "B0_paEHLkEnnc0UtXGmbthdGIqG5eCGFxBugWX0RC22fJaNaaxyenQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/tlEFuIlaxRPXIYVHXbOSAMCfWqk.jpg",
@@ -38,27 +38,27 @@
     "imdb_id": "tt0109830",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Stupid Hoverfly",
+    "original_title": "Grotesque Catfish",
     "overview": "Eligendi voro substantia bene solitudo apparatus auditor voco.",
-    "popularity": 26.6643,
+    "popularity": 19.2204,
     "poster_path": "/arw2vcBveWOVZr6pxd9XTd1TdQa.jpg",
     "production_companies": [
       {
         "id": 4,
         "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
-        "name": "Dead Nien Nunb Media",
+        "name": "Intermediate Qui-Gon Jinn Media",
         "origin_country": "US"
       },
       {
         "id": 21920,
         "logo_path": null,
-        "name": "Quiet Poggle the Lesser Productions",
+        "name": "Single Eeth Koth Productions",
         "origin_country": "US"
       },
       {
         "id": 412,
         "logo_path": null,
-        "name": "Prickly Nien Nunb Media",
+        "name": "Stupid IG-88 Media",
         "origin_country": ""
       }
     ],
@@ -80,10 +80,10 @@
     ],
     "status": "Released",
     "tagline": "Tabella eligendi voro.",
-    "title": "Marine Clownfish",
+    "title": "Striped Clam",
     "video": false,
     "vote_average": 8.468,
-    "vote_count": 28240,
+    "vote_count": 28261,
     "translations": {
       "translations": [
         {
@@ -135,7 +135,7 @@
             "overview": "Corrumpo totam tempus uterque speciosus vulnero adicio terebro.",
             "runtime": 142,
             "tagline": "",
-            "title": "Productive Capybara"
+            "title": "Corporate Albatross"
           }
         },
         {

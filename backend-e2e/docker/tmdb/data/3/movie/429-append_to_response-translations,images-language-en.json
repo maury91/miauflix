@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=25236",
+    "cache-control": "public, max-age=2341",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"31e95e1c3ae3e3e7e8be5ddc13d61521\"",
+    "etag": "W/\"7b606104c94629164f06008a8fb78a98\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "ahPOcYPBTXQ4hRhEJ_Ch5LxOxDe1qTW82ZYMCIIXGiIKcOiRJJbFlA==",
+    "via": "1.1 231be1c97cc722fa08b64d21072ebfac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "BQBsYmSVuUWwel3mprBcizNzFBrQwa1WKkLdX3T6OsoI2imBOjmwlw==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/x4biAVdPVCghBlsVIzB6NmbghIz.jpg",
@@ -30,33 +30,33 @@
     "imdb_id": "tt0060196",
     "origin_country": ["IT"],
     "original_language": "it",
-    "original_title": "Monthly Salmon",
+    "original_title": "Regular Meadowlark",
     "overview": "Acervus tepesco absconditus cui tenetur amitto deripio dedecor optio demergo. Cicuta molestias qui sapiente thorax cohaero. Damnatio arca cursus cubitum provident doloribus.",
-    "popularity": 12.9116,
+    "popularity": 70.5334,
     "poster_path": "/bX2xnavhMYjWDoZp1VM6VnU1xwe.jpg",
     "production_companies": [
       {
         "id": 60,
         "logo_path": "/4YldLvCWQL9VIAHQ2Fu3Ffkh9Si.png",
-        "name": "Soft Ayla Secura Pictures",
+        "name": "Influential Arvel Crynyd Pictures",
         "origin_country": "US"
       },
       {
         "id": 7508,
         "logo_path": null,
-        "name": "Certain Ric Olié Media",
+        "name": "Abstract Ackbar Media",
         "origin_country": "IT"
       },
       {
         "id": 42498,
         "logo_path": null,
-        "name": "Uncomfortable Dexter Jettster Pictures",
+        "name": "Tired Lando Calrissian Pictures",
         "origin_country": "ES"
       },
       {
         "id": 47,
         "logo_path": "/i7Z9ot2o3N5Sa3HrF09kniFs2y8.png",
-        "name": "Desirable Wilhuff Tarkin Studios",
+        "name": "Technological Quarsh Panaka Studios",
         "origin_country": "DE"
       }
     ],
@@ -90,10 +90,10 @@
     ],
     "status": "Released",
     "tagline": "Vulticulus acervus tepesco absconditus cui tenetur amitto deripio.",
-    "title": "Sole Bat",
+    "title": "Precise Tyrannosaurus",
     "video": false,
-    "vote_average": 8.462,
-    "vote_count": 8994,
+    "vote_average": 8.461,
+    "vote_count": 9007,
     "translations": {
       "translations": [
         {
@@ -106,7 +106,7 @@
             "overview": "Vulgaris admitto dignissimos toties demonstro socius amicitia caritas.",
             "runtime": 161,
             "tagline": "Synagoga vulgaris admitto dignissimos.",
-            "title": "Stuck Anaconda"
+            "title": "Cultural Cephalopod"
           }
         },
         {
@@ -119,7 +119,7 @@
             "overview": "Aspicio color basium tum curriculum volubilis.",
             "runtime": 161,
             "tagline": "Cunctatio aspicio color.",
-            "title": "Dull Narwhal"
+            "title": "Conscious Mockingbird"
           }
         },
         {
@@ -132,7 +132,7 @@
             "overview": "Aggero cursus via decens.",
             "runtime": 179,
             "tagline": "Antepono aggero cursus via.",
-            "title": "Indirect Lobster"
+            "title": "Many Marmot"
           }
         },
         {
@@ -145,7 +145,7 @@
             "overview": "Aspicio color basium tum curriculum volubilis.",
             "runtime": 161,
             "tagline": "Cunctatio aspicio color.",
-            "title": "Dull Narwhal"
+            "title": "Conscious Mockingbird"
           }
         },
         {
@@ -158,7 +158,7 @@
             "overview": "Vulgus delinquo suus degusto verus autem.",
             "runtime": 0,
             "tagline": "",
-            "title": "Open Goat"
+            "title": "Explicit Badger"
           }
         }
       ]
@@ -213,12 +213,21 @@
       ],
       "logos": [
         {
+          "aspect_ratio": 2.068,
+          "height": 1856,
+          "iso_639_1": "en",
+          "file_path": "/3u3zjZnW7O1TPHmbs3OUUCfg12x.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3838
+        },
+        {
           "aspect_ratio": 0.648,
           "height": 540,
           "iso_639_1": "en",
           "file_path": "/lsWpgoZ5SUfmcssShExi4F1mr9Y.png",
-          "vote_average": 3.334,
-          "vote_count": 1,
+          "vote_average": 1.75,
+          "vote_count": 2,
           "width": 350
         },
         {
@@ -226,8 +235,8 @@
           "height": 198,
           "iso_639_1": "en",
           "file_path": "/u2rfEbus0cNf3SoSSKiYwR24MdY.png",
-          "vote_average": 3.334,
-          "vote_count": 1,
+          "vote_average": 1.75,
+          "vote_count": 2,
           "width": 353
         },
         {
@@ -247,15 +256,6 @@
           "vote_average": 0,
           "vote_count": 0,
           "width": 1966
-        },
-        {
-          "aspect_ratio": 4.68,
-          "height": 820,
-          "iso_639_1": "en",
-          "file_path": "/2JGVJnsIymzi1siKTojC3cfR7Ar.png",
-          "vote_average": 0,
-          "vote_count": 0,
-          "width": 3838
         }
       ],
       "posters": [
@@ -269,39 +269,39 @@
           "width": 1000
         },
         {
-          "aspect_ratio": 0.701,
-          "height": 1426,
-          "iso_639_1": "en",
-          "file_path": "/lPzomd8YmtfjPguP8LKRz9q27WV.jpg",
-          "vote_average": 6.722,
-          "vote_count": 6,
-          "width": 1000
-        },
-        {
           "aspect_ratio": 0.667,
           "height": 1800,
           "iso_639_1": "en",
           "file_path": "/pUFvDCS8DuSys8kVNbGywrerWLu.jpg",
-          "vote_average": 6.608,
-          "vote_count": 28,
+          "vote_average": 6.396,
+          "vote_count": 29,
           "width": 1200
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_639_1": "en",
+          "file_path": "/lPzomd8YmtfjPguP8LKRz9q27WV.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/oayZt3jvtVmqOg0kLRt870z62YE.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 1000
         },
         {
           "aspect_ratio": 0.667,
           "height": 1500,
           "iso_639_1": "en",
           "file_path": "/9JrwknFUbCZkr7av5dV4l1nLLIT.jpg",
-          "vote_average": 5.25,
-          "vote_count": 10,
-          "width": 1000
-        },
-        {
-          "aspect_ratio": 0.667,
-          "height": 1500,
-          "iso_639_1": "en",
-          "file_path": "/eWivEg4ugIMAd7d4uWI37b17Cgj.jpg",
-          "vote_average": 4.3,
-          "vote_count": 20,
+          "vote_average": 4.818,
+          "vote_count": 11,
           "width": 1000
         }
       ]

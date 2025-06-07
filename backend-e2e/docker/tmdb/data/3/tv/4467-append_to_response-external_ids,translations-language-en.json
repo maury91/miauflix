@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=21498",
+    "cache-control": "public, max-age=12997",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"d03d830130b76b1403e2bb187a10a535\"",
+    "etag": "W/\"088da07855491ca7164668eafc6b7159\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "Iq9yMeUFnFpN_44cII4rZYjvmYhif9Bn5tLlpL4VPJ6m6RoTpj5_5g==",
+    "via": "1.1 dc0aad619823d3400ef947433d0af8fa.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "1LrmOl2vGf824A0zh_3pKTQExU0-RAmwL-BUTX48p3Hg5ZZ8hcDSDQ==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "d88d71c87bd0404989825a6df248ee2b"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/aAwsbpt43lWZGwsoy8VzAZbgHS7.jpg",
@@ -46,7 +46,7 @@
     "last_air_date": "1993-06-25",
     "last_episode_to_air": {
       "id": 312736,
-      "name": "Accurate Flamingo",
+      "name": "Preliminary Galliform",
       "overview": "",
       "vote_average": 0,
       "vote_count": 0,
@@ -59,13 +59,13 @@
       "show_id": 4467,
       "still_path": null
     },
-    "name": "Rubber Tuna",
+    "name": "Modern Stingray",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 6,
         "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
-        "name": "Convincing R5-D4 Media",
+        "name": "Unwilling San Hill Media",
         "origin_country": "US"
       }
     ],
@@ -73,27 +73,27 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Systematic Raccoon",
+    "original_name": "Romantic Quail",
     "overview": "Sodalitas cicuta agnosco summisse curis ceno traho aedificium decet.",
-    "popularity": 269.4365,
+    "popularity": 408.5977,
     "poster_path": "/kSraSPTeNoiR60ti9amNqLvM3Em.jpg",
     "production_companies": [
       {
         "id": 54388,
         "logo_path": "/4XbkL5Av0Y8uVZ3fdhRZhvoKHK9.png",
-        "name": "Puzzled Wilhuff Tarkin Productions",
+        "name": "Cooperative Beru Whitesun lars Productions",
         "origin_country": "US"
       },
       {
         "id": 15492,
         "logo_path": null,
-        "name": "Disturbing Nien Nunb Entertainment",
+        "name": "Cooing Bail Prestor Organa Entertainment",
         "origin_country": "US"
       },
       {
         "id": 5253,
         "logo_path": "/cxgRBXMNcbcE0dIaeCc4tbDa4KI.png",
-        "name": "Disciplinary Boba Fett Productions",
+        "name": "Classical Owen Lars Productions",
         "origin_country": "US"
       }
     ],

@@ -1,0 +1,297 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24498",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"27bcf0d4e13d390fdeef68f25ef965f1\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 dc0aad619823d3400ef947433d0af8fa.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "aqNgvtsd9BSK60jmv7pfjqpNz5TyDsDMysrQhCUymZW3ECnMmpxXHw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6baf574374274cd5a85ee544c125e4a7"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6QmX2BDVr1hIOIPHqnxvp1C1ZZp.jpg",
+    "belongs_to_collection": null,
+    "budget": 69000000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "",
+    "id": 339846,
+    "imdb_id": "tt1469304",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Determined Emu",
+    "overview": "Complectus tristis comparo modi aliquam amor curvo. Varius decet textilis terga. Somnus dedecor cuppedia clementia iste voluptas.",
+    "popularity": 104.2192,
+    "poster_path": "/6HE4xd8zloDqmjMZuhUCCw2UcY1.jpg",
+    "production_companies": [
+      {
+        "id": 90835,
+        "logo_path": null,
+        "name": "Primitive Jek Tono Porkins Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 4,
+        "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
+        "name": "Intermediate Qui-Gon Jinn Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 34081,
+        "logo_path": null,
+        "name": "Ytterbic Wilhuff Tarkin Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 62029,
+        "logo_path": null,
+        "name": "Kind IG-88 Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 73669,
+        "logo_path": "/pZ1sOLrUxvCvW1jODdCFgU6RxUA.png",
+        "name": "Scattered Ackbar Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 82819,
+        "logo_path": "/gXfFl9pRPaoaq14jybEn1pHeldr.png",
+        "name": "Sunny Cliegg Lars Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 2364,
+        "logo_path": "/oZyR5maGM96jReVgW7oJ7mXN8ts.png",
+        "name": "Cuddly Adi Gallia Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2017-05-25",
+    "revenue": 177900000,
+    "runtime": 116,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Error complectus tristis comparo modi aliquam amor.",
+    "title": "Mammoth Tahr",
+    "video": false,
+    "vote_average": 6.1,
+    "vote_count": 8196,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Copiose facilis tersus callide cognatus vulgo credo. Compono quo textilis viridis appositus. Absque abstergo tondeo tergeo sto coniecto.",
+            "runtime": 116,
+            "tagline": "Pecto copiose facilis tersus callide cognatus vulgo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Thymum vigilo officiis voluptate demum. Vicissitudo tres fugiat victoria pauci ea adsidue cognatus summisse apparatus. Clamo cilicium ducimus cultellus aestas pauci alveus stips damnatio.",
+            "runtime": 116,
+            "tagline": "Caste thymum vigilo officiis voluptate demum voro vicissitudo.",
+            "title": "Tory Yak"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://stiff-remains.org",
+            "overview": "Vir cruciamentum constans voveo ars barba conturbo cohibeo. Delectus careo cibus conscendo bellicus advoco. Adhaero caute capio.",
+            "runtime": 116,
+            "tagline": "Tabula vir cruciamentum constans voveo ars barba.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Thymum vigilo officiis voluptate demum. Vicissitudo tres fugiat victoria pauci ea adsidue cognatus summisse apparatus. Clamo cilicium ducimus cultellus aestas pauci alveus stips damnatio.",
+            "runtime": 117,
+            "tagline": "Caste thymum vigilo officiis voluptate demum voro vicissitudo.",
+            "title": "Tory Yak"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Animus vicinus callide curiositas caute aeternus claro.",
+            "runtime": 117,
+            "tagline": "",
+            "title": "Regional Aphid"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/sl1VNM9zRP1HQtkSLWCnkE0HnLq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 964,
+          "iso_639_1": "en",
+          "file_path": "/wGkV2Ei0aCkYfmIKZz3XCSBwmBd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1712
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 964,
+          "iso_639_1": "en",
+          "file_path": "/pUe2XO616GXP5EYsdiJtMyVHgYy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1712
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 964,
+          "iso_639_1": "en",
+          "file_path": "/jLa0q3z7aM7NKqCjd7Od1oAxjaO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1712
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/9fP0JOKLBt3dj9vmZCoxJP9lf2b.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.4,
+          "height": 310,
+          "iso_639_1": "en",
+          "file_path": "/6IUJ7rfLdj9JuuLHQ5BHieQOCWO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2294
+        },
+        {
+          "aspect_ratio": 7.05,
+          "height": 181,
+          "iso_639_1": "en",
+          "file_path": "/pMgR3eWB0skNkg05boZXmGbZRro.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1276
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/6HE4xd8zloDqmjMZuhUCCw2UcY1.jpg",
+          "vote_average": 2.31,
+          "vote_count": 21,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/omsKDgiLOMoD4APCbIUIcja8NaB.jpg",
+          "vote_average": 8.362,
+          "vote_count": 18,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/5ANXCBbHQTnykpD0fdB2QOIoRyQ.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/lKwrGId6GEZTY4mEmFoidMy3Jzu.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/rLKZAqhr2fsfsT9EnoyE78NDJZC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

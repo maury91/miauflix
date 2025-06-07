@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=23510",
+    "cache-control": "public, max-age=15228",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"6e4cf44293e10c5f0e52d147e220aa15\"",
+    "etag": "W/\"838980652c0e7e0ca0003c41f6da1f92\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "v6O-zUpsDReH1VAM1Q9BNNkqEdrBP-NSIna-dzG5lbNRrwLvnEbe2Q==",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "QO8sFuG4WVTpmTGMCLvNDAnqZxdErNNYXKXpWNgOHtBaQGnETVvwzg==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/3EGjqKhVHGsvNHvBIbxmqS17Aal.jpg",
@@ -37,7 +37,7 @@
     "last_air_date": "2025-03-15",
     "last_episode_to_air": {
       "id": 6030566,
-      "name": "Comprehensive Walrus",
+      "name": "Welcome Quail",
       "overview": "Clementia architecto caute conservo talis vorago cupiditas. Aliquid vulariter aggero cubitum amaritudo alter cornu apto.",
       "vote_average": 0,
       "vote_count": 0,
@@ -50,19 +50,19 @@
       "show_id": 224,
       "still_path": "/E4hzA3503m9r8oBzoflSHp9RRv.jpg"
     },
-    "name": "Mature Goat",
+    "name": "Melted Leopon",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 4,
         "logo_path": "/uJjcCg3O4DMEjM0xtno9OWFciRP.png",
-        "name": "Dead Nien Nunb Media",
+        "name": "Intermediate Qui-Gon Jinn Media",
         "origin_country": "GB"
       },
       {
         "id": 332,
         "logo_path": "/7HVPn1p2w1nC5oRKBehXVHpss7e.png",
-        "name": "Educational Ackbar Media",
+        "name": "Dirty Tarfful Media",
         "origin_country": "GB"
       }
     ],
@@ -70,15 +70,15 @@
     "number_of_seasons": 5,
     "origin_country": ["GB"],
     "original_language": "en",
-    "original_name": "Retired Leopard",
+    "original_name": "Willowy Boa",
     "overview": "Maiores autus valens vulpes aperte utrimque patria vetus.",
-    "popularity": 273.7579,
+    "popularity": 683.0151,
     "poster_path": "/paRFRd11WlFOxVbGnzjjCBym7FW.jpg",
     "production_companies": [
       {
         "id": 16986,
         "logo_path": "/nBWSAxcnFYeh5xYWoGtZoEWk8a.png",
-        "name": "Illegal Padmé Amidala Entertainment",
+        "name": "Cheerful Roos Tarpals Entertainment",
         "origin_country": "GB"
       }
     ],
@@ -150,7 +150,7 @@
     "status": "Returning Series",
     "tagline": "",
     "type": "Documentary",
-    "vote_average": 7.467,
+    "vote_average": 7.5,
     "vote_count": 45,
     "external_ids": {
       "imdb_id": "tt0135733",

@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=21322",
+    "cache-control": "public, max-age=3216",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"03b71c3379234bb3394e71b74abffe0f\"",
+    "etag": "W/\"96cffc2f55e3bda9902c1069d9d0b7fe\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "BRdSiQx4DlGt6vAYzcqtQHqOS-7Mth1ilFfJJvcIpnJCtp-s05wlaQ==",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "jURjI7BSJykEfm5DzBd0Q4SUS8Z36rhzE-eJvUldDSbDBrAVNpXo1w==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16921a284f8149ff85d91cd4375dbdb5"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/cs4wxElH1XPgRLFq1FOtIFpeKqz.jpg",
@@ -34,35 +34,35 @@
     "id": 4419,
     "in_production": true,
     "languages": ["en"],
-    "last_air_date": "2025-05-02",
+    "last_air_date": "2025-05-30",
     "last_episode_to_air": {
-      "id": 6083105,
-      "name": "Perfect Roadrunner",
-      "overview": "Venio dolore quidem astrum approbo angustus socius cimentarius amitto deleo. Utroque brevis arbor fugit. Tredecim vulnus crebro.",
+      "id": 6208819,
+      "name": "Profound Slug",
+      "overview": "Doloremque una attero aliquid temeritas arguo labore doloribus.",
       "vote_average": 0,
       "vote_count": 0,
-      "air_date": "2025-05-16",
-      "episode_number": 16,
+      "air_date": "2025-06-06",
+      "episode_number": 18,
       "episode_type": "standard",
       "production_code": "",
       "runtime": 60,
       "season_number": 5,
       "show_id": 4419,
-      "still_path": "/jeKOim51ZjWjEB1Q0TkAdhmSUwr.jpg"
+      "still_path": null
     },
-    "name": "National Sturgeon",
+    "name": "Repulsive Alligator",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 49,
         "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
-        "name": "Silent C-3PO Pictures",
+        "name": "Quarrelsome Yarael Poof Pictures",
         "origin_country": "US"
       },
       {
         "id": 59,
         "logo_path": "/2EIKV6SomKx8L52HoSViKyJO87m.png",
-        "name": "Voluminous Eeth Koth Media",
+        "name": "Parliamentary Lobot Media",
         "origin_country": "US"
       }
     ],
@@ -70,27 +70,27 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Loose Galliform",
+    "original_name": "Unpleasant Worm",
     "overview": "Turpis stella antepono tabesco curo canto blandior. Thermae aureus coniuratio tepesco degusto. Celer comis verto creta.",
-    "popularity": 320.8809,
+    "popularity": 665.1265,
     "poster_path": "/pbpoLLp4kvnYVfnEGiEhagpJuVZ.jpg",
     "production_companies": [
       {
         "id": 21203,
         "logo_path": null,
-        "name": "Embarrassed Anakin Skywalker Productions",
+        "name": "Established Jango Fett Productions",
         "origin_country": "US"
       },
       {
         "id": 21199,
         "logo_path": "/freGVtYt766cJ6HollWKl8RO64a.png",
-        "name": "Tasteless Poggle the Lesser Pictures",
+        "name": "Alert Kit Fisto Pictures",
         "origin_country": "US"
       },
       {
         "id": 56394,
         "logo_path": null,
-        "name": "Clean Jango Fett Productions",
+        "name": "Past Leia Organa Productions",
         "origin_country": ""
       }
     ],
@@ -172,7 +172,7 @@
     "status": "Returning Series",
     "tagline": "Magnam turpis stella antepono tabesco curo canto blandior.",
     "type": "Talk Show",
-    "vote_average": 6.002,
+    "vote_average": 6,
     "vote_count": 217,
     "external_ids": {
       "imdb_id": "tt0350448",

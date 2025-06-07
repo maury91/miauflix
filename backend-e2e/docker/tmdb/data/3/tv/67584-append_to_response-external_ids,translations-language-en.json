@@ -1,0 +1,189 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22076",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"84e66cb9be1abbcb29aba624389e9b59\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "sK7G7BVeLCsaUKYdS70FNaJji2BMqVM6WboMHdbdMdSKTZe6bz4yDg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/51X8OTROsfVlV4oOD2pGPW5EP7c.jpg",
+    "created_by": [],
+    "episode_run_time": [25],
+    "first_air_date": "2016-10-10",
+    "genres": [
+      {
+        "id": 10763,
+        "name": "News"
+      }
+    ],
+    "homepage": "https://annual-agreement.org",
+    "id": 67584,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2023-05-25",
+    "last_episode_to_air": {
+      "id": 4471964,
+      "name": "Stable Harrier",
+      "overview": "Termes abscido ulciscor. Nostrum adopto accusator corrupti. Verbum testimonium voluptates.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2023-05-25",
+      "episode_number": 20,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 45,
+      "season_number": 5,
+      "show_id": 67584,
+      "still_path": "/9KjDIrK92H6aG8OrYj94HdvI1Ke.jpg"
+    },
+    "name": "Likely Monkey",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 3706,
+        "logo_path": "/iA3HkJ8eNQZngQAjETO24YV8p1n.png",
+        "name": "Purring Grievous Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Quarrelsome Yarael Poof Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 918,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Primitive Takin",
+    "overview": "Vindico derelinquo sopor.",
+    "popularity": 373.0449,
+    "poster_path": "/ll2mHKFz0EYcnpQf3Hs9q5rgbgS.jpg",
+    "production_companies": [
+      {
+        "id": 17209,
+        "logo_path": "/khOQX3iJuSmaFWrL3w4LijbtnJZ.png",
+        "name": "Shaggy Sebulba Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-09-29",
+        "episode_count": 6,
+        "id": 172979,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2016-10-10",
+        "episode_count": 211,
+        "id": 79582,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/gXbwM4BIXjCBsKT2FJN5tQFkyAI.jpg",
+        "season_number": 1,
+        "vote_average": 9.8
+      },
+      {
+        "air_date": "2017-10-10",
+        "episode_count": 257,
+        "id": 100398,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 6.5
+      },
+      {
+        "air_date": "2019-01-02",
+        "episode_count": 138,
+        "id": 122927,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2020-03-04",
+        "episode_count": 140,
+        "id": 144715,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/1FHCAF6ppg6bdfC0wjgb1jXOUbW.jpg",
+        "season_number": 4,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2021-01-04",
+        "episode_count": 166,
+        "id": 177818,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 7.8
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "News",
+    "vote_average": 6.6,
+    "vote_count": 28,
+    "external_ids": {
+      "imdb_id": "tt6329790",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 317479,
+      "tvrage_id": null,
+      "wikidata_id": "Q27536802",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Ipsum vae aeternus desparatus cultura aliquid videlicet cattus. Apostolus at balbus nostrum stips cruciamentum adinventitias confero vicissitudo. Sum turbo vulgus aranea vereor ulterius thymum.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

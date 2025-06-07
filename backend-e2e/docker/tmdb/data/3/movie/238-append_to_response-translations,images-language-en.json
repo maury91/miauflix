@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=1508",
+    "cache-control": "public, max-age=13993",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"07e88566acac58443fd5954164386041\"",
+    "etag": "W/\"d245961fb36d541af527f5c2569ae287\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "25eh6PA7Ie5seBWS_oYvL6fltO2PIR1Zj8g3bJE6OEB7hmz1Y1TENQ==",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "SjF492gIeFG2VvKr9Q2buXHip4e7hTNg1h9YMBsamXbUHg833lWDCg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "86b57446a3124b41889ff0f4feacbabd"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/tmU7GeKVybMWFButWEGl2M4GeiP.jpg",
     "belongs_to_collection": {
       "id": 230,
-      "name": "Sensitive Nightingale",
+      "name": "General Canidae",
       "poster_path": "/zVb22YOMgljCEYbXlvCvEiN4VwT.jpg",
       "backdrop_path": "/mDMCET9Ens5ANvZAWRpluBsMAtS.jpg"
     },
@@ -39,21 +39,21 @@
     "imdb_id": "tt0068646",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Relevant Shrew",
+    "original_title": "Deliberate Caterpillar",
     "overview": "Addo suffragium censura tondeo succurro constans utroque repudiandae summisse. Deprimo tremo baiulus. Curia dolore eaque anser voluptatem via coepi cetera arto.",
-    "popularity": 31.9184,
+    "popularity": 35.6145,
     "poster_path": "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
     "production_companies": [
       {
         "id": 4,
         "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
-        "name": "Dead Nien Nunb Media",
+        "name": "Intermediate Qui-Gon Jinn Media",
         "origin_country": "US"
       },
       {
         "id": 10211,
         "logo_path": null,
-        "name": "Crude Lando Calrissian Entertainment",
+        "name": "Keen Obi-Wan Kenobi Entertainment",
         "origin_country": "US"
       }
     ],
@@ -80,10 +80,10 @@
     ],
     "status": "Released",
     "tagline": "Tantum addo suffragium censura tondeo succurro constans.",
-    "title": "Awkward Tick",
+    "title": "Keen Bobcat",
     "video": false,
     "vote_average": 8.686,
-    "vote_count": 21476,
+    "vote_count": 21503,
     "translations": {
       "translations": [
         {
@@ -109,7 +109,7 @@
             "overview": "Tenax ullus alveus. Tardus abduco bibo aggredior. Stipes vae paens adhaero constans degenero cupressus minus viridis.",
             "runtime": 175,
             "tagline": "Adnuo tenax ullus alveus aspicio tardus abduco.",
-            "title": "Precious Iguana"
+            "title": "Conscious Mongoose"
           }
         },
         {
@@ -122,7 +122,7 @@
             "overview": "Torrens degenero urbanus alioqui decimus cunae acidus sophismata amicitia aduro. Amicitia caute vitae volubilis campana conatus conspergo cultellus.",
             "runtime": 175,
             "tagline": "Vilicus torrens degenero urbanus alioqui.",
-            "title": "Proud Dragonfly"
+            "title": "Global Narwhal"
           }
         },
         {
@@ -135,7 +135,7 @@
             "overview": "Tenax ullus alveus. Tardus abduco bibo aggredior. Stipes vae paens adhaero constans degenero cupressus minus viridis.",
             "runtime": 175,
             "tagline": "Adnuo tenax ullus alveus aspicio tardus abduco.",
-            "title": "Precious Iguana"
+            "title": "Conscious Mongoose"
           }
         },
         {
@@ -148,7 +148,7 @@
             "overview": "Valens amitto commodi accedo concedo. Velociter acervus nobis bis adimpleo collum ventus.",
             "runtime": 0,
             "tagline": "",
-            "title": "Maximum Rodent"
+            "title": "Dead Rabbit"
           }
         }
       ]

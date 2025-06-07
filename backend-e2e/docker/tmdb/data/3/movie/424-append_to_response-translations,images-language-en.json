@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=12787",
+    "cache-control": "public, max-age=14667",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"931d5c22e42db2c0ed9cc953c10b72d6\"",
+    "etag": "W/\"360768bc37e8f0fd3f4e272b270d15af\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "2lFwLafuiJpEOloHMrNgHMTxQBeGbyfqecHFBOx9EernIq2Lh0ewew==",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "moEhi-EHSXJDbfMhTkOnV-BQ7SuAUKpoZBJiyRM0gjFRz8TqS-UrWQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "0091e8d404bb4c579424a9eabac49dd4"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/zb6fM1CX41D9rF9hdgclu0peUmy.jpg",
@@ -38,15 +38,15 @@
     "imdb_id": "tt0108052",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Tired Whale",
+    "original_title": "Sole Mammal",
     "overview": "Adstringo deinde cubitum cultellus calculus amplitudo terga aiunt cupiditate. Aperte perspiciatis suppellex. Ullus aliqua surculus conscendo derelinquo custodia cinis.",
-    "popularity": 19.2064,
+    "popularity": 22.7078,
     "poster_path": "/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg",
     "production_companies": [
       {
         "id": 56,
         "logo_path": "/cEaxANEisCqeEoRvODv2dO1I0iI.png",
-        "name": "Olympic Shaak Ti Media",
+        "name": "Detailed Taun We Media",
         "origin_country": "US"
       }
     ],
@@ -83,10 +83,10 @@
     ],
     "status": "Released",
     "tagline": "Turpis adstringo deinde cubitum cultellus calculus amplitudo terga.",
-    "title": "Inquisitive Salamander",
+    "title": "Safe Opossum",
     "video": false,
-    "vote_average": 8.565,
-    "vote_count": 16452,
+    "vote_average": 8.564,
+    "vote_count": 16466,
     "translations": {
       "translations": [
         {
@@ -112,7 +112,7 @@
             "overview": "Vigor acervus arbor. Cena deduco acer. Auditor verto decretum praesentium cena valens quae.",
             "runtime": 195,
             "tagline": "Alii vigor acervus arbor ago cena deduco.",
-            "title": "Chronic Lamprey"
+            "title": "Specific Catfish"
           }
         },
         {
@@ -125,7 +125,7 @@
             "overview": "Stillicidium tergo ter.",
             "runtime": 195,
             "tagline": "Adfectus stillicidium tergo.",
-            "title": "Broad Ant"
+            "title": "Likely Gopher"
           }
         },
         {
@@ -138,7 +138,7 @@
             "overview": "Stillicidium tergo ter.",
             "runtime": 195,
             "tagline": "Adfectus stillicidium tergo.",
-            "title": "Broad Ant"
+            "title": "Likely Gopher"
           }
         },
         {
@@ -151,7 +151,7 @@
             "overview": "Patruus strenuus caries.",
             "runtime": 0,
             "tagline": "",
-            "title": "Yappy Nightingale"
+            "title": "Particular Dove"
           }
         }
       ]

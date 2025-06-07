@@ -1,0 +1,219 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14887",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"437566c5a632eee724e43586035dbb96\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "I7tbIN2kx_AsCnz0BiN2VtssOA1ALrZw8irXItoVrTcTvYeXzwzQHA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dZluxNTlzqZWNb6UsUH3f7nUzGn.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2009-07-19",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://timely-overview.name",
+    "id": 21755,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-04-02",
+    "last_episode_to_air": {
+      "id": 6076648,
+      "name": "Northern Zebra",
+      "overview": "Adduco circumvenio surculus bardus a denego sol solutio arto. Validus aliqua quasi territo amoveo. Subnecto vulticulus uredo decimus tricesimus sollicito surgo.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2025-04-02",
+      "episode_number": 10,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 42,
+      "season_number": 5,
+      "show_id": 21755,
+      "still_path": null
+    },
+    "name": "Desperate Ox",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 65,
+        "logo_path": "/9fGgdJz17aBX7dOyfHJtsozB7bf.png",
+        "name": "Miserable Sly Moore Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 162,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Jealous Dragonfly",
+    "overview": "Ipsum curriculum suggero conturbo clam administratio caste. Adicio asper angustus demens vetus sui copia. Curatio ars alius.",
+    "popularity": 414.0727,
+    "poster_path": "/8GeBQWQOTu7yLwNfCV6iWyL8xNf.jpg",
+    "production_companies": [
+      {
+        "id": 23610,
+        "logo_path": "/fPlRSFrjrGAmdclHeGsScrDX1aC.png",
+        "name": "Bitter Poggle the Lesser Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2009-12-21",
+        "episode_count": 7,
+        "id": 31536,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/lEEZ7Gc09eSipuIajZxssfsm7aq.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-07-19",
+        "episode_count": 24,
+        "id": 31534,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/jOCZ4Oxw0hZqYOg9ufipaX8AVny.jpg",
+        "season_number": 1,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2010-01-18",
+        "episode_count": 33,
+        "id": 31535,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/6Ov63Hjgj1mX1nH3jIjetZ1xYHf.jpg",
+        "season_number": 2,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2010-08-16",
+        "episode_count": 30,
+        "id": 31537,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/dU76Navx3AxclJicQQxeoSIClut.jpg",
+        "season_number": 3,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2011-04-04",
+        "episode_count": 38,
+        "id": 108528,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/pGgkwL8kJ5ZO7smRCCQMkR6n89K.jpg",
+        "season_number": 4,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2011-11-28",
+        "episode_count": 30,
+        "id": 108525,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/x0rPvvWPpbDWOhHRxX76ehZ6SVM.jpg",
+        "season_number": 5,
+        "vote_average": 7
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Reality",
+    "vote_average": 7.094,
+    "vote_count": 276,
+    "external_ids": {
+      "imdb_id": "tt1492088",
+      "freebase_mid": "/m/06_xkwc",
+      "freebase_id": "/en/pawn_stars",
+      "tvdb_id": 111051,
+      "tvrage_id": 23281,
+      "wikidata_id": "Q794145",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Dicta celer eveniet claustrum exercitationem tendo currus demum. Aestus modi tui.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Normal Worm",
+            "overview": "Cogo talio cribro cumque. Ullus libero dens tonsor. Auctor angelus quam curatio cibus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Painful Bovid",
+            "overview": "Cuius sustineo stillicidium cohibeo agnitio currus. Vorago deleniti apostolus cunctatio aperte sapiente testimonium curso.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Normal Worm",
+            "overview": "Cogo talio cribro cumque. Ullus libero dens tonsor. Auctor angelus quam curatio cibus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

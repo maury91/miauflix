@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=10443",
+    "cache-control": "public, max-age=9708",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"0ae1b47c6467b1539373bf10046b0f08\"",
+    "etag": "W/\"b44d3b55b62e31f18f2abefa136ba3cc\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "Rytrg7WGegrjOtPB2QtdiGWdanPKlz1jjDqjKD1ukcPX-MS_UZ5XKQ==",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "7cnbGri2689fWfz-wycRTcOMt5sYmdyeBST8HNbRrn_i_dM5YTG15A==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/aIglP9Z5gtkQf7Fidb4NRv2gfDj.jpg",
     "belongs_to_collection": {
       "id": 97461,
-      "name": "Minor Cat",
+      "name": "Tight Grouse",
       "poster_path": "/bstyyXaLinnYwoyvo5HaDceJN07.jpg",
       "backdrop_path": "/2bQIDuinsMUXjcBZq8hbyPxjhvz.jpg"
     },
@@ -43,21 +43,21 @@
     "imdb_id": "tt0275847",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Careful Fowl",
+    "original_title": "Abstract Cow",
     "overview": "Tenus commemoro soluta cerno quaerat chirographum stips. Texo credo cavus arx.",
-    "popularity": 171.5098,
+    "popularity": 125.6741,
     "poster_path": "/m13Vbzv7R2GMAl3GXFrkmMEgCFQ.jpg",
     "production_companies": [
       {
         "id": 2,
         "logo_path": "/wdrCwmRnLFJhEoH8GSfymY85KHT.png",
-        "name": "Accused R4-P17 Entertainment",
+        "name": "Mild R5-D4 Entertainment",
         "origin_country": "US"
       },
       {
         "id": 171656,
         "logo_path": "/4UBohOtIr9DtxylH48Qsg6aDow6.png",
-        "name": "Bold Bib Fortuna Entertainment",
+        "name": "Objective Mace Windu Entertainment",
         "origin_country": "US"
       }
     ],
@@ -79,10 +79,10 @@
     ],
     "status": "Released",
     "tagline": "Pecco tenus commemoro soluta cerno quaerat.",
-    "title": "Probable Heron",
+    "title": "Official Leopard",
     "video": false,
-    "vote_average": 7.545,
-    "vote_count": 6539,
+    "vote_average": 7.6,
+    "vote_count": 6589,
     "translations": {
       "translations": [
         {
@@ -121,7 +121,7 @@
             "overview": "Vomica officiis arbustum clamo bis. Charisma valens praesentium bibo vinitor velit tui quia thalassinus. Cubo odit eveniet cena dolor.",
             "runtime": 85,
             "tagline": "Clam vomica officiis arbustum clamo bis traho.",
-            "title": "Potential Lizard"
+            "title": "Allied Coyote"
           }
         },
         {
@@ -134,7 +134,7 @@
             "overview": "Thorax dolorum carus. Tabgo deprecator ullam vestigium.",
             "runtime": 0,
             "tagline": "",
-            "title": "Thirsty Eagle"
+            "title": "Proposed Puffin"
           }
         },
         {
@@ -147,7 +147,7 @@
             "overview": "Vomica officiis arbustum clamo bis. Charisma valens praesentium bibo vinitor velit tui quia thalassinus. Cubo odit eveniet cena dolor.",
             "runtime": 0,
             "tagline": "Clam vomica officiis arbustum clamo bis traho.",
-            "title": "Potential Lizard"
+            "title": "Allied Coyote"
           }
         }
       ]
@@ -277,21 +277,21 @@
         },
         {
           "aspect_ratio": 0.667,
-          "height": 1500,
+          "height": 3000,
           "iso_639_1": "en",
-          "file_path": "/be5PVn30PhB35LbP5BwrmcusOui.jpg",
-          "vote_average": 3.334,
-          "vote_count": 1,
-          "width": 1000
+          "file_path": "/poJMAlwdnYCt3IoWOslcqRxyGCS.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
         },
         {
           "aspect_ratio": 0.667,
-          "height": 1500,
+          "height": 2475,
           "iso_639_1": "en",
-          "file_path": "/lThSHem4uvalwL6I6qrXpyyqqKv.jpg",
+          "file_path": "/3qNf7wtCpBqqslrb4F01k6johy9.jpg",
           "vote_average": 3.334,
           "vote_count": 1,
-          "width": 1000
+          "width": 1650
         }
       ]
     }

@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=16435",
+    "cache-control": "public, max-age=7426",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"00d42726a71655ae2d9644abe4a5936c\"",
+    "etag": "W/\"8b68a06c09f407cd2811d8bdaba1059a\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "MSJII0CQe8GPvGeLojR4AL8U8PcQc99BvYjvyK2y_Ld23Mw1v6MBSA==",
+    "via": "1.1 7395d1816622756cd6753f5e1281200c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "4TrwgfeFVavgdMwo4DzWZeuyj1hwCyXsxpNeqVn8lWDc0JosaLUrSw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/zo8CIjJ2nfNOevqNajwMRO6Hwka.jpg",
     "belongs_to_collection": {
       "id": 1241984,
-      "name": "Obvious Dog",
+      "name": "Fashionable Baboon",
       "poster_path": "/wuU5y8Jd5GWVcf71uv1nyoNkgwR.jpg",
       "backdrop_path": "/4OgaftFNqtE1UvfDDb2Eov7A5Rz.jpg"
     },
@@ -47,27 +47,27 @@
     "imdb_id": "tt13622970",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Distinctive Quail",
+    "original_title": "Crucial Salamander",
     "overview": "Statua commodo assumenda deprimo utique debilito sto vinculum autus carus. Suppono dedico decimus.",
-    "popularity": 114.6447,
+    "popularity": 96.9766,
     "poster_path": "/aLVkiINlIeCkcZIzb7XHzPYgO6L.jpg",
     "production_companies": [
       {
         "id": 2,
         "logo_path": "/wdrCwmRnLFJhEoH8GSfymY85KHT.png",
-        "name": "Accused R4-P17 Entertainment",
+        "name": "Mild R5-D4 Entertainment",
         "origin_country": "US"
       },
       {
         "id": 6125,
         "logo_path": "/tzsMJBJZINu7GHzrpYzpReWhh66.png",
-        "name": "Steep Grievous Media",
+        "name": "Capable Arvel Crynyd Media",
         "origin_country": "US"
       },
       {
         "id": 158526,
         "logo_path": "/tzsMJBJZINu7GHzrpYzpReWhh66.png",
-        "name": "Grateful Saesee Tiin Media",
+        "name": "Fit Jabba Desilijic Tiure Media",
         "origin_country": "CA"
       }
     ],
@@ -82,7 +82,7 @@
       }
     ],
     "release_date": "2024-11-21",
-    "revenue": 1059544057,
+    "revenue": 1059242164,
     "runtime": 100,
     "spoken_languages": [
       {
@@ -93,10 +93,10 @@
     ],
     "status": "Released",
     "tagline": "Utroque statua commodo assumenda deprimo utique.",
-    "title": "Mere Goldfish",
+    "title": "Enchanting Wolf",
     "video": false,
-    "vote_average": 7.079,
-    "vote_count": 2407,
+    "vote_average": 7.1,
+    "vote_count": 2435,
     "translations": {
       "translations": [
         {
@@ -122,7 +122,7 @@
             "overview": "Averto cultellus degero voluptatum.",
             "runtime": 100,
             "tagline": "Capitulus averto cultellus.",
-            "title": "Outdoor Cockroach"
+            "title": "Theoretical Rhinoceros"
           }
         },
         {
@@ -148,7 +148,7 @@
             "overview": "Unde stultus versus saepe. Teres ratione cattus usus.",
             "runtime": 0,
             "tagline": "Basium unde stultus versus saepe.",
-            "title": "Fragile Tapir"
+            "title": "Promising Elk"
           }
         },
         {
@@ -161,7 +161,7 @@
             "overview": "Succedo ambulo inflammatio arcesso derelinquo corrigo. Demens ea crapula subvenio tempus. Nobis claro nulla capio.",
             "runtime": 100,
             "tagline": "",
-            "title": "Smooth Fowl"
+            "title": "Colourful Ferret"
           }
         }
       ]

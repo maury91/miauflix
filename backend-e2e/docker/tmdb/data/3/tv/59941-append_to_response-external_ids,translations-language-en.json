@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=10831",
+    "cache-control": "public, max-age=12924",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"38841cc3a8841739de158cdace463dba\"",
+    "etag": "W/\"f2e8941eab90a3f9fa872123c68b470a\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "FR0rTz1shKPh3xqK3wybhlsSjK93wbTEde1liGUELc9RwR5QCFLiJA==",
+    "via": "1.1 dc0aad619823d3400ef947433d0af8fa.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "aLcity3x7Bw8NjaDIAOJNvdo61n77zDI4diJxxunh_dWBLpkyxJ0Qg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "03e2018322f74fe8b973ddf1bd673363"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/6jGVOu5NvnmSKh28ByWAJrTOEH2.jpg",
@@ -43,14 +43,14 @@
     "id": 59941,
     "in_production": true,
     "languages": ["en"],
-    "last_air_date": "2025-05-01",
+    "last_air_date": "2025-05-22",
     "last_episode_to_air": {
-      "id": 6213230,
-      "name": "Thoughtless Quelea",
-      "overview": "",
+      "id": 6290266,
+      "name": "Mean Constrictor",
+      "overview": "Statim abutor placeat admoneo volubilis quis. Eveniet aegrus sortitus ultra deficio. Sursum ciminatio spoliatio.",
       "vote_average": 0,
       "vote_count": 0,
-      "air_date": "2025-05-22",
+      "air_date": "2025-06-05",
       "episode_number": 7,
       "episode_type": "standard",
       "production_code": "",
@@ -59,13 +59,13 @@
       "show_id": 59941,
       "still_path": null
     },
-    "name": "Nasty Tern",
+    "name": "Mild Chicken",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 6,
         "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
-        "name": "Convincing R5-D4 Media",
+        "name": "Unwilling San Hill Media",
         "origin_country": "US"
       }
     ],
@@ -73,33 +73,33 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Poor Urial",
+    "original_name": "Conventional Cockroach",
     "overview": "Ventus arca temporibus uterque. Tardus impedit solio subiungo.",
-    "popularity": 348.0823,
+    "popularity": 526.1939,
     "poster_path": "/g4amxJvtpnY79J77xeamnAEUO8r.jpg",
     "production_companies": [
       {
         "id": 1756,
         "logo_path": "/d7YyNzysIF0lSb4lJRf1ar6MHxi.png",
-        "name": "Invisible R2-D2 Pictures",
+        "name": "Traditional Palpatine Pictures",
         "origin_country": "US"
       },
       {
         "id": 26727,
         "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
-        "name": "Nasty Bail Prestor Organa Productions",
+        "name": "Troubled Raymus Antilles Productions",
         "origin_country": "US"
       },
       {
         "id": 157329,
         "logo_path": null,
-        "name": "Innovative Dud Bolt Pictures",
+        "name": "Victorious Beru Whitesun lars Pictures",
         "origin_country": ""
       },
       {
         "id": 104278,
         "logo_path": null,
-        "name": "Statutory Jabba Desilijic Tiure Media",
+        "name": "Xeric Eeth Koth Media",
         "origin_country": ""
       }
     ],
@@ -171,7 +171,7 @@
     "status": "Returning Series",
     "tagline": "Apud ventus arca temporibus uterque.",
     "type": "Talk Show",
-    "vote_average": 5.837,
+    "vote_average": 5.8,
     "vote_count": 338,
     "external_ids": {
       "imdb_id": "tt3444938",

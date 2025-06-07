@@ -1,0 +1,311 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4269",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"cd183e10821d2d301ba615bd9721b2cf\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 dc0aad619823d3400ef947433d0af8fa.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "WJ1iPG893g0VN_pyG30PArkdV8IRO1p1kD3IeR5N_ZWamrlX5lkopA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "b1fd7bf3bf9c49d299f2ad784d495b2d"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/XSTGtPVegdHD1xy5GPuK0tURTQ.jpg",
+    "belongs_to_collection": {
+      "id": 468552,
+      "name": "Parallel Termite",
+      "poster_path": "/8AQRfTuTHeFTddZN4IUAqprN8Od.jpg",
+      "backdrop_path": "/n9KlvCOBFDmSyw3BgNrkUkxMFva.jpg"
+    },
+    "budget": 200000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://respectful-funding.name",
+    "id": 464052,
+    "imdb_id": "tt7126948",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Xerothermic Takin",
+    "overview": "Sol denuo custodia contra antiquus. Virgo cunctatio adicio adstringo vicinus terebro. Claustrum totidem bardus arca comis apud baiulus cui.",
+    "popularity": 153.4039,
+    "poster_path": "/8UlWHLMpgZm9bx6QYh0NFoq67TZ.jpg",
+    "production_companies": [
+      {
+        "id": 174,
+        "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
+        "name": "Advanced Anakin Skywalker Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 114152,
+        "logo_path": "/xYfrnGFXxrEy5x5OVThunxHYScK.png",
+        "name": "Hot Palpatine Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 128064,
+        "logo_path": "/13F3Jf7EFAcREU0xzZqJnVnyGXu.png",
+        "name": "Eastern Jabba Desilijic Tiure Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 507,
+        "logo_path": "/aRmHe6GWxYMRCQljF75rn2B9Gv8.png",
+        "name": "Continental Ackbar Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2020-12-16",
+    "revenue": 169601036,
+    "runtime": 151,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Correptius sol denuo custodia contra antiquus curis.",
+    "title": "Missing Canid",
+    "video": false,
+    "vote_average": 6.4,
+    "vote_count": 8642,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://ambitious-mood.org",
+            "overview": "Venustas aufero hic creator crur ulciscor conor.",
+            "runtime": 151,
+            "tagline": "Necessitatibus venustas aufero.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://dear-camper.com",
+            "overview": "Asperiores tubineus aperte.",
+            "runtime": 151,
+            "tagline": "Anser asperiores tubineus aperte.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://personal-boon.net",
+            "overview": "Torqueo cogo termes. Arceo amplitudo tubineus.",
+            "runtime": 151,
+            "tagline": "Allatus torqueo cogo termes absconditus arceo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://personal-boon.net",
+            "overview": "Torqueo cogo termes. Arceo amplitudo tubineus.",
+            "runtime": 155,
+            "tagline": "Allatus torqueo cogo termes absconditus arceo.",
+            "title": "Strict Eel"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Vobis caste commodi adsuesco. Deficio nemo similique mollitia ancilla umbra agnosco coerceo solium tres. Subnecto curatio saepe desino cuppedia deleniti adduco.",
+            "runtime": 151,
+            "tagline": "",
+            "title": "Late Marsupial"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/lqzv1tdOhpUsB2lWlHuLqCYjtRp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/vCp8wasUvkdJMUqKG4i46WRzHw1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ipnoSFleiqS08D4AQ6rY4UosLw1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/18wXXGjhhM7QiGiey6q7B9Xx473.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/2h1hgHSu0Nz9B0w0ekOmHHh8ajU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.613,
+          "height": 1298,
+          "iso_639_1": "en",
+          "file_path": "/mjwPhOvbU5DRMnqnZeu6IdEs1xi.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2094
+        },
+        {
+          "aspect_ratio": 3.99,
+          "height": 196,
+          "iso_639_1": "en",
+          "file_path": "/hZ8wCtjniKwonpN1uG1CsSbRrCU.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 782
+        },
+        {
+          "aspect_ratio": 2.326,
+          "height": 688,
+          "iso_639_1": "en",
+          "file_path": "/lJ3JpvQj6J0N872RjvShC2Sy9Jq.svg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 4.062,
+          "height": 192,
+          "iso_639_1": "en",
+          "file_path": "/1OCME4z6KWpKZnD5tucI83ut5p4.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 780
+        },
+        {
+          "aspect_ratio": 2.718,
+          "height": 387,
+          "iso_639_1": "en",
+          "file_path": "/ac5aGA34jCkjxL49N2234NxNTdO.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1052
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/8UlWHLMpgZm9bx6QYh0NFoq67TZ.jpg",
+          "vote_average": 6.794,
+          "vote_count": 81,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_639_1": "en",
+          "file_path": "/di1bCAfGoJ0BzNEavLsPyxQ2AaB.jpg",
+          "vote_average": 5.25,
+          "vote_count": 41,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/6wjoI3LO0WZHDQdfGlq4de0FHEj.jpg",
+          "vote_average": 5.25,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/9Vxf15s6EApHUlRZVLpVmlZZbCF.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_639_1": "en",
+          "file_path": "/zsLi3dfp7R7uysW1x0LMXF8WcGV.jpg",
+          "vote_average": 5.144,
+          "vote_count": 45,
+          "width": 1382
+        }
+      ]
+    }
+  }
+}

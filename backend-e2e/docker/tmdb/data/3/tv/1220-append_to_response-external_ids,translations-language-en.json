@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=13967",
+    "cache-control": "public, max-age=4835",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"8e2e0605ebd1d5fc3b5f53352f559503\"",
+    "etag": "W/\"724c025eb89cc17ad79c7343370033e9\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "pvpEV9Xl0cNTRWEdx-it7WKhkrBxoMTB6JD5Zcu92J8xk9ZmCrsdNg==",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "_mHU_qJx6yCfgZMqAIGpycM_GawHgkbb9y7djdfwxNmHP6zeRm254g==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "ec744e2834f1415aae57fbd47ef01c38"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/6wX6105dCfRqTrwvoQgA8bGxUCo.jpg",
@@ -37,7 +37,7 @@
     "last_air_date": "2025-03-07",
     "last_episode_to_air": {
       "id": 5994268,
-      "name": "Xenophobic Duck",
+      "name": "Remaining Heron",
       "overview": "Cunctatio demoror thesis arbustum numquam admiratio antea. Atavus delibero complectus ultio.",
       "vote_average": 0,
       "vote_count": 0,
@@ -50,19 +50,19 @@
       "show_id": 1220,
       "still_path": null
     },
-    "name": "Electrical Porcupine",
+    "name": "Random Leopard",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 4,
         "logo_path": "/uJjcCg3O4DMEjM0xtno9OWFciRP.png",
-        "name": "Dead Nien Nunb Media",
+        "name": "Intermediate Qui-Gon Jinn Media",
         "origin_country": "GB"
       },
       {
         "id": 332,
         "logo_path": "/7HVPn1p2w1nC5oRKBehXVHpss7e.png",
-        "name": "Educational Ackbar Media",
+        "name": "Dirty Tarfful Media",
         "origin_country": "GB"
       }
     ],
@@ -70,15 +70,15 @@
     "number_of_seasons": 5,
     "origin_country": ["GB"],
     "original_language": "en",
-    "original_name": "Tiny Meadowlark",
+    "original_name": "Central Felidae",
     "overview": "Verecundia argentum deleniti allatus vester villa. Aegre vulgus suppellex inflammatio.",
-    "popularity": 188.8588,
+    "popularity": 533.6248,
     "poster_path": "/vrbqaBXB8AALynQzpWz6JdCPEJS.jpg",
     "production_companies": [
       {
         "id": 73509,
         "logo_path": "/kjeaAHYZ6G747gSF1wuO0YCYdJZ.png",
-        "name": "Noisy Saesee Tiin Entertainment",
+        "name": "Subsequent Nute Gunray Entertainment",
         "origin_country": "GB"
       }
     ],
@@ -160,8 +160,8 @@
     "status": "Returning Series",
     "tagline": "",
     "type": "Talk Show",
-    "vote_average": 7.159,
-    "vote_count": 264,
+    "vote_average": 7.2,
+    "vote_count": 265,
     "external_ids": {
       "imdb_id": "tt0924651",
       "freebase_mid": "/m/02pn8wm",
@@ -205,7 +205,7 @@
           "name": "Español",
           "english_name": "Spanish",
           "data": {
-            "name": "Ordinary Coral",
+            "name": "Extra Constrictor",
             "overview": "Commodo tantum aveho cena capillus admoneo ustilo.",
             "homepage": "",
             "tagline": ""

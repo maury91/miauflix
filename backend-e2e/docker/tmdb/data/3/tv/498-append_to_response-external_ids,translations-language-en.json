@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=1288",
+    "cache-control": "public, max-age=22914",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"f4e31efc525629af8b52e0fd45b85217\"",
+    "etag": "W/\"9a8b815c0bd98a5feedf6bbd42850399\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "uxClqqcuDtb0_p2irupivRdOHF7JwQ6doQixZS5OWIQK3pkv4JfYSg==",
+    "via": "1.1 6fc439c8bc0a64a7ab978ce699795274.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "hML3Ag_NKkirERB6cqEE1Kp3xkwgpschx1_i5YzjDVqf2w8ag9FxXQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "b1fd7bf3bf9c49d299f2ad784d495b2d"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/7jEnft2CLNbILWAiBRIBrXNN7Qh.jpg",
@@ -37,7 +37,7 @@
     "last_air_date": "2015-05-20",
     "last_episode_to_air": {
       "id": 1070870,
-      "name": "Rough Scorpion",
+      "name": "Minimal Otter",
       "overview": "Ver stultus itaque curiositas ager. Cotidie studio combibo peccatus dolorem vociferor.",
       "vote_average": 0,
       "vote_count": 0,
@@ -50,13 +50,13 @@
       "show_id": 498,
       "still_path": null
     },
-    "name": "Rising Stork",
+    "name": "Watery Anaconda",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 16,
         "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
-        "name": "Architectural Saesee Tiin Pictures",
+        "name": "Many C-3PO Pictures",
         "origin_country": "US"
       }
     ],
@@ -64,33 +64,33 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Imaginative Chimpanzee",
+    "original_name": "Tasteless Crane",
     "overview": "Calamitas apud tantum solitudo vere.",
-    "popularity": 500.6598,
+    "popularity": 774.6399,
     "poster_path": "/fTBC5EpsgKmli9VQcJMtqQ08Qj4.jpg",
     "production_companies": [
       {
         "id": 54388,
         "logo_path": "/4XbkL5Av0Y8uVZ3fdhRZhvoKHK9.png",
-        "name": "Puzzled Wilhuff Tarkin Productions",
+        "name": "Cooperative Beru Whitesun lars Productions",
         "origin_country": "US"
       },
       {
         "id": 124448,
         "logo_path": null,
-        "name": "Sole Sebulba Studios",
+        "name": "Spotless Ben Quadinaros Studios",
         "origin_country": "US"
       },
       {
         "id": 2161,
         "logo_path": "/kaHPCUD2nQ1DGWDAH3zbYVCkTae.png",
-        "name": "Modest Luke Skywalker Media",
+        "name": "Mixed Gregar Typho Media",
         "origin_country": "US"
       },
       {
         "id": 1081,
         "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
-        "name": "Graceful Jek Tono Porkins Pictures",
+        "name": "Late Zam Wesell Pictures",
         "origin_country": "US"
       }
     ],
@@ -162,8 +162,8 @@
     "status": "Ended",
     "tagline": "",
     "type": "Talk Show",
-    "vote_average": 6.303,
-    "vote_count": 152,
+    "vote_average": 6.314,
+    "vote_count": 153,
     "external_ids": {
       "imdb_id": "tt0106053",
       "freebase_mid": "/m/0ph24",

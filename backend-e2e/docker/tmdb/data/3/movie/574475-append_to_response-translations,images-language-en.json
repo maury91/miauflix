@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1223",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=14528",
+    "cache-control": "public, max-age=21010",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"9fa1a8e03c43ed8a326c7f448cc736e2\"",
+    "etag": "W/\"9119372002ad907021c183d807929055\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "JVP-ac7eQ4yoG6HQeR5Ci1PQDBtIwCnojyovUd4buKKW9flf0X6HFA==",
+    "via": "1.1 efb4ddf9650598b987ef5db782c5b530.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "sPTOF1Jw8_BT2kNuAH91MDbjZRsc0R_Y2hmRaCb4sxBiypxTPrsIhg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "c48e0a81c0964062b5f95e61bfbac73e"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16921a284f8149ff85d91cd4375dbdb5"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/uIpJPDNFoeX0TVml9smPrs9KUVx.jpg",
     "belongs_to_collection": {
       "id": 8864,
-      "name": "Philosophical Mammal",
+      "name": "Distinct Snake",
       "poster_path": "/nr4MXTXK2in9gxYhFMQGni66KRJ.jpg",
       "backdrop_path": "/y3aWOInifbGKXM34KjtcMITrZRZ.jpg"
     },
@@ -39,39 +39,39 @@
     "imdb_id": "tt9619824",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Vast Marlin",
+    "original_title": "Wee Nightingale",
     "overview": "Audax aegrotatio ocer. Credo tubineus suppono timidus cumque pecus suffragium.",
-    "popularity": 394.4219,
+    "popularity": 265.4529,
     "poster_path": "/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg",
     "production_companies": [
       {
         "id": 12,
         "logo_path": "/2ycs64eqV5rqKYHyQK0GVoKGvfX.png",
-        "name": "Operational Nien Nunb Studios",
+        "name": "Striped Wicket Systri Warrick Studios",
         "origin_country": "US"
       },
       {
         "id": 48788,
         "logo_path": null,
-        "name": "Willing Han Solo Studios",
+        "name": "Brief Anakin Skywalker Studios",
         "origin_country": "US"
       },
       {
         "id": 252366,
         "logo_path": null,
-        "name": "Suspicious Roos Tarpals Entertainment",
+        "name": "Urban Kit Fisto Entertainment",
         "origin_country": ""
       },
       {
         "id": 252367,
         "logo_path": null,
-        "name": "Squealing Zam Wesell Pictures",
+        "name": "Useless Nute Gunray Pictures",
         "origin_country": "US"
       },
       {
         "id": 216687,
         "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
-        "name": "Expected R4-P17 Pictures",
+        "name": "Gross Nute Gunray Pictures",
         "origin_country": "US"
       }
     ],
@@ -82,7 +82,7 @@
       }
     ],
     "release_date": "2025-05-14",
-    "revenue": 191658534,
+    "revenue": 235964623,
     "runtime": 110,
     "spoken_languages": [
       {
@@ -93,10 +93,10 @@
     ],
     "status": "Released",
     "tagline": "Aer audax aegrotatio ocer harum.",
-    "title": "Stuck Otter",
+    "title": "Crooked Egret",
     "video": false,
     "vote_average": 7,
-    "vote_count": 482,
+    "vote_count": 586,
     "translations": {
       "translations": [
         {
@@ -122,7 +122,7 @@
             "overview": "Unus vorago antiquus asporto ratione spero sortitus subito volo apud.",
             "runtime": 100,
             "tagline": "Voro unus vorago antiquus.",
-            "title": "Given Fowl"
+            "title": "Perfect Cicada"
           }
         },
         {
@@ -135,7 +135,7 @@
             "overview": "Unus vorago antiquus asporto ratione spero sortitus subito volo apud.",
             "runtime": 0,
             "tagline": "",
-            "title": "Given Fowl"
+            "title": "Perfect Cicada"
           }
         },
         {
@@ -148,7 +148,7 @@
             "overview": "Copia solium denuo tepidus addo aureus degero. Cura angulus depopulo temporibus omnis arceo.",
             "runtime": 0,
             "tagline": "Pauper copia solium denuo tepidus.",
-            "title": "Present Wolf"
+            "title": "Governing Capybara"
           }
         },
         {
@@ -161,7 +161,7 @@
             "overview": "Autem iusto corpus somnus deleniti sufficio suscipio voluntarius. Utrimque sperno textilis tabesco aduro aestivus pauci.",
             "runtime": 110,
             "tagline": "",
-            "title": "Sorry Mandrill"
+            "title": "Sound Sloth"
           }
         }
       ]
@@ -267,8 +267,8 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/6WxhEvFsauuACfv8HyoVX6mZKFj.jpg",
-          "vote_average": 8.362,
-          "vote_count": 12,
+          "vote_average": 9.106,
+          "vote_count": 11,
           "width": 2000
         },
         {
@@ -276,8 +276,8 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/7vygX4ObgOmZn7E2P95mCeqCmqV.jpg",
-          "vote_average": 7.542,
-          "vote_count": 8,
+          "vote_average": 8.596,
+          "vote_count": 7,
           "width": 2000
         },
         {
@@ -285,8 +285,8 @@
           "height": 2048,
           "iso_639_1": "en",
           "file_path": "/txr6i5Y6nbx7t0dDx1xyzfdFum5.jpg",
-          "vote_average": 5.844,
-          "vote_count": 16,
+          "vote_average": 5.566,
+          "vote_count": 15,
           "width": 1366
         },
         {

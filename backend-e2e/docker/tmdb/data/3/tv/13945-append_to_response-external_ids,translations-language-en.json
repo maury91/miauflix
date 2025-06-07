@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=14637",
+    "cache-control": "public, max-age=3931",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"2edfbb135d7512eaf6c07c3afcb9a36a\"",
+    "etag": "W/\"464f30006937e809e236d8489f4e872e\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "fUtAccLPaGoPETUxSuwhm3tkE2YzbyrykQS9mznxaIxbSOmUIWZYmw==",
+    "via": "1.1 5492e1c9a06f2320204e7fcc383cff5c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "s1UVEFxk70ahHRKVosbeaiMfftFsPAUl6nUc7UGz8sfzz9XSWZb9pQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "ca8bd6c20dff440c935fd568c903018a"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16921a284f8149ff85d91cd4375dbdb5"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/ottT2Yt0OfHiHp3PHJTLNVV8JPE.jpg",
@@ -37,7 +37,7 @@
     "last_air_date": "2025-05-16",
     "last_episode_to_air": {
       "id": 6262525,
-      "name": "Glamorous Goat",
+      "name": "Tory Dinosaur",
       "overview": "",
       "vote_average": 0,
       "vote_count": 0,
@@ -50,13 +50,13 @@
       "show_id": 13945,
       "still_path": null
     },
-    "name": "Odd Wildfowl",
+    "name": "Mature Antlion",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 207,
         "logo_path": "/ttANGe4D31vZoMmtmolsHSlZUAy.png",
-        "name": "Mobile Barriss Offee Entertainment",
+        "name": "Xenogeneic Adi Gallia Entertainment",
         "origin_country": "DE"
       }
     ],
@@ -64,21 +64,21 @@
     "number_of_seasons": 5,
     "origin_country": ["DE"],
     "original_language": "de",
-    "original_name": "Reluctant Buzzard",
+    "original_name": "Elaborate Jaguar",
     "overview": "Abduco curso argentum.",
-    "popularity": 568.6086,
+    "popularity": 499.4992,
     "poster_path": "/qujVFLAlBnPU9mZElV4NZgL8iXT.jpg",
     "production_companies": [
       {
         "id": 51150,
         "logo_path": null,
-        "name": "Fine Tarfful Productions",
+        "name": "Orthodox Palpatine Productions",
         "origin_country": ""
       },
       {
         "id": 2018,
         "logo_path": null,
-        "name": "Live Tion Medon Media",
+        "name": "Alright Dormé Media",
         "origin_country": "DE"
       }
     ],
@@ -150,8 +150,8 @@
     "status": "Returning Series",
     "tagline": "",
     "type": "Scripted",
-    "vote_average": 5.675,
-    "vote_count": 40,
+    "vote_average": 5.769,
+    "vote_count": 39,
     "external_ids": {
       "imdb_id": "tt0103434",
       "freebase_mid": "/m/0492x8",

@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=1589",
+    "cache-control": "public, max-age=13357",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"50f89dc1ea33dbe47428b9f90c58ea18\"",
+    "etag": "W/\"106ff3ad890d39cebaadc25f31dcd07b\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "OmTmY0lwhQd9jaAqViRBSSYPCMS6cexpNLpRcnaiALoh9LSt-ZmxYg==",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "_H692zafawQJMt41feOdjSfl1_kboF55NRz3yNPH5smxBhI-v0ntdQ==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "9ccb4863d383443e8e3512d171137869"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/fQq1FWp1rC89xDrRMuyFJdFUdMd.jpg",
     "belongs_to_collection": {
       "id": 729322,
-      "name": "Interesting Lemming",
+      "name": "Specified Condor",
       "poster_path": "/LdSn17U6ybhtPJT3S6fTNRni5Y.jpg",
       "backdrop_path": "/hXF55codODfnzTZDExbUbfFmA9y.jpg"
     },
@@ -39,15 +39,15 @@
     "imdb_id": "tt13535456",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Intermediate Platypus",
+    "original_title": "Printed Tortoise",
     "overview": "Callide atqui volo quam spoliatio aperiam dolorum speciosus.",
-    "popularity": 2.2118,
+    "popularity": 3.0156,
     "poster_path": "/fYtHxTxlhzD4QWfEbrC1rypysSD.jpg",
     "production_companies": [
       {
         "id": 92153,
         "logo_path": "/psjvYkjjgAPtS8utnFYDM8t8yi7.png",
-        "name": "Responsible Finis Valorum Media",
+        "name": "Yawning Lama Su Media",
         "origin_country": "US"
       }
     ],
@@ -69,9 +69,9 @@
     ],
     "status": "Released",
     "tagline": "",
-    "title": "Eerie Harrier",
+    "title": "Continuous Parrot",
     "video": false,
-    "vote_average": 8.376,
+    "vote_average": 8.4,
     "vote_count": 1058,
     "translations": {
       "translations": [
@@ -98,7 +98,7 @@
             "overview": "",
             "runtime": 0,
             "tagline": "",
-            "title": "Scientific Silverfish"
+            "title": "Cold Crocodile"
           }
         },
         {

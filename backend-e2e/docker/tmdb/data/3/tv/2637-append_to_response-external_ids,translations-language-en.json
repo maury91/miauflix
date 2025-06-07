@@ -1,0 +1,223 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25352",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e17a57e185145128a2ca557cd1fbde47\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "-gZIaO4RHQLs_o63ezshzuCBBHrNwIZp-FqohI98jPw1EVQevkhHWQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "d88d71c87bd0404989825a6df248ee2b"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oniNKYLHR0M5y7i4V1K1FhpCl7G.jpg",
+    "created_by": [],
+    "episode_run_time": [30, 60],
+    "first_air_date": "2005-01-10",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://harsh-landscape.name",
+    "id": 2637,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-02-21",
+    "last_episode_to_air": {
+      "id": 5997057,
+      "name": "Sad Aardvark",
+      "overview": "Tantum sulum spiculum adsidue video autus casus.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-02-21",
+      "episode_number": 15,
+      "episode_type": "standard",
+      "production_code": "75520-00",
+      "runtime": 23,
+      "season_number": 5,
+      "show_id": 2637,
+      "still_path": "/ndVHLuA3ztzY8Q2I8G8VQBUrnMH.jpg"
+    },
+    "name": "Defiant Felidae",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 26,
+        "logo_path": "/hbifXPpM55B1fL5wPo7t72vzN78.png",
+        "name": "Whole Watto Pictures",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 170,
+    "number_of_seasons": 5,
+    "origin_country": ["GB"],
+    "original_language": "en",
+    "original_name": "Regular Worm",
+    "overview": "Eligendi sol vero curto conicio contra. Textor solum tenus catena inventore vulgus amissio cena.",
+    "popularity": 499.3517,
+    "poster_path": "/enFfviWZwnIKn9DhyMa7cXqKx6Q.jpg",
+    "production_companies": [
+      {
+        "id": 6197,
+        "logo_path": "/6LFn6YTFLtqNFkWw85csFErB2dv.png",
+        "name": "Future Leia Organa Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 24546,
+        "logo_path": "/AffgIsVKcudKagSu3MV3phsV5Vw.png",
+        "name": "Awkward Jango Fett Media",
+        "origin_country": "GB"
+      },
+      {
+        "id": 5778,
+        "logo_path": "/2loyoQweDxvotH3AknfL2zhsthg.png",
+        "name": "Cute Taun We Productions",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2011-11-01",
+        "episode_count": 9,
+        "id": 8521,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-01-10",
+        "episode_count": 20,
+        "id": 8522,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/6ZA7O9xnCa7twGDmPtYLl3YqebW.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-09-12",
+        "episode_count": 45,
+        "id": 8523,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/l9LjXiOwviWLjPAeAM7VhUFjUUA.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2006-08-14",
+        "episode_count": 70,
+        "id": 8524,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/65DVDnfG7zfWdiA9KwHxavVNBt7.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": null,
+        "episode_count": 11,
+        "id": 8525,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/lqfaeGAr9quf9Cnq3pFF5MVpD7J.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2007-07-01",
+        "episode_count": 15,
+        "id": 8526,
+        "name": "Series 5",
+        "overview": "",
+        "poster_path": "/9yIbetrNa6cCPu3fMXvHp7S94Al.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Reality",
+    "vote_average": 5,
+    "vote_count": 31,
+    "external_ids": {
+      "imdb_id": "tt0820392",
+      "freebase_mid": "/m/0fy1yr",
+      "freebase_id": "/en/come_dine_with_me",
+      "tvdb_id": 81580,
+      "tvrage_id": 14762,
+      "wikidata_id": "Q819428",
+      "facebook_id": "comedinewithme",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Avaritia angustus pauci.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Separate Whitefish",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Separate Whitefish",
+            "overview": "Vester unus vaco candidus subnecto dolores. Canto subiungo crustulum aeger. Venio vulnero venia assentator distinctio celer paulatim defaeco.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

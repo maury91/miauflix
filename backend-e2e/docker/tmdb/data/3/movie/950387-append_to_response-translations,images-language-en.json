@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1221",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=14029",
+    "cache-control": "public, max-age=23807",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"9f09436248a79e55a213431f0a1d4962\"",
+    "etag": "W/\"0a12c21dadc5f2c633e25d3453e0301c\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "dRMPXOjPl-TD_JaW7yHa6yS9j-IxEiQ6xV74fLDYggQnLlB4hhp-Hg==",
+    "via": "1.1 c43915e0cad14ee7685e5f74a99ce93c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "k3312990tKJ-NMV5eiuWn4NdFLRNuUhwtIBN0Z4GM8rB0SsiT6gH8A==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "85a6078dcab74afaa4c1c2eb8c47b6a9"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/2Nti3gYAX513wvhp8IiLL6ZDyOm.jpg",
     "belongs_to_collection": {
       "id": 1461530,
-      "name": "Ready Fox",
+      "name": "Embarrassed Condor",
       "poster_path": "/8jMQ2sVZ1RRiYSpcb7Yommo7V4r.jpg",
       "backdrop_path": "/gvR8XaxV3wZlh1LKpReAjaTWhA2.jpg"
     },
@@ -47,45 +47,45 @@
     "imdb_id": "tt3566834",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Hissing Coyote",
+    "original_title": "Ideological Ladybug",
     "overview": "Quas barba veniam ver quos.",
-    "popularity": 501.4662,
+    "popularity": 325.3314,
     "poster_path": "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
     "production_companies": [
       {
         "id": 174,
         "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
-        "name": "Gastric Rugor Nass Entertainment",
+        "name": "Advanced Anakin Skywalker Entertainment",
         "origin_country": "US"
       },
       {
         "id": 923,
         "logo_path": "/5UQsZrfbfG2dYJbx8DxfoTr2Bvu.png",
-        "name": "Autonomous Ayla Secura Productions",
+        "name": "Wily Lama Su Productions",
         "origin_country": "US"
       },
       {
         "id": 110691,
         "logo_path": "/i0D9b0veZbValgEFiJjSd0mbb9C.png",
-        "name": "Handicapped Greedo Entertainment",
+        "name": "Colonial Luke Skywalker Entertainment",
         "origin_country": "SE"
       },
       {
         "id": 829,
         "logo_path": "/aXqwCvJSCDbTclkxAYfsT1l4Dsa.png",
-        "name": "Scary Shaak Ti Studios",
+        "name": "Optimistic Wedge Antilles Studios",
         "origin_country": "US"
       },
       {
         "id": 159602,
         "logo_path": "/e3KodIPxOSC6xpzgIBISB4COQcu.png",
-        "name": "Innocent Ayla Secura Pictures",
+        "name": "Lovely Mon Mothma Pictures",
         "origin_country": "US"
       },
       {
         "id": 216687,
         "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
-        "name": "Expected R4-P17 Pictures",
+        "name": "Gross Nute Gunray Pictures",
         "origin_country": "US"
       }
     ],
@@ -100,7 +100,7 @@
       }
     ],
     "release_date": "2025-03-31",
-    "revenue": 940583805,
+    "revenue": 948128918,
     "runtime": 101,
     "spoken_languages": [
       {
@@ -111,10 +111,10 @@
     ],
     "status": "Released",
     "tagline": "Conscendo quas barba veniam.",
-    "title": "Ill Cardinal",
+    "title": "Stable Guppy",
     "video": false,
-    "vote_average": 6.498,
-    "vote_count": 1530,
+    "vote_average": 6.507,
+    "vote_count": 1684,
     "translations": {
       "translations": [
         {
@@ -140,7 +140,7 @@
             "overview": "Fugiat cibo conitor substantia ter tricesimus adeo est. Censura conicio video tubineus cometes tantum celo tristis desipio auctus.",
             "runtime": 101,
             "tagline": "Repudiandae fugiat cibo conitor substantia.",
-            "title": "Royal Harrier"
+            "title": "Silky Porcupine"
           }
         },
         {
@@ -153,7 +153,7 @@
             "overview": "Fugiat cibo conitor substantia ter tricesimus adeo est. Censura conicio video tubineus cometes tantum celo tristis desipio auctus.",
             "runtime": 0,
             "tagline": "Repudiandae fugiat cibo conitor substantia.",
-            "title": "Royal Harrier"
+            "title": "Silky Porcupine"
           }
         },
         {
@@ -166,7 +166,7 @@
             "overview": "Conscendo annus succurro undique succedo error. Facilis tum voveo cohibeo.",
             "runtime": 101,
             "tagline": "Damno conscendo annus succurro undique succedo.",
-            "title": "Xerothermic Tapir"
+            "title": "Professional Centipede"
           }
         },
         {
@@ -179,7 +179,7 @@
             "overview": "Suasoria spectaculum natus. Rem laboriosam coerceo defero. Depopulo neque caecus voluptate carmen speculum vigilo.",
             "runtime": 101,
             "tagline": "",
-            "title": "Impressed Limpet"
+            "title": "Rival Antlion"
           }
         }
       ]
