@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=15449",
+    "cache-control": "public, max-age=9139",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"863035b89636f083d5fd9b4405fa533a\"",
+    "etag": "W/\"0e80724387deddb685071c0c429dc0a4\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 fa8c9f29fb8ef5c537a2a53f4de05240.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "_L1qZWvsiK3wMrVhs36CEftCL-pgw051Tc1bHPkLBQVB8wtHU27hig==",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "tLFQXKNErbUa8biDcG3wPtYWGgBw10huVVuoZH9bUaIWPOKvnm1tLA==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/alQqTpmEkxSLgajfEYTsTH6nAKB.jpg",
     "belongs_to_collection": {
       "id": 1219938,
-      "name": "Zonal Snipe",
+      "name": "Comprehensive Loon",
       "poster_path": "/2AGBk8Oiv6tamlVcoi6fxPhDUGZ.jpg",
       "backdrop_path": "/cw87veY8orlWaiYwuF2jwWWQHfE.jpg"
     },
@@ -43,27 +43,27 @@
     "imdb_id": "tt0271383",
     "origin_country": ["BR"],
     "original_language": "pt",
-    "original_title": "Poor Constrictor",
+    "original_title": "Fellow Rodent",
     "overview": "Deprimo natus quam summisse nisi casus decerno aptus statim utor. Stella utrum thorax odit vinum careo iure. Creber deduco talio triduana theologus pauper testimonium turba.",
-    "popularity": 1.83,
+    "popularity": 2.9421,
     "poster_path": "/aovknfdLnFp1IiWi3yvTAg8Gm5k.jpg",
     "production_companies": [
       {
         "id": 11446,
         "logo_path": null,
-        "name": "Criminal Dooku Studios",
+        "name": "Electronic Ayla Secura Studios",
         "origin_country": "BR"
       },
       {
         "id": 13969,
         "logo_path": "/bEpiJ2zXGIH70JT16asjWNFtOEv.png",
-        "name": "Relative Gregar Typho Entertainment",
+        "name": "Disgusted Quarsh Panaka Entertainment",
         "origin_country": "BR"
       },
       {
         "id": 46430,
         "logo_path": "/tQZIt59BLw3b0b6rHJRqv4Dvrpd.png",
-        "name": "Fixed Wat Tambor Studios",
+        "name": "Unknown Sebulba Studios",
         "origin_country": "BR"
       }
     ],
@@ -90,10 +90,10 @@
     ],
     "status": "Released",
     "tagline": "Vir deprimo natus quam summisse nisi casus.",
-    "title": "Protective Tick",
+    "title": "Negative Porpoise",
     "video": false,
     "vote_average": 8.4,
-    "vote_count": 1160,
+    "vote_count": 1162,
     "translations": {
       "translations": [
         {
@@ -106,7 +106,7 @@
             "overview": "Super adaugeo ait a studio alias stabilis delinquo veritas virga.",
             "runtime": 104,
             "tagline": "Uxor super adaugeo ait.",
-            "title": "Remarkable Barnacle"
+            "title": "Supreme Donkey"
           }
         },
         {
@@ -132,7 +132,7 @@
             "overview": "Ver mollitia virgo commodi sortitus ultra audeo vociferor.",
             "runtime": 104,
             "tagline": "Succedo ver mollitia.",
-            "title": "Capitalist Crocodile"
+            "title": "Uneven Stoat"
           }
         }
       ]

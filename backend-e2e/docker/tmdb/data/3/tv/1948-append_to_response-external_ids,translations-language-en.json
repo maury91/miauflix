@@ -1,0 +1,240 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13833",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"919ecbee0f9f1bd6b8e18c260537c0ca\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "4smZHzi5nA7Ux3Ipd2x2WYWoQhSOKXkWBFw-13rIUMnu7YVweDH04Q==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6Rvq9wwTDyH1k1Qg660KXTknTfG.jpg",
+    "created_by": [
+      {
+        "id": 1214312,
+        "credit_id": "52571cb019c29571140ef912",
+        "name": "Elizabeth Volkman",
+        "original_name": "Elizabeth Volkman",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 1214332,
+        "credit_id": "52571cb019c29571140ef918",
+        "name": "Silvia Labadie",
+        "original_name": "Silvia Labadie",
+        "gender": 1,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [22, 30],
+    "first_air_date": "2001-10-14",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10766,
+        "name": "Soap"
+      }
+    ],
+    "homepage": "https://serene-colonialism.biz",
+    "id": 1948,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2015-07-31",
+    "last_episode_to_air": {
+      "id": 1092889,
+      "name": "Literary Cod",
+      "overview": "Caelum damnatio tollo casso arbor speciosus conventus nemo. Surculus velit quo damno corrigo appello. Alii denique solitudo.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2015-07-31",
+      "episode_number": 19,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 1948,
+      "still_path": null
+    },
+    "name": "Rich Meerkat",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 138,
+        "logo_path": "/yKnRDHAQ0lDt38GS62imutKRzMp.png",
+        "name": "Sure Kit Fisto Productions",
+        "origin_country": "CA"
+      },
+      {
+        "id": 110,
+        "logo_path": "/uPoKSf3GtME7IZz4alnoWvc0nWx.png",
+        "name": "Early R2-D2 Studios",
+        "origin_country": "CA"
+      },
+      {
+        "id": 335,
+        "logo_path": "/21R9OhboglOCwWQOKiS138PZ6fk.png",
+        "name": "Wicked R5-D4 Productions",
+        "origin_country": "CA"
+      }
+    ],
+    "number_of_episodes": 103,
+    "number_of_seasons": 5,
+    "origin_country": ["CA"],
+    "original_language": "en",
+    "original_name": "Causal Koi",
+    "overview": "Caecus decipio tenuis canto. Quas candidus curis una crudelis quasi. Claudeo sonitus acidus canto contra currus.",
+    "popularity": 412.9271,
+    "poster_path": "/AfqQ4lZAi9LWyhnHm3VCpm2hLpB.jpg",
+    "production_companies": [
+      {
+        "id": 16935,
+        "logo_path": null,
+        "name": "Available Raymus Antilles Pictures",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2007-10-31",
+        "episode_count": 3,
+        "id": 5698,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/zKrxGXwycWYvBuKwu1ac5a3gvGD.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2001-10-14",
+        "episode_count": 15,
+        "id": 5692,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/oxR1AqQUHB9kp0kZsy4FfsPnluL.jpg",
+        "season_number": 1,
+        "vote_average": 9.1
+      },
+      {
+        "air_date": "2002-09-29",
+        "episode_count": 22,
+        "id": 5693,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/iMOSiB2MZlQaT1TdeZjnFoz2Gt4.jpg",
+        "season_number": 2,
+        "vote_average": 10
+      },
+      {
+        "air_date": "2003-09-16",
+        "episode_count": 22,
+        "id": 5694,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/g3ANIB8BNA3T4eidrjEuZmTTU3F.jpg",
+        "season_number": 3,
+        "vote_average": 10
+      },
+      {
+        "air_date": "2004-09-06",
+        "episode_count": 22,
+        "id": 5689,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/87bv6MSDDjzHFYXHiwmRHT6M5e7.jpg",
+        "season_number": 4,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2005-09-18",
+        "episode_count": 19,
+        "id": 5691,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/5h4cEZIX4e5EQO5i3dSApLEFxJo.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Attollo caecus decipio tenuis canto demum quas.",
+    "type": "Scripted",
+    "vote_average": 7.6,
+    "vote_count": 100,
+    "external_ids": {
+      "imdb_id": "tt0288937",
+      "freebase_mid": "/m/02vjhf",
+      "freebase_id": "/en/degrassi_the_next_generation",
+      "tvdb_id": 77733,
+      "tvrage_id": 3275,
+      "wikidata_id": "Q1182912",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Demitto bis eligendi concedo enim aperiam animi taceo. Capillus cado cruciamentum vinum velum aequitas umerus vado ancilla.",
+            "homepage": "https://minor-proliferation.info",
+            "tagline": "Sublime demitto bis eligendi concedo enim."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Underground Squid",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Underground Squid",
+            "overview": "Theca vigor viscus approbo. Earum auxilium accommodo dens turbo summisse eaque bis. Nesciunt verumtamen trucido teneo animus nisi adduco adulatio venia.",
+            "homepage": "https://sniveling-debris.net",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

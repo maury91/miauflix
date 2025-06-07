@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=11344",
+    "cache-control": "public, max-age=27334",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"3aae47bf6618940bd44d792aa79f8d07\"",
+    "etag": "W/\"7d754aa353c4e2edfa4cb5831d57b03d\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "8Sq4IpYVRVaVw5Kuq4iVrLgItmtcm0N9Mx2RWj9o9U8H038QPsw7ZQ==",
+    "via": "1.1 5b6e22c950501920595c86fc25834582.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "YoHzF-bOuGtKZFAfRnLOxMNWcZ3LQcrSnRk6PMe1pmhfdabntgxzQg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/amZavErrjrdgDwhsIdpWxHNenIx.jpg",
@@ -38,21 +38,21 @@
     "imdb_id": "tt0120689",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Indirect Crocodile",
+    "original_title": "Governing Anglerfish",
     "overview": "Vallum vestrum contabesco vigor colligo venustas ante tenetur. Benevolentia aeternus thesaurus patior acquiro bibo tamdiu.",
-    "popularity": 18.6211,
+    "popularity": 19.2059,
     "poster_path": "/8VG8fDNiy50H4FedGwdSVUPoaJe.jpg",
     "production_companies": [
       {
         "id": 97,
         "logo_path": "/7znWcbDd4PcJzJUlJxYqAlPPykp.png",
-        "name": "Eager Luminara Unduli Media",
+        "name": "Marvellous Bib Fortuna Media",
         "origin_country": "US"
       },
       {
         "id": 3982,
         "logo_path": "/bli7HkPOXOEWsDwDK0W7XXfeUU2.png",
-        "name": "Compulsory Ki-Adi-Mundi Studios",
+        "name": "Very Adi Gallia Studios",
         "origin_country": "US"
       }
     ],
@@ -79,10 +79,10 @@
     ],
     "status": "Released",
     "tagline": "Supplanto vallum vestrum contabesco vigor colligo.",
-    "title": "Independent Alpaca",
+    "title": "Stale Cod",
     "video": false,
-    "vote_average": 8.5,
-    "vote_count": 18111,
+    "vote_average": 8.506,
+    "vote_count": 18126,
     "translations": {
       "translations": [
         {
@@ -108,7 +108,7 @@
             "overview": "Supplanto amplexus volo ab decerno decerno expedita. Subseco tyrannus casus demitto civitas alioqui deludo decens sopor. Creo volo officia adnuo amor crebro tepesco.",
             "runtime": 188,
             "tagline": "Nemo supplanto amplexus volo ab decerno decerno expedita.",
-            "title": "Available Butterfly"
+            "title": "Hollow Prawn"
           }
         },
         {
@@ -121,7 +121,7 @@
             "overview": "Cohibeo vis barba carmen denego labore tardus brevis cibus.",
             "runtime": 189,
             "tagline": "Tui cohibeo vis barba.",
-            "title": "Outside Gazelle"
+            "title": "Ideological Booby"
           }
         },
         {
@@ -134,7 +134,7 @@
             "overview": "Cohibeo vis barba carmen denego labore tardus brevis cibus.",
             "runtime": 189,
             "tagline": "Tui cohibeo vis barba.",
-            "title": "Outside Gazelle"
+            "title": "Ideological Booby"
           }
         },
         {
@@ -147,7 +147,7 @@
             "overview": "Vallum tempora bis distinctio clementia clarus aptus dolor deduco delinquo.",
             "runtime": 0,
             "tagline": "",
-            "title": "Helpful Possum"
+            "title": "Busy Swallow"
           }
         }
       ]

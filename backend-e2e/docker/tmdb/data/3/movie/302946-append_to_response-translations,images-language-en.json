@@ -1,0 +1,311 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=695",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"bbff3c2be106c6fec04b879c5c7369bd\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "XLE46Cs3Hsa9ytj5cS1DJA7Y5qfrWbqqPVozGEvl6l6UBG2bbqZXTg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dTGECn8He16tZeBHQTLf6rVydE8.jpg",
+    "belongs_to_collection": {
+      "id": 870339,
+      "name": "Marked Gerbil",
+      "poster_path": "/hHfiZBIxzMmkzFds6vkQEJIurIB.jpg",
+      "backdrop_path": "/wWqGxS0kL7Oba7m0UojJ87y3Cjn.jpg"
+    },
+    "budget": 44000000,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://plaintive-grandfather.name",
+    "id": 302946,
+    "imdb_id": "tt2140479",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Fragile Parrot",
+    "overview": "Solvo socius arx sui conitor summa. Atrox auctor adulescens cinis crebro sub desolo.",
+    "popularity": 181.7066,
+    "poster_path": "/fceheXB5fC4WrLVuWJ6OZv9FXYr.jpg",
+    "production_companies": [
+      {
+        "id": 5357,
+        "logo_path": "/19A0Ilxeh1bWMlyMtMgGzcNBn07.png",
+        "name": "Agreed Luke Skywalker Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 8600,
+        "logo_path": null,
+        "name": "Written Sly Moore Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 41624,
+        "logo_path": "/wzKxIeQKlMP0y5CaAw25MD6EQmf.png",
+        "name": "Zestful Gregar Typho Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 174,
+        "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
+        "name": "Advanced Anakin Skywalker Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2016-10-13",
+    "revenue": 155160045,
+    "runtime": 128,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Crur solvo socius arx sui conitor.",
+    "title": "Multiple Beetle",
+    "video": false,
+    "vote_average": 7.114,
+    "vote_count": 6629,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://dirty-shout.net",
+            "overview": "Temporibus utor aqua deporto voco aeneus conscendo arx rem.",
+            "runtime": 128,
+            "tagline": "Thorax temporibus utor aqua.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Adfero sed provident tunc inventore vorax.",
+            "runtime": 128,
+            "tagline": "Cubo adfero sed provident.",
+            "title": "Devoted Puma"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://metallic-opportunist.name",
+            "overview": "Ipsa contabesco victoria verto amo tardus animi. Cursus armarium uberrime quibusdam trans charisma.",
+            "runtime": 128,
+            "tagline": "Perspiciatis ipsa contabesco victoria verto amo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://faithful-greenhouse.com",
+            "overview": "Adfero sed provident tunc inventore vorax.",
+            "runtime": 128,
+            "tagline": "Cubo adfero sed provident.",
+            "title": "Devoted Puma"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Vulariter rem adulatio voluntarius deserunt agnitio aeneus benevolentia fuga. Advenio advenio conservo territo uberrime.",
+            "runtime": 0,
+            "tagline": "Tergiversatio vulariter rem adulatio voluntarius.",
+            "title": "Breezy Fowl"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/4v7BPOZ7B8lpSGlH0dHAdnPcbPc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/cYS9MJb2g33sOS3pCJAuLFMjV7C.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/vTdfppKe2go7hIxNmL5Anepf4hu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/fkZP7DLoiUjfFVYZcI9OWeS1Vnn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/n7xizEJJHitS4TMxXxODrXvv41J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.015,
+          "height": 266,
+          "iso_639_1": "en",
+          "file_path": "/uqsuusdP3JsvbSrylm7RqlHuqB2.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 7.892,
+          "height": 547,
+          "iso_639_1": "en",
+          "file_path": "/uZD9FKw2t5ooAAD8grmSpxG0dY4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4317
+        },
+        {
+          "aspect_ratio": 3.594,
+          "height": 355,
+          "iso_639_1": "en",
+          "file_path": "/zNyj8eQOncWSsTC4WIUS6GVkBij.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1276
+        },
+        {
+          "aspect_ratio": 3.594,
+          "height": 355,
+          "iso_639_1": "en",
+          "file_path": "/iDNijLTFlPWc3eD0JWRNABHyEz7.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1276
+        },
+        {
+          "aspect_ratio": 7.526,
+          "height": 574,
+          "iso_639_1": "en",
+          "file_path": "/fYXv2cpYtE1WxUYjOmPgJPWRErP.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4320
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/fceheXB5fC4WrLVuWJ6OZv9FXYr.jpg",
+          "vote_average": 10,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/3GWVi4dlYMsJGaIprgQAKkcs4di.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/qttnL1Kt1EDCOiLBOdqbl82fwYa.jpg",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/oHMRhVytkVApLyCNML659LQZiQ1.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/nztAld019tFjllW7VCJvPFiFkt8.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

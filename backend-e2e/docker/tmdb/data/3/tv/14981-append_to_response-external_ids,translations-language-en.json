@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=1417",
+    "cache-control": "public, max-age=3805",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"dbd95916f1b792be17f3f9546aba3d40\"",
+    "etag": "W/\"b87420aa872ad656f22fd8689e2e914a\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 3296b04068551f925d5fafd1b785ff30.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "8s_6bU3OkEqGzEuriWPpbKnkpndstWsUT7dwb4FDGv2nFjt2AIIPEg==",
+    "via": "1.1 79272ab9b399ee696b329d4f677dca48.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "68CE3u7qnFGFhg9mqX_IJe-aTkUDCjsMfD8-vtKWCtqlctdyqpsCtA==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "b1fd7bf3bf9c49d299f2ad784d495b2d"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/m0bV3qBiJBBlpFaaKjwHo13MVjm.jpg",
@@ -37,7 +37,7 @@
     "last_air_date": "2014-12-19",
     "last_episode_to_air": {
       "id": 2763686,
-      "name": "Rough Sparrow",
+      "name": "Unfair Herring",
       "overview": "Aspicio curo valde cupio. Ter inventore subseco blandior arguo appono currus. Venustas barba vester nesciunt thymum spargo chirographum.",
       "vote_average": 9,
       "vote_count": 1,
@@ -50,13 +50,13 @@
       "show_id": 14981,
       "still_path": null
     },
-    "name": "Single Pheasant",
+    "name": "Interior Ocelot",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 16,
         "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
-        "name": "Architectural Saesee Tiin Pictures",
+        "name": "Many C-3PO Pictures",
         "origin_country": "US"
       }
     ],
@@ -64,9 +64,9 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Determined Lark",
+    "original_name": "Determined Walrus",
     "overview": "Valens vivo combibo iste cicuta crepusculum uredo. Accusamus crur urbanus summa in cum texo repellat adaugeo. Vinco absens alius adficio audio vulgivagus arbor modi capitulus.",
-    "popularity": 633.4477,
+    "popularity": 808.48,
     "poster_path": "/gGC7zSDgG0FY0MbM1pjfhTCWQBI.jpg",
     "production_companies": [],
     "production_countries": [
@@ -147,7 +147,7 @@
     "status": "Ended",
     "tagline": "",
     "type": "Talk Show",
-    "vote_average": 6.814,
+    "vote_average": 6.8,
     "vote_count": 102,
     "external_ids": {
       "imdb_id": "tt0437729",

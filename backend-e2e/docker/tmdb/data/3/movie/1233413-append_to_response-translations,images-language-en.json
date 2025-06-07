@@ -1,0 +1,310 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16139",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e336317bd1a6e7d47927345ce8d29f03\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "49wvXrvTEbrIU_vQO_6229Mym7uO6qTmbSg-VekMLJXt_W6KJmIS7Q==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "c48e0a81c0964062b5f95e61bfbac73e"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/nAxGnGHOsfzufThz20zgmRwKur3.jpg",
+    "belongs_to_collection": {
+      "id": 1489663,
+      "name": "Excited Owl",
+      "poster_path": "/48KYBYnHmt7ykX57zGuv6SXVZOO.jpg",
+      "backdrop_path": "/e0kl32U3pHA2cdR1VGRk5TUmrFr.jpg"
+    },
+    "budget": 90000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://insubstantial-meatloaf.net",
+    "id": 1233413,
+    "imdb_id": "tt31193180",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Nuclear Woodpecker",
+    "overview": "Teneo validus demens repellat virtus sulum delectatio. Sodalitas acervus culpo infit alveus coadunatio admoveo.",
+    "popularity": 499.7936,
+    "poster_path": "/yqsCU5XOP2mkbFamzAqbqntmfav.jpg",
+    "production_companies": [
+      {
+        "id": 174,
+        "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
+        "name": "Advanced Anakin Skywalker Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 148495,
+        "logo_path": "/2fQRDickgp9vuDIxJTlDLEs7j0y.png",
+        "name": "Reduced Quarsh Panaka Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 216687,
+        "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
+        "name": "Gross Nute Gunray Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-04-16",
+    "revenue": 352221894,
+    "runtime": 138,
+    "spoken_languages": [
+      {
+        "english_name": "Mandarin",
+        "iso_639_1": "zh",
+        "name": "普通话"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Inventore teneo validus demens repellat.",
+    "title": "Existing Kiwi",
+    "video": false,
+    "vote_average": 7.5,
+    "vote_count": 1170,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://demanding-tripod.com",
+            "overview": "Adsum solium volutabrum voluptate spiculum vilicus dolorem coma virgo campana.",
+            "runtime": 138,
+            "tagline": "Vetus adsum solium volutabrum.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Voluptatem sequi terreo pariatur conitor accommodo curis sordeo sono.",
+            "runtime": 0,
+            "tagline": "Tunc voluptatem sequi terreo.",
+            "title": "Heavy Dog"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Nisi veniam ademptio. Vulgo torqueo suffoco benevolentia aliquid vindico tamdiu contigo tenuis perspiciatis. Clementia triduana tabella quaerat.",
+            "runtime": 137,
+            "tagline": "Adulescens nisi veniam ademptio victus vulgo torqueo suffoco.",
+            "title": "Useful Octopus"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Voluptatem sequi terreo pariatur conitor accommodo curis sordeo sono.",
+            "runtime": 0,
+            "tagline": "Tunc voluptatem sequi terreo.",
+            "title": "Heavy Dog"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Vindico cicuta aedificium xiphias audio acies tametsi turbo degusto cuppedia.",
+            "runtime": 0,
+            "tagline": "Vitiosus vindico cicuta aedificium.",
+            "title": "Maximum Alpaca"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/52uHGNA8f2ktgZi8zwbmVyOEdCh.jpg",
+          "vote_average": 3.334,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/n1ru2llkLn0WWUxExr9oHIyOPKb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/rjbYS9FGmDdNosoMnfnOI20sF4f.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/fuald0DcDeoL90kvLLuRK7Hb2mV.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1350,
+          "iso_639_1": "en",
+          "file_path": "/dI4MqeNd3a2mK7YI7hgzAYnksI4.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2400
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.934,
+          "height": 228,
+          "iso_639_1": "en",
+          "file_path": "/kPUKvxsGgQBZMThi8VbMrTeznX0.png",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 1125
+        },
+        {
+          "aspect_ratio": 4.975,
+          "height": 865,
+          "iso_639_1": "en",
+          "file_path": "/neDI3TKo5Pe3hBxas3SHAM83T2e.png",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 4303
+        },
+        {
+          "aspect_ratio": 5.451,
+          "height": 339,
+          "iso_639_1": "en",
+          "file_path": "/mC3MvXKouqfWnZ3jOnJLXSCnBTC.png",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1848
+        },
+        {
+          "aspect_ratio": 4.855,
+          "height": 83,
+          "iso_639_1": "en",
+          "file_path": "/vOkuSDc1p6MI4HqQpO1FDoeh3m2.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 403
+        },
+        {
+          "aspect_ratio": 4.977,
+          "height": 258,
+          "iso_639_1": "en",
+          "file_path": "/5vpiFbVkw7ua0x7OiEFbyiSYp7A.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1284
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/yqsCU5XOP2mkbFamzAqbqntmfav.jpg",
+          "vote_average": 6.766,
+          "vote_count": 47,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/jYfMTSiFFK7ffbY2lay4zyvTkEk.jpg",
+          "vote_average": 6.696,
+          "vote_count": 23,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/cuM1rGXxTd28KEQXBG683ODtWPY.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/zrYk9fEhhnNTptnhFeyyFIUBu5d.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/4CkZl1LK6a5rXBqJB2ZP77h3N5i.jpg",
+          "vote_average": 6.258,
+          "vote_count": 33,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

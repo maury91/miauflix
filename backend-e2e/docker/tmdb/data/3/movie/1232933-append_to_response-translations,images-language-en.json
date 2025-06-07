@@ -1,0 +1,186 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22741",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"99c9a5e2ae3170d67f305fd0b1ec01ca\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 79272ab9b399ee696b329d4f677dca48.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Etjn2B7Ddi0YehioD4vvzNKzwBdkdunfnRIf2thP8GGuNUe-rW6yhg==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "0091e8d404bb4c579424a9eabac49dd4"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/I1relwnq4IZ0IOcLxPyyjaiOoN.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "",
+    "id": 1232933,
+    "imdb_id": "tt13098590",
+    "origin_country": ["AU"],
+    "original_language": "en",
+    "original_title": "Impossible Cricket",
+    "overview": "Substantia adsidue at facere vito pax desipio. Teneo solum despecto sopor infit tam praesentium.",
+    "popularity": 126.048,
+    "poster_path": "/24uJJJSRYwxHfNAqVCUmqjtmXgz.jpg",
+    "production_companies": [
+      {
+        "id": 82273,
+        "logo_path": "/bdLK2wX6DYIj9jtw1kW0guXvLta.png",
+        "name": "Flexible Bossk Studios",
+        "origin_country": "AU"
+      },
+      {
+        "id": 103845,
+        "logo_path": "/2Ro1iQDguoYtWhl7c2Xy0McsZ0H.png",
+        "name": "Eerie Kit Fisto Media",
+        "origin_country": "AU"
+      },
+      {
+        "id": 89446,
+        "logo_path": null,
+        "name": "Wicked Chewbacca Media",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "AU",
+        "name": "Australia"
+      }
+    ],
+    "release_date": "2025-05-02",
+    "revenue": 0,
+    "runtime": 85,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Distinctio substantia adsidue at facere vito.",
+    "title": "Romantic Mollusk",
+    "video": false,
+    "vote_average": 6.348,
+    "vote_count": 33,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Contego ducimus in. Cedo valde vester amiculum reprehenderit.",
+            "runtime": 85,
+            "tagline": "Acer contego ducimus in coepi.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tactus suasoria thalassinus terror occaecati. Agnitio solvo abundans cognomen umbra minus alias volva contra.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Steep Pheasant"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Tactus suasoria thalassinus terror occaecati. Agnitio solvo abundans cognomen umbra minus alias volva contra.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Steep Pheasant"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/24uJJJSRYwxHfNAqVCUmqjtmXgz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/httZeIloyNLhvVKUwc0qktcjTZE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/obK2G8huZWeAQEgOz1I47AkzHYh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/v2sF5vnXSo6R6YWrkzTGKzROkGI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/xMePrJjGI8Fae6bxbKS5g6HNtHX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

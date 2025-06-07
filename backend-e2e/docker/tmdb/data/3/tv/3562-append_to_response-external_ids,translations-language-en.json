@@ -1,0 +1,219 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14949",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9f6b986448158155fa2316d6978bb87c\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "y220Ed_h2ELcO3XYGDyJbP4YoUAZ5wFWtDteJXri68QcOeOml_ofhQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "ca8bd6c20dff440c935fd568c903018a"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mwDwh50lriqEpGlSyFhwxNz8w9Y.jpg",
+    "created_by": [],
+    "episode_run_time": [55],
+    "first_air_date": "1974-03-03",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://virtuous-legacy.org",
+    "id": 3562,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-14",
+    "last_episode_to_air": {
+      "id": 6093347,
+      "name": "Remarkable Chickadee",
+      "overview": "Cumque umerus utrimque vesica usitas tracto comis sub pecus pecto. Auctor appono maxime vestigium celebrer. Atavus sublime contigo tumultus torqueo vix congregatio super.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-05-14",
+      "episode_number": 11,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 53,
+      "season_number": 5,
+      "show_id": 3562,
+      "still_path": "/xg1do9aVS7kgtWXh7eMumCjFoaP.jpg"
+    },
+    "name": "Primitive Anteater",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 14,
+        "logo_path": "/4Fn4eQmEmJZ9YWjiIhZ6cF1QHAi.png",
+        "name": "Operational Jocasta Nu Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 100,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Civic Anteater",
+    "overview": "Virga assentator textor verbera venia vestrum colligo. Numquam benigne thesis solitudo utilis caput. Quos decretum nihil soleo corpus cupressus tolero considero.",
+    "popularity": 443.4674,
+    "poster_path": "/giUBXYnDAaJgNqA6iE3BMVE2EHp.jpg",
+    "production_companies": [
+      {
+        "id": 10197,
+        "logo_path": "/lRah8iyzBZJ90ZgsKUIWUU9XnRu.png",
+        "name": "Female Zam Wesell Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1999-07-13",
+        "episode_count": 10,
+        "id": 10828,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/hrpNWnlth9MSZ0JGgVlOMnyNiZi.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1974-03-03",
+        "episode_count": 13,
+        "id": 10791,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/j6lNoURRfwfd1vYbFZkc0GL3IXN.jpg",
+        "season_number": 1,
+        "vote_average": 10
+      },
+      {
+        "air_date": "1974-11-03",
+        "episode_count": 17,
+        "id": 10790,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/gb6e3ubp4hbGtiuEY25JZHCFZGc.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1976-01-04",
+        "episode_count": 20,
+        "id": 10787,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/h8AYuWpnWH2S3d3y5xSsMv3D2F4.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1977-01-05",
+        "episode_count": 19,
+        "id": 10789,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/79p5IahlMxpMdUjwvmuo9k4Q0o9.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1978-01-04",
+        "episode_count": 21,
+        "id": 10788,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/xPuFIqPn4XiDiGApqihaoqKL5a7.jpg",
+        "season_number": 5,
+        "vote_average": 10
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Documentary",
+    "vote_average": 7.023,
+    "vote_count": 127,
+    "external_ids": {
+      "imdb_id": "tt0206501",
+      "freebase_mid": "/m/01w3gd",
+      "freebase_id": "/en/nova",
+      "tvdb_id": 76119,
+      "tvrage_id": 6771,
+      "wikidata_id": "Q3071768",
+      "facebook_id": "NOVApbs",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Chirographum calcar sursum. Adipiscor vorago a confido suppellex canis tamen vesica.",
+            "homepage": "https://luxurious-ambition.biz",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Atavus aut asporto desipio terminatio depopulo odio vorago deinde comitatus. Occaecati laborum damnatio cruentus similique decor calculus vel.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Nice Constrictor",
+            "overview": "Atavus aut asporto desipio terminatio depopulo odio vorago deinde comitatus. Occaecati laborum damnatio cruentus similique decor calculus vel.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

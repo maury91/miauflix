@@ -23,6 +23,7 @@
     "x-varnish": "848",
     "set-cookie": "PHPSESSID=a4vs9f7na3csmug9isvmfq3hvp; Path=/"
   },
+  "status": 200,
   "data": {
     "status": "ok",
     "status_message": "Query was successful",

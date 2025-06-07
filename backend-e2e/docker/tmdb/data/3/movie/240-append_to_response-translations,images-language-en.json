@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=15524",
+    "cache-control": "public, max-age=18922",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"97e605836b3a4d00f041845b0c76332b\"",
+    "etag": "W/\"cbdd39c3d2b2d4beaef19c0f766b9335\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "i9L2siCYEIdJiwFGhwLTFkntGeHTEnjXh90v0iz9gcSCtzXa9bIp0w==",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "6w-d4fiOC9_7Lx6zZmXPf2Q4b2pm4BTiYLbCj0ascedYt9wjpU3OTg==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "d130474cdde94af8be619bf933ed9912"
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/kGzFbGhp99zva6oZODW5atUtnqi.jpg",
     "belongs_to_collection": {
       "id": 230,
-      "name": "Sensitive Nightingale",
+      "name": "General Canidae",
       "poster_path": "/zVb22YOMgljCEYbXlvCvEiN4VwT.jpg",
       "backdrop_path": "/mDMCET9Ens5ANvZAWRpluBsMAtS.jpg"
     },
@@ -39,27 +39,27 @@
     "imdb_id": "tt0071562",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Realistic Puffin",
+    "original_title": "Underground Halibut",
     "overview": "Color tero tametsi incidunt acies.",
-    "popularity": 16.777,
+    "popularity": 17.8898,
     "poster_path": "/hek3koDUyRQk7FIhPXsa6mT2Zc3.jpg",
     "production_companies": [
       {
         "id": 4,
         "logo_path": "/gz66EfNoYPqHTYI4q9UEN4CbHRc.png",
-        "name": "Dead Nien Nunb Media",
+        "name": "Intermediate Qui-Gon Jinn Media",
         "origin_country": "US"
       },
       {
         "id": 536,
         "logo_path": null,
-        "name": "Senior Anakin Skywalker Studios",
+        "name": "Acceptable Yarael Poof Studios",
         "origin_country": "US"
       },
       {
         "id": 70,
         "logo_path": "/ueaENQkPcy8rlr5fGZVBXKOhlBh.png",
-        "name": "Remarkable Padmé Amidala Media",
+        "name": "Expensive Tion Medon Media",
         "origin_country": "US"
       }
     ],
@@ -96,10 +96,10 @@
     ],
     "status": "Released",
     "tagline": "Caute color tero tametsi.",
-    "title": "Mere Shark",
+    "title": "Similar Dingo",
     "video": false,
     "vote_average": 8.57,
-    "vote_count": 12972,
+    "vote_count": 12990,
     "translations": {
       "translations": [
         {
@@ -125,7 +125,7 @@
             "overview": "Conitor correptius tenus. Thalassinus sint sit cogo tergeo itaque cursus tondeo vel universe. Artificiose utrum ciminatio sequi voluptate apostolus depopulo.",
             "runtime": 200,
             "tagline": "Absum conitor correptius tenus video thalassinus sint.",
-            "title": "Alternative Owl"
+            "title": "Spicy Shrimp"
           }
         },
         {
@@ -138,7 +138,7 @@
             "overview": "Turba supplanto villa arbor torrens quisquam vero aestus incidunt apparatus. Sumptus tot caput adulescens creta.",
             "runtime": 200,
             "tagline": "Vix turba supplanto villa arbor torrens.",
-            "title": "Vital Gazelle"
+            "title": "Labour Pig"
           }
         },
         {
@@ -151,7 +151,7 @@
             "overview": "Turba supplanto villa arbor torrens quisquam vero aestus incidunt apparatus. Sumptus tot caput adulescens creta.",
             "runtime": 0,
             "tagline": "",
-            "title": "Vital Gazelle"
+            "title": "Labour Pig"
           }
         },
         {
@@ -164,7 +164,7 @@
             "overview": "Valens admitto comitatus cariosus synagoga deprimo alii coerceo. Amor aurum bestia certe adopto beatae crapula testimonium.",
             "runtime": 0,
             "tagline": "",
-            "title": "Physical Hookworm"
+            "title": "Artificial Carp"
           }
         }
       ]

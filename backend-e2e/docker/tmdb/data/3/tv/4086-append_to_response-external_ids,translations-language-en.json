@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=19510",
+    "cache-control": "public, max-age=9913",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"c4526da41f7fc6ab826dc91284fb5469\"",
+    "etag": "W/\"1e54d14737cc9444cc147c58b578c2f7\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 d262e104d5d9dd6a4a52f090bdf9395c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "FuCOj0HShvWxOJ1L8jYmkiAHeHc01DOAbnIwi37i06e62Qnf9GR6_A==",
+    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "nA3JnJW4zEEXRU9h01XSTgDXbNk7VTh4pu5p5_qBWOrYHWjn2uIjNw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/tKtxE1KzqKDg3HIXNnlr7VpuWzd.jpg",
@@ -34,29 +34,29 @@
     "id": 4086,
     "in_production": true,
     "languages": ["en"],
-    "last_air_date": "2025-05-09",
+    "last_air_date": "2025-05-30",
     "last_episode_to_air": {
-      "id": 6223004,
-      "name": "Awful Swallow",
-      "overview": "Adulatio debitis combibo abduco vulgivagus confugo tego curtus officia natus. Via acerbitas truculenter tergeo quos.",
+      "id": 6276573,
+      "name": "Alone Wildfowl",
+      "overview": "Delicate vilitas voluptatum.",
       "vote_average": 0,
       "vote_count": 0,
-      "air_date": "2025-05-23",
-      "episode_number": 4,
+      "air_date": "2025-06-06",
+      "episode_number": 6,
       "episode_type": "standard",
       "production_code": "",
-      "runtime": 22,
+      "runtime": null,
       "season_number": 5,
       "show_id": 4086,
       "still_path": null
     },
-    "name": "Managing Locust",
+    "name": "Adjacent Sloth",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 143,
         "logo_path": "/tm2UclPxfamHyFuILLq4jNxsi8v.png",
-        "name": "Shaky Darth Vader Productions",
+        "name": "Typical Eeth Koth Productions",
         "origin_country": "US"
       }
     ],
@@ -64,33 +64,33 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Rude Junglefowl",
+    "original_name": "Only Kite",
     "overview": "Cena stips conculco thesaurus undique sulum cui depraedor. Astrum tutis aurum qui dedico defetiscor virtus accommodo depromo.",
-    "popularity": 239.8233,
+    "popularity": 553.4416,
     "poster_path": "/zeTYGOpVDI68gw47A5EmNhGDP7c.jpg",
     "production_companies": [
       {
         "id": 134690,
         "logo_path": "/irfF0sDNJDS3wFjflgfRLZUoMmF.png",
-        "name": "Pregnant Finis Valorum Media",
+        "name": "Occasional IG-88 Media",
         "origin_country": "US"
       },
       {
         "id": 26784,
         "logo_path": "/p3qLEuW57lelJkmC9TIuwIYgsg3.png",
-        "name": "Complex Dud Bolt Productions",
+        "name": "Opposite Kit Fisto Productions",
         "origin_country": "US"
       },
       {
         "id": 200761,
         "logo_path": null,
-        "name": "Spotless Leia Organa Studios",
+        "name": "Level Dud Bolt Studios",
         "origin_country": ""
       },
       {
         "id": 200762,
         "logo_path": null,
-        "name": "Mute Arvel Crynyd Studios",
+        "name": "Eerie Ackbar Studios",
         "origin_country": ""
       }
     ],
@@ -172,7 +172,7 @@
     "status": "Returning Series",
     "tagline": "",
     "type": "Reality",
-    "vote_average": 6.727,
+    "vote_average": 6.7,
     "vote_count": 64,
     "external_ids": {
       "imdb_id": "tt1020913",
@@ -217,7 +217,7 @@
           "name": "Italiano",
           "english_name": "Italian",
           "data": {
-            "name": "Grieving Pelican",
+            "name": "Artificial Porpoise",
             "overview": "Deserunt decumbo voluptatem vulpes.",
             "homepage": "",
             "tagline": ""
@@ -229,7 +229,7 @@
           "name": "Español",
           "english_name": "Spanish",
           "data": {
-            "name": "Skilled Tortoise",
+            "name": "Atomic Kangaroo",
             "overview": "Contigo consequuntur corporis non apostolus tristis colo tondeo. Aer veritas attollo ipsa vado arcesso somniculosus.",
             "homepage": "",
             "tagline": ""

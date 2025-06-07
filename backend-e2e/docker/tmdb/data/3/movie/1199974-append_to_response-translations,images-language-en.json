@@ -1,0 +1,147 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3071",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"090f7d03628048896ccc49181aae5428\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "ivU3WsufVj4GtkAJXeMs-eP3rHrySGmabUEQ9MlsUkwpN5N-D0bGlQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "ec744e2834f1415aae57fbd47ef01c38"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mSIp4SUvsFOjA2vKnLTS5AnyR1A.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      }
+    ],
+    "homepage": "",
+    "id": 1199974,
+    "imdb_id": "tt28800662",
+    "origin_country": ["MX"],
+    "original_language": "es",
+    "original_title": "Curly Giraffe",
+    "overview": "Excepturi inventore bonus. Accusator ver accendo saepe.",
+    "popularity": 137.6148,
+    "poster_path": "/pHehmoG3gbTb5RsKWOdxqLmnhpD.jpg",
+    "production_companies": [
+      {
+        "id": 212599,
+        "logo_path": "/4LWh97E6Zofn8yozyjGmdCwzoMg.png",
+        "name": "Uptight Mace Windu Productions",
+        "origin_country": "MX"
+      },
+      {
+        "id": 184311,
+        "logo_path": "/1SKmlO4xeqgNvbBSjhRD1oEzMor.png",
+        "name": "Square Zam Wesell Entertainment",
+        "origin_country": "MX"
+      },
+      {
+        "id": 16298,
+        "logo_path": "/nppGHtKu7zd05oDAjwKU13mPaZW.png",
+        "name": "Soviet Kit Fisto Productions",
+        "origin_country": "MX"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      }
+    ],
+    "release_date": "2024-10-18",
+    "revenue": 0,
+    "runtime": 120,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Aeternus excepturi inventore bonus capillus.",
+    "title": "Theoretical Wildfowl",
+    "video": false,
+    "vote_average": 6.559,
+    "vote_count": 17,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Appello temporibus aequus suscipit. Sed capto talis tollo esse clamo tres adimpleo.",
+            "runtime": 120,
+            "tagline": "Benigne appello temporibus aequus suscipit statim.",
+            "title": "Potential Tapir"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Vesica degero doloremque victoria sperno facilis eos.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Smiling Gazelle"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Vesica degero doloremque victoria sperno facilis eos.",
+            "runtime": 119,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/pHehmoG3gbTb5RsKWOdxqLmnhpD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.698,
+          "height": 1320,
+          "iso_639_1": "en",
+          "file_path": "/a5jBGeGsgI6OZdsYT9Ya3PiS27n.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 922
+        }
+      ]
+    }
+  }
+}

@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=18593",
+    "cache-control": "public, max-age=16110",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"53332e6265c22e0264370e090641eaad\"",
+    "etag": "W/\"0cf200a08703cc02406cf56e148ad7e1\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "MLq4gMnfKZRGCynA3yqFddOI9M9-pvX5_oCJSll8XOY-jeq32IGvnw==",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "I3brFknb4Lpp_cJ2C9T346UToh2MrjlE2dN-Q8lYTKwuc-hYzRyEmg==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/qFfWFwfaEHzDLWLuttWiYq7Poy2.jpg",
@@ -50,7 +50,7 @@
     "last_air_date": "1992-05-22",
     "last_episode_to_air": {
       "id": 3514898,
-      "name": "Preferred Ferret",
+      "name": "Famous Platypus",
       "overview": "Apostolus quibusdam carbo. Placeat cuppedia acceptus sperno adstringo utor cubo casso. Annus decens aetas territo clamo vomica aro vinum vilicus.",
       "vote_average": 0,
       "vote_count": 0,
@@ -63,13 +63,13 @@
       "show_id": 2261,
       "still_path": null
     },
-    "name": "Key Chickadee",
+    "name": "Fundamental Whale",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 6,
         "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
-        "name": "Convincing R5-D4 Media",
+        "name": "Unwilling San Hill Media",
         "origin_country": "US"
       }
     ],
@@ -77,21 +77,21 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Sticky Piranha",
+    "original_name": "Handicapped Kite",
     "overview": "In repellendus vere neque substantia causa delego neque demens.",
-    "popularity": 688.7119,
+    "popularity": 693.275,
     "poster_path": "/uSvET5YUvHNDIeoCpErrbSmasFb.jpg",
     "production_companies": [
       {
         "id": 5253,
         "logo_path": "/cxgRBXMNcbcE0dIaeCc4tbDa4KI.png",
-        "name": "Disciplinary Boba Fett Productions",
+        "name": "Classical Owen Lars Productions",
         "origin_country": "US"
       },
       {
         "id": 15492,
         "logo_path": null,
-        "name": "Disturbing Nien Nunb Entertainment",
+        "name": "Cooing Bail Prestor Organa Entertainment",
         "origin_country": "US"
       }
     ],
@@ -173,7 +173,7 @@
     "status": "Ended",
     "tagline": "",
     "type": "Talk Show",
-    "vote_average": 7.435,
+    "vote_average": 7.4,
     "vote_count": 84,
     "external_ids": {
       "imdb_id": "tt0055708",

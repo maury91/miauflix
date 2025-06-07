@@ -1,0 +1,304 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20464",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"253e79f7512b6c180cca09b2956b6da2\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "7Q1zL8Mq13Om9sVLxsnmyfjIaKPV0Nzfejoe4ysofrR3u_zfVBOTVA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "9ccb4863d383443e8e3512d171137869"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kEYWal656zP5Q2Tohm91aw6orlT.jpg",
+    "belongs_to_collection": null,
+    "budget": 6000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "https://slippery-federation.info",
+    "id": 1064213,
+    "imdb_id": "tt28607951",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Better Trout",
+    "overview": "Constans bellicus tero consectetur attonbitus. Abeo ipsa recusandae. Nihil suasoria utique sollers amplus tandem carcer complectus xiphias.",
+    "popularity": 70.2475,
+    "poster_path": "/7MrgIUeq0DD2iF7GR6wqJfYZNeC.jpg",
+    "production_companies": [
+      {
+        "id": 88152,
+        "logo_path": "/zm1yRe17jzOgEzXrNj6hd8gl89O.png",
+        "name": "Conventional Tarfful Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 7493,
+        "logo_path": "/fHitYiGUCkRafgt6VPYQlXWLkdp.png",
+        "name": "Ultimate Lama Su Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2024-10-14",
+    "revenue": 56286295,
+    "runtime": 139,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Russian",
+        "iso_639_1": "ru",
+        "name": "Pусский"
+      },
+      {
+        "english_name": "Armenian",
+        "iso_639_1": "hy",
+        "name": ""
+      }
+    ],
+    "status": "Released",
+    "tagline": "Confero constans bellicus tero consectetur attonbitus accedo.",
+    "title": "Deep Cheetah",
+    "video": false,
+    "vote_average": 7.058,
+    "vote_count": 2247,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://spry-cat.org",
+            "overview": "Vilicus tribuo veniam audio. Contigo solutio maxime adiuvo neque cruentus adsuesco collum vulnus damnatio. Atqui deprimo via theologus.",
+            "runtime": 139,
+            "tagline": "Appositus vilicus tribuo veniam audio vesper contigo.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Fugiat tenus suspendo vereor cupiditate utrimque timor conqueror et color. Sursum tempus audio pecto accusamus ascisco.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Derideo tantum decimus amet alias benevolentia.",
+            "runtime": 138,
+            "tagline": "Cursim derideo tantum decimus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Derideo tantum decimus amet alias benevolentia.",
+            "runtime": 139,
+            "tagline": "Cursim derideo tantum decimus.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Appello atavus tempora coepi.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Technological Albatross"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ypTsorMoyUZWEz3xd9fwsqmw1uk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/8gGOe2JkSxEQB40yRpEsAdCYHPL.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/giFkNubhMNbRZb2IYFrgZNoIzSE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/kZ48QqZO6cWcjKhPqLamqSdPLft.jpg",
+          "vote_average": 1.75,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/jhoJbAhnAsihEiCv3PGzRklDnH.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.955,
+          "height": 641,
+          "iso_639_1": "en",
+          "file_path": "/dYVsBFfGLSCAZ9HqwOfkpgWUwTw.png",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 1253
+        },
+        {
+          "aspect_ratio": 2.109,
+          "height": 1523,
+          "iso_639_1": "en",
+          "file_path": "/e4zNwk1MWsmND5DIBvfzXEUnEjP.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3212
+        },
+        {
+          "aspect_ratio": 2.096,
+          "height": 1299,
+          "iso_639_1": "en",
+          "file_path": "/eO9bO9sEEe8GYxTDFgjKFPYoU9k.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2723
+        },
+        {
+          "aspect_ratio": 2.109,
+          "height": 1523,
+          "iso_639_1": "en",
+          "file_path": "/pmcLENFKjN1bAt3P0i1SWhqHkdx.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3212
+        },
+        {
+          "aspect_ratio": 2.099,
+          "height": 292,
+          "iso_639_1": "en",
+          "file_path": "/axmdOABOzSv28HhAH2ppPuEbG2A.png",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 613
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/7MrgIUeq0DD2iF7GR6wqJfYZNeC.jpg",
+          "vote_average": 5.778,
+          "vote_count": 36,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/aoV4UeZGy8nM6F59l7KRXPrsK4B.jpg",
+          "vote_average": 5.616,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1935,
+          "iso_639_1": "en",
+          "file_path": "/3bXdP1k2pzpmVD8GWXkC8VhmUKP.jpg",
+          "vote_average": 5.488,
+          "vote_count": 40,
+          "width": 1290
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2961,
+          "iso_639_1": "en",
+          "file_path": "/7GZQa5bX3Ty80AqoRkkRLszCaE4.jpg",
+          "vote_average": 5.476,
+          "vote_count": 42,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 2954,
+          "iso_639_1": "en",
+          "file_path": "/nGUUQAsnW5bmSjBNao8vXlK0QMK.jpg",
+          "vote_average": 5.122,
+          "vote_count": 37,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

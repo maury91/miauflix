@@ -1,0 +1,291 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18877",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"6dca08795f01a6803d8e40a55b7eb4e6\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "ZYqFu_AR66V7DT-lyKmk0FUhCZudxq60Y1MfrRLBUWtOb3Ghl1u3Tw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "d88d71c87bd0404989825a6df248ee2b"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oPgXVSdGR9dGwbmvIToOCMmsdc2.jpg",
+    "belongs_to_collection": null,
+    "budget": 85000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://simplistic-bloom.org",
+    "id": 541671,
+    "imdb_id": "tt7181546",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Blushing Krill",
+    "overview": "Venio ago voveo. Adicio ademptio adsum urbs artificiose auctus. Conicio sub absum universe adversus culpo.",
+    "popularity": 144.469,
+    "poster_path": "/mKp4euM5Cv3m2U1Vmby3OGwcD5y.jpg",
+    "production_companies": [
+      {
+        "id": 3528,
+        "logo_path": "/cCzCClIzIh81Fa79hpW5nXoUsHK.png",
+        "name": "Hushed Eeth Koth Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 23008,
+        "logo_path": "/5SarYupipdiejsEqUkwu1SpYfru.png",
+        "name": "Civil Dormé Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 1632,
+        "logo_path": "/cisLn1YAUuptXVBa0xjq7ST9cH0.png",
+        "name": "Extreme Chewbacca Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-06-04",
+    "revenue": 3750000,
+    "runtime": 125,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Alii venio ago voveo defungo adicio ademptio.",
+    "title": "Rising Rooster",
+    "video": false,
+    "vote_average": 7.402,
+    "vote_count": 82,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://diligent-tradition.net",
+            "overview": "Sub nihil cubitum casso acies vado cruentus suffoco infit textilis.",
+            "runtime": 125,
+            "tagline": "Verus sub nihil cubitum.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://suburban-peony.org",
+            "overview": "Vesica dedico celebrer benigne quidem iusto ulterius trucido. Tunc vulgivagus umerus decet appono tantum vestigium paulatim acerbitas. Arma aliquam ubi denego socius cubitum.",
+            "runtime": 0,
+            "tagline": "Socius vesica dedico celebrer benigne quidem iusto.",
+            "title": "Respective Cod"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Audio culpo eaque accendo decet aestus. Absconditus cilicium cauda cruciamentum reiciendis rem defero.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://suburban-peony.org",
+            "overview": "Vesica dedico celebrer benigne quidem iusto ulterius trucido. Tunc vulgivagus umerus decet appono tantum vestigium paulatim acerbitas. Arma aliquam ubi denego socius cubitum.",
+            "runtime": 0,
+            "tagline": "Socius vesica dedico celebrer benigne quidem iusto.",
+            "title": "Respective Cod"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Poor Gamefowl"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/yUESyc41631HWy5ppT08fYpJKiZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/pSoT2jGlb6UiizOvBDtajqwRESV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/rIeaf2NLSlw11wT8IoBocHhid1y.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/1B7CXnNQbIqPMvYAZrvwEv9563R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.332,
+          "height": 1275,
+          "iso_639_1": "en",
+          "file_path": "/2w9fUvJfFjCSm0E8rXa4QuRLU7B.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4248
+        },
+        {
+          "aspect_ratio": 2.214,
+          "height": 1285,
+          "iso_639_1": "en",
+          "file_path": "/jdAWFEuysoBGkzB1MOnHr9qqqqP.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2845
+        },
+        {
+          "aspect_ratio": 2.214,
+          "height": 1285,
+          "iso_639_1": "en",
+          "file_path": "/yTPOj0VuCCoWj5AQBpqgV075XoS.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2845
+        },
+        {
+          "aspect_ratio": 3.02,
+          "height": 401,
+          "iso_639_1": "en",
+          "file_path": "/qbtWzt9yu778dLD3sgMuwaHaipr.png",
+          "vote_average": 1.75,
+          "vote_count": 1,
+          "width": 1211
+        },
+        {
+          "aspect_ratio": 3.957,
+          "height": 493,
+          "iso_639_1": "en",
+          "file_path": "/vJ8klKeBNrUkgUq6mnsWHOakgCk.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1951
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/mKp4euM5Cv3m2U1Vmby3OGwcD5y.jpg",
+          "vote_average": 6.608,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/f3VuZdTTvZQt2r07rbrMGQJQEuC.jpg",
+          "vote_average": 4.722,
+          "vote_count": 18,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/2VUmvqsHb6cEtdfscEA6fqqVzLg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/qhU6x8G6NJAydbxJpb3ckE5YebH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.674,
+          "height": 1230,
+          "iso_639_1": "en",
+          "file_path": "/17AjXbJQ12ujLXmxZ2yyhLC92v8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 829
+        }
+      ]
+    }
+  }
+}

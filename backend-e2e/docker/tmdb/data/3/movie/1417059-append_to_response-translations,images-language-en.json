@@ -1,0 +1,247 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3257",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a2f9181f7f64e61692e76b886465b70a\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "H0ijrkZV5U5KGJnF5JgKKAuH1f6Ip0WF_YZcl8av-_rauZz-HtXJ2g==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "108979e82b494b21a1e63d45841dacff"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8LjN496M9Mo0b5M6uvlVObz81bn.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://sociable-minute.org",
+    "id": 1417059,
+    "imdb_id": "tt35396529",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Single Tortoise",
+    "overview": "Vulnero studio venio aveho fugit auditor aureus. Patrocinor vulgivagus accusamus congregatio adfero. Subiungo aestivus curiositas animadverto mollitia creptio.",
+    "popularity": 99.8084,
+    "poster_path": "/jZKK5mFKWbquxhAGMkRJtNYwk0I.jpg",
+    "production_companies": [
+      {
+        "id": 7429,
+        "logo_path": "/6in9uMqxXEHx5XgYgkeRBpZ4rPw.png",
+        "name": "Uptight Poggle the Lesser Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 222466,
+        "logo_path": null,
+        "name": "Delicate Ben Quadinaros Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 169639,
+        "logo_path": null,
+        "name": "Sticky Raymus Antilles Media",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-06-01",
+    "revenue": 0,
+    "runtime": 109,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Maxime vulnero studio venio aveho fugit auditor.",
+    "title": "Slight Chinchilla",
+    "video": false,
+    "vote_average": 5.489,
+    "vote_count": 47,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://equal-thunderhead.com",
+            "overview": "Aetas arcesso ter sto reiciendis vetus ducimus utpote deduco copiose.",
+            "runtime": 109,
+            "tagline": "Ventus aetas arcesso ter.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Illo decretum ullam depono cedo denuncio uxor creber.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Illo decretum ullam depono cedo denuncio uxor creber.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Eligible Python"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Arcus stillicidium vel adfectus. Adicio ratione delibero cupiditas cribro vere. Carmen bellicus adeptio delectus usus volubilis itaque coaegresco explicabo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/rkWMqI9wA3plbjETzSks9oSLzoJ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/8FoqUpWYETVQzRTlNosCEWgjM4h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/igypMYCLkW4zXd6LJfFZtzo9tGn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/yWKxU5AEA6LLOlSgfQJHoz5OMGh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.26,
+          "height": 1014,
+          "iso_639_1": "en",
+          "file_path": "/v40WaNzRYBjZnFITRk60m0chR61.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4320
+        },
+        {
+          "aspect_ratio": 4.264,
+          "height": 1012,
+          "iso_639_1": "en",
+          "file_path": "/idZjQ4Y4XCDP3d0gf05TJjV3YpI.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4315
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/jZKK5mFKWbquxhAGMkRJtNYwk0I.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_639_1": "en",
+          "file_path": "/fweMWQn2bpe7vXbhaEFFOvAcZpV.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/mt0meAPAOrqKU1ro4CN6FEnrDkB.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/cJoI0FA8RdJRJ9QM077SY5uO01W.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_639_1": "en",
+          "file_path": "/fzyXZfXjsGyisjRubcx2kSLRkyY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ]
+    }
+  }
+}

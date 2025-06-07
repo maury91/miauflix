@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1224",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=3118",
+    "cache-control": "public, max-age=20753",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"3b42015460f08c6aa582d4c9bca863ff\"",
+    "etag": "W/\"e0dc221295d8fb08cadd576a87c0859e\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 ca8cb14c76df16342491237cea8cfed6.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "CzkJTamltNE7lNlXNfgCQb7VPafT3hq8bf3ymVUwDuGLb7VKff8aXA==",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "cQwTrt2NUvpdzKskAjjGeLqLfREgLBx2PutZow5bS73Y6cAw-xKlAA==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "52fc9f647dd04ae58f28f729fe00b502"
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "8ba9fee787bd4a04a18018403aabe196"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/fTrQsdMS2MUw00RnzH0r3JWHhts.jpg",
@@ -38,51 +38,51 @@
     "imdb_id": "tt9150192",
     "origin_country": ["GB", "US"],
     "original_language": "en",
-    "original_title": "Temporary Mockingbird",
+    "original_title": "Gay Emu",
     "overview": "Considero sufficio temptatio. Praesentium unus communis compello perferendis curtus adulatio tantum rem. Vacuus saepe correptius adinventitias dolorum ancilla ex amo terebro.",
-    "popularity": 315.0435,
+    "popularity": 258.8084,
     "poster_path": "/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg",
     "production_companies": [
       {
         "id": 118475,
         "logo_path": "/x8mwqWGZK2gQvrp5QlYQho1VgXj.png",
-        "name": "Ltd Jek Tono Porkins Media",
+        "name": "Hungry Ayla Secura Media",
         "origin_country": "US"
       },
       {
         "id": 219295,
         "logo_path": null,
-        "name": "Vicarious Barriss Offee Pictures",
+        "name": "Unnecessary Lando Calrissian Pictures",
         "origin_country": "US"
       },
       {
         "id": 218150,
         "logo_path": null,
-        "name": "Magnetic Cliegg Lars Productions",
+        "name": "Dusty Lando Calrissian Productions",
         "origin_country": "GB"
       },
       {
         "id": 166120,
-        "logo_path": "/fRuHQF9DB4Zl3ha62D5Bpu1a5TL.png",
-        "name": "Defensive Lobot Pictures",
+        "logo_path": "/otEUziHlND4he9VvTtQU2gdULSS.png",
+        "name": "Passing R2-D2 Pictures",
         "origin_country": "US"
       },
       {
         "id": 22146,
         "logo_path": "/v37N1mFeXNQfvPankg3feBhVvM7.png",
-        "name": "Extended Adi Gallia Productions",
+        "name": "Quiet Sebulba Productions",
         "origin_country": "US"
       },
       {
         "id": 181874,
         "logo_path": "/crrgXvLhDO9c57HYrbO4H58Vxmb.png",
-        "name": "Aggressive Taun We Entertainment",
+        "name": "Confused Obi-Wan Kenobi Entertainment",
         "origin_country": "US"
       },
       {
         "id": 253169,
         "logo_path": null,
-        "name": "Very Jabba Desilijic Tiure Productions",
+        "name": "Screeching Sebulba Productions",
         "origin_country": "US"
       }
     ],
@@ -97,7 +97,7 @@
       }
     ],
     "release_date": "2025-03-26",
-    "revenue": 98652557,
+    "revenue": 99055960,
     "runtime": 116,
     "spoken_languages": [
       {
@@ -118,10 +118,10 @@
     ],
     "status": "Released",
     "tagline": "Admoveo considero sufficio temptatio triumphus praesentium unus communis.",
-    "title": "Divine Kite",
+    "title": "Hilarious Smelt",
     "video": false,
-    "vote_average": 6.663,
-    "vote_count": 1050,
+    "vote_average": 6.7,
+    "vote_count": 1158,
     "translations": {
       "translations": [
         {
@@ -147,7 +147,7 @@
             "overview": "Antea catena auxilium hic tenax vicissitudo incidunt atqui contabesco canto. Coma ipsam acsi explicabo ipsa vulgaris cursus error earum. Vitiosus delectatio aveho demitto adfectus solitudo ubi collum.",
             "runtime": 0,
             "tagline": "Venia antea catena auxilium hic tenax vicissitudo.",
-            "title": "Yappy Cicada"
+            "title": "Maximum Beetle"
           }
         },
         {
@@ -173,7 +173,7 @@
             "overview": "Absconditus cruentus terra auxilium consequuntur.",
             "runtime": 116,
             "tagline": "Correptius absconditus cruentus.",
-            "title": "Established Fox"
+            "title": "Vertical Dormouse"
           }
         },
         {
@@ -283,8 +283,8 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/6FRFIogh3zFnVWn7Z6zcYnIbRcX.jpg",
-          "vote_average": 7.466,
-          "vote_count": 15,
+          "vote_average": 7.206,
+          "vote_count": 17,
           "width": 2000
         },
         {
@@ -292,8 +292,8 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/bkbmInoAnEaMH4oxpXAXWwKr8Kd.jpg",
-          "vote_average": 7.73,
-          "vote_count": 13,
+          "vote_average": 6.834,
+          "vote_count": 15,
           "width": 2000
         },
         {
@@ -301,8 +301,8 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/u5MyKwfrrWYbgwsUcJS9xgwKN5v.jpg",
-          "vote_average": 3.334,
-          "vote_count": 2,
+          "vote_average": 2.278,
+          "vote_count": 4,
           "width": 2000
         },
         {
@@ -310,17 +310,17 @@
           "height": 3000,
           "iso_639_1": "en",
           "file_path": "/xycusHgMwmHNt7t3d9daD6zmJJ7.jpg",
-          "vote_average": 3.334,
-          "vote_count": 2,
+          "vote_average": 2.278,
+          "vote_count": 3,
           "width": 2000
         },
         {
           "aspect_ratio": 0.667,
           "height": 3000,
           "iso_639_1": "en",
-          "file_path": "/t0yBvZTdJOBaSQxyEJnu5C9N3Pj.jpg",
-          "vote_average": 2.278,
-          "vote_count": 3,
+          "file_path": "/n5byqNhgXYgTy8r3Jco1Ok7nwr9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
           "width": 2000
         }
       ]

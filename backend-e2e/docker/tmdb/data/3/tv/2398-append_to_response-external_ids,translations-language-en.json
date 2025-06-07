@@ -1,0 +1,210 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14227",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7d42d759ec879db2ebb3f7ee0969f66f\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6fc439c8bc0a64a7ab978ce699795274.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "OQN9Ya28_T7xmWYNm95EyiWYSvrza08anxghw2D-enWZA_XkmK0oug==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/lJEItmoc7bdqvA0yS5quuBIwW0N.jpg",
+    "created_by": [
+      {
+        "id": 183230,
+        "credit_id": "525735b1760ee3776a3a945d",
+        "name": "Sammy Schinner III",
+        "original_name": "Sammy Schinner III",
+        "gender": 1,
+        "profile_path": "/mP9E6DfYcSAoIyNpGM9w9aZGGkE.jpg"
+      }
+    ],
+    "episode_run_time": [30],
+    "first_air_date": "2000-09-11",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://testy-comedy.info",
+    "id": 2398,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2008-02-11",
+    "last_episode_to_air": {
+      "id": 180565,
+      "name": "Imperial Kite",
+      "overview": "Confero voluptatibus recusandae minima tutis combibo suspendo. Verbera cultellus taceo corroboro eaque cum cui repellendus amplexus consectetur. Conspergo delego aetas utroque audeo.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2008-02-11",
+      "episode_number": 13,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 21,
+      "season_number": 5,
+      "show_id": 2398,
+      "still_path": "/is71BbZsukc9gK2ZdGT2itDSNVR.jpg"
+    },
+    "name": "Standard Cockroach",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 40,
+        "logo_path": "/333LtWX9Z7H9uRrNcCl1JcTvdpR.png",
+        "name": "Boiling Leia Organa Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 71,
+        "logo_path": "/hEpcdJ4O6eitG9ADSnDXNUrlovS.png",
+        "name": "Relieved Luminara Unduli Studios",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 115,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Likely Crane",
+    "overview": "Denuo ver termes excepturi. Sonitus summisse magni dedecor enim harum. Viridis vestrum blandior collum pectus.",
+    "popularity": 388.1187,
+    "poster_path": "/buFnsyWEg4pPR7dco5Vbsm6HCIY.jpg",
+    "production_companies": [
+      {
+        "id": 55016,
+        "logo_path": null,
+        "name": "Helpless Arvel Crynyd Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 1081,
+        "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
+        "name": "Late Zam Wesell Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2000-09-11",
+        "episode_count": 22,
+        "id": 7512,
+        "name": "Season 1",
+        "overview": "Confronted with failing marriages, new jobs and therapy, four whip-smart professional women turn to one another as they struggle with life's challenges.",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 8.5
+      },
+      {
+        "air_date": "2001-09-10",
+        "episode_count": 22,
+        "id": 7510,
+        "name": "Season 2",
+        "overview": "After a disastrous vacation in Jamaica, the second season finds Joan and Toni making amends and vowing to never let a man come between them again.",
+        "poster_path": "/biyAO91pPisvKFTU0T3e8gXEqMl.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2002-09-23",
+        "episode_count": 25,
+        "id": 7509,
+        "name": "Season 3",
+        "overview": "Exes and woes test close friends Joan, Toni, Maya and Lynn as they deal with marital, financial and emotional drama.",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2003-09-15",
+        "episode_count": 24,
+        "id": 7511,
+        "name": "Season 4",
+        "overview": "This season, Toni adjusts to married life, Maya pursues her passion, Lynn searches for answers, and Joan tries to figure out her future.",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2004-09-20",
+        "episode_count": 22,
+        "id": 7508,
+        "name": "Season 5",
+        "overview": "Still tight as ever, Joan, Toni, Maya and Lynn start new chapters in their lives involving career moves, motherhood and complicated relationships.",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.2,
+    "vote_count": 39,
+    "external_ids": {
+      "imdb_id": "tt0247102",
+      "freebase_mid": "/m/03yvjx",
+      "freebase_id": "/en/girlfriends",
+      "tvdb_id": 74631,
+      "tvrage_id": null,
+      "wikidata_id": "Q1526781",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Arbustum conforto cornu ventus deorsum sollers utrum currus timidus. Chirographum amplus cometes succurro illum cilicium canonicus curis.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Trucido celebrer uredo capio virtus ago assentator casso. Cresco pecto creber ducimus animus decor cum ustulo voluptate.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

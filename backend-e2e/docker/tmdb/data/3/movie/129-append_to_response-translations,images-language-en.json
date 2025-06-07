@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=21966",
+    "cache-control": "public, max-age=2578",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"c1cf0bc20e02c0c7ae5deb511f3e7837\"",
+    "etag": "W/\"5348f8715ecbc45085b2a49b596805ba\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 0a71d283a25c1e3f082b4dbc9d844dfe.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "JYv3gb41LsrtSNYJ0X_PudOfLGt91FTm4jcrrXQ9qhfvpTZ207Lczw==",
+    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "H49phK28JrOYLCGgT8HxG1lVgVsbGkfnJR6o2vluPOkqRoupS_bbkw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "ca8bd6c20dff440c935fd568c903018a"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/m4TUa2ciEWSlk37rOsjiSIvZDXE.jpg",
@@ -38,15 +38,15 @@
     "imdb_id": "tt0245429",
     "origin_country": ["JP"],
     "original_language": "ja",
-    "original_title": "Characteristic Ostrich",
+    "original_title": "Monetary Cephalopod",
     "overview": "Substantia collum audio cilicium cupressus acquiro pecto certus conventus. Video asper bestia.",
-    "popularity": 23.5265,
+    "popularity": 20.8746,
     "poster_path": "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
     "production_companies": [
       {
         "id": 10342,
         "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
-        "name": "Squealing IG-88 Studios",
+        "name": "Changing Jocasta Nu Studios",
         "origin_country": "JP"
       }
     ],
@@ -68,10 +68,10 @@
     ],
     "status": "Released",
     "tagline": "Terga substantia collum audio cilicium.",
-    "title": "Neutral Mink",
+    "title": "Obvious Tiglon",
     "video": false,
-    "vote_average": 8.5,
-    "vote_count": 17164,
+    "vote_average": 8.537,
+    "vote_count": 17186,
     "translations": {
       "translations": [
         {
@@ -84,7 +84,7 @@
             "overview": "Delibero dens timor voluptatum supra conculco civis abscido. Tibi molestias aggredior. Succurro cogo minus damnatio virga theca degenero sub itaque curis.",
             "runtime": 125,
             "tagline": "Tabgo delibero dens timor voluptatum supra conculco civis.",
-            "title": "Unique Mastodon"
+            "title": "Front Marmoset"
           }
         },
         {
@@ -97,7 +97,7 @@
             "overview": "Ad occaecati nulla conatus delego succedo. Velit sum conatus asper tubineus.",
             "runtime": 122,
             "tagline": "Decens ad occaecati nulla conatus delego.",
-            "title": "Neutral Kiwi"
+            "title": "Pure Harrier"
           }
         },
         {
@@ -110,7 +110,7 @@
             "overview": "Speculum audacia congregatio nulla ver denique cometes sto verecundia.",
             "runtime": 125,
             "tagline": "Tempore speculum audacia.",
-            "title": "Convenient Hummingbird"
+            "title": "Weak Pigeon"
           }
         },
         {
@@ -123,7 +123,7 @@
             "overview": "Ad occaecati nulla conatus delego succedo. Velit sum conatus asper tubineus.",
             "runtime": 125,
             "tagline": "",
-            "title": "Neutral Kiwi"
+            "title": "Pure Harrier"
           }
         },
         {
@@ -136,7 +136,7 @@
             "overview": "Subnecto vis abscido accedo rem tabgo. Conduco adfero cuius crastinus corroboro aer deprimo arceo.",
             "runtime": 0,
             "tagline": "",
-            "title": "Thoughtful Aardwolf"
+            "title": "Equal Newt"
           }
         }
       ]

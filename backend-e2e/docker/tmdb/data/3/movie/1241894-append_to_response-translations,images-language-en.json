@@ -1,0 +1,220 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19958",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ef215408d4ac7c6ee86b6465e0b43de9\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "CuUbelNKHdFwnctL1PQ8YeOaJLp0MgjUeEQnBn4Zx7dVhsAK7VMpUw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "0091e8d404bb4c579424a9eabac49dd4"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/d53MM15mO9EEiHzNlfvJK0otaaM.jpg",
+    "belongs_to_collection": {
+      "id": 1278855,
+      "name": "Monetary Alligator",
+      "poster_path": null,
+      "backdrop_path": null
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "",
+    "id": 1241894,
+    "imdb_id": "tt30398905",
+    "origin_country": ["AT", "DE"],
+    "original_language": "de",
+    "original_title": "Elated Krill",
+    "overview": "Vulpes verus ventus fugit censura suppellex sapiente. Culpa derelinquo tametsi conventus victus substantia tamen crebro pauci. Quidem patria synagoga traho debilito animadverto.",
+    "popularity": 148.4286,
+    "poster_path": "/bC1r04ohuxv5feaGDzQ0lXz7Bbl.jpg",
+    "production_companies": [
+      {
+        "id": 3460,
+        "logo_path": "/wayJJRUb4KSXwl5fTQCpuY8pK85.png",
+        "name": "Different Roos Tarpals Productions",
+        "origin_country": "DE"
+      },
+      {
+        "id": 142064,
+        "logo_path": "/lU0gJVT0WA2UfvDYiNw9O1Qo85w.png",
+        "name": "Meaningful Taun We Studios",
+        "origin_country": "IT"
+      },
+      {
+        "id": 608,
+        "logo_path": "/dD2Do4GHXAql5c4LjXCbEOvxbFg.png",
+        "name": "Miserable R4-P17 Productions",
+        "origin_country": "AT"
+      },
+      {
+        "id": 106689,
+        "logo_path": "/fWQ9uEqIKuPukxrbZEUIrkPRrjs.png",
+        "name": "Comparative Beru Whitesun lars Media",
+        "origin_country": "DE"
+      },
+      {
+        "id": 19332,
+        "logo_path": null,
+        "name": "Actual Chewbacca Productions",
+        "origin_country": "DE"
+      },
+      {
+        "id": 47,
+        "logo_path": "/i7Z9ot2o3N5Sa3HrF09kniFs2y8.png",
+        "name": "Technological Quarsh Panaka Studios",
+        "origin_country": "DE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "AT",
+        "name": "Austria"
+      },
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      },
+      {
+        "iso_3166_1": "IT",
+        "name": "Italy"
+      }
+    ],
+    "release_date": "2024-10-17",
+    "revenue": 0,
+    "runtime": 103,
+    "spoken_languages": [
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      }
+    ],
+    "status": "Released",
+    "tagline": "",
+    "title": "Dreadful Lynx",
+    "video": false,
+    "vote_average": 6.25,
+    "vote_count": 24,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Tabesco comminor creta coaegresco cicuta averto velut temeritas subnecto tum. Vorax excepturi color tenetur temporibus modi degero clam.",
+            "runtime": 103,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Cumque cornu aestus bestia tabesco comitatus. Voluptatum cubicularis auctus tendo bene. Ratione vomito patria cum aeger demonstro.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Termes conspergo voluptates absorbeo temeritas turba eveniet blandior tergeo.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Responsible Barnacle"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/gOOC5gSklDEHvb1WAkIv06LcwmJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.606,
+          "height": 649,
+          "iso_639_1": "en",
+          "file_path": "/bncw4JwjghiXtzZDlZR5jyjYt0r.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4287
+        },
+        {
+          "aspect_ratio": 6.811,
+          "height": 630,
+          "iso_639_1": "en",
+          "file_path": "/olyr0h6a39A8nhATLtAnEVXuKmS.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4291
+        },
+        {
+          "aspect_ratio": 6.669,
+          "height": 121,
+          "iso_639_1": "en",
+          "file_path": "/to566Y2lvGT1aCge5QV32GlmNOR.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 807
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/bC1r04ohuxv5feaGDzQ0lXz7Bbl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/dDIwz4xABrQoFlQAxhrxYOs621S.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

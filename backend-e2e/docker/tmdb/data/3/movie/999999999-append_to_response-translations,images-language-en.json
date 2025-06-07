@@ -4,13 +4,14 @@
     "content-type": "application/json;charset=utf-8",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 68b2682a924ac399aa2724b5b439e75c.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "UBD-ht70C7ddtsxwbxdTm1EyTTiMQufqYYikKiA_6APIIH0KKjPv2A==",
+    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "tjKFekS_NeF2PIsK-Uby0mQYvbrtl1xrlKX5Hy0MGyTH02h1Z6A5Pw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
+    "x-az": "us-east-1a",
     "x-cache": "Error from cloudfront",
-    "x-task-id": "63df3edcc6194d98bad2ea1ff917b034"
+    "x-task-id": "85a6078dcab74afaa4c1c2eb8c47b6a9"
   },
+  "status": 404,
   "data": {
     "success": false,
     "status_code": 34,

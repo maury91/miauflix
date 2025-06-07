@@ -1,0 +1,217 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12969",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c1fe58757ac176b87f48a14cb75a7c78\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "KxK1joSOHN7kqlvemoBawewu1JRdRtewsnlZ4sMZrT4DTPCFtm1Sug==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/zPaCuvPr2OreS29xpUtWAoK2gQ4.jpg",
+    "created_by": [],
+    "episode_run_time": [42],
+    "first_air_date": "2010-01-03",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://watery-ecumenist.biz",
+    "id": 31783,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-02-02",
+    "last_episode_to_air": {
+      "id": 5914081,
+      "name": "Ancient Vole",
+      "overview": "Conventus cunctatio pecus caste quod decipio.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-02-02",
+      "episode_number": 7,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 42,
+      "season_number": 5,
+      "show_id": 31783,
+      "still_path": null
+    },
+    "name": "Obvious Rooster",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 143,
+        "logo_path": "/tm2UclPxfamHyFuILLq4jNxsi8v.png",
+        "name": "Typical Eeth Koth Productions",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 39,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Skinny Unicorn",
+    "overview": "Benigne comedo demoror crur creo. Brevis acerbitas utpote deinde. Tollo atqui carpo theologus somnus sapiente spiculum vobis universe quae.",
+    "popularity": 380.2259,
+    "poster_path": "/vE3uKy2AGHQAyDLJ3nR08zpkRJ0.jpg",
+    "production_companies": [
+      {
+        "id": 57099,
+        "logo_path": "/17wDGCSsPxVhuFGxCF6KALV8g6F.png",
+        "name": "Testy Luminara Unduli Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 35951,
+        "logo_path": "/eXfXNlLeW8eHOyQoeOUIivQa6z6.png",
+        "name": "Novel Beru Whitesun lars Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 189370,
+        "logo_path": "/8iFLlGJPKtCzeQ1CyS3Nijs2rmW.png",
+        "name": "Atomic Shmi Skywalker Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 13856,
+        "logo_path": "/o44n2sfzaX4IX4MnEsgAkvGbGZ3.png",
+        "name": "Thirsty Wat Tambor Pictures",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": null,
+        "episode_count": 3,
+        "id": 135611,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2010-01-03",
+        "episode_count": 6,
+        "id": 43284,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2011-01-02",
+        "episode_count": 8,
+        "id": 43285,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2012-02-12",
+        "episode_count": 8,
+        "id": 43283,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2013-02-17",
+        "episode_count": 7,
+        "id": 43286,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2014-02-17",
+        "episode_count": 7,
+        "id": 132808,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Reality",
+    "vote_average": 6.3,
+    "vote_count": 27,
+    "external_ids": {
+      "imdb_id": "tt1570957",
+      "freebase_mid": "/m/09v0qd6",
+      "freebase_id": null,
+      "tvdb_id": 134441,
+      "tvrage_id": null,
+      "wikidata_id": "Q8037126",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Validus creator fuga damno socius solio dapifer absum.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Academic Turkey",
+            "overview": "Terreo sophismata totus acquiro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

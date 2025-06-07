@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1223",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=13170",
+    "cache-control": "public, max-age=16771",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"fc534e2f17c2d8dd604346a1f1ca0c94\"",
+    "etag": "W/\"d5004092ab6b9062596108694d9f20e8\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "GooT3_DAr7VOXT7cjJYunntmMkpqSzdHReNNbAdo7Zu8f_YxqAr-mg==",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "Gn3SpfGXRISVfaehd9Ph4hG1wHiTcBShdOWnnyDk7UYov7rntlqUng==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "86b57446a3124b41889ff0f4feacbabd"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/14UFWFJsGeInCbhTiehRLTff4Yx.jpg",
@@ -34,21 +34,21 @@
     "imdb_id": "tt30876483",
     "origin_country": ["AT", "DE"],
     "original_language": "de",
-    "original_title": "Married Jay",
+    "original_title": "Labour Capybara",
     "overview": "Spargo tyrannus clarus socius contego confugo caries clementia condico capitulus. Suasoria calcar summopere tui combibo trepide.",
-    "popularity": 134.5884,
+    "popularity": 94.1116,
     "poster_path": "/jM2uqCZNKbiyStyzXOERpMqAbdx.jpg",
     "production_companies": [
       {
         "id": 114791,
         "logo_path": "/jeTQ9G3haIbLn8Shrc9OxPafST6.png",
-        "name": "Overall Luminara Unduli Pictures",
+        "name": "Friendly Poggle the Lesser Pictures",
         "origin_country": "DE"
       },
       {
         "id": 1833,
         "logo_path": "/6Ot5X5xRv0PvZ9cUUD5ZymSruLi.png",
-        "name": "Natural Ayla Secura Productions",
+        "name": "Aware R2-D2 Productions",
         "origin_country": "AT"
       }
     ],
@@ -79,10 +79,10 @@
     ],
     "status": "Released",
     "tagline": "",
-    "title": "Pretty Anglerfish",
+    "title": "Leading Hornet",
     "video": false,
-    "vote_average": 6.74,
-    "vote_count": 411,
+    "vote_average": 6.765,
+    "vote_count": 454,
     "translations": {
       "translations": [
         {
@@ -108,7 +108,7 @@
             "overview": "Sollers sordeo arbor deleo amo amplus. Adinventitias defendo solvo valetudo tracto cometes varietas virtus aqua reprehenderit.",
             "runtime": 109,
             "tagline": "",
-            "title": "Definite Louse"
+            "title": "Internal Cow"
           }
         },
         {
@@ -121,7 +121,7 @@
             "overview": "Sollers sordeo arbor deleo amo amplus. Adinventitias defendo solvo valetudo tracto cometes varietas virtus aqua reprehenderit.",
             "runtime": 0,
             "tagline": "",
-            "title": "Definite Louse"
+            "title": "Internal Cow"
           }
         },
         {
@@ -134,7 +134,7 @@
             "overview": "Valens aiunt comedo pauper amiculum tandem advenio videlicet.",
             "runtime": 109,
             "tagline": "",
-            "title": "Victorious Gopher"
+            "title": "Decent Hoverfly"
           }
         }
       ]

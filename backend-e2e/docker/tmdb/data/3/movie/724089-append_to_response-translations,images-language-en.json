@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=8454",
+    "cache-control": "public, max-age=8548",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"2af2eedbc55dbff6fd4fe003fdcb48df\"",
+    "etag": "W/\"9ac3f2d43ee1e8a761fc6eb29a681d8e\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 544814e402956ba93c0a2d2b923e94c2.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "1s2YeHVP38rjv9fKLH5SvPPBohEPNypr4WRzlF4SbUWW_vbqiLAr4A==",
+    "via": "1.1 79272ab9b399ee696b329d4f677dca48.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "sLp-Z9DiWi2hFtHgYAgkKglcNa7cxiPO7UuYUkUDdOy6NmaZwJOxLQ==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16921a284f8149ff85d91cd4375dbdb5"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/jtAI6OJIWLWiRItNSZoWjrsUtmi.jpg",
     "belongs_to_collection": {
       "id": 729322,
-      "name": "Interesting Lemming",
+      "name": "Specified Condor",
       "poster_path": "/LdSn17U6ybhtPJT3S6fTNRni5Y.jpg",
       "backdrop_path": "/hXF55codODfnzTZDExbUbfFmA9y.jpg"
     },
@@ -39,15 +39,15 @@
     "imdb_id": "tt13535454",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Used Lobster",
+    "original_title": "Responsible Asp",
     "overview": "Atrocitas umquam sollers veniam tendo cetera. Accommodo cursim corpus depereo candidus cribro carpo tepesco. Quis ustulo tollo aestivus ustulo certus antiquus cognatus molestias.",
-    "popularity": 1.253,
+    "popularity": 1.6033,
     "poster_path": "/x5o8cLZfEXMoZczTYWLrUo1P7UJ.jpg",
     "production_companies": [
       {
         "id": 92153,
         "logo_path": "/psjvYkjjgAPtS8utnFYDM8t8yi7.png",
-        "name": "Responsible Finis Valorum Media",
+        "name": "Yawning Lama Su Media",
         "origin_country": "US"
       }
     ],
@@ -64,9 +64,9 @@
     ],
     "status": "Released",
     "tagline": "",
-    "title": "Joint Marten",
+    "title": "Extreme Roundworm",
     "video": false,
-    "vote_average": 8.38,
+    "vote_average": 8.4,
     "vote_count": 1522,
     "translations": {
       "translations": [

@@ -1,0 +1,248 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1842",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0766cc87b1842f98d678802971653844\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 b4904c5988fd0eaae341a12cc47f3766.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "0oZ54grQcSfMNz3DN0nkNohhkYeR6DkLwXZDvL6ozLAfomSFLA-70A==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/cBgJJS19kVxedaLWPBbAi7Mh8wM.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://weighty-prelude.name",
+    "id": 1376434,
+    "imdb_id": "tt36463894",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Homeless Goat",
+    "overview": "Inventore bellicus sum casus praesentium aer derideo utique. Debitis audeo adfectus ut cras annus xiphias deduco crinis. Molestias claustrum alo turbo curo.",
+    "popularity": 375.9331,
+    "poster_path": "/lbimIPTVsSlnmqSW5ngEsUxtHLM.jpg",
+    "production_companies": [
+      {
+        "id": 127928,
+        "logo_path": "/h0rjX5vjW5r8yEnUBStFarjcLT4.png",
+        "name": "Registered Raymus Antilles Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 1302,
+        "logo_path": "/zC3b70ixHh89qJIikLQPEvLqbPM.png",
+        "name": "Competitive Lama Su Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 840,
+        "logo_path": null,
+        "name": "Unexpected R4-P17 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 185309,
+        "logo_path": null,
+        "name": "Just Sly Moore Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-06-05",
+    "revenue": 0,
+    "runtime": 85,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Stips inventore bellicus sum casus praesentium aer derideo.",
+    "title": "Absolute Pigeon",
+    "video": false,
+    "vote_average": 8,
+    "vote_count": 72,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://qualified-length.com",
+            "overview": "Aperio certus summisse sulum solium tendo subito. Defluo collum adamo caelestis abundans similique acervus.",
+            "runtime": 85,
+            "tagline": "Distinctio aperio certus summisse sulum solium.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Peccatus viscus caste minus valde aer ustilo consequuntur.",
+            "runtime": 0,
+            "tagline": "Suscipio peccatus viscus.",
+            "title": "Rainy Mockingbird"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Careo tempore in vallum acervus capitulus trado. Tracto quae speculum tandem adeo patior.",
+            "runtime": 0,
+            "tagline": "Pauci careo tempore in vallum acervus.",
+            "title": "Divine Fowl"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Peccatus viscus caste minus valde aer ustilo consequuntur.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Rainy Mockingbird"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/oDreoJHKpxZ3i9PKQzzssxDMlKn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.826,
+          "height": 397,
+          "iso_639_1": "en",
+          "file_path": "/jCAF2HRnJkhqrFOr2bsr3Vfgn7D.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1916
+        },
+        {
+          "aspect_ratio": 4.826,
+          "height": 397,
+          "iso_639_1": "en",
+          "file_path": "/7UskZzw063uvjDaVg8H6ea6ZyYo.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1916
+        },
+        {
+          "aspect_ratio": 1.214,
+          "height": 2035,
+          "iso_639_1": "en",
+          "file_path": "/ujfUIpHyM6sjRDabdF6yqz7lJaa.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2470
+        },
+        {
+          "aspect_ratio": 1.073,
+          "height": 1296,
+          "iso_639_1": "en",
+          "file_path": "/f36aI80dqszZav3NPNiT7JXKBPv.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1391
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/lbimIPTVsSlnmqSW5ngEsUxtHLM.jpg",
+          "vote_average": 8.77,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/mv2U0SkydsVjDpHSzy6hs1uYSbp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/lIBtgpfiB92xNoB3Wa2ZtRtcyYP.jpg",
+          "vote_average": 2.542,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/gbnglqTlBFratrUJG9hu2EZmQ2J.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/m0ltLbYf0Y556ZAzhEeXkNQxcDE.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

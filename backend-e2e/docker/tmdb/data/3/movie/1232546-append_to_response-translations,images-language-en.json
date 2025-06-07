@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1223",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=19216",
+    "cache-control": "public, max-age=11916",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"147180fe9c26dd2c8d03fbd371aa25d1\"",
+    "etag": "W/\"41d42e7e4df0e40c6656072c2f924098\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "492hGoZjISAfZHhrwrhhzkmiVZDB-sLjttSTu8aMs0gnxetDP9hong==",
+    "via": "1.1 39e6266db143f6443f194d8c60e22480.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "GIwJU8alMcd5t7UjWQhavioVtY7V7J2afErv5zPouIhvIDL_ePh-5g==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "b1fd7bf3bf9c49d299f2ad784d495b2d"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/icFWIk1KfkWLZnugZAJEDauNZ94.jpg",
@@ -34,39 +34,39 @@
     "imdb_id": "tt30955489",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Sunny Chimpanzee",
+    "original_title": "Embarrassed Orca",
     "overview": "Sapiente tergeo vesco cognomen surculus. Illum nihil beneficium adulescens vinitor decumbo.",
-    "popularity": 341.3584,
+    "popularity": 128.4101,
     "poster_path": "/juA4IWO52Fecx8lhAsxmDgy3M3.jpg",
     "production_companies": [
       {
         "id": 125281,
         "logo_path": "/3hV8pyxzAJgEjiSYVv1WZ0ZYayp.png",
-        "name": "Hollow Ben Quadinaros Pictures",
+        "name": "Misty Greedo Pictures",
         "origin_country": "US"
       },
       {
         "id": 149696,
         "logo_path": "/w0ARek3q2bIKGfoM2WRsFOqyYCB.png",
-        "name": "Closed Ki-Adi-Mundi Productions",
+        "name": "Peculiar Dormé Productions",
         "origin_country": "US"
       },
       {
         "id": 125060,
         "logo_path": "/9giIHcLFMEQhYByHBvPB2ZuQSM8.png",
-        "name": "Bewildered R5-D4 Pictures",
+        "name": "Remaining Leia Organa Pictures",
         "origin_country": "US"
       },
       {
         "id": 829,
         "logo_path": "/aXqwCvJSCDbTclkxAYfsT1l4Dsa.png",
-        "name": "Scary Shaak Ti Studios",
+        "name": "Optimistic Wedge Antilles Studios",
         "origin_country": "US"
       },
       {
         "id": 3287,
         "logo_path": "/bz6GbCQQXGNE56LTW9dwgksW0Iw.png",
-        "name": "Relative Arvel Crynyd Studios",
+        "name": "Near Wat Tambor Studios",
         "origin_country": "US"
       }
     ],
@@ -77,7 +77,7 @@
       }
     ],
     "release_date": "2025-04-23",
-    "revenue": 50023607,
+    "revenue": 51515949,
     "runtime": 103,
     "spoken_languages": [
       {
@@ -88,10 +88,10 @@
     ],
     "status": "Released",
     "tagline": "Comes sapiente tergeo vesco cognomen surculus.",
-    "title": "Tense Rat",
+    "title": "Forward Seahorse",
     "video": false,
-    "vote_average": 6.46,
-    "vote_count": 475,
+    "vote_average": 6.511,
+    "vote_count": 587,
     "translations": {
       "translations": [
         {
@@ -116,7 +116,7 @@
             "homepage": "https://unused-damage.com",
             "overview": "Ad crastinus admitto antea. Demens degusto cultellus dolorum quia terreo. Turba vallum attollo absque circumvenio uxor sublime repellat est provident.",
             "runtime": 0,
-            "tagline": "",
+            "tagline": "Capillus ad crastinus admitto antea decet demens degusto.",
             "title": ""
           }
         },
@@ -130,7 +130,7 @@
             "overview": "Temperantia clibanus solitudo. Aperio quod tergum accedo tenetur denuncio xiphias laborum. Catena basium canto turbo eos surgo territo voco sed.",
             "runtime": 0,
             "tagline": "Alii temperantia clibanus solitudo tabesco aperio quod tergum.",
-            "title": "Invisible Mollusk"
+            "title": "Youngest Manatee"
           }
         },
         {
@@ -143,7 +143,7 @@
             "overview": "Ad crastinus admitto antea. Demens degusto cultellus dolorum quia terreo. Turba vallum attollo absque circumvenio uxor sublime repellat est provident.",
             "runtime": 0,
             "tagline": "Capillus ad crastinus admitto antea decet demens degusto.",
-            "title": "Improved Snail"
+            "title": "Xenial Toad"
           }
         },
         {
@@ -156,7 +156,7 @@
             "overview": "Ante claustrum trado artificiose curia quae vir molestiae video. Decimus callide atavus administratio ademptio. Arceo quam subiungo cruciamentum adduco atavus torqueo spectaculum sulum.",
             "runtime": 0,
             "tagline": "Ulciscor ante claustrum trado artificiose curia quae.",
-            "title": "Decent Marmot"
+            "title": "Straightforward Ostrich"
           }
         }
       ]

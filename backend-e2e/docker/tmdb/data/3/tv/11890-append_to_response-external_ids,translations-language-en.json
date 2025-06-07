@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=11398",
+    "cache-control": "public, max-age=16810",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"ba4a52b728e421d0da81742d2975f65e\"",
+    "etag": "W/\"eab8d669bf93cfbb71ac0a4938ec1f8c\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "dRhPyKtO1qgMTy8_br6P87ueGc7FiEo-zBg_VsPJto5vI8_xDvR72A==",
+    "via": "1.1 5492e1c9a06f2320204e7fcc383cff5c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "cXkOGFhV7_m9l5fhX8hNbBuwGgVa8ibDpbR0jHRlIqQl1omYEUSiXw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "e78ad5e342f040ccaf3804ad02ab4916"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6baf574374274cd5a85ee544c125e4a7"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/hlVfglhjnlCP5tp8hFvTQKQVaMp.jpg",
@@ -33,7 +33,7 @@
     "last_air_date": "2025-01-09",
     "last_episode_to_air": {
       "id": 5890125,
-      "name": "Consistent Orca",
+      "name": "Frequent Raven",
       "overview": "",
       "vote_average": 0,
       "vote_count": 0,
@@ -46,19 +46,19 @@
       "show_id": 11890,
       "still_path": null
     },
-    "name": "Hard Whale",
+    "name": "Inclined Crane",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 1334,
         "logo_path": "/Ov29JztLk1yyMVe1FeuknzDYbL.png",
-        "name": "Tremendous Palpatine Media",
+        "name": "Fond Roos Tarpals Media",
         "origin_country": "NL"
       },
       {
         "id": 274,
         "logo_path": "/jJnRnPYp49BrUC44hrtwqGNkaQw.png",
-        "name": "Bad Luke Skywalker Pictures",
+        "name": "Representative R4-P17 Pictures",
         "origin_country": "NL"
       }
     ],
@@ -66,15 +66,15 @@
     "number_of_seasons": 5,
     "origin_country": ["NL"],
     "original_language": "nl",
-    "original_name": "Chemical Parrot",
+    "original_name": "Statistical Pike",
     "overview": "Recusandae apparatus fuga calamitas. Curso tergiversatio defungo votum triumphus urbs terreo vulgus vel defendo.",
-    "popularity": 415.9299,
+    "popularity": 399.002,
     "poster_path": "/p1oXgtJ0q0wAcEp3tHA5DpiynxL.jpg",
     "production_companies": [
       {
         "id": 66389,
         "logo_path": "/ewSYWqmrOst8pEyFu1w2dG0EP9T.png",
-        "name": "Remaining Mas Amedda Entertainment",
+        "name": "Insufficient Shaak Ti Entertainment",
         "origin_country": "NL"
       }
     ],

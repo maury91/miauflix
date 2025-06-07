@@ -1,0 +1,229 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17213",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b409d0874376079e33c87c4fbf889bbe\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 5492e1c9a06f2320204e7fcc383cff5c.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "t-e8M6eDixI-KK_F_TFIMns0PjZKf8sIT86QnsaiQsvZuk9kQb3W2Q==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6baf574374274cd5a85ee544c125e4a7"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/f2tgUFZC6TKqQDshRBW19zvmk7X.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://arctic-garbage.com",
+    "id": 1165642,
+    "imdb_id": "tt28664733",
+    "origin_country": ["KR"],
+    "original_language": "ko",
+    "original_title": "Disciplinary Cuckoo",
+    "overview": "Amor aggero magni cariosus facilis adeptio.",
+    "popularity": 65.1084,
+    "poster_path": "/dXlUIfwejWa9YvugU9V773dUASY.jpg",
+    "production_companies": [
+      {
+        "id": 127541,
+        "logo_path": "/Aq35mXuZv7lhPm8a60YKRaB9Vek.png",
+        "name": "Horizontal Gregar Typho Media",
+        "origin_country": "KR"
+      },
+      {
+        "id": 86981,
+        "logo_path": "/8FwCT7KohE031xFLBeRMZlbuzSr.png",
+        "name": "Internal Arvel Crynyd Productions",
+        "origin_country": "KR"
+      },
+      {
+        "id": 176892,
+        "logo_path": "/8wB5pWuEweNzwPYr6K5Jk3HznyQ.png",
+        "name": "Brainy Boba Fett Studios",
+        "origin_country": "KR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      }
+    ],
+    "release_date": "2025-05-30",
+    "revenue": 0,
+    "runtime": 96,
+    "spoken_languages": [
+      {
+        "english_name": "Korean",
+        "iso_639_1": "ko",
+        "name": "한국어/조선말"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Coruscus amor aggero.",
+    "title": "Surrounding Canidae",
+    "video": false,
+    "vote_average": 7.578,
+    "vote_count": 32,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://warm-ghost.biz",
+            "overview": "Casso cernuus corporis attonbitus dicta ante. Maiores amita repellat distinctio concido ocer vergo. Deludo ambitus balbus tempore vapulus vigilo supplanto tui aggredior.",
+            "runtime": 96,
+            "tagline": "Crebro casso cernuus corporis attonbitus dicta ante infit.",
+            "title": "Okay Moose"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://arid-overflight.com",
+            "overview": "Admiratio patria angelus degusto blanditiis suscipio bonus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Afraid Pony"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://frightened-tavern.org",
+            "overview": "Velociter admoneo esse cicuta odit vomica tenuis apparatus temperantia laboriosam.",
+            "runtime": 0,
+            "tagline": "Validus velociter admoneo esse.",
+            "title": "Curly Hookworm"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://arid-overflight.com",
+            "overview": "Admiratio patria angelus degusto blanditiis suscipio bonus.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Afraid Pony"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 967,
+          "iso_639_1": "en",
+          "file_path": "/keQZPgy44NV3bGV88gfIuyvQBqY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1719
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 12.614,
+          "height": 101,
+          "iso_639_1": "en",
+          "file_path": "/4r7hIHu8YV4X50PC0iKN2Ed30uc.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1274
+        },
+        {
+          "aspect_ratio": 12.826,
+          "height": 46,
+          "iso_639_1": "en",
+          "file_path": "/3LGbfvlcsS0HDS3W9qZDBZwlsU6.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 590
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2025,
+          "iso_639_1": "en",
+          "file_path": "/dXlUIfwejWa9YvugU9V773dUASY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1350
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_639_1": "en",
+          "file_path": "/1SBntT6VXsrxuW7SmxZLtMvVKHc.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_639_1": "en",
+          "file_path": "/a7jqkVL1fHuzUg3XZVyDAgyOPpd.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1481
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_639_1": "en",
+          "file_path": "/6RDXvT0C9Mvm5FNHGThn4iP8xKH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/exUmlwsXGzpnl8UOLtAGeX8AsJr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=3795",
+    "cache-control": "public, max-age=23413",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"3d46aa0a85427e99d9ca918d4ed1db75\"",
+    "etag": "W/\"d053b12ff8a0dce3f8980ed99146bec6\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "IFzm6MfHmAK8o2FR0UmG2-4cKLf82ZGrmLDPi4l4a9880RUvnv4HZQ==",
+    "via": "1.1 231be1c97cc722fa08b64d21072ebfac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "pkwvRC6vJ7cr_Ie_oR9iBGYwO3r5_JNl3CHk9tHhDU8qiuqOFjGgeg==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "026b46e7a79247b7bd324ba3aad6b49c"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/gMMnf8VRg3Z98WaFmOLr9Jk8pIs.jpg",
@@ -67,15 +67,15 @@
     "id": 63770,
     "in_production": true,
     "languages": ["en"],
-    "last_air_date": "2025-05-01",
+    "last_air_date": "2025-06-05",
     "last_episode_to_air": {
-      "id": 6238034,
-      "name": "Stale Loon",
+      "id": 6274252,
+      "name": "Sexual Ocelot",
       "overview": "",
       "vote_average": 0,
       "vote_count": 0,
-      "air_date": "2025-05-22",
-      "episode_number": 122,
+      "air_date": "2025-06-05",
+      "episode_number": 126,
       "episode_type": "standard",
       "production_code": "",
       "runtime": 41,
@@ -83,13 +83,13 @@
       "show_id": 63770,
       "still_path": null
     },
-    "name": "Typical Constrictor",
+    "name": "Satisfied Urial",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 16,
         "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
-        "name": "Architectural Saesee Tiin Pictures",
+        "name": "Many C-3PO Pictures",
         "origin_country": "US"
       }
     ],
@@ -97,21 +97,21 @@
     "number_of_seasons": 5,
     "origin_country": ["US"],
     "original_language": "en",
-    "original_name": "Visiting Goldfish",
+    "original_name": "Few Orca",
     "overview": "Pauci varius sophismata thesis depopulo coadunatio dolore in. Contra depraedor amor vomer suspendo. Charisma condico tenus articulus succurro patior aestus absconditus.",
-    "popularity": 544.0928,
+    "popularity": 759.6454,
     "poster_path": "/9jkThAGYj2yp8jsS6Nriy5mzKFT.jpg",
     "production_companies": [
       {
         "id": 90191,
         "logo_path": null,
-        "name": "Worried Plo Koon Studios",
+        "name": "Underlying Shmi Skywalker Studios",
         "origin_country": "US"
       },
       {
         "id": 1081,
         "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
-        "name": "Graceful Jek Tono Porkins Pictures",
+        "name": "Late Zam Wesell Pictures",
         "origin_country": "US"
       }
     ],
@@ -183,7 +183,7 @@
     "status": "Returning Series",
     "tagline": "",
     "type": "Talk Show",
-    "vote_average": 6.344,
+    "vote_average": 6.3,
     "vote_count": 308,
     "external_ids": {
       "imdb_id": "tt3697842",

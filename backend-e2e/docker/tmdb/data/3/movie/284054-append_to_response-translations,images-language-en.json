@@ -1,0 +1,308 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17571",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"181be84dc4b4ee3e08ec0083ecb51da0\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "WmGEPY96GHzOVR8oD_A90qSOXv5qG8oniAqIKTlY9_B4mn5bXpPBeA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "fa7e5a425c9543bbb7a85d8f3598ff2e"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/b6ZJZHUdMEFECvGiDpJjlfUWela.jpg",
+    "belongs_to_collection": {
+      "id": 529892,
+      "name": "Happy Donkey",
+      "poster_path": "/VtMkk2s92SnDUt8eYyUyYaSJQK.jpg",
+      "backdrop_path": "/nsiBzWsmmerBMuD8TKHpYBTnfhD.jpg"
+    },
+    "budget": 200000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://pretty-stability.org",
+    "id": 284054,
+    "imdb_id": "tt1825683",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Managerial Bison",
+    "overview": "Vitium vigor arguo sophismata agnitio bonus color voluptatibus curia. Appositus ubi sublime suspendo error veritatis stella votum veniam subiungo.",
+    "popularity": 175.7277,
+    "poster_path": "/uxzzxijgPIY7slzFvMotPv8wjKA.jpg",
+    "production_companies": [
+      {
+        "id": 420,
+        "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
+        "name": "Urgent Sebulba Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2018-02-13",
+    "revenue": 1349926083,
+    "runtime": 135,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Korean",
+        "iso_639_1": "ko",
+        "name": "한국어/조선말"
+      },
+      {
+        "english_name": "Swahili",
+        "iso_639_1": "sw",
+        "name": "Kiswahili"
+      },
+      {
+        "english_name": "Xhosa",
+        "iso_639_1": "xh",
+        "name": ""
+      }
+    ],
+    "status": "Released",
+    "tagline": "Tutamen vitium vigor arguo sophismata agnitio.",
+    "title": "Obliged Turkey",
+    "video": false,
+    "vote_average": 7.373,
+    "vote_count": 22587,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://humongous-keep.com",
+            "overview": "Acerbitas usque desino facilis facere centum. Tunc temporibus casus aestas vulnus deleniti usus adipisci.",
+            "runtime": 135,
+            "tagline": "Depereo acerbitas usque desino facilis.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://pastel-mouth.name",
+            "overview": "Harum alioqui cuppedia crur circumvenio dolore terebro. Trepide vitae tabernus eaque fugit tonsor trucido.",
+            "runtime": 134,
+            "tagline": "Nisi harum alioqui cuppedia crur circumvenio.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Fugit valens cotidie uxor paens xiphias versus decretum sollicito. Amplexus adimpleo adsuesco acies alias accendo. Vulariter admiratio valeo termes audax auctor crur tendo cupiditate.",
+            "runtime": 134,
+            "tagline": "",
+            "title": "Mute Catshark"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Neque centum cogito civis. Consequuntur triduana sublime blanditiis tredecim acervus credo circumvenio. Vallum thalassinus totam.",
+            "runtime": 134,
+            "tagline": "Architecto neque centum cogito civis suadeo consequuntur triduana.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Harum alioqui cuppedia crur circumvenio dolore terebro. Trepide vitae tabernus eaque fugit tonsor trucido.",
+            "runtime": 134,
+            "tagline": "Nisi harum alioqui cuppedia crur circumvenio.",
+            "title": "Zoophagous Marmoset"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/iwKlrK1FJJy6wnJVu8YQgNq3Ort.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/mCKusESgNuUV5ttHuCiuafQNLsv.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/i96ssa3qzjCldOfj6wag9mRfXZO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/v1T6iDf8ZqhIUmdN5qymGqMb18R.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/kGxFD1k0kzZQC3W1qdvZRbwpfgx.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.69,
+          "height": 1667,
+          "iso_639_1": "en",
+          "file_path": "/hhSZl284wdgX7nY3lJXGS1e0sAL.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2818
+        },
+        {
+          "aspect_ratio": 2.151,
+          "height": 159,
+          "iso_639_1": "en",
+          "file_path": "/t8CuYrFTTBg4jbGI6JC2822hK51.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 342
+        },
+        {
+          "aspect_ratio": 2.141,
+          "height": 1061,
+          "iso_639_1": "en",
+          "file_path": "/4oxUTzj2YiIJINMACnweCo0mjUB.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2272
+        },
+        {
+          "aspect_ratio": 2.133,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/7QKKL2HGtg6AJqG5f2o1lJ9WsMh.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2304
+        },
+        {
+          "aspect_ratio": 2.068,
+          "height": 294,
+          "iso_639_1": "en",
+          "file_path": "/lGtABiT66xVzxJHosPbq8caTBS5.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 608
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/uxzzxijgPIY7slzFvMotPv8wjKA.jpg",
+          "vote_average": 6.78,
+          "vote_count": 59,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/udd8VinUWwLIiTYn3wdOEpCk9Fq.jpg",
+          "vote_average": 6.58,
+          "vote_count": 25,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/3LpwXRR8AhNXgxQBVN4It2ldinU.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/qjarBufG0iUqr1IvJUK8AJnpTIR.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_639_1": "en",
+          "file_path": "/9WRfiLhrkG3SlCYgpL7ytYL6idU.jpg",
+          "vote_average": 4.884,
+          "vote_count": 26,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

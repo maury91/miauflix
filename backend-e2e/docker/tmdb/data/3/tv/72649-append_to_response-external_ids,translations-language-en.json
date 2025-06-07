@@ -1,0 +1,202 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2827",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c5c0a8ca8e95c9c92f566fe3f57fcda7\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 79272ab9b399ee696b329d4f677dca48.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "FoA-TCarbwfRiiT4TkWA9mk3i5CMS02DJOQlEk6twjLtT32o1XjDiw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "c48e0a81c0964062b5f95e61bfbac73e"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/iNt4CmfX70UlqFG6Ixxnhto3IOA.jpg",
+    "created_by": [
+      {
+        "id": 1843425,
+        "credit_id": "59591f15925141088302638b",
+        "name": "Allan Douglas",
+        "original_name": "Allan Douglas",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [25],
+    "first_air_date": "2015-03-12",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://general-constitution.com",
+    "id": 72649,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-04-10",
+    "last_episode_to_air": {
+      "id": 6239474,
+      "name": "Female Tiglon",
+      "overview": "Denuo admoneo cur varius terminatio sequi annus depromo triumphus defaeco. Praesentium compono comminor valens voluptatibus ut defaeco acies aptus.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-06-05",
+      "episode_number": 3,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 22,
+      "season_number": 5,
+      "show_id": 72649,
+      "still_path": "/p0WIUhSLAy9XXR29CsWfL40ukW2.jpg"
+    },
+    "name": "Zany Squirrel",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 247,
+        "logo_path": "/9Ga8A5QegQmiSVHp4hyusfMfpVk.png",
+        "name": "Christian Quarsh Panaka Pictures",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 177,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Cute Wildcat",
+    "overview": "Aer umquam carbo amplitudo.",
+    "popularity": 400.4859,
+    "poster_path": "/4uudasFgKCVQFNGqfanD6wEGVS1.jpg",
+    "production_companies": [
+      {
+        "id": 55795,
+        "logo_path": "/5GDnpABmYFAAptHwYx8jMY4rkeq.png",
+        "name": "Scientific Greedo Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 110542,
+        "logo_path": "/AwtRrQM6Fy6Ndg9DUlonbJU3bO3.png",
+        "name": "Rigid Grievous Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2016-09-07",
+        "episode_count": 57,
+        "id": 90115,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/m5KDEnSK6Rl3FHtoT1Gs92chwHz.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2015-03-12",
+        "episode_count": 9,
+        "id": 90073,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/mYb6UeNgL5lHHe2sYmuEHZwHPZF.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2015-12-10",
+        "episode_count": 47,
+        "id": 90074,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/jqXa7pcyUgJEvuKNpFBLrUsksCP.jpg",
+        "season_number": 2,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2017-01-19",
+        "episode_count": 24,
+        "id": 90082,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/fJhv1wzEND6UUksPYk89R5yQoQK.jpg",
+        "season_number": 3,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2017-07-17",
+        "episode_count": 24,
+        "id": 90439,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/lxNDuv91tuDBO2pZ0ETkuxn6QI7.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2018-01-18",
+        "episode_count": 16,
+        "id": 102118,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/c8x6ssI0sw44iTau5v5AsJDEDcH.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Talk Show",
+    "vote_average": 7.4,
+    "vote_count": 57,
+    "external_ids": {
+      "imdb_id": "tt6556992",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 327172,
+      "tvrage_id": null,
+      "wikidata_id": "Q39055175",
+      "facebook_id": "HotOnesFWF",
+      "instagram_id": "hotones",
+      "twitter_id": "firstwefeast"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Defluo angelus traho adficio spargo architecto voco bibo. Audeo abutor animadverto despecto valde corona aliquam timor suffoco. Accusamus stultus perspiciatis aro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

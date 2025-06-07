@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=17148",
+    "cache-control": "public, max-age=23575",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"14af5f60edfee492f818cba6fc6ea3f3\"",
+    "etag": "W/\"05d4b9f93d8b08dab3f7c77de6fe90c0\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 cb605905cea2427f1d9f13acc778e822.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "2isRVWu1C1g6-oaOiRZ00wkfBQsrIRnJURp189g9GCD59XCxqb8wmg==",
+    "via": "1.1 7251dede1ac94066b27bcd33919b30c6.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "l9ITl7S_nvTC1UrSJ0-I7NBd7-1owIL4c4XoxrNeS7M6k89clms5UA==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "be8412f006b64a3f82c3433128314ac9"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/hHMWfDlqKisD5zVcZfz3KEw5U3v.jpg",
@@ -37,7 +37,7 @@
     "last_air_date": "2021-07-17",
     "last_episode_to_air": {
       "id": 4191290,
-      "name": "Gentle Cricket",
+      "name": "Forward Swan",
       "overview": "",
       "vote_average": 10,
       "vote_count": 1,
@@ -50,13 +50,13 @@
       "show_id": 50821,
       "still_path": null
     },
-    "name": "Male Cow",
+    "name": "Delicate Hornet",
     "next_episode_to_air": null,
     "networks": [
       {
         "id": 833,
-        "logo_path": "/r3GEPOAXaREH765QVreesBK9mE0.png",
-        "name": "Yielding Ric Olié Media",
+        "logo_path": "/fGmCnh6tmQlCllhaFaHbKf6dSL.png",
+        "name": "Opposite IG-88 Media",
         "origin_country": "HU"
       }
     ],
@@ -64,15 +64,15 @@
     "number_of_seasons": 5,
     "origin_country": ["HU"],
     "original_language": "hu",
-    "original_name": "Xenophobic Anteater",
+    "original_name": "Short Cheetah",
     "overview": "Tum tamen aperte video. Tego abscido circumvenio titulus confido vobis umbra tantum sollicito arbustum. Uterque vestigium calcar arbor tergiversatio appello admiratio ab.",
-    "popularity": 349.1828,
+    "popularity": 532.3871,
     "poster_path": "/kBBbSgNchtMvsgD6z1oI1RRluHP.jpg",
     "production_companies": [
       {
         "id": 56902,
         "logo_path": "/uVFsyoIrj5IakdsaLWkZn13ef5x.png",
-        "name": "Curious Nien Nunb Media",
+        "name": "Easy Barriss Offee Media",
         "origin_country": "HU"
       }
     ],
@@ -165,7 +165,7 @@
           "name": "English",
           "english_name": "English",
           "data": {
-            "name": "Welcome Bison",
+            "name": "Old Rattlesnake",
             "overview": "Degusto crur conventus tactus calculus apparatus spoliatio votum vulnero. Thema usque comburo vilis adeptio.",
             "homepage": "",
             "tagline": ""

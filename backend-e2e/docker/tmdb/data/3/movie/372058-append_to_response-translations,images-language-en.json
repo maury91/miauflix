@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=25068",
+    "cache-control": "public, max-age=20228",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"7939d0e7082708259c8baaf9f3398ad4\"",
+    "etag": "W/\"6c208266e23670f00055759300bb9f48\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 7fd88bab22735486702d23ba4e028d86.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "5LGuEVFvsNFV2HyUb_20O_asPBicJBdEq8zlxrbB7Y5_t72m8oU1Ag==",
+    "via": "1.1 987865b81ba895db5b3f56f8ae175c84.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "8mb0VwtS99PjP-quDgebdid2ENmtdSmJFLQfb3jcW4cDDzVdMnxW2Q==",
     "x-amz-cf-pop": "FRA60-P3",
     "x-az": "us-east-1b",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "0091e8d404bb4c579424a9eabac49dd4"
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "108979e82b494b21a1e63d45841dacff"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/8x9iKH8kWA0zdkgNdpAew7OstYe.jpg",
@@ -38,51 +38,51 @@
     "imdb_id": "tt5311514",
     "origin_country": ["JP"],
     "original_language": "ja",
-    "original_title": "Philosophical Marsupial",
+    "original_title": "Added Ox",
     "overview": "Certus amor aureus spero tamdiu callide vilicus reiciendis arceo abundans. Venia contego curriculum dens curiositas.",
-    "popularity": 20.4735,
+    "popularity": 23.3558,
     "poster_path": "/8GJsy7w7frGquw1cy9jasOGNNI1.jpg",
     "production_companies": [
       {
         "id": 3756,
         "logo_path": "/t38uPdbKmyBB8brKKeTFWIwojRz.png",
-        "name": "Perfect Dud Bolt Pictures",
+        "name": "Western Barriss Offee Pictures",
         "origin_country": "JP"
       },
       {
         "id": 882,
         "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
-        "name": "Calm Gasgano Productions",
+        "name": "Yelling Grievous Productions",
         "origin_country": "JP"
       },
       {
         "id": 2073,
         "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
-        "name": "Overall Mon Mothma Entertainment",
+        "name": "Great Raymus Antilles Entertainment",
         "origin_country": "JP"
       },
       {
         "id": 8157,
         "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
-        "name": "Modern Tarfful Media",
+        "name": "Sparkling R5-D4 Media",
         "origin_country": "JP"
       },
       {
         "id": 14602,
         "logo_path": "/t9eqx5QCHtu8LxxgYzivqrJAosp.png",
-        "name": "Squealing Mon Mothma Pictures",
+        "name": "Yammering Ackbar Pictures",
         "origin_country": "JP"
       },
       {
         "id": 128617,
         "logo_path": null,
-        "name": "Excited Grievous Entertainment",
+        "name": "Lengthy Wicket Systri Warrick Entertainment",
         "origin_country": "JP"
       },
       {
         "id": 104184,
         "logo_path": "/reEBh8dBl2y1DbXe2EdgxtMtaim.png",
-        "name": "Private Obi-Wan Kenobi Studios",
+        "name": "Obnoxious Dexter Jettster Studios",
         "origin_country": "JP"
       }
     ],
@@ -104,10 +104,10 @@
     ],
     "status": "Released",
     "tagline": "Voluptates certus amor aureus spero.",
-    "title": "Distinctive Crawdad",
+    "title": "Robust Cheetah",
     "video": false,
-    "vote_average": 8.482,
-    "vote_count": 11781,
+    "vote_average": 8.483,
+    "vote_count": 11798,
     "translations": {
       "translations": [
         {
@@ -120,7 +120,7 @@
             "overview": "Vero admitto nulla caterva deputo careo teneo angulus tendo thymbra.",
             "runtime": 106,
             "tagline": "Ventus vero admitto.",
-            "title": "Quick Rat"
+            "title": "Energetic Ox"
           }
         },
         {
@@ -133,7 +133,7 @@
             "overview": "Avaritia veniam vicinus laboriosam abscido deleniti curto thymum. Dedico vaco expedita sperno patruus celer coma nam decet.",
             "runtime": 106,
             "tagline": "Taceo avaritia veniam vicinus laboriosam abscido.",
-            "title": "Valuable Tiglon"
+            "title": "Modern Tiglon"
           }
         },
         {
@@ -146,7 +146,7 @@
             "overview": "Succedo fugit audacia officia studio acidus accommodo pax confido doloremque.",
             "runtime": 106,
             "tagline": "Vis succedo fugit audacia.",
-            "title": "Obvious Lemur"
+            "title": "Attractive Tortoise"
           }
         },
         {
@@ -159,7 +159,7 @@
             "overview": "Succedo fugit audacia officia studio acidus accommodo pax confido doloremque.",
             "runtime": 107,
             "tagline": "Vis succedo fugit audacia.",
-            "title": "Obvious Lemur"
+            "title": "Attractive Tortoise"
           }
         },
         {
@@ -172,7 +172,7 @@
             "overview": "Certus tergeo adsum curia derideo cotidie. Porro civitas casus quia ullam degenero tempus volup artificiose suffragium. Antea vilitas astrum substantia suscipit.",
             "runtime": 0,
             "tagline": "",
-            "title": "Zonal Mouse"
+            "title": "Nutritious Scorpion"
           }
         }
       ]

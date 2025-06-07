@@ -1,0 +1,327 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5579",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3eccbc29a7cb47a48d8d6a1a3e39330e\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "_Re327rWLCN1nghxBvXs4KpubR3tIqRjDln-gD-qxrRRawLWD3uizA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "52c19747ebc4484f9477eea6ab9d801b"
+  },
+  "status": 200,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/cjRUhKyt2Jo3V1KNzc5tpPNfccG.jpg",
+    "belongs_to_collection": {
+      "id": 748,
+      "name": "Female Armadillo",
+      "poster_path": "/31rqs6ZxFdi5nWZZaFPIr17q8jt.jpg",
+      "backdrop_path": "/ykVHlrE3aSvHYeIXOrWDsYZ18vv.jpg"
+    },
+    "budget": 200000000,
+    "genres": [
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      }
+    ],
+    "homepage": "https://rash-dawn.biz",
+    "id": 320288,
+    "imdb_id": "tt6565702",
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_title": "Initial Crocodile",
+    "overview": "Circumvenio viduo terreo conor. Carcer inventore virgo terreo ante ambitus alter ratione. Caritas speciosus totidem eius tam aurum voluntarius temeritas tempora.",
+    "popularity": 78.76,
+    "poster_path": "/cCTJPelKGLhALq3r51A9uMonxKj.jpg",
+    "production_companies": [
+      {
+        "id": 28788,
+        "logo_path": "/Aqomtf9oh5dKtxBNEagkdlp3aGv.png",
+        "name": "Oral IG-88 Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 91797,
+        "logo_path": null,
+        "name": "Bad Jabba Desilijic Tiure Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 25,
+        "logo_path": "/qZCc1lty5FzX30aOCVRBLzaVmcp.png",
+        "name": "Grotesque Chewbacca Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 22213,
+        "logo_path": "/qx9K6bFWJupwde0xQDwOvXkOaL8.png",
+        "name": "Notable Plo Koon Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 7505,
+        "logo_path": "/837VMM4wOkODc1idNxGT0KQJlej.png",
+        "name": "Chronic Sebulba Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2019-06-05",
+    "revenue": 252442974,
+    "runtime": 114,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Portuguese",
+        "iso_639_1": "pt",
+        "name": "Português"
+      },
+      {
+        "english_name": "Russian",
+        "iso_639_1": "ru",
+        "name": "Pусский"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Capitulus circumvenio viduo terreo conor recusandae carcer.",
+    "title": "Broad Mandrill",
+    "video": false,
+    "vote_average": 6,
+    "vote_count": 6689,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://clumsy-commotion.org",
+            "overview": "Veritas demum excepturi asporto.",
+            "runtime": 114,
+            "tagline": "Audax veritas demum.",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Avarus conduco infit colo confugo sol. Volubilis derelinquo tunc.",
+            "runtime": 116,
+            "tagline": "Cui avarus conduco infit colo confugo.",
+            "title": "Sensible Vole"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "",
+            "overview": "Tibi baiulus necessitatibus attonbitus cedo aequitas.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Xenacious Quokka"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://tangible-mastication.net",
+            "overview": "Terminatio aeneus trado copia depereo versus voluptatum. Terreo accendo spiculum termes clam avaritia debitis sordeo ancilla atavus. Suffoco utor vae crepusculum ater sed paens.",
+            "runtime": 114,
+            "tagline": "In terminatio aeneus trado copia depereo versus voluptatum.",
+            "title": "Early Donkey"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Avarus conduco infit colo confugo sol. Volubilis derelinquo tunc.",
+            "runtime": 114,
+            "tagline": "Cui avarus conduco infit colo confugo.",
+            "title": "Sensible Vole"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/boro9nzcDKAMWM6NNuSGa8xgzU5.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_639_1": "en",
+          "file_path": "/l1ckMJCfEjfNEXM6A7B9i89eT96.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_639_1": "en",
+          "file_path": "/ojVQv3qO5dL9kA7pk9KxpMi0ANO.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_639_1": "en",
+          "file_path": "/rNgwj5XhpBMfcQn4Jr9tD6s1kfg.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_639_1": "en",
+          "file_path": "/jg724HiwzVcUZrb1mRe3RTZjpmd.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.636,
+          "height": 550,
+          "iso_639_1": "en",
+          "file_path": "/abOCWvW4EQkHFXjBLlZBQBy8Wvl.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 2.829,
+          "height": 509,
+          "iso_639_1": "en",
+          "file_path": "/b3i0jh1LX9Ia6wNbE8uxKQALpn5.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 3.733,
+          "height": 210,
+          "iso_639_1": "en",
+          "file_path": "/alm2oIo8xxBslSlvVgpiUPLOZrM.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 784
+        },
+        {
+          "aspect_ratio": 2.911,
+          "height": 270,
+          "iso_639_1": "en",
+          "file_path": "/wPJbVS5iMVqRmZ8TkEbAw4JAMqp.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 786
+        },
+        {
+          "aspect_ratio": 11.761,
+          "height": 67,
+          "iso_639_1": "en",
+          "file_path": "/cy03M7b0dHDH1jCGye4ARMAffhw.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 788
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/cCTJPelKGLhALq3r51A9uMonxKj.jpg",
+          "vote_average": 6.016,
+          "vote_count": 31,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/jTfj82OPLFtOEjnS5AmZT9MyJf9.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/gUGhbJVZAOBAf5Zg6OHF6JWrABf.jpg",
+          "vote_average": 6.648,
+          "vote_count": 17,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/voYHGTcuuUyicP9RJhnJetvcsqY.jpg",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_639_1": "en",
+          "file_path": "/kZv92eTc0Gg3mKxqjjDAM73z9cy.jpg",
+          "vote_average": 5.456,
+          "vote_count": 46,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

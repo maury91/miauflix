@@ -1,27 +1,27 @@
 {
   "headers": {
-    "age": "1220",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=25579",
+    "cache-control": "public, max-age=23282",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"d9966b2eacd6bb9c339440d2efbe795c\"",
+    "etag": "W/\"40c19673b804a161481a954f447b14bd\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 2a44338adc8233e5b25aca28287a69c8.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "F6ENGW85y9zbhuw9FVpi6K7YLxjjKFWrCcDXKNZfCOX8urQQ_-PDHQ==",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "c2SBLpd5ut8z7zvLnNemuajoYsMA1Q54th-xm__bBy8lHInkSdFnfw==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "2c5663ea6eae40d7928280f2a748520c"
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "16a22cb42da94f4cadf27d6f906c3fa9"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/dMZxEdrWIzUmUoOz2zvmFuutbj7.jpg",
     "belongs_to_collection": {
       "id": 10,
-      "name": "Mathematical Wasp",
+      "name": "Youthful Wallaby",
       "poster_path": "/aSrMJYmQX8kpF26LijkCsYhBMvm.jpg",
-      "backdrop_path": "/zZDkgOmFMVYpGAkR9Tkxw0CRnxX.jpg"
+      "backdrop_path": "/qVPChlozQ1BP3svfHjiAdNneMGA.jpg"
     },
     "budget": 18000000,
     "genres": [
@@ -43,15 +43,15 @@
     "imdb_id": "tt0080684",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Uninterested Clownfish",
+    "original_title": "Fit Chickadee",
     "overview": "Aptus cribro quas deludo deficio decimus ago sto adamo. Adulescens civitas vilicus umbra utor tenuis ultra totam degero.",
-    "popularity": 9.3503,
+    "popularity": 8.7311,
     "poster_path": "/nNAeTmF4CtdSgMDplXTDPOpYzsX.jpg",
     "production_companies": [
       {
         "id": 1,
         "logo_path": "/tlVSws0RvvtPBwViUyOFAO0vcQS.png",
-        "name": "Eager Eeth Koth Entertainment",
+        "name": "National Saesee Tiin Entertainment",
         "origin_country": "US"
       }
     ],
@@ -73,10 +73,10 @@
     ],
     "status": "Released",
     "tagline": "Teneo aptus cribro quas deludo.",
-    "title": "Operational Pinniped",
+    "title": "Net Caribou",
     "video": false,
     "vote_average": 8.4,
-    "vote_count": 17422,
+    "vote_count": 17438,
     "translations": {
       "translations": [
         {
@@ -102,7 +102,7 @@
             "overview": "Testimonium aliquid autem delinquo comminor conicio absconditus spero. Coerceo ultra adfectus vivo cuius volubilis beneficium canis. Quos altus tam audax tonsor desolo vestrum appono atrocitas conservo.",
             "runtime": 124,
             "tagline": "Summisse testimonium aliquid autem delinquo comminor conicio absconditus.",
-            "title": "Rigid Flyingfish"
+            "title": "Nuclear Jaguar"
           }
         },
         {
@@ -115,7 +115,7 @@
             "overview": "Vicinus vindico voro conatus cui aduro approbo velum cauda.",
             "runtime": 124,
             "tagline": "Urbanus vicinus vindico voro.",
-            "title": "Raw Perch"
+            "title": "Recent Tyrannosaurus"
           }
         },
         {
@@ -128,7 +128,7 @@
             "overview": "Vicinus vindico voro conatus cui aduro approbo velum cauda.",
             "runtime": 124,
             "tagline": "Urbanus vicinus vindico voro.",
-            "title": "Raw Perch"
+            "title": "Recent Tyrannosaurus"
           }
         },
         {
@@ -141,7 +141,7 @@
             "overview": "Rerum fuga somnus tutis summisse thema vulgo.",
             "runtime": 0,
             "tagline": "",
-            "title": "Normal Basilisk"
+            "title": "Appropriate Caribou"
           }
         }
       ]

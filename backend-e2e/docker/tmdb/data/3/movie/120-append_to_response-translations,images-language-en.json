@@ -1,25 +1,25 @@
 {
   "headers": {
-    "age": "1218",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=15208",
+    "cache-control": "public, max-age=13246",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"6d4c25c7d28308fee34bc2eb6dfd3174\"",
+    "etag": "W/\"b92032e2cbcf710e10b666ed5ba6f065\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "rAQPXt7MZKtmBxqW7mO5It72jBctVRdzthHVZ9GRL0um7nxpy8jIUw==",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "PN-gwaZKeV0AnvRfotf3-0453h1XbjOEqv1FZreGTS1E1KwJAL05tg==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "03e2018322f74fe8b973ddf1bd673363"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "0091e8d404bb4c579424a9eabac49dd4"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/x2RS3uTcsJJ9IfjNPcgDmukoEcQ.jpg",
     "belongs_to_collection": {
       "id": 119,
-      "name": "Psychological Skink",
+      "name": "Agricultural Swordtail",
       "poster_path": "/249qw7r9E31vvOSeMQoOrjxMjfm.jpg",
       "backdrop_path": "/bccR2CGTWVVSZAG0yqmy3DIvhTX.jpg"
     },
@@ -43,27 +43,27 @@
     "imdb_id": "tt0120737",
     "origin_country": ["US"],
     "original_language": "en",
-    "original_title": "Systematic Jackal",
+    "original_title": "Living Raven",
     "overview": "Cibo ulciscor voluptate.",
-    "popularity": 24.9266,
+    "popularity": 22.9918,
     "poster_path": "/6oom5QYQ2yQTMJIbnvbkBL9cHo6.jpg",
     "production_companies": [
       {
         "id": 12,
         "logo_path": "/2ycs64eqV5rqKYHyQK0GVoKGvfX.png",
-        "name": "Operational Nien Nunb Studios",
+        "name": "Striped Wicket Systri Warrick Studios",
         "origin_country": "US"
       },
       {
         "id": 11,
         "logo_path": "/6FAuASQHybRkZUk08p9PzSs9ezM.png",
-        "name": "Valid Cliegg Lars Studios",
+        "name": "Narrow Qui-Gon Jinn Studios",
         "origin_country": "NZ"
       },
       {
         "id": 5237,
         "logo_path": "/mlnr7vsBHvLye8oEb5A76C0t8x9.png",
-        "name": "Unknown Dooku Studios",
+        "name": "Misty Gasgano Studios",
         "origin_country": "US"
       }
     ],
@@ -89,10 +89,10 @@
     ],
     "status": "Released",
     "tagline": "Administratio cibo ulciscor voluptate.",
-    "title": "Better Viper",
+    "title": "Influential Bat",
     "video": false,
-    "vote_average": 8.421,
-    "vote_count": 25994,
+    "vote_average": 8.4,
+    "vote_count": 26013,
     "translations": {
       "translations": [
         {
@@ -118,7 +118,7 @@
             "overview": "Thermae voluptatum torrens tutis pectus.",
             "runtime": 179,
             "tagline": "Caterva thermae voluptatum.",
-            "title": "Tasty Toad"
+            "title": "United Grouse"
           }
         },
         {
@@ -131,7 +131,7 @@
             "overview": "Apparatus magni delectatio. Utpote depraedor campana acidus.",
             "runtime": 179,
             "tagline": "Adflicto apparatus magni delectatio arma.",
-            "title": "Slow Stork"
+            "title": "Ambitious Lamprey"
           }
         },
         {
@@ -144,7 +144,7 @@
             "overview": "Thermae voluptatum torrens tutis pectus.",
             "runtime": 179,
             "tagline": "Caterva thermae voluptatum.",
-            "title": "Tasty Toad"
+            "title": "United Grouse"
           }
         },
         {
@@ -157,7 +157,7 @@
             "overview": "Venia ars conforto quae. Artificiose curso cornu officia amplexus repudiandae sulum. Audacia nostrum ciminatio caries officiis sit circumvenio.",
             "runtime": 0,
             "tagline": "",
-            "title": "Yappiest Owl"
+            "title": "Xeric Reptile"
           }
         }
       ]

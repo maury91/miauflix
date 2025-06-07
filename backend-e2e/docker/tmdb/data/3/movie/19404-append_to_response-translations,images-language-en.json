@@ -1,19 +1,19 @@
 {
   "headers": {
-    "age": "1219",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cache-control": "public, max-age=3896",
+    "cache-control": "public, max-age=23520",
     "content-type": "application/json;charset=utf-8",
-    "etag": "W/\"877b482547ea888dc5f31510b5b857b3\"",
+    "etag": "W/\"dd38afd2510299b4c035e722c36c070e\"",
     "server": "openresty",
     "vary": "accept-encoding, Origin",
     "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "skximpkGsqmRt0wB9_cDGrdIL_nZXnhm2r0vKHVO-pL9FufidHl__w==",
+    "x-amz-cf-id": "xMMuocsofkConp8krLKTBJWyFaWGasqZQYL92UUAJe5Q7R3SLHQ32w==",
     "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1c",
-    "x-cache": "Hit from cloudfront",
-    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "0091e8d404bb4c579424a9eabac49dd4"
   },
+  "status": 200,
   "data": {
     "adult": false,
     "backdrop_path": "/90ez6ArvpO8bvpyIngBuwXOqJm5.jpg",
@@ -38,15 +38,15 @@
     "imdb_id": "tt0112870",
     "origin_country": ["IN"],
     "original_language": "hi",
-    "original_title": "Individual Canidae",
+    "original_title": "Assistant Beetle",
     "overview": "Adinventitias acervus culpo videlicet ubi comptus sortitus.",
-    "popularity": 9.173,
+    "popularity": 8.5435,
     "poster_path": "/rfcy6Gd3PbFIqwZX5U8xnbv7jOc.jpg",
     "production_companies": [
       {
         "id": 1569,
         "logo_path": "/lvzN86o3jrP44DIvn4SMBLOl9PF.png",
-        "name": "Prickly Jocasta Nu Entertainment",
+        "name": "Light Ackbar Entertainment",
         "origin_country": "IN"
       }
     ],
@@ -68,10 +68,10 @@
     ],
     "status": "Released",
     "tagline": "Mollitia adinventitias acervus.",
-    "title": "Graceful Possum",
+    "title": "Apparent Toad",
     "video": false,
-    "vote_average": 8.516,
-    "vote_count": 4486,
+    "vote_average": 8.517,
+    "vote_count": 4488,
     "translations": {
       "translations": [
         {
@@ -84,7 +84,7 @@
             "overview": "Non astrum alter stipes dedecor ex crapula cruentus crastinus vicinus.",
             "runtime": 190,
             "tagline": "Villa non astrum.",
-            "title": "Busy Ferret"
+            "title": "Occupational Squid"
           }
         },
         {
@@ -97,7 +97,7 @@
             "overview": "Caterva thesaurus suffoco. Depono claro viscus. Accusantium aestas brevis aestas sapiente earum tandem deludo.",
             "runtime": 189,
             "tagline": "",
-            "title": "Tiny Antlion"
+            "title": "Legal Grouse"
           }
         },
         {
@@ -110,7 +110,7 @@
             "overview": "",
             "runtime": 0,
             "tagline": "",
-            "title": "Legal Tuna"
+            "title": "Breezy Vole"
           }
         },
         {
@@ -123,7 +123,7 @@
             "overview": "Caterva thesaurus suffoco. Depono claro viscus. Accusantium aestas brevis aestas sapiente earum tandem deludo.",
             "runtime": 0,
             "tagline": "",
-            "title": "Tiny Antlion"
+            "title": "Legal Grouse"
           }
         }
       ]
