@@ -11,7 +11,7 @@ const rateLimiters = new Map<string, RateLimiter>();
 const getRateLimiter = (ip: string, path: string, limit: number): RateLimiter => {
   const key = `${ip}-${path}`;
   if (!rateLimiters.has(key)) {
-    rateLimiters.set(key, new RateLimiter(limit));
+    rateLimiters.set(key, new RateLimiter(limit, `RateLimitMiddleware:${key}`));
   }
   return rateLimiters.get(key)!;
 };
@@ -24,7 +24,7 @@ export const createRateLimitMiddlewareFactory =
 
       // Check if rate limiting should be bypassed
       const rateLimitTestMode = process.env.RATE_LIMIT_TEST_MODE === 'true';
-      const forceRateLimit = url.searchParams.get('_forceRateLimit') === 'true';
+      const forceRateLimit = context.req.header('X-Force-RateLimit') === 'true';
 
       // In test mode, bypass rate limiting unless explicitly forced
       if (rateLimitTestMode && !forceRateLimit) {

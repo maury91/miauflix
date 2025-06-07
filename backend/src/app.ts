@@ -1,20 +1,10 @@
 import 'reflect-metadata';
 
 import { serve } from '@hono/node-server';
-import { zValidator } from '@hono/zod-validator';
 import { logger } from '@logger';
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import z from 'zod';
 
 import { Database } from '@database/database';
 import { AuthError, LoginError, RoleError } from '@errors/auth.errors';
-import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
-import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
-import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import { createAuthRoutes } from '@routes/auth.routes';
-import { createMovieRoutes } from '@routes/movie.routes';
-import { createTraktRoutes } from '@routes/trakt.routes';
 import { AuthService } from '@services/auth/auth.service';
 import { DownloadService } from '@services/download/download.service';
 import { EncryptionService } from '@services/encryption/encryption.service';
@@ -26,12 +16,14 @@ import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { MagnetService, SourceService } from '@services/source';
 import { TrackerService } from '@services/source/tracker.service';
+import { StorageService } from '@services/storage/storage.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 import { TraktService } from '@services/trakt/trakt.service';
 import { buildCache } from '@utils/caching';
 
 import { validateConfiguration } from './configuration';
 import { ENV } from './constants';
+import { createRoutes } from './routes';
 
 type Methods<T> = {
   [K in keyof T]: T[K] extends (...args: unknown[]) => void ? T[K] : never;
@@ -88,6 +80,9 @@ try {
   const downloadService = new DownloadService();
   const magnetService = new MagnetService(downloadService);
   const sourceService = new SourceService(db, vpnDetectionService, trackerService, magnetService);
+  // ToDo: Use the storage service in the right places
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const storageService = new StorageService(db); // For tracking download progress (used in streaming infrastructure)
 
   await authService.configureUsers();
 
@@ -166,7 +161,19 @@ try {
   process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-  const app = new Hono();
+  // Compose all routes using createRoutes
+  const app = createRoutes({
+    authService,
+    auditLogService,
+    mediaService,
+    sourceService,
+    listService,
+    tmdbApi,
+    vpnDetectionService,
+    trackerService,
+    magnetService,
+    traktService,
+  });
 
   // Error handling middleware - must be added first
   app.onError((err, c) => {
@@ -212,81 +219,6 @@ try {
       500
     );
   });
-
-  app.use(
-    cors({
-      origin: ENV('CORS_ORIGIN'),
-      allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-      allowHeaders: ['Content-Type', 'Authorization'],
-      exposeHeaders: ['Content-Range', 'X-Content-Range'],
-      credentials: true,
-      maxAge: 86400, // 24 hours
-    })
-  );
-
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
-
-  app.use(createAuthMiddleware(authService));
-  app.use(createAuditLogMiddleware(auditLogService));
-
-  app.get('/health', rateLimitGuard(10), c => {
-    return c.json({
-      status: 'ok',
-    });
-  });
-
-  app.get('/status', rateLimitGuard(10), c => {
-    return c.json({
-      tmdb: tmdbApi.status(),
-      vpn: vpnDetectionService.status(),
-      trackers: trackerService.status(),
-      magnetResolvers: magnetService.status(),
-    });
-  });
-
-  app.route('/auth', createAuthRoutes(authService, auditLogService));
-  app.route('/movies', createMovieRoutes(mediaService, sourceService, auditLogService));
-  app.route('/trakt', createTraktRoutes(traktService, auditLogService));
-
-  app.get('/lists', rateLimitGuard(5), authGuard(), async c => {
-    const lists = await listService.getLists();
-    return c.json(
-      lists.map(list => ({
-        name: list.name,
-        slug: list.slug,
-        description: list.description,
-        url: `/list/${list.slug}`,
-      }))
-    );
-  });
-
-  app.get(
-    '/list/:slug',
-    rateLimitGuard(10),
-    authGuard(),
-    zValidator(
-      'query',
-      z.object({
-        lang: z.string().min(2).max(5).optional(),
-      })
-    ),
-    zValidator(
-      'param',
-      z.object({
-        slug: z.string().min(2).max(100),
-      })
-    ),
-    async c => {
-      const slug = c.req.valid('param').slug;
-      const lang = c.req.valid('query').lang;
-
-      const list = await listService.getListContent(slug, lang);
-      return c.json({
-        results: list,
-        total: list.length,
-      });
-    }
-  );
 
   const port = ENV.number('PORT');
   const server = serve({

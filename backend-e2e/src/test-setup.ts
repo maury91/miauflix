@@ -6,7 +6,7 @@
 jest.setTimeout(30000);
 
 // Global test configuration
-const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}`;
+const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}/`;
 
 // Make backend URL available globally
 global.BACKEND_URL = BACKEND_URL;

@@ -44,11 +44,10 @@ export const createMovieRoutes = (
   sourceService: SourceService,
   auditLogService: AuditLogService
 ) => {
-  const app = new Hono();
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
 
   // Get a single movie by ID
-  app.get(
+  return new Hono().get(
     '/:id',
     rateLimitGuard(5), // 5 requests per second
     authGuard(),
@@ -163,6 +162,4 @@ export const createMovieRoutes = (
       }
     }
   );
-
-  return app;
 };
