@@ -1,9 +1,4 @@
-import {
-  TestClient,
-  waitForService,
-  testData,
-  extractUserCredentialsFromLogs,
-} from '../utils/test-utils';
+import { TestClient, waitForService, extractUserCredentialsFromLogs } from '../utils/test-utils';
 
 describe('Authentication Endpoints', () => {
   let client: TestClient;
@@ -29,7 +24,7 @@ describe('Authentication Endpoints', () => {
   });
 
   it('should reject login with invalid credentials', async () => {
-    const response = await client.post('/auth/login', {
+    const response = await client.login({
       email: 'nonexistent@example.com',
       password: 'wrongpassword',
     });
@@ -40,7 +35,7 @@ describe('Authentication Endpoints', () => {
 
   it('should require authentication for protected endpoints', async () => {
     // Try to access a protected endpoint without authentication
-    const response = await client.get('/lists');
+    const response = await client.get(['lists']);
 
     expect(response.status).toBe(401);
   });
@@ -54,10 +49,11 @@ describe('Authentication Endpoints', () => {
 
     const response = await client.login(userCredentials);
 
-    expect(response).toHaveProperty('accessToken');
-    expect(response).toHaveProperty('refreshToken');
-    expect(typeof response.accessToken).toBe('string');
-    expect(typeof response.refreshToken).toBe('string');
+    expect(response.status).toBe(200);
+    expect(response.data).toHaveProperty('accessToken');
+    expect(response.data).toHaveProperty('refreshToken');
+    expect(typeof response.data.accessToken).toBe('string');
+    expect(typeof response.data.refreshToken).toBe('string');
   });
 
   it('should access protected endpoints when authenticated', async () => {
@@ -71,7 +67,7 @@ describe('Authentication Endpoints', () => {
     await client.login(userCredentials);
 
     // Now try to access a protected endpoint
-    const response = await client.get('/lists');
+    const response = await client.get(['lists']);
 
     expect(response.status).toBe(200);
     expect(response.data).toBeDefined();
@@ -91,8 +87,10 @@ describe('Authentication Endpoints', () => {
     client.clearAuth();
 
     // Use refresh token to get new access token
-    const refreshResponse = await client.post('/auth/refresh', {
-      refreshToken: loginResponse.refreshToken,
+    const refreshResponse = await client.post(['auth', 'refresh'], {
+      json: {
+        refreshToken: loginResponse.data.refreshToken,
+      },
     });
 
     expect(refreshResponse.status).toBe(200);
@@ -111,9 +109,7 @@ describe('Authentication Endpoints', () => {
     const loginResponse = await client.login(userCredentials);
 
     // Logout using refresh token
-    const logoutResponse = await client.post('/auth/logout', {
-      refreshToken: loginResponse.refreshToken,
-    });
+    const logoutResponse = await client.logout(loginResponse.data.refreshToken);
 
     expect(logoutResponse.status).toBe(200);
     expect(logoutResponse.data).toHaveProperty('message');
@@ -127,14 +123,19 @@ describe('Authentication Endpoints', () => {
     };
 
     // Make multiple rapid login attempts to trigger rate limiting
-    // Use _forceRateLimit=true to enable rate limiting for this specific test
+    // Use X-Force-RateLimit=true to enable rate limiting for this specific test
     const promises = [];
     for (let i = 0; i < 6; i++) {
       promises.push(
-        client.post('/auth/login?_forceRateLimit=true', invalidCredentials).catch(err => ({
-          status: err.response?.status || 500,
-          data: err.response?.data || {},
-        }))
+        client.post(
+          ['auth', 'login'],
+          {
+            json: invalidCredentials,
+          },
+          {
+            headers: { 'X-Force-RateLimit': 'true' },
+          }
+        )
       );
     }
 

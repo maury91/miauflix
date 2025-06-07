@@ -32,7 +32,10 @@ describe('Sources E2E Tests', () => {
       }
 
       // Request movie with sources included
-      const response = await client.get('/movies/550', { includeSources: 'true' });
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '550' },
+        query: { includeSources: 'true' },
+      });
 
       if (response.status === 404) {
         throw new Error('Movie 550 not found - test data is required for source testing');
@@ -40,6 +43,10 @@ describe('Sources E2E Tests', () => {
 
       expect(response.status).toBe(200);
       expect(response.data).toHaveProperty('sources');
+
+      if ('sources' in response.data === false) {
+        throw new Error('Response does not contain sources property');
+      }
 
       if (response.data.sources && response.data.sources.length > 0) {
         const sources = response.data.sources;
@@ -96,9 +103,12 @@ describe('Sources E2E Tests', () => {
       const allSourceTypes = new Set<string>();
 
       for (const movieId of movieIds) {
-        const response = await client.get(`/movies/${movieId}`, { includeSources: 'true' });
+        const response = await client.get(['movies', ':id'], {
+          param: { id: movieId },
+          query: { includeSources: 'true' },
+        });
 
-        if (response.status === 200 && response.data.sources) {
+        if (response.status === 200 && 'sources' in response.data && response.data.sources) {
           const sources = response.data.sources;
           totalSources += sources.length;
 
@@ -122,9 +132,17 @@ describe('Sources E2E Tests', () => {
         );
       }
 
-      const response = await client.get('/movies/550', { includeSources: 'true' });
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '550' },
+        query: { includeSources: 'true' },
+      });
 
-      if (response.status === 200 && response.data.sources && response.data.sources.length > 0) {
+      if (
+        response.status === 200 &&
+        'sources' in response.data &&
+        response.data.sources &&
+        response.data.sources.length > 0
+      ) {
         const source = response.data.sources[0];
 
         // Test magnet link format
@@ -165,7 +183,7 @@ describe('Sources E2E Tests', () => {
         );
       }
 
-      const response = await client.get('/movies/550');
+      const response = await client.get(['movies', ':id'], { param: { id: '550' }, query: {} });
 
       if (response.status === 200) {
         expect(response.data).not.toHaveProperty('sources');
@@ -180,11 +198,17 @@ describe('Sources E2E Tests', () => {
       }
 
       // Use a very obscure movie ID that likely has no sources
-      const response = await client.get('/movies/999888777', { includeSources: 'true' });
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '999888777' },
+        query: { includeSources: 'true' },
+      });
 
       // Should either return 404 or return movie with empty sources array
       if (response.status === 200) {
         expect(response.data).toHaveProperty('sources');
+        if (!('sources' in response.data)) {
+          throw new Error('Response does not contain sources property');
+        }
         expect(Array.isArray(response.data.sources)).toBe(true);
       } else {
         expect(response.status).toBe(404);

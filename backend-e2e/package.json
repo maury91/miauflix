@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
-    "axios": "^1.6.0",
+    "@miauflix/backend-schema": "file:../packages/backend-schema",
+    "hono": "^4.7.11",
     "sqlite3": "^5.0.11"
   },
   "jest": {

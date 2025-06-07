@@ -6,6 +6,60 @@ describe('Database Encryption E2E Tests', () => {
   let client: TestClient;
   let userCredentials: { email: string; password: string } | null = null;
 
+  // Temp folder for copied DB files
+  const os = require('os');
+  const fs = require('fs');
+  const path = require('path');
+  const tmpDbDir = path.join(os.tmpdir(), 'miauflix-e2e-db');
+  if (!fs.existsSync(tmpDbDir)) {
+    fs.mkdirSync(tmpDbDir, { recursive: true });
+  }
+
+  const getDatabase = () => {
+    // Copy the database file out of the running backend container
+    const path = require('path');
+    const fs = require('fs');
+    const { execSync } = require('child_process');
+
+    // Find the running backend container name (docker-compose test env)
+    let containerName = '';
+    try {
+      containerName = execSync('docker ps --filter "name=backend" --format "{{.Names}}" | head -n1')
+        .toString()
+        .trim();
+    } catch (err) {
+      throw new Error('Could not find running backend container: ' + err);
+    }
+
+    if (!containerName) {
+      throw new Error('No running backend container found');
+    }
+
+    // Copy the database file from the container to a temp location
+    const tempDbPath = path.join(tmpDbDir, `database.sqlite.testcopy.${Date.now()}`);
+    try {
+      execSync(`docker cp ${containerName}:/usr/src/app/data/database.sqlite ${tempDbPath}`);
+    } catch (err) {
+      throw new Error(`Failed to copy database from container (${containerName}): ${err}`);
+    }
+
+    if (!fs.existsSync(tempDbPath)) {
+      throw new Error(`Database file not found at ${tempDbPath} after docker cp`);
+    }
+
+    return new sqlite3.Database(tempDbPath);
+  };
+
+  afterAll(() => {
+    // Remove all files in the temp db dir and the dir itself
+    if (fs.existsSync(tmpDbDir)) {
+      fs.readdirSync(tmpDbDir).forEach((file: string) => {
+        fs.unlinkSync(path.join(tmpDbDir, file));
+      });
+      fs.rmdirSync(tmpDbDir);
+    }
+  });
+
   beforeAll(async () => {
     client = new TestClient();
 
@@ -34,10 +88,14 @@ describe('Database Encryption E2E Tests', () => {
       }
 
       // First, get a movie with sources to ensure we have data to test
-      const movieResponse = await client.get('/movies/550', { includeSources: 'true' });
+      const movieResponse = await client.get(['movies', ':id'], {
+        param: { id: '550' }, // Use a valid movie ID for testing
+        query: { includeSources: 'true' },
+      });
 
       if (
         movieResponse.status !== 200 ||
+        'sources' in movieResponse.data === false ||
         !movieResponse.data.sources ||
         movieResponse.data.sources.length === 0
       ) {
@@ -48,23 +106,13 @@ describe('Database Encryption E2E Tests', () => {
 
       // Connect directly to the database to verify encryption
       try {
-        // Note: In a real E2E environment, we'd need to know the actual database path
-        // This test assumes we can access the database file or have a way to query it
-        const dbPath = process.env.DATABASE_PATH || '/app/data/database.sqlite';
-
-        if (!fs.existsSync(dbPath)) {
-          throw new Error(
-            `Database file not found at ${dbPath} - cannot verify encryption at rest`
-          );
-        }
-
-        const db = new sqlite3.Database(dbPath);
+        const db = getDatabase();
 
         try {
           // Query the raw database to check if sensitive fields are encrypted
           const rawSourceData = await new Promise<any>((resolve, reject) => {
             db.get(
-              `SELECT hash, magnetLink, torrentFileUrl FROM movie_sources WHERE id = ?`,
+              `SELECT ih, ml, file FROM movie_source WHERE id = ?`,
               [source.id],
               (err, row) => {
                 if (err) reject(err);
@@ -76,16 +124,16 @@ describe('Database Encryption E2E Tests', () => {
           if (rawSourceData) {
             // Verify that sensitive fields are stored encrypted (not plaintext)
             // Encrypted data should not match the plaintext values returned by the API
-            expect(rawSourceData.hash).not.toBe(source.hash);
-            expect(rawSourceData.magnetLink).not.toBe(source.magnetLink);
+            expect(rawSourceData.ih).not.toBe(source.hash);
+            expect(rawSourceData.ml).not.toBe(source.magnetLink);
 
             // Encrypted data should be base64 encoded strings (typical encryption output)
-            expect(rawSourceData.hash).toMatch(/^[A-Za-z0-9+/=]+$/);
-            expect(rawSourceData.magnetLink).toMatch(/^[A-Za-z0-9+/=]+$/);
+            expect(rawSourceData.ih).toMatch(/^[A-Za-z0-9+/=]+$/);
+            expect(rawSourceData.ml).toMatch(/^[A-Za-z0-9+/=]+$/);
 
             // Encrypted data should be longer than typical plaintext due to IV + tag + padding
-            expect(rawSourceData.hash.length).toBeGreaterThan(source.hash.length);
-            expect(rawSourceData.magnetLink.length).toBeGreaterThan(source.magnetLink.length);
+            expect(rawSourceData.ih.length).toBeGreaterThan(source.hash.length);
+            expect(rawSourceData.ml.length).toBeGreaterThan(source.magnetLink.length);
           } else {
             throw new Error('Could not find source data in database for verification');
           }
@@ -111,9 +159,9 @@ describe('Database Encryption E2E Tests', () => {
 
       // Get movie sources multiple times to ensure decryption is working consistently
       const responses = await Promise.all([
-        client.get('/movies/550', { includeSources: 'true' }),
-        client.get('/movies/550', { includeSources: 'true' }),
-        client.get('/movies/550', { includeSources: 'true' }),
+        client.get(['movies', ':id'], { param: { id: '550' }, query: { includeSources: 'true' } }),
+        client.get(['movies', ':id'], { param: { id: '550' }, query: { includeSources: 'true' } }),
+        client.get(['movies', ':id'], { param: { id: '550' }, query: { includeSources: 'true' } }),
       ]);
 
       // All responses should be successful
@@ -122,14 +170,22 @@ describe('Database Encryption E2E Tests', () => {
       });
 
       // Skip if no sources available
-      if (!responses[0].data.sources || responses[0].data.sources.length === 0) {
+      const firstResponse = responses[0];
+      if (
+        'sources' in firstResponse.data === false ||
+        !firstResponse.data.sources ||
+        firstResponse.data.sources.length === 0
+      ) {
         throw new Error('No sources available for decryption testing - test data is required');
       }
 
       // All responses should return identical decrypted data
-      const firstSources = responses[0].data.sources;
+      const firstSources = firstResponse.data.sources;
 
       responses.slice(1).forEach(response => {
+        if ('sources' in response.data === false) {
+          throw new Error('No sources available for decryption testing - test data is required');
+        }
         expect(response.data.sources).toEqual(firstSources);
       });
 
@@ -154,10 +210,14 @@ describe('Database Encryption E2E Tests', () => {
         );
       }
 
-      const movieResponse = await client.get('/movies/550', { includeSources: 'true' });
+      const movieResponse = await client.get(['movies', ':id'], {
+        param: { id: '550' },
+        query: { includeSources: 'true' },
+      });
 
       if (
         movieResponse.status !== 200 ||
+        'sources' in movieResponse.data === false ||
         !movieResponse.data.sources ||
         movieResponse.data.sources.length === 0
       ) {
@@ -198,7 +258,9 @@ describe('Database Encryption E2E Tests', () => {
       // Make multiple rapid requests to test encryption service stability
       const promises = Array(10)
         .fill(0)
-        .map(() => client.get('/movies/550', { includeSources: 'true' }));
+        .map(() =>
+          client.get(['movies', ':id'], { param: { id: '550' }, query: { includeSources: 'true' } })
+        );
 
       const responses = await Promise.all(promises);
 
@@ -209,12 +271,19 @@ describe('Database Encryption E2E Tests', () => {
 
       // If any have sources, they should all be consistent
       const responsesWithSources = responses.filter(
-        r => r.status === 200 && r.data.sources && r.data.sources.length > 0
+        r => r.status === 200 && 'sources' in r.data && r.data.sources && r.data.sources.length > 0
       );
 
       if (responsesWithSources.length > 1) {
-        const firstSources = responsesWithSources[0].data.sources;
+        const firstResponse = responsesWithSources[0];
+        if ('sources' in firstResponse.data === false) {
+          throw new Error('No sources available for consistency testing - test data is required');
+        }
+        const firstSources = firstResponse.data.sources;
         responsesWithSources.slice(1).forEach(response => {
+          if ('sources' in response.data === false) {
+            throw new Error('No sources available for consistency testing - test data is required');
+          }
           expect(response.data.sources).toEqual(firstSources);
         });
       }
@@ -231,7 +300,10 @@ describe('Database Encryption E2E Tests', () => {
       const responses = [];
 
       for (let i = 0; i < 5; i++) {
-        const response = await client.get('/movies/550', { includeSources: 'true' });
+        const response = await client.get(['movies', ':id'], {
+          param: { id: '550' },
+          query: { includeSources: 'true' },
+        });
         if (response.status === 200) {
           responses.push(response);
         }
@@ -247,9 +319,16 @@ describe('Database Encryption E2E Tests', () => {
       }
 
       // All responses should have identical source data
-      const firstSources = responses[0].data.sources;
+      const firstResponse = responses[0];
+      if ('sources' in firstResponse.data === false || !firstResponse.data.sources) {
+        throw new Error('No sources available for data integrity testing - test data is required');
+      }
+      const firstSources = firstResponse.data.sources;
 
       responses.slice(1).forEach((response, index) => {
+        if ('sources' in response.data === false || !response.data.sources) {
+          throw new Error(`No sources available in response ${index + 1} - test data is required`);
+        }
         expect(response.data.sources).toEqual(firstSources);
       });
 

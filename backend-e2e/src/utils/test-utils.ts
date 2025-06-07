@@ -1,8 +1,7 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-
 /**
  * Test utilities for backend E2E tests
  */
+import { Client, hcWithType } from '@miauflix/backend-schema';
 
 export interface TestResponse<T = any> {
   status: number;
@@ -10,112 +9,285 @@ export interface TestResponse<T = any> {
   headers: Record<string, string>;
 }
 
-export interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
-}
+type ExtractResponseType<T> = T extends (
+  ...args: any[]
+) => Promise<{ json: () => Promise<infer R> }>
+  ? R
+  : T;
 
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
+export type AuthTokens = ExtractResponseType<Client['auth']['login']['$post']>;
+export type LoginCredentials = Parameters<Client['auth']['login']['$post']>[0]['json'];
 
 /**
  * HTTP client configured for E2E testing
  */
 export class TestClient {
-  private axios: AxiosInstance;
+  public client: Client;
+  private authToken: string | null = null;
 
   constructor(baseURL: string = global.BACKEND_URL) {
-    this.axios = axios.create({
-      baseURL,
-      timeout: 10000,
-      validateStatus: () => true, // Don't throw on HTTP errors
-    });
+    this.client = hcWithType(baseURL);
   }
 
   /**
    * Set authorization header for authenticated requests
    */
   setAuthToken(token: string): void {
-    this.axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    this.authToken = `Bearer ${token}`;
   }
 
   /**
    * Clear authorization header
    */
   clearAuth(): void {
-    delete this.axios.defaults.headers.common['Authorization'];
-  }
-
-  /**
-   * Make a GET request
-   */
-  async get<T = any>(url: string, params?: Record<string, any>): Promise<TestResponse<T>> {
-    const response = await this.axios.get(url, { params });
-    return this.formatResponse(response);
-  }
-
-  /**
-   * Make a POST request
-   */
-  async post<T = any>(url: string, data?: any): Promise<TestResponse<T>> {
-    const response = await this.axios.post(url, data);
-    return this.formatResponse(response);
-  }
-
-  /**
-   * Make a PUT request
-   */
-  async put<T = any>(url: string, data?: any): Promise<TestResponse<T>> {
-    const response = await this.axios.put(url, data);
-    return this.formatResponse(response);
-  }
-
-  /**
-   * Make a DELETE request
-   */
-  async delete<T = any>(url: string): Promise<TestResponse<T>> {
-    const response = await this.axios.delete(url);
-    return this.formatResponse(response);
+    this.authToken = null;
   }
 
   /**
    * Login and set auth token
    */
-  async login(credentials: LoginCredentials): Promise<AuthTokens> {
-    const response = await this.post<AuthTokens>('/auth/login', credentials);
+  async login(credentials: LoginCredentials): Promise<TestResponse<AuthTokens>> {
+    const response = await this.client.auth.login.$post({
+      json: credentials,
+    });
+
+    const data = await this.parseResponse(response);
 
     if (response.status === 200) {
-      this.setAuthToken(response.data.accessToken);
-      return response.data;
+      this.setAuthToken(data.accessToken);
+      return this.formatResponse(response.status, data, response.headers);
     }
 
-    throw new Error(
-      `Login failed with status ${response.status}: ${JSON.stringify(response.data)}`
-    );
+    // For non-200 responses, still return the response (don't throw)
+    // This allows tests to check the error response
+    return this.formatResponse(response.status, data, response.headers);
   }
 
   /**
    * Logout and clear auth token
    */
-  async logout(refreshToken: string): Promise<void> {
-    await this.post('/auth/logout', { refreshToken });
+  async logout(
+    refreshToken: string
+  ): Promise<TestResponse<ExtractResponseType<Client['auth']['logout']['$post']>>> {
+    const response = await this.client.auth.logout.$post({
+      json: {
+        refreshToken,
+      },
+    });
     this.clearAuth();
+    return this.formatResponse(
+      response.status,
+      await this.parseResponse(response),
+      response.headers
+    );
   }
 
-  private formatResponse<T>(response: AxiosResponse<T>): TestResponse<T> {
+  private formatResponse<T>(status: number, response: T, rawHeaders: Headers): TestResponse<T> {
     // Convert headers to a plain object to avoid circular references
     const headers: Record<string, string> = {};
-    for (const [key, value] of Object.entries(response.headers)) {
-      headers[key] = String(value);
-    }
+    rawHeaders.forEach((value, key) => {
+      headers[key] = value;
+    });
 
     return {
-      status: response.status,
-      data: response.data,
+      status,
+      data: response,
       headers,
     };
+  }
+
+  /**
+   * Parse response handling both JSON and non-JSON responses
+   */
+  private async parseResponse(response: Response): Promise<any> {
+    const contentType = response.headers.get('content-type');
+
+    try {
+      // Check if response is JSON
+      if (contentType && contentType.includes('application/json')) {
+        return await response.json();
+      }
+
+      // For non-JSON responses, try to parse as JSON first
+      // If that fails, return as text
+      const text = await response.text();
+      try {
+        return JSON.parse(text);
+      } catch {
+        // If JSON parsing fails, return the text as-is
+        return { message: text };
+      }
+    } catch (error) {
+      // If all parsing fails, return error info
+      return { error: 'Failed to parse response', details: error };
+    }
+  }
+  /**
+   * Type-safe generic POST method with method overloads for different endpoint depths
+   */
+
+  // 1-level endpoint
+  public async post<K1 extends keyof Client>(
+    endpoint: [K1],
+    args: Client[K1] extends { $post: (args: infer P) => any } ? NoInfer<P> : never,
+    options?: Client[K1] extends { $post: (args: any, options: infer P) => any }
+      ? NoInfer<P>
+      : never
+  ): Promise<
+    TestResponse<
+      Client[K1] extends { $post: (args: any) => Promise<{ json(): Promise<infer R> }> } ? R : never
+    >
+  >;
+
+  // 2-level endpoint
+  public async post<K1 extends keyof Client, K2 extends keyof Client[K1]>(
+    endpoint: [K1, K2],
+    args: Client[K1][K2] extends { $post: (args: infer P) => any } ? NoInfer<P> : never,
+    options?: Client[K1][K2] extends { $post: (args: any, options: infer P) => any }
+      ? NoInfer<P>
+      : never
+  ): Promise<
+    TestResponse<
+      Client[K1][K2] extends { $post: (args: any) => Promise<{ json(): Promise<infer R> }> }
+        ? R
+        : never
+    >
+  >;
+
+  // 3-level endpoint
+  public async post<
+    K1 extends keyof Client,
+    K2 extends keyof Client[K1],
+    K3 extends keyof Client[K1][K2],
+  >(
+    endpoint: [K1, K2, K3],
+    args: Client[K1][K2][K3] extends { $post: (args: infer P) => any } ? NoInfer<P> : never,
+    options?: Client[K1][K2][K3] extends { $post: (args: any, options: infer P) => any }
+      ? NoInfer<P>
+      : never
+  ): Promise<
+    TestResponse<
+      Client[K1][K2][K3] extends { $post: (args: any) => Promise<{ json(): Promise<infer R> }> }
+        ? R
+        : never
+    >
+  >;
+
+  // Implementation for POST
+  public async post(endpoint: string[], args?: any, options?: any): Promise<TestResponse<any>> {
+    let currentClient: any = this.client;
+
+    for (const segment of endpoint) {
+      if (currentClient && typeof currentClient[segment] !== 'undefined') {
+        currentClient = currentClient[segment];
+      } else {
+        throw new Error(
+          `Invalid endpoint path: ${endpoint.join('.')} - segment '${segment}' not found`
+        );
+      }
+    }
+
+    if (!currentClient || typeof currentClient.$post !== 'function') {
+      throw new Error(`Endpoint ${endpoint.join('.')} does not have a $post method`);
+    }
+
+    // Prepare headers for authentication
+    const requestOptions = options || {};
+    if (this.authToken) {
+      if (!requestOptions.headers) requestOptions.headers = {};
+      requestOptions.headers['Authorization'] = this.authToken;
+    }
+
+    const response = await currentClient.$post(args, requestOptions);
+
+    return this.formatResponse(
+      response.status,
+      await this.parseResponse(response),
+      response.headers
+    );
+  }
+
+  /**
+   * Type-safe generic GET method with method overloads for different endpoint depths
+   */
+
+  // 1-level endpoint
+  public async get<K1 extends keyof Client>(
+    endpoint: [K1],
+    args?: Client[K1] extends { $get: (args: infer P) => any } ? NoInfer<P> : never,
+    options?: Client[K1] extends { $get: (args: any, options: infer P) => any } ? NoInfer<P> : never
+  ): Promise<
+    TestResponse<
+      Client[K1] extends { $get: (args: any) => Promise<{ json(): Promise<infer R> }> } ? R : never
+    >
+  >;
+
+  // 2-level endpoint
+  public async get<K1 extends keyof Client, K2 extends keyof Client[K1]>(
+    endpoint: [K1, K2],
+    args?: Client[K1][K2] extends { $get: (args: infer P) => any } ? NoInfer<P> : never,
+    options?: Client[K1][K2] extends { $get: (args: any, options: infer P) => any }
+      ? NoInfer<P>
+      : never
+  ): Promise<
+    TestResponse<
+      Client[K1][K2] extends { $get: (args: any) => Promise<{ json(): Promise<infer R> }> }
+        ? R
+        : never
+    >
+  >;
+
+  // 3-level endpoint
+  public async get<
+    K1 extends keyof Client,
+    K2 extends keyof Client[K1],
+    K3 extends keyof Client[K1][K2],
+  >(
+    endpoint: [K1, K2, K3],
+    args?: Client[K1][K2][K3] extends { $get: (args: infer P) => any } ? NoInfer<P> : never,
+    options?: Client[K1][K2][K3] extends { $get: (args: any, options: infer P) => any }
+      ? NoInfer<P>
+      : never
+  ): Promise<
+    TestResponse<
+      Client[K1][K2][K3] extends { $get: (args: any) => Promise<{ json(): Promise<infer R> }> }
+        ? R
+        : never
+    >
+  >;
+
+  // Implementation for GET
+  public async get(endpoint: string[], args?: any, options?: any): Promise<TestResponse<any>> {
+    let currentClient: any = this.client;
+
+    for (const segment of endpoint) {
+      if (currentClient && typeof currentClient[segment] !== 'undefined') {
+        currentClient = currentClient[segment];
+      } else {
+        throw new Error(
+          `Invalid endpoint path: ${endpoint.join('.')} - segment '${segment}' not found`
+        );
+      }
+    }
+
+    if (!currentClient || typeof currentClient.$get !== 'function') {
+      throw new Error(`Endpoint ${endpoint.join('.')} does not have a $get method`);
+    }
+
+    // Prepare headers for authentication
+    const requestOptions = options || {};
+    if (this.authToken) {
+      if (!requestOptions.headers) requestOptions.headers = {};
+      requestOptions.headers['Authorization'] = this.authToken;
+    }
+
+    const response = await currentClient.$get(args, requestOptions);
+
+    return this.formatResponse(
+      response.status,
+      await this.parseResponse(response),
+      response.headers
+    );
   }
 }
 
@@ -142,15 +314,11 @@ export async function waitFor(
 /**
  * Wait for service to be healthy
  */
-export async function waitForService(
-  client: TestClient,
-  endpoint: string = '/health',
-  timeout: number = 30000
-): Promise<void> {
+export async function waitForService(client: TestClient, timeout: number = 30000): Promise<void> {
   await waitFor(
     async () => {
       try {
-        const response = await client.get(endpoint);
+        const response = await client.get(['health']);
         return response.status === 200;
       } catch {
         return false;

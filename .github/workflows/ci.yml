@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Build packages
-        run: npm run build:libs
+        run: npm run build:all
 
       - name: Check TypeScript
         run: npm run check:ts
