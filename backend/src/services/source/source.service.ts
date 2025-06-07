@@ -430,7 +430,7 @@ export class SourceService {
     if (!this.sourceRateLimiters.has(source)) {
       // Set rate limits per source (requests per second)
       const rateLimit = source === 'YTS' ? 0.5 : 0.2; // YTS: 30 req/min, others: 12 req/min
-      this.sourceRateLimiters.set(source, new RateLimiter(rateLimit));
+      this.sourceRateLimiters.set(source, new RateLimiter(rateLimit, `SourceService:${source}`));
     }
     return this.sourceRateLimiters.get(source)!;
   }

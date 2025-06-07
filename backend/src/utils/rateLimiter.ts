@@ -1,16 +1,19 @@
+import { logger } from '@logger';
+
 import { sleep } from './time';
 
+// Optionally identify this limiter for debugging
 export class RateLimiter {
   private requestTimestamps: number[] = [];
+  private readonly name: string;
+  private readonly intervalMs: number;
 
-  constructor(private readonly limit: number) {}
-
-  /**
-   * Calculates the interval in milliseconds based on the rate limit
-   * @returns The interval in milliseconds
-   */
-  private getIntervalMs(): number {
-    return this.limit < 1 ? Math.round(1000 / this.limit) : 1000;
+  constructor(
+    private readonly limit: number,
+    name?: string
+  ) {
+    this.name = name || 'unnamed';
+    this.intervalMs = this.limit < 1 ? Math.round(1000 / this.limit) : 1000;
   }
 
   /**
@@ -18,8 +21,7 @@ export class RateLimiter {
    * @returns Filtered timestamps array
    */
   private filterOldTimestamps(): void {
-    const intervalMs = this.getIntervalMs() + 1;
-    const cutoffTime = Date.now() - intervalMs;
+    const cutoffTime = Date.now() - this.intervalMs + 1;
     this.requestTimestamps = this.requestTimestamps.filter(timestamp => timestamp > cutoffTime);
   }
 
@@ -34,8 +36,6 @@ export class RateLimiter {
     if (this.limit < 1) {
       // For fractional rates (e.g., 0.2 req/sec = 1 req every 5 seconds)
       if (this.requestTimestamps.length > 0) {
-        const intervalMs = this.getIntervalMs();
-
         // When calculating the next available slot, we need to consider all previous requests
         // Each request "blocks" a slot for a full interval
         // For example, with a rate limit of 0.2 req/sec:
@@ -45,16 +45,23 @@ export class RateLimiter {
 
         const lastTimestamp = this.requestTimestamps[this.requestTimestamps.length - 1];
 
+        logger.debug(
+          'RateLimiter',
+          `[${this.name}] Request limit reached: ${this.requestTimestamps.length} >= ${this.limit}, lastTimestamp=${new Date(lastTimestamp).toISOString()}, intervalMs=${this.intervalMs}, now=${new Date(now).toISOString()}`
+        );
         // The delay is the time until the last slot ends
-        return Math.max(0, lastTimestamp + intervalMs - now);
+        return Math.max(0, lastTimestamp + this.intervalMs - now);
       }
     } else {
       // For standard rates (e.g., 5 req/sec)
       if (this.requestTimestamps.length >= this.limit) {
         // We need to wait until the oldest request expires
-        const intervalMs = this.getIntervalMs();
         const oldestRequest = Math.min(...this.requestTimestamps);
-        return oldestRequest + intervalMs - now;
+        logger.debug(
+          'RateLimiter',
+          `[${this.name}] Request limit reached: ${this.requestTimestamps.length} >= ${this.limit}, oldestRequest=${new Date(oldestRequest).toISOString()}, now=${new Date(now).toISOString()}`
+        );
+        return oldestRequest + this.intervalMs - now;
       }
     }
 
@@ -65,12 +72,26 @@ export class RateLimiter {
    * Throttles the request by waiting if necessary
    */
   async throttle(): Promise<void> {
+    const now = Date.now();
     const delayMs = this.calculateDelay();
 
-    this.requestTimestamps.push(Date.now() + delayMs);
+    logger.debug(
+      'RateLimiter',
+      `[${this.name}] throttle() called at ${new Date(now).toISOString()} | delayMs=${delayMs} | queue=[${this.requestTimestamps.join(', ')}] | limit=${this.limit}`
+    );
 
+    this.requestTimestamps.push(now + delayMs);
+
+    logger.debug(
+      'RateLimiter',
+      `[${this.name}] Delaying for ${delayMs}ms (until ${new Date(now + delayMs).toISOString()})`
+    );
     if (delayMs > 0) {
       await sleep(delayMs);
+      logger.debug(
+        'RateLimiter',
+        `[${this.name}] Delay finished at ${new Date(Date.now()).toISOString()}`
+      );
     }
   }
 

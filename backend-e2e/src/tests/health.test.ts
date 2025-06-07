@@ -17,7 +17,7 @@ describe('Health Endpoint', () => {
   }, 60000); // 60 second timeout for service startup
 
   it('should return 200 OK for health check', async () => {
-    const response = await client.get('/health');
+    const response = await client.get(['health']);
 
     expect(response.status).toBeHttpStatus(200);
     expect(response.data).toEqual({
@@ -27,7 +27,7 @@ describe('Health Endpoint', () => {
 
   it('should respond quickly to health checks', async () => {
     const startTime = Date.now();
-    const response = await client.get('/health');
+    const response = await client.get(['health']);
     const endTime = Date.now();
 
     const responseTime = endTime - startTime;
@@ -37,7 +37,7 @@ describe('Health Endpoint', () => {
   });
 
   it('should have correct content type for health response', async () => {
-    const response = await client.get('/health');
+    const response = await client.get(['health']);
 
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);
@@ -47,7 +47,7 @@ describe('Health Endpoint', () => {
     // Ensure we're not authenticated
     client.clearAuth();
 
-    const response = await client.get('/health');
+    const response = await client.get(['health']);
 
     expect(response.status).toBe(200);
     expect(response.data.status).toBe('ok');

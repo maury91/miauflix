@@ -21,8 +21,11 @@ export abstract class Api {
     if (!cache) {
       throw new Error('Cache is required');
     }
-    this.rateLimiter = new RateLimiter(rateLimit);
-    this.highPriorityRateLimiter = new RateLimiter(highPriorityRateLimit);
+    this.rateLimiter = new RateLimiter(rateLimit, `${this.constructor.name}:default`);
+    this.highPriorityRateLimiter = new RateLimiter(
+      highPriorityRateLimit,
+      `${this.constructor.name}:highPriority`
+    );
   }
 
   protected constructUrl(endpoint: string, params: Record<string, boolean | number | string> = {}) {

@@ -32,7 +32,8 @@ export class YTSApi extends Api {
       ENV('YTS_API_URL') || `https://${domainMirrors[0]}`,
       // YTS doesn't document rate limits specifically, but we'll implement
       // a conservative rate limiter (20 requests per minute) to be safe
-      20 / 60 // 20 requests per minute
+      20 / 60, // Default RateLimiter: 20 requests per minute
+      2 // High priority RateLimiter: 2 request per second
     );
   }
 

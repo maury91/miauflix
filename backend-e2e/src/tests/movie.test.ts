@@ -28,7 +28,10 @@ describe('Movie Endpoints', () => {
       // Clear auth to test unauthorized access
       client.clearAuth();
 
-      const response = await client.get('/movies/550'); // Fight Club movie ID
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '550' }, // Use a valid movie ID for testing
+        query: {},
+      });
 
       expect(response.status).toBe(401);
       expect(response.data).toHaveProperty('message');
@@ -46,7 +49,10 @@ describe('Movie Endpoints', () => {
         );
       }
 
-      const response = await client.get('/movies/999999999');
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '999999999' }, // Use a valid movie ID for testing
+        query: {},
+      });
 
       expect(response.status).toBe(404);
       expect(response.data).toHaveProperty('error', 'Movie not found');
@@ -60,7 +66,10 @@ describe('Movie Endpoints', () => {
       }
 
       // Test invalid movie ID (non-numeric)
-      const response = await client.get('/movies/invalid-id');
+      const response = await client.get(['movies', ':id'], {
+        param: { id: 'invalid-id' }, // Use a valid movie ID for testing
+        query: {},
+      });
 
       expect(response.status).toBe(400);
       expect(response.data).toHaveProperty('error');
@@ -74,7 +83,10 @@ describe('Movie Endpoints', () => {
       }
 
       // Use a popular movie ID that should exist (Fight Club)
-      const response = await client.get('/movies/550');
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '550' }, // Use a valid movie ID for testing
+        query: {},
+      });
 
       if (response.status === 404) {
         throw new Error('Movie not found - ensure the backend has the TMDB data loaded');
@@ -93,6 +105,9 @@ describe('Movie Endpoints', () => {
       expect(response.data).toHaveProperty('popularity');
       expect(response.data).toHaveProperty('rating');
 
+      if (!('id' in response.data)) {
+        throw new Error('Movie data does not contain expected properties');
+      }
       // Validate data types
       expect(typeof response.data.id).toBe('number');
       expect(typeof response.data.tmdbId).toBe('number');
@@ -112,7 +127,10 @@ describe('Movie Endpoints', () => {
       }
 
       // Test with Spanish language
-      const response = await client.get('/movies/550', { lang: 'es' });
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '550' }, // Use a valid movie ID for testing
+        query: { lang: 'es' },
+      });
 
       if (response.status === 404) {
         throw new Error('Movie not found for Spanish language');
@@ -130,7 +148,10 @@ describe('Movie Endpoints', () => {
         );
       }
 
-      const response = await client.get('/movies/550', { includeSources: 'true' });
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '550' }, // Use a valid movie ID for testing
+        query: { includeSources: 'true' },
+      });
 
       if (response.status === 404) {
         throw new Error('Movie not found for Spanish language');
@@ -139,29 +160,36 @@ describe('Movie Endpoints', () => {
       expect(response.status).toBe(200);
       expect(response.data).toHaveProperty('sources');
 
-      if (response.data.sources && response.data.sources.length > 0) {
-        const source = response.data.sources[0];
-        expect(source).toHaveProperty('id');
-        expect(source).toHaveProperty('hash');
-        expect(source).toHaveProperty('magnetLink');
-        expect(source).toHaveProperty('quality');
-        expect(source).toHaveProperty('resolution');
-        expect(source).toHaveProperty('size');
-        expect(source).toHaveProperty('videoCodec');
-        expect(source).toHaveProperty('source');
-        expect(source).toHaveProperty('hasDataFile');
-
-        // Validate source data types
-        expect(typeof source.id).toBe('number');
-        expect(typeof source.hash).toBe('string');
-        expect(typeof source.magnetLink).toBe('string');
-        expect(typeof source.quality).toBe('string');
-        expect(typeof source.resolution).toBe('number');
-        expect(typeof source.size).toBe('number');
-        expect(typeof source.videoCodec).toBe('string');
-        expect(typeof source.source).toBe('string');
-        expect(typeof source.hasDataFile).toBe('boolean');
+      if (!('sources' in response.data)) {
+        throw new Error('Movie data does not contain sources');
       }
+
+      if (!response.data.sources || !Array.isArray(response.data.sources)) {
+        throw new Error('Sources should be an array');
+      }
+      expect(response.data.sources.length).toBeGreaterThan(0);
+
+      const source = response.data.sources[0];
+      expect(source).toHaveProperty('id');
+      expect(source).toHaveProperty('hash');
+      expect(source).toHaveProperty('magnetLink');
+      expect(source).toHaveProperty('quality');
+      expect(source).toHaveProperty('resolution');
+      expect(source).toHaveProperty('size');
+      expect(source).toHaveProperty('videoCodec');
+      expect(source).toHaveProperty('source');
+      expect(source).toHaveProperty('hasDataFile');
+
+      // Validate source data types
+      expect(typeof source.id).toBe('number');
+      expect(typeof source.hash).toBe('string');
+      expect(typeof source.magnetLink).toBe('string');
+      expect(typeof source.quality).toBe('string');
+      expect(typeof source.resolution).toBe('number');
+      expect(typeof source.size).toBe('number');
+      expect(typeof source.videoCodec).toBe('string');
+      expect(typeof source.source).toBe('string');
+      expect(typeof source.hasDataFile).toBe('boolean');
     });
 
     it('should not include sources by default', async () => {
@@ -171,7 +199,10 @@ describe('Movie Endpoints', () => {
         );
       }
 
-      const response = await client.get('/movies/550');
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '550' }, // Use a valid movie ID for testing
+        query: {},
+      });
 
       if (response.status === 404) {
         throw new Error('Movie not found for Spanish language');
@@ -189,10 +220,21 @@ describe('Movie Endpoints', () => {
       }
 
       // Make multiple rapid requests to test rate limiting (10 requests per second limit)
-      // Use _forceRateLimit=true to enable rate limiting for this specific test
+      // Use X-Force-RateLimit=true to enable rate limiting for this specific test
       const promises = Array(15)
         .fill(0)
-        .map(() => client.get('/movies/550?_forceRateLimit=true'));
+        .map(() =>
+          client.get(
+            ['movies', ':id'],
+            {
+              param: { id: '550' }, // Use a valid movie ID for testing
+              query: {},
+            },
+            {
+              headers: { 'X-Force-RateLimit': 'true' },
+            }
+          )
+        );
       const responses = await Promise.all(promises);
 
       // At least some requests should be rate limited
@@ -208,10 +250,37 @@ describe('Movie Endpoints', () => {
       }
 
       // Test with edge case movie ID that might cause issues
-      const response = await client.get('/movies/0');
+      const response = await client.get(['movies', ':id'], {
+        param: { id: '0' },
+        query: {},
+      });
 
       // Should return either 404 or 400, but not 500
       expect([400, 404]).toContain(response.status);
     });
+  });
+  // Performance test: on-demand source request for unprocessed movie
+  it('should request a source on-demand for an unprocessed movie in under 1 second', async () => {
+    if (!userCredentials) {
+      throw new Error(
+        'No user credentials available for testing - ensure backend is running and generating admin user'
+      );
+    }
+
+    // Use a movie ID that is present in test fixtures and likely unprocessed
+    const unprocessedMovieId = 1356039; // Mid Bandicoot, valid and unused movie for on-demand test
+    const start = Date.now();
+
+    // Request the movie with sources included (on-demand)
+    const response = await client.get(['movies', ':id'], {
+      param: { id: `${unprocessedMovieId}` },
+      query: { includeSources: 'true' },
+    });
+
+    const durationMs = Date.now() - start;
+
+    expect(response.status).toBe(200);
+    expect(response.data).toHaveProperty('sources');
+    expect(durationMs).toBeLessThan(1000);
   });
 });
