@@ -21,6 +21,7 @@
     "paths": {
       "@database": ["src/database"],
       "@database/*": ["src/database/*"],
+      "@dto/*": ["src/dto/*"],
       "@entities/*": ["src/entities/*"],
       "@errors/*": ["src/errors/*"],
       "@middleware/*": ["src/middleware/*"],

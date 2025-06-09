@@ -12,26 +12,23 @@ export class GenreRepository {
   }
 
   async createOrGetGenre(id: number): Promise<Genre> {
+    await this.genreRepository.upsert({ id }, ['id']);
     const genre = await this.genreRepository.findOne({ where: { id } });
     if (genre) {
       return genre;
     }
-    const newGenre = this.genreRepository.create({ id });
-    return this.genreRepository.save(newGenre);
+    throw new Error(`Genre with ID ${id} does not exist and could not be created`);
   }
 
   async createTranslation(genre: Genre, name: string, language: string): Promise<void> {
-    const existingTranslation = await this.genreTranslationRepository.findOne({
-      where: { genreId: genre.id, language },
-    });
-    if (!existingTranslation) {
-      const newTranslation = this.genreTranslationRepository.create({
-        genre,
+    await this.genreTranslationRepository.upsert(
+      {
+        genreId: genre.id,
         name,
         language,
-      });
-      await this.genreTranslationRepository.save(newTranslation);
-    }
+      },
+      ['genreId', 'language']
+    );
   }
 
   async findAll(): Promise<Genre[]> {

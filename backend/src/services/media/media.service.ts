@@ -64,7 +64,13 @@ export class MediaService {
             }
           })
         );
-      } catch {
+      } catch (err) {
+        logger.error(
+          'MediaService',
+          `Error fetching movie with TMDB ID ${movieId}:`,
+          err,
+          err instanceof Error ? err.stack : undefined
+        );
         // If TMDB returns 404 or any error, return null
         return null;
       }
@@ -393,7 +399,17 @@ export class MediaService {
   }
 
   private async getGenres(ids: number[], additionalLanguages: string[] = []): Promise<Genre[]> {
-    await this.ensureGenres(ids, additionalLanguages);
+    try {
+      await this.ensureGenres(ids, additionalLanguages);
+    } catch (error) {
+      logger.error(
+        'MediaService',
+        'Error ensuring genres:',
+        error,
+        error instanceof Error ? error.stack : undefined
+      );
+      throw new Error('Failed to ensure genres');
+    }
 
     return ids.map(id => {
       const genre = this.genreCache.get(id);
@@ -405,6 +421,7 @@ export class MediaService {
   }
 
   private async ensureGenres(ids: number[], additionalLanguages: string[] = []): Promise<boolean> {
+    logger.debug('MediaService', `Ensuring genres for IDs: ${ids.join(', ')}`);
     const languages = [...supportedLanguages, ...additionalLanguages];
     const incompleteLanguagesBeforeCacheRefresh = languages.filter(language =>
       ids.some(id => !this.genreCache.get(id)?.languages.includes(language))

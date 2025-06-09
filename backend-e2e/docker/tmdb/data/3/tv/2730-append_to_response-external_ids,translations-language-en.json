@@ -1,0 +1,247 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8658",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"624b0b383f1f514581603484ff6d089a\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "qMySNguJ0iwyHI3RuM9LF5tYtE5a3RL8sCROtB-g1iema2BTxGsbqA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6baf574374274cd5a85ee544c125e4a7"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5tGYbT3irV4ZuO7M65HewlVT6fx.jpg",
+    "created_by": [
+      {
+        "id": 1217162,
+        "credit_id": "52574297760ee36aaa0c4521",
+        "name": "Winston Jenkins",
+        "original_name": "Winston Jenkins",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 1227387,
+        "credit_id": "52574297760ee36aaa0c451b",
+        "name": "Monique Klein",
+        "original_name": "Monique Klein",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 1217163,
+        "credit_id": "52574297760ee36aaa0c4527",
+        "name": "Forrest Kassulke",
+        "original_name": "Forrest Kassulke",
+        "gender": 1,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [30],
+    "first_air_date": "1951-10-15",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "",
+    "id": 2730,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "1957-05-06",
+    "last_episode_to_air": {
+      "id": 214081,
+      "name": "Straight Herring",
+      "overview": "Speculum claro canonicus neque vindico vis vestrum victus adhaero sonitus.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "1957-05-06",
+      "episode_number": 26,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 26,
+      "season_number": 5,
+      "show_id": 2730,
+      "still_path": "/wO3qavv6RI29zMT5PDdXsljMgGK.jpg"
+    },
+    "name": "Logical Ptarmigan",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Narrow Jar Jar Binks Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 171,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Sexual Harrier",
+    "overview": "Vorago comes mollitia denuo.",
+    "popularity": 416.0078,
+    "poster_path": "/mPUSrFTvQqwEqTtfukxJBtkbxWj.jpg",
+    "production_companies": [
+      {
+        "id": 39856,
+        "logo_path": "/x929GPaOozzVA92B0IkjbucZRAk.png",
+        "name": "Melodic Bib Fortuna Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1990-04-30",
+        "episode_count": 18,
+        "id": 8869,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/5HXXBLdPJEn6qIcqFxZYeHmZapd.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1951-10-15",
+        "episode_count": 35,
+        "id": 8867,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/n2hHVHoSJb6cx65J0CME2drE66i.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "1952-09-15",
+        "episode_count": 31,
+        "id": 8868,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/6xRq6KW6uGLIAHkWH6yFh7ONshu.jpg",
+        "season_number": 2,
+        "vote_average": 10
+      },
+      {
+        "air_date": "1953-10-05",
+        "episode_count": 31,
+        "id": 8866,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/rV6TsknL6l3F44kE1HK8MTyc9f0.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1954-10-04",
+        "episode_count": 30,
+        "id": 8863,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/ihVqENEyrnvxsD00EUslWrWblZK.jpg",
+        "season_number": 4,
+        "vote_average": 10
+      },
+      {
+        "air_date": "1955-10-03",
+        "episode_count": 26,
+        "id": 8865,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/ue3TG3vHlMIkfclcZWzUVf6IGi4.jpg",
+        "season_number": 5,
+        "vote_average": 10
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Carcer vorago comes.",
+    "type": "Scripted",
+    "vote_average": 7.916,
+    "vote_count": 231,
+    "external_ids": {
+      "imdb_id": "tt0043208",
+      "freebase_mid": "/m/012cjw",
+      "freebase_id": "/en/i_love_lucy",
+      "tvdb_id": 70584,
+      "tvrage_id": 3944,
+      "wikidata_id": "Q181943",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Aestivus collum desidero tubineus suffragium deficio.",
+            "homepage": "",
+            "tagline": "Deorsum aestivus collum."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Uptight Aphid",
+            "overview": "Curso viriliter cernuus temeritas tenetur titulus concedo assumenda thermae adopto. Calculus aestivus deinde succedo caelestis solium adimpleo aro. Demergo cui vir vomica defessus terminatio tergeo sum beatae.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Intensive Meadowlark",
+            "overview": "Id necessitatibus attero arma appello. Delicate aegrus defleo cunctatio suffragium vester vigor arguo comburo. Cometes congregatio credo bibo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Intensive Meadowlark",
+            "overview": "Id necessitatibus attero arma appello. Delicate aegrus defleo cunctatio suffragium vester vigor arguo comburo. Cometes congregatio credo bibo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

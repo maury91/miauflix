@@ -1,0 +1,200 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9764",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0d2a4d0213074d6694f8cd9aa3a30474\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 231be1c97cc722fa08b64d21072ebfac.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "T0vsECrEwo3-LjkKbFjIJBcDOpmL3FQb3LiKaXUclJr7vSbcVPsoEA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "bf59d1a70aa24b70b33046ab4959a826"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/575sxZXNNulSlIz7DvtWH5r4lkC.jpg",
+    "created_by": [],
+    "episode_run_time": [23],
+    "first_air_date": "1999-10-16",
+    "genres": [
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://amazing-severity.biz",
+    "id": 45952,
+    "in_production": false,
+    "languages": ["ja"],
+    "last_air_date": "2001-03-31",
+    "last_episode_to_air": {
+      "id": 1177412,
+      "name": "Kurapika x Friends x Spider's Doom",
+      "overview": "Zeno and Silva injure Chrollo, but do not finish him off because of  the call from Illumi who manages to kill the mafia dons. Having no  client, the professional assassins have no reason to fight and just  leave. Fake bodies of Chrollo and all other Phantom Troupe members are found, calming the mafia community, and the auction takes place as  planned. Kurapika calms down a bit and meets with Gon, Killua and  Leorio. In the last seconds of the episode Hisoka sends a text message to Kurapika telling him the corpses are fake.",
+      "vote_average": 8.5,
+      "vote_count": 4,
+      "air_date": "2001-03-31",
+      "episode_number": 62,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 45952,
+      "still_path": "/gDX3GZmTDEGmZIMrPKXW4N5pquO.jpg"
+    },
+    "name": "Competent Mosquito",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1,
+        "logo_path": "/4x4GsmRmSLLL0RVNKsoqAVH43tz.png",
+        "name": "Okay San Hill Entertainment",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 92,
+    "number_of_seasons": 1,
+    "origin_country": ["JP"],
+    "original_language": "ja",
+    "original_name": "Civil Unicorn",
+    "overview": "Atqui patruus commemoro verbera vergo quaerat aegrotatio tondeo demens.",
+    "popularity": 257.1979,
+    "poster_path": "/eobAuhCJA8oRp814V67WhezVXtQ.jpg",
+    "production_companies": [
+      {
+        "id": 4287,
+        "logo_path": "/hIxV81PD6eNsNluKemgiWwdZhcb.png",
+        "name": "Correct Padmé Amidala Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3464,
+        "logo_path": "/9k0nr75nwnNeT2MHerf1OXJN0hj.png",
+        "name": "Surrounding Bib Fortuna Entertainment",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2002-01-17",
+        "episode_count": 30,
+        "id": 136069,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/d6u7X0qmUrKOPpWqHgCRb1ZNfCi.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1999-10-16",
+        "episode_count": 62,
+        "id": 75533,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/4XvlGTXxHVaiYVuVzxvjYFNFNa1.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.462,
+    "vote_count": 184,
+    "external_ids": {
+      "imdb_id": "tt0426719",
+      "freebase_mid": "/m/0lqhmfb",
+      "freebase_id": null,
+      "tvdb_id": 79076,
+      "tvrage_id": null,
+      "wikidata_id": "Q2277401",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Salty Boa",
+            "overview": "Trepide arbitro defessus angelus soleo bellicus. Vesco verto stillicidium thesis stips timidus vulgaris. Varius canis thorax vilitas decens aperio nam antiquus allatus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Doubtful Bovid",
+            "overview": "Summisse demum articulus corporis voro bardus tepidus vesper neque. Cervus supplanto somniculosus suffragium.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Doubtful Bovid",
+            "overview": "Summisse demum articulus corporis voro bardus tepidus vesper neque. Cervus supplanto somniculosus suffragium.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Boring Mouse",
+            "overview": "Bis eligendi voluptatum.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

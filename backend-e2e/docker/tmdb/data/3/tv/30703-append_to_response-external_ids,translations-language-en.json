@@ -1,0 +1,217 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19537",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1992f5b7231f70bac76ad2776a83217b\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 4612dc3b414cf2057f542e94733d59bc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "uBRZTQ_VZyykCdoB9LDUsoexszXOvghi9i1DdMZAH1H31_IfCTRP8g==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/lxekzMqu4I1dWG7bK4IaurD5PbM.jpg",
+    "created_by": [
+      {
+        "id": 942904,
+        "credit_id": "52589984760ee346615d4f41",
+        "name": "Mr. Earnest Schaden",
+        "original_name": "Mr. Earnest Schaden",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [44],
+    "first_air_date": "2009-08-09",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://insistent-faithful.net",
+    "id": 30703,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-05-16",
+    "last_episode_to_air": {
+      "id": 6201706,
+      "name": "Inquisitive Warbler",
+      "overview": "Aduro stipes delibero statua contigo statua aetas nobis strues. Caecus comitatus in cogito.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2025-05-16",
+      "episode_number": 20,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 43,
+      "season_number": 5,
+      "show_id": 30703,
+      "still_path": "/68zqzdMDrfWgwcAw3Gtyu79o1x5.jpg"
+    },
+    "name": "Tiny Termite",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2,
+        "logo_path": "/2uy2ZWcplrSObIyt4x0Y9rkG6qO.png",
+        "name": "Forward Kit Fisto Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 93,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Imaginative Reindeer",
+    "overview": "Totus appello temperantia tumultus vilis. Coepi cervus antea victoria bonus illo baiulus tardus.",
+    "popularity": 426.5731,
+    "poster_path": "/wztqq3SWfdzcuxvl9oA2HwOXasO.jpg",
+    "production_companies": [
+      {
+        "id": 11073,
+        "logo_path": "/aCbASRcI1MI7DXjPbSW9Fcv9uGR.png",
+        "name": "Homeless Ben Quadinaros Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 59551,
+        "logo_path": null,
+        "name": "Communist Ki-Adi-Mundi Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 54460,
+        "logo_path": null,
+        "name": "Stable R2-D2 Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 2230,
+        "logo_path": "/igOjospzsKQIbpuFCGhoN5F9icS.png",
+        "name": "Forward Wedge Antilles Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 77503,
+        "logo_path": null,
+        "name": "Helpful Dormé Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2009-08-09",
+        "episode_count": 14,
+        "id": 42272,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/zqLimK8hwafDRFDw7OZEkg9H9LW.jpg",
+        "season_number": 1,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2011-03-20",
+        "episode_count": 9,
+        "id": 42273,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/2HgOP5TpY2vGdIqupFUAGKPRlnZ.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2012-01-20",
+        "episode_count": 15,
+        "id": 42274,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/tPoZuhMFbxyi5GMzhAST60fkklE.jpg",
+        "season_number": 3,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2012-09-14",
+        "episode_count": 26,
+        "id": 42275,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2013-09-20",
+        "episode_count": 29,
+        "id": 42277,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/m6gFT4snsI9WPjm2J5LuQuaJJyl.jpg",
+        "season_number": 5,
+        "vote_average": 7.2
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Conatus totus appello temperantia tumultus.",
+    "type": "Reality",
+    "vote_average": 6.7,
+    "vote_count": 127,
+    "external_ids": {
+      "imdb_id": "tt1442550",
+      "freebase_mid": "/m/0640j0c",
+      "freebase_id": null,
+      "tvdb_id": 100981,
+      "tvrage_id": 22610,
+      "wikidata_id": "Q1440964",
+      "facebook_id": "SharkTank",
+      "instagram_id": "sharktankabc",
+      "twitter_id": "ABCSharkTank"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Vallum dolorem omnis nostrum dignissimos correptius. Aliqua illo acidus vitium tabgo.",
+            "homepage": "",
+            "tagline": "Defendo vallum dolorem omnis nostrum dignissimos."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Ugly Bovid",
+            "overview": "Vigilo spargo copiose custodia repellendus tripudio tracto coepi amita. Cresco audio tibi cultura balbus spoliatio spargo depromo. Cibus cubo succurro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

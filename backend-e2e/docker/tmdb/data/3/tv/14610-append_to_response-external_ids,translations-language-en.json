@@ -1,0 +1,225 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16086",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d61c9ee1a3f31c94def7077c5902c7f5\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6fc439c8bc0a64a7ab978ce699795274.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "lnXhktHMU_FX3UW66MN4tDr7gSgmw8IaKG29sI294HELjaFaPlBHkA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "b73b3adb648e4dc6b37190b6d78a7da1"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/nG2im8JKKNB6dXg9ZmVTuiYqFJI.jpg",
+    "created_by": [
+      {
+        "id": 1245327,
+        "credit_id": "525833ac760ee36aaa91234a",
+        "name": "Mr. Daryl Morissette",
+        "original_name": "Mr. Daryl Morissette",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 1245328,
+        "credit_id": "525833ad760ee36aaa912353",
+        "name": "Lila Padberg",
+        "original_name": "Lila Padberg",
+        "gender": 1,
+        "profile_path": null
+      },
+      {
+        "id": 1245329,
+        "credit_id": "525833af760ee36aaa91235c",
+        "name": "Mr. Clayton Donnelly",
+        "original_name": "Mr. Clayton Donnelly",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [21],
+    "first_air_date": "1999-01-25",
+    "genres": [
+      {
+        "id": 10766,
+        "name": "Soap"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://scared-championship.name",
+    "id": 14610,
+    "in_production": true,
+    "languages": ["fi"],
+    "last_air_date": "2025-05-09",
+    "last_episode_to_air": {
+      "id": 6177466,
+      "name": "Solid Panther",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-06-06",
+      "episode_number": 165,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 21,
+      "season_number": 5,
+      "show_id": 14610,
+      "still_path": "/mGhBmChOA2fp6f7LsMpPiwG9ioq.jpg"
+    },
+    "name": "Comfortable Swordtail",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 295,
+        "logo_path": "/u9LyIrxe50xzah32svsarAiYwDd.png",
+        "name": "Chemical Lobot Productions",
+        "origin_country": "FI"
+      },
+      {
+        "id": 5785,
+        "logo_path": "/tzrrna47zTSTnCkhpbyDY1c3pAD.png",
+        "name": "Only Jango Fett Studios",
+        "origin_country": "FI"
+      },
+      {
+        "id": 7452,
+        "logo_path": "/7q59lBeXRb4kDBPZbMvbWOAgl7m.png",
+        "name": "Circular Saesee Tiin Media",
+        "origin_country": "FI"
+      }
+    ],
+    "number_of_episodes": 775,
+    "number_of_seasons": 5,
+    "origin_country": ["FI"],
+    "original_language": "fi",
+    "original_name": "Provincial Gecko",
+    "overview": "Minima vesco verto catena. Defungo subvenio concedo uredo sapiente comis aestivus illum suppono. Blandior allatus aut advoco viriliter cavus.",
+    "popularity": 398.5653,
+    "poster_path": "/ugYAGyxwajuplDUUYT8Bzbj8eNR.jpg",
+    "production_companies": [
+      {
+        "id": 81234,
+        "logo_path": "/laQYVH7TN1xXSvyoTgAz0OYqCu6.png",
+        "name": "Head Ben Quadinaros Pictures",
+        "origin_country": "FI"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FI",
+        "name": "Finland"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1999-01-25",
+        "episode_count": 90,
+        "id": 26077,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1999-08-30",
+        "episode_count": 170,
+        "id": 26078,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2000-08-28",
+        "episode_count": 180,
+        "id": 26079,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2001-08-20",
+        "episode_count": 170,
+        "id": 26080,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2002-09-02",
+        "episode_count": 165,
+        "id": 26081,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Finnish",
+        "iso_639_1": "fi",
+        "name": "suomi"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 4.5,
+    "vote_count": 17,
+    "external_ids": {
+      "imdb_id": "tt0185819",
+      "freebase_mid": "/m/0661q7",
+      "freebase_id": "/en/salatut_elamat",
+      "tvdb_id": 287994,
+      "tvrage_id": 17532,
+      "wikidata_id": "Q132288",
+      "facebook_id": "MTVSalatutElamat",
+      "instagram_id": "mtvsalatutelamat",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Main Turkey",
+            "overview": "Derelinquo odit cursus creator uberrime cenaculum cur cribro viscus. Adulatio calculus depraedor numquam vorax volo ocer patrocinor contra.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Mass Crow",
+            "overview": "Decretum baiulus adinventitias stella depopulo eligendi acidus argentum amicitia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

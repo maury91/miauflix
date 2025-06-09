@@ -1,6 +1,7 @@
+import { logger } from '@logger';
 import path from 'path';
-import type { EntityTarget, ObjectLiteral, Repository } from 'typeorm';
-import { DataSource } from 'typeorm';
+import type { EntityTarget, LogLevel, LogMessage, ObjectLiteral, Repository } from 'typeorm';
+import { AbstractLogger, DataSource } from 'typeorm';
 
 import { AuditLog } from '@entities/audit-log.entity';
 import { Episode } from '@entities/episode.entity';
@@ -29,6 +30,53 @@ import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
 import type { EncryptionService } from '@services/encryption/encryption.service';
 import { ENV } from '@constants';
+
+class DatabaseLogger extends AbstractLogger {
+  protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {
+    console.log('Preparing log messages');
+    const messages = this.prepareLogMessages(logMessage, {
+      highlightSql: false,
+    });
+    console.log('Got log messages', messages.length);
+
+    for (let message of messages) {
+      switch (message.type ?? level) {
+        case 'log':
+        case 'schema-build':
+        case 'migration':
+          logger.debug('DATABASE', `[${message.type}] ${message.message}`);
+          break;
+
+        case 'info':
+        case 'query':
+          if (message.prefix) {
+            logger.debug('DATABASE', `[${message.prefix}] ${message.message}`);
+          } else {
+            logger.debug('DATABASE', `${message.message}`);
+          }
+          break;
+
+        case 'warn':
+        case 'query-slow':
+          if (message.prefix) {
+            logger.warn('DATABASE', `[${message.prefix}] ${message.message}`);
+          } else {
+            logger.warn('DATABASE', `${message.message}`);
+          }
+          break;
+
+        case 'error':
+        case 'query-error':
+          if (message.prefix) {
+            logger.error('DATABASE', `[${message.prefix}] ${message.message}`);
+          } else {
+            logger.error('DATABASE', `${message.message}`);
+          }
+          break;
+      }
+    }
+  }
+}
 
 export class Database {
   private readonly dataSource: DataSource;
@@ -71,6 +119,8 @@ export class Database {
         Storage,
       ],
       synchronize: true,
+      logger: new DatabaseLogger(),
+      logging: ['query', 'error', 'schema', 'warn', 'info', 'log'],
     });
   }
 
