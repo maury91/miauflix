@@ -1,0 +1,120 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "94ce82df89231c07-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=buKUfdrGFKhgoDJzGXKB5MbJe5zsHxfKKMEmSREgKKYizV8Gm7UXZFl14HJwizMwo581iNn5IQQcIddPtNnDoruMiXA4KxWEe49xHeE%2FVdyvxgW3gOwANQ%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+    "server": "cloudflare",
+    "server-timing": "cfL4;desc=\"?proto=TCP&rtt=866&min_rtt=621&rtt_var=440&sent=15&recv=12&lost=0&retrans=0&sent_bytes=9538&recv_bytes=1295&delivery_rate=6961538&cwnd=41&unsent_bytes=0&cid=a022f119b48f887c&ts=6157&x=0\"",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "7877681",
+    "set-cookie": "PHPSESSID=3uvattvn69vpf297vle7uqhis7; path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 3313,
+          "url": "https://motionless-evening.info/usr/X11R6",
+          "imdb_code": "tt25645322",
+          "title": "Faithful Grouse",
+          "title_english": "Disciplinary Hoverfly",
+          "title_long": "Mushy Constrictor",
+          "slug": "faithful-grouse-1966",
+          "year": 1966,
+          "rating": 8.8,
+          "runtime": 178,
+          "genres": ["Action", "Adventure", "Drama", "Western"],
+          "summary": "Aestus subiungo thorax tutamen tego virtus subito modi capio. Succurro adfectus adicio creptio claro.",
+          "description_full": "Bibo curso tantum ambulo velut suppono sopor odit cresco. Labore apud ceno autem tempus auditor altus. Decipio apud ciminatio thymum una autus qui delibero.",
+          "synopsis": "Voro aegrotatio ter complectus curiositas vestrum. Abeo versus ventosus tamen.",
+          "yt_trailer_code": "466zyUJs4SI",
+          "language": "it",
+          "mpa_rating": "",
+          "background_image": "https://fancy-trillion.biz/var/spool",
+          "background_image_original": "https://hearty-yolk.info/lost+found",
+          "small_cover_image": "https://realistic-catastrophe.com/private",
+          "medium_cover_image": "https://pastel-toad.net/var",
+          "large_cover_image": "https://unripe-diarist.net/usr/X11R6",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "hash": "1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "quality": "720p",
+              "type": "bluray",
+              "is_repack": "1",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 53,
+              "peers": 8,
+              "size": "1.45 GB",
+              "size_bytes": 1556925645,
+              "date_uploaded": "2022-03-01 19:09:31",
+              "date_uploaded_unix": 1646158171
+            },
+            {
+              "url": "https://yts.mx/torrent/download/2A23C985CB7731B7CA9D2C12D9F6E9D9A7CFC330",
+              "hash": "2A23C985CB7731B7CA9D2C12D9F6E9D9A7CFC330",
+              "quality": "1080p",
+              "type": "bluray",
+              "is_repack": "1",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "5.1",
+              "seeds": 100,
+              "peers": 16,
+              "size": "2.99 GB",
+              "size_bytes": 3210488054,
+              "date_uploaded": "2022-03-01 20:48:52",
+              "date_uploaded_unix": 1646164132
+            },
+            {
+              "url": "https://yts.mx/torrent/download/F686FEFB499202455E762A73740AD4F2768E4D96",
+              "hash": "F686FEFB499202455E762A73740AD4F2768E4D96",
+              "quality": "2160p",
+              "type": "bluray",
+              "is_repack": "",
+              "video_codec": "x265",
+              "bit_depth": "10",
+              "audio_channels": "5.1",
+              "seeds": 89,
+              "peers": 11,
+              "size": "7.24 GB",
+              "size_bytes": 7773890806,
+              "date_uploaded": "2021-05-12 13:09:02",
+              "date_uploaded_unix": 1620817742
+            }
+          ],
+          "date_uploaded": "2022-03-01 19:09:31",
+          "date_uploaded_unix": 1646158171
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1749449902,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

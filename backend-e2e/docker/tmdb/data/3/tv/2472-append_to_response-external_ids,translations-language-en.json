@@ -1,0 +1,227 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10347",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c59d17c636d142c546a2dc47e19d4353\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 8b889e35789d2b97f2ba8771acc9a008.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "EXcFpxKsR316-zh1uKrJDSIgx_mbGUqd4JOvMjOMAfxpDre13CTaqQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "bec4a5a123e544fb9ba3d3c9002f9f25"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fRpAoUzw8PMdOYfXeabEBUY7fFF.jpg",
+    "created_by": [
+      {
+        "id": 942904,
+        "credit_id": "525739c719c29531db01d22f",
+        "name": "Mr. Earnest Schaden",
+        "original_name": "Mr. Earnest Schaden",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [60],
+    "first_air_date": "2005-02-16",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://specific-disease.org",
+    "id": 2472,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-04-17",
+    "last_episode_to_air": {
+      "id": 6092177,
+      "name": "Attractive Mandrill",
+      "overview": "Thorax bellum comedo artificiose bellum contego claudeo depraedor.",
+      "vote_average": 6,
+      "vote_count": 1,
+      "air_date": "2025-04-17",
+      "episode_number": 12,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 59,
+      "season_number": 5,
+      "show_id": 2472,
+      "still_path": null
+    },
+    "name": "Sunny Alligator",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 4,
+        "logo_path": "/uJjcCg3O4DMEjM0xtno9OWFciRP.png",
+        "name": "Crucial Kit Fisto Media",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 79,
+    "number_of_seasons": 5,
+    "origin_country": ["GB"],
+    "original_language": "en",
+    "original_name": "Nursing Whale",
+    "overview": "Tum surculus terebro casus conicio. Defluo super vitium tamquam aestivus ducimus. Uterque sponte adicio tempus appositus coniuratio.",
+    "popularity": 265.9829,
+    "poster_path": "/2GhXaFR3n5OnfBHDATwdXlOeswL.jpg",
+    "production_companies": [
+      {
+        "id": 13157,
+        "logo_path": "/jr4fJUF5avpcT3V0HwrIZ4t8uMn.png",
+        "name": "Extreme Barriss Offee Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 59551,
+        "logo_path": null,
+        "name": "Communist Ki-Adi-Mundi Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 5645,
+        "logo_path": "/bKcQzzCVVeqgby86hAqKm5iVuzi.png",
+        "name": "Sophisticated Bail Prestor Organa Media",
+        "origin_country": "GB"
+      },
+      {
+        "id": 47773,
+        "logo_path": "/d1mGbi5yBtaFr5lz8FO4UWMnsXx.png",
+        "name": "Convincing Eeth Koth Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 77503,
+        "logo_path": null,
+        "name": "Helpful Dormé Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 2230,
+        "logo_path": "/igOjospzsKQIbpuFCGhoN5F9icS.png",
+        "name": "Forward Wedge Antilles Media",
+        "origin_country": "US"
+      },
+      {
+        "id": 62029,
+        "logo_path": null,
+        "name": "Delicious Ayla Secura Productions",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2007-03-15",
+        "episode_count": 16,
+        "id": 7848,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-02-16",
+        "episode_count": 14,
+        "id": 7844,
+        "name": "Season 1",
+        "overview": "Series One of The Apprentice television programme was broadcast in the UK from 16 February to 11 May in 2005. The format of the UK version was very similar to that of the US original. The format was licensed by RTL Group and the programme produced for the BBC by RTL's Talkback Thames division. It was shown on BBC Two on Wednesday evenings over twelve weekly episodes. The winner was to become an apprentice to Sir Alan Sugar.",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2006-02-22",
+        "episode_count": 12,
+        "id": 7845,
+        "name": "Season 2",
+        "overview": "Series Two of The Apprentice was a television series which was broadcast on BBC Two between 22 February and 10 May 2006. As in the previous series, Sir Alan Sugar continued as the boss, assigning the teams specifically designed tasks. Nick Hewer and Margaret Mountford also returned as Sugar's advisers and observed the teams in action. In addition, a companion discussion program called The Apprentice: You're Fired! was introduced and aired on BBC Three.\n\nThis series premiered in Australia on 27 August 2008 at 9:30pm on Channel Seven, under the title Sir Alan Sugar: The Apprentice to distinguish it from the US version. Despite heavy promotion of the series during Seven's Olympic coverage, the series only rated 583,000 viewers nationally, which was third for its timeslot. The following week, the series was moved to 10:30pm, and ratings have continued to decrease. The series also airs in Australia on pay TV channel UKTV.",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2007-03-28",
+        "episode_count": 12,
+        "id": 7842,
+        "name": "Season 3",
+        "overview": "Series Three of The Apprentice was a television series which aired in the UK on BBC One. The series began on 28 March 2007 and finished on 13 June 2007.\n\nSir Alan Sugar reprised his role as the boss with Nick Hewer and Margaret Mountford as his advisors. Moving from BBC Two, this series attracted 10,000 applicants and promised \"tougher tasks and better people\" than before, however Sir Alan believed that the show was morphing into \"Big Brother\". Sugar also criticised the US version for making the error of \"trying to change things just for the sake of it\", causing it to backfire.\n\nTwo 90-minute specials were aired during the series run. The first programme was titled The Apprentice: Beyond the Boardroom and featured information about the personal lives of each of the semi-finalists. The second, The Apprentice: Why I Fired Them, featured Sugar revealing why he chose to remove each candidate from the programme.",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-03-26",
+        "episode_count": 13,
+        "id": 7843,
+        "name": "Season 4",
+        "overview": "Series Four of The Apprentice was a British reality television series. The series began on BBC One on 26 March 2008, and ran for twelve weekly episodes. Auditions and interviews are reported to have taken place during the first two weeks of July 2007 in London, Glasgow, Manchester and Bristol. A record 20,000 applications were received.\n\nSir Alan Sugar reprised his role as the boss, and Nick Hewer and Margaret Mountford again served as his advisers. 'Frances', Sir Alan's boardroom 'receptionist', also returned. The show's spin-off, The Apprentice: You're Fired!, was again hosted by Adrian Chiles. Filming of the first episode of The Apprentice: You're Fired! took place on 25 March 2008. TV presenter Jennifer Maguire also participated in this series.",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-03-25",
+        "episode_count": 12,
+        "id": 7846,
+        "name": "Season 5",
+        "overview": "Series Five of The Apprentice was a British reality television series. The series began airing on BBC One on 25 March 2009 and ran for twelve weekly hour-long episodes, as in all previous years. Auditions and interviews took place during July 2008 in London, Glasgow, Manchester and Birmingham. There were fifteen participants; one more dropped out prior to the first boardroom briefing.\n\nSir Alan Sugar, Nick Hewer and Margaret Mountford made appearances, as in all previous series. Spin-off show The Apprentice: You're Fired! also returned, airing on BBC Two immediately after the main show.",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Reality",
+    "vote_average": 5.8,
+    "vote_count": 29,
+    "external_ids": {
+      "imdb_id": "tt0450897",
+      "freebase_mid": "/m/0652_v",
+      "freebase_id": null,
+      "tvdb_id": 75795,
+      "tvrage_id": null,
+      "wikidata_id": null,
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Tubineus tamen aiunt velut arceo incidunt alii utique. Audeo abbas varius tubineus subvenio perspiciatis paulatim.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

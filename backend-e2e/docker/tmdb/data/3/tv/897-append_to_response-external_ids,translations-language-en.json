@@ -1,0 +1,235 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25045",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3abeec19e2963622be20893d566b84e9\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "DQuw33lYH4M71y8SVFV6mCP-8ri14pl3x9Kev8TF9-ODJIDhXNKiog==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "86b57446a3124b41889ff0f4feacbabd"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1eRvnxCQLrMjCieyO8VBsPJ28Jv.jpg",
+    "created_by": [
+      {
+        "id": 81597,
+        "credit_id": "5844b6259251416a8000f1a2",
+        "name": "Miss Susan Collins-Hackett PhD",
+        "original_name": "Miss Susan Collins-Hackett PhD",
+        "gender": 2,
+        "profile_path": "/aqyhhgwaEfVU166lWvR8Cxj7tmN.jpg"
+      }
+    ],
+    "episode_run_time": [11, 7, 22],
+    "first_air_date": "2001-08-24",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10762,
+        "name": "Kids"
+      }
+    ],
+    "homepage": "https://bubbly-cloister.biz",
+    "id": 897,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2007-11-09",
+    "last_episode_to_air": {
+      "id": 2853619,
+      "name": "Total Cod",
+      "overview": "Solio trucido vulariter cattus tabgo xiphias.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2007-11-09",
+      "episode_number": 11,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 897,
+      "still_path": "/aY2vdqbq37IrG1EZnDYKGRnhOvR.jpg"
+    },
+    "name": "Flexible Peafowl",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 56,
+        "logo_path": "/c5OC6oVCg6QP4eqzW6XIq17CQjI.png",
+        "name": "Liable Saesee Tiin Media",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 140,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Wispy Wolf",
+    "overview": "Capio at abduco somnus.",
+    "popularity": 377.0336,
+    "poster_path": "/gxdTn5UwvriN1EzDSNnWr5AAQN7.jpg",
+    "production_companies": [
+      {
+        "id": 7899,
+        "logo_path": "/qnhd98hnBxCMMMod58FJqbCZ5O7.png",
+        "name": "Yappiest Barriss Offee Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2007-03-30",
+        "episode_count": 24,
+        "id": 67454,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2001-08-24",
+        "episode_count": 23,
+        "id": 60176,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/1q0uEruI5Whr6idwWRdtOZoxrHd.jpg",
+        "season_number": 1,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2003-06-13",
+        "episode_count": 26,
+        "id": 67404,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/QsUlgpV0xOsmXh2sm5cQfgZHSp.jpg",
+        "season_number": 2,
+        "vote_average": 6.4
+      },
+      {
+        "air_date": "2004-06-11",
+        "episode_count": 32,
+        "id": 67429,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/zAXWK5B4Ru3ZsmfJDxXr86E9XXc.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-02-25",
+        "episode_count": 24,
+        "id": 67443,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/cwUIuP4m0jiRaaFOzsLwaKrf6EZ.jpg",
+        "season_number": 4,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": "2005-07-29",
+        "episode_count": 11,
+        "id": 67447,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/8sPOC47vlJxuxTs6KgCquDQwmX6.jpg",
+        "season_number": 5,
+        "vote_average": 7.6
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.045,
+    "vote_count": 977,
+    "external_ids": {
+      "imdb_id": "tt0292800",
+      "freebase_mid": "/m/038srg",
+      "freebase_id": "/en/the_grim_adventures_of_billy_and_mandy",
+      "tvdb_id": 78980,
+      "tvrage_id": null,
+      "wikidata_id": "Q679096",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Suppono debitis claro odio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Witty Kangaroo",
+            "overview": "Colo caute aperio sequi suffragium uterque. Atque decretum aliquam autem fugit crastinus. Cogo clibanus crudelis adsuesco statim arca tolero tum crustulum tergiversatio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Witty Kangaroo",
+            "overview": "Colo caute aperio sequi suffragium uterque. Atque decretum aliquam autem fugit crastinus. Cogo clibanus crudelis adsuesco statim arca tolero tum crustulum tergiversatio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Respectable Python",
+            "overview": "Antepono conculco velum clarus caritas comminor cauda tredecim cras. Tardus patria volutabrum. Totidem abbas tempora aetas accusamus causa curia eveniet est.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

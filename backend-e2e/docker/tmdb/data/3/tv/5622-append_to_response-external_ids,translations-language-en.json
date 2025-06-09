@@ -1,0 +1,182 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15162",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"54c4a7730c22ab07558db662c3ad9750\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 968007545c497b68cc41825f11e930ba.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "zC59hrIIoEaczw4BHTJEdCv9c8hbm6msPGMGMyQFNn11AJ9TtPQUTQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "9ccb4863d383443e8e3512d171137869"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/wHCjJBVS6ZmrOwW4l2fun6q6cIQ.jpg",
+    "created_by": [],
+    "episode_run_time": [20],
+    "first_air_date": "2000-07-07",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10762,
+        "name": "Kids"
+      }
+    ],
+    "homepage": "https://tidy-pitch.info",
+    "id": 5622,
+    "in_production": false,
+    "languages": ["ja"],
+    "last_air_date": "2006-03-31",
+    "last_episode_to_air": {
+      "id": 2759610,
+      "name": "Episode 296",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2006-03-31",
+      "episode_number": 296,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 20,
+      "season_number": 1,
+      "show_id": 5622,
+      "still_path": null
+    },
+    "name": "Blank Salmon",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 98,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "Loyal Greedo Productions",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 296,
+    "number_of_seasons": 1,
+    "origin_country": ["JP"],
+    "original_language": "ja",
+    "original_name": "Growing Chimpanzee",
+    "overview": "Curto cohaero argumentum quam taceo anser viduo audeo. Tametsi acceptus corrumpo concedo delibero. Votum cibo caveo constans benevolentia suscipio aggero vesco nostrum tutis.",
+    "popularity": 264.1854,
+    "poster_path": "/heeMIthcPavUaNJJl0YPARva2ua.jpg",
+    "production_companies": [
+      {
+        "id": 7164,
+        "logo_path": "/vHsaqTkQ2ZTbdqrCA272YahoVlg.png",
+        "name": "Inadequate Zam Wesell Media",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3034,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "Promising Ben Quadinaros Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 90500,
+        "logo_path": null,
+        "name": "Charming Darth Vader Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 36341,
+        "logo_path": "/2Q13Cf8yPyvcz518gaB2iVFYYQq.png",
+        "name": "Senior Owen Lars Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2000-07-07",
+        "episode_count": 296,
+        "id": 15693,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/pTwY4srrRs2JYI2wp6lxkBaDmSE.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Sonitus curto cohaero argumentum quam taceo anser viduo.",
+    "type": "Scripted",
+    "vote_average": 7.9,
+    "vote_count": 201,
+    "external_ids": {
+      "imdb_id": "tt0318895",
+      "freebase_mid": "/m/01bq7d",
+      "freebase_id": "/en/hamtaro",
+      "tvdb_id": 70817,
+      "tvrage_id": null,
+      "wikidata_id": "Q30921668",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Shallow Otter",
+            "overview": "Paens comptus sumptus timor deduco. Artificiose tamquam virgo cito desipio.",
+            "homepage": "",
+            "tagline": "Casso paens comptus sumptus timor deduco."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Wonderful Wasp",
+            "overview": "Attonbitus coruscus damnatio cotidie artificiose socius termes sulum celer. Cumque subnecto cur repellat quis suspendo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Marine Mongoose",
+            "overview": "Veniam ullus nostrum calcar atrox adsidue soluta comparo. Summopere compello subiungo viduo acsi. Capio nesciunt utilis defessus talio commodo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}
