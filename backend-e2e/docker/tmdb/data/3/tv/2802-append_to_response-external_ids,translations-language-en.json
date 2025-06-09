@@ -1,0 +1,231 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3182",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3d350c20bfe0b7d2ff2d6c61f74b5ca3\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6fc439c8bc0a64a7ab978ce699795274.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "JBEusSGJRJVMELSA1D3yzkHvckgijhJVOq3_OxWj05hpCidjIOWCaA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "1df73541dc1e499f889ed4641db6f68e"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/uGyze9Wd98oBVYBS4Bzlq2GcfbU.jpg",
+    "created_by": [
+      {
+        "id": 1440711,
+        "credit_id": "550691bec3a36862e5004090",
+        "name": "Isaac Reilly",
+        "original_name": "Isaac Reilly",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 1440712,
+        "credit_id": "550691e1c3a3683d7800036f",
+        "name": "Dr. Doreen McDermott",
+        "original_name": "Dr. Doreen McDermott",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [52, 60],
+    "first_air_date": "2006-03-09",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://fast-weather.com",
+    "id": 2802,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-04-01",
+    "last_episode_to_air": {
+      "id": 5953456,
+      "name": "Systematic Anglerfish",
+      "overview": "Totidem solitudo bellicus. Amet amoveo theca suasoria vilicus vomito sto appello varius. Conitor benevolentia advoco aeternus dolores caste.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-04-01",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 58,
+      "season_number": 5,
+      "show_id": 2802,
+      "still_path": "/so48EV5ZpJmREakdhS7OZ4Jlqlt.jpg"
+    },
+    "name": "Fragile Minnow",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 4,
+        "logo_path": "/uJjcCg3O4DMEjM0xtno9OWFciRP.png",
+        "name": "Crucial Kit Fisto Media",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 80,
+    "number_of_seasons": 5,
+    "origin_country": ["GB"],
+    "original_language": "en",
+    "original_name": "Retail Mammal",
+    "overview": "Abduco pecus custodia aro conculco arbitro assumenda textus concido pectus.",
+    "popularity": 392.1233,
+    "poster_path": "/gZoVJ0iVcyFDtrS8a7vFaiQfNa8.jpg",
+    "production_companies": [
+      {
+        "id": 29319,
+        "logo_path": null,
+        "name": "Xeric Nien Nunb Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 16049,
+        "logo_path": "/2hb0R2GJ6BvgwmyqO7fIgtjsakt.png",
+        "name": "Operational Yarael Poof Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 172278,
+        "logo_path": null,
+        "name": "Active Mas Amedda Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 3324,
+        "logo_path": "/dqT3yOTlfJRmtvk52Ccd1O6dZ0A.png",
+        "name": "Forthcoming Taun We Studios",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2006-03-09",
+        "episode_count": 8,
+        "id": 9085,
+        "name": "Series 1",
+        "overview": "Drama series set in a failing secondary school.",
+        "poster_path": "/MV2X0bbhnXEqikzETy1xkJbOiy.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2007-01-18",
+        "episode_count": 12,
+        "id": 9086,
+        "name": "Series 2",
+        "overview": "Drama series set in a failing secondary school.",
+        "poster_path": "/xN1Qos3U2FDnpItcYodem2AdMXc.jpg",
+        "season_number": 2,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2007-10-11",
+        "episode_count": 20,
+        "id": 9084,
+        "name": "Series 3",
+        "overview": "Drama series set in a failing secondary school.",
+        "poster_path": "/zbwBg7Hrv3pUvn7ILREz6AEoNHD.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-01-07",
+        "episode_count": 20,
+        "id": 9087,
+        "name": "Series 4",
+        "overview": "Drama series set in a failing secondary school.",
+        "poster_path": "/3OyQfu6NYEeHJTJcbJUsET01wVV.jpg",
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-10-28",
+        "episode_count": 20,
+        "id": 9088,
+        "name": "Series 5",
+        "overview": "War breaks out in the playground after the closure of a local private school leads to an influx of middle-class pupils at Waterloo Road.",
+        "poster_path": "/fpzXP9fYyIa7f6oUdHbAlzYNMJ9.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.2,
+    "vote_count": 26,
+    "external_ids": {
+      "imdb_id": "tt0487189",
+      "freebase_mid": "/m/0bxp9l",
+      "freebase_id": "/en/waterloo_road",
+      "tvdb_id": 80763,
+      "tvrage_id": 8531,
+      "wikidata_id": "Q3499780",
+      "facebook_id": "officialwaterlooroad",
+      "instagram_id": "officialwaterlooroad",
+      "twitter_id": "WaterlooRoad"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Turpis defleo non modi creator catena defendo sunt desipio concedo. Alius triduana ustulo expedita abscido temeritas collum demens ambulo aro. Bene corrumpo cupio suadeo temporibus curatio carcer adeptio arbustum crepusculum.",
+            "homepage": "https://shady-uplift.org",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

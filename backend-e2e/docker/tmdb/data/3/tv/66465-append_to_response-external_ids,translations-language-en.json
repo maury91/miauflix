@@ -1,0 +1,186 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7265",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7e08d381b65020cf4796bf1b211ec999\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6fc439c8bc0a64a7ab978ce699795274.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "2C02SGqMO8WZMQPXVR2koAtsr32o0l3ofBEfOZTcHI2Hk5Mk1l1gmQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "bec4a5a123e544fb9ba3d3c9002f9f25"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/xV0JOheZzmemwdpq1fahTnfAUoU.jpg",
+    "created_by": [],
+    "episode_run_time": [60],
+    "first_air_date": "2016-04-23",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10767,
+        "name": "Talk"
+      }
+    ],
+    "homepage": "https://attractive-authority.info",
+    "id": 66465,
+    "in_production": false,
+    "languages": ["hi"],
+    "last_air_date": "2023-07-23",
+    "last_episode_to_air": {
+      "id": 4596165,
+      "name": "The Night Manager Of Entertainment",
+      "overview": "The star cast of the hit web series, Anil Kapoor, Aditya Roy Kapoor, Sobhita Dhulipala, Ravi Behl and Tillotama Shome, rejoin Kapil as they create many more moments of pure laughter and entertainment together.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2023-07-23",
+      "episode_number": 85,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 64,
+      "season_number": 3,
+      "show_id": 66465,
+      "still_path": "/fEMM9Q6FpjAMj2zdU900avnlTHg.jpg"
+    },
+    "name": "Misleading Quelea",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 676,
+        "logo_path": "/vamK8zdyD953QvkMIGf4J93MPKz.png",
+        "name": "Puzzled Boba Fett Media",
+        "origin_country": "IN"
+      }
+    ],
+    "number_of_episodes": 474,
+    "number_of_seasons": 3,
+    "origin_country": ["IN"],
+    "original_language": "hi",
+    "original_name": "Weekly Crocodile",
+    "overview": "",
+    "popularity": 395.1268,
+    "poster_path": "/fBPNBNFmcwhYXUpkW2Kb6jbeJOR.jpg",
+    "production_companies": [
+      {
+        "id": 112807,
+        "logo_path": null,
+        "name": "Incredible Mon Mothma Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 121263,
+        "logo_path": null,
+        "name": "Ugliest Shmi Skywalker Entertainment",
+        "origin_country": ""
+      },
+      {
+        "id": 121264,
+        "logo_path": null,
+        "name": "Provincial Adi Gallia Entertainment",
+        "origin_country": ""
+      },
+      {
+        "id": 128743,
+        "logo_path": "/lolfhhOSyUBEg0C7nxAdu481lQ.png",
+        "name": "Ill Shaak Ti Entertainment",
+        "origin_country": "IN"
+      },
+      {
+        "id": 115215,
+        "logo_path": "/4FoNChngLnjhs2B7gvrlTiO8Dyr.png",
+        "name": "Gradual San Hill Entertainment",
+        "origin_country": "IN"
+      },
+      {
+        "id": 112670,
+        "logo_path": "/3THCQhFGQRvmy14KSZFkFjKXNQ4.png",
+        "name": "Confident Darth Vader Productions",
+        "origin_country": "IN"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IN",
+        "name": "India"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2016-04-23",
+        "episode_count": 130,
+        "id": 76970,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 5
+      },
+      {
+        "air_date": "2018-12-29",
+        "episode_count": 259,
+        "id": 115076,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/e62h3Ig2bD8PMb9nPMM5QplEc8H.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2022-09-10",
+        "episode_count": 85,
+        "id": 308296,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/4yTkjEQCEMQugLSv14OiJYT90oD.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Hindi",
+        "iso_639_1": "hi",
+        "name": "हिन्दी"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Talk Show",
+    "vote_average": 7.1,
+    "vote_count": 35,
+    "external_ids": {
+      "imdb_id": "tt5747326",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 310679,
+      "tvrage_id": null,
+      "wikidata_id": null,
+      "facebook_id": "tkssatsony",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Exuberant Quelea",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

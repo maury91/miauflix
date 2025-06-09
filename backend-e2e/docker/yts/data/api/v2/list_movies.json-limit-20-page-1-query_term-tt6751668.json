@@ -1,0 +1,120 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "94ce82cccdfa1c07-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=MSJ2TYol5Byr%2BMVFwzN1BBhWJc7FPVpO7Ka7qZxg4PtgnMVgjZHgon%2FVj0w7CmGhu3CqVuqgubnBawYwciwNZeelDg6o%2BBAXmG0Iw90SyhH%2B5iifa3J%2BxA%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+    "server": "cloudflare",
+    "server-timing": "cfL4;desc=\"?proto=TCP&rtt=744&min_rtt=621&rtt_var=373&sent=10&recv=9&lost=0&retrans=0&sent_bytes=6239&recv_bytes=1057&delivery_rate=6961538&cwnd=37&unsent_bytes=0&cid=a022f119b48f887c&ts=3149&x=0\"",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "10879516",
+    "set-cookie": "PHPSESSID=23r8sg0ned09k9c3ri2prkc2dk; path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 14884,
+          "url": "https://mediocre-macrofauna.com/var/yp",
+          "imdb_code": "tt28169243",
+          "title": "Tight Hummingbird",
+          "title_english": "Striped Egret",
+          "title_long": "Unacceptable Puffin",
+          "slug": "tight-hummingbird-2019",
+          "year": 2019,
+          "rating": 8.5,
+          "runtime": 132,
+          "genres": ["Action", "Comedy", "Crime", "Drama", "Horror", "Thriller"],
+          "summary": "Coma video autus eius sequi illum quod.",
+          "description_full": "Taceo cervus comedo spiculum crudelis contigo adhaero vorago. Cubitum ventosus thymum decimus antea alias thalassinus temptatio.",
+          "synopsis": "Strues coniecto alius architecto deputo stips vesco defero vox vel. Curatio alioqui capio tandem reprehenderit coadunatio victus depraedor tres maiores.",
+          "yt_trailer_code": "3L7al6XI91N",
+          "language": "ko",
+          "mpa_rating": "",
+          "background_image": "https://damp-cowbell.info/home/user/dir",
+          "background_image_original": "https://fussy-prose.com/media",
+          "small_cover_image": "https://gripping-start.org/opt/lib",
+          "medium_cover_image": "https://pleased-bracelet.name/opt/include",
+          "large_cover_image": "https://serpentine-disappointment.name/opt/share",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/2A23C985CB7731B7CA9D2C12D9F6E9D9A7CFC330",
+              "hash": "2A23C985CB7731B7CA9D2C12D9F6E9D9A7CFC330",
+              "quality": "720p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 100,
+              "peers": 21,
+              "size": "1.15 GB",
+              "size_bytes": 1234803098,
+              "date_uploaded": "2020-01-06 16:03:06",
+              "date_uploaded_unix": 1578322986
+            },
+            {
+              "url": "https://yts.mx/torrent/download/ADC902E124DC1FE0E14E0139E4DE6C091BF2E353",
+              "hash": "ADC902E124DC1FE0E14E0139E4DE6C091BF2E353",
+              "quality": "1080p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 100,
+              "peers": 100,
+              "size": "2.07 GB",
+              "size_bytes": 2222645576,
+              "date_uploaded": "2020-01-06 18:24:55",
+              "date_uploaded_unix": 1578331495
+            },
+            {
+              "url": "https://yts.mx/torrent/download/CDBED221404095DAA58955898FD86E0F1A8E14BF",
+              "hash": "CDBED221404095DAA58955898FD86E0F1A8E14BF",
+              "quality": "2160p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x265",
+              "bit_depth": "10",
+              "audio_channels": "7.1",
+              "seeds": 100,
+              "peers": 28,
+              "size": "6.05 GB",
+              "size_bytes": 6496138035,
+              "date_uploaded": "2020-03-19 16:51:48",
+              "date_uploaded_unix": 1584633108
+            }
+          ],
+          "date_uploaded": "2020-01-06 16:03:06",
+          "date_uploaded_unix": 1578322986
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1749449899,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

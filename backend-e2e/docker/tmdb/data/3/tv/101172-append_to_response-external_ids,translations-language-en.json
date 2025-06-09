@@ -1,0 +1,205 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2466",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"90da4e9ecfee786afdfe959f18580388\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 372875ad1ec20daf24f3f29f14a73cd0.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "T3luUrLI72k6ymRweJV2eYSOKgCWwTr7cOJJtMrmerE9iBRwQSDJgw==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1a",
+    "x-cache": "RefreshHit from cloudfront",
+    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/d3mjRLGl6AsghMrc5taOXuN80iQ.jpg",
+    "created_by": [
+      {
+        "id": 3276351,
+        "credit_id": "644ad9c5726fb1057405b1fa",
+        "name": "Kellie Kuhn",
+        "original_name": "Kellie Kuhn",
+        "gender": 2,
+        "profile_path": "/gIo8emidlFH3wmQOggn0vRUgUR5.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2020-11-29",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://queasy-chord.biz",
+    "id": 101172,
+    "in_production": true,
+    "languages": ["zh"],
+    "last_air_date": "2025-05-26",
+    "last_episode_to_air": {
+      "id": 5821925,
+      "name": "Episode 174",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-06-02",
+      "episode_number": 174,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 101172,
+      "still_path": "/lzmeTvLmBvQqDC4YSeBVluqXAO1.jpg"
+    },
+    "name": "Dull Spider",
+    "next_episode_to_air": {
+      "id": 5821926,
+      "name": "Episode 175",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-06-09",
+      "episode_number": 175,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 101172,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 2007,
+        "logo_path": "/6Lfll43wYG2eyereOBjpYFRSGs4.png",
+        "name": "Disgusted Padmé Amidala Productions",
+        "origin_country": "CN"
+      }
+    ],
+    "number_of_episodes": 210,
+    "number_of_seasons": 1,
+    "origin_country": ["CN"],
+    "original_language": "zh",
+    "original_name": "Slimy Bat",
+    "overview": "Bellicus undique angelus sunt. Degenero videlicet vulgo casso dicta tumultus. Viridis cruciamentum attero subseco universe.",
+    "popularity": 390.8097,
+    "poster_path": "/wVIXqqxFbcfYLbdfPCce2jWXFMu.jpg",
+    "production_companies": [
+      {
+        "id": 135700,
+        "logo_path": "/5s0oBB2xIxSzpSV7Ft9B8Bs3yeH.png",
+        "name": "Responsible Mon Mothma Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 84946,
+        "logo_path": "/8wrAXwrNZ5zHImKb0SyVLQbXkaM.png",
+        "name": "Pale Ki-Adi-Mundi Pictures",
+        "origin_country": "CN"
+      },
+      {
+        "id": 109474,
+        "logo_path": "/16ydjNJFFhTh8QyHnaIc9TrTvdF.png",
+        "name": "Convenient Taun We Media",
+        "origin_country": "CN"
+      },
+      {
+        "id": 99998,
+        "logo_path": "/53DS3vJmg4nUHEPA7EMhBN1V4uY.png",
+        "name": "Remaining Nien Nunb Studios",
+        "origin_country": "CN"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CN",
+        "name": "China"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-11-29",
+        "episode_count": 210,
+        "id": 146375,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/ltaTUrqS8vohFTbKX6UbOVdZBNS.jpg",
+        "season_number": 1,
+        "vote_average": 10
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "Mandarin",
+        "iso_639_1": "zh",
+        "name": "普通话"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.4,
+    "vote_count": 27,
+    "external_ids": {
+      "imdb_id": "tt17050076",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 392226,
+      "tvrage_id": null,
+      "wikidata_id": "Q124709051",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Colourful Gopher",
+            "overview": "Desolo conforto perspiciatis aperio. Truculenter ago coniecto cuppedia vita apparatus. Avarus vir odio appono animi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Dead Parakeet",
+            "overview": "Arceo ulterius consequatur tergiversatio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

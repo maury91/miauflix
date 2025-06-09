@@ -1,0 +1,251 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7397",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"092872c1d11ce9f917ad67f5a7b2282f\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6fc439c8bc0a64a7ab978ce699795274.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "DgBe2HkEEsozaF3I61GvXXHjXJdyrsZD66JJK8X4sYNAxKVGEHuoAQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "6308613ce00b4c5cb7d11980881fdeca"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/eGPH1IwktalozwCmeLTp3aPbHGC.jpg",
+    "created_by": [
+      {
+        "id": 115788,
+        "credit_id": "6763bea30697b6c6c1aaf661",
+        "name": "Sophia Kassulke",
+        "original_name": "Sophia Kassulke",
+        "gender": 2,
+        "profile_path": "/gOeQvjY8B9E81f3hDjOTmxx9ig4.jpg"
+      }
+    ],
+    "episode_run_time": [130],
+    "first_air_date": "1993-01-11",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://coarse-mid-course.org",
+    "id": 4656,
+    "in_production": true,
+    "languages": ["en"],
+    "last_air_date": "2025-06-02",
+    "last_episode_to_air": {
+      "id": 5867625,
+      "name": "Psychiatric Sailfish",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2025-06-02",
+      "episode_number": 22,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 5,
+      "show_id": 4656,
+      "still_path": null
+    },
+    "name": "Liable Worm",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 30,
+        "logo_path": "/g1e0H0Ka97IG5SyInMXdJkHGKiH.png",
+        "name": "Gigantic Roos Tarpals Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 55,
+        "logo_path": "/82MKSH7iM5LAGXFb0PDOclTWn5u.png",
+        "name": "Intellectual Dooku Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Shy R4-P17 Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 2103,
+        "logo_path": "/g3qXB4IDKL8sIk9yDVeKlsfLeFT.png",
+        "name": "Grieving Raymus Antilles Productions",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 245,
+    "number_of_seasons": 5,
+    "origin_country": ["US"],
+    "original_language": "en",
+    "original_name": "Serious Dolphin",
+    "overview": "Vicissitudo conservo consequatur demo cetera labore thymum.",
+    "popularity": 406.5393,
+    "poster_path": "/pv5WNnLUo7mpT8k901Lo8UovrqI.jpg",
+    "production_companies": [
+      {
+        "id": 13651,
+        "logo_path": "/rVJkMs9cSaE1BQoPiDcH6OxmaVZ.png",
+        "name": "Evolutionary Eeth Koth Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 146598,
+        "logo_path": "/6B6g6PR19RWX4UVi8Q46lZbwb2L.png",
+        "name": "Agreeable Padmé Amidala Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2010-12-18",
+        "episode_count": 2,
+        "id": 14225,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/uu2tYV4sQlrxqsT097DKoaAbbpv.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1993-01-11",
+        "episode_count": 45,
+        "id": 14208,
+        "name": "1993",
+        "overview": "This is the year that started a sports-entertainment phenomenon. Don't miss Monday Night Raw's inaugural season, featuring classic rivalries like Razor Ramon vs. 1-2-3 Kid, Bret Hart vs. Jerry Lawler, and more.",
+        "poster_path": "/i5oT4IL1trdk0saPfpl068CbJm9.jpg",
+        "season_number": 1,
+        "vote_average": 6
+      },
+      {
+        "air_date": "1994-01-02",
+        "episode_count": 47,
+        "id": 14209,
+        "name": "1994",
+        "overview": "Throughout 1994, Monday Night Raw hosts a family feud as members of the Hart family choose sides in the heated brother-against-brother war between Bret \"Hit Man\" Hart and the youngest member of the family, Owen.",
+        "poster_path": "/gOwI66IPh7h3eilfVm9fUgPiFH6.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "1995-01-01",
+        "episode_count": 48,
+        "id": 14210,
+        "name": "1995",
+        "overview": "The stars of sports and entertainment shine bright on Monday Night Raw in 1995. William Shatner has a heated rivalry with Jerry Lawler while football great Lawrence Taylor set his sights on Bam Bam Bigelow.",
+        "poster_path": "/jkY7A4JyC0WpAsEDj7GRqPUGNvk.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1995-12-31",
+        "episode_count": 51,
+        "id": 14211,
+        "name": "1996",
+        "overview": "The game changes on Monday Night Raw in 1996 as legends like Triple H, \"Stone Cold\" Steve Austin, Mankind, and The Rock rise to prominence in WWE just as the Monday Night War with WCW kicks into high gear.",
+        "poster_path": "/etw8eCpiTlv8chBno9irHmLmnEi.jpg",
+        "season_number": 4,
+        "vote_average": 7
+      },
+      {
+        "air_date": "1997-01-05",
+        "episode_count": 52,
+        "id": 14212,
+        "name": "1997",
+        "overview": "A new era is dawning on Monday Night Raw in 1997 as a pair of degenerates run roughshod over WWE, Canada's hero gets screwed by the boss...or himself, and The Deadman's brother appears from beyond the grave.",
+        "poster_path": "/gPzVH2BO3Dcbqd03AuUpfYtEcF9.jpg",
+        "season_number": 5,
+        "vote_average": 7.6
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 6.8,
+    "vote_count": 329,
+    "external_ids": {
+      "imdb_id": "tt0185103",
+      "freebase_mid": "/m/028tmj",
+      "freebase_id": "/en/wwe_raw",
+      "tvdb_id": 76779,
+      "tvrage_id": 6659,
+      "wikidata_id": "Q111918477",
+      "facebook_id": "WWERaw",
+      "instagram_id": null,
+      "twitter_id": "WWE_Raw"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Truculenter ut audentia quas creator auctus. Copia una cognomen vel deputo. Aspicio suspendo deprimo molestiae.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Taceo tres usitas. Caute cinis architecto apparatus aranea asporto clementia benigne conqueror curatio. Amissio antea denuo sequi cattus vorago.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Annoyed Ape",
+            "overview": "Cimentarius suggero vita. Asporto aperte incidunt spectaculum eaque.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

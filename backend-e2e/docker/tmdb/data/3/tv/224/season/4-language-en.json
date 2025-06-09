@@ -1,0 +1,2078 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5369",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"6edf86b6523b6a3d3443e77f15c4ef28\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 c80ae6bd97b709ed6e4747f0d5ea4efc.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "YJ9sRWXPNfN9HYPgxRs8sdbKa7a3640xx9AJ8HgHX82--eeaBpQEvA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "19850",
+    "x-memc-expires": "5369",
+    "x-memc-key": "52295246965955671cc042fed699a9f2",
+    "x-task-id": "86b57446a3124b41889ff0f4feacbabd"
+  },
+  "data": {
+    "_id": "5ee08303f36a32001d908c10",
+    "air_date": "1967-08-05",
+    "episodes": [
+      {
+        "air_date": "1967-08-05",
+        "episode_number": 1,
+        "episode_type": "standard",
+        "id": 2303447,
+        "name": "Exact Rodent",
+        "overview": "Fugiat voro perferendis illo soluta. Utrimque voco necessitatibus tenuis pel studio conatus sol vulgo. Cunae itaque thymum auctor carmen cruciamentum corrigo celebrer delectus.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef8aa5ad6d64d0037c55e02",
+            "adult": false,
+            "gender": 0,
+            "id": 2694730,
+            "known_for_department": "Crew",
+            "name": "Jordan Runte",
+            "original_name": "Jordan Runte",
+            "popularity": 0.0398,
+            "profile_path": null
+          },
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef8aa7dd6d64d0036c5f336",
+            "adult": false,
+            "gender": 0,
+            "id": 2694731,
+            "known_for_department": "Crew",
+            "name": "Angela Johns V",
+            "original_name": "Angela Johns V",
+            "popularity": 0.0239,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-08-12",
+        "episode_number": 2,
+        "episode_type": "standard",
+        "id": 2303455,
+        "name": "Prepared Puma",
+        "overview": "Turpis esse ubi cresco aptus. Utilis ter depopulo cursim cattus peccatus. Supplanto absum vox adfectus vehemens desolo uberrime.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-08-19",
+        "episode_number": 3,
+        "episode_type": "standard",
+        "id": 2303456,
+        "name": "Amazing Koi",
+        "overview": "Vir nostrum antiquus validus. Ulciscor caecus aegre copia condico appono porro audentia autem.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-08-26",
+        "episode_number": 4,
+        "episode_type": "standard",
+        "id": 2303462,
+        "name": "Cool Crawdad",
+        "overview": "Temptatio arbustum caterva amplus molestiae antepono tenetur auctus atqui.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-09-02",
+        "episode_number": 5,
+        "episode_type": "standard",
+        "id": 2303480,
+        "name": "Keen Parrotfish",
+        "overview": "Tactus aqua calco contabesco. Beneficium velit vel sollicito advoco tredecim peior atqui aestivus verecundia.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-09-09",
+        "episode_number": 6,
+        "episode_type": "standard",
+        "id": 2303482,
+        "name": "Agreeable Lynx",
+        "overview": "Canis territo corona quo verecundia tempore conicio atque incidunt defessus.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-09-16",
+        "episode_number": 7,
+        "episode_type": "standard",
+        "id": 2303484,
+        "name": "Yearning Tortoise",
+        "overview": "Clibanus vir ventito.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-09-23",
+        "episode_number": 8,
+        "episode_type": "standard",
+        "id": 2303486,
+        "name": "Efficient Bandicoot",
+        "overview": "Adamo crustulum admoneo bellicus voco talio titulus cenaculum stips. Cito clam adduco causa torqueo.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-09-30",
+        "episode_number": 9,
+        "episode_type": "standard",
+        "id": 2303488,
+        "name": "Governing Slug",
+        "overview": "Calculus pecto ratione defero omnis temporibus crustulum blanditiis.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-10-07",
+        "episode_number": 10,
+        "episode_type": "standard",
+        "id": 2303489,
+        "name": "Retired Elk",
+        "overview": "Volo titulus desidero autus.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d3a26beaea003552a154",
+            "adult": false,
+            "gender": 0,
+            "id": 1214669,
+            "known_for_department": "Acting",
+            "name": "Gwendolyn Wisozk",
+            "original_name": "Gwendolyn Wisozk",
+            "popularity": 0.0775,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-10-14",
+        "episode_number": 11,
+        "episode_type": "standard",
+        "id": 2303490,
+        "name": "Stingy Leech",
+        "overview": "Vinculum deleo eum. Bellicus vulgus conduco dedecor thorax alias apud somnus nulla. Absum suppellex statim.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-10-21",
+        "episode_number": 12,
+        "episode_type": "standard",
+        "id": 2303491,
+        "name": "Graceful Boa",
+        "overview": "Vulnus textilis desidero ademptio cervus certe vito damnatio. Voluptatibus deleniti sapiente uberrime succedo. Abundans blanditiis carpo quam pauper adeo.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-10-28",
+        "episode_number": 13,
+        "episode_type": "standard",
+        "id": 2303492,
+        "name": "Uncertain Whale",
+        "overview": "Quasi super aperiam vigor aurum antiquus collum.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-11-04",
+        "episode_number": 14,
+        "episode_type": "standard",
+        "id": 2303493,
+        "name": "Exotic Cicada",
+        "overview": "Ratione celebrer dedecor cauda somniculosus consequatur similique capto repellat. Arbustum vado usitas claro sulum depromo abundans virga. Quod aurum theatrum ipsam terminatio earum vomer vesco.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-11-11",
+        "episode_number": 15,
+        "episode_type": "standard",
+        "id": 2303494,
+        "name": "Intermediate Trout",
+        "overview": "Communis ver confugo. Venio sufficio thermae appello suggero perspiciatis occaecati ustulo bibo cribro.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-11-18",
+        "episode_number": 16,
+        "episode_type": "standard",
+        "id": 2303496,
+        "name": "Upper Locust",
+        "overview": "Ubi comparo truculenter. Tum aranea veritatis spes rerum caelestis exercitationem contra. Error sumo adipisci.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-11-25",
+        "episode_number": 17,
+        "episode_type": "standard",
+        "id": 2303497,
+        "name": "Human Armadillo",
+        "overview": "Pax caste cunabula. Summisse cras terreo velociter porro agnosco decet basium consuasor officiis.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-12-02",
+        "episode_number": 18,
+        "episode_type": "standard",
+        "id": 2303499,
+        "name": "Elegant Parrot",
+        "overview": "Stips coruscus aureus deorsum aperio. Victoria conatus catena.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-12-09",
+        "episode_number": 19,
+        "episode_type": "standard",
+        "id": 2303501,
+        "name": "Involved Caterpillar",
+        "overview": "Supplanto ubi aer vito. Subseco censura totam tot ater varietas cornu correptius crepusculum vereor. Antea corpus crepusculum aegrotatio esse delectatio trans.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-12-16",
+        "episode_number": 20,
+        "episode_type": "standard",
+        "id": 2303502,
+        "name": "Xeric Aardvark",
+        "overview": "Delinquo cupiditate curso cohaero depromo cubicularis ultio vilitas curatio via. Tremo turpis a.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d356967cc70035463f09",
+            "adult": false,
+            "gender": 0,
+            "id": 2673520,
+            "known_for_department": "Acting",
+            "name": "Marcella Pouros",
+            "original_name": "Marcella Pouros",
+            "popularity": 0.0281,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-12-23",
+        "episode_number": 21,
+        "episode_type": "standard",
+        "id": 2303504,
+        "name": "Coming Wren",
+        "overview": "Nam aut solutio sophismata enim voluptate velum amor ambulo. Appono synagoga cohibeo. Sub curvo avarus accusantium.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1967-12-30",
+        "episode_number": 22,
+        "episode_type": "standard",
+        "id": 2303506,
+        "name": "Socialist Caribou",
+        "overview": "Cervus ceno terreo verbera praesentium cogo vallum vicissitudo. Vito civis confugo blanditiis cito suus aequitas decerno. Textus vilis taedium tabernus vado cumque considero dolorem.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-01-06",
+        "episode_number": 23,
+        "episode_type": "standard",
+        "id": 2303508,
+        "name": "Local Bison",
+        "overview": "Testimonium tenetur adsuesco tyrannus.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d356967cc70035463f09",
+            "adult": false,
+            "gender": 0,
+            "id": 2673520,
+            "known_for_department": "Acting",
+            "name": "Marcella Pouros",
+            "original_name": "Marcella Pouros",
+            "popularity": 0.0281,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-01-13",
+        "episode_number": 24,
+        "episode_type": "standard",
+        "id": 2303509,
+        "name": "Sore Stoat",
+        "overview": "Tolero casso spiritus ullam collum tabula ipsa peior tunc adhuc. Amo patior valeo.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-01-20",
+        "episode_number": 25,
+        "episode_type": "standard",
+        "id": 2303510,
+        "name": "Respectable Swan",
+        "overview": "Caute tabula culpo conitor deinde clam bellum tonsor traho. Cupiditate vesper balbus summisse tot.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef70ae827d9cc0037ae3c4a",
+            "adult": false,
+            "gender": 0,
+            "id": 2657486,
+            "known_for_department": "Acting",
+            "name": "Wilfred Kling",
+            "original_name": "Wilfred Kling",
+            "popularity": 0.0352,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-01-27",
+        "episode_number": 26,
+        "episode_type": "standard",
+        "id": 2303511,
+        "name": "Damp Coral",
+        "overview": "Impedit dens deporto ultio causa.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Producer",
+            "department": "Production",
+            "credit_id": "5ee0cb4bf031740020dd4ed1",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          },
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d3a26beaea003552a154",
+            "adult": false,
+            "gender": 0,
+            "id": 1214669,
+            "known_for_department": "Acting",
+            "name": "Gwendolyn Wisozk",
+            "original_name": "Gwendolyn Wisozk",
+            "popularity": 0.0775,
+            "profile_path": null
+          },
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d356967cc70035463f09",
+            "adult": false,
+            "gender": 0,
+            "id": 2673520,
+            "known_for_department": "Acting",
+            "name": "Marcella Pouros",
+            "original_name": "Marcella Pouros",
+            "popularity": 0.0281,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0cafbdbf144001e91ab96",
+            "order": 504,
+            "adult": false,
+            "gender": 0,
+            "id": 2673564,
+            "known_for_department": "Acting",
+            "name": "Dr. Leonard Osinski",
+            "original_name": "Dr. Leonard Osinski",
+            "popularity": 0.0461,
+            "profile_path": "/p9JrDRdgf2EeUaiUI4w4Llm0Hus.jpg"
+          },
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-02-03",
+        "episode_number": 27,
+        "episode_type": "standard",
+        "id": 2303517,
+        "name": "Continuous Bat",
+        "overview": "Ratione vox sol amoveo arma spiritus succedo ratione optio veniam.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-02-10",
+        "episode_number": 28,
+        "episode_type": "standard",
+        "id": 2303520,
+        "name": "Compulsory Lizard",
+        "overview": "Considero audeo tunc.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-02-17",
+        "episode_number": 29,
+        "episode_type": "standard",
+        "id": 2303523,
+        "name": "Angry Warbler",
+        "overview": "Sui sequi creber antepono bis pecto aptus.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          },
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d3a26beaea003552a154",
+            "adult": false,
+            "gender": 0,
+            "id": 1214669,
+            "known_for_department": "Acting",
+            "name": "Gwendolyn Wisozk",
+            "original_name": "Gwendolyn Wisozk",
+            "popularity": 0.0775,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          },
+          {
+            "character": "Commentator",
+            "credit_id": "5ecdea623dc3130020c6e362",
+            "order": 503,
+            "adult": false,
+            "gender": 0,
+            "id": 1213509,
+            "known_for_department": "Acting",
+            "name": "Meredith Bergstrom",
+            "original_name": "Meredith Bergstrom",
+            "popularity": 0.116,
+            "profile_path": "/fnhjxcctBAuyZK4VxsHx7uG3k0L.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-02-24",
+        "episode_number": 30,
+        "episode_type": "standard",
+        "id": 2303524,
+        "name": "Stormy Galliform",
+        "overview": "Vivo creator adamo desino repudiandae atque textilis.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef8b3ded6d64d0037c56e7f",
+            "adult": false,
+            "gender": 0,
+            "id": 2673580,
+            "known_for_department": "Acting",
+            "name": "Brooke Hirthe",
+            "original_name": "Brooke Hirthe",
+            "popularity": 0.0281,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-03-02",
+        "episode_number": 31,
+        "episode_type": "standard",
+        "id": 2303525,
+        "name": "Harsh Orca",
+        "overview": "Vulnero triduana arx assentator decet. Chirographum defluo curis civitas amet.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d3a26beaea003552a154",
+            "adult": false,
+            "gender": 0,
+            "id": 1214669,
+            "known_for_department": "Acting",
+            "name": "Gwendolyn Wisozk",
+            "original_name": "Gwendolyn Wisozk",
+            "popularity": 0.0775,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-03-09",
+        "episode_number": 32,
+        "episode_type": "standard",
+        "id": 2303526,
+        "name": "Necessary Hookworm",
+        "overview": "Adimpleo angulus testimonium.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          },
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d3a26beaea003552a154",
+            "adult": false,
+            "gender": 0,
+            "id": 1214669,
+            "known_for_department": "Acting",
+            "name": "Gwendolyn Wisozk",
+            "original_name": "Gwendolyn Wisozk",
+            "popularity": 0.0775,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          },
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-03-16",
+        "episode_number": 33,
+        "episode_type": "standard",
+        "id": 2303527,
+        "name": "Wittering Toucan",
+        "overview": "Ea cura curso stella. Sponte suppellex atrocitas aliqua varius cavus beatae arto atavus quasi. Acsi cultura angelus suggero.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-03-23",
+        "episode_number": 34,
+        "episode_type": "standard",
+        "id": 2303528,
+        "name": "Extended Firefly",
+        "overview": "Auctus comburo pauci solum adinventitias abutor tabella deserunt.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-03-30",
+        "episode_number": 35,
+        "episode_type": "standard",
+        "id": 2303529,
+        "name": "Disgusted Bee",
+        "overview": "Suppellex cavus comedo veritas succurro deprecator decimus ambulo casso. Sollers acsi conventus sed ventito amita tredecim suppono.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          },
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ef2d3a26beaea003552a154",
+            "adult": false,
+            "gender": 0,
+            "id": 1214669,
+            "known_for_department": "Acting",
+            "name": "Gwendolyn Wisozk",
+            "original_name": "Gwendolyn Wisozk",
+            "popularity": 0.0775,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          },
+          {
+            "character": "Commentator",
+            "credit_id": "5ecdea623dc3130020c6e362",
+            "order": 503,
+            "adult": false,
+            "gender": 0,
+            "id": 1213509,
+            "known_for_department": "Acting",
+            "name": "Meredith Bergstrom",
+            "original_name": "Meredith Bergstrom",
+            "popularity": 0.116,
+            "profile_path": "/fnhjxcctBAuyZK4VxsHx7uG3k0L.jpg"
+          },
+          {
+            "character": "Presenter",
+            "credit_id": "5ee0cdb6dbf144001f909655",
+            "order": 521,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-04-06",
+        "episode_number": 36,
+        "episode_type": "standard",
+        "id": 2303530,
+        "name": "Resonant Panther",
+        "overview": "Votum adhuc tempora coepi verbum approbo.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-04-13",
+        "episode_number": 37,
+        "episode_type": "standard",
+        "id": 2303531,
+        "name": "Valuable Whitefish",
+        "overview": "Cuius damno statim talus. Assentator crudelis in thymbra commemoro tremo summa aperio vitiosus curo.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Commentator",
+            "credit_id": "5ee0af842dda89002175fdad",
+            "order": 546,
+            "adult": false,
+            "gender": 2,
+            "id": 2673408,
+            "known_for_department": "Acting",
+            "name": "Andrea Franecki",
+            "original_name": "Andrea Franecki",
+            "popularity": 0.0554,
+            "profile_path": "/kaiLThhjkqpCuopQeD03vWPNzgJ.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-04-20",
+        "episode_number": 38,
+        "episode_type": "standard",
+        "id": 2303532,
+        "name": "Old Aphid",
+        "overview": "Quidem valetudo cursim molestiae reiciendis cruciamentum damnatio voveo carus. Aer vere videlicet carmen alveus valde auditor.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-04-27",
+        "episode_number": 39,
+        "episode_type": "standard",
+        "id": 2303533,
+        "name": "Attractive Catfish",
+        "overview": "Natus nisi suggero pax carcer aperiam. Vesica cinis traho suffragium.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          },
+          {
+            "job": "Producer",
+            "department": "Production",
+            "credit_id": "5ef8b92ea284eb00368d6f15",
+            "adult": false,
+            "gender": 0,
+            "id": 2694814,
+            "known_for_department": "Production",
+            "name": "Tommie Connelly DVM",
+            "original_name": "Tommie Connelly DVM",
+            "popularity": 0.0143,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-05-04",
+        "episode_number": 40,
+        "episode_type": "standard",
+        "id": 2303534,
+        "name": "Amateur Wallaby",
+        "overview": "Deporto cura ambitus. Cursim deinde adfectus amplexus stips volo cubitum ab.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-05-11",
+        "episode_number": 41,
+        "episode_type": "standard",
+        "id": 2303535,
+        "name": "Informal Spoonbill",
+        "overview": "Ascisco cotidie cibo utilis texo. Utilis abutor confero crastinus adhaero decet.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      },
+      {
+        "air_date": "1968-05-18",
+        "episode_number": 42,
+        "episode_type": "finale",
+        "id": 2303536,
+        "name": "Sheer Dove",
+        "overview": "Avarus vigor sub tristis. Stillicidium caute coniuratio causa. Decimus harum astrum tutis subito appositus creta amaritudo.",
+        "production_code": "",
+        "runtime": 80,
+        "season_number": 4,
+        "show_id": 224,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [
+          {
+            "job": "Presenter",
+            "department": "Crew",
+            "credit_id": "5ee71607a217c00022d5ff58",
+            "adult": false,
+            "gender": 0,
+            "id": 1214668,
+            "known_for_department": "Acting",
+            "name": "Byron Lehner",
+            "original_name": "Byron Lehner",
+            "popularity": 0.0404,
+            "profile_path": null
+          }
+        ],
+        "guest_stars": [
+          {
+            "character": "Self - Commentator",
+            "credit_id": "5f2a5285869e75003672c420",
+            "order": 1,
+            "adult": false,
+            "gender": 0,
+            "id": 2653205,
+            "known_for_department": "Acting",
+            "name": "Stephanie Fahey III",
+            "original_name": "Stephanie Fahey III",
+            "popularity": 0.1267,
+            "profile_path": "/zMxIWpPhLQd0Zmge6UQ8z15XdlG.jpg"
+          }
+        ]
+      }
+    ],
+    "name": "Season 1967/68",
+    "overview": "Once again, protracted negotiations during the summer ensured the return of the show. In order to secure the deal the BBC had to agree to broadcast five matches from Division Two and two from Divisions Three or Four as well as the 23 Division One games that they wanted.",
+    "id": 153185,
+    "poster_path": null,
+    "season_number": 4,
+    "vote_average": 0
+  }
+}
