@@ -33,11 +33,9 @@ import { ENV } from '@constants';
 
 class DatabaseLogger extends AbstractLogger {
   protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {
-    console.log('Preparing log messages');
     const messages = this.prepareLogMessages(logMessage, {
-      highlightSql: false,
+      highlightSql: true,
     });
-    console.log('Got log messages', messages.length);
 
     for (let message of messages) {
       switch (message.type ?? level) {
@@ -119,8 +117,8 @@ export class Database {
         Storage,
       ],
       synchronize: true,
-      logger: new DatabaseLogger(),
-      logging: ['query', 'error', 'schema', 'warn', 'info', 'log'],
+      logger: new DatabaseLogger('all'),
+      logging: true,
     });
   }
 
