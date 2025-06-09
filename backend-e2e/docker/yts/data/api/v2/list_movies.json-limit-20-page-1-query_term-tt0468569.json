@@ -1,0 +1,120 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "94ce6e472eabbbcd-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=zHzadYMupL0RFIbCuAWW%2FRjQO3Ngbxq%2FN9%2FhuP9qMoTY3RSIpFTxWFoAOYMuATlK8VeT%2BlQ3RkamXIz%2FjONZGa6B0ZHfca2i54%2B5%2BCvhPhJSh13AE3vGRw%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+    "server": "cloudflare",
+    "server-timing": "cfL4;desc=\"?proto=TCP&rtt=3924&min_rtt=653&rtt_var=4793&sent=22&recv=20&lost=0&retrans=0&sent_bytes=13460&recv_bytes=1812&delivery_rate=4160919&cwnd=46&unsent_bytes=0&cid=8edbd7842c26d89c&ts=7533&x=0\"",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "106554",
+    "set-cookie": "PHPSESSID=lcfjtgvb1c71m2j3ekh28esk6b; path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 3175,
+          "url": "https://irritating-dryer.net/lib",
+          "imdb_code": "tt10698213",
+          "title": "Relative Lemur",
+          "title_english": "Lonely Pony",
+          "title_long": "Resident Wildfowl",
+          "slug": "relative-lemur-2008",
+          "year": 2008,
+          "rating": 9,
+          "runtime": 152,
+          "genres": ["Action", "Adventure", "Crime", "Drama", "Thriller"],
+          "summary": "Subseco turbo culpo. Vulnero sustineo teres vapulus.",
+          "description_full": "Usus curo ipsam.",
+          "synopsis": "Clementia patior temeritas architecto derelinquo. Vulnero pecto cubo succedo comburo aetas cohors tergeo trucido minima. Clam suscipit crudelis cedo amor coma campana stips sed.",
+          "yt_trailer_code": "FH0vnHJcP0H",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://specific-hog.name/tmp",
+          "background_image_original": "https://ajar-pathology.biz/usr",
+          "small_cover_image": "https://weekly-warren.net/private/var",
+          "medium_cover_image": "https://athletic-cheek.com/lib",
+          "large_cover_image": "https://impractical-arm.name/usr/src",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "hash": "1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "quality": "720p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 42,
+              "peers": 29,
+              "size": "949.99 MB",
+              "size_bytes": 996136714,
+              "date_uploaded": "2015-11-01 02:20:06",
+              "date_uploaded_unix": 1446340806
+            },
+            {
+              "url": "https://yts.mx/torrent/download/CFD6EFD082B246843B8D86C0CAC9BB0A24159A9A",
+              "hash": "CFD6EFD082B246843B8D86C0CAC9BB0A24159A9A",
+              "quality": "1080p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 100,
+              "peers": 100,
+              "size": "1.70 GB",
+              "size_bytes": 1825361101,
+              "date_uploaded": "2015-11-01 02:20:12",
+              "date_uploaded_unix": 1446340812
+            },
+            {
+              "url": "https://yts.mx/torrent/download/FE2DDB9E153590DEDE52381A8BB02F1EA3C99CD0",
+              "hash": "FE2DDB9E153590DEDE52381A8BB02F1EA3C99CD0",
+              "quality": "2160p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x265",
+              "bit_depth": "10",
+              "audio_channels": "5.1",
+              "seeds": 100,
+              "peers": 30,
+              "size": "7.52 GB",
+              "size_bytes": 8074538516,
+              "date_uploaded": "2020-05-26 17:14:13",
+              "date_uploaded_unix": 1590506053
+            }
+          ],
+          "date_uploaded": "2015-11-01 02:20:06",
+          "date_uploaded_unix": 1446340806
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1749449058,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

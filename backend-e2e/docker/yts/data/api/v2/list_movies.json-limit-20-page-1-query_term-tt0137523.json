@@ -1,0 +1,104 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "94ce6e3e799cbbcd-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=Owex9muzYqd8DY2IbAqo1ZTtO4Wf7aBLWg3YhBx3YK43GD4clCS8%2FDTM0mLKyYf5HruPAGQpQv2ragInIhtJgFimB4sKqQtAHTP08jARblOx%2FNPQmIFgBA%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+    "server": "cloudflare",
+    "server-timing": "cfL4;desc=\"?proto=TCP&rtt=6829&min_rtt=696&rtt_var=11503&sent=14&recv=12&lost=0&retrans=0&sent_bytes=8828&recv_bytes=1335&delivery_rate=4160919&cwnd=40&unsent_bytes=0&cid=8edbd7842c26d89c&ts=6148&x=0\"",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "8587884",
+    "set-cookie": "PHPSESSID=fqlroilsp7ke2k62087nv14dkd; path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 1151,
+          "url": "https://occasional-class.name/Network",
+          "imdb_code": "tt91137156",
+          "title": "Typical Woodpecker",
+          "title_english": "Yearling Krill",
+          "title_long": "Due Shrew",
+          "slug": "typical-woodpecker-1999",
+          "year": 1999,
+          "rating": 8.8,
+          "runtime": 139,
+          "genres": ["Action", "Crime", "Drama", "Thriller"],
+          "summary": "Aestas arcus ipsum viridis spectaculum. Vinitor speculum cubicularis triduana cognatus.",
+          "description_full": "Deprecator peccatus cupiditate suspendo atrox volva est delectatio.",
+          "synopsis": "Bis repellendus quo. Sponte crux beatae adamo arguo comparo uterque vesper. Accusamus perferendis aestivus absque.",
+          "yt_trailer_code": "hD4HBLi5HA0",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://moral-workhorse.info/var",
+          "background_image_original": "https://welcome-assurance.biz/usr/include",
+          "small_cover_image": "https://humble-luggage.biz/usr/src",
+          "medium_cover_image": "https://canine-deduction.com/srv",
+          "large_cover_image": "https://warlike-providence.net/private",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/7A8B2E1A456B8CD12F77B2F4D1B0F6F3BB4546A8",
+              "hash": "7A8B2E1A456B8CD12F77B2F4D1B0F6F3BB4546A8",
+              "quality": "720p",
+              "type": "bluray",
+              "is_repack": "1",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 100,
+              "peers": 29,
+              "size": "1.25 GB",
+              "size_bytes": 1342177280,
+              "date_uploaded": "2021-05-18 14:23:15",
+              "date_uploaded_unix": 1621340595
+            },
+            {
+              "url": "https://yts.mx/torrent/download/FF63E5B9DA9D51209A99BF8269AAB8E833D1BE84",
+              "hash": "FF63E5B9DA9D51209A99BF8269AAB8E833D1BE84",
+              "quality": "1080p",
+              "type": "bluray",
+              "is_repack": "1",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "5.1",
+              "seeds": 100,
+              "peers": 24,
+              "size": "2.57 GB",
+              "size_bytes": 2759516488,
+              "date_uploaded": "2021-05-18 15:52:12",
+              "date_uploaded_unix": 1621345932
+            }
+          ],
+          "date_uploaded": "2021-05-18 14:23:15",
+          "date_uploaded_unix": 1621340595
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1749449057,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

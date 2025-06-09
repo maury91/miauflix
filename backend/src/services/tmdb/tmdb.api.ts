@@ -78,7 +78,7 @@ export class TMDBApi extends Api {
         'Content-Type': 'application/json',
       },
     });
-    if (!response.ok) {
+    if (!response.ok || response.status >= 400) {
       logger.error('TMDB', url, response);
       throw response;
     }

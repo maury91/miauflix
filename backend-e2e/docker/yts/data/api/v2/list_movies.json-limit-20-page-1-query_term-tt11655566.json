@@ -1,0 +1,41 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "94cea368bb299bc5-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=yhPJbszjC6ykiha%2BdGPn7OpgGcTXPmB5C8MXaQnI3VyF%2FIv1OoMCatyYLFfNgPpHkfW85eA%2BeYBbR962YczXhUS6WIoUk2c10IJy%2FJ8xjxPXOd%2BoE1jyUw%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+    "server": "cloudflare",
+    "server-timing": "cfL4;desc=\"?proto=TCP&rtt=687&min_rtt=629&rtt_var=353&sent=5&recv=6&lost=0&retrans=0&sent_bytes=3170&recv_bytes=820&delivery_rate=3959890&cwnd=33&unsent_bytes=0&cid=a65abde6cbf815ff&ts=263&x=0\"",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "2338066",
+    "set-cookie": "PHPSESSID=9p3k6d8voe6a19p58m93ab61jh; path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 0,
+      "limit": 20,
+      "page_number": 1
+    },
+    "@meta": {
+      "server_time": 1749451234,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

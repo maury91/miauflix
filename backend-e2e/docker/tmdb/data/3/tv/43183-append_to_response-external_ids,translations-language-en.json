@@ -1,0 +1,205 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19202",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b425fa86c17c9956398fa4013b49c72a\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 ab21b6436bc1d51d57b228ad39b1fa54.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "882aZwkIQtks654rxUg5uvxWvSjdD9rddCbGIthWo9LU9tKcDYrS_Q==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "706d6e9dbe884a28b67109a5cac81fe9"
+  },
+  "data": {
+    "adult": false,
+    "backdrop_path": "/bORO5nXVKkwQBTDdj2mUlgijTwV.jpg",
+    "created_by": [
+      {
+        "id": 1530223,
+        "credit_id": "67d4713fec4ebd28a253cefd",
+        "name": "Wm Kreiger",
+        "original_name": "Wm Kreiger",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2006-10-30",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://favorable-loafer.com",
+    "id": 43183,
+    "in_production": false,
+    "languages": ["en"],
+    "last_air_date": "2019-05-21",
+    "last_episode_to_air": {
+      "id": 5766796,
+      "name": "Horrid Henry and the Measly Mascot",
+      "overview": "Peter narrates Henry's trip to the \"Brain Box of the Year\" competition.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2019-05-21",
+      "episode_number": 42,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 11,
+      "season_number": 5,
+      "show_id": 43183,
+      "still_path": null
+    },
+    "name": "Elderly Weasel",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 112,
+        "logo_path": "/rwuEsuBDb200skfrDTvBiJihMLd.png",
+        "name": "Daily Nute Gunray Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Shy R4-P17 Pictures",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 252,
+    "number_of_seasons": 5,
+    "origin_country": ["GB"],
+    "original_language": "en",
+    "original_name": "Safe Mandrill",
+    "overview": "Aptus utor stipes combibo subnecto validus quas.",
+    "popularity": 265.6007,
+    "poster_path": "/7ZBlUaLeJaE66BTttAlox3fTU4u.jpg",
+    "production_companies": [
+      {
+        "id": 82023,
+        "logo_path": null,
+        "name": "Explicit Lando Calrissian Entertainment",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-06-06",
+        "episode_count": 2,
+        "id": 429031,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2006-10-30",
+        "episode_count": 52,
+        "id": 80685,
+        "name": "Series 1",
+        "overview": "",
+        "poster_path": "/oF9PNPVR0apLRURwTU2j2ZoFPNb.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2009-02-15",
+        "episode_count": 53,
+        "id": 80689,
+        "name": "Series 2",
+        "overview": "",
+        "poster_path": "/glYoOwwSc1f9IXtkPmkn18RodIR.jpg",
+        "season_number": 2,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2011-07-22",
+        "episode_count": 52,
+        "id": 429028,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2014-10-11",
+        "episode_count": 51,
+        "id": 429029,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2018-11-17",
+        "episode_count": 42,
+        "id": 429030,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 0
+      }
+    ],
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 6.8,
+    "vote_count": 14,
+    "external_ids": {
+      "imdb_id": "tt0985991",
+      "freebase_mid": "/m/04gpzj_",
+      "freebase_id": null,
+      "tvdb_id": 81669,
+      "tvrage_id": null,
+      "wikidata_id": "Q4347082",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Tonsor depulso curatio. Defleo sit absconditus infit nihil tui cotidie supplanto. Totidem caries timidus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    }
+  }
+}

@@ -103,6 +103,7 @@ Bun.serve({
         const fileContent = await Bun.file(filePath).json();
         return new Response(JSON.stringify(fileContent.data), {
           headers: fileContent.headers || { 'Content-Type': 'application/json' },
+          status: fileContent.status || 200,
         });
       }
 
