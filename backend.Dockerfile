@@ -21,7 +21,7 @@ RUN npm ci && npm cache clean --force
 COPY backend/ ./backend/
 
 # Build backend first (required for backend-client project reference), then other packages
-RUN npm run build --workspace=backend && npm run build:sanitizer && npm run build:backend-client
+RUN npm run build --workspace=backend && npm run build:libs && npm run build:backend-client
 
 # Move node_modules to the dist directory
 RUN mv ./backend/node_modules ./dist/backend/node_modules && \
