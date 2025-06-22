@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
-import type { Storage } from '@entities/storage.entity';
 import type { Database } from '@database/database';
+import type { Storage } from '@entities/storage.entity';
 import type { StorageRepository } from '@repositories/storage.repository';
 
 /**

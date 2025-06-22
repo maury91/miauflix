@@ -1,9 +1,9 @@
 import { logger } from '@logger';
 
+import type { Database } from '@database/database';
 import type { MediaList } from '@entities/list.entity';
 import { Movie } from '@entities/movie.entity';
 import { TVShow } from '@entities/tvshow.entity';
-import type { Database } from '@database/database';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { MediaSummaryList } from '@services/tmdb/tmdb.types';

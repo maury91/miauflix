@@ -89,7 +89,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 # Build libraries
-npm run build:all
+npm run build:libs
 npm install # Links the libraries 
 
 # Clean up previous build artifacts

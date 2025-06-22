@@ -1,0 +1,37 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "content-type": "application/json",
+    "cross-origin-opener-policy": "same-origin",
+    "referrer-policy": "same-origin",
+    "x-proxy-cache": "HIT"
+  },
+  "body": {
+    "links": {
+      "next": null,
+      "previous": null
+    },
+    "page_size": 50,
+    "count": 1,
+    "total": 1,
+    "results": [
+      {
+        "pk": "861b41",
+        "n": "Chronicles of vague complex 1997 BluRay AV1 DDP 5 1 Multi7 dAV1nci",
+        "a": 1749978029,
+        "c": "Anime",
+        "s": 2899102924,
+        "t": null,
+        "u": "Jennie Stiedemann-Langosh",
+        "se": 2,
+        "le": 4,
+        "i": "tt0119698",
+        "h": "123456789ABCDEF0123456789ABCDEF012345678",
+        "tg": []
+      }
+    ]
+  },
+  "bodyIsJson": true,
+  "isTransformed": true
+}

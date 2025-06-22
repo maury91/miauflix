@@ -41,9 +41,16 @@ const fetchMock = jest.fn(async function (
     HTTP_VCR_CONFIG.providerMap,
     HTTP_VCR_CONFIG.defaultProvider
   );
+  const canLoadFromCache = ['replay', 'hybrid', 'migrate'].includes(HTTP_VCR_CONFIG.mode);
+  const canLoadFromNetwork = ['record', 'hybrid', 'migrate'].includes(HTTP_VCR_CONFIG.mode);
+
+  // Find matching transformer based on URL
+  const transformer = HTTP_VCR_CONFIG.transformers.find(t =>
+    new RegExp(t.urlPattern).test(urlString)
+  );
 
   // Check if we have a cached response and are in replay mode
-  if (['replay', 'hybrid'].includes(HTTP_VCR_CONFIG.mode) && existsSync(filepath)) {
+  if (canLoadFromCache && existsSync(filepath)) {
     try {
       const cachedData = await readFile(filepath, 'utf8');
       const responseData = JSON.parse(cachedData) as StoredResponse;
@@ -51,62 +58,53 @@ const fetchMock = jest.fn(async function (
       let needsUpdate = false;
 
       // Check if this fixture contains any blacklisted headers that should be removed
-      if (HTTP_VCR_CONFIG.mode === 'hybrid') {
-        const blacklistedHeadersFound = Object.keys(headers).some(key =>
-          HTTP_VCR_CONFIG.headersBlacklist.includes(key.toLowerCase())
+      const blacklistedHeadersFound = Object.keys(headers).some(key =>
+        HTTP_VCR_CONFIG.headersBlacklist.includes(key.toLowerCase())
+      );
+
+      if (blacklistedHeadersFound) {
+        console.log(`[HTTP VCR] Removing blacklisted headers from fixture: ${filepath}`);
+        // Filter out blacklisted headers
+        headers = Object.fromEntries(
+          Object.entries(headers).filter(
+            ([key]) => !HTTP_VCR_CONFIG.headersBlacklist.includes(key.toLowerCase())
+          )
         );
+        needsUpdate = true;
+      }
 
-        if (blacklistedHeadersFound) {
-          console.log(`[HTTP VCR] Removing blacklisted headers from fixture: ${filepath}`);
-          // Filter out blacklisted headers
-          headers = Object.fromEntries(
-            Object.entries(headers).filter(
-              ([key]) => !HTTP_VCR_CONFIG.headersBlacklist.includes(key.toLowerCase())
-            )
-          );
-          needsUpdate = true;
-        }
+      // Check if we need to apply transformations to this fixture
+      if (HTTP_VCR_CONFIG.autoTransform && !isTransformed && transformer) {
+        console.log(`[HTTP VCR] Transforming data in fixture: ${filepath}`);
+        const transformedData = transformer.transform({
+          status,
+          statusText,
+          headers,
+          body,
+          bodyIsJson,
+        }) as StoredResponse;
 
-        // Check if we need to apply transformations to this fixture
-        if (HTTP_VCR_CONFIG.autoTransform && !isTransformed) {
-          // Find matching transformer based on URL
-          const transformer = HTTP_VCR_CONFIG.transformers.find(t =>
-            new RegExp(t.urlPattern).test(urlString)
-          );
+        // Update with transformed data
+        body = transformedData.body;
+        isTransformed = true;
+        needsUpdate = true;
+      }
 
-          if (transformer) {
-            console.log(`[HTTP VCR] Transforming data in fixture: ${filepath}`);
-            const transformedData = transformer.transform({
-              status,
-              statusText,
-              headers,
-              body,
-              bodyIsJson,
-            }) as StoredResponse;
+      // Update the fixture file if needed
+      if (needsUpdate) {
+        const updatedResponseData: StoredResponse = {
+          status,
+          statusText,
+          headers,
+          body,
+          bodyIsJson,
+          isTransformed,
+        };
 
-            // Update with transformed data
-            body = transformedData.body;
-            isTransformed = true;
-            needsUpdate = true;
-          }
-        }
-
-        // Update the fixture file if needed
-        if (needsUpdate) {
-          const updatedResponseData: StoredResponse = {
-            status,
-            statusText,
-            headers,
-            body,
-            bodyIsJson,
-            isTransformed,
-          };
-
-          // Use pretty print spacing if configured
-          const indent = HTTP_VCR_CONFIG.prettyPrintJson ? 2 : 0;
-          writeFileSync(filepath, JSON.stringify(updatedResponseData, null, indent));
-          console.log(`[HTTP VCR] Updated fixture: ${filepath}`);
-        }
+        // Use pretty print spacing if configured
+        const indent = HTTP_VCR_CONFIG.prettyPrintJson ? 2 : 0;
+        writeFileSync(filepath, JSON.stringify(updatedResponseData, null, indent));
+        console.log(`[HTTP VCR] Updated fixture: ${filepath}`);
       }
 
       // Convert body back to string if it was stored as a parsed JSON object
@@ -129,7 +127,7 @@ const fetchMock = jest.fn(async function (
     }
   }
 
-  if (HTTP_VCR_CONFIG.mode === 'replay') {
+  if (!canLoadFromNetwork) {
     console.warn(`[HTTP VCR] No cached response found for: ${urlString} [${provider}]`);
     throw new Error(`No cached response found for: ${urlString}`);
   }
@@ -179,10 +177,6 @@ const fetchMock = jest.fn(async function (
     };
 
     // Apply transformation if needed
-    const transformer = HTTP_VCR_CONFIG.transformers.find(t =>
-      new RegExp(t.urlPattern).test(urlString)
-    );
-
     if (transformer) {
       console.log(`[HTTP VCR] Transforming new response data for: ${urlString}`);
       responseData = transformer.transform(responseData) as StoredResponse;
