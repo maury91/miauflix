@@ -1,0 +1,163 @@
+{
+  "project": {
+    "name": "miauflix-bun",
+    "type": "media-streaming-platform",
+    "tech_stack": {
+      "backend": "TypeScript/Hono/TypeORM",
+      "frontend": "React/TypeScript",
+      "containerization": "Docker",
+      "testing": "Jest/E2E",
+      "database": "PostgreSQL"
+    }
+  },
+  "npm_commands": {
+    "execution_policy": {
+      "always_from_root": true,
+      "never_navigate_to_workspaces": true,
+      "description": "All npm commands must be executed from the root directory to maintain workspace consistency"
+    },
+    "available_commands": {
+      "test": {
+        "command": "npm run test",
+        "description": "Run backend unit tests",
+        "execution_context": "root"
+      },
+      "test:backend": {
+        "command": "npm run test:backend",
+        "description": "Run backend unit tests",
+        "execution_context": "root"
+      },
+      "test:backend:e2e": {
+        "command": "npm run test:backend:e2e",
+        "description": "Run backend E2E tests with Docker compose lifecycle",
+        "execution_context": "root"
+      },
+      "test:backend:e2e:dev": {
+        "command": "npm run test:backend:e2e:dev",
+        "description": "Run E2E tests against running Docker environment",
+        "execution_context": "root",
+        "requires_docker": true,
+        "prerequisites": ["start:backend:e2e"]
+      },
+      "start:backend:e2e": {
+        "command": "npm run start:backend:e2e",
+        "description": "Start backend E2E environment with Docker compose",
+        "execution_context": "root",
+        "manages_docker": true
+      },
+      "lint:fix": {
+        "command": "npm run lint:fix",
+        "description": "Fix linting issues across the project",
+        "execution_context": "root"
+      },
+      "check:ts": {
+        "command": "npm run check:ts",
+        "description": "Check TypeScript compilation",
+        "execution_context": "root"
+      },
+      "build": {
+        "command": "npm run build",
+        "description": "Build backend",
+        "execution_context": "root"
+      },
+      "dev": {
+        "command": "npm run dev",
+        "description": "Start development servers concurrently",
+        "execution_context": "root"
+      }
+    }
+  },
+  "docker_compose": {
+    "workflow_rules": {
+      "app_runs_in_docker": true,
+      "file_watching_disabled": true,
+      "verification_method": "e2e_tests",
+      "description": "Docker containers don't watch files, use E2E tests to verify changes"
+    },
+    "lifecycle_management": {
+      "auto_cleanup": true,
+      "process_references": true,
+      "background_process_handling": "track_and_manage"
+    }
+  },
+  "testing": {
+    "http_vcr": {
+      "enabled": true,
+      "workflow": [
+        "write_test_with_real_api_call",
+        "run_test_to_generate_fixtures",
+        "analyze_fixture_data_structure",
+        "create_data_transformers",
+        "neutralize_copyrighted_content"
+      ],
+      "fixture_analysis": {
+        "extract_data_patterns": true,
+        "identify_relationships": true,
+        "preserve_structure": true
+      }
+    },
+    "third_party_services": {
+      "yts": "torrents",
+      "therarbg": "torrents",
+      "tmdb": "metadata",
+      "trakt": "user_data"
+    },
+    "data_neutralization": {
+      "required": true,
+      "preserve_relationships": true,
+      "transform_copyrighted_content": true
+    }
+  },
+  "typescript": {
+    "strict_mode": true,
+    "path_mapping": true,
+    "compilation_checks": "check:ts"
+  },
+  "security": {
+    "authentication": {
+      "middleware": "auth.middleware.ts",
+      "refresh_tokens": true,
+      "audit_logging": true
+    },
+    "rate_limiting": {
+      "middleware": "rate-limit.middleware.ts"
+    },
+    "encryption": {
+      "required_for_streaming": true,
+      "required_for_user_data": true
+    }
+  },
+  "performance": {
+    "streaming": {
+      "chunk_stores": "fs-chunk-store",
+      "webtorrent_integration": true,
+      "background_processing": true
+    },
+    "content_optimization": {
+      "quality_extraction": true,
+      "video_codec_detection": true,
+      "metadata_enrichment": true
+    }
+  },
+  "content_directories": {
+    "abstract_implementation": "content-directory.abstract.ts",
+    "providers": {
+      "yts": {
+        "api": "yts.api.ts",
+        "types": "yts.types.ts",
+        "utils": "yts.utils.ts"
+      },
+      "therarbg": {
+        "api": "therarbg.api.ts",
+        "types": "therarbg.types.ts",
+        "utils": "therarbg.utils.ts",
+        "tracker": "therarbg.tracker.ts"
+      }
+    }
+  },
+  "development": {
+    "hot_reload": false,
+    "docker_required": true,
+    "verification_via_e2e": true
+  }
+}
