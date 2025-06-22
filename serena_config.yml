@@ -1,0 +1,12 @@
+# Basic Serena configuration
+project_root: '/home/vscode/projects/miauflix-bun'
+language_servers:
+  - typescript
+  - python
+  - javascript
+
+# Enable features you want
+features:
+  semantic_search: true
+  code_editing: true
+  file_operations: true
