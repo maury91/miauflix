@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y curl python3 make g++ && rm -rf /var/li
 # Copy package.json and package-lock.json (if available)
 COPY package.json package-lock.json ./
 COPY backend/package.json ./backend/
+COPY tsconfig.json ./tsconfig.json
 
 # Copy the packages that backend depends on
 COPY packages/ ./packages/
@@ -21,7 +22,7 @@ RUN npm ci && npm cache clean --force
 COPY backend/ ./backend/
 
 # Build backend first (required for backend-client project reference), then other packages
-RUN npm run build --workspace=backend && npm run build:libs && npm run build:backend-client
+RUN npm run build:libs && npm run build --workspace=backend 
 
 # Move node_modules to the dist directory
 RUN mv ./backend/node_modules ./dist/backend/node_modules && \
