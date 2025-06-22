@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y \
 COPY package.json package-lock.json ./
 COPY backend/package.json ./backend/
 
+# Copy the packages that backend depends on
+COPY packages/ ./packages/
+
 # Install dependencies
 RUN npm install
 

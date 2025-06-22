@@ -29,7 +29,7 @@
       "@repositories/*": ["src/repositories/*"],
       "@routes/*": ["src/routes/*"],
       "@services/*": ["src/services/*"],
-      "@trackers/*": ["src/trackers/*"],
+      "@content-directories/*": ["src/content-directories/*"],
       "@utils/*": ["src/utils/*"],
       "@logger": ["src/logger"],
       "@constants": ["src/constants"],

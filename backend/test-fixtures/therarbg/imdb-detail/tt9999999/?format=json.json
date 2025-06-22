@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "content-type": "text/html; charset=utf-8",
+    "cross-origin-opener-policy": "same-origin",
+    "referrer-policy": "same-origin",
+    "x-proxy-cache": "HIT"
+  },
+  "body": "<!DOCTYPE html>\n\n<html lang=\"en\"></html>\n",
+  "bodyIsJson": false,
+  "isTransformed": true
+}

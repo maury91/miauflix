@@ -1,16 +1,18 @@
 import type { Database } from '@database/database';
 
 // Mock the dependencies
-jest.mock('./tracker.service');
-jest.mock('./magnet.service');
+jest.mock('@services/source/magnet.service');
 jest.mock('@services/security/vpn.service');
+jest.mock('@services/download/download.service');
+jest.mock('@services/source-metadata/content-directory.service');
 
+import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+
+import { DownloadService } from '@services/download/download.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
-import { VideoCodec } from '@utils/torrent-name-parser.util';
-
-import { MagnetService } from './magnet.service';
-import { SourceService } from './source.service';
-import { TrackerService } from './tracker.service';
+import { MagnetService } from '@services/source/magnet.service';
+import { SourceService } from '@services/source/source.service';
+import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 
 // Mock repositories
 const mockMovieRepository = {
@@ -54,81 +56,73 @@ const mockDatabase = {
 } as unknown as Database;
 
 describe('SourceService', () => {
+  const mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
   let service: SourceService;
-  let mockTrackerService: jest.Mocked<TrackerService>;
-  let mockMagnetService: jest.Mocked<MagnetService>;
-  let mockVpnService: jest.Mocked<VpnDetectionService>;
+  const mockTrackerService = new ContentDirectoryService(
+    {} as never,
+    mockDownloadService
+  ) as jest.Mocked<ContentDirectoryService>;
+  const mockMagnetService = new MagnetService(mockDownloadService) as jest.Mocked<MagnetService>;
+  const mockVpnService = new VpnDetectionService() as jest.Mocked<VpnDetectionService>;
 
   beforeEach(() => {
     // Reset all mocks
     jest.clearAllMocks();
     jest.useFakeTimers();
 
-    // Get the mocked classes and create instances
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mockTrackerService = new TrackerService({} as any) as jest.Mocked<TrackerService>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mockMagnetService = new MagnetService({} as any) as jest.Mocked<MagnetService>;
-    mockVpnService = new VpnDetectionService() as jest.Mocked<VpnDetectionService>;
+    mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
 
     // Setup default mock implementations
     mockTrackerService.searchTorrentsForMovie.mockResolvedValue({
-      id: 1,
-      imdbCode: 'tt1234567',
-      title: 'Test Movie 1',
-      titleLong: 'Test Movie 1 (2023)',
-      year: 2023,
-      rating: 7.5,
-      runtime: 120,
-      genres: ['Action', 'Drama'],
-      summary: 'Test movie summary',
-      language: 'en',
-      coverImage: 'https://example.com/cover.jpg',
-      backdropImage: 'https://example.com/backdrop.jpg',
-      trailerCode: 'abcd1234',
-      torrents: [
+      sources: [
         {
-          approximateBitrate: 2000,
-          audioCodec: null,
-          leechers: 10,
+          audioCodec: [],
+          bitrate: 2000,
+          broadcasters: 100,
+          hash: 'abc123',
+          language: [],
           magnetLink: 'magnet:?xt=urn:btih:abc123&dn=test',
-          quality: '1080p',
+          quality: Quality.FHD,
           resolution: { width: 1920, height: 1080, label: 'FHD' },
-          seeders: 100,
-          size: { bytes: 1500000000, value: 1.5, unit: 'GB' },
-          source: 'YTS',
+          score: 0,
+          size: 1500000000,
+          source: Source.WEB,
+          type: 'WEB',
           uploadDate: new Date('2023-01-01'),
           url: 'https://example.com/torrent1',
           videoCodec: VideoCodec.X264,
-          type: 'WEB',
+          watchers: 10,
         },
         {
-          approximateBitrate: 1500,
-          audioCodec: null,
-          leechers: 5,
+          audioCodec: [],
+          bitrate: 1500,
+          broadcasters: 50,
+          hash: 'def456',
+          language: [],
           magnetLink: 'magnet:?xt=urn:btih:def456&dn=test',
-          quality: '720p',
+          quality: Quality.HD,
           resolution: { width: 1280, height: 720, label: 'HD' },
-          seeders: 50,
-          size: { bytes: 800000000, value: 800, unit: 'MB' },
-          source: 'YTS',
+          score: 0,
+          size: 800000000,
+          source: Source.BLURAY,
+          type: 'BluRay',
           uploadDate: new Date('2023-01-02'),
           url: 'https://example.com/torrent2',
           videoCodec: VideoCodec.X264,
-          type: 'BluRay',
+          watchers: 5,
         },
       ],
+      trailerCode: 'abcd1234',
     });
 
-    mockTrackerService.status.mockReturnValue({
-      yts: {
+    mockTrackerService.status.mockReturnValue([
+      {
         queue: 0,
         successes: [],
         failures: [],
         lastRequest: null,
       },
-    });
+    ]);
 
     mockVpnService.isVpnActive.mockResolvedValue(true);
     mockVpnService.on.mockReturnValue(jest.fn());
@@ -236,20 +230,8 @@ describe('SourceService', () => {
             setTimeout(
               () =>
                 resolve({
-                  id: 2,
-                  imdbCode: 'tt-slow-search',
-                  title: 'Slow Movie',
-                  titleLong: 'Slow Movie (2023)',
-                  year: 2023,
-                  rating: 6.0,
-                  runtime: 90,
-                  genres: ['Drama'],
-                  summary: 'Slow movie summary',
-                  language: 'en',
-                  coverImage: 'https://example.com/cover2.jpg',
-                  backdropImage: 'https://example.com/backdrop2.jpg',
+                  sources: [],
                   trailerCode: 'efgh5678',
-                  torrents: [],
                 }),
               400
             ); // Take longer than timeout
@@ -294,20 +276,8 @@ describe('SourceService', () => {
             setTimeout(() => {
               searchResolved = true;
               resolve({
-                id: 1,
-                imdbCode: 'tt1234567',
-                title: 'Test Movie',
-                titleLong: 'Test Movie (2023)',
-                year: 2023,
-                rating: 7.5,
-                runtime: 120,
-                genres: ['Action'],
-                summary: 'Test movie summary',
-                language: 'en',
-                coverImage: 'https://example.com/cover.jpg',
-                backdropImage: 'https://example.com/backdrop.jpg',
+                sources: [],
                 trailerCode: 'abcd1234',
-                torrents: [],
               });
             }, 400); // Take longer than timeout
           });

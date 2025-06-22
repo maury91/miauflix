@@ -1,10 +1,10 @@
 import { logger } from '@logger';
 
+import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
 import { Movie } from '@entities/movie.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow, TVShowTranslation } from '@entities/tvshow.entity';
-import type { Database } from '@database/database';
 import type { GenreRepository } from '@repositories/genre.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type { SyncStateRepository } from '@repositories/syncState.repository';

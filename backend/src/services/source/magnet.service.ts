@@ -2,13 +2,13 @@ import { logger } from '@logger';
 import parseTorrent from 'parse-torrent';
 import path from 'path';
 
-import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 import { ENV } from '@constants';
+import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
 import type { DownloadService } from '../download/download.service';
+import { ErrorWithStatus } from './services/error-with-status.util';
 import { getTorrentFromITorrents } from './services/itorrents';
 import { getTorrentFromTorrage } from './services/torrage';
-import { ErrorWithStatus } from './services/utils';
 import type {
   Service,
   ServiceData,

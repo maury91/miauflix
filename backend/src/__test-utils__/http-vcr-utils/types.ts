@@ -1,6 +1,6 @@
 export interface HttpVcrConfig {
-  /** Mode can be "replay" (use always cache), "record" (always record), "hybrid" (use cache if available, otherwise record), or "disabled" (don't use caching) */
-  mode: 'disabled' | 'hybrid' | 'record' | 'replay';
+  /** Mode can be "replay" (use always cache), "record" (always record), "hybrid" (use cache if available, otherwise record), "migrate" (hybrid + transform unmigrated fixtures), or "disabled" (don't use caching) */
+  mode: 'disabled' | 'hybrid' | 'migrate' | 'record' | 'replay';
   /** Directory to store fixtures */
   fixturesDir: string;
   /** URL patterns to include in recording/replay (if empty, all URLs are included) */
@@ -27,10 +27,16 @@ export interface HttpVcrConfig {
 }
 
 export interface StoredResponse {
+  /** Status code of the response */
   status: number;
+  /** Status text of the response */
   statusText: string;
+  /** Headers of the response */
   headers: Record<string, string>;
-  body: unknown; // Can be string or parsed JSON object
-  bodyIsJson?: boolean; // Indicates if body has been parsed as JSON
-  isTransformed?: boolean; // Indicates if the response has been transformed
+  /** Body can be string or parsed JSON object depending on the content-type */
+  body: unknown;
+  /** Indicates if body has been parsed as JSON */
+  bodyIsJson?: boolean;
+  /** Indicates if the response has been transformed */
+  isTransformed?: boolean;
 }

@@ -1,3 +1,4 @@
+import { Quality } from '@miauflix/source-metadata-extractor';
 import {
   Column,
   CreateDateColumn,
@@ -67,21 +68,21 @@ export class MovieSource {
   url?: string; // URI link to the source, if available
 
   // URI link to the source, if available
-  @Column()
-  quality: string;
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  quality: Quality | null;
 
   @Column()
   resolution: number; // Vertical resolution in pixels ( used for sorting and filtering )
 
-  // Vertical resolution in pixels ( used for sorting and filtering )
   @Column()
   size: number; // Size in bytes
 
-  // Size in bytes
-  @Column()
-  videoCodec: string; // e.g. "x264", "x265", "HVEC"
+  @Column({ nullable: true, type: 'varchar', length: 10 })
+  videoCodec: string | null; // e.g. "x264", "x265", "HVEC"
 
-  // e.g. "x264", "x265", "HVEC"
   @Column({ nullable: true })
   broadcasters?: number;
 

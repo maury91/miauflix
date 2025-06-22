@@ -12,7 +12,7 @@ import type { AuditLogService } from '@services/security/audit-log.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { SourceService } from '@services/source';
 import type { MagnetService } from '@services/source';
-import type { TrackerService } from '@services/source/tracker.service';
+import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { TraktService } from '@services/trakt/trakt.service';
 
@@ -28,7 +28,7 @@ export function createRoutes(deps: {
   listService: ListService;
   tmdbApi: TMDBApi;
   vpnDetectionService: VpnDetectionService;
-  trackerService: TrackerService;
+  trackerService: ContentDirectoryService;
   magnetService: MagnetService;
   traktService: TraktService;
 }) {

@@ -11,17 +11,17 @@ RUN apt-get update && apt-get install -y curl python3 make g++ && rm -rf /var/li
 COPY package.json package-lock.json ./
 COPY backend/package.json ./backend/
 
+# Copy the packages that backend depends on
+COPY packages/ ./packages/
+
 # Install all dependencies for building
 RUN npm ci && npm cache clean --force
 
-# Copy application source code
+# Copy backend source code (needed for TypeScript project references)
 COPY backend/ ./backend/
 
-# Build the application (compile TypeScript, etc.)
-RUN npm run build --workspace=backend
-
-# Remove dev dependencies to reduce image size
-RUN npm ci --only=production && npm cache clean --force
+# Build backend first (required for backend-client project reference), then other packages
+RUN npm run build --workspace=backend && npm run build:sanitizer && npm run build:backend-client
 
 # Move node_modules to the dist directory
 RUN mv ./backend/node_modules ./dist/backend/node_modules && \

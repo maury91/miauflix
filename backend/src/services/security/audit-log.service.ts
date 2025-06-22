@@ -1,8 +1,8 @@
 import type { Context } from 'hono';
 
+import type { Database } from '@database/database';
 import type { AuditLog } from '@entities/audit-log.entity';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
-import type { Database } from '@database/database';
 import type { AuditLogRepository } from '@repositories/audit-log.repository';
 import { getRealClientIp } from '@utils/proxy.util';
 

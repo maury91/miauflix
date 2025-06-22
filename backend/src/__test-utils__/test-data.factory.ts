@@ -1,7 +1,9 @@
+import { Quality } from '@miauflix/source-metadata-extractor';
+
+import type { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
 import type { MovieSource } from '@entities/movie-source.entity';
 import type { Storage } from '@entities/storage.entity';
-import type { Database } from '@database/database';
 
 /**
  * Test data factory for creating test entities with realistic data
@@ -49,7 +51,7 @@ export class TestDataFactory {
       movieId,
       hash: '0123456789abcdef0123456789abcdef01234567', // 40 char hex string
       magnetLink: 'magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567&dn=Test+Movie+2023',
-      quality: '1080p',
+      quality: Quality.FHD,
       resolution: 1080,
       size: 2147483648, // 2GB
       videoCodec: 'x264',

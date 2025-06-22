@@ -1,9 +1,9 @@
-import { AudioCodec, VideoCodec } from '@utils/torrent-name-parser.util';
+import { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 /**
  * Normalize string codec values to VideoCodec enum
  */
-export function normalizeVideoCodec(codec: VideoCodec | string): VideoCodec {
+export function normalizeVideoCodec(codec: VideoCodec | string): VideoCodec | null {
   if (Object.values(VideoCodec).includes(codec as VideoCodec)) {
     return codec as VideoCodec;
   }
@@ -51,13 +51,13 @@ export function normalizeVideoCodec(codec: VideoCodec | string): VideoCodec {
     return VideoCodec.VC1;
   }
 
-  return VideoCodec.UNKNOWN;
+  return null;
 }
 
 /**
  * Normalize string codec values to AudioCodec enum
  */
-export function normalizeAudioCodec(codec: AudioCodec | string): AudioCodec {
+export function normalizeAudioCodec(codec: AudioCodec | string): AudioCodec | null {
   if (Object.values(AudioCodec).includes(codec as AudioCodec)) {
     return codec as AudioCodec;
   }
@@ -107,7 +107,7 @@ export function normalizeAudioCodec(codec: AudioCodec | string): AudioCodec {
     return AudioCodec.OPUS;
   }
 
-  return AudioCodec.UNKNOWN;
+  return null;
 }
 
 /**
@@ -115,6 +115,10 @@ export function normalizeAudioCodec(codec: AudioCodec | string): AudioCodec {
  */
 export function getVideoCodecQualityBonus(codec: VideoCodec | string): number {
   const normalizedCodec = normalizeVideoCodec(codec);
+
+  if (!normalizedCodec) {
+    return 0;
+  }
 
   switch (normalizedCodec) {
     case VideoCodec.X265:
@@ -140,8 +144,12 @@ export function getVideoCodecQualityBonus(codec: VideoCodec | string): number {
 /**
  * Format video codec for display
  */
-export function formatVideoCodec(codec: VideoCodec | string): string {
-  const normalizedCodec = normalizeVideoCodec(codec);
+export function formatVideoCodec(codec: VideoCodec | string | null): string {
+  const normalizedCodec = codec ? normalizeVideoCodec(codec) : null;
+
+  if (!normalizedCodec) {
+    return 'Unknown';
+  }
 
   switch (normalizedCodec) {
     case VideoCodec.X264:
@@ -179,6 +187,10 @@ export function formatVideoCodec(codec: VideoCodec | string): string {
 export function formatAudioCodec(codec: AudioCodec | string): string {
   const normalizedCodec = normalizeAudioCodec(codec);
 
+  if (!normalizedCodec) {
+    return 'Unknown';
+  }
+
   switch (normalizedCodec) {
     case AudioCodec.AAC:
       return 'AAC';
@@ -200,10 +212,10 @@ export function formatAudioCodec(codec: AudioCodec | string): string {
       return 'FLAC';
     case AudioCodec.MP3:
       return 'MP3';
-    case AudioCodec.PCM:
-      return 'PCM';
     case AudioCodec.OPUS:
       return 'Opus';
+    case AudioCodec.PCM:
+      return 'PCM';
     default:
       return 'Unknown';
   }

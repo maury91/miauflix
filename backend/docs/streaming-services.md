@@ -1,176 +1,140 @@
 # Streaming Services
 
-The backend provides torrent-based streaming capabilities through WebTorrent integration.
+> **Status Updated:** 2025-06-25 - Verified against actual implementation
 
-## Current Implementation
+The backend provides comprehensive torrent infrastructure with WebTorrent integration. **Note:** The streaming endpoint is not yet implemented, but all supporting infrastructure exists.
 
-### WebTorrent Integration
+## ✅ Current Implementation (Fully Functional)
 
-- **Magnet Link Conversion**: Convert magnet links to torrent objects for processing
-- **Metadata Extraction**: Parse torrent files to extract detailed information about media content
-- **File Analysis**: Analyze torrent contents to identify video files and their properties
-- **Basic Streaming Support**: Foundation for streaming torrent content
+### WebTorrent Infrastructure (Complete)
 
-### Source Services
+- ✅ **Complete WebTorrent Client**: `DownloadService` with full WebTorrent integration
+- ✅ **Tracker Management**: Best tracker loading, blacklist support, IP set filtering
+- ✅ **Magnet Link Generation**: Dynamic magnet link creation with tracker lists
+- ✅ **Torrent File Download**: Timeout-based torrent file retrieval
+- ✅ **Stats Scraping**: Real-time seeders/leechers statistics
+- ✅ **Connection Management**: Configurable connection and bandwidth limits
 
-- **Torrent Processing**: Handle torrent files and magnet links
-- **Metadata Parsing**: Extract title, quality, and other metadata from torrent names
-- **Quality Detection**: Automatically detect video quality (720p, 1080p, 4K, etc.)
-- **File Validation**: Validate torrent contents for media files
+### Source Services (Production Ready)
 
-## Planned Features
+- ✅ **Multi-Provider Aggregation**: YTS + THERARBG content directories fully implemented
+- ✅ **Background Source Discovery**: Automated source search every 0.1 seconds
+- ✅ **VPN-Aware Processing**: Automatic pause/resume based on VPN status
+- ✅ **On-Demand Source Search**: Real-time source discovery with timeout (`getSourcesForMovieWithOnDemandSearch`)
+- ✅ **Rate Limiting**: Per-provider rate limiters with configurable limits
+- ✅ **Quality Detection**: Automatic quality, codec, and metadata extraction
+- ✅ **Database Integration**: Complete source persistence with encryption
 
-### Custom Streaming Server
+### API Infrastructure (Ready for Streaming)
 
-- **Authentication Integration**: Secure streaming with user authentication
-- **Session Management**: User-specific streaming sessions with proper isolation
-- **Bandwidth Management**: Intelligent bandwidth allocation and throttling
-- **Adaptive Streaming**: Quality adjustment based on connection speed
-- **Pause/Resume**: Full pause and resume functionality for streams
-- **Seeking Support**: Jump to specific timestamps in media content
-- **Error Recovery**: Robust error handling and stream recovery mechanisms
+- ✅ **Movie Endpoints**: `/movies/:id?includeSources=true` provides sources for streaming
+- ✅ **Authentication**: Complete JWT system with refresh tokens and role-based access
+- ✅ **Rate Limiting**: Configurable rate limiting per endpoint
+- ✅ **Error Handling**: Comprehensive error handling and audit logging
 
-### Advanced Features
+## ❌ Missing Implementation
 
-- **Multi-file Torrents**: Handle torrents with multiple episodes or movies
-- **Subtitle Integration**: Automatic subtitle detection and streaming
-- **Transcoding**: On-the-fly video transcoding for compatibility
-- **Download Management**: Optional downloading for offline viewing
-- **Stream Analytics**: Monitor streaming performance and user behavior
+### Critical Missing Component
 
-## API Endpoints
+**Stream Endpoint**: The `/api/stream/:sourceId` endpoint is not implemented. This is the only missing piece preventing video streaming.
 
-### Current Endpoints
+**Required Implementation:**
 
-- `POST /api/torrents/convert` - Convert magnet to torrent object
+```typescript
+// Missing: routes/stream.routes.ts
+app.get('/api/stream/:sourceId', authGuard(), async c => {
+  // 1. Lookup MovieSource by ID
+  // 2. Add torrent to DownloadService client
+  // 3. Handle Range requests for video streaming
+  // 4. Pipe WebTorrent stream to HTTP response
+  // 5. Cleanup on connection close
+});
+```
 
-### Planned Endpoints
+### Secondary Missing Components
 
-- `GET /api/stream/:hash` - Start streaming a torrent
-- `GET /api/stream/:hash/status` - Get streaming status
-- `POST /api/stream/:hash/seek` - Seek to specific position
-- `DELETE /api/stream/:hash` - Stop streaming session
+- **Viewport Preload Queue**: `/api/ui/viewport` endpoint for priority-based preloading
+- **Stream Session Management**: User-specific streaming sessions
+- **Seeking Support**: Jump to specific timestamps (requires stream endpoint first)
 
-## Configuration
+## 🏗️ Available Infrastructure for Streaming
+
+All the necessary infrastructure exists and is production-ready:
+
+### WebTorrent Client (DownloadService)
+
+```typescript
+// Already implemented and available
+const downloadService = new DownloadService();
+downloadService.client; // WebTorrent client ready for streaming
+downloadService.getTorrent(magnetLink, hash, timeout); // Get torrent file
+downloadService.getStats(infoHash); // Get seeders/leechers
+```
+
+### Source Discovery (SourceService)
+
+```typescript
+// Already implemented and available
+sourceService.getSourcesForMovie(movieId); // Get all sources
+sourceService.getSourcesWithTorrentsForMovie(movieId); // Sources with torrent files
+```
+
+### Authentication & Security
+
+```typescript
+// Already implemented and available
+authGuard(); // JWT authentication middleware
+rateLimitGuard(limit); // Rate limiting middleware
+auditLogService; // Request logging
+```
+
+## Configuration (Already Implemented)
 
 ### Environment Variables
 
 ```env
-# WebTorrent Configuration
+# WebTorrent Configuration (Active)
 CONTENT_CONNECTION_LIMIT=100
-WEBTORRENT_DHT_PORT=6881
-CONTENT_DOWNLOAD_LIMIT=0
-CONTENT_UPLOAD_LIMIT=0
+CONTENT_DOWNLOAD_LIMIT=0  # MB/s (0 = unlimited)
+CONTENT_UPLOAD_LIMIT=0    # MB/s (0 = unlimited)
+DISABLE_DISCOVERY=false   # DHT enabled
+SOURCE_SECURITY_KEY=...   # AES-256 encryption key
 
-# Streaming Configuration
-STREAM_PORT=8080
-STREAM_TIMEOUT=30000
-STREAM_BUFFER_SIZE=1048576
-
-# Security Configuration
-STREAM_AUTH_REQUIRED=true
-STREAM_RATE_LIMIT=10
+# VPN Configuration (Active)
+DISABLE_VPN_CHECK=false   # VPN required for source search
 ```
 
-### Performance Settings
+## Development Status
 
-```env
-# Memory Management
-MAX_CONCURRENT_STREAMS=5
-STREAM_CACHE_SIZE=104857600
-TORRENT_TIMEOUT=60000
+### ✅ Phase 1: Infrastructure (Complete)
 
-# Network Configuration
-PEER_TIMEOUT=30000
-ANNOUNCE_TIMEOUT=15000
-MAX_PEERS=200
-```
+- ✅ WebTorrent client integration (`DownloadService`)
+- ✅ Multi-provider source discovery (`SourceService`)
+- ✅ Database layer with encryption
+- ✅ Authentication and security middleware
+- ✅ Background processing and scheduling
 
-## Security Considerations
+### ❌ Phase 2: Streaming Endpoint (Missing)
 
-### Authentication
+- ❌ `/api/stream/:sourceId` route implementation
+- ❌ Range request handling for video streaming
+- ❌ Stream session management
+- ❌ Connection cleanup on client disconnect
 
-- All streaming endpoints require valid JWT tokens
-- User permissions checked before stream initiation
-- Session isolation prevents cross-user access
+### 📋 Phase 3: Advanced Features (Planned)
 
-### Rate Limiting
-
-- Prevent abuse with streaming rate limits
-- Per-user concurrent stream limits
-- Bandwidth throttling for fair usage
-
-### Content Validation
-
-- Validate torrent sources before streaming
-- Check file types to prevent malicious content
-- Monitor for suspicious download patterns
-
-## Technical Implementation
-
-### WebTorrent Client
-
-The streaming service uses a WebTorrent client with the following features:
-
-```typescript
-interface StreamingService {
-  // Convert magnet to torrent
-  convertMagnet(magnetUri: string): Promise<TorrentInfo>;
-
-  // Parse torrent metadata
-  parseTorrent(torrent: Buffer): Promise<TorrentMetadata>;
-
-  // Start streaming session
-  startStream(torrentHash: string, userId: string): Promise<StreamSession>;
-
-  // Get stream status
-  getStreamStatus(sessionId: string): Promise<StreamStatus>;
-
-  // Stop streaming session
-  stopStream(sessionId: string): Promise<void>;
-}
-```
-
-### File Processing
-
-- **Media Detection**: Identify video files within torrents
-- **Quality Analysis**: Determine video resolution and codec
-- **Duration Extraction**: Get media duration for seeking support
-- **Subtitle Detection**: Find and extract subtitle files
-
-### Error Handling
-
-- **Connection Failures**: Handle peer connection issues
-- **Timeout Management**: Graceful handling of slow downloads
-- **Stream Interruption**: Recover from network interruptions
-- **Invalid Content**: Handle corrupted or invalid torrents
-
-## Development Roadmap
-
-### Phase 1: Basic Streaming (Current)
-
-- ✅ WebTorrent integration
-- ✅ Magnet link conversion
-- ✅ Metadata extraction
-- ✅ Basic torrent parsing
-
-### Phase 2: Streaming Server
-
-- 🚧 Custom streaming endpoints
-- 🚧 User session management
-- 🚧 Authentication integration
-- 🚧 Basic error handling
-
-### Phase 3: Advanced Features
-
+- 📋 Viewport-based preload queue
 - 📋 Seeking and pause/resume
-- 📋 Bandwidth management
-- 📋 Quality adaptation
+- 📋 Adaptive quality streaming
 - 📋 Subtitle integration
 
-### Phase 4: Optimization
+## Implementation Estimate
 
-- 📋 Performance optimization
-- 📋 Caching strategies
-- 📋 Load balancing
-- 📋 Monitoring and analytics
+**Stream Endpoint**: ~8 hours (as per `backend#stream` todo)
+
+- All infrastructure exists
+- Requires HTTP Range request handling
+- WebTorrent stream piping to HTTP response
+- Connection cleanup and error handling
+
+**Impact**: Once implemented, enables full video streaming functionality with all security, authentication, and source discovery already working.

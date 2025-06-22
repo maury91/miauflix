@@ -3,10 +3,10 @@ import {
   type MediaSourceInternal,
   MediaSourceMapper,
 } from '@dto/media-source.dto';
+import { AudioCodec, type VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { MovieSource } from '@entities/movie-source.entity';
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';
-import { AudioCodec, type VideoCodec } from '@utils/torrent-name-parser.util';
 
 import { type QualityMetrics, QualityScoringService } from './quality-scoring.service';
 

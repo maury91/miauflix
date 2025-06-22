@@ -81,12 +81,12 @@ export default [
             },
             {
               group: [
-                '../trackers/*',
-                '../../trackers/*',
-                '../../../trackers/*',
-                '../../../../trackers/*',
+                '../content-directories/*',
+                '../../content-directories/*',
+                '../../../content-directories/*',
+                '../../../../content-directories/*',
               ],
-              message: "Use '@trackers/...' instead of long relative paths.",
+              message: "Use '@content-directories/...' instead of long relative paths.",
             },
             {
               group: ['../types/*', '../../types/*', '../../../types/*', '../../../../types/*'],
@@ -111,18 +111,18 @@ export default [
             ['^@?\\w'],
             // Internal aliases. Matches specific aliases like @entities/, @services/, etc.
             [
-              '^@entities/',
+              '^@config', // Assuming @config maps to configuration.ts
+              '^@constants',
+              '^@content-directories/',
               '^@database/',
+              '^@entities/',
               '^@errors/',
               '^@middleware/',
               '^@mytypes/',
               '^@repositories/',
               '^@routes/',
               '^@services/',
-              '^@trackers/',
               '^@utils/',
-              '^@constants',
-              '^@config', // Assuming @config maps to configuration.ts
             ],
             // Relative imports. Put parent imports first (`../`), then sibling imports (`./`).
             ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],

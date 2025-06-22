@@ -7,9 +7,13 @@ import type { Torrent } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
 import { ENV } from '@constants';
-
-import { enhancedFetch, ErrorWithStatus } from '../source/services/utils';
-import { bestTrackersURL, blacklistedTrackersURL, extra_trackers } from '../source/trackers.const';
+import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
+import {
+  bestTrackersURL,
+  blacklistedTrackersURL,
+  extra_trackers,
+} from '@services/source/trackers.const';
+import { enhancedFetch } from '@utils/fetch.util';
 
 export class DownloadService {
   public readonly client: WebTorrent;
@@ -84,6 +88,18 @@ export class DownloadService {
     if (blacklistedTrackers) {
       this.client.blocked = blacklistedTrackers;
     }
+  }
+
+  generateLink(infoHash: string, trackers: string[], name = ''): string {
+    const allTrackers = [...new Set([...trackers, ...this.bestTrackers])].filter(Boolean);
+
+    const magnetParams = new URLSearchParams({
+      xt: `urn:btih:${infoHash}`,
+      tr: allTrackers,
+      dn: name,
+    });
+
+    return `magnet:?${magnetParams.toString()}`;
   }
 
   async getTorrent(magnetLink: string, hash: string, timeout: number): Promise<Buffer> {
