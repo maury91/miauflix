@@ -15,7 +15,7 @@
     "build:therarbg-sanitizer": "npm -w packages/therarbg-sanitizer run build",
     "build:backend-client": "npm -w packages/backend-client run build",
     "build:source-metadata-extractor": "npm -w packages/source-metadata-extractor run build",
-    "build:libs": "npm run build:source-metadata-extractor && concurrently \"build:therarbg-sanitizer\" \"npm run build:yts-sanitizer\" --names \"therarbg-sanitizer,yts-sanitizer\" --prefix-colors \"blue,green\"",
+    "build:libs": "npm run build:source-metadata-extractor && npm run build:therarbg-sanitizer && npm run build:yts-sanitizer",
     "build:all": "npm run build:libs && npm run build:backend && npm run build:backend-client",
     "start": "npm run start:backend",
     "start:backend": "npm -w backend start",
