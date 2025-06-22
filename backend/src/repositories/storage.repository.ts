@@ -1,7 +1,7 @@
 import type { Repository } from 'typeorm';
 
-import { Storage } from '@entities/storage.entity';
 import type { Database } from '@database/database';
+import { Storage } from '@entities/storage.entity';
 
 export class StorageRepository {
   private readonly repository: Repository<Storage>;

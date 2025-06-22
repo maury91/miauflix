@@ -1,8 +1,8 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 import { logger as mockLogger } from '@logger';
 
-import type { Movie } from '@entities/movie.entity';
 import type { Database } from '@database/database';
+import type { Movie } from '@entities/movie.entity';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { MediaService } from './media.service';
@@ -51,7 +51,7 @@ const mockSyncStateRepo = {
 };
 
 const theWildRobotTMDBID = 1184918; // Movie: The Wild Robot
-const barbieTMDBID = 346698; // Movie: Barbie
+const cosmicPrincessTMDBID = 346698; // Movie: Cosmic Princess
 
 const mockDb = {
   getMovieRepository: () => mockMovieRepo,
@@ -223,11 +223,11 @@ describe('MediaService', () => {
               translations: [],
             } as unknown as Movie);
           }
-          if (`${barbieTMDBID}` === `${tmdbId}`) {
+          if (`${cosmicPrincessTMDBID}` === `${tmdbId}`) {
             return Promise.resolve({
               id: 2,
               tmdbId,
-              title: 'Barbie',
+              title: 'Cosmic Princess',
               overview: 'Overview here.',
               tagline: '',
               releaseDate: new Date(),
@@ -278,7 +278,7 @@ describe('MediaService', () => {
         }
 
         expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(theWildRobotTMDBID);
-        expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(barbieTMDBID);
+        expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(cosmicPrincessTMDBID);
 
         expect(mockMovieRepo.checkForChangesAndUpdate).toHaveBeenCalledTimes(2);
         expect(mockMovieRepo.checkForChangesAndUpdate).toHaveBeenCalledWith(
@@ -286,8 +286,8 @@ describe('MediaService', () => {
           expect.objectContaining({ tmdbId: theWildRobotTMDBID })
         );
         expect(mockMovieRepo.checkForChangesAndUpdate).toHaveBeenCalledWith(
-          expect.objectContaining({ tmdbId: barbieTMDBID }),
-          expect.objectContaining({ tmdbId: barbieTMDBID })
+          expect.objectContaining({ tmdbId: cosmicPrincessTMDBID }),
+          expect.objectContaining({ tmdbId: cosmicPrincessTMDBID })
         );
 
         expect(mockSyncStateRepo.setLastSync).toHaveBeenCalledTimes(2);

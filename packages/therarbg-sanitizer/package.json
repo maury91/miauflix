@@ -1,0 +1,51 @@
+{
+  "name": "@miauflix/therarbg-sanitizer",
+  "version": "1.0.0",
+  "description": "A shared library for sanitizing TheRARBG API data across Miauflix projects",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "clean": "rm -rf dist coverage",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "therarbg",
+    "sanitizer",
+    "testing",
+    "miauflix",
+    "torrent",
+    "fake-data"
+  ],
+  "author": "Miauflix Team",
+  "license": "MIT",
+  "dependencies": {
+    "@miauflix/source-metadata-extractor": "*",
+    "@faker-js/faker": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/**/*.test.ts",
+      "!src/**/*.d.ts"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ]
+  }
+}

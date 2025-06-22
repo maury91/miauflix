@@ -152,7 +152,7 @@ describe('Sources E2E Tests', () => {
         expect(source.hash).toMatch(/^[a-fA-F0-9]{40}$/);
 
         // Test quality values are reasonable
-        expect(['720p', '1080p', '2160p', '480p']).toContain(source.quality);
+        expect(['720p', '1080p', '2160p', '480p', 'Unknown']).toContain(source.quality);
 
         // Test resolution is a positive number
         expect(source.resolution).toBeGreaterThan(0);

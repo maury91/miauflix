@@ -3,6 +3,13 @@ import type { Cache } from 'cache-manager';
 import { RateLimiter } from '@utils/rateLimiter';
 import { groupTimestampsByInterval } from '@utils/trackStatus.util';
 
+export interface ApiStatus {
+  queue: number;
+  successes: { time: string; count: number }[];
+  failures: { time: string; count: number }[];
+  lastRequest: string | null;
+}
+
 export abstract class Api {
   public requestQueueCount = 0;
   public requestSuccesses: number[] = [];
@@ -55,7 +62,7 @@ export abstract class Api {
    * - failures: array of { time, count } for last 24h, grouped by 5 min
    * - lastRequest: timestamp of last request (ms since epoch)
    */
-  public status() {
+  public status(): ApiStatus {
     return {
       queue: this.requestQueueCount,
       successes: groupTimestampsByInterval(this.requestSuccesses).map(item => ({

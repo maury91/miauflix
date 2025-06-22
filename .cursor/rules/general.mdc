@@ -1,0 +1,157 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Miauflix-Bun Project Rules
+
+## 🎯 General Approach
+
+- Be blunt and direct - if a proposal is stupid or not ideal, say so. Don't be a yes-man.
+- Always read `docs/overview.md` first for project context and documentation structure.
+- Check `docs/task-file-mapping.md` for implementation status before starting any task.
+- Verify current priorities in `todo/` files before making assumptions.
+
+## 📋 Project Context (Updated 2025-06-25)
+
+### Implementation Status Overview
+
+- **Backend Infrastructure**: 85-90% complete, production-ready
+- **Frontend**: Basic structure exists, JWT authentication missing
+- **Critical Missing**: Stream endpoint (`/api/stream/:sourceId`) and viewport preload
+
+### Key Documentation Files
+
+- `docs/overview.md` - Documentation roadmap and entry point
+- `docs/task-file-mapping.md` - Task → file mapping with implementation status
+- `docs/miauflix-architecture-analysis.md` - System architecture and background tasks
+- `todo/backend-todos.md` - Backend task priorities
+- `todo/frontend-todos.md` - Frontend task priorities
+- `todo/infra-todos.md` - Infrastructure task priorities
+
+### Production-Ready Components
+
+- ✅ **Source Aggregation**: Multi-provider (YTS + THERARBG) with background processing
+- ✅ **WebTorrent Infrastructure**: Complete client with tracker management
+- ✅ **Authentication Backend**: Full JWT system with refresh tokens
+- ✅ **Database Layer**: Complete entity model with encryption
+- ✅ **Background Tasks**: All 7 scheduled tasks operational
+- ✅ **API Infrastructure**: Comprehensive routes with auth/rate limiting
+
+### Missing Critical Components
+
+- ❌ **Stream Endpoint**: `/api/stream/:sourceId` (prevents video playback)
+- ❌ **Frontend JWT Auth**: Login page, token management, interceptors
+- ❌ **Viewport Preload**: `/api/ui/viewport` endpoint
+
+## 🧪 Testing Guidelines
+
+### Test Commands (Always run from root)
+
+- `npm test --workspace backend` - Backend unit tests
+- `npm run test:backend:e2e` - E2E tests (spins up Docker environment)
+- `npm test --workspace=packages/source-metadata-extractor` - Source metadata tests
+- No frontend tests currently exist
+
+### E2E Testing Methods
+
+**Method 1 (One-time):** `npm run test:backend:e2e`
+**Method 2 (Development):**
+
+1. `npm run start:backend:e2e` (background)
+2. `npm run test:backend:e2e:dev` (repeat as needed)
+
+### Unit Test Patterns
+
+```typescript
+// Prefer Jest auto-generated mocks
+jest.mock('@services/download/download.service');
+import { DownloadService } from '@services/download/download.service';
+const mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
+
+beforeEach(() => {
+  mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
+});
+```
+
+## 📦 Dependency Management
+
+- Install dependencies from root using workspace flag: `npm install --workspace backend package-name`
+- Never install dependencies directly in workspace directories
+
+## 🏗️ Architecture Awareness
+
+### Key Services (All Implemented)
+
+- `AuthService` - JWT authentication with refresh tokens
+- `SourceService` - Multi-provider torrent source aggregation
+- `DownloadService` - WebTorrent client management
+- `MediaService` - TMDB integration and movie metadata
+- `TraktService` - Trakt.tv integration for lists
+
+### Background Tasks (All Active)
+
+- Movie source search (0.1s intervals)
+- Torrent file processing (0.2s intervals)
+- Stats updates (2s intervals)
+- List synchronization (1h intervals)
+- Movie metadata sync (1.5h intervals)
+
+### File Structure Patterns
+
+- Services: `backend/src/services/[service-name]/[service-name].service.ts`
+- Routes: `backend/src/routes/[feature].routes.ts`
+- Entities: `backend/src/entities/[entity-name].entity.ts`
+- Repositories: `backend/src/repositories/[entity-name].repository.ts`
+
+## 🔍 Before Starting Any Task
+
+1. **Read Documentation Context**
+
+   - Check `docs/overview.md` for project structure
+   - Review `docs/task-file-mapping.md` for implementation status
+   - Scan relevant `todo/` files for current priorities
+
+2. **Verify Implementation Status**
+
+   - Don't assume tasks marked as incomplete are actually incomplete
+   - Check actual codebase implementation vs todo status
+   - Look for existing services, routes, and infrastructure
+
+3. **Understand Dependencies**
+   - Check if required infrastructure already exists
+   - Identify what's actually missing vs what's documented as missing
+   - Consider impact on other components
+
+## 🚨 Common Pitfalls to Avoid
+
+- **Don't rebuild existing infrastructure** - Most backend components are production-ready
+- **Don't trust todo status blindly** - Verify against actual implementation
+- **Don't create authentication from scratch** - Backend JWT system is complete
+- **Don't implement source aggregation** - YTS + THERARBG providers are fully functional
+- **Don't assume WebTorrent needs setup** - DownloadService is complete and operational
+
+## 💡 Development Priorities
+
+1. **Stream Endpoint Implementation** - Only missing piece for video playback
+2. **Frontend JWT Integration** - Connect frontend to existing backend auth
+3. **Viewport Preload Queue** - Performance optimization
+4. **Documentation Updates** - Keep docs synchronized with implementation
+
+## 📁 Quick File References
+
+### Most Important Files
+
+- `backend/src/app.ts` - Main application setup
+- `backend/src/services/source/source.service.ts` - Source aggregation (complete)
+- `backend/src/services/download/download.service.ts` - WebTorrent client (complete)
+- `backend/src/services/auth/auth.service.ts` - Authentication (complete)
+- `backend/src/routes/index.ts` - Route definitions
+
+### Missing Implementations
+
+- `backend/src/routes/stream.routes.ts` - Stream endpoint (needs creation)
+- Frontend JWT auth components (needs creation)
+- `/api/ui/viewport` endpoint (needs creation)
+
+Remember: This project has significantly more working infrastructure than the todos suggest. Focus on the few missing pieces rather than rebuilding what already works.

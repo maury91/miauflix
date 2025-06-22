@@ -1,10 +1,10 @@
 import type { Repository } from 'typeorm';
 import { In, IsNull, Not } from 'typeorm';
 
+import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
 import { type MovieSource } from '@entities/movie-source.entity';
-import type { Database } from '@database/database';
 import { objectKeys } from '@utils/object.util';
 
 export class MovieRepository {

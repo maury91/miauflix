@@ -1,5 +1,3 @@
-console.log('Using webtorrent mock');
-
 export const mockedTorrentInstance = {
   add: jest.fn(),
   remove: jest.fn(),

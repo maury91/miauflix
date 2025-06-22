@@ -1,16 +1,17 @@
 import { logger } from '@logger';
+import { Quality } from '@miauflix/source-metadata-extractor';
 
+import { ENV } from '@constants';
+import type { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
 import type { MovieSource } from '@entities/movie-source.entity';
-import type { Database } from '@database/database';
 import type { VpnDetectionService } from '@services/security/vpn.service';
-import type { TrackerService } from '@services/source/tracker.service';
+import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
+import { enhancedFetch } from '@utils/fetch.util';
 import { RateLimiter } from '@utils/rateLimiter';
 import { SingleFlight } from '@utils/singleflight.util';
 import { sleep } from '@utils/time';
-import { ENV } from '@constants';
 
-import { enhancedFetch } from './services/utils';
 import type { MagnetService } from './magnet.service';
 
 /**
@@ -30,7 +31,7 @@ export class SourceService {
   constructor(
     db: Database,
     vpnService: VpnDetectionService,
-    private readonly trackerService: TrackerService,
+    private readonly trackerService: ContentDirectoryService,
     private readonly magnetService: MagnetService
   ) {
     this.movieRepository = db.getMovieRepository();
@@ -122,14 +123,14 @@ export class SourceService {
         isOnDemand
       );
 
-      if (!movieWithTorrents || !movieWithTorrents.torrents?.length) {
+      if (!movieWithTorrents || !movieWithTorrents.sources?.length) {
         logger.debug('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
         return;
       }
 
       logger.debug(
         'SourceService',
-        `Found ${movieWithTorrents.torrents.length} sources for movie ${movie.id} (${movie.title})`
+        `Found ${movieWithTorrents.sources.length} sources for movie ${movie.id} (${movie.title})`
       );
 
       if (movieWithTorrents.trailerCode) {
@@ -141,17 +142,17 @@ export class SourceService {
       }
 
       // Convert sources to MovieSource objects and save them
-      const sources = movieWithTorrents.torrents.map(
+      const sources = movieWithTorrents.sources.map(
         (torrent): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
           movieId: movie.id,
           hash: torrent.magnetLink.split('btih:')[1].split('&')[0], // Extract identifier from URI link
           magnetLink: torrent.magnetLink,
           quality: torrent.quality,
           resolution: torrent.resolution.height,
-          size: torrent.size.bytes,
-          videoCodec: torrent.videoCodec.toString(),
-          broadcasters: torrent.seeders,
-          watchers: torrent.leechers,
+          size: torrent.size,
+          videoCodec: torrent.videoCodec?.toString() ?? null,
+          broadcasters: torrent.broadcasters,
+          watchers: torrent.watchers,
           sourceUploadedAt: torrent.uploadDate,
           url: torrent.url,
           source: 'YTS', // Currently only using YTS as a source
@@ -360,7 +361,7 @@ export class SourceService {
     id: number;
     hash: string;
     magnetLink: string;
-    quality: string;
+    quality: Quality | null;
     movieId: number;
     url?: string;
     source: string;
@@ -644,17 +645,17 @@ export class SourceService {
         );
       }
 
-      if (!movieWithTorrents.torrents?.length) {
+      if (!movieWithTorrents.sources?.length) {
         logger.warn(
           'SourceService',
-          `No torrents found for movie ${movie.id} (${movie.title}) on YTS`
+          `No sources found for movie ${movie.id} (${movie.title}) on YTS`
         );
         return;
       }
 
       logger.debug(
         'SourceService',
-        `Found ${movieWithTorrents.torrents.length} torrents for movie ${movie.id} (${movie.title})`
+        `Found ${movieWithTorrents.sources.length} sources for movie ${movie.id} (${movie.title})`
       );
 
       // Get existing sources for this movie
@@ -666,19 +667,13 @@ export class SourceService {
       let updatedCount = 0;
 
       // Update existing sources with fresh data from YTS
-      for (const torrent of movieWithTorrents.torrents) {
-        const hash = torrent.magnetLink.split('btih:')[1]?.split('&')[0];
-        if (!hash) {
-          logger.warn(
-            'SourceService',
-            `Could not extract hash from magnet link: ${torrent.magnetLink}`
-          );
-          continue;
-        }
-
-        const existingSource = existingSourcesMap.get(hash);
+      for (const torrent of movieWithTorrents.sources) {
+        const existingSource = existingSourcesMap.get(torrent.hash);
         if (!existingSource) {
-          logger.debug('SourceService', `Source with hash ${hash} not found in database, skipping`);
+          logger.debug(
+            'SourceService',
+            `Source with hash "${torrent.hash.substring(0, 8)}-redacted" not found in database, skipping`
+          );
           continue;
         }
 

@@ -1,5 +1,6 @@
 import { join } from 'path/posix';
 
+import { transformTheRarbgData } from './http-vcr-utils/therarbg.transformer';
 import type { HttpVcrConfig } from './http-vcr-utils/types';
 import { transformYtsData } from './http-vcr-utils/yts.transformer';
 
@@ -18,6 +19,8 @@ export const HTTP_VCR_CONFIG: HttpVcrConfig = {
     { pattern: 'yts.am', name: 'yts' },
     { pattern: 'torrage.info', name: 'torrage' },
     { pattern: 'itorrents.org', name: 'itorrents' },
+    { pattern: 'therarbg.to', name: 'therarbg' },
+    { pattern: 'therar.site', name: 'therarbg' },
   ],
   defaultProvider: 'other',
   headersBlacklist: [
@@ -58,6 +61,10 @@ export const HTTP_VCR_CONFIG: HttpVcrConfig = {
     {
       urlPattern: 'yts\\..*\\/api\\/v2\\/',
       transform: transformYtsData,
+    },
+    {
+      urlPattern: '(therarbg\\.to|therar\\.site)',
+      transform: transformTheRarbgData,
     },
   ],
   autoTransform: true,

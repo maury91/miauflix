@@ -15,7 +15,7 @@ import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { MagnetService, SourceService } from '@services/source';
-import { TrackerService } from '@services/source/tracker.service';
+import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { StorageService } from '@services/storage/storage.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 import { TraktService } from '@services/trakt/trakt.service';
@@ -76,8 +76,8 @@ try {
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
-  const trackerService = new TrackerService(cache);
   const downloadService = new DownloadService();
+  const trackerService = new ContentDirectoryService(cache, downloadService);
   const magnetService = new MagnetService(downloadService);
   const sourceService = new SourceService(db, vpnDetectionService, trackerService, magnetService);
   // ToDo: Use the storage service in the right places

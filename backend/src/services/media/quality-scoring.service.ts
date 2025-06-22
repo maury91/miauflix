@@ -1,6 +1,6 @@
+import type { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor';
+
 import { getVideoCodecQualityBonus } from '@utils/codec.util';
-import type { AudioCodec } from '@utils/torrent-name-parser.util';
-import type { VideoCodec } from '@utils/torrent-name-parser.util';
 
 export interface QualityMetrics {
   resolution: string;

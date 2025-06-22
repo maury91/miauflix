@@ -3,6 +3,7 @@ import path from 'path';
 import type { EntityTarget, LogLevel, LogMessage, ObjectLiteral, Repository } from 'typeorm';
 import { AbstractLogger, DataSource } from 'typeorm';
 
+import { ENV } from '@constants';
 import { AuditLog } from '@entities/audit-log.entity';
 import { Episode } from '@entities/episode.entity';
 import { Genre, GenreTranslation } from '@entities/genre.entity';
@@ -29,7 +30,6 @@ import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
 import type { EncryptionService } from '@services/encryption/encryption.service';
-import { ENV } from '@constants';
 
 class DatabaseLogger extends AbstractLogger {
   protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {

@@ -1,7 +1,7 @@
 import { In, LessThan, type Repository } from 'typeorm';
 
-import { MovieSource } from '@entities/movie-source.entity';
 import type { Database } from '@database/database';
+import { MovieSource } from '@entities/movie-source.entity';
 
 /* ------------------------------------------------------------------------- */
 /* REUSABLE CONSTANTS & SQL SNIPPET                                         */

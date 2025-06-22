@@ -26,6 +26,7 @@ services:
       - nordvpn
     environment:
       - DATA_DIR=/usr/data
+      - DEBUG=SourceService,DataResolver
     volumes:
       - ./.env:/usr/src/app/.env
       - ./data:/usr/data/

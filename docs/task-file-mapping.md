@@ -1,9 +1,33 @@
 ## 🔖 Task ↔ File Mapping
 
-| Roadmap Tag          | Main Files                                                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `backend#auth`       | `auth.service.ts`, `auth.routes.ts`, `user.entity.ts`, `refresh-token.entity.ts`, `auth.middleware.ts`             |
-| `backend#sources`    | `source.service.ts`, `tracker.service.ts`, `trackers/yts/`, `movie-source.entity.ts`, `movie-source.repository.ts` |
-| `backend#stream`     | `webtorrent.service.ts`, `magnet.service.ts`, torrent utils                                                        |
-| `backend#lists`      | `list.service.ts`, `list.syncronizer.ts`, `list.entity.ts`, `trakt.service.ts`, `trakt.routes.ts`                  |
-| `backend#encryption` | `encryption.service.ts`, `movie-source.repository.ts`, `scripts/migrate-encrypt.ts` ✅ **Complete**                |
+> **Status Updated:** 2025-06-25 - Verified against actual codebase implementation
+
+| Roadmap Tag          | Status          | Main Files                                                                                                                               |
+| -------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `backend#auth`       | ✅ **Complete** | `auth.service.ts`, `auth.routes.ts`, `user.entity.ts`, `refresh-token.entity.ts`, `auth.middleware.ts`                                   |
+| `backend#sources`    | ✅ **Complete** | `source.service.ts`, `content-directories/yts/`, `content-directories/therarbg/`, `movie-source.entity.ts`, `movie-source.repository.ts` |
+| `backend#stream`     | ❌ **Missing**  | Stream endpoint not implemented - requires `routes/stream.routes.ts`, streaming service integration                                      |
+| `backend#preload`    | ❌ **Missing**  | Viewport preload queue not implemented - requires `/api/ui/viewport` endpoint                                                            |
+| `backend#lists`      | ✅ **Complete** | `list.service.ts`, `list.syncronizer.ts`, `list.entity.ts`, `trakt.service.ts`, `trakt.routes.ts`                                        |
+| `backend#encryption` | ✅ **Complete** | `encryption.service.ts`, `movie-source.repository.ts`, `scripts/migrate-encrypt.ts`                                                      |
+
+## 🔍 Implementation Status Notes
+
+### ✅ Completed Tasks (Not in Original Todos)
+
+- **Authentication System**: Full JWT implementation with refresh tokens, role-based access, audit logging
+- **Source Aggregation**: Multi-provider system (YTS + THERARBG) with background processing, VPN awareness
+- **WebTorrent Infrastructure**: Complete `download.service.ts` with tracker management, stats scraping
+- **Database Layer**: Complete entity model with 13+ entities, repository pattern, encryption
+- **API Routes**: Comprehensive route system with authentication, rate limiting, validation
+
+### ❌ Missing Critical Components
+
+- **Stream Endpoint**: `/api/stream/:sourceId` route for video streaming (all infrastructure exists)
+- **Viewport Preload**: `/api/ui/viewport` endpoint for priority-based preloading
+
+### 📋 File Reference Corrections
+
+- `tracker.service.ts` → `content-directories/` (actual location)
+- `webtorrent.service.ts` → `download.service.ts` (actual filename)
+- Added `content-directories/therarbg/` (second provider implementation)

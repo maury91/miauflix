@@ -36,12 +36,14 @@ Essential frontend functionality for movie discovery, authentication, and basic 
 
 ## Progress Dashboard
 
-| Task                      | Status | Assignee | Dependencies |
-| ------------------------- | ------ | -------- | ------------ |
-| frontend#login-jwt        | ⬜     | @ui-dev  | -            |
-| frontend#viewport-payload | ⬜     | @ui-dev  | -            |
+| Task                      | Status | Assignee | Dependencies | Notes                                          |
+| ------------------------- | ------ | -------- | ------------ | ---------------------------------------------- |
+| frontend#login-jwt        | ⬜     | @ui-dev  | -            | **CRITICAL** - App non-functional without this |
+| frontend#viewport-payload | ⬜     | @ui-dev  | -            | -                                              |
 
 ## frontend#login-jwt — JWT Authentication System (5 SP)
+
+> **Status:** ❌ NOT IMPLEMENTED - Frontend still uses legacy device-code auth. Backend JWT system is complete and ready for integration.
 
 ### Goal
 
