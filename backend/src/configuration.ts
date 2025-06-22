@@ -4,6 +4,8 @@ import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { isatty } from 'tty';
 
+import { theRarbgConfigurationDefinition } from '@content-directories/therarbg/therarbg.configuration';
+import { ytsConfigurationDefinition } from '@content-directories/yts/yts.configuration';
 import {
   type ServiceConfiguration,
   serviceConfiguration,
@@ -14,7 +16,6 @@ import { vpnConfigurationDefinition } from '@services/security/vpn.configuration
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
-import { ytsConfigurationDefinition } from '@trackers/yts/yts.configuration';
 
 function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
@@ -59,13 +60,14 @@ const serverConfigurationDefinition = serviceConfiguration({
 });
 
 export const services = {
-  TMDB: tmdbConfigurationDefinition,
-  TRAKT: traktConfigurationDefinition,
-  YTS: ytsConfigurationDefinition,
   JWT: jwtConfigurationDefinition,
   SERVER: serverConfigurationDefinition,
   SOURCE: sourceConfigurationDefinition,
+  THE_RARBG: theRarbgConfigurationDefinition,
+  TMDB: tmdbConfigurationDefinition,
+  TRAKT: traktConfigurationDefinition,
   VPN: vpnConfigurationDefinition,
+  YTS: ytsConfigurationDefinition,
 };
 
 export type Variables = {

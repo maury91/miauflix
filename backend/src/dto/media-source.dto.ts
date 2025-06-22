@@ -1,5 +1,6 @@
+import type { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor';
+
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';
-import type { AudioCodec, VideoCodec } from '@utils/torrent-name-parser.util';
 
 /**
  * Public interface for media sources - completely sanitized

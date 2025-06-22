@@ -4,10 +4,10 @@ import { jwtVerify, SignJWT } from 'jose';
 import { hostname } from 'os';
 import { v4 as uuidv4 } from 'uuid';
 
+import type { Database } from '@database/database';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
-import type { Database } from '@database/database';
 import { InvalidTokenError } from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { UserRepository } from '@repositories/user.repository';

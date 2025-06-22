@@ -1,4 +1,4 @@
-import { enhancedFetch } from './utils';
+import { enhancedFetch } from '@utils/fetch.util';
 
 export const caesarShift = (str: string, shift: number): string => {
   return str
@@ -25,11 +25,9 @@ export const getTorrentFromTorrage = async (hash: string, timeout: number): Prom
   const encryptedTTL = (await encryptedTTLRaw.clone().text()).match(/getTTL\("([^"]+)"/)?.[1];
   if (encryptedTTL) {
     const decryptedTTL = reverse(caesarShift(encryptedTTL, -12));
-    return await enhancedFetch(
-      `https://torrage.info/download.php?h=${hash}&ttl=${decryptedTTL}`,
-      {},
-      timeout
-    );
+    return await enhancedFetch(`https://torrage.info/download.php?h=${hash}&ttl=${decryptedTTL}`, {
+      timeout,
+    });
   }
   return encryptedTTLRaw;
 };

@@ -1,7 +1,7 @@
 import type { Repository } from 'typeorm';
 
-import { MediaList } from '@entities/list.entity';
 import type { Database } from '@database/database';
+import { MediaList } from '@entities/list.entity';
 
 export class MediaListRepository {
   private readonly repository: Repository<MediaList>;
