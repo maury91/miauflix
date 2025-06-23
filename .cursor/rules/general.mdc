@@ -11,6 +11,7 @@ alwaysApply: true
 - Always read `docs/overview.md` first for project context and documentation structure.
 - Check `docs/task-file-mapping.md` for implementation status before starting any task.
 - Verify current priorities in `todo/` files before making assumptions.
+- If a task appears to be complex, first plan it using the sequential thinking tool, show the plan to the user and after the user confirms the plan is solid proceed with the implementation.
 
 ## 📋 Project Context (Updated 2025-06-25)
 

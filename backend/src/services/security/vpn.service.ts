@@ -32,7 +32,7 @@ export class VpnDetectionService {
     ['connect', []],
     ['disconnect', []],
   ]);
-  private readonly disabled = ENV.boolean('DISABLE_VPN_CHECK');
+  private readonly disabled = ENV('DISABLE_VPN_CHECK');
   private monitoringInterval: ReturnType<typeof setInterval> | null = null;
   private lastVpnStatus: boolean | null = null;
   protected currentProviderIndex: number = 0;

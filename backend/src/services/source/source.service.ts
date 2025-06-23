@@ -23,7 +23,7 @@ export class SourceService {
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
 
   private vpnConnected = false;
-  private readonly searchOnlyBehindVpn = !ENV.boolean('DISABLE_VPN_CHECK');
+  private readonly searchOnlyBehindVpn = !ENV('DISABLE_VPN_CHECK');
   private readonly startPromise: Promise<void>;
   private lastNoSourcesLogTime = 0;
   private noSourcesLogInterval = 30000; // Start with 30 seconds, will increase exponentially

@@ -6,16 +6,13 @@ import { isatty } from 'tty';
 
 import { theRarbgConfigurationDefinition } from '@content-directories/therarbg/therarbg.configuration';
 import { ytsConfigurationDefinition } from '@content-directories/yts/yts.configuration';
-import {
-  type ServiceConfiguration,
-  serviceConfiguration,
-  type VariableInfo,
-} from '@mytypes/configuration';
+import { type ServiceConfiguration, type VariableInfo } from '@mytypes/configuration';
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
+import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 function isNonInteractiveEnvironment() {
   return !isatty(process.stdout.fd);
@@ -27,31 +24,42 @@ const serverConfigurationDefinition = serviceConfiguration({
   name: 'Server',
   description: 'Server configuration',
   variables: {
-    CORS_ORIGIN: {
+    CORS_ORIGIN: variable({
       description: "Allowed origins for CORS (use '*' for all origins)",
       required: false,
       defaultValue: '*',
       example: 'http://localhost:3000',
-    },
-    PORT: {
+    }),
+    PORT: variable({
       description: 'Port for the server to listen on',
       required: false,
       defaultValue: '3000',
       example: '3000',
-    },
-    DATA_DIR: {
+      transform: transforms.number({ min: 1, max: 65535, integer: true }),
+    }),
+    DATA_DIR: variable({
       description: 'Directory for storing data files',
       required: false,
       defaultValue: path.resolve(process.cwd(), './data'),
       example: '/path/to/data',
-    },
-    REVERSE_PROXY_SECRET: {
+      transform: transforms.string({ minLength: 1 }),
+    }),
+    MAXIMUM_CACHE_EMPTY_SPACE: variable({
+      description:
+        'Cache will be cleaned periodically, however, the database file will not shrink automatically, empty space will be reused in the future, this is the maximum size of the empty space',
+      required: false,
+      defaultValue: '10MB',
+      example: '10MB',
+      transform: transforms.size(['B', 'KB', 'MB', 'GB', 'TB']),
+    }),
+    REVERSE_PROXY_SECRET: variable({
       description:
         'Secret key shared between the reverse proxy and the backend to validate requests',
       required: false,
       defaultValue: '',
       example: 'your-secure-random-string',
-    },
+      transform: transforms.optional(transforms.string({ minLength: 16 })),
+    }),
   },
   test: async () => {
     // No test needed for CORS configuration
@@ -82,7 +90,7 @@ export const variablesDefaultValues = Object.values(services).reduce(
   (acc, service) => {
     (Object.entries(service.variables) as [Variables, VariableInfo][]).forEach(
       ([varName, varInfo]) => {
-        if ('defaultValue' in varInfo) {
+        if ('defaultValue' in varInfo && varInfo.defaultValue) {
           acc[varName] = getDefaultValue(varInfo.defaultValue);
         }
       }
@@ -95,7 +103,7 @@ export const variablesDefaultValues = Object.values(services).reduce(
 type ServiceKey = keyof typeof services;
 
 const testService = async (
-  service: ServiceConfiguration<string>
+  service: ServiceConfiguration<Record<string, VariableInfo>>
 ): Promise<{ success: boolean; message?: string }> => {
   console.error = () => {};
   try {
@@ -116,7 +124,9 @@ const testService = async (
 /**
  * Configure a service by prompting for variables and testing the configuration
  */
-async function configureService(service: ServiceConfiguration<string>): Promise<void> {
+async function configureService(
+  service: ServiceConfiguration<Record<string, VariableInfo>>
+): Promise<void> {
   console.log();
   console.log(chalk.cyan.bold(`===== ${service.name} Configuration =====`));
   console.log(chalk.white(service.description));
@@ -178,7 +188,8 @@ async function promptForVariable(
   varInfo: VariableInfo,
   optional: boolean
 ): Promise<string> {
-  const defaultValue = 'defaultValue' in varInfo ? getDefaultValue(varInfo.defaultValue) : '';
+  const defaultValue =
+    'defaultValue' in varInfo && varInfo.defaultValue ? getDefaultValue(varInfo.defaultValue) : '';
   const currentValue = process.env[varName] || defaultValue;
 
   console.log();
@@ -199,16 +210,38 @@ async function promptForVariable(
     console.log(`You can get this from: ${varInfo.link}`);
   }
 
+  // Enhanced validation function
+  const validateInput = async (input: string): Promise<string | true> => {
+    // Basic required validation
+    if (!input.trim() && varInfo.required) {
+      return `${varName} is required`;
+    }
+
+    // Skip validation for empty optional fields
+    if (!input.trim() && !varInfo.required) {
+      return true;
+    }
+
+    // Run custom validation if present
+    if ('transform' in varInfo && varInfo.transform && input.trim()) {
+      const result = varInfo.transform(input);
+      if (!result.isValid) {
+        let errorMsg = result.error!;
+        if (result.suggestions?.length) {
+          errorMsg += `\n${chalk.dim('Suggestions:')} ${result.suggestions.join(', ')}`;
+        }
+        return errorMsg;
+      }
+    }
+
+    return true;
+  };
+
   if ('password' in varInfo && varInfo.password) {
     const passwordValue = await password({
       message: `Enter ${chalk.cyan(varName)}:`,
       mask: true,
-      validate: input => {
-        if (!input.trim() && varInfo.required) {
-          return `${varName} is required`;
-        }
-        return true;
-      },
+      validate: validateInput,
     });
 
     return passwordValue || defaultValue || '';
@@ -217,12 +250,7 @@ async function promptForVariable(
   const value = await input({
     message: `Enter ${chalk.cyan(varName)}:`,
     default: currentValue,
-    validate: input => {
-      if (!input.trim() && varInfo.required) {
-        return `${varName} is required`;
-      }
-      return true;
-    },
+    validate: validateInput,
   });
 
   return value || defaultValue || '';
@@ -404,13 +432,16 @@ export async function validateConfiguration(
 async function validateExistingConfiguration(): Promise<ServiceKey[]> {
   const invalidServices = (
     await Promise.all(
-      (Object.entries(services) as [ServiceKey, ServiceConfiguration<string>][]).map(
-        async ([serviceKey, service]) => {
-          // Execute test
-          const testResult = await testService(service);
-          return [testResult.success, serviceKey] as const;
-        }
-      )
+      (
+        Object.entries(services) as [
+          ServiceKey,
+          ServiceConfiguration<Record<string, VariableInfo>>,
+        ][]
+      ).map(async ([serviceKey, service]) => {
+        // Execute test
+        const testResult = await testService(service);
+        return [testResult.success, serviceKey] as const;
+      })
     )
   )
     .filter(([isValid]) => !isValid)

@@ -67,12 +67,18 @@ describe('MediaService', () => {
   let mediaService: MediaService;
 
   beforeEach(async () => {
+    process.env.TMDB_API_ACCESS_TOKEN = 'test-token';
+
     // Create the MediaService with the mock DB and a new TMDBApi instance
     const tmdbApi = new TMDBApi(mockCache);
     mediaService = new MediaService(mockDb, tmdbApi);
 
     await Promise.resolve();
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    delete process.env.TMDB_API_ACCESS_TOKEN;
   });
 
   // Group existing movie tests
