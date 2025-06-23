@@ -13,7 +13,7 @@
 
 | Priority       | Focus Area            | Tasks                | Status |
 | -------------- | --------------------- | -------------------- | ------ |
-| **Priority 1** | Core Movie Playback   | 2 active, 5 complete | 🔄     |
+| **Priority 1** | Core Movie Playback   | 3 active, 5 complete | 🔄     |
 | **Priority 2** | TV Show Episodes      | 6 planned            | ⬜     |
 | **Priority 3** | Nice-to-Have Features | 4 planned            | ⬜     |
 | **Priority 4** | Anime Support         | 6 planned            | ⬜     |
@@ -22,12 +22,13 @@
 
 ## Environment Variables Reference
 
-| Variable                | Required | Default | Description                         |
-| ----------------------- | -------- | ------- | ----------------------------------- |
-| SOURCE_SECURITY_KEY     | Yes      | -       | Base64 AES-256 key for encryption   |
-| MAX_PRELOAD_CONCURRENCY | No       | 3       | Max simultaneous preload operations |
-| STREAM_CHUNK_SIZE       | No       | 65536   | Streaming chunk size in bytes       |
-| STREAM_TIMEOUT_MS       | No       | 30000   | Stream connection timeout           |
+| Variable                 | Required | Default | Description                          |
+| ------------------------ | -------- | ------- | ------------------------------------ |
+| SOURCE_SECURITY_KEY      | Yes      | -       | Base64 AES-256 key for encryption    |
+| MAX_PRELOAD_CONCURRENCY  | No       | 3       | Max simultaneous preload operations  |
+| STREAM_CHUNK_SIZE        | No       | 65536   | Streaming chunk size in bytes        |
+| STREAM_TIMEOUT_MS        | No       | 30000   | Stream connection timeout            |
+| TORRENT_TRACKER_ANNOUNCE | No       | -       | BitTorrent tracker URL for E2E tests |
 
 ---
 
@@ -59,6 +60,7 @@ Essential streaming functionality that enables basic movie playback with securit
 | Task                    | Status | Assignee  | Dependencies          |
 | ----------------------- | ------ | --------- | --------------------- |
 | backend#stream          | ⬜     | @core-dev | -                     |
+| backend#stream-e2e      | ⬜     | @qa-dev   | backend#stream        |
 | backend#sources         | ✅     | @core-dev | -                     |
 | backend#preload         | ⬜     | @core-dev | backend#sources       |
 | backend#encrypt-blobs   | ☑     | @sec-dev  | -                     |
@@ -121,6 +123,151 @@ interface RangeRequest {
 - Memory stays < 200 MB per 1080p stream.
 - Range requests work: `curl -H "Range: bytes=0-1023" → 206 Partial Content`
 - Concurrent streams: 5 users can stream different movies simultaneously
+
+---
+
+## backend#stream-e2e — E2E Testing for Torrent Streaming (12 SP)
+
+**Summary**
+Implement comprehensive E2E testing infrastructure for torrent streaming functionality using a multi-container mock ecosystem that validates actual BitTorrent protocol behavior in production-like Docker environment.
+
+**Dependencies**
+
+- Requires `backend#stream` (streaming endpoint implementation)
+- Based on research: `docs/e2e-torrent-streaming-research.md`
+
+**Tasks**
+
+### Phase 1: Core Infrastructure (4 SP)
+
+1. **Streaming Endpoint Extension** - Enhance `/api/stream/:sourceId` with comprehensive error handling
+2. **HTTP Range Request Validation** - Implement robust range parsing with proper 206/416 responses
+3. **Torrent Metadata Management** - Add torrent info caching and validation
+
+### Phase 2: Test Environment Setup (4 SP)
+
+4. **BitTorrent Tracker Container** - Configure `quoorex/bittorrent-tracker` in test environment
+5. **Torrent Seeder Container** - Build custom Node.js seeder with WebTorrent and health endpoints
+6. **Test Video Generation** - Create deterministic FFmpeg-generated test content (720p, 1080p, 4K)
+7. **Docker Compose Integration** - Update `docker-compose.test.yml` with new services
+
+### Phase 3: E2E Test Implementation (4 SP)
+
+8. **Core Streaming Tests** - Full video streams, range requests, seeking simulation
+9. **Error Condition Testing** - 404s, timeouts, malformed requests, unauthorized access
+10. **Performance Testing** - Concurrent streams, memory usage, response time validation
+11. **Integration Testing** - Source creation → streaming workflow, torrent lifecycle management
+
+**Technical Architecture**
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Miauflix      │    │  BitTorrent     │    │   Torrent       │
+│   Backend       │───▶│   Tracker       │◀───│   Seeder        │
+│   (Test)        │    │                 │    │                 │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   E2E Tests     │    │   HTTP Range    │    │   Test Videos   │
+│   (Jest/TS)     │    │   Server        │    │   (Synthetic)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+**Implementation Files**
+
+```
+backend-e2e/
+├── docker/
+│   ├── torrent-seeder.Dockerfile
+│   ├── range-server.Dockerfile
+│   └── docker-compose.test.yml (updated)
+├── mock-content/
+│   ├── generate-test-videos.sh
+│   ├── seed-torrents.js
+│   └── range-server.js
+└── src/tests/
+    ├── streaming.test.ts
+    ├── torrent-lifecycle.test.ts
+    ├── range-requests.test.ts
+    ├── performance.test.ts
+    └── utils/torrent-utils.ts
+```
+
+**Container Specifications**
+
+1. **BitTorrent Tracker** (`quoorex/bittorrent-tracker`)
+
+   - Protocols: HTTP, UDP, WebSocket
+   - Health endpoint: `/stats`
+   - Resource usage: <50MB RAM
+
+2. **Torrent Seeder** (Custom Node.js)
+
+   - Base: `node:18-alpine`
+   - WebTorrent client with predetermined test content
+   - Health endpoint: `/health` with torrent inventory
+   - API endpoint: `/torrents` for hash lookup
+
+3. **Test Content** (FFmpeg-generated)
+   - `test-small-720p.mp4` (1MB, 10s duration)
+   - `test-medium-1080p.mp4` (5MB, 30s duration)
+   - `test-large-4k.mp4` (20MB, 60s duration)
+
+**Environment Variables**
+
+```bash
+# E2E Testing Configuration
+TORRENT_TRACKER_ANNOUNCE=ws://bittorrent-tracker:8000
+DISABLE_DISCOVERY=false  # Enable for BitTorrent testing
+DEBUG=webtorrent:*,miauflix:stream
+```
+
+**Test Coverage Requirements**
+
+- **Functional Coverage**: 95% of streaming endpoint scenarios
+- **Range Request Testing**: All HTTP range patterns (start-end, -suffix, start-)
+- **Error Handling**: 100% of error conditions (404, 401, 408, 416, 503)
+- **Performance**: Baseline metrics for latency (<5s first byte) and throughput
+- **Concurrency**: 5+ simultaneous streams without degradation
+
+**Acceptance Criteria**
+
+### Core Functionality
+
+- ✅ Stream small video content successfully (200 response, proper headers)
+- ✅ Handle HTTP range requests correctly (206 responses, content-range headers)
+- ✅ Support multiple range patterns for video seeking
+- ✅ Validate authentication before streaming (401 for invalid JWT)
+- ✅ Handle concurrent streams without memory leaks
+
+### Error Scenarios
+
+- ✅ Return 404 for non-existent torrent hashes
+- ✅ Return 416 for malformed range requests
+- ✅ Return 408 for torrent timeout scenarios
+- ✅ Graceful degradation under memory pressure
+
+### Performance & Integration
+
+- ✅ First byte response time <5 seconds for cached content
+- ✅ Memory usage <200MB per concurrent stream
+- ✅ End-to-end workflow: create source → stream video
+- ✅ Torrent lifecycle management with cleanup
+
+**Success Metrics**
+
+- **Test Execution Time**: <2 minutes for full streaming test suite
+- **Container Startup**: All services healthy within 30 seconds
+- **Test Reliability**: 100% pass rate on clean environment
+- **Performance Baseline**: Documented metrics for future optimization
+
+**Risk Mitigation**
+
+- **Resource Usage**: Monitor container memory/CPU during test execution
+- **Test Isolation**: Each test uses separate torrent hashes
+- **Cleanup Strategy**: Automatic torrent removal after test completion
+- **Fallback Testing**: HTTP range server for non-BitTorrent validation
 
 ---
 
