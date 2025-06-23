@@ -13,7 +13,7 @@
 
 | Priority          | Focus Area            | Tasks     | Status |
 | ----------------- | --------------------- | --------- | ------ |
-| **Priority 1**    | Core Movie Playback   | 3 active  | 🔄     |
+| **Priority 1**    | Core Movie Playback   | 4 active  | 🔄     |
 | **Priority 2**    | TV Show Episodes      | 0 tasks   | -      |
 | **Priority 3**    | Nice-to-Have Features | 1 planned | ⬜     |
 | **Priority 4**    | Anime Support         | 0 tasks   | -      |
@@ -37,11 +37,12 @@ Essential infrastructure to support basic movie streaming functionality.
 
 ## Progress Dashboard
 
-| Task           | Status | Assignee   | Dependencies  |
-| -------------- | ------ | ---------- | ------------- |
-| infra#compose  | ⬜     | @infra-dev | -             |
-| infra#seed     | ⬜     | @infra-dev | infra#compose |
-| infra#nginx-ui | ⬜     | @infra-dev | infra#compose |
+| Task             | Status | Assignee   | Dependencies  |
+| ---------------- | ------ | ---------- | ------------- |
+| infra#compose    | ⬜     | @infra-dev | -             |
+| infra#seed       | ⬜     | @infra-dev | infra#compose |
+| infra#nginx-ui   | ⬜     | @infra-dev | infra#compose |
+| infra#e2e-stream | ⬜     | @qa-dev    | infra#compose |
 
 ## infra#compose — Docker Compose Infrastructure (2 SP)
 
@@ -199,24 +200,25 @@ server {
     # Frontend static files
     location / {
         root /usr/share/nginx/html;
+        index index.html;
         try_files $uri $uri/ /index.html;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
+
+        # Cache static assets
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
     }
 
     # API proxy
     location /api/ {
         proxy_pass http://backend:4000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
 
-    # WebSocket support for streaming
-    location /ws/ {
-        proxy_pass http://backend:4000;
+        # WebSocket support for streaming
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
@@ -257,6 +259,170 @@ services:
 - Static assets cached with proper headers
 - HTTPS configuration ready for production
 - Performance improved vs direct backend serving
+
+---
+
+## infra#e2e-stream — E2E Testing Infrastructure for Torrent Streaming (6 SP)
+
+### Goal
+
+Set up multi-container Docker Compose infrastructure to support comprehensive E2E testing of torrent streaming functionality with isolated BitTorrent network and deterministic test content.
+
+### Background
+
+Implements research findings from `docs/e2e-torrent-streaming-research.md` to create a production-like testing environment that validates actual BitTorrent protocol behavior without external dependencies.
+
+### Tasks
+
+#### Container Infrastructure (3 SP)
+
+1. **BitTorrent Tracker Setup**
+
+   - Deploy `quoorex/bittorrent-tracker` container
+   - Configure HTTP, UDP, WebSocket support
+   - Health checks and stats endpoint integration
+   - Network isolation within test environment
+
+2. **Torrent Seeder Container**
+
+   - Build custom Node.js container with WebTorrent
+   - Health endpoint with torrent inventory (`/health`, `/torrents`)
+   - Predetermined test content seeding
+   - Automatic torrent announcement to tracker
+
+3. **HTTP Range Request Server**
+   - Standalone container for range request validation
+   - Independent streaming endpoint testing
+   - Comparison baseline for BitTorrent streaming
+
+#### Test Content Generation (2 SP)
+
+4. **Synthetic Video Creation**
+
+   - FFmpeg-based deterministic video generation
+   - Multiple resolutions: 720p (1MB), 1080p (5MB), 4K (20MB)
+   - Known characteristics for predictable testing
+   - Consistent hashes across environments
+
+5. **Content Seeding Pipeline**
+   - Automated torrent creation from test videos
+   - Hash inventory management for test lookup
+   - Seeder initialization and health validation
+
+#### Docker Integration (1 SP)
+
+6. **Test Environment Configuration**
+   - Update `backend-e2e/docker/docker-compose.test.yml`
+   - Network configuration for container communication
+   - Environment variable integration
+   - Service dependency management and health checks
+
+### Technical Implementation
+
+#### New Container Services
+
+```yaml
+# BitTorrent Tracker
+bittorrent-tracker:
+  image: quoorex/bittorrent-tracker:latest
+  environment:
+    - HTTP=true
+    - UDP=true
+    - WEBSOCKET=true
+    - STATS=true
+  networks: [test-network]
+  healthcheck:
+    test: ['CMD', 'wget', '--spider', 'http://localhost:8000/stats']
+
+# Torrent Seeder
+torrent-seeder:
+  build:
+    context: .
+    dockerfile: torrent-seeder.Dockerfile
+  networks: [test-network]
+  healthcheck:
+    test: ['CMD', 'wget', '--spider', 'http://localhost:3001/health']
+  depends_on:
+    bittorrent-tracker: { condition: service_healthy }
+
+# Range Request Server
+range-server:
+  build:
+    context: .
+    dockerfile: range-server.Dockerfile
+  networks: [test-network]
+  healthcheck:
+    test: ['CMD', 'wget', '--spider', 'http://localhost:3002/test-small-720p.mp4']
+```
+
+#### Directory Structure
+
+```
+backend-e2e/
+├── docker/
+│   ├── torrent-seeder.Dockerfile
+│   ├── range-server.Dockerfile
+│   └── docker-compose.test.yml (updated)
+├── mock-content/
+│   ├── generate-test-videos.sh
+│   ├── seed-torrents.js
+│   ├── range-server.js
+│   └── test-videos/ (generated)
+└── scripts/
+    ├── setup-e2e-environment.sh
+    └── cleanup-test-content.sh
+```
+
+### Environment Variables
+
+| Variable                 | Value                         | Description                   |
+| ------------------------ | ----------------------------- | ----------------------------- |
+| TORRENT_TRACKER_ANNOUNCE | ws://bittorrent-tracker:8000  | WebSocket tracker URL         |
+| DISABLE_DISCOVERY        | false                         | Enable BitTorrent for testing |
+| DEBUG                    | webtorrent:\*,miauflix:stream | Debug logging configuration   |
+
+### Performance Requirements
+
+- **Container Startup**: All services healthy within 30 seconds
+- **Resource Usage**: Total additional ~300MB RAM for test infrastructure
+- **Test Isolation**: Each test run uses separate content/hashes
+- **Cleanup**: Automatic cleanup of torrents and temporary files
+
+### Dependencies
+
+- infra#compose (requires base Docker Compose setup)
+- Coordination with backend#stream-e2e task
+
+### Acceptance Criteria
+
+#### Infrastructure Validation
+
+- ✅ All containers start successfully and report healthy status
+- ✅ BitTorrent tracker accessible and returns stats
+- ✅ Torrent seeder serves predetermined content with known hashes
+- ✅ Range server handles HTTP range requests correctly
+- ✅ Network communication between all services functional
+
+#### Content Generation
+
+- ✅ Test videos generate consistently with same hashes
+- ✅ Seeder automatically announces torrents to tracker
+- ✅ Test content inventory accessible via API endpoints
+- ✅ Content cleanup after test execution
+
+#### Integration Testing
+
+- ✅ Backend can connect to test tracker and download content
+- ✅ Streaming endpoint works with seeded test torrents
+- ✅ E2E test suite can run against infrastructure
+- ✅ Performance baselines established for streaming tests
+
+### Risk Mitigation
+
+- **Container Dependencies**: Robust health checks and retry logic
+- **Resource Management**: Memory/CPU monitoring during test execution
+- **Test Isolation**: Separate Docker networks and content namespacing
+- **Cleanup Procedures**: Automated cleanup of test torrents and temp files
 
 ---
 
