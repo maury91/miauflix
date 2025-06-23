@@ -7,9 +7,11 @@
 | `backend#auth`       | ✅ **Complete** | `auth.service.ts`, `auth.routes.ts`, `user.entity.ts`, `refresh-token.entity.ts`, `auth.middleware.ts`                                   |
 | `backend#sources`    | ✅ **Complete** | `source.service.ts`, `content-directories/yts/`, `content-directories/therarbg/`, `movie-source.entity.ts`, `movie-source.repository.ts` |
 | `backend#stream`     | ❌ **Missing**  | Stream endpoint not implemented - requires `routes/stream.routes.ts`, streaming service integration                                      |
+| `backend#stream-e2e` | ❌ **Missing**  | E2E testing infrastructure - requires `backend-e2e/` expansion, torrent testing containers                                               |
 | `backend#preload`    | ❌ **Missing**  | Viewport preload queue not implemented - requires `/api/ui/viewport` endpoint                                                            |
 | `backend#lists`      | ✅ **Complete** | `list.service.ts`, `list.syncronizer.ts`, `list.entity.ts`, `trakt.service.ts`, `trakt.routes.ts`                                        |
 | `backend#encryption` | ✅ **Complete** | `encryption.service.ts`, `movie-source.repository.ts`, `scripts/migrate-encrypt.ts`                                                      |
+| `infra#e2e-stream`   | ❌ **Missing**  | E2E infrastructure setup - requires Docker containers, test content generation, compose file updates                                     |
 
 ## 🔍 Implementation Status Notes
 
