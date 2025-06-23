@@ -21,8 +21,9 @@ RUN npm ci && npm cache clean --force
 # Copy backend source code (needed for TypeScript project references)
 COPY backend/ ./backend/
 
-# Build backend first (required for backend-client project reference), then other packages
-RUN npm run build:libs && npm run build --workspace=backend 
+# Build libraries and backend
+RUN npm run build:libs
+RUN npm run build --workspace=backend 
 
 # Move node_modules to the dist directory
 RUN mv ./backend/node_modules ./dist/backend/node_modules && \

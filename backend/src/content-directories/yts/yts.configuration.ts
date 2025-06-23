@@ -1,6 +1,6 @@
 import { createCache } from 'cache-manager';
 
-import { serviceConfiguration } from '@mytypes/configuration';
+import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 import { YTSApi } from './yts.api';
 
@@ -8,12 +8,13 @@ export const ytsConfigurationDefinition = serviceConfiguration({
   name: 'YTS (YIFY Torrents)',
   description: 'Service for fetching YTS movie torrents information',
   variables: {
-    YTS_API_URL: {
+    YTS_API_URL: variable({
       description: 'URL for the YTS API',
       example: 'https://yts.mx',
       defaultValue: 'https://yts.mx',
       required: false,
-    },
+      transform: transforms.url(),
+    }),
   },
   test: async () => {
     try {
