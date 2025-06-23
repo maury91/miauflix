@@ -1,6 +1,6 @@
 import { createCache } from 'cache-manager';
 
-import { serviceConfiguration } from '@mytypes/configuration';
+import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 import { TheRARBGApi } from './therarbg.api';
 
@@ -8,12 +8,13 @@ export const theRarbgConfigurationDefinition = serviceConfiguration({
   name: 'TheRARBG',
   description: 'Service for fetching TheRARBG torrents information',
   variables: {
-    THE_RARBG_API_URL: {
+    THE_RARBG_API_URL: variable({
       description: 'URL for the TheRARBG API',
       example: 'https://therarbg.to',
       defaultValue: 'https://therarbg.to',
       required: false,
-    },
+      transform: transforms.url(),
+    }),
   },
   test: async () => {
     try {

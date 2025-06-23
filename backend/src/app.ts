@@ -6,6 +6,7 @@ import { logger } from '@logger';
 import { Database } from '@database/database';
 import { AuthError, LoginError, RoleError } from '@errors/auth.errors';
 import { AuthService } from '@services/auth/auth.service';
+import { CacheService } from '@services/cache/cache.service';
 import { DownloadService } from '@services/download/download.service';
 import { EncryptionService } from '@services/encryption/encryption.service';
 import { ListService } from '@services/media/list.service';
@@ -19,7 +20,6 @@ import { ContentDirectoryService } from '@services/source-metadata/content-direc
 import { StorageService } from '@services/storage/storage.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 import { TraktService } from '@services/trakt/trakt.service';
-import { buildCache } from '@utils/caching';
 
 import { validateConfiguration } from './configuration';
 import { ENV } from './constants';
@@ -66,8 +66,8 @@ try {
   const db = new Database(encryptionService);
   await db.initialize();
 
-  const cache = buildCache();
-  const tmdbApi = new TMDBApi(cache);
+  const cacheService = new CacheService();
+  const tmdbApi = new TMDBApi(cacheService.cache);
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
   const authService = new AuthService(db, auditLogService);
@@ -77,7 +77,7 @@ try {
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
   const downloadService = new DownloadService();
-  const trackerService = new ContentDirectoryService(cache, downloadService);
+  const trackerService = new ContentDirectoryService(cacheService.cache, downloadService);
   const magnetService = new MagnetService(downloadService);
   const sourceService = new SourceService(db, vpnDetectionService, trackerService, magnetService);
   // ToDo: Use the storage service in the right places
@@ -133,6 +133,12 @@ try {
     'resyncMovieSources',
     5, // 5 seconds
     bind(sourceService, 'resyncMovieSources')
+  );
+
+  scheduler.scheduleTask(
+    'cacheCleanup',
+    6 * 60 * 60, // 6 hours
+    bind(cacheService, 'cleanup')
   );
 
   // Graceful shutdown handlers
@@ -220,7 +226,7 @@ try {
     );
   });
 
-  const port = ENV.number('PORT');
+  const port = ENV('PORT');
   const server = serve({
     fetch: app.fetch,
     port,

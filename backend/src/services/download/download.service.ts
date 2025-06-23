@@ -23,10 +23,10 @@ export class DownloadService {
 
   constructor() {
     this.client = new WebTorrent({
-      maxConns: ENV.number('CONTENT_CONNECTION_LIMIT'),
-      downloadLimit: ENV.number('CONTENT_DOWNLOAD_LIMIT') << 20, // Convert MB/s to bytes/s
-      uploadLimit: ENV.number('CONTENT_UPLOAD_LIMIT') << 20, // Convert MB/s to bytes/s
-      dht: ENV.boolean('DISABLE_DISCOVERY') ? false : undefined,
+      maxConns: ENV('CONTENT_CONNECTION_LIMIT'),
+      downloadLimit: Number(ENV('CONTENT_DOWNLOAD_LIMIT')),
+      uploadLimit: Number(ENV('CONTENT_UPLOAD_LIMIT')),
+      dht: ENV('DISABLE_DISCOVERY') ? false : undefined,
       blocklist: [blacklistedTrackersURL],
     });
     this.client.on('error', (error: Error) => {
