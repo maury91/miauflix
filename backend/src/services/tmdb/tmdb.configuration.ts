@@ -1,6 +1,6 @@
 import { createCache } from 'cache-manager';
 
-import { serviceConfiguration } from '@mytypes/configuration';
+import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 import { TMDBApi } from './tmdb.api';
 
@@ -10,19 +10,20 @@ export const tmdbConfigurationDefinition = serviceConfiguration({
   name: 'The Movie Database (TMDB)',
   description: 'Service for fetching movie and TV show information',
   variables: {
-    TMDB_API_URL: {
+    TMDB_API_URL: variable({
       description: 'URL for The Movie Database API',
       example: 'https://api.themoviedb.org/3',
       defaultValue: 'https://api.themoviedb.org/3',
       required: false,
-    },
-    TMDB_API_ACCESS_TOKEN: {
+      transform: transforms.url(),
+    }),
+    TMDB_API_ACCESS_TOKEN: variable({
       description: 'Access token for The Movie Database API',
       example: 'eyJhbGciOiJIUzI1NiJ9...',
       link: 'https://www.themoviedb.org/settings/api',
       required: true,
       password: true,
-    },
+    }),
   },
   test: async () => {
     try {
