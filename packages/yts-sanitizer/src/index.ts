@@ -6,7 +6,12 @@
  */
 
 // Main sanitization functions
-export { sanitize, sanitizeMovie, sanitizeTorrent, sanitizeCastMember } from './sanitizer.js';
+export {
+  sanitize,
+  sanitizeMovie,
+  sanitizeSourceMetadata,
+  sanitizeCastMember,
+} from './sanitizer.js';
 
 // Utility functions that might be useful externally
 export {
@@ -22,13 +27,13 @@ export {
 // Types
 export type {
   YTSMovie,
-  YTSTorrent,
+  YTSSourceMetadata,
   YTSCastMember,
   YTSMovieListResponse,
   YTSMovieDetailsResponse,
   YTSWrappedResponse,
   YTSApiResponse,
-  LegalTorrentHash,
+  LegalHash,
   SanitizationOptions,
 } from './types.js';
 

@@ -2,9 +2,9 @@
  * Tests for YTS sanitizer
  */
 
-import { sanitize, sanitizeMovie, sanitizeTorrent } from './sanitizer';
+import { sanitize, sanitizeMovie, sanitizeSourceMetadata } from './sanitizer';
 import { clearCache } from './utils';
-import type { YTSMovie, YTSTorrent, YTSMovieListResponse } from './types';
+import type { YTSMovie, YTSSourceMetadata, YTSMovieListResponse } from './types';
 
 describe('YTS Sanitizer', () => {
   beforeEach(() => {
@@ -145,22 +145,22 @@ describe('YTS Sanitizer', () => {
     });
   });
 
-  describe('sanitizeTorrent', () => {
-    it('should sanitize torrent hashes', () => {
-      const torrent: YTSTorrent = {
+  describe('sanitizeSourceMetadata', () => {
+    it('should sanitize hashes', () => {
+      const sourceMetadata: YTSSourceMetadata = {
         hash: '1234567890ABCDEF1234567890ABCDEF12345678',
         url: 'https://yts.mx/torrent/download/1234567890ABCDEF1234567890ABCDEF12345678',
       };
 
-      const sanitized = sanitizeTorrent(torrent, {}, new Set<string>());
+      const sanitized = sanitizeSourceMetadata(sourceMetadata, {}, new Set<string>());
 
-      expect(sanitized.hash).not.toBe(torrent.hash);
+      expect(sanitized.hash).not.toBe(sourceMetadata.hash);
       expect(sanitized.hash).toMatch(/^[A-F0-9]{40}$/);
       expect(sanitized.url).toContain(sanitized.hash);
     });
 
-    it('should preserve other torrent properties', () => {
-      const torrent: YTSTorrent = {
+    it('should preserve other source metadata properties', () => {
+      const sourceMetadata: YTSSourceMetadata = {
         hash: '1234567890ABCDEF1234567890ABCDEF12345678',
         quality: '1080p',
         seeds: 100,
@@ -168,12 +168,12 @@ describe('YTS Sanitizer', () => {
         size: '2.1 GB',
       };
 
-      const sanitized = sanitizeTorrent(torrent, {}, new Set<string>());
+      const sanitized = sanitizeSourceMetadata(sourceMetadata, {}, new Set<string>());
 
-      expect(sanitized.quality).toBe(torrent.quality);
-      expect(sanitized.seeds).toBe(torrent.seeds);
-      expect(sanitized.peers).toBe(torrent.peers);
-      expect(sanitized.size).toBe(torrent.size);
+      expect(sanitized.quality).toBe(sourceMetadata.quality);
+      expect(sanitized.seeds).toBe(sourceMetadata.seeds);
+      expect(sanitized.peers).toBe(sourceMetadata.peers);
+      expect(sanitized.size).toBe(sourceMetadata.size);
     });
   });
 

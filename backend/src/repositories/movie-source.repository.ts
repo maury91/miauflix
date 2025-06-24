@@ -151,11 +151,11 @@ export class MovieSourceRepository {
   }
 
   /**
-   * Update a movie source with torrent file data
+   * Update a movie source with source file data
    */
-  updateTorrentFile(sourceId: number, torrentFile: Buffer) {
+  updateSourceFile(sourceId: number, sourceFile: Buffer) {
     return this.movieSourceRepository.update(sourceId, {
-      file: torrentFile,
+      file: sourceFile,
     });
   }
 
@@ -332,7 +332,7 @@ LIMIT ?
    */
   updateSourceMetadata(
     sourceId: number,
-    updateData: { sourceType?: string; sourceUploadedAt?: Date }
+    updateData: { sourceType?: string | null; sourceUploadedAt?: Date }
   ) {
     return this.movieSourceRepository.update(sourceId, updateData);
   }

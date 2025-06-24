@@ -30,6 +30,8 @@ export interface SourceMetadata {
 export abstract class AbstractContentDirectory<T extends Api = Api> {
   protected api: T;
 
+  abstract name: string;
+
   abstract getMovie(
     imdbId: string,
     highPriority?: boolean

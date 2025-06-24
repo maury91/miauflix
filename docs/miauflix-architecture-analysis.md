@@ -2,71 +2,60 @@
 
 ## Executive Summary
 
-Miauflix is a comprehensive media streaming platform built with modern web technologies, designed with security-first principles and privacy protection. The system features a React-based frontend, Hono backend API, SQLite database with TypeORM, and Docker containerization with NordVPN integration for secure torrent operations.
+Miauflix is a self-hosted streaming platform that discovers and streams media content. The backend (Node.js + Hono) handles source discovery and streaming, while the React frontend provides the UI. Uses SQLite for data, Docker for deployment, and optional VPN integration for privacy.
 
 ## Technology Stack
 
-### Backend Infrastructure
+### Backend
 
-- **Framework**: [Hono v4.7.10](https://hono.dev/) - Lightweight web framework
-- **Runtime**: Node.js with TypeScript v5.8.3
-- **Database**: SQLite v5.0.11 with [TypeORM v0.3.10](https://typeorm.io/)
-- **Torrent Client**: [WebTorrent v2.6.7](https://webtorrent.io/)
-- **Authentication**: [JOSE v6.0.10](https://github.com/panva/jose) for JWT handling
-- **Caching**: [Keyv v5.3.1](https://keyv.org/) with SQLite adapter
-- **Validation**: [Zod v3.25.20](https://zod.dev/) for schema validation
+- **API Framework**: Hono
+- **Database**: SQLite + TypeORM
+- **Streaming Engine**: WebTorrent for peer-to-peer delivery
+- **Auth**: JWT tokens with JOSE library
+- **Validation**: Zod schemas
 
-### Frontend Application
+### Frontend
 
-- **Framework**: [React v18.2.0](https://react.dev/) with TypeScript
-- **State Management**: [Redux Toolkit v1.9.7](https://redux-toolkit.js.org/)
-- **Styling**: [Styled Components v6.1.1](https://styled-components.com/)
-- **Animations**: [Framer Motion v10.16.4](https://www.framer.com/motion/) and [GSAP v3.12.2](https://gsap.com/)
-- **Build Tool**: [Vite v4.5.0](https://vitejs.dev/)
-- **Navigation**: [@noriginmedia/norigin-spatial-navigation v2.0.1](https://github.com/NoriginMedia/norigin-spatial-navigation)
+- **Framework**: React + TypeScript
+- **State**: Redux Toolkit + RTK Query
+- **Build**: Vite
+- **TV Support**: Spatial navigation for Samsung TVs
 
-### Infrastructure & Security
+### Infrastructure
 
-- **Containerization**: Docker with multi-service orchestration
-- **VPN Integration**: NordVPN (ghcr.io/bubuntux/nordlynx) for traffic anonymization
-- **Reverse Proxy**: Nginx Alpine with SSL termination
-- **SSL Management**: Let's Encrypt with Certbot automation
-- **Process Management**: PM2-style scheduling with graceful shutdown
+- **Deployment**: Docker + docker-compose
+- **VPN**: NordVPN integration (optional, more are welcome)
+- **Web Server**: Nginx with Let's Encrypt SSL
+- **Background Jobs**: Custom scheduler
 
 ## System Architecture Overview
 
 ### Core Components
 
-#### 1. Frontend Application (`frontend/`)
+#### 1. Frontend (`frontend/`)
 
-- **React SPA**: Single-page application with routing and state management
-- **Redux Store**: Centralized state management for media, user sessions, and UI state
-- **Component Architecture**: Modular components with hooks-based logic
-- **Platform Support**: Web browsers and Samsung Tizen Smart TVs
-- **Responsive Design**: Adaptive layouts for various screen sizes
+- More-famous-streaming-platform-like React interface with Redux state management
+- Samsung TV support (spatial navigation for remote control)
+- Pages: Home, Player, Movie details, User profiles
 
 #### 2. Backend API (`backend/`)
 
-- **Hono Framework**: RESTful API with middleware pipeline
-- **Service Layer**: Business logic separation with dependency injection
-- **Entity Layer**: TypeORM entities for database modeling
-- **Route Handlers**: Organized by feature domains (movies, users, sources)
-- **Middleware**: Authentication, rate limiting, CORS, error handling
+- REST API built with Hono framework
+- Service classes for business logic (Auth, Media, Source, Download)
+- Routes: `/movies`, `/auth`, `/stream` (in progress)
+- Middleware: JWT auth, rate limiting, audit logging
 
-#### 3. Database Layer
+#### 3. Database
 
-- **SQLite Database**: File-based database with ACID transactions
-- **TypeORM Integration**: Entity management with migrations
-- **Encryption**: Field-level encryption for sensitive data
-- **Audit Logging**: Comprehensive activity tracking
-- **Caching Layer**: In-memory and persistent caching strategies
+- SQLite with TypeORM for entities and migrations
+- AES-256-GCM encryption for sensitive source metadata
 
-#### 4. External Integrations
+#### 4. External Services
 
-- **TMDB API**: Movie and TV show metadata retrieval
-- **YTS Mirrors**: Torrent source discovery (5 mirror endpoints)
-- **Trakt.tv**: Optional user activity synchronization
-- **Torrent Trackers**: Distributed torrent file discovery
+- **TMDB**: Movie posters, ratings, metadata
+- **YTS + THERARBG**: Source metadata discovery
+- **Trakt.tv**: Watch list sync (optional)
+- **Peer Network**: Availability statistics
 
 ## Database Schema
 
@@ -95,7 +84,7 @@ Miauflix is a comprehensive media streaming platform built with modern web techn
 
 #### Source Management
 
-5. **MovieSource**: Torrent source tracking
+5. **MovieSource**: Media source tracking
    - Fields: `quality`, `type`, `size`, `seeds`, `peers`, `magnetUri`, `infoHash`, `language`, `title`, `score`
    - Relationships: `Movie`
 
@@ -184,7 +173,7 @@ The system implements automated background processing with the following schedul
 
    - **Interval**: 0.2 seconds (200ms)
    - **Function**: **✅ FULLY IMPLEMENTED** - Downloads and validates torrent files
-   - **Service**: `SourceService.searchTorrentFilesForSources()`
+   - **Service**: `SourceService.syncMissingSourceFiles()`
    - **Features**: Timeout handling, file validation, metadata extraction
    - **Status**: ✅ Production ready
 

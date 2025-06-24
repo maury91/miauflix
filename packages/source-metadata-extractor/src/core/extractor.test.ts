@@ -9,7 +9,7 @@ import {
 import { extractSourceMetadata } from './extractor';
 
 describe('extractSourceMetadata', () => {
-  describe('Movie Torrents', () => {
+  describe('Movie Sources', () => {
     test.each<{
       name: string;
       size: number;
@@ -366,7 +366,7 @@ describe('extractSourceMetadata', () => {
   });
 
   describe('Performance and Edge Cases', () => {
-    test('handles very long torrent names efficiently', () => {
+    test('handles very long source names efficiently', () => {
       const result = extractSourceMetadata({
         name: 'Very.Long.Movie.Title.With.Many.Words.And.Technical.Details.2023.2160p.UHD.BluRay.REMUX.x265.10bit.HDR10.Plus.TrueHD.Atmos.7.1.DTS-HD.MA.5.1.Multi.Language.Subtitles.Director.Commentary.Making.Of.Deleted.Scenes-SUPERLONGRELEASEGROUPNAME',
         size: 50000000000,
@@ -443,7 +443,7 @@ describe('extractSourceMetadata', () => {
       expect(result.confidence.year).toBe(0);
     });
   });
-  describe('TV Show Torrents', () => {
+  describe('TV Show Sources', () => {
     test.each<{
       name: string;
       size: number;

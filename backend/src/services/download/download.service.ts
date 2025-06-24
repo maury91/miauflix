@@ -1,6 +1,6 @@
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
-import { Client as TrackerClient } from 'bittorrent-tracker';
+import { Client as BTClient } from 'bittorrent-tracker';
 import type IPSet from 'ip-set';
 import loadIPSet from 'load-ip-set';
 import type { Torrent } from 'webtorrent';
@@ -90,19 +90,19 @@ export class DownloadService {
     }
   }
 
-  generateLink(infoHash: string, trackers: string[], name = ''): string {
+  generateLink(hash: string, trackers: string[], name = ''): string {
     const allTrackers = [...new Set([...trackers, ...this.bestTrackers])].filter(Boolean);
 
-    const magnetParams = new URLSearchParams({
-      xt: `urn:btih:${infoHash}`,
+    const params = new URLSearchParams({
+      xt: `urn:btih:${hash}`,
       tr: allTrackers,
       dn: name,
     });
 
-    return `magnet:?${magnetParams.toString()}`;
+    return `magnet:?${params.toString()}`;
   }
 
-  async getTorrent(magnetLink: string, hash: string, timeout: number): Promise<Buffer> {
+  async getSourceMetadataFile(sourceLink: string, hash: string, timeout: number): Promise<Buffer> {
     return new Promise((resolve, rejectRaw) => {
       const remove = () => {
         this.client.remove(hash, () => {});
@@ -117,22 +117,22 @@ export class DownloadService {
         reject(new ErrorWithStatus(`Timeout after ${timeout} ms while adding file`, 'timeout'));
       }, timeout);
       try {
-        const onTorrent = (torrent: Torrent) => {
-          if (!torrent.torrentFile) {
+        const onSourceMetadata = (sourceMetadata: Torrent) => {
+          if (!sourceMetadata.torrentFile) {
             return reject(new ErrorWithStatus(`File not found`, 'added_but_no_file'));
           }
           clearTimeout(timeoutId);
           remove();
-          resolve(torrent.torrentFile);
+          resolve(sourceMetadata.torrentFile);
         };
-        const existingTorrent = this.client.torrents.find(t => t.infoHash === hash);
-        if (existingTorrent) {
-          onTorrent(existingTorrent);
+        const existingSourceFile = this.client.torrents.find(t => t.infoHash === hash);
+        if (existingSourceFile) {
+          onSourceMetadata(existingSourceFile);
         }
         this.client.add(
-          magnetLink,
+          sourceLink,
           { deselect: true, destroyStoreOnDestroy: true, skipVerify: true },
-          onTorrent
+          onSourceMetadata
         );
       } catch (error: unknown) {
         console.error(`Error adding data source`, error);
@@ -143,7 +143,7 @@ export class DownloadService {
 
   private async scrape(infoHash: string): Promise<ScrapeData> {
     return new Promise((resolve, reject) => {
-      const client = new TrackerClient({
+      const client = new BTClient({
         infoHash: infoHash.toLowerCase(),
         announce: this.bestTrackersOriginal,
         peerId: Buffer.from('01234567890123456789'), // 20-byte dummy peer ID

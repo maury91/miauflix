@@ -6,43 +6,42 @@ import { YTSContentDirectory } from '@content-directories/yts';
 import type { DownloadService } from '@services/download/download.service';
 
 /**
- * Service for searching torrents from various tracker sources
+ * Service for searching content from various directory sources
  */
 export class ContentDirectoryService {
-  private readonly movieTrackers: AbstractContentDirectory[];
+  private readonly movieDirectories: AbstractContentDirectory[];
 
   constructor(cache: Cache, downloadService: DownloadService) {
-    this.movieTrackers = [
+    this.movieDirectories = [
       new YTSContentDirectory(cache),
       new TherarbgContentDirectory(cache, downloadService),
     ];
   }
 
   /**
-   * Get the status of the tracker services
-   * @returns Status of the tracker services
+   * Get the status of the content directory services
+   * @returns Status of the content directory services
    */
   public status() {
-    return this.movieTrackers.map(tracker => tracker.status());
+    return this.movieDirectories.map(contentDirectory => contentDirectory.status());
   }
 
   /**
-   * Search torrents for a movie by its IMDb ID
+   * Search content sources for a movie by its IMDb ID
    *
    * @param imdbId - The IMDb ID of the movie (format: ttXXXXXXX)
    * @param highPriority - Whether to use high priority rate limit (default: false)
-   * @returns A movie object with normalized torrents or null if not found
+   * @returns A movie object with normalized sources or null if not found
    */
-  public async searchTorrentsForMovie(imdbId: string, highPriority = false) {
-    for (const tracker of this.movieTrackers) {
+  public async searchSourcesForMovie(imdbId: string, highPriority = false) {
+    for (const contentDirectory of this.movieDirectories) {
       try {
-        // Currently only using YTS, but this can be extended to use multiple trackers
-        const { sources, trailerCode } = await tracker.getMovie(imdbId, highPriority);
+        const { sources, trailerCode } = await contentDirectory.getMovie(imdbId, highPriority);
         if (sources.length > 0) {
-          return { sources, trailerCode };
+          return { sources, trailerCode, source: contentDirectory.name };
         }
       } catch (error) {
-        console.error(`Error searching torrents for movie ${imdbId}:`, error);
+        console.error(`Error searching sources for movie ${imdbId}:`, error);
         return null;
       }
     }

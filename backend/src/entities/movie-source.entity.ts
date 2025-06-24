@@ -90,13 +90,13 @@ export class MovieSource {
   watchers?: number;
 
   @Column()
-  source: string;
+  source: string; // YTS, TheRARBG, etc.
 
   @Column({
     type: 'varchar',
-    default: 'unknown',
+    nullable: true,
   })
-  sourceType: string; // e.g. "web", "cam", "bluray", "dvd", ...
+  sourceType: string | null; // e.g. "web", "cam", "bluray", "dvd", ...
 
   @Column({
     type: 'blob',

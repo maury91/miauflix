@@ -86,7 +86,7 @@ export class MovieRepository {
   /**
    * Find movies that haven't been searched for sources yet
    */
-  async findMoviesWithoutSources(limit: number = 10): Promise<Movie[]> {
+  async findMoviesPendingSourceSearch(limit: number = 10): Promise<Movie[]> {
     return this.movieRepository.find({
       where: {
         sourceSearched: false,
@@ -99,20 +99,20 @@ export class MovieRepository {
     });
   }
 
-  async findMoviesWithoutTorrents(limit: number = 10): Promise<
+  async findMoviesWithoutSources(limit: number = 10): Promise<
     (Omit<Movie, 'sources'> & {
       sources: MovieSource[];
       sourcesCount: number;
       missingCount: number;
     })[]
   > {
-    // Get movies that have sources without torrent files
+    // Get movies that have sources without source files
     // This query prioritizes movies based on:
     // - Movie popularity
     // - Number of sources for the movie
-    // - Number of sources with missing torrent files
+    // - Number of sources with missing source files
 
-    // First, find movie IDs with their source counts and missing torrent counts
+    // First, find movie IDs with their source counts and missing source counts
     const results = await this.movieRepository
       .createQueryBuilder('movie')
       .innerJoin('movie.sources', 'source')
