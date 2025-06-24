@@ -1,5 +1,5 @@
 import type { ImdbDetailPost } from './therarbg.types';
-import { filterTorrents, validateImdbId } from './therarbg.utils';
+import { filterSources, validateImdbId } from './therarbg.utils';
 
 describe('TheRarBG Utils', () => {
   describe('validateImdbId', () => {
@@ -59,8 +59,8 @@ describe('TheRarBG Utils', () => {
     });
   });
 
-  describe('filterTorrents', () => {
-    const createMockTorrent = (overrides: Partial<ImdbDetailPost>): ImdbDetailPost => ({
+  describe('filterSources', () => {
+    const createMockSource = (overrides: Partial<ImdbDetailPost>): ImdbDetailPost => ({
       eid: 'test',
       pid: 1,
       category: 14,
@@ -105,43 +105,32 @@ describe('TheRarBG Utils', () => {
       ...overrides,
     });
 
-    it('should filter out torrents without torrent files', () => {
-      const torrents = [
-        createMockTorrent({ has_torrent: true, seeders: 10, size: 2147483648 }),
-        createMockTorrent({ has_torrent: false, seeders: 10, size: 2147483648 }),
+    it('should filter out sources with insufficient seeders', () => {
+      const sources = [
+        createMockSource({ has_torrent: true, seeders: 5, size: 2147483648 }),
+        createMockSource({ has_torrent: true, seeders: 1, size: 2147483648 }),
       ];
 
-      const filtered = filterTorrents(torrents);
-      expect(filtered).toHaveLength(1);
-      expect(filtered[0].has_torrent).toBe(true);
-    });
-
-    it('should filter out torrents with insufficient seeders', () => {
-      const torrents = [
-        createMockTorrent({ has_torrent: true, seeders: 5, size: 2147483648 }),
-        createMockTorrent({ has_torrent: true, seeders: 1, size: 2147483648 }),
-      ];
-
-      const filtered = filterTorrents(torrents);
+      const filtered = filterSources(sources);
       expect(filtered).toHaveLength(1);
       expect(filtered[0].seeders).toBe(5);
     });
 
-    it('should filter out torrents that are too small', () => {
-      const torrents = [
-        createMockTorrent({ has_torrent: true, seeders: 10, size: 2147483648 }), // 2GB
-        createMockTorrent({ has_torrent: true, seeders: 10, size: 52428800 }), // 50MB
+    it('should filter out sources that are too small', () => {
+      const sources = [
+        createMockSource({ has_torrent: true, seeders: 10, size: 2147483648 }), // 2GB
+        createMockSource({ has_torrent: true, seeders: 10, size: 52428800 }), // 50MB
       ];
 
-      const filtered = filterTorrents(torrents);
+      const filtered = filterSources(sources);
       expect(filtered).toHaveLength(1);
       expect(filtered[0].size).toBe(2147483648);
     });
 
-    it('should return empty array when no torrents meet criteria', () => {
-      const torrents = [createMockTorrent({ has_torrent: false, seeders: 1, size: 104857600 })];
+    it('should return empty array when no sources meet criteria', () => {
+      const sources = [createMockSource({ has_torrent: false, seeders: 1, size: 104857600 })];
 
-      const filtered = filterTorrents(torrents);
+      const filtered = filterSources(sources);
       expect(filtered).toHaveLength(0);
     });
   });

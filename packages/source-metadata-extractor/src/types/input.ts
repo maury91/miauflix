@@ -1,16 +1,12 @@
 /**
- * Core input interfaces for torrent metadata extraction
- */
-
-/**
- * File information within a torrent
+ * File information within a source
  */
 export interface FileInfo {
   /** File name */
   name: string;
   /** File size in bytes */
   size: number;
-  /** Full path within the torrent */
+  /** Full path within the source */
   full_location: string;
 }
 
@@ -52,11 +48,11 @@ export interface TrackerMetadata {
 }
 
 /**
- * Main input interface for torrent metadata extraction
+ * Main input interface for source metadata extraction
  */
-export interface TorrentInput {
+export interface SourceMetadataInput {
   // Required core fields
-  /** Torrent name/title */
+  /** Source name/title */
   name: string;
   /** Total size in bytes */
   size: number;
@@ -64,7 +60,7 @@ export interface TorrentInput {
   // Optional fields from existing SourceMetadataItem
   /** Optional description text */
   description?: string;
-  /** List of files in the torrent */
+  /** List of files in the source */
   files?: FileInfo[];
   /** Content category */
   category?: string;

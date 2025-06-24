@@ -3,11 +3,11 @@
  *
  * This package provides intelligent sanitization of TheRARBG API responses,
  * replacing copyrighted content with fake data while preserving technical
- * metadata in torrent names.
+ * metadata in names.
  */
 
 // Main sanitization functions
-export { sanitize, sanitizeImdbData, sanitizeTorrentPost, sanitizeImdbDetail } from './sanitizer';
+export { sanitize, sanitizeImdbData, sanitizePost, sanitizeImdbDetail } from './sanitizer';
 
 // Utility functions
 export {
@@ -16,7 +16,7 @@ export {
   generateFakeImdbId,
   generateFakePersonName,
   generateSafeInfoHash,
-  sanitizeTorrentName,
+  sanitizeName,
   generateFakePlot,
   generateFakeUrl,
   shouldUseLegalHash,
@@ -30,10 +30,10 @@ export {
 export type {
   TheRARBGApiResponse,
   TheRARBGImdbData,
-  TheRARBGTorrentPost,
+  TheRARBGPost,
   SanitizationOptions,
   TitleMapping,
-  LegalTorrentHash,
+  LegalHash,
 } from './types';
 
 // Constants and Faker-based generators

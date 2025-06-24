@@ -270,7 +270,7 @@ flowchart TD
 #### 2. Torrent File Search (0.2 seconds)
 
 - **Purpose**: Process and validate torrent files
-- **Service**: `SourceService.searchTorrentFilesForSources()`
+- **Service**: `SourceService.syncMissingSourceFiles()`
 - **Dependencies**: Tracker services
 - **VPN Required**: Yes
 - **Database Impact**: Medium (updates existing records)

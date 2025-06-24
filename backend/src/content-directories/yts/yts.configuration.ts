@@ -5,8 +5,8 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
 import { YTSApi } from './yts.api';
 
 export const ytsConfigurationDefinition = serviceConfiguration({
-  name: 'YTS (YIFY Torrents)',
-  description: 'Service for fetching YTS movie torrents information',
+  name: 'YTS)',
+  description: 'Service for fetching movie sources from YTS',
   variables: {
     YTS_API_URL: variable({
       description: 'URL for the YTS API',

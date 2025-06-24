@@ -1,10 +1,7 @@
 ## 📚 Backend Documentation Overview
 
-> **Documentation Status:** Updated 2025-01-XX with implementation verification  
-> **Note:** Documentation has been updated to reflect actual codebase implementation status
-
-This directory provides a layered reference for the **miauflix-bun** backend.
-Start here and dive progressively deeper:
+This directory organizes the **miauflix-bun** backend docs by complexity.
+Start here and go deeper as needed:
 
 | Level | File                                                                          | What You'll Find                                                         |
 | ----- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |

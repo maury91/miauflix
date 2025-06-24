@@ -231,7 +231,7 @@ describe('Database Encryption E2E Tests', () => {
       // Verify all sensitive fields are present and properly formatted
       // These fields should be encrypted in the database according to MovieSource entity
 
-      // Hash field (should be decrypted torrent hash)
+      // Hash field (should be decrypted source hash)
       expect(source.hash).toBeDefined();
       expect(typeof source.hash).toBe('string');
       expect(source.hash.length).toBe(40); // SHA-1 hash length
@@ -241,7 +241,7 @@ describe('Database Encryption E2E Tests', () => {
       expect(typeof source.magnetLink).toBe('string');
       expect(source.magnetLink).toMatch(/^magnet:/);
 
-      // If torrent file URL is present, it should also be properly decrypted
+      // If file URL is present, it should also be properly decrypted
       // Note: This field might not always be present depending on the source
     });
 

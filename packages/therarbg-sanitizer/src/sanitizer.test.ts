@@ -1,6 +1,6 @@
-import { sanitize, sanitizeImdbData, sanitizeTorrentPost, sanitizeImdbDetail } from './sanitizer';
+import { sanitize, sanitizeImdbData, sanitizePost, sanitizeImdbDetail } from './sanitizer';
 import { shouldUseLegalHash, getLegalHashMetadata } from './utils';
-import type { TheRARBGImdbData, TheRARBGTorrentPost, SanitizationOptions } from './types';
+import type { TheRARBGImdbData, TheRARBGPost, SanitizationOptions } from './types';
 
 describe('Sanitizer Functions', () => {
   // Mock data for testing
@@ -59,7 +59,7 @@ describe('Sanitizer Functions', () => {
     created_at: '2023-01-01T00:00:00Z',
   };
 
-  const mockTorrentPost: TheRARBGTorrentPost = {
+  const mockPost: TheRARBGPost = {
     eid: 'e12345',
     pid: 12345,
     name: 'The.Cosmic.Adventure.2023.1080p.BluRay.x264-GROUP',
@@ -241,33 +241,33 @@ describe('Sanitizer Functions', () => {
     });
   });
 
-  describe('sanitizeTorrentPost', () => {
-    it('should sanitize torrent post with legal hash options', () => {
+  describe('sanitizePost', () => {
+    it('should sanitize post with legal hash options', () => {
       const options: SanitizationOptions = {
         useLegalHashes: true,
         legalHashStrategy: 'imdb-based',
       };
 
-      const result = sanitizeTorrentPost(mockTorrentPost, mockImdbData, options);
+      const result = sanitizePost(mockPost, mockImdbData, options);
 
       // Should change sensitive data
-      expect(result.name).not.toBe(mockTorrentPost.name);
-      expect(result.short_name).not.toBe(mockTorrentPost.short_name);
-      expect(result.imdb).not.toBe(mockTorrentPost.imdb);
-      expect(result.info_hash).not.toBe(mockTorrentPost.info_hash);
-      expect(result.username).not.toBe(mockTorrentPost.username);
+      expect(result.name).not.toBe(mockPost.name);
+      expect(result.short_name).not.toBe(mockPost.short_name);
+      expect(result.imdb).not.toBe(mockPost.imdb);
+      expect(result.info_hash).not.toBe(mockPost.info_hash);
+      expect(result.username).not.toBe(mockPost.username);
 
-      // Should preserve technical metadata in torrent names
+      // Should preserve technical metadata in names
       expect(result.name).toContain('1080p');
       expect(result.name).toContain('BluRay');
       expect(result.name).toContain('x264');
 
       // Should preserve non-sensitive data
-      expect(result.pid).toBe(mockTorrentPost.pid);
-      expect(result.size).toBe(mockTorrentPost.size);
-      expect(result.seeders).toBe(mockTorrentPost.seeders);
-      expect(result.leechers).toBe(mockTorrentPost.leechers);
-      expect(result.category).toBe(mockTorrentPost.category);
+      expect(result.pid).toBe(mockPost.pid);
+      expect(result.size).toBe(mockPost.size);
+      expect(result.seeders).toBe(mockPost.seeders);
+      expect(result.leechers).toBe(mockPost.leechers);
+      expect(result.category).toBe(mockPost.category);
     });
 
     it('should use legal hash for odd IMDB IDs when enabled', () => {
@@ -276,10 +276,10 @@ describe('Sanitizer Functions', () => {
         legalHashStrategy: 'imdb-based',
       };
 
-      const result = sanitizeTorrentPost(mockTorrentPost, mockImdbData, options);
+      const result = sanitizePost(mockPost, mockImdbData, options);
 
       // tt0111161 is odd, so should use legal hash
-      expect(shouldUseLegalHash(mockTorrentPost.imdb)).toBe(true);
+      expect(shouldUseLegalHash(mockPost.imdb)).toBe(true);
 
       const metadata = getLegalHashMetadata(result.info_hash);
       expect(metadata).toBeDefined();
@@ -288,30 +288,30 @@ describe('Sanitizer Functions', () => {
 
     it('should use fake hash for even IMDB IDs', () => {
       const evenImdbData = { ...mockImdbData, imdb_id: 'tt0111162' };
-      const evenTorrentPost = { ...mockTorrentPost, imdb: 'tt0111162' };
+      const evenPost = { ...mockPost, imdb: 'tt0111162' };
 
       const options: SanitizationOptions = {
         useLegalHashes: true,
         legalHashStrategy: 'imdb-based',
       };
 
-      const result = sanitizeTorrentPost(evenTorrentPost, evenImdbData, options);
+      const result = sanitizePost(evenPost, evenImdbData, options);
 
       // tt0111162 is even, so should use fake hash
-      expect(shouldUseLegalHash(evenTorrentPost.imdb)).toBe(false);
+      expect(shouldUseLegalHash(evenPost.imdb)).toBe(false);
 
       const metadata = getLegalHashMetadata(result.info_hash);
       expect(metadata).toBeUndefined(); // Should not be a legal hash
     });
 
     it('should sanitize file information', () => {
-      const result = sanitizeTorrentPost(mockTorrentPost, mockImdbData);
+      const result = sanitizePost(mockPost, mockImdbData);
 
       expect(result.files).toBeDefined();
-      expect(result.files?.length).toBe(mockTorrentPost.files?.length);
+      expect(result.files?.length).toBe(mockPost.files?.length);
 
       result.files?.forEach((file, index) => {
-        const originalFile = mockTorrentPost.files?.[index];
+        const originalFile = mockPost.files?.[index];
 
         // File names should be sanitized
         expect(file.name).not.toBe(originalFile?.name);
@@ -326,20 +326,20 @@ describe('Sanitizer Functions', () => {
     });
 
     it('should sanitize images and URLs', () => {
-      const result = sanitizeTorrentPost(mockTorrentPost, mockImdbData);
+      const result = sanitizePost(mockPost, mockImdbData);
 
       // Thumbnail should be sanitized
-      expect(result.thumbnail).not.toBe(mockTorrentPost.thumbnail);
+      expect(result.thumbnail).not.toBe(mockPost.thumbnail);
 
       // Description should be sanitized
-      expect(result.descr).not.toBe(mockTorrentPost.descr);
+      expect(result.descr).not.toBe(mockPost.descr);
 
       // Images array should be sanitized
       expect(result.images).toBeDefined();
-      expect(result.images?.length).toBe(mockTorrentPost.images?.length);
+      expect(result.images?.length).toBe(mockPost.images?.length);
 
       result.images?.forEach((image, index) => {
-        expect(image).not.toBe(mockTorrentPost.images?.[index]);
+        expect(image).not.toBe(mockPost.images?.[index]);
       });
     });
 
@@ -352,12 +352,8 @@ describe('Sanitizer Functions', () => {
         preserveTechnicalMetadata: false,
       };
 
-      const resultPreserve = sanitizeTorrentPost(mockTorrentPost, mockImdbData, optionsPreserve);
-      const resultNoPreserve = sanitizeTorrentPost(
-        mockTorrentPost,
-        mockImdbData,
-        optionsNoPreserve
-      );
+      const resultPreserve = sanitizePost(mockPost, mockImdbData, optionsPreserve);
+      const resultNoPreserve = sanitizePost(mockPost, mockImdbData, optionsNoPreserve);
 
       // With preservation, should keep technical terms
       expect(resultPreserve.name).toContain('1080p');
@@ -365,19 +361,19 @@ describe('Sanitizer Functions', () => {
       expect(resultPreserve.name).toContain('x264');
 
       // Both should still be different from original
-      expect(resultPreserve.name).not.toBe(mockTorrentPost.name);
-      expect(resultNoPreserve.name).not.toBe(mockTorrentPost.name);
+      expect(resultPreserve.name).not.toBe(mockPost.name);
+      expect(resultNoPreserve.name).not.toBe(mockPost.name);
     });
 
     it('should handle missing optional fields gracefully', () => {
-      const minimalPost: Partial<TheRARBGTorrentPost> = {
+      const minimalPost: Partial<TheRARBGPost> = {
         pid: 12345,
         name: 'Test.Movie.2023.1080p.BluRay.x264',
         imdb: 'tt0111161',
         info_hash: 'ABCDEF1234567890ABCDEF1234567890ABCDEF12',
       };
 
-      const result = sanitizeTorrentPost(minimalPost as TheRARBGTorrentPost, mockImdbData);
+      const result = sanitizePost(minimalPost as TheRARBGPost, mockImdbData);
 
       expect(result.name).not.toBe(minimalPost.name);
       expect(result.imdb).not.toBe(minimalPost.imdb);
@@ -386,8 +382,8 @@ describe('Sanitizer Functions', () => {
     });
 
     it('should return input unchanged for invalid data', () => {
-      expect(sanitizeTorrentPost(null as any, mockImdbData)).toBe(null);
-      expect(sanitizeTorrentPost(undefined as any, mockImdbData)).toBe(undefined);
+      expect(sanitizePost(null as any, mockImdbData)).toBe(null);
+      expect(sanitizePost(undefined as any, mockImdbData)).toBe(undefined);
     });
 
     it('should work with different legal hash strategies', () => {
@@ -404,14 +400,14 @@ describe('Sanitizer Functions', () => {
           legalHashStrategy: strategy,
         };
 
-        const result = sanitizeTorrentPost(mockTorrentPost, mockImdbData, options);
+        const result = sanitizePost(mockPost, mockImdbData, options);
 
         // Should be deterministic for same inputs
-        const result2 = sanitizeTorrentPost(mockTorrentPost, mockImdbData, options);
+        const result2 = sanitizePost(mockPost, mockImdbData, options);
         expect(result.info_hash).toBe(result2.info_hash);
 
         // For odd IMDB ID, should use legal hash
-        if (shouldUseLegalHash(mockTorrentPost.imdb)) {
+        if (shouldUseLegalHash(mockPost.imdb)) {
           const metadata = getLegalHashMetadata(result.info_hash);
           expect(metadata).toBeDefined();
         }
@@ -423,14 +419,14 @@ describe('Sanitizer Functions', () => {
     it('should sanitize IMDB detail responses', () => {
       const response = {
         imdb: mockImdbData,
-        trb_posts: [mockTorrentPost],
+        trb_posts: [mockPost],
       };
 
       const result = sanitize(response);
 
       expect(result.imdb.name).not.toBe(mockImdbData.name);
-      expect(result.trb_posts[0].name).not.toBe(mockTorrentPost.name);
-      expect(result.trb_posts[0].info_hash).not.toBe(mockTorrentPost.info_hash);
+      expect(result.trb_posts[0].name).not.toBe(mockPost.name);
+      expect(result.trb_posts[0].info_hash).not.toBe(mockPost.info_hash);
     });
 
     it('should handle wrapped HTTP-VCR responses', () => {
@@ -439,7 +435,7 @@ describe('Sanitizer Functions', () => {
         headers: {},
         body: {
           imdb: mockImdbData,
-          trb_posts: [mockTorrentPost],
+          trb_posts: [mockPost],
         },
       };
 
@@ -447,14 +443,14 @@ describe('Sanitizer Functions', () => {
 
       expect(result.status).toBe(200);
       expect(result.body.imdb.name).not.toBe(mockImdbData.name);
-      expect(result.body.trb_posts[0].name).not.toBe(mockTorrentPost.name);
+      expect(result.body.trb_posts[0].name).not.toBe(mockPost.name);
     });
 
-    it('should respect maxTorrents option', () => {
+    it('should respect maxItems option', () => {
       const multiplePosts = Array(10)
         .fill(null)
         .map((_, index) => ({
-          ...mockTorrentPost,
+          ...mockPost,
           pid: 12345 + index,
           name: `Test.Movie.${index}.1080p.BluRay.x264`,
         }));
@@ -464,7 +460,7 @@ describe('Sanitizer Functions', () => {
         trb_posts: multiplePosts,
       };
 
-      const options: SanitizationOptions = { maxTorrents: 3 };
+      const options: SanitizationOptions = { maxItems: 3 };
       const result = sanitize(response, undefined, options);
 
       expect(result.trb_posts.length).toBe(3);
@@ -474,7 +470,7 @@ describe('Sanitizer Functions', () => {
     it('should pass options to sanitization functions', () => {
       const response = {
         imdb: mockImdbData,
-        trb_posts: [mockTorrentPost],
+        trb_posts: [mockPost],
       };
 
       const options: SanitizationOptions = {
@@ -490,7 +486,7 @@ describe('Sanitizer Functions', () => {
       expect(result.trb_posts[0].name).toContain('BluRay');
 
       // For odd IMDB ID with legal hashes enabled, should use legal hash
-      if (shouldUseLegalHash(mockTorrentPost.imdb)) {
+      if (shouldUseLegalHash(mockPost.imdb)) {
         const metadata = getLegalHashMetadata(result.trb_posts[0].info_hash);
         expect(metadata).toBeDefined();
       }
@@ -527,24 +523,24 @@ describe('Sanitizer Functions', () => {
     it('should work as a convenience wrapper', () => {
       const response = {
         imdb: mockImdbData,
-        trb_posts: [mockTorrentPost],
+        trb_posts: [mockPost],
       };
 
       const result = sanitizeImdbDetail(response);
 
       expect(result.imdb.name).not.toBe(mockImdbData.name);
-      expect(result.trb_posts[0].name).not.toBe(mockTorrentPost.name);
+      expect(result.trb_posts[0].name).not.toBe(mockPost.name);
     });
 
     it('should pass options correctly', () => {
       const response = {
         imdb: mockImdbData,
-        trb_posts: [mockTorrentPost],
+        trb_posts: [mockPost],
       };
 
       const options: SanitizationOptions = {
         useLegalHashes: true,
-        maxTorrents: 1,
+        maxItems: 1,
       };
 
       const result = sanitizeImdbDetail(response, options);
@@ -552,7 +548,7 @@ describe('Sanitizer Functions', () => {
       expect(result.trb_posts.length).toBe(1);
 
       // For odd IMDB ID with legal hashes enabled
-      if (shouldUseLegalHash(mockTorrentPost.imdb)) {
+      if (shouldUseLegalHash(mockPost.imdb)) {
         const metadata = getLegalHashMetadata(result.trb_posts[0].info_hash);
         expect(metadata).toBeDefined();
       }
@@ -563,7 +559,7 @@ describe('Sanitizer Functions', () => {
     it('should maintain consistency across multiple sanitizations', () => {
       const response = {
         imdb: mockImdbData,
-        trb_posts: [mockTorrentPost],
+        trb_posts: [mockPost],
       };
 
       const result1 = sanitize(response);
@@ -600,7 +596,7 @@ describe('Sanitizer Functions', () => {
         trb_posts: Array(5)
           .fill(null)
           .map((_, i) => ({
-            ...mockTorrentPost,
+            ...mockPost,
             pid: 12345 + i,
             name: `Movie.Title.${2020 + i}.${['720p', '1080p', '2160p'][i % 3]}.${['BluRay', 'WEB-DL', 'HDTV'][i % 3]}.${['x264', 'x265', 'HEVC'][i % 3]}-GROUP${i}`,
             files: Array(3)
@@ -620,7 +616,7 @@ describe('Sanitizer Functions', () => {
         useLegalHashes: true,
         legalHashStrategy: 'weighted',
         preserveTechnicalMetadata: true,
-        maxTorrents: 3,
+        maxItems: 3,
       };
 
       const result = sanitize(complexResponse, undefined, options);
@@ -630,7 +626,7 @@ describe('Sanitizer Functions', () => {
       expect(result.imdb.actors.length).toBe(complexResponse.imdb.actors.length);
       expect(result.imdb.top_credits.length).toBe(complexResponse.imdb.top_credits.length);
 
-      // Should respect maxTorrents
+      // Should respect maxItems
       expect(result.trb_posts.length).toBe(3);
 
       // Should preserve technical metadata
@@ -690,14 +686,14 @@ describe('Sanitizer Functions', () => {
       expect(result.imdb_id).toMatch(/^tt\d+$/);
     });
 
-    it('should preserve IMDB IDs in torrent posts when preserveImdbId is true', () => {
-      const result = sanitizeTorrentPost(mockTorrentPost, mockImdbData, { preserveImdbId: true });
+    it('should preserve IMDB IDs in posts when preserveImdbId is true', () => {
+      const result = sanitizePost(mockPost, mockImdbData, { preserveImdbId: true });
 
       expect(result.imdb).toBe('tt0111161');
     });
 
-    it('should generate fake IMDB IDs in torrent posts when preserveImdbId is false', () => {
-      const result = sanitizeTorrentPost(mockTorrentPost, mockImdbData, { preserveImdbId: false });
+    it('should generate fake IMDB IDs in posts when preserveImdbId is false', () => {
+      const result = sanitizePost(mockPost, mockImdbData, { preserveImdbId: false });
 
       expect(result.imdb).not.toBe('tt0111161');
       expect(result.imdb).toMatch(/^tt\d+$/);

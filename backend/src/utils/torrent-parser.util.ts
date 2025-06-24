@@ -1,5 +1,5 @@
 /**
- * Utility functions for parsing torrent information
+ * Utility functions for parsing source metadata information
  */
 
 const VIDEO_CODECS = [
@@ -119,7 +119,7 @@ const TV_PATTERNS: Record<string, RegExp> = {
   completeSeason: /\bS(\d{1,2})\b|\bSeason\s*(\d{1,2})\b/i,
 };
 
-export interface ParsedTorrentInfo {
+export interface ParsedSourceMetadataInfo {
   title: string;
   cleanTitle: string;
   isTV: boolean;
@@ -144,14 +144,14 @@ export interface ParsedTorrentInfo {
   additionalInfo: Record<string, unknown>;
 }
 
-export interface TorrentFile {
+export interface SourceFile {
   name: string;
   size: number;
   path?: string;
 }
 
-export interface TorrentMetadata {
-  files?: TorrentFile[];
+export interface SourceMetadata {
+  files?: SourceFile[];
   category_str?: string;
   type?: string;
   short_name?: string;
@@ -567,7 +567,10 @@ function extractAudioChannels(fullText: string): string | undefined {
   return undefined;
 }
 
-export function parseTorrentInfo(title: string, metadata: TorrentMetadata = {}): ParsedTorrentInfo {
+export function parseSourceMetadataInfo(
+  title: string,
+  metadata: SourceMetadata = {}
+): ParsedSourceMetadataInfo {
   const {
     files = [],
     category_str = '',
@@ -746,17 +749,17 @@ function extractResolution(fullText: string): string | undefined {
   return undefined;
 }
 
-export function isTVShow(torrentInfo: ParsedTorrentInfo | string): boolean {
-  if (typeof torrentInfo === 'string') {
-    const text = torrentInfo.toLowerCase();
+export function isTVShow(sourceMetadataInfo: ParsedSourceMetadataInfo | string): boolean {
+  if (typeof sourceMetadataInfo === 'string') {
+    const text = sourceMetadataInfo.toLowerCase();
     return Object.values(TV_PATTERNS).some(pattern => pattern.test(text));
   }
-  return torrentInfo.isTV;
+  return sourceMetadataInfo.isTV;
 }
 
-export function isMovie(torrentInfo: ParsedTorrentInfo | string): boolean {
-  if (typeof torrentInfo === 'string') {
-    return !isTVShow(torrentInfo);
+export function isMovie(sourceMetadataInfo: ParsedSourceMetadataInfo | string): boolean {
+  if (typeof sourceMetadataInfo === 'string') {
+    return !isTVShow(sourceMetadataInfo);
   }
-  return !torrentInfo.isTV;
+  return !sourceMetadataInfo.isTV;
 }

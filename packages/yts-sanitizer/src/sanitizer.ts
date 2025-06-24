@@ -4,7 +4,7 @@
 
 import type {
   YTSMovie,
-  YTSTorrent,
+  YTSSourceMetadata,
   YTSCastMember,
   YTSApiResponse,
   SanitizationOptions,
@@ -24,16 +24,16 @@ import {
 } from './utils';
 
 /**
- * Sanitize torrent data
+ * Sanitize source metadata
  */
-export function sanitizeTorrent(
-  torrent: YTSTorrent,
+export function sanitizeSourceMetadata(
+  sourceMetadata: YTSSourceMetadata,
   options: SanitizationOptions = {},
   seen: Set<string>
-): YTSTorrent {
-  if (!torrent || typeof torrent !== 'object') return torrent;
+): YTSSourceMetadata {
+  if (!sourceMetadata || typeof sourceMetadata !== 'object') return sourceMetadata;
 
-  const sanitized = { ...torrent };
+  const sanitized = { ...sourceMetadata };
   const { legalHashProbability = DEFAULT_OPTIONS.legalHashProbability } = options;
 
   // Sanitize hash
@@ -176,10 +176,12 @@ export function sanitizeMovie(
     sanitized.cast = sanitized.cast.map(sanitizeCastMember);
   }
 
-  // Sanitize torrents
+  // Sanitize source metadatta
   if (sanitized.torrents && Array.isArray(sanitized.torrents)) {
     const seen = new Set<string>();
-    sanitized.torrents = sanitized.torrents.map(torrent => sanitizeTorrent(torrent, options, seen));
+    sanitized.torrents = sanitized.torrents.map(sourceMetadata =>
+      sanitizeSourceMetadata(sourceMetadata, options, seen)
+    );
   }
 
   return sanitized;

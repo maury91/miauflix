@@ -128,9 +128,9 @@ describe('Get-Posts Sanitization', () => {
     });
   });
 
-  describe('maxTorrents limiting', () => {
-    it('should limit results when maxTorrents is specified', () => {
-      const result = sanitize(mockGetPostsResponse, undefined, { maxTorrents: 1 });
+  describe('maxItems limiting', () => {
+    it('should limit results when maxItems is specified', () => {
+      const result = sanitize(mockGetPostsResponse, undefined, { maxItems: 1 });
 
       expect(result.results).toHaveLength(1);
       expect(result.count).toBe(1); // Should update count

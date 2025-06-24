@@ -1,23 +1,35 @@
-## 📂 Directory Cheat-Sheet
+## 📂 Directory Guide
+
+> **💡 Tip**: Each directory has a specific purpose. When adding new features, follow these patterns!
+
+### 🎯 Backend Core (`backend/src/`)
 
 ```text
-backend/
-└─ src/
-  ├─ routes/ — Hono route handlers
-  │  ├─ auth.routes.ts — authentication endpoints
-  │  ├─ movie.routes.ts — movie-related endpoints
-  │  └─ trakt.routes.ts — Trakt integration endpoints
-  ├─ services/ — domain logic & business services
-  ├─ database/ — TypeORM config & migrations
-  ├─ entities/ — TypeORM entity definitions
-  ├─ repositories/ — data access layer
-  ├─ middleware/ — auth, rate-limit, audit middleware
-  ├─ trackers/ — torrent client implementations
-  ├─ utils/ — helpers (cache, encryption, limiter…)
-  ├─ types/ — TypeScript type definitions
-  ├─ errors/ — custom error classes
-  ├─ configuration.ts — interactive setup system
-  └─ app.ts — application entry point
+├─ 🚪 routes/          API endpoints (what users can call)
+│  ├─ auth.routes.ts    → Login, logout, refresh tokens
+│  ├─ movie.routes.ts   → Search movies, get details, sources
+│  └─ trakt.routes.ts   → Sync watchlists, mark as watched
+│
+├─ ⚙️ services/        Business logic (the "brain" of each feature)
+│  ├─ auth/            → JWT creation, password hashing
+│  ├─ source/          → Find torrents, rank quality
+│  ├─ media/           → TMDB data sync, metadata
+│  └─ download/        → WebTorrent streaming
+│
+├─ 🗄️ database/        Database setup and changes
+│
+├─ 📊 entities/        Database table definitions
+│  ├─ movie.entity.ts  → What a movie looks like in DB
+│  ├─ user.entity.ts   → User accounts and roles
+│  └─ ...              → (13 entities total)
+│
+├─ 🔍 repositories/    Database queries (how to find/save data)
+├─ 🛡️ middleware/      Request processing (auth, rate limits)
+├─ 🧰 utils/           Helper functions (encryption, caching)
+├─ 📝 types/           TypeScript definitions
+├─ ❌ errors/          Custom error classes
+├─ ⚙️ configuration.ts → Interactive setup wizard
+└─ 🚀 app.ts           → Main application startup
 └─ docs/ — specialized documentation
   ├─ scheduler-service.md — background job system
   ├─ chunk-stores.md — torrent chunk management
@@ -33,22 +45,36 @@ backend/
   └─ itorrents/ — torrent metadata
 ```
 
-### Frontend Structure
+### 🎨 Frontend Structure (`frontend/src/`)
 
 ```text
-frontend/
-└─ src/
-  ├─ app/ — React application components
-  │  ├─ components/ — reusable UI components
-  │  ├─ pages/ — application pages (home, welcome)
-  │  ├─ hooks/ — custom React hooks
-  │  └─ contexts/ — React context providers
-  ├─ store/ — Redux Toolkit state management
-  │  ├─ api/ — RTK Query API endpoints
-  │  └─ slices/ — Redux state slices
-  ├─ types/ — TypeScript type definitions
-  └─ assets/ — static assets (fonts, images, styles)
+├─ 📱 app/              React application
+│  ├─ components/       → Reusable UI (buttons, cards, etc.)
+│  ├─ pages/            → Full screens (home, player, login)
+│  │  ├─ home/          → Movie browsing and discovery
+│  │  ├─ player/        → Video playback interface
+│  │  └─ welcome/       → Initial app setup
+│  ├─ hooks/            → Custom React hooks
+│  └─ contexts/         → React context providers
+│
+├─ 🏪 store/            Redux state management
+│  ├─ api/              → Backend API calls (RTK Query)
+│  └─ slices/           → App state (movies, user, UI)
+│
+├─ 🎨 assets/           Static files
+│  ├─ Poppins/          → Font files
+│  ├─ svgs/             → Icons and graphics
+│  └─ app.scss          → Main styles
+│
+└─ 📝 types/            TypeScript definitions
 ```
+
+### 📚 Quick Examples
+
+**Adding a new API endpoint?** → `backend/src/routes/`  
+**Need to store movie data?** → `backend/src/entities/movie.entity.ts`  
+**Business logic for features?** → `backend/src/services/`  
+**New React page?** → `frontend/src/app/pages/`
 
 ### Additional Directories
 

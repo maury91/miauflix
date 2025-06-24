@@ -15,6 +15,8 @@ import type { ImdbDetailPost, ImdbMetadata } from './therarbg.types';
 export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGApi> {
   protected readonly api: TheRARBGApi;
 
+  name = 'TheRARBG';
+
   constructor(
     cache: Cache,
     private readonly downloadService: DownloadService
@@ -24,46 +26,52 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
   }
 
   /**
-   * Normalize a NormalizedTorrent (from detailed API) into SourceMetadata format.
+   * Normalize a ImdbPost (from detailed API) into SourceMetadata format.
    */
-  private normalizaImdbPost(torrent: ImdbDetailPost, movieDetails: ImdbMetadata): SourceMetadata {
+  private normalizaImdbPost(
+    sourceMetadata: ImdbDetailPost,
+    movieDetails: ImdbMetadata
+  ): SourceMetadata {
     const metadata = extractSourceMetadata({
-      name: torrent.name,
-      type: torrent.type,
-      size: torrent.size,
-      files: torrent.files,
-      category: torrent.category_str,
+      name: sourceMetadata.name,
+      type: sourceMetadata.type,
+      size: sourceMetadata.size,
+      files: sourceMetadata.files,
+      category: sourceMetadata.category_str,
       trackerMetadata: {
-        imdbId: torrent.imdb,
-        uploadDate: new Date(torrent.timestamp),
-        language: torrent.language,
-        season: torrent.season,
-        episode: torrent.episode,
+        imdbId: sourceMetadata.imdb,
+        uploadDate: new Date(sourceMetadata.timestamp),
+        language: sourceMetadata.language,
+        season: sourceMetadata.season,
+        episode: sourceMetadata.episode,
         runtime: parseInt(movieDetails.runtime, 10),
       },
     });
     return {
       audioCodec: metadata.audioCodec,
-      bitrate: calculateApproximateBitrate(torrent.size, parseInt(movieDetails.runtime, 10) / 60),
-      broadcasters: torrent.seeders ?? 0,
-      hash: torrent.info_hash,
+      bitrate: calculateApproximateBitrate(
+        sourceMetadata.size,
+        parseInt(movieDetails.runtime, 10) / 60
+      ),
+      broadcasters: sourceMetadata.seeders ?? 0,
+      hash: sourceMetadata.info_hash,
       language: metadata.language,
       magnetLink: this.downloadService.generateLink(
-        torrent.info_hash,
-        torrent.trackers
+        sourceMetadata.info_hash,
+        sourceMetadata.trackers
           .filter(tracker => tracker.scrape_error === null)
           .map(tracker => tracker.tracker)
       ),
       quality: metadata.quality ?? null,
       resolution: qualityToResolution(metadata.quality),
       score: 0, // ToDo: use scoringService to calculate score
-      size: torrent.size,
+      size: sourceMetadata.size,
       source: metadata.source ?? null,
-      type: torrent.type,
-      uploadDate: new Date(torrent.timestamp),
-      url: '', // TheRARBG does not provide a direct torrent page URL
+      type: sourceMetadata.type,
+      uploadDate: new Date(sourceMetadata.timestamp),
+      url: '', // TheRARBG does not provide a direct download URL
       videoCodec: metadata.videoCodec[0] ?? null,
-      watchers: torrent.leechers ?? 0,
+      watchers: sourceMetadata.leechers ?? 0,
     };
   }
 
@@ -78,7 +86,9 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
     }
 
     return {
-      sources: movie.trb_posts.map(torrent => this.normalizaImdbPost(torrent, movie.imdb)),
+      sources: movie.trb_posts.map(sourceMetadata =>
+        this.normalizaImdbPost(sourceMetadata, movie.imdb)
+      ),
       trailerCode: '',
     };
   }
@@ -99,12 +109,14 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
 
     if (tvShow && tvShow.trb_posts && tvShow.trb_posts.length) {
       return {
-        sources: tvShow.trb_posts.map(torrent => this.normalizaImdbPost(torrent, tvShow.imdb)),
+        sources: tvShow.trb_posts.map(sourceMetadata =>
+          this.normalizaImdbPost(sourceMetadata, tvShow.imdb)
+        ),
         trailerCode: '',
       };
     }
 
-    // No torrents found
+    // No sources found
     return {
       sources: [],
       trailerCode: '',

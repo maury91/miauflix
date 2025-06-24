@@ -6,7 +6,7 @@ import { TheRARBGApi } from './therarbg.api';
 
 export const theRarbgConfigurationDefinition = serviceConfiguration({
   name: 'TheRARBG',
-  description: 'Service for fetching TheRARBG torrents information',
+  description: 'Service for fetching media sources from TheRARBG',
   variables: {
     THE_RARBG_API_URL: variable({
       description: 'URL for the TheRARBG API',

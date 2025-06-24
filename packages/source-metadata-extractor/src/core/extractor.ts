@@ -1,5 +1,5 @@
 import {
-  TorrentInput,
+  SourceMetadataInput,
   ExtractedSourceMetadata,
   AudioCodec,
   VideoCodec,
@@ -26,7 +26,7 @@ import { calculateComplexity, calculateDynamicConfidence } from './confidence-ca
 import { applyCleanupPatterns } from './pattern-matcher';
 
 /**
- * Extract metadata from torrent information
+ * Extract metadata from source information
  */
 /**
  * Future Implementation Note:
@@ -40,7 +40,7 @@ import { applyCleanupPatterns } from './pattern-matcher';
  */
 
 export function extractSourceMetadata(
-  input: TorrentInput & { trackerEnhancements?: any }
+  input: SourceMetadataInput & { trackerEnhancements?: any }
 ): ExtractedSourceMetadata {
   const workingText: WorkingText = {
     title: input.name,

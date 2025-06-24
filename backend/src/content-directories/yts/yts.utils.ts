@@ -1,4 +1,4 @@
-import { VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 /**
  * Maps YTS video codec information to our internal VideoCodec enum
@@ -35,5 +35,46 @@ export function mapYTSVideoCodec(codec: string, bitDepth: string): VideoCodec | 
     return VideoCodec.MPEG4;
   }
 
+  return null;
+}
+
+export function mapYTSTypeToSource(type: string): Source | null {
+  if (!type || typeof type !== 'string') {
+    return null;
+  }
+
+  const normalizedType = type.toLowerCase().trim();
+
+  // Blu-ray variants
+  if (/blu-?ray|bdremux|bdrip|bd$/i.test(normalizedType)) {
+    return Source.BLURAY;
+  }
+
+  // DVD variants
+  if (/dvd|dvdrip|dvdscr$/i.test(normalizedType)) {
+    return Source.DVD;
+  }
+
+  // Web variants (streaming/digital releases)
+  if (/^web|webrip|web-dl|webdl|web-rip$/i.test(normalizedType)) {
+    return Source.WEB;
+  }
+
+  // TV/HDTV variants
+  if (/^tv|hdtv|pdtv|sdtv$/i.test(normalizedType)) {
+    return Source.HDTV;
+  }
+
+  // Camera/theater recordings
+  if (/^cam|ts|telesync|telecine|tc$/i.test(normalizedType)) {
+    return Source.CAM;
+  }
+
+  // Screener variants
+  if (/scr|screener|dvdscr$/i.test(normalizedType)) {
+    return Source.DVD; // Screeners are typically DVD quality
+  }
+
+  // If no match found, return null
   return null;
 }

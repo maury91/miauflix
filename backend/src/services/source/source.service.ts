@@ -12,7 +12,7 @@ import { RateLimiter } from '@utils/rateLimiter';
 import { SingleFlight } from '@utils/singleflight.util';
 import { sleep } from '@utils/time';
 
-import type { MagnetService } from './magnet.service';
+import type { SourceMetadataFileService } from './source-metadata-file.service';
 
 /**
  * Service for searching and managing sources
@@ -31,8 +31,8 @@ export class SourceService {
   constructor(
     db: Database,
     vpnService: VpnDetectionService,
-    private readonly trackerService: ContentDirectoryService,
-    private readonly magnetService: MagnetService
+    private readonly contentDirectoryService: ContentDirectoryService,
+    private readonly magnetService: SourceMetadataFileService
   ) {
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
@@ -66,7 +66,7 @@ export class SourceService {
 
     // Find movies that haven't been searched for sources
     // We go one movie at time because the scheduler will call this method periodically
-    const moviesToSearch = await this.movieRepository.findMoviesWithoutSources(1);
+    const moviesToSearch = await this.movieRepository.findMoviesPendingSourceSearch(1);
 
     if (moviesToSearch.length === 0) {
       await sleep(500);
@@ -117,46 +117,46 @@ export class SourceService {
     );
 
     try {
-      // Search for sources using the tracker service
-      const movieWithTorrents = await this.trackerService.searchTorrentsForMovie(
+      // Search for sources using the content directory service
+      const movieWithSources = await this.contentDirectoryService.searchSourcesForMovie(
         movie.imdbId,
         isOnDemand
       );
 
-      if (!movieWithTorrents || !movieWithTorrents.sources?.length) {
+      if (!movieWithSources || !movieWithSources.sources?.length) {
         logger.debug('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
         return;
       }
 
       logger.debug(
         'SourceService',
-        `Found ${movieWithTorrents.sources.length} sources for movie ${movie.id} (${movie.title})`
+        `Found ${movieWithSources.sources.length} sources for movie ${movie.id} (${movie.title})`
       );
 
-      if (movieWithTorrents.trailerCode) {
+      if (movieWithSources.trailerCode) {
         // If the movie has a trailer, update the movie record
         await this.movieRepository.updateMovieTrailerIfDoesntExists(
           movie.id,
-          movieWithTorrents.trailerCode
+          movieWithSources.trailerCode
         );
       }
 
       // Convert sources to MovieSource objects and save them
-      const sources = movieWithTorrents.sources.map(
-        (torrent): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
+      const sources = movieWithSources.sources.map(
+        (source): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
           movieId: movie.id,
-          hash: torrent.magnetLink.split('btih:')[1].split('&')[0], // Extract identifier from URI link
-          magnetLink: torrent.magnetLink,
-          quality: torrent.quality,
-          resolution: torrent.resolution.height,
-          size: torrent.size,
-          videoCodec: torrent.videoCodec?.toString() ?? null,
-          broadcasters: torrent.broadcasters,
-          watchers: torrent.watchers,
-          sourceUploadedAt: torrent.uploadDate,
-          url: torrent.url,
-          source: 'YTS', // Currently only using YTS as a source
-          sourceType: torrent.type,
+          hash: source.hash,
+          magnetLink: source.magnetLink,
+          quality: source.quality,
+          resolution: source.resolution.height,
+          size: source.size,
+          videoCodec: source.videoCodec,
+          broadcasters: source.broadcasters,
+          watchers: source.watchers,
+          sourceUploadedAt: source.uploadDate,
+          url: source.url,
+          source: movieWithSources.source,
+          sourceType: source.source,
           nextStatsCheckAt: new Date(),
         })
       );
@@ -243,9 +243,9 @@ export class SourceService {
   }
 
   /**
-   * Find all sources with data files for a specific movie
+   * Find all sources with source metadata files for a specific movie
    */
-  public async getSourcesWithTorrentsForMovie(movieId: number): Promise<MovieSource[]> {
+  public async getSourcesWithFilesForMovie(movieId: number): Promise<MovieSource[]> {
     const sources = await this.movieSourceRepository.findByMovieId(movieId);
     return sources.filter(source => source.file !== null);
   }
@@ -293,7 +293,7 @@ export class SourceService {
    * Find and download data files for sources that don't have them yet
    * This method prioritizes by movie popularity and ensures fair distribution
    */
-  public async searchTorrentFilesForSources(): Promise<void> {
+  public async syncMissingSourceFiles(): Promise<void> {
     await this.startPromise;
 
     if (!this.vpnConnected && this.searchOnlyBehindVpn) {
@@ -317,7 +317,7 @@ export class SourceService {
 
       // Use exponential backoff for logging when consistently no sources found
       if (timeSinceLastLog > this.noSourcesLogInterval) {
-        logger.debug('SourceService', 'No sources requiring data files found');
+        logger.debug('SourceService', 'No sources requiring source files found');
         this.lastNoSourcesLogTime = now;
 
         // Increase the log interval exponentially (double it, but cap at 10 minutes)
@@ -329,14 +329,14 @@ export class SourceService {
     // Reset log interval when sources are found again
     this.noSourcesLogInterval = 30000; // Reset to 30 seconds
 
-    logger.debug('SourceService', 'Searching data files for sources without them');
+    logger.debug('SourceService', 'Searching source files for sources without them');
 
     const processSource = async (source: (typeof sourcesToProcess)[number]) => {
       logger.debug(
         'SourceService',
         `Processing source ${source.id} with quality ${source.quality}`
       );
-      await this.searchTorrentFileForSource(source);
+      await this.downloadSourceFileForSource(source);
       const potentialNextSource = sourcesToProcess[0];
       if (
         potentialNextSource &&
@@ -355,9 +355,9 @@ export class SourceService {
   }
 
   /**
-   * Search and save torrent file for a specific source
+   * Search and save source file for a specific source
    */
-  private async searchTorrentFileForSource(source: {
+  private async downloadSourceFileForSource(source: {
     id: number;
     hash: string;
     magnetLink: string;
@@ -372,15 +372,15 @@ export class SourceService {
     );
 
     try {
-      let torrentFile: Buffer | null = null;
+      let file: Buffer | null = null;
 
       if (source.url && this.canMakeSourceRequest(source.source)) {
-        torrentFile = await this.downloadTorrentFromUrl(source.url, source.source);
+        file = await this.downloadSourceMetadataFileFromUrl(source.url, source.source);
 
-        if (torrentFile) {
+        if (file) {
           logger.debug(
             'SourceService',
-            `Successfully downloaded torrent via direct URL for source ${source.id}`
+            `Successfully downloaded source file via direct URL for source ${source.id}`
           );
         } else {
           logger.debug(
@@ -396,11 +396,11 @@ export class SourceService {
       }
 
       // Fall back to magnet service if direct download failed or wasn't available
-      if (!torrentFile) {
-        torrentFile = await this.magnetService.getTorrent(source.magnetLink, source.hash);
+      if (!file) {
+        file = await this.magnetService.getSourceMetadataFile(source.magnetLink, source.hash);
       }
 
-      if (!torrentFile) {
+      if (!file) {
         logger.warn(
           'SourceService',
           `No file found for source ${source.id} (quality: ${source.quality})`
@@ -408,12 +408,12 @@ export class SourceService {
         return;
       }
 
-      // Save the torrent file to the database
-      await this.movieSourceRepository.updateTorrentFile(source.id, torrentFile);
+      // Save the source file to the database
+      await this.movieSourceRepository.updateSourceFile(source.id, file);
 
       logger.debug(
         'SourceService',
-        `Successfully saved file for source ${source.id} (quality: ${source.quality}, size: ${torrentFile.length} bytes)`
+        `Successfully saved file for source ${source.id} (quality: ${source.quality}, size: ${file.length} bytes)`
       );
     } catch (error) {
       logger.error(
@@ -445,9 +445,12 @@ export class SourceService {
   }
 
   /**
-   * Download torrent file from direct URL
+   * Download source file from direct URL
    */
-  private async downloadTorrentFromUrl(url: string, source: string): Promise<Buffer | null> {
+  private async downloadSourceMetadataFileFromUrl(
+    url: string,
+    source: string
+  ): Promise<Buffer | null> {
     try {
       logger.debug('SourceService', `Downloading from URL (source: ${source})`);
 
@@ -622,30 +625,32 @@ export class SourceService {
     );
 
     try {
-      // Get fresh data from tracker service
-      const movieWithTorrents = await this.trackerService.searchTorrentsForMovie(movie.imdbId);
+      // Get fresh data from content directory service
+      const movieWithSources = await this.contentDirectoryService.searchSourcesForMovie(
+        movie.imdbId
+      );
 
-      if (!movieWithTorrents) {
+      if (!movieWithSources) {
         logger.warn(
           'SourceService',
-          `No movie data found for movie ${movie.id} (${movie.title}) via tracker service`
+          `No movie data found for movie ${movie.id} (${movie.title}) via content directory service`
         );
         return;
       }
 
       // Update trailer if movie doesn't have one and YTS provides it
-      if (!movie.trailer && movieWithTorrents.trailerCode) {
+      if (!movie.trailer && movieWithSources.trailerCode) {
         await this.movieRepository.updateMovieTrailerIfDoesntExists(
           movie.id,
-          movieWithTorrents.trailerCode
+          movieWithSources.trailerCode
         );
         logger.debug(
           'SourceService',
-          `Updated trailer for movie ${movie.id} with code: ${movieWithTorrents.trailerCode}`
+          `Updated trailer for movie ${movie.id} with code: ${movieWithSources.trailerCode}`
         );
       }
 
-      if (!movieWithTorrents.sources?.length) {
+      if (!movieWithSources.sources?.length) {
         logger.warn(
           'SourceService',
           `No sources found for movie ${movie.id} (${movie.title}) on YTS`
@@ -655,7 +660,7 @@ export class SourceService {
 
       logger.debug(
         'SourceService',
-        `Found ${movieWithTorrents.sources.length} sources for movie ${movie.id} (${movie.title})`
+        `Found ${movieWithSources.sources.length} sources for movie ${movie.id} (${movie.title})`
       );
 
       // Get existing sources for this movie
@@ -667,12 +672,12 @@ export class SourceService {
       let updatedCount = 0;
 
       // Update existing sources with fresh data from YTS
-      for (const torrent of movieWithTorrents.sources) {
-        const existingSource = existingSourcesMap.get(torrent.hash);
+      for (const source of movieWithSources.sources) {
+        const existingSource = existingSourcesMap.get(source.hash);
         if (!existingSource) {
           logger.debug(
             'SourceService',
-            `Source with hash "${torrent.hash.substring(0, 8)}-redacted" not found in database, skipping`
+            `Source with hash "${source.hash.substring(0, 8)}-redacted" not found in database, skipping`
           );
           continue;
         }
@@ -685,11 +690,11 @@ export class SourceService {
           const updateData: Partial<MovieSource> = {};
 
           if (existingSource.sourceType === 'unknown') {
-            updateData.sourceType = torrent.type;
+            updateData.sourceType = source.type;
           }
 
-          if (!existingSource.sourceUploadedAt && torrent.uploadDate) {
-            updateData.sourceUploadedAt = torrent.uploadDate;
+          if (!existingSource.sourceUploadedAt && source.uploadDate) {
+            updateData.sourceUploadedAt = source.uploadDate;
           }
 
           if (Object.keys(updateData).length > 0) {

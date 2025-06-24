@@ -1,5 +1,5 @@
 import { extractSourceMetadata } from '@miauflix/source-metadata-extractor';
-import type { TitleMapping, LegalTorrentHash, SanitizationOptions, ContentType } from './types';
+import type { TitleMapping, LegalHash, SanitizationOptions, ContentType } from './types';
 import {
   generateFakeMovieTitle,
   generateFakeTVTitle,
@@ -189,7 +189,7 @@ function selectLegalHashRandom(seed: string, contentType?: ContentType): string 
 /**
  * Get legal hash metadata for a given hash
  */
-export function getLegalHashMetadata(hash: string): LegalTorrentHash | undefined {
+export function getLegalHashMetadata(hash: string): LegalHash | undefined {
   return LEGAL_HASHES.find(h => h.hash.toUpperCase() === hash.toUpperCase());
 }
 
@@ -200,7 +200,7 @@ export function getAvailableLegalHashes(
   contentType?: ContentType,
   minWeight?: number,
   yearRange?: { min?: number; max?: number }
-): LegalTorrentHash[] {
+): LegalHash[] {
   let filtered = [...LEGAL_HASHES];
 
   if (contentType) {
@@ -305,10 +305,10 @@ export function generateFakePersonName(input: string): string {
 }
 
 /**
- * Sanitize torrent name using source metadata extraction
+ * Sanitize name using source metadata extraction
  */
-export function sanitizeTorrentName(
-  torrentName: string,
+export function sanitizeName(
+  name: string,
   titleMapping: TitleMapping,
   preserveTechnicalMetadata: boolean = true
 ): string {
@@ -319,13 +319,13 @@ export function sanitizeTorrentName(
   try {
     // Extract metadata using the source metadata extractor
     const metadata = extractSourceMetadata({
-      name: torrentName,
+      name: name,
       size: 1000000000, // 1GB default size
     });
 
     if (metadata.title) {
       // Replace the extracted title with the fake title
-      let sanitized = torrentName;
+      let sanitized = name;
 
       // Try to replace the title while preserving technical metadata
       // First try exact match
@@ -338,7 +338,7 @@ export function sanitizeTorrentName(
       }
 
       // If the above didn't work, try replacing with dots/spaces conversion
-      if (sanitized === torrentName) {
+      if (sanitized === name) {
         // Convert title to dot format and try again
         const titleWithDots = metadata.title.replace(/\s+/g, '.');
         if (sanitized.includes(titleWithDots)) {
@@ -355,7 +355,7 @@ export function sanitizeTorrentName(
   }
 
   // Fallback: replace the real title with fake title
-  let sanitized = torrentName;
+  let sanitized = name;
   if (titleMapping.realTitle) {
     // Try exact match first
     if (sanitized.includes(titleMapping.realTitle)) {

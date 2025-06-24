@@ -2,7 +2,7 @@
  * Types for YTS API data structures and sanitization
  */
 
-export interface YTSTorrent {
+export interface YTSSourceMetadata {
   hash?: string;
   url?: string;
   quality?: string;
@@ -42,7 +42,7 @@ export interface YTSMovie {
   mpa_rating: string;
   background_image: string;
   background_image_original: string;
-  torrents: YTSTorrent[];
+  torrents: YTSSourceMetadata[];
   date_uploaded: string;
   date_uploaded_unix: number;
 }
@@ -104,9 +104,9 @@ export type YTSApiResponse =
   | any;
 
 /**
- * Legal torrent hash with metadata
+ * Legal hash with metadata
  */
-export interface LegalTorrentHash {
+export interface LegalHash {
   title: string;
   hash: string;
 }
@@ -117,7 +117,7 @@ export interface LegalTorrentHash {
 export interface SanitizationOptions {
   /** Maximum number of movies to include in responses (default: 50) */
   maxMovies?: number;
-  /** Whether to use legal hashes for torrents (default: true) */
+  /** Whether to use legal hashes (default: true) */
   useLegalHashes?: boolean;
   /** Probability of using a legal hash vs random hash (default: 0.6) */
   legalHashProbability?: number;

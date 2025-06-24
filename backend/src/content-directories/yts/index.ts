@@ -10,7 +10,7 @@ import { AbstractContentDirectory } from '@content-directories/content-directory
 
 import { YTSApi } from './yts.api';
 import type { YTSSourceMetadata } from './yts.types';
-import { mapYTSVideoCodec } from './yts.utils';
+import { mapYTSTypeToSource, mapYTSVideoCodec } from './yts.utils';
 
 export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
   protected readonly api: YTSApi;
@@ -20,32 +20,35 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
     this.api = new YTSApi(cache);
   }
 
+  name = 'YTS';
+
   private normalize = (
-    torrent: YTSSourceMetadata,
+    sourceMetadata: YTSSourceMetadata,
     movieTitle: string,
     runtime: number
   ): SourceMetadata => {
     const resolution = qualityToResolution(undefined); // YTS quality mapping needs to be implemented
-    const videoCodec = mapYTSVideoCodec(torrent.video_codec, torrent.bit_depth);
-    const audioCodec = detectAudioCodecFromChannels(torrent.audio_channels);
+    const videoCodec = mapYTSVideoCodec(sourceMetadata.video_codec, sourceMetadata.bit_depth);
+    const audioCodec = detectAudioCodecFromChannels(sourceMetadata.audio_channels);
+    const source = mapYTSTypeToSource(sourceMetadata.type);
 
     return {
       audioCodec: audioCodec ? [audioCodec] : [],
-      bitrate: calculateApproximateBitrate(torrent.size_bytes, runtime),
-      broadcasters: torrent.seeds,
-      hash: torrent.hash,
+      bitrate: calculateApproximateBitrate(sourceMetadata.size_bytes, runtime),
+      broadcasters: sourceMetadata.seeds,
+      hash: sourceMetadata.hash,
       language: [],
-      magnetLink: `magnet:?xt=urn:btih:${torrent.hash}&dn=${encodeURIComponent(movieTitle)}`,
+      magnetLink: `magnet:?xt=urn:btih:${sourceMetadata.hash}&dn=${encodeURIComponent(movieTitle)}`,
       quality: null, // ToDo: YTS quality mapping needs to be implemented
       resolution,
       score: 0,
-      size: torrent.size_bytes,
-      source: null, // ToDo: YTS source mapping needs to be implemented
-      type: torrent.type,
-      uploadDate: new Date(torrent.date_uploaded),
-      url: torrent.url,
+      size: sourceMetadata.size_bytes,
+      source,
+      type: sourceMetadata.type,
+      uploadDate: new Date(sourceMetadata.date_uploaded),
+      url: sourceMetadata.url,
       videoCodec,
-      watchers: torrent.peers,
+      watchers: sourceMetadata.peers,
     };
   };
 
@@ -58,8 +61,8 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
 
     const movie = response.data.movies[0];
     return {
-      sources: movie.torrents.map(torrent =>
-        this.normalize(torrent, movie.title_long, movie.runtime)
+      sources: movie.torrents.map(sourceMetadata =>
+        this.normalize(sourceMetadata, movie.title_long, movie.runtime)
       ),
       trailerCode: movie.yt_trailer_code || '',
     };
