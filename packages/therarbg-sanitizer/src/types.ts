@@ -4,7 +4,7 @@
 
 // GetPosts Endpoint Response Types
 export interface GetPostsResponse {
-  results: GetPostsTorrent[];
+  results: GetPosts[];
   links: {
     next: string | null;
     previous: string | null;
@@ -14,7 +14,7 @@ export interface GetPostsResponse {
   total: number;
 }
 
-export interface GetPostsTorrent {
+export interface GetPosts {
   pk: number | string; // post ID
   n: string; // name/title
   a: string | number; // added timestamp
@@ -122,7 +122,7 @@ export interface ImdbDetailPost {
   episode: number; // 0 in case of movies
   timestamp: string;
   last_checked: string;
-  files: TorrentFile[] | null;
+  files: SourceFile[] | null;
   trackers: TrackerInfo[];
   has_torrent: boolean;
   images: string[];
@@ -139,7 +139,7 @@ export interface ImdbDetailPost {
   imdb_data: number;
 }
 
-export interface TorrentFile {
+export interface SourceFile {
   name: string;
   size: number;
   full_location?: string;
@@ -172,8 +172,8 @@ export type TheRarBGApiResponse =
  * Configuration options for TheRarBG sanitization
  */
 export interface SanitizationOptions {
-  /** Maximum number of torrents to return */
-  maxTorrents?: number;
+  /** Maximum number of items to return */
+  maxItems?: number;
 
   /** Whether to preserve year information in titles */
   preserveYear?: boolean;
@@ -187,7 +187,7 @@ export interface SanitizationOptions {
   /** Whether to generate consistent fake data using deterministic seeding */
   generateConsistentFakes?: boolean;
 
-  /** Whether to use legal torrent hashes for testing real downloads */
+  /** Whether to use legal hashes for testing real downloads */
   useLegalHashes?: boolean;
 
   /** Strategy for selecting legal hashes when useLegalHashes is true */
@@ -211,7 +211,7 @@ export type LegalHashStrategy = 'imdb-based' | 'random' | 'sequential' | 'weight
 /**
  * Legal hash with metadata for validation and selection
  */
-export interface LegalTorrentHash {
+export interface LegalHash {
   /** Human-readable title of the content */
   title: string;
 
@@ -235,9 +235,9 @@ export interface LegalTorrentHash {
 }
 
 /**
- * Parsed torrent name components
+ * Parsed name components
  */
-export interface ParsedTorrentName {
+export interface ParsedName {
   /** The original full name */
   original: string;
   /** The movie/show title portion */
@@ -263,10 +263,10 @@ export interface ParsedTorrentName {
 }
 
 /**
- * Torrent name parsing error
+ * Name parsing error
  */
-export interface TorrentNameParsingError extends Error {
-  name: 'TorrentNameParsingError';
+export interface NameParsingError extends Error {
+  name: 'NameParsingError';
   originalName: string;
   reason: string;
 }
@@ -336,7 +336,7 @@ export interface TheRARBGImdbData {
   created_at: string;
 }
 
-export interface TheRARBGTorrentPost {
+export interface TheRARBGPost {
   eid: string;
   pid: number;
   category: string | null;
@@ -396,7 +396,7 @@ export interface TheRARBGApiResponse {
   headers: Record<string, string>;
   body: {
     imdb: TheRARBGImdbData;
-    trb_posts: TheRARBGTorrentPost[];
+    trb_posts: TheRARBGPost[];
   };
   bodyIsJson: boolean;
 }
@@ -412,7 +412,7 @@ export interface TitleMapping {
   contentType: 'Movie' | 'TV';
 }
 
-export interface TorrentNameMetadata {
+export interface NameMetadata {
   title: string;
   year?: number;
   season?: number;

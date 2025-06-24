@@ -573,23 +573,24 @@ npm run lint:fix
 
 ## Quick Reference Commands
 
-### Essential Commands
+### Essential NPM Scripts
 
 ```bash
-# Development
-npm run dev                    # Start development servers
-npm run test:backend          # Unit tests
-npm run check:ts             # TypeScript compilation
+npm run dev:backend          # Start development servers
+npm run start:backend        # one-shot server
+npm run start:backend:e2e &  # dockerised watch server (mock data) in *detached* mode
+npm run test:backend         # Jest unit tests
+npm run test:backend:e2e     # Full E2E cycle ( start docker, run tests, stop docker )
+npm run test:backend:e2e:dev # Full E2E tests ( requires running docker (start:backend:e2e) )
+npm run config               # interactive configuration setup and start server
+npm run config-only          # configuration only (no server start)
+```
 
-# E2E Testing
-npm run start:backend:e2e    # Start E2E environment
-npm run test:backend:e2e     # Full E2E cycle
-npm run test:backend:e2e:dev # Test against running environment
-npm run docker:cleanup       # Clean Docker resources
+### Quality Assurance
 
-# Quality Assurance
+```bash
 npm run lint:fix            # Fix linting issues
-npm run build              # Build project
+npm run build:all           # Build everything in the correct order
 ```
 
 ### Docker Management
@@ -612,7 +613,6 @@ docker network ls                   # List networks
 ```bash
 # Service Health Checks
 curl http://localhost:3000/health   # Backend health
-curl http://localhost:3000/api/v1/  # API availability
 
 # Database Connection
 docker exec -it miauflix-postgres psql -U postgres -d miauflix
@@ -620,5 +620,77 @@ docker exec -it miauflix-postgres psql -U postgres -d miauflix
 # Container Shell Access
 docker exec -it miauflix-backend /bin/bash
 ```
+
+### Configuration System
+
+The application features an **interactive configuration system** ([`backend/src/configuration.ts`](../backend/src/configuration.ts)) that handles:
+
+- **Auto-setup workflow** - Automatically detects missing configuration and guides setup
+- **Interactive prompts** - User-friendly configuration collection
+- **Environment validation** - Ensures all required settings are properly configured
+- **Secret generation** - Auto-generates secure keys when missing
+
+#### First-time Setup
+
+```bash
+npm run config-only    # Run configuration setup without starting server
+npm run config        # Configure and start server
+```
+
+The configuration system will guide you through setting up:
+
+- TMDB API access token
+- JWT secrets for authentication
+- Optional Trakt integration
+- Optional NordVPN configuration
+- Reverse proxy settings
+
+### Requirements
+
+- **Node 20+**
+- `.env` file (auto-created during configuration):
+
+  ```env
+  TMDB_API_ACCESS_TOKEN=
+  JWT_SECRET=
+  REFRESH_TOKEN_SECRET=
+  SOURCE_SECURITY_KEY=          # Auto-generated if missing
+  # Optional integrations
+  TRAKT_CLIENT_ID=
+  TRAKT_CLIENT_SECRET=
+  NORDVPN_PRIVATE_KEY=
+  REVERSE_PROXY_SECRET=
+  # Database configuration
+  DATA_DIR=data/        # SQLite database directory
+  ```
+
+- SQLite DB auto-creates at `data/database.sqlite` (controlled by `DATA_DIR` environment variable)
+
+### Testing Infrastructure
+
+Comprehensive testing setup with multiple test types:
+
+- **Unit Tests** - Component-level testing with Jest
+- **Integration Tests** - Service integration testing
+- **E2E Tests** - Full application workflow testing
+- **Test Fixtures** - Extensive mock data for consistent testing
+
+For detailed testing information, see **[Testing Infrastructure](testing-infrastructure.md)**.
+
+### Development Workflow
+
+1. **Initial Setup**: Run `npm run config-only` for first-time configuration
+2. **Development**: Use `npm run dev:backend` for hot-reload development
+3. **Testing**: Run `npm run test:backend` for unit tests
+4. **E2E Testing**: Use `npm run test:backend:e2e` for full integration testing
+5. **Production**: Build with `npm run build:all` and run with `npm run start:backend`
+
+### Debugging Tips
+
+- Use VS Code debugger with Node.js configuration
+- Check application logs for detailed error information
+- Verify environment variables are properly loaded
+- Ensure SQLite database permissions and directory structure
+- Test external API connectivity (TMDB, Trakt) separately
 
 This workflow guide provides the practical foundation for efficient development in the miauflix-bun project while maintaining compliance with security and testing requirements.

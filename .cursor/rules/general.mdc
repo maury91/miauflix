@@ -12,8 +12,9 @@ alwaysApply: true
 - Check `docs/task-file-mapping.md` for implementation status before starting any task.
 - Verify current priorities in `todo/` files before making assumptions.
 - If a task appears to be complex, first plan it using the sequential thinking tool, show the plan to the user and after the user confirms the plan is solid proceed with the implementation.
+- Use MCP when available ( for example Serena ), do not use tools for editing files unless explicitely allowed by the user ( file edits from MCP do not appear in the interface )
 
-## 📋 Project Context (Updated 2025-06-25)
+## 📋 Project Context (Updated 2025-06-23)
 
 ### Implementation Status Overview
 

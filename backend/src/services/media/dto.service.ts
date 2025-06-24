@@ -19,7 +19,6 @@ export class DtoService {
 
   /**
    * Transform internal MovieSource entities to sanitized MediaSource objects
-   * This is the main abstraction point that removes all torrent terminology
    */
   public transformToSanitizedSources(movieSources: MovieSource[]): MediaSource[] {
     return movieSources.map(source => this.transformSingleSource(source));
@@ -49,7 +48,7 @@ export class DtoService {
     // Calculate quality score using the quality scoring service
     const qualityMetrics: QualityMetrics = {
       resolution: internal.resolution,
-      videoCodec: source.videoCodec as VideoCodec,
+      videoCodec: source.videoCodec as VideoCodec | null,
       sourceType: source.sourceType,
       fileSize: source.size,
       availability: internal.availabilityMetrics,

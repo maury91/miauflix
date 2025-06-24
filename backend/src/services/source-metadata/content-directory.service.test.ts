@@ -22,9 +22,9 @@ describe('ContentDirectoryService', () => {
     service = new ContentDirectoryService(mockCache, mockDownloadService);
   });
 
-  describe('searchTorrentsForMovie', () => {
+  describe('searchSourcesForMovie', () => {
     it('should return movie data with sources for valid IMDb ID', async () => {
-      const result = await service.searchTorrentsForMovie(imdbId);
+      const result = await service.searchSourcesForMovie(imdbId);
 
       expect(result).not.toBeNull();
 
@@ -47,7 +47,7 @@ describe('ContentDirectoryService', () => {
     });
 
     it('should return null for invalid IMDb ID', async () => {
-      const result = await service.searchTorrentsForMovie('invalid-id');
+      const result = await service.searchSourcesForMovie('invalid-id');
       expect(result).toBeNull();
     });
   });

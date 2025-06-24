@@ -65,7 +65,7 @@ The following tasks are automatically scheduled during application startup in [`
 ### 5. Data File Search (`dataFileSearch`)
 
 - **Interval**: 0.2 seconds
-- **Function**: [`sourceService.searchTorrentFilesForSources()`](../src/services/source/source.service.ts)
+- **Function**: [`sourceService.syncMissingSourceFiles()`](../src/services/source/source.service.ts)
 - **Purpose**: Searches for torrent data files, prioritized after source search
 
 ### 6. Source Statistics Update (`updateSourcesStats`)
