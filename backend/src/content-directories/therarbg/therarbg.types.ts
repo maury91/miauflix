@@ -91,7 +91,7 @@ export interface ImdbDetailPost {
   episode: number; // 0 in case of movies
   timestamp: string;
   last_checked: string;
-  files: TorrentFile[];
+  files: SourceFile[];
   trackers: TrackerInfo[];
   has_torrent: boolean;
   images: string[];
@@ -108,7 +108,7 @@ export interface ImdbDetailPost {
   imdb_data: number;
 }
 
-export interface TorrentFile {
+export interface SourceFile {
   name: string;
   size: number;
   full_location: string;
@@ -124,7 +124,7 @@ export interface TrackerInfo {
 
 // Get Posts Endpoint Response Types
 export interface GetPostsResponse {
-  results: GetPostsTorrent[];
+  results: GetPosts[];
   links: {
     next: string | null;
     previous: string | null;
@@ -134,7 +134,7 @@ export interface GetPostsResponse {
   total: number;
 }
 
-export interface GetPostsTorrent {
+export interface GetPosts {
   pk: number; // post ID
   n: string; // name/title
   a: string; // added timestamp

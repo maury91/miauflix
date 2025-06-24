@@ -31,25 +31,20 @@ export function validateImdbId(imdbId: string): ImdbIdValidation {
 }
 
 /**
- * Filter torrents based on minimum requirements
+ * Filter sources based on minimum requirements
  */
-export function filterTorrents(
-  torrents: ImdbDetailPost[],
+export function filterSources(
+  sources: ImdbDetailPost[],
   { minSeeders = 2, minSizeMB = 100 }: { minSeeders?: number; minSizeMB?: number } = {}
 ): ImdbDetailPost[] {
-  return torrents.filter(torrent => {
-    // Must have torrent available
-    if (!torrent.has_torrent) {
-      return false;
-    }
-
+  return sources.filter(source => {
     // Minimum seeders
-    if (torrent.seeders < minSeeders) {
+    if (source.seeders < minSeeders) {
       return false;
     }
 
     // Minimum file size
-    const sizeMB = torrent.size / (1024 * 1024);
+    const sizeMB = source.size / (1024 * 1024);
     if (sizeMB < minSizeMB) {
       return false;
     }

@@ -61,7 +61,7 @@ export class YTSApi extends Api {
       }
 
       if (response.headers.get('content-type')?.includes('application/octet-stream')) {
-        return response.arrayBuffer() as unknown as T; // Handle non-JSON responses (e.g., torrent downloads)
+        return response.arrayBuffer() as unknown as T; // Handle non-JSON responses (e.g., file downloads)
       }
       if (response.headers.get('content-type')?.includes('text/html')) {
         // This is most likely the 404 page or an error page
@@ -276,7 +276,7 @@ export class YTSApi extends Api {
     if (result instanceof ArrayBuffer) {
       return Buffer.from(result);
     } else {
-      logger.error('YTS', `Unexpected response type for torrent download: ${typeof result}`);
+      logger.error('YTS', `Unexpected response type for source download: ${typeof result}`);
       return null;
     }
   }

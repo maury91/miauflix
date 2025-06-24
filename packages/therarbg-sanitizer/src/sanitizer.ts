@@ -1,10 +1,9 @@
 import type {
-  TheRARBGApiResponse,
   TheRARBGImdbData,
-  TheRARBGTorrentPost,
+  TheRARBGPost,
   SanitizationOptions,
   GetPostsResponse,
-  GetPostsTorrent,
+  GetPosts,
 } from './types';
 import { DEFAULT_OPTIONS } from './constants';
 import {
@@ -12,7 +11,7 @@ import {
   generateFakeImdbId,
   generateFakePersonName,
   generateSafeInfoHash,
-  sanitizeTorrentName,
+  sanitizeName,
   generateFakePlot,
   generateFakeUrl,
 } from './utils';
@@ -108,13 +107,13 @@ export function sanitizeImdbData(
 }
 
 /**
- * Sanitize a single torrent post
+ * Sanitize a single post
  */
-export function sanitizeTorrentPost(
-  post: TheRARBGTorrentPost,
+export function sanitizePost(
+  post: TheRARBGPost,
   imdbData: TheRARBGImdbData,
   options: SanitizationOptions = {}
-): TheRARBGTorrentPost {
+): TheRARBGPost {
   if (!post || typeof post !== 'object') {
     return post;
   }
@@ -130,7 +129,7 @@ export function sanitizeTorrentPost(
     ? post.imdb || imdbData.imdb_id
     : generateFakeImdbId(post.imdb || imdbData.imdb_id, contentType);
 
-  // Create a title mapping for torrent name sanitization
+  // Create a title mapping for name sanitization
   const titleMapping = {
     realTitle: imdbData.name,
     fakeTitle,
@@ -139,14 +138,14 @@ export function sanitizeTorrentPost(
     contentType,
   };
 
-  // Sanitize torrent name using source metadata extraction
+  // Sanitize name using source metadata extraction
   if (sanitized.name) {
-    sanitized.name = sanitizeTorrentName(sanitized.name, titleMapping, preserveTechnicalMetadata);
+    sanitized.name = sanitizeName(sanitized.name, titleMapping, preserveTechnicalMetadata);
   }
 
   // Sanitize short name if present
   if (sanitized.short_name) {
-    sanitized.short_name = sanitizeTorrentName(
+    sanitized.short_name = sanitizeName(
       sanitized.short_name,
       titleMapping,
       preserveTechnicalMetadata
@@ -222,10 +221,7 @@ function getContentTypeFromCategory(category: string | number): 'Movie' | 'TV' |
 /**
  * Sanitize a single get-posts item
  */
-function sanitizeGetPostsItem(
-  item: GetPostsTorrent,
-  options: SanitizationOptions = {}
-): GetPostsTorrent {
+function sanitizeGetPostsItem(item: GetPosts, options: SanitizationOptions = {}): GetPosts {
   if (!item || typeof item !== 'object') {
     return item;
   }
@@ -240,7 +236,7 @@ function sanitizeGetPostsItem(
     const fakeImdbId =
       options.preserveImdbId && item.i ? item.i : generateFakeImdbId(seedId, contentType);
 
-    // For get-posts, we need to extract the real title from the torrent name first
+    // For get-posts, we need to extract the real title from the name first
     // Try to extract using source metadata extractor
     let realTitle = item.n;
     try {
@@ -256,7 +252,7 @@ function sanitizeGetPostsItem(
       realTitle = item.n;
     }
 
-    // Create title mapping for torrent name sanitization
+    // Create title mapping for name sanitization
     const titleMapping = {
       realTitle,
       fakeTitle,
@@ -265,12 +261,8 @@ function sanitizeGetPostsItem(
       contentType,
     };
 
-    // Sanitize torrent name
-    sanitized.n = sanitizeTorrentName(
-      item.n,
-      titleMapping,
-      options.preserveTechnicalMetadata !== false
-    );
+    // Sanitize name
+    sanitized.n = sanitizeName(item.n, titleMapping, options.preserveTechnicalMetadata !== false);
 
     // Replace IMDB ID if present, or if we have a fake one to set
     if (sanitized.i || !options.preserveImdbId) {
@@ -374,18 +366,18 @@ function sanitizeGetPostsResponse(
     return response;
   }
 
-  const { maxTorrents = DEFAULT_OPTIONS.maxTorrents } = options;
+  const { maxItems = DEFAULT_OPTIONS.maxItems } = options;
   const sanitized = { ...response };
 
   // Sanitize results array
   let sanitizedResults = response.results || [];
 
-  // Limit number of torrents if specified
-  if (maxTorrents > 0 && sanitizedResults.length > maxTorrents) {
-    sanitizedResults = sanitizedResults.slice(0, maxTorrents);
+  // Limit number of items if specified
+  if (maxItems > 0 && sanitizedResults.length > maxItems) {
+    sanitizedResults = sanitizedResults.slice(0, maxItems);
     // Update counts to reflect the limitation
-    sanitized.count = Math.min(sanitized.count, maxTorrents);
-    sanitized.total = Math.min(sanitized.total, maxTorrents);
+    sanitized.count = Math.min(sanitized.count, maxItems);
+    sanitized.total = Math.min(sanitized.total, maxItems);
   }
 
   // Sanitize each result item
@@ -402,7 +394,7 @@ export function sanitize(data: any, url?: string, options: SanitizationOptions =
     return data;
   }
 
-  const { maxTorrents = DEFAULT_OPTIONS.maxTorrents } = options;
+  const { maxItems = DEFAULT_OPTIONS.maxItems } = options;
 
   // Handle wrapped HTTP-VCR responses
   if ('body' in data && data.body && typeof data.body === 'object') {
@@ -418,16 +410,16 @@ export function sanitize(data: any, url?: string, options: SanitizationOptions =
     // Sanitize IMDB data first
     const sanitizedImdb = sanitizeImdbData(response.imdb, options);
 
-    // Sanitize torrent posts using the original IMDB data for context
+    // Sanitize posts using the original IMDB data for context
     let sanitizedPosts = response.trb_posts || [];
 
-    // Limit number of torrents if specified
-    if (maxTorrents > 0 && sanitizedPosts.length > maxTorrents) {
-      sanitizedPosts = sanitizedPosts.slice(0, maxTorrents);
+    // Limit number of posts if specified
+    if (maxItems > 0 && sanitizedPosts.length > maxItems) {
+      sanitizedPosts = sanitizedPosts.slice(0, maxItems);
     }
 
-    sanitizedPosts = sanitizedPosts.map((post: TheRARBGTorrentPost) =>
-      sanitizeTorrentPost(post, response.imdb, options)
+    sanitizedPosts = sanitizedPosts.map((post: TheRARBGPost) =>
+      sanitizePost(post, response.imdb, options)
     );
 
     return {
@@ -451,11 +443,11 @@ export function sanitize(data: any, url?: string, options: SanitizationOptions =
  * Sanitize a single IMDB detail response (convenience function)
  */
 export function sanitizeImdbDetail(
-  response: { imdb: TheRARBGImdbData; trb_posts: TheRARBGTorrentPost[] },
+  response: { imdb: TheRARBGImdbData; trb_posts: TheRARBGPost[] },
   options: SanitizationOptions = {}
-): { imdb: TheRARBGImdbData; trb_posts: TheRARBGTorrentPost[] } {
+): { imdb: TheRARBGImdbData; trb_posts: TheRARBGPost[] } {
   return sanitize(response, undefined, options) as {
     imdb: TheRARBGImdbData;
-    trb_posts: TheRARBGTorrentPost[];
+    trb_posts: TheRARBGPost[];
   };
 }

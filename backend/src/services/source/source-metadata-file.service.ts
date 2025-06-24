@@ -7,8 +7,8 @@ import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
 import type { DownloadService } from '../download/download.service';
 import { ErrorWithStatus } from './services/error-with-status.util';
-import { getTorrentFromITorrents } from './services/itorrents';
-import { getTorrentFromTorrage } from './services/torrage';
+import { getSourceMetadataFileFromITorrents } from './services/itorrents';
+import { getSourceMetadataFileFromTorrage } from './services/torrage';
 import type {
   Service,
   ServiceData,
@@ -25,14 +25,14 @@ const generateRequestId = (): string => {
 };
 
 /**
- * Service for getting data ( torrent ) files from URI ( magnet ) links ( or identifier )
- * Uses both WebTorrent and torrent cache services with adaptive optimization
+ * Service for getting source files from URI links ( or identifier )
+ * Uses both WebTorrent and online cache services with adaptive optimization
  */
-export class MagnetService {
+export class SourceMetadataFileService {
   private readonly services: Record<string, ServiceData> = {};
   private readonly concurrency: number;
   private readonly queue: Array<{
-    magnetLink: string;
+    sourceLink: string;
     hash: string;
     onComplete: (result: Buffer | null) => void;
   }> = [];
@@ -42,8 +42,8 @@ export class MagnetService {
     this.createService('webTorrent', {
       maxConcurrentRequests: 50,
       shouldVerify: false,
-      getTorrent: async (magnetLink: string, hash: string): Promise<Buffer> => {
-        return downloadService.getTorrent(magnetLink, hash, 120000);
+      getSourceMetadata: async (sourceLink: string, hash: string): Promise<Buffer> => {
+        return downloadService.getSourceMetadataFile(sourceLink, hash, 120000);
       },
     });
 
@@ -54,12 +54,12 @@ export class MagnetService {
         limit: 90, // 90 requests per minute
       },
       shouldVerify: true,
-      getTorrent: async (
+      getSourceMetadata: async (
         _magnetLink: string,
         hash: string,
         rateLimiter?: DynamicRateLimit
       ): Promise<Buffer> => {
-        const response = await getTorrentFromITorrents(hash, 5000);
+        const response = await getSourceMetadataFileFromITorrents(hash, 5000);
         if (response) {
           rateLimiter?.reportResponse(response);
           if (response.ok) {
@@ -84,12 +84,12 @@ export class MagnetService {
         limit: 90, // 90 requests per minute
       },
       shouldVerify: true,
-      getTorrent: async (
+      getSourceMetadata: async (
         _magnetLink: string,
         hash: string,
         rateLimiter?: DynamicRateLimit
       ): Promise<Buffer> => {
-        const response = await getTorrentFromTorrage(hash, 5000);
+        const response = await getSourceMetadataFileFromTorrage(hash, 5000);
         if (response) {
           rateLimiter?.reportResponse(response);
           if (response.ok) {
@@ -118,14 +118,14 @@ export class MagnetService {
   }
 
   /**
-   * Get a torrent file from a magnet link and hash
-   * @param magnetLink The magnet link to convert
+   * Get a source metadata file from a magnet link and hash
+   * @param sourceLink The magnet link to convert
    * @param hash The hash of the magnet link
    * @param preferIdle If true, prefer idle services over busy ones
-   * @returns The torrent file as a Buffer, or null if conversion failed
+   * @returns The source metadata file as a Buffer, or null if conversion failed
    */
-  public async getTorrent(
-    magnetLink: string,
+  public async getSourceMetadataFile(
+    sourceLink: string,
     hash: string,
     preferIdle: boolean = false
   ): Promise<Buffer | null> {
@@ -136,7 +136,7 @@ export class MagnetService {
     this.createWorker();
     // Wait for the worker to process it
     return new Promise<Buffer | null>(resolve => {
-      this.queue.push({ magnetLink, hash, onComplete: resolve });
+      this.queue.push({ sourceLink: sourceLink, hash, onComplete: resolve });
     });
   }
 
@@ -179,9 +179,9 @@ export class MagnetService {
     };
   }
 
-  private async convertToTorrentWith(
+  private async convertToFileWith(
     serviceName: string,
-    magnetLink: string,
+    sourceLink: string,
     hash: string
   ): Promise<Buffer | false | null> {
     const service = this.services[serviceName];
@@ -209,29 +209,29 @@ export class MagnetService {
     const requestId = generateRequestId();
     const start = Date.now();
     service.activeRequests.add(requestId);
-    let torrent: Buffer | null = null;
+    let file: Buffer | null = null;
     let success = false;
 
     try {
       // Pass the rate limiter to services that need it
-      torrent = await service.config.getTorrent(magnetLink, hash, service.rateLimiter);
+      file = await service.config.getSourceMetadata(sourceLink, hash, service.rateLimiter);
 
-      // Validate torrent if service requires validation
-      if (torrent && service.config.shouldVerify) {
-        const isValid = await this.validateTorrentBuffer(torrent, hash, serviceName);
+      // Validate source metadata file if service requires validation
+      if (file && service.config.shouldVerify) {
+        const isValid = await this.validateSourceMetadataBuffer(file, hash, serviceName);
         if (!isValid) {
-          torrent = null; // Mark as invalid
+          file = null; // Mark as invalid
         } else {
           success = true;
         }
-      } else if (torrent) {
+      } else if (file) {
         // If no verification needed and we got a buffer, consider it successful
         success = true;
       }
 
       this.updateServiceMetrics(service.performance, success, start);
 
-      return torrent;
+      return file;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       logger.warn('DataResolver', `Error using ${serviceName}: ${errorMessage}`);
@@ -261,7 +261,7 @@ export class MagnetService {
   }
 
   private async processQueue() {
-    const { magnetLink, hash, onComplete } = this.queue.shift()!;
+    const { sourceLink: magnetLink, hash, onComplete } = this.queue.shift()!;
     // Try all services with fallback mechanism
     let serviceOrder = this.getOptimizedServiceOrder();
 
@@ -271,20 +271,20 @@ export class MagnetService {
     serviceOrder = [...idleServices, ...nonIdleServices];
 
     for (const serviceName of serviceOrder) {
-      const torrent = await this.convertToTorrentWith(serviceName, magnetLink, hash);
+      const file = await this.convertToFileWith(serviceName, magnetLink, hash);
 
-      if (torrent === false) {
+      if (file === false) {
         // Service was throttled, continue to next service
         logger.debug('DataResolver', `Service ${serviceName} was throttled, trying next service`);
         continue;
       }
 
-      if (torrent) {
+      if (file) {
         // Success
-        return onComplete(torrent);
+        return onComplete(file);
       }
 
-      // torrent is null, continue to next service
+      // file is null, continue to next service
     }
 
     // All services failed
@@ -307,22 +307,22 @@ export class MagnetService {
   }
 
   /**
-   * Validates that a buffer contains a valid torrent file
+   * Validates that a buffer contains a valid source metadata file
    * @param buffer The buffer to validate
-   * @param hash The expected hash of the torrent (used for validation)
+   * @param hash The expected hash of the source metadata file (used for validation)
    * @param serviceName The service name for logging
-   * @returns True if the buffer contains a valid torrent file
+   * @returns True if the buffer contains a valid source metadata file
    */
-  private async validateTorrentBuffer(
+  private async validateSourceMetadataBuffer(
     buffer: Buffer,
     hash: string,
     serviceName: string
   ): Promise<boolean> {
     try {
-      // Try to parse the torrent file
+      // Try to parse the source metadata file
       const parsed = await parseTorrent(buffer);
 
-      // Verify that essential torrent properties exist
+      // Verify that essential source metadata properties exist
       if (!parsed || !parsed.infoHash) {
         logger.warn('DataResolver', 'Invalid data: Missing identifier');
         return false;
@@ -345,7 +345,7 @@ export class MagnetService {
   }
 
   /**
-   * Get the optimized service order for torrent retrieval
+   * Get the optimized service order for source metadata file retrieval
    */
   private getOptimizedServiceOrder(): string[] {
     // Create array of service names

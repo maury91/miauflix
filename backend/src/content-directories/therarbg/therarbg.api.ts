@@ -68,7 +68,9 @@ export class TheRARBGApi extends Api {
           'TheRARBG',
           `Received HTML response for ${url}. This may indicate an error or a 404 page.`
         );
-        throw new Error(`TheRARBG API returned HTML response for ${url}`);
+        throw new Error(
+          `TheRARBG API returned HTML response for ${url}?${JSON.stringify(queryParams)}`
+        );
       }
 
       const data = (await response.json()) as T;

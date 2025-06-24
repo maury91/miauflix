@@ -2,8 +2,8 @@
  * Deterministically transforms YTS responses using the shared sanitization library.
  * This ensures that:
  * 1. Movie titles are replaced with appropriate alternatives
- * 2. URLs pointing to torrent downloads are scrambled
- * 3. Torrent hashes are modified
+ * 2. URLs pointing to downloads are scrambled
+ * 3. Hashes are modified
  * 4. Other sensitive data is altered
  *
  * This file now uses the shared @miauflix/yts-sanitizer library for consistency

@@ -69,7 +69,7 @@ export const VIDEO_CODEC_PATTERNS: PatternConfig<VideoCodec>[] = [
     value: VideoCodec.X264_10BIT,
     specificity: 90,
   },
-  // Regular codecs - add H264/H265 patterns (common in torrent names)
+  // Regular codecs - add H264/H265 patterns (common in names)
   { regex: /(\b[hx][ .]?265\b|\bhevc\b|\bh265\b)/gi, value: VideoCodec.X265, specificity: 85 },
   { regex: /(\b[hx][ .]?264\b|\bavc\b|\bh264\b)/gi, value: VideoCodec.X264, specificity: 85 },
   { regex: /(\bav1\b)/gi, value: VideoCodec.AV1, specificity: 90 },

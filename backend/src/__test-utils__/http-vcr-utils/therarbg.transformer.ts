@@ -2,7 +2,7 @@
  * Deterministically transforms TheRARBG responses using the shared sanitization library.
  * This ensures that:
  * 1. Movie/TV titles are replaced with fictional alternatives
- * 2. Torrent hashes are replaced with legal or fake hashes
+ * 2. Hashes are replaced with known hashes or fake hashes
  * 3. Personal information (names, descriptions) is sanitized
  * 4. File names and technical metadata are preserved
  * 5. IMDB IDs are replaced with fictional ones
@@ -18,7 +18,7 @@ export function transformTheRarbgData(data: unknown): unknown {
     useLegalHashes: true,
     preserveTechnicalMetadata: true,
     preserveImdbId: true,
-    maxTorrents: 20,
+    maxItems: 20,
     legalHashStrategy: 'imdb-based',
   });
 }

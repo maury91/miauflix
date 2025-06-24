@@ -7,14 +7,14 @@ export const sourceConfigurationDefinition = serviceConfiguration({
   description: 'Configuration for the source service',
   variables: {
     SOURCE_SECURITY_KEY: variable({
-      description: 'Base64 AES-256 encryption key for torrent identifiers',
+      description: 'Base64 AES-256 encryption key for source metadata identifiers',
       example: 'dGhpc19pc19hX3NhbXBsZV8yNTZfYml0X2tleQ==',
       defaultValue: () => randomBytes(32).toString('base64'),
       skipUserInteraction: true,
       required: true,
     }),
     CONTENT_CONNECTION_LIMIT: variable({
-      description: 'Maximum number of connections for WebTorrent',
+      description: 'Maximum number of connections for peer-to-peer client',
       example: '100',
       defaultValue: '100',
       skipUserInteraction: true,
@@ -22,7 +22,7 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       transform: transforms.number({ min: 1, integer: true }),
     }),
     CONTENT_DOWNLOAD_LIMIT: variable({
-      description: 'Download limit for WebTorrent',
+      description: 'Download limit for peer-to-peer client',
       example: '20MB',
       defaultValue: '20MB',
       skipUserInteraction: true,
@@ -30,7 +30,7 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       transform: transforms.size(['KB', 'MB', 'GB', 'TB']),
     }),
     CONTENT_UPLOAD_LIMIT: variable({
-      description: 'Upload limit for WebTorrent',
+      description: 'Upload limit for peer-to-peer client',
       example: '20MB',
       defaultValue: '20MB',
       skipUserInteraction: true,
@@ -38,7 +38,7 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       transform: transforms.size(['KB', 'MB', 'GB', 'TB']),
     }),
     DISABLE_DISCOVERY: variable({
-      description: 'Disable DHT for WebTorrent',
+      description: 'Disable DHT for peer-to-peer client',
       example: 'false',
       defaultValue: 'false',
       required: false,

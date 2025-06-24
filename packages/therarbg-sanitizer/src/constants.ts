@@ -3,14 +3,14 @@
  */
 
 import { faker } from '@faker-js/faker';
-import type { LegalTorrentHash } from './types.js';
+import type { LegalHash } from './types.js';
 import { SanitizationOptions } from './types';
 
 /**
  * Public-domain / CC-licensed torrents we trust to be permanent.
  * SHA-1 info hashes collected from well-known trackers / archive.org
  */
-export const LEGAL_HASHES: readonly LegalTorrentHash[] = [
+export const LEGAL_HASHES: readonly LegalHash[] = [
   // Blender Foundation Open Movies
   {
     title: 'Big Buck Bunny (2008)',
@@ -241,7 +241,7 @@ export const LEGAL_HASH_LIST = LEGAL_HASHES.map(h => h.hash.toUpperCase());
  * Default sanitization options
  */
 export const DEFAULT_OPTIONS: Required<SanitizationOptions> = {
-  maxTorrents: 50,
+  maxItems: 50,
   preserveYear: true,
   preserveTechnicalMetadata: true,
   preserveImdbId: false,
@@ -319,7 +319,7 @@ function hashStringToNumber(str: string): number {
 }
 
 /**
- * Common quality indicators found in torrent names
+ * Common quality indicators found in names
  */
 export const QUALITY_PATTERNS = [
   // Resolution patterns
@@ -349,7 +349,7 @@ export const RELEASE_GROUP_PATTERNS = [
 export const YEAR_PATTERN = /\b(19[0-9]{2}|20[0-9]{2})\b/g;
 
 /**
- * Common separators in torrent names
+ * Common separators in names
  */
 export const SEPARATORS = ['.', ' ', '-', '_'];
 
@@ -399,7 +399,7 @@ export const FAKE_IMDB_PREFIXES = {
 } as const;
 
 /**
- * Legal/safe hash characters for torrent info hashes
+ * Legal/safe hash characters for info hashes
  */
 export const SAFE_HASH_CHARS = '0123456789ABCDEF';
 

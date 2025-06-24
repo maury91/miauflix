@@ -11,7 +11,7 @@ import type { MediaService } from '@services/media/media.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { SourceService } from '@services/source';
-import type { MagnetService } from '@services/source';
+import type { SourceMetadataFileService } from '@services/source';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { TraktService } from '@services/trakt/trakt.service';
@@ -28,8 +28,8 @@ export function createRoutes(deps: {
   listService: ListService;
   tmdbApi: TMDBApi;
   vpnDetectionService: VpnDetectionService;
-  trackerService: ContentDirectoryService;
-  magnetService: MagnetService;
+  contentDirectoryService: ContentDirectoryService;
+  magnetService: SourceMetadataFileService;
   traktService: TraktService;
 }) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(deps.auditLogService);
@@ -44,7 +44,7 @@ export function createRoutes(deps: {
       return c.json({
         tmdb: deps.tmdbApi.status(),
         vpn: deps.vpnDetectionService.status(),
-        trackers: deps.trackerService.status(),
+        contentDirectories: deps.contentDirectoryService.status(),
         magnetResolvers: deps.magnetService.status(),
       });
     })

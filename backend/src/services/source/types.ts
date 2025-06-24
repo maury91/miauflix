@@ -17,8 +17,12 @@ export interface Service {
     windowSize: number; // in milliseconds
     limit: number;
   };
-  shouldVerify: boolean; // Whether to verify the torrent file after retrieval
-  getTorrent(magnetLink: string, hash: string, rateLimiter?: DynamicRateLimit): Promise<Buffer>;
+  shouldVerify: boolean; // Whether to verify the source metadata file after retrieval
+  getSourceMetadata(
+    sourceLink: string,
+    hash: string,
+    rateLimiter?: DynamicRateLimit
+  ): Promise<Buffer>;
 }
 
 export interface ServiceData {

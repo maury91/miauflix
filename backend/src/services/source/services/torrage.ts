@@ -18,7 +18,10 @@ export const reverse = (str: string): string => {
   return str.split('').reverse().join('');
 };
 
-export const getTorrentFromTorrage = async (hash: string, timeout: number): Promise<Response> => {
+export const getSourceMetadataFileFromTorrage = async (
+  hash: string,
+  timeout: number
+): Promise<Response> => {
   const encryptedTTLRaw = await fetch(
     `https://torrage.info/torrent.php?h=${hash}&ttl=${Math.floor(Date.now() / 1000)}`
   );

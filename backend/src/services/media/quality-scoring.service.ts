@@ -4,9 +4,9 @@ import { getVideoCodecQualityBonus } from '@utils/codec.util';
 
 export interface QualityMetrics {
   resolution: string;
-  videoCodec: VideoCodec | string;
+  videoCodec: VideoCodec | null;
   audioCodec?: AudioCodec | string;
-  sourceType: string;
+  sourceType: string | null;
   fileSize: number;
   availability: number;
 }
@@ -60,7 +60,9 @@ export class QualityScoringService {
   /**
    * Get base score for source type
    */
-  private getSourceTypeScore(sourceType: string): number {
+  private getSourceTypeScore(sourceType: string | null): number {
+    if (!sourceType) return 2.5;
+
     const type = sourceType.toLowerCase();
 
     // Map source types to quality scores
@@ -146,7 +148,7 @@ export class QualityScoringService {
     // Known source types increase confidence
     const knownSourceTypes = ['bluray', 'web-dl', 'webrip', 'hdtv', 'dvdrip', 'cam'];
     const hasKnownType = knownSourceTypes.some(type =>
-      metrics.sourceType.toLowerCase().includes(type)
+      metrics.sourceType?.toLowerCase().includes(type)
     );
     if (hasKnownType) confidence += 0.1;
 

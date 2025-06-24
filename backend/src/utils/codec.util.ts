@@ -113,8 +113,8 @@ export function normalizeAudioCodec(codec: AudioCodec | string): AudioCodec | nu
 /**
  * Get quality bonus points for video codec
  */
-export function getVideoCodecQualityBonus(codec: VideoCodec | string): number {
-  const normalizedCodec = normalizeVideoCodec(codec);
+export function getVideoCodecQualityBonus(codec: VideoCodec | string | null): number {
+  const normalizedCodec = codec ? normalizeVideoCodec(codec) : null;
 
   if (!normalizedCodec) {
     return 0;

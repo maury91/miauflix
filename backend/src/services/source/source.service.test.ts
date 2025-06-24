@@ -1,7 +1,7 @@
 import type { Database } from '@database/database';
 
 // Mock the dependencies
-jest.mock('@services/source/magnet.service');
+jest.mock('@services/source/source-metadata-file.service');
 jest.mock('@services/security/vpn.service');
 jest.mock('@services/download/download.service');
 jest.mock('@services/source-metadata/content-directory.service');
@@ -10,13 +10,13 @@ import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor
 
 import { DownloadService } from '@services/download/download.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
-import { MagnetService } from '@services/source/magnet.service';
 import { SourceService } from '@services/source/source.service';
+import { SourceMetadataFileService } from '@services/source/source-metadata-file.service';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 
 // Mock repositories
 const mockMovieRepository = {
-  findMoviesWithoutSources: jest.fn(() =>
+  findMoviesPendingSourceSearch: jest.fn(() =>
     Promise.resolve([
       { id: 1, imdbId: 'tt1234567', title: 'Test Movie 1' },
       { id: 2, imdbId: 'tt7654321', title: 'Test Movie 2' },
@@ -44,7 +44,7 @@ const mockMovieSourceRepository = {
   findSourceThatNeedsStatsUpdate: jest.fn(() => Promise.resolve([])),
   updateStats: jest.fn(() => Promise.resolve(undefined)),
   getNextSourcesToProcess: jest.fn(() => Promise.resolve([])),
-  updateTorrentFile: jest.fn(() => Promise.resolve(undefined)),
+  updateSourceFile: jest.fn(() => Promise.resolve(undefined)),
   findMovieIdsWithUnknownSourceType: jest.fn(() => Promise.resolve([])),
   updateSourceMetadata: jest.fn(() => Promise.resolve(undefined)),
 };
@@ -58,11 +58,13 @@ const mockDatabase = {
 describe('SourceService', () => {
   const mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
   let service: SourceService;
-  const mockTrackerService = new ContentDirectoryService(
+  const mockContentDirectoryService = new ContentDirectoryService(
     {} as never,
     mockDownloadService
   ) as jest.Mocked<ContentDirectoryService>;
-  const mockMagnetService = new MagnetService(mockDownloadService) as jest.Mocked<MagnetService>;
+  const mockSourceMetadataFileService = new SourceMetadataFileService(
+    mockDownloadService
+  ) as jest.Mocked<SourceMetadataFileService>;
   const mockVpnService = new VpnDetectionService() as jest.Mocked<VpnDetectionService>;
 
   beforeEach(() => {
@@ -73,7 +75,7 @@ describe('SourceService', () => {
     mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
 
     // Setup default mock implementations
-    mockTrackerService.searchTorrentsForMovie.mockResolvedValue({
+    mockContentDirectoryService.searchSourcesForMovie.mockResolvedValue({
       sources: [
         {
           audioCodec: [],
@@ -89,7 +91,7 @@ describe('SourceService', () => {
           source: Source.WEB,
           type: 'WEB',
           uploadDate: new Date('2023-01-01'),
-          url: 'https://example.com/torrent1',
+          url: 'https://example.com/source1',
           videoCodec: VideoCodec.X264,
           watchers: 10,
         },
@@ -107,15 +109,16 @@ describe('SourceService', () => {
           source: Source.BLURAY,
           type: 'BluRay',
           uploadDate: new Date('2023-01-02'),
-          url: 'https://example.com/torrent2',
+          url: 'https://example.com/source2',
           videoCodec: VideoCodec.X264,
           watchers: 5,
         },
       ],
+      source: 'YTS',
       trailerCode: 'abcd1234',
     });
 
-    mockTrackerService.status.mockReturnValue([
+    mockContentDirectoryService.status.mockReturnValue([
       {
         queue: 0,
         successes: [],
@@ -128,19 +131,21 @@ describe('SourceService', () => {
     mockVpnService.on.mockReturnValue(jest.fn());
     mockVpnService.status.mockReturnValue({ isVpnActive: true, disabled: false });
 
-    mockMagnetService.getTorrent.mockResolvedValue(Buffer.from('mock torrent file'));
-    mockMagnetService.getServiceStatistics.mockReturnValue({});
-    mockMagnetService.getStats.mockResolvedValue({ seeders: 100, leechers: 10 });
-    mockMagnetService.getAvailableConcurrency.mockReturnValue(2);
-    mockMagnetService.isIdle.mockReturnValue(true);
-    mockMagnetService.status.mockReturnValue({});
+    mockSourceMetadataFileService.getSourceMetadataFile.mockResolvedValue(
+      Buffer.from('mock source metadata file')
+    );
+    mockSourceMetadataFileService.getServiceStatistics.mockReturnValue({});
+    mockSourceMetadataFileService.getStats.mockResolvedValue({ seeders: 100, leechers: 10 });
+    mockSourceMetadataFileService.getAvailableConcurrency.mockReturnValue(2);
+    mockSourceMetadataFileService.isIdle.mockReturnValue(true);
+    mockSourceMetadataFileService.status.mockReturnValue({});
 
     // Create service instance
     service = new SourceService(
       mockDatabase,
       mockVpnService,
-      mockTrackerService,
-      mockMagnetService
+      mockContentDirectoryService,
+      mockSourceMetadataFileService
     );
   });
 
@@ -150,12 +155,14 @@ describe('SourceService', () => {
 
   describe('searchSourcesForMovies', () => {
     it('should process movies without sources', async () => {
-      mockTrackerService.searchTorrentsForMovie.mockRejectedValueOnce(new Error('Search failed'));
+      mockContentDirectoryService.searchSourcesForMovie.mockRejectedValueOnce(
+        new Error('Search failed')
+      );
       await service.searchSourcesForMovies();
 
-      expect(mockMovieRepository.findMoviesWithoutSources).toHaveBeenCalledTimes(1);
-      expect(mockMovieRepository.findMoviesWithoutSources).toHaveBeenCalledWith(1);
-      expect(mockTrackerService.searchTorrentsForMovie).toHaveBeenCalledTimes(2);
+      expect(mockMovieRepository.findMoviesPendingSourceSearch).toHaveBeenCalledTimes(1);
+      expect(mockMovieRepository.findMoviesPendingSourceSearch).toHaveBeenCalledWith(1);
+      expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledTimes(2);
       expect(mockMovieSourceRepository.createMany).toHaveBeenCalledTimes(1);
       expect(mockMovieRepository.markSourceSearched).toHaveBeenCalledTimes(3);
     });
@@ -183,7 +190,7 @@ describe('SourceService', () => {
 
         expect(sources).toEqual(existingSources);
         expect(mockMovieSourceRepository.findByMovieId).toHaveBeenCalledWith(1);
-        expect(mockTrackerService.searchTorrentsForMovie).not.toHaveBeenCalled();
+        expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
       });
     });
 
@@ -200,7 +207,10 @@ describe('SourceService', () => {
         const sources = await searchPromise;
 
         expect(mockMovieSourceRepository.findByMovieId).toHaveBeenCalledWith(1);
-        expect(mockTrackerService.searchTorrentsForMovie).toHaveBeenCalledWith('tt1234567', true);
+        expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
+          'tt1234567',
+          true
+        );
         expect(sources).toEqual([]);
 
         // Wait for the markSourceSearched call which happens without await
@@ -214,7 +224,10 @@ describe('SourceService', () => {
         const movie = { id: 1, imdbId: 'tt1234567', title: 'Test Movie', sourceSearched: false };
         await service.getSourcesForMovieWithOnDemandSearch(movie);
 
-        expect(mockTrackerService.searchTorrentsForMovie).toHaveBeenCalledWith('tt1234567', true);
+        expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
+          'tt1234567',
+          true
+        );
       });
     });
 
@@ -225,13 +238,14 @@ describe('SourceService', () => {
 
         mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
 
-        mockTrackerService.searchTorrentsForMovie.mockImplementation(() => {
+        mockContentDirectoryService.searchSourcesForMovie.mockImplementation(() => {
           return new Promise(resolve => {
             setTimeout(
               () =>
                 resolve({
                   sources: [],
                   trailerCode: 'efgh5678',
+                  source: 'YTS',
                 }),
               400
             ); // Take longer than timeout
@@ -251,7 +265,7 @@ describe('SourceService', () => {
 
         expect(endTime - startTime).toBeLessThan(220); // Should timeout around 200ms
         expect(sources).toEqual([]);
-        expect(mockTrackerService.searchTorrentsForMovie).toHaveBeenCalledWith(
+        expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
           'tt-slow-search',
           true
         );
@@ -271,13 +285,14 @@ describe('SourceService', () => {
         mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
 
         let searchResolved = false;
-        mockTrackerService.searchTorrentsForMovie.mockImplementation(() => {
+        mockContentDirectoryService.searchSourcesForMovie.mockImplementation(() => {
           return new Promise(resolve => {
             setTimeout(() => {
               searchResolved = true;
               resolve({
                 sources: [],
                 trailerCode: 'abcd1234',
+                source: 'YTS',
               });
             }, 400); // Take longer than timeout
           });
@@ -311,7 +326,7 @@ describe('SourceService', () => {
         const sources = await service.getSourcesForMovieWithOnDemandSearch(movie);
 
         expect(sources).toEqual([]);
-        expect(mockTrackerService.searchTorrentsForMovie).not.toHaveBeenCalled();
+        expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
         expect(mockMovieRepository.markSourceSearched).not.toHaveBeenCalled();
       });
     });
@@ -319,14 +334,19 @@ describe('SourceService', () => {
     describe('when search fails', () => {
       it('should handle errors gracefully and return empty array', async () => {
         mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
-        mockTrackerService.searchTorrentsForMovie.mockRejectedValue(new Error('Search failed'));
+        mockContentDirectoryService.searchSourcesForMovie.mockRejectedValue(
+          new Error('Search failed')
+        );
 
         const movie = { id: 1, imdbId: 'tt1234567', title: 'Test Movie', sourceSearched: false };
 
         const sources = await service.getSourcesForMovieWithOnDemandSearch(movie);
 
         expect(sources).toEqual([]);
-        expect(mockTrackerService.searchTorrentsForMovie).toHaveBeenCalledWith('tt1234567', true);
+        expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
+          'tt1234567',
+          true
+        );
       });
     });
   });
@@ -348,12 +368,12 @@ describe('SourceService', () => {
       mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce(
         sourcesToUpdate as never[]
       );
-      mockMagnetService.getStats.mockResolvedValueOnce({ seeders: 100, leechers: 10 });
+      mockSourceMetadataFileService.getStats.mockResolvedValueOnce({ seeders: 100, leechers: 10 });
 
       await service.syncStatsForSources();
 
       expect(mockMovieSourceRepository.findSourceThatNeedsStatsUpdate).toHaveBeenCalledWith(5);
-      expect(mockMagnetService.getStats).toHaveBeenCalledWith('abc123');
+      expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledWith('abc123');
       expect(mockMovieSourceRepository.updateStats).toHaveBeenCalledWith(
         1,
         100,
@@ -362,7 +382,7 @@ describe('SourceService', () => {
       );
     });
 
-    it('should skip sources without torrent files', async () => {
+    it('should skip sources without source metadata files', async () => {
       const sourcesToUpdate = [
         {
           id: 1,
@@ -381,7 +401,7 @@ describe('SourceService', () => {
 
       await service.syncStatsForSources();
 
-      expect(mockMagnetService.getStats).not.toHaveBeenCalled();
+      expect(mockSourceMetadataFileService.getStats).not.toHaveBeenCalled();
       expect(mockMovieSourceRepository.updateStats).not.toHaveBeenCalled();
     });
 
@@ -401,11 +421,11 @@ describe('SourceService', () => {
       mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce(
         sourcesToUpdate as never[]
       );
-      mockMagnetService.getStats.mockRejectedValueOnce(new Error('Stats fetch failed'));
+      mockSourceMetadataFileService.getStats.mockRejectedValueOnce(new Error('Stats fetch failed'));
 
       await service.syncStatsForSources();
 
-      expect(mockMagnetService.getStats).toHaveBeenCalledWith('abc123');
+      expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledWith('abc123');
       expect(mockMovieSourceRepository.updateStats).not.toHaveBeenCalled();
     });
 
@@ -415,8 +435,8 @@ describe('SourceService', () => {
       const serviceWithoutVpn = new SourceService(
         mockDatabase,
         mockVpnService,
-        mockTrackerService,
-        mockMagnetService
+        mockContentDirectoryService,
+        mockSourceMetadataFileService
       );
 
       await serviceWithoutVpn.syncStatsForSources();
@@ -437,7 +457,7 @@ describe('SourceService', () => {
 
       expect(mockMovieSourceRepository.findMovieIdsWithUnknownSourceType).toHaveBeenCalled();
       expect(mockMovieRepository.findMoviesByIdsWithImdb).toHaveBeenCalledWith([1], 1);
-      expect(mockTrackerService.searchTorrentsForMovie).toHaveBeenCalledWith('tt1234567');
+      expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith('tt1234567');
     });
 
     it('should skip when no movies need processing', async () => {
@@ -446,7 +466,7 @@ describe('SourceService', () => {
       await service.resyncMovieSources();
 
       expect(mockMovieRepository.findMoviesByIdsWithImdb).not.toHaveBeenCalled();
-      expect(mockTrackerService.searchTorrentsForMovie).not.toHaveBeenCalled();
+      expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
     });
 
     it('should handle tracker service errors gracefully', async () => {
@@ -455,11 +475,13 @@ describe('SourceService', () => {
         1,
       ] as never[]);
       mockMovieRepository.findMoviesByIdsWithImdb.mockResolvedValueOnce([movie] as never[]);
-      mockTrackerService.searchTorrentsForMovie.mockRejectedValueOnce(new Error('Resync failed'));
+      mockContentDirectoryService.searchSourcesForMovie.mockRejectedValueOnce(
+        new Error('Resync failed')
+      );
 
       await service.resyncMovieSources();
 
-      expect(mockTrackerService.searchTorrentsForMovie).toHaveBeenCalledWith('tt1234567');
+      expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith('tt1234567');
       // Should not throw - error is handled internally
     });
 
@@ -469,8 +491,8 @@ describe('SourceService', () => {
       const serviceWithoutVpn = new SourceService(
         mockDatabase,
         mockVpnService,
-        mockTrackerService,
-        mockMagnetService
+        mockContentDirectoryService,
+        mockSourceMetadataFileService
       );
 
       await serviceWithoutVpn.resyncMovieSources();
@@ -486,18 +508,23 @@ describe('SourceService', () => {
       const serviceWithoutVpn = new SourceService(
         mockDatabase,
         mockVpnService,
-        mockTrackerService,
-        mockMagnetService
+        mockContentDirectoryService,
+        mockSourceMetadataFileService
       );
 
       await serviceWithoutVpn.searchSourcesForMovies();
 
-      expect(mockMovieRepository.findMoviesWithoutSources).not.toHaveBeenCalled();
-      expect(mockTrackerService.searchTorrentsForMovie).not.toHaveBeenCalled();
+      expect(mockMovieRepository.findMoviesPendingSourceSearch).not.toHaveBeenCalled();
+      expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
     });
 
     it('should register VPN connection event handlers', async () => {
-      new SourceService(mockDatabase, mockVpnService, mockTrackerService, mockMagnetService);
+      new SourceService(
+        mockDatabase,
+        mockVpnService,
+        mockContentDirectoryService,
+        mockSourceMetadataFileService
+      );
 
       expect(mockVpnService.on).toHaveBeenCalledWith('connect', expect.any(Function));
       expect(mockVpnService.on).toHaveBeenCalledWith('disconnect', expect.any(Function));

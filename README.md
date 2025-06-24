@@ -32,33 +32,33 @@
 
 ## 🔍 Overview
 
-Miauflix is a comprehensive media platform that empowers you to manage and stream your media collection with ease and security. Built with Node.js and designed to be self-hosted, it gives you full control over your streaming experience.
+Miauflix is a self-hosted media streaming platform that enables users to discover and stream content from various sources. It provides a modern web interface for accessing media content through peer-to-peer streaming technology. Built with Node.js and designed for personal server deployment, Miauflix offers a customizable streaming solution for your media library.
 
 ## ✨ Features
 
 ### 🚀 Currently Available
 
-- **🔐 Secure Authentication**: JWT-based user authentication system
-- **🎬 Media Metadata**: Rich movie and TV show information via TMDB integration
-- **🔍 Content Discovery**: Movie search and torrent finding through YTS tracker
-- **🛡️ Security Features**: VPN detection, audit logging, and comprehensive security middleware
-- **📊 Health Monitoring**: System health checks and monitoring endpoints
-- **🐳 Docker Ready**: Full containerization with nginx reverse proxy and SSL support
+- **🔐 User Authentication**: JWT login system with refresh tokens
+- **🎬 Movie Database**: TMDB integration for posters, ratings, and metadata
+- **🔍 Source Discovery**: Automatic search across multiple content directories, currently supported YTS and THERARBG but more to come
+- **🛡️ VPN Integration**: Built-in VPN detection and enforcement ( optional )
+- **📊 Background Processing**: Continuous source discovery and quality scoring
+- **🔒 Content Encryption**: All source metadata is encrypted at rest, either if it's in the database or in the file system ( you may be safe from automated detection, protection from a human is impossible )
+- **🐳 Docker Support**: Ready-to-run containers with nginx and SSL
 
 ### 🔄 In Development
 
-- **📺 Media Streaming**: WebTorrent-based content streaming (foundation complete)
-- **📱 Frontend Interface**: Web application for browsing and playing content
-- **📋 Trakt.tv Integration**: Watch list synchronization and progress tracking
+- **📺 Video Streaming**: Stream endpoint for peer-to-peer content (backend 95% done)
+- **📱 Web Interface**: Frontend JWT integration and build fixes needed
 
 ### 🎯 Planned Features
 
-- **📚 Media Library Management**: Organize and manage your content collection
-- **🔒 Content Encryption**: Optional encryption for downloaded content
-- **📱 Mobile Apps**: Native iOS and Android applications
-- **🎵 Multi-format Support**: Support for various media formats and quality options
+- **📺 TV Shows**: Episode navigation and season management
+- **⛩️ Anime**: Anime support
+- **🎯 More Sources**: Additional content directories and indexers ( 1337x, Nyan, Jackett & Prowlarr )
+- **📱 Mobile Apps**: Native iOS and Android clients
 
-> **Current Status**: Backend API is production-ready (~75% complete), frontend is in early development. See [Implementation Status](IMPLEMENTATION_STATUS.md) for detailed progress tracking.
+> **Current Status**: Backend is nearly complete (95%), frontend needs JWT auth and build fixes. About 2-3 weeks from full functionality.
 
 The application is a self-contained Node.js application. Docker image and docker-compose files are provided for easy server setup. Note: Docker and docker-compose are not mandatory but are recommended as they provide pre-configured VPN and reverse proxy setup.
 
@@ -81,6 +81,18 @@ miauflix/
 ├── setup-ssl.sh              # SSL setup wizard
 ├── docker-compose.yml        # Container orchestration
 ```
+
+## ⚡ Quick Setup (5 minutes)
+
+> Just want to try it? Here's the fastest path:
+
+```bash
+git clone <repository-url> && cd miauflix-bun
+docker compose run --rm backend npm run start:backend -- --only-config
+docker compose up
+```
+
+First command runs the configuration wizard (TMDB API key, etc.), then start the full stack. No local Node.js installation needed!
 
 ## 🚀 Getting Started
 

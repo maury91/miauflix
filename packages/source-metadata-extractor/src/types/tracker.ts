@@ -36,35 +36,3 @@ export interface ExtractedData<T> {
   /** Method used for extraction */
   method?: 'pattern' | 'tracker' | 'inference';
 }
-
-/**
- * Legacy SourceMetadataItem interface for backward compatibility
- */
-export interface SourceMetadataItem {
-  /** Torrent name */
-  name: string;
-  /** Description text */
-  descr: string | null;
-  /** Short name (optional) */
-  short_name?: string;
-  /** File list */
-  files: SourceMetadataFile[] | null;
-  /** Category */
-  category: string | null;
-  /** Type */
-  type: string | null;
-  /** Size in bytes */
-  size: number;
-}
-
-/**
- * Legacy file metadata interface
- */
-export interface SourceMetadataFile {
-  /** File name */
-  name: string;
-  /** File size in bytes */
-  size: number;
-  /** Full location path */
-  full_location: string;
-}

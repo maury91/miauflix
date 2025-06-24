@@ -15,7 +15,7 @@ import { MediaService } from '@services/media/media.service';
 import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
-import { MagnetService, SourceService } from '@services/source';
+import { SourceMetadataFileService, SourceService } from '@services/source';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { StorageService } from '@services/storage/storage.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
@@ -77,9 +77,14 @@ try {
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
   const downloadService = new DownloadService();
-  const trackerService = new ContentDirectoryService(cacheService.cache, downloadService);
-  const magnetService = new MagnetService(downloadService);
-  const sourceService = new SourceService(db, vpnDetectionService, trackerService, magnetService);
+  const contentDirectoryService = new ContentDirectoryService(cacheService.cache, downloadService);
+  const magnetService = new SourceMetadataFileService(downloadService);
+  const sourceService = new SourceService(
+    db,
+    vpnDetectionService,
+    contentDirectoryService,
+    magnetService
+  );
   // ToDo: Use the storage service in the right places
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const storageService = new StorageService(db); // For tracking download progress (used in streaming infrastructure)
@@ -120,7 +125,7 @@ try {
   scheduler.scheduleTask(
     'dataFileSearch',
     0.2, // 0.2 second (slightly slower than source search to prioritize finding new sources first)
-    bind(sourceService, 'searchTorrentFilesForSources')
+    bind(sourceService, 'syncMissingSourceFiles')
   );
 
   scheduler.scheduleTask(
@@ -176,7 +181,7 @@ try {
     listService,
     tmdbApi,
     vpnDetectionService,
-    trackerService,
+    contentDirectoryService,
     magnetService,
     traktService,
   });

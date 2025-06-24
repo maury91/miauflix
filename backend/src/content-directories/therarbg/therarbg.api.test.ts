@@ -26,14 +26,14 @@ describe('TheRARBGService', () => {
         expect(typeof result.imdb.release_detailed.year).toBe('number');
         expect(typeof result.imdb.runtime).toBe('string');
 
-        // Check torrent structure if any torrents exist
+        // Check source structure if any sources exist
         if (result.trb_posts.length > 0) {
-          const firstTorrent = result.trb_posts[0];
-          expect(firstTorrent.name).toBeDefined();
-          expect(firstTorrent.info_hash).toBeDefined();
-          expect(typeof firstTorrent.seeders).toBe('number');
-          expect(typeof firstTorrent.leechers).toBe('number');
-          expect(typeof firstTorrent.size).toBe('number');
+          const firstSource = result.trb_posts[0];
+          expect(firstSource.name).toBeDefined();
+          expect(firstSource.info_hash).toBeDefined();
+          expect(typeof firstSource.seeders).toBe('number');
+          expect(typeof firstSource.leechers).toBe('number');
+          expect(typeof firstSource.size).toBe('number');
         }
       }
     });

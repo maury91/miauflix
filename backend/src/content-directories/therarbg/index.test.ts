@@ -218,7 +218,7 @@ describe('TherarbgContentDirectory', () => {
       ]);
     });
 
-    it('should handle torrents with null seeders/leechers', async () => {
+    it('should handle sources with null seeders/leechers', async () => {
       const mockResponseWithNullValues = {
         ...mockMovieResponse,
         trb_posts: [
@@ -350,7 +350,7 @@ describe('TherarbgContentDirectory', () => {
       });
     });
 
-    it('should return empty sources when TV show has no torrents', async () => {
+    it('should return empty sources when TV show has no sources', async () => {
       jest.spyOn(contentDirectory['api'], 'searchByImdbId').mockResolvedValue({
         ...mockTVShowResponse,
         trb_posts: [],

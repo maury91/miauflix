@@ -3,7 +3,7 @@ import type { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';
 
 /**
- * Public interface for media sources - completely sanitized
+ * Public interface for media sources
  */
 export interface MediaSource {
   id: number;
@@ -15,7 +15,7 @@ export interface MediaSource {
   audioFormat: string; // "AAC"
   availability: string; // "High/Medium/Low"
   uploadDate?: string; // ISO date string
-  // NO: hash, magnet, torrent, seeder, tracker, etc.
+  // NO sensitive data
 }
 
 /**
