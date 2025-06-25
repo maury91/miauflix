@@ -99,8 +99,11 @@ export class Movie {
   @Column()
   logo: string;
 
-  @Column({ default: false })
-  sourceSearched: boolean;
+  @Column({
+    type: 'simple-json',
+    default: '[]',
+  })
+  contentDirectoriesSearched: string[];
 
   @OneToMany(() => MovieSource, source => source.movie)
   sources: Relation<MovieSource>[];

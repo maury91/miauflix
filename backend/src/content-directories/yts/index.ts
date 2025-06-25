@@ -44,7 +44,6 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
       score: 0,
       size: sourceMetadata.size_bytes,
       source,
-      type: sourceMetadata.type,
       uploadDate: new Date(sourceMetadata.date_uploaded),
       url: sourceMetadata.url,
       videoCodec,

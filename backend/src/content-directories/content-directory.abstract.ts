@@ -15,14 +15,16 @@ export interface SourceMetadata {
   hash: string;
   language: Language[];
   magnetLink: string;
+  /* Quality of the source ( 1080p, 720p, etc ) */
   quality: Quality | null;
   resolution: { width: number; height: number; label: string };
   score: number;
   size: number;
+  /* Where the media is coming from ( WEB, YTS, etc ) */
   source: Source | null;
-  type: string;
   uploadDate: Date;
   url: string;
+  /* Video codec of the source ( x264, x265, etc ) */
   videoCodec: VideoCodec | null;
   watchers: number;
 }
