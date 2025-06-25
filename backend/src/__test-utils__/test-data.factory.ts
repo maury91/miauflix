@@ -29,7 +29,7 @@ export class TestDataFactory {
       poster: '/test-poster.jpg',
       backdrop: '/test-backdrop.jpg',
       logo: '/test-logo.png',
-      sourceSearched: false,
+      contentDirectoriesSearched: [],
       genres: [],
       translations: [],
       ...overrides,

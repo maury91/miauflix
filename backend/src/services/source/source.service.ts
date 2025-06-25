@@ -64,8 +64,7 @@ export class SourceService {
       return;
     }
 
-    // Find movies that haven't been searched for sources
-    // We go one movie at time because the scheduler will call this method periodically
+    // Find movies that haven't been searched at all
     const moviesToSearch = await this.movieRepository.findMoviesPendingSourceSearch(1);
 
     if (moviesToSearch.length === 0) {
@@ -74,25 +73,26 @@ export class SourceService {
     }
 
     for (const movie of moviesToSearch) {
-      await this.searchSourcesForMovie(movie);
-
-      // Mark as searched even if no sources were found
-      await this.movieRepository.markSourceSearched(movie.id);
+      const sources = await this.searchSourcesForMovie({ ...movie }, false);
+      if (sources) {
+        await this.movieRepository.markSourceSearched(movie.id, sources.directory);
+      }
     }
   }
 
   /**
    * Search for sources for a specific movie
    */
-  @SingleFlight(movie => movie.id)
+  @SingleFlight(movie => movie.id + ':' + movie.contentDirectoriesSearched?.join(','))
   private async searchSourcesForMovie(
     movie: {
       id: number;
       imdbId: string | null;
       title: string;
+      contentDirectoriesSearched?: string[];
     },
     isOnDemand: boolean = false
-  ): Promise<MovieSource[] | void> {
+  ): Promise<{ directory: string; sources: MovieSource[] } | void> {
     await this.startPromise;
 
     if (!this.vpnConnected) {
@@ -120,7 +120,8 @@ export class SourceService {
       // Search for sources using the content directory service
       const movieWithSources = await this.contentDirectoryService.searchSourcesForMovie(
         movie.imdbId,
-        isOnDemand
+        isOnDemand,
+        movie.contentDirectoriesSearched || []
       );
 
       if (!movieWithSources || !movieWithSources.sources?.length) {
@@ -130,7 +131,7 @@ export class SourceService {
 
       logger.debug(
         'SourceService',
-        `Found ${movieWithSources.sources.length} sources for movie ${movie.id} (${movie.title})`
+        `Found ${movieWithSources.sources.length} sources for movie ${movie.id} (${movie.title}) using ${movieWithSources.source}`
       );
 
       if (movieWithSources.trailerCode) {
@@ -166,7 +167,7 @@ export class SourceService {
         'SourceService',
         `Saved ${sources.length} sources for movie ${movie.id} (${movie.title})`
       );
-      return createdSources;
+      return { directory: movieWithSources.source, sources: createdSources };
     } catch (error) {
       logger.error(
         'SourceService',
@@ -189,11 +190,16 @@ export class SourceService {
    * Returns sources within timeout, but continues search in background if needed
    */
   public async getSourcesForMovieWithOnDemandSearch(
-    movie: { id: number; imdbId: string | null; title: string; sourceSearched: boolean },
+    movie: {
+      id: number;
+      imdbId: string | null;
+      title: string;
+      contentDirectoriesSearched: string[];
+    },
     timeoutMs: number = 1200
   ): Promise<MovieSource[]> {
     // First check if we already have sources
-    const existingSources = await this.movieSourceRepository.findByMovieId(movie.id);
+    const existingSources = await this.getSourcesForMovie(movie.id);
     if (existingSources.length > 0) {
       return existingSources;
     }
@@ -208,17 +214,20 @@ export class SourceService {
       let status: 'pending' | 'success' | 'timeout' = 'pending';
       const searchPromise = (async () => {
         const sources = await this.searchSourcesForMovie(movie, true);
-        // On purpose without await so it returns faster
-        this.movieRepository.markSourceSearched(movie.id);
-        if (status === 'pending') {
-          status = 'success';
-        } else {
-          logger.debug(
-            'SourceService',
-            `Background search completed for movie ${movie.id} (${movie.title})`
-          );
+        if (sources) {
+          // On purpose without await so it returns faster
+          this.movieRepository.markSourceSearched(movie.id, sources.directory);
+          if (status === 'pending') {
+            status = 'success';
+          } else {
+            logger.debug(
+              'SourceService',
+              `Background search completed for movie ${movie.id} (${movie.title})`
+            );
+          }
+          return sources.sources;
         }
-        return sources;
+        return [];
       })();
       const timeoutPromise = (async () => {
         await sleep(timeoutMs);
@@ -267,9 +276,6 @@ export class SourceService {
     await Promise.all(
       sourcesToUpdate.map(async source => {
         try {
-          if (!source.file) {
-            return;
-          }
           const { seeders, leechers } = await this.magnetService.getStats(source.hash);
           const nextCheckTime = this.calculateNextStatsCheckTime(source, seeders, leechers);
 
@@ -690,7 +696,7 @@ export class SourceService {
           const updateData: Partial<MovieSource> = {};
 
           if (existingSource.sourceType === 'unknown') {
-            updateData.sourceType = source.type;
+            updateData.sourceType = source.source;
           }
 
           if (!existingSource.sourceUploadedAt && source.uploadDate) {

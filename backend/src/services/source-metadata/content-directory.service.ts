@@ -31,10 +31,18 @@ export class ContentDirectoryService {
    *
    * @param imdbId - The IMDb ID of the movie (format: ttXXXXXXX)
    * @param highPriority - Whether to use high priority rate limit (default: false)
+   * @param contentDirectoriesSearched - The content directories that have already been searched (default: [])
    * @returns A movie object with normalized sources or null if not found
    */
-  public async searchSourcesForMovie(imdbId: string, highPriority = false) {
+  public async searchSourcesForMovie(
+    imdbId: string,
+    highPriority = false,
+    contentDirectoriesSearched: string[] = []
+  ) {
     for (const contentDirectory of this.movieDirectories) {
+      if (contentDirectoriesSearched.includes(contentDirectory.name)) {
+        continue;
+      }
       try {
         const { sources, trailerCode } = await contentDirectory.getMovie(imdbId, highPriority);
         if (sources.length > 0) {
