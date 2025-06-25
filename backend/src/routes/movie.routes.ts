@@ -118,7 +118,7 @@ export const createMovieRoutes = (
               id: movie.id,
               imdbId: movie.imdbId,
               title: movie.title,
-              sourceSearched: movie.sourceSearched,
+              contentDirectoriesSearched: movie.contentDirectoriesSearched,
             },
             1200 // 1.2 second timeout - enough time for YTS API search but still reasonable for users
           );

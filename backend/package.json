@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.27.2",
+    "@faker-js/faker": "^8.4.1",
     "@swc-node/register": "^1.10.10",
     "@tsconfig/node20": "20.1.5",
     "@types/bcrypt": "^5.0.2",

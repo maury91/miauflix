@@ -87,14 +87,13 @@ export class MovieRepository {
    * Find movies that haven't been searched for sources yet
    */
   async findMoviesPendingSourceSearch(limit: number = 10): Promise<Movie[]> {
+    // Find movies where no directories have been searched
     return this.movieRepository.find({
       where: {
-        sourceSearched: false,
-        imdbId: Not(IsNull()), // Only search movies with IMDb ID
+        imdbId: Not(IsNull()),
+        contentDirectoriesSearched: '[]',
       },
-      order: {
-        popularity: 'DESC',
-      },
+      order: { popularity: 'DESC' },
       take: limit,
     });
   }
@@ -157,10 +156,19 @@ export class MovieRepository {
   /**
    * Mark a movie as having been searched for sources
    */
-  async markSourceSearched(movieId: number): Promise<void> {
-    await this.movieRepository.update(movieId, {
-      sourceSearched: true,
-    });
+  async markSourceSearched(movieId: number, directory: string): Promise<void> {
+    // Fetch the movie
+    const movie = await this.movieRepository.findOneBy({ id: movieId });
+    if (!movie) return;
+    // Initialize array if missing
+    if (!Array.isArray(movie.contentDirectoriesSearched)) {
+      movie.contentDirectoriesSearched = [];
+    }
+    // Add directory if not present
+    if (!movie.contentDirectoriesSearched.includes(directory)) {
+      movie.contentDirectoriesSearched.push(directory);
+      await this.movieRepository.save(movie);
+    }
   }
 
   /**

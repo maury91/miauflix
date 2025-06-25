@@ -32,9 +32,9 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
     sourceMetadata: ImdbDetailPost,
     movieDetails: ImdbMetadata
   ): SourceMetadata {
-    const metadata = extractSourceMetadata({
+    const extractedMetadata = extractSourceMetadata({
       name: sourceMetadata.name,
-      type: sourceMetadata.type,
+      type: sourceMetadata.type, // This is file type ( mp4, mkv, etc ) but also sometimes the codec ( x264, x265, etc )
       size: sourceMetadata.size,
       files: sourceMetadata.files,
       category: sourceMetadata.category_str,
@@ -48,29 +48,28 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
       },
     });
     return {
-      audioCodec: metadata.audioCodec,
+      audioCodec: extractedMetadata.audioCodec,
       bitrate: calculateApproximateBitrate(
         sourceMetadata.size,
         parseInt(movieDetails.runtime, 10) / 60
       ),
       broadcasters: sourceMetadata.seeders ?? 0,
       hash: sourceMetadata.info_hash,
-      language: metadata.language,
+      language: extractedMetadata.language,
       magnetLink: this.downloadService.generateLink(
         sourceMetadata.info_hash,
         sourceMetadata.trackers
           .filter(tracker => tracker.scrape_error === null)
           .map(tracker => tracker.tracker)
       ),
-      quality: metadata.quality ?? null,
-      resolution: qualityToResolution(metadata.quality),
+      quality: extractedMetadata.quality ?? null,
+      resolution: qualityToResolution(extractedMetadata.quality),
       score: 0, // ToDo: use scoringService to calculate score
       size: sourceMetadata.size,
-      source: metadata.source ?? null,
-      type: sourceMetadata.type,
+      source: extractedMetadata.source ?? null,
       uploadDate: new Date(sourceMetadata.timestamp),
       url: '', // TheRARBG does not provide a direct download URL
-      videoCodec: metadata.videoCodec[0] ?? null,
+      videoCodec: extractedMetadata.videoCodec[0] ?? null,
       watchers: sourceMetadata.leechers ?? 0,
     };
   }
