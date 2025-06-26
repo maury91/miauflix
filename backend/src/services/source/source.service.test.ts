@@ -148,7 +148,7 @@ describe('SourceService', () => {
       Buffer.from('mock source metadata file')
     );
     mockSourceMetadataFileService.getServiceStatistics.mockReturnValue({});
-    mockSourceMetadataFileService.getStats.mockResolvedValue({ seeders: 100, leechers: 10 });
+    mockSourceMetadataFileService.getStats.mockResolvedValue({ broadcasters: 100, watchers: 10 });
     mockSourceMetadataFileService.getAvailableConcurrency.mockReturnValue(2);
     mockSourceMetadataFileService.isIdle.mockReturnValue(true);
     mockSourceMetadataFileService.status.mockReturnValue({});
@@ -431,7 +431,7 @@ describe('SourceService', () => {
       const { service, mockSource1, mockMovieSourceRepository, mockSourceMetadataFileService } =
         setupTest();
 
-      const newSeeders = mockSource1.watchers + 10;
+      const newWatchers = mockSource1.watchers + 10;
       const newBroadcasters = mockSource1.broadcasters + 10;
 
       const sourceToUpdate = createMockSourceForStats({
@@ -441,8 +441,8 @@ describe('SourceService', () => {
         sourceToUpdate,
       ]);
       mockSourceMetadataFileService.getStats.mockResolvedValueOnce({
-        seeders: newSeeders,
-        leechers: newBroadcasters,
+        broadcasters: newBroadcasters,
+        watchers: newWatchers,
       });
 
       await service.syncStatsForSources();
@@ -457,8 +457,8 @@ describe('SourceService', () => {
       // And it should update the stats for the source
       expect(mockMovieSourceRepository.updateStats).toHaveBeenCalledWith(
         sourceToUpdate.id,
-        newSeeders,
         newBroadcasters,
+        newWatchers,
         expect.any(Date)
       );
     });
@@ -471,15 +471,15 @@ describe('SourceService', () => {
         hash: mockSource1.hash,
         file: undefined,
       });
-      const newSeeders = mockSource1.watchers + 10;
+      const newWatchers = mockSource1.watchers + 10;
       const newBroadcasters = mockSource1.broadcasters + 10;
 
       mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
         sourceWithoutFile,
       ]);
       mockSourceMetadataFileService.getStats.mockResolvedValueOnce({
-        seeders: newSeeders,
-        leechers: newBroadcasters,
+        broadcasters: newBroadcasters,
+        watchers: newWatchers,
       });
 
       await service.syncStatsForSources();
@@ -491,8 +491,8 @@ describe('SourceService', () => {
       // And it should update the stats for the source
       expect(mockMovieSourceRepository.updateStats).toHaveBeenCalledWith(
         sourceWithoutFile.id,
-        newSeeders,
         newBroadcasters,
+        newWatchers,
         expect.any(Date)
       );
     });
