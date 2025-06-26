@@ -142,8 +142,8 @@ export interface GetPosts {
   s: number; // size in bytes
   t: null; // thumbnail URL (null if not available)
   u: string; // uploader username
-  se: number; // seeders
-  le: number; // leechers
+  se: number; // broadcasters
+  le: number; // watchers
   i: string; // imdb_id
   h: string; // info_hash
   tg: string[]; // tags array

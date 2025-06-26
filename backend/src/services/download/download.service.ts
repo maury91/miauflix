@@ -30,7 +30,7 @@ export class DownloadService {
       blocklist: [blacklistedTrackersURL],
     });
     this.client.on('error', (error: Error) => {
-      logger.error('DataService', 'Error:', error.message);
+      logger.error('DownloadService', 'Error:', error.message, error);
     });
     this.ready = this.loadTrackers();
   }
@@ -50,7 +50,7 @@ export class DownloadService {
         }
       }
     } catch (error) {
-      logger.error('DataService', 'Error fetching trackers:', error);
+      logger.error('DownloadService', 'Error fetching trackers:', error);
     }
     return [];
   }
@@ -64,7 +64,7 @@ export class DownloadService {
         },
         (err, ipSet) => {
           if (err) {
-            logger.error('DataService', 'Error loading IP set:', err);
+            logger.error('DownloadService', 'Error loading IP set:', err);
             return resolve(null);
           }
           resolve(ipSet);
@@ -169,12 +169,12 @@ export class DownloadService {
     });
   }
 
-  async getStats(infoHash: string): Promise<{ seeders: number; leechers: number }> {
+  async getStats(infoHash: string): Promise<{ broadcasters: number; watchers: number }> {
     await this.ready;
     const result = await this.scrape(infoHash);
     return {
-      seeders: result.complete || 0,
-      leechers: result.incomplete || 0,
+      broadcasters: result.complete || 0,
+      watchers: result.incomplete || 0,
     };
   }
 }

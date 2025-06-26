@@ -1,5 +1,5 @@
 import type { Repository } from 'typeorm';
-import { In, IsNull, Not } from 'typeorm';
+import { In, IsNull, LessThanOrEqual, Not } from 'typeorm';
 
 import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
@@ -92,6 +92,7 @@ export class MovieRepository {
       where: {
         imdbId: Not(IsNull()),
         contentDirectoriesSearched: '[]',
+        nextSourceSearchAt: LessThanOrEqual(new Date()),
       },
       order: { popularity: 'DESC' },
       take: limit,
@@ -154,7 +155,9 @@ export class MovieRepository {
   }
 
   /**
-   * Mark a movie as having been searched for sources
+   * Mark a movie as having been searched for sources ( successfully )
+   * @param movieId - The ID of the movie to mark
+   * @param directory - The directory that was searched
    */
   async markSourceSearched(movieId: number, directory: string): Promise<void> {
     // Fetch the movie
@@ -169,6 +172,16 @@ export class MovieRepository {
       movie.contentDirectoriesSearched.push(directory);
       await this.movieRepository.save(movie);
     }
+  }
+
+  /**
+   * Mark a movie as having been attempted to search for sources ( unsuccessfully )
+   * @param movieId - The ID of the movie to mark
+   */
+  async markSourceSearchAttempt(movieId: number): Promise<void> {
+    const backoffMs = (45 + Math.random() * 30) * 60 * 1000; // 45-75 minutes
+    const nextSearch = new Date(Date.now() + backoffMs);
+    await this.movieRepository.update(movieId, { nextSourceSearchAt: nextSearch });
   }
 
   /**

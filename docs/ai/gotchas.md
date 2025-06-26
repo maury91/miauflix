@@ -37,6 +37,92 @@ npm install --workspace frontend package-name
 npm test --workspace backend -- yts.api.test.ts
 ```
 
+### 🚨 **Critical Testing Gotchas**
+
+#### ❌ **DON'T use shared state between tests**
+
+```typescript
+// WRONG - Shared service instance leads to race conditions
+describe('Service', () => {
+  let service: Service; // ❌ Shared state
+
+  beforeEach(() => {
+    service = new Service(); // ❌ Tests can interfere with each other
+  });
+});
+```
+
+#### ✅ **ALWAYS use setupTest() pattern for test isolation**
+
+```typescript
+// CORRECT - Fresh instances prevent race conditions
+const setupTest = () => {
+  const mockRepository = new Repository({} as never) as jest.Mocked<Repository>;
+  const service = new Service(mockRepository);
+  return { service, mockRepository };
+};
+
+it('should work', async () => {
+  const { service, mockRepository } = setupTest(); // ✅ Fresh state
+});
+```
+
+#### ❌ **DON'T put jest.mock() inside describe blocks**
+
+```typescript
+// WRONG - Mocks won't be hoisted properly
+describe('Service', () => {
+  jest.mock('@services/external.service'); // ❌ Too late, won't work
+});
+```
+
+#### ✅ **ALWAYS put jest.mock() at the top of the file**
+
+```typescript
+// CORRECT - Mocks are hoisted before any imports
+jest.mock('@services/external.service'); // ✅ At file top
+
+import { Service } from './service'; // ✅ After mocks
+```
+
+#### ⚠️ **Mock module paths must be exact**
+
+- Use exact TypeScript paths: `@services/auth/auth.service`
+- Relative paths won't work reliably
+- Check existing working test files for correct paths
+
+#### 🎯 **Faker seed is critical for reproducible tests**
+
+```typescript
+// REQUIRED for reproducible random data
+beforeAll(() => {
+  configureFakerSeed(); // ✅ Must call this
+});
+```
+
+#### ❌ **DON'T forget to clean up timers in async tests**
+
+```typescript
+// WRONG - Timers leak between tests
+it('should timeout', async () => {
+  jest.useFakeTimers(); // ❌ Not cleaned up
+  // test code...
+});
+```
+
+#### ✅ **ALWAYS clean up timers**
+
+```typescript
+// CORRECT - Proper timer cleanup
+beforeEach(() => {
+  jest.useFakeTimers();
+});
+
+afterEach(() => {
+  jest.useRealTimers(); // ✅ Clean up
+});
+```
+
 ## 🗄️ **Database Safety**
 
 ### ⚠️ **Database uses TypeORM synchronize mode**

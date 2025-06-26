@@ -140,7 +140,7 @@ export class SourceMetadataFileService {
     });
   }
 
-  public async getStats(hash: string): Promise<{ seeders: number; leechers: number }> {
+  public async getStats(hash: string): Promise<{ broadcasters: number; watchers: number }> {
     return this.downloadService.getStats(hash);
   }
 
