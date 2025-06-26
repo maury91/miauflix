@@ -12,7 +12,7 @@ import { validateImdbId } from './therarbg.utils';
 
 const mirrors = ['https://therarbg.to', 'https://therar.site'];
 
-type SearchPostsSortKey = 'added' | 'leechers' | 'seeders' | 'size';
+type SearchPostsSortKey = 'added' | 'broadcasters' | 'size' | 'watchers';
 
 interface SearchPostsOptions {
   sort?: {
@@ -23,6 +23,16 @@ interface SearchPostsOptions {
     type: 'days' | 'hours';
     value: number; // N for last N days/hours
   };
+}
+
+class TheRARBGError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number
+  ) {
+    super(message);
+    this.name = 'TheRARBGError';
+  }
 }
 
 export class TheRARBGApi extends Api {
@@ -55,11 +65,20 @@ export class TheRARBGApi extends Api {
       const response = await enhancedFetch(url, {
         queryString: queryParams,
         timeout: 15000,
+        redirect: 'manual',
       });
 
       if (!response.ok) {
         logger.error('TheRARBG', `API error for ${url}:`, response.status, response.statusText);
         throw new Error(`TheRARBG API error: (${response.status}) ${response.statusText}`);
+      }
+
+      if (response.status === 302) {
+        if (response.headers.get('location') === '/') {
+          // This is essentially a 404, it means they have nothing about this movie
+          throw new TheRARBGError('Redirect to homepage', 404);
+        }
+        logger.error('TheRARBG', `Redirected to ${response.headers.get('location')}`);
       }
 
       if (response.headers.get('content-type')?.includes('text/html')) {
@@ -114,14 +133,21 @@ export class TheRARBGApi extends Api {
     // endpoint format: /imdb-detail/tt{imdbId}/?format=json
     const endpoint = `imdb-detail/${normalizedImdbId}/`;
 
-    const data = await this.request<ImdbDetailResponse>(endpoint, {}, highPriority);
+    try {
+      const data = await this.request<ImdbDetailResponse>(endpoint, {}, highPriority);
 
-    if (!data.imdb || !data.trb_posts) {
-      return null;
+      if (!data.imdb || !data.trb_posts) {
+        return null;
+      }
+
+      // Process and normalize the response
+      return data;
+    } catch (error) {
+      if (error instanceof TheRARBGError && error.status === 404) {
+        return null;
+      }
+      throw error;
     }
-
-    // Process and normalize the response
-    return data;
   }
 
   /**
@@ -147,8 +173,8 @@ export class TheRARBGApi extends Api {
       const { key, direction } = options.sort;
       const sortKeys: Record<SearchPostsSortKey, string> = {
         added: 'a',
-        leechers: 'le',
-        seeders: 'se',
+        watchers: 'le',
+        broadcasters: 'se',
         size: 's',
       };
       const sortField = sortKeys[key];

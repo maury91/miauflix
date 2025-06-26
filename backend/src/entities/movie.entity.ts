@@ -99,11 +99,19 @@ export class Movie {
   @Column()
   logo: string;
 
+  /** Status */
+
   @Column({
     type: 'simple-json',
     default: '[]',
   })
   contentDirectoriesSearched: string[];
+
+  @Column({
+    type: 'datetime',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  nextSourceSearchAt: Date;
 
   @OneToMany(() => MovieSource, source => source.movie)
   sources: Relation<MovieSource>[];

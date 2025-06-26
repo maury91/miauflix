@@ -23,7 +23,7 @@ import { Movie } from './movie.entity';
 @Entity()
 @Unique(['movieId', 'hash']) // avoid duplicates per film
 @Index('idx_movie_rank', ['movieId', 'resolution', 'broadcasters', 'size'])
-@Index('idx_movie_file', ['movieId', 'file']) // fast "file IS NULL" scans
+@Index('idx_movie_source_no_file', ['movieId'], { where: '"file" IS NULL' }) // fast "file IS NULL" scans - partial index
 export class MovieSource {
   static encryptionService: EncryptionService;
 

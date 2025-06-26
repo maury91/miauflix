@@ -85,7 +85,7 @@ export class DtoService {
   }
 
   /**
-   * Calculate availability metrics from seeders/leechers data
+   * Calculate availability metrics from broadcasters/watchers data
    * Maps "broadcasters/watchers" to neutral availability metrics
    */
   private calculateAvailabilityMetrics(source: MovieSource): number {
