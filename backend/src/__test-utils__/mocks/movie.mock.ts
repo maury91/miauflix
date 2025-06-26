@@ -74,6 +74,7 @@ export function createMockMovie(overrides: Partial<Movie> = {}): Movie {
     sources: overrides.sources ?? [],
     createdAt: overrides.createdAt ?? faker.date.past(),
     updatedAt: overrides.updatedAt ?? faker.date.recent(),
+    nextSourceSearchAt: overrides.nextSourceSearchAt ?? faker.date.future(),
     ...overrides,
   };
 }

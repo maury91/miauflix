@@ -94,7 +94,7 @@ describe('TheRARBGService', () => {
       try {
         const result = await service.searchPosts('tt0119698', {
           filter: { type: 'days', value: 30 },
-          sort: { key: 'seeders', direction: 'desc' },
+          sort: { key: 'broadcasters', direction: 'desc' },
         });
 
         if (result && result.results) {

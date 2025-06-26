@@ -139,19 +139,93 @@ nginx/conf.d/default.conf.template     # Web server config
 
 ## 🧪 **Testing Files**
 
-```bash
-# Unit tests (beside source files)
-backend/src/**/*.test.ts
+### **Unit Tests (Enterprise Pattern)**
 
-# E2E tests
+```bash
+# Service tests (follow source.service.test.ts pattern)
+backend/src/services/[service]/[service].service.test.ts
+
+# Repository tests
+backend/src/repositories/[entity].repository.test.ts
+
+# API client tests (HTTP-VCR)
+backend/src/content-directories/[provider]/[provider].api.test.ts
+
+# Utility tests
+backend/src/utils/[utility].test.ts
+```
+
+### **E2E Tests**
+
+```bash
+# Integration tests
 backend-e2e/src/tests/
 
-# Test fixtures (pre-recorded API responses)
+# E2E configuration
+backend-e2e/src/config/
+```
+
+### **Test Infrastructure**
+
+```bash
+# Mock factories (centralized, faker-based)
+backend/src/__test-utils__/mocks/
+├── movie.mock.ts           # Movie/source mock factories
+├── user.mock.ts            # User/auth mock factories
+└── [entity].mock.ts        # Entity-specific factories
+
+# Test utilities
+backend/src/__test-utils__/
+├── utils.ts                # configureFakerSeed, delayedResult helpers
+├── http-vcr.ts            # HTTP recording system
+└── http-vcr.config.ts     # VCR configuration
+
+# HTTP-VCR fixtures (pre-recorded API responses)
 backend/test-fixtures/
-├── tmdb/           # TMDB API responses
-├── yts/            # YTS API responses
-├── therarbg/       # THERARBG API responses
-└── torrage/        # Source file download service responses
+├── tmdb/                  # TMDB API responses
+├── yts/                   # YTS API responses
+├── therarbg/              # THERARBG API responses
+└── torrage/               # Source file download responses
+```
+
+### **Testing Patterns to Follow**
+
+#### **Service Tests (✅ Use This Pattern)**
+
+```bash
+# Location: backend/src/services/[service]/[service].service.test.ts
+# Pattern: Follow source.service.test.ts exactly
+# Features:
+# - jest.mock() at top
+# - setupTest() for isolation
+# - Faker with seeds for data
+# - Auto-generated type-safe mocks
+# - Comprehensive error testing
+# - Async timeout testing
+```
+
+#### **API Tests (✅ Use HTTP-VCR)**
+
+```bash
+# Location: backend/src/content-directories/[provider]/[provider].api.test.ts
+# Pattern: Follow yts.api.test.ts
+# Features:
+# - Automatic HTTP recording/replay
+# - No manual mocking needed
+# - Real API response testing
+# - Fixture management included
+```
+
+#### **Mock Data (✅ Use Factories)**
+
+```bash
+# Location: backend/src/__test-utils__/mocks/[entity].mock.ts
+# Pattern: Follow movie.mock.ts
+# Features:
+# - Faker-generated realistic data
+# - Configurable overrides
+# - Proper relational references
+# - Seeded for reproducibility
 ```
 
 ## 🚨 **Emergency File Locations**

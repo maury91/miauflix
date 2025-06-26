@@ -5,12 +5,18 @@ import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
 import type { MovieSource } from '@entities/movie-source.entity';
+import { MovieRepository } from '@repositories/movie.repository';
+import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
+import { adaptiveLog } from '@utils/adaptive-logging.util';
 import { enhancedFetch } from '@utils/fetch.util';
 import { RateLimiter } from '@utils/rateLimiter';
+import { scheduleNextCheck } from '@utils/scheduling.util';
 import { SingleFlight } from '@utils/singleflight.util';
 import { sleep } from '@utils/time';
+import { providerSourcesToEntities } from '@utils/transformers.util';
+import { validateContentFileResponse } from '@utils/validation.util';
 
 import type { SourceMetadataFileService } from './source-metadata-file.service';
 
@@ -18,15 +24,13 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
  * Service for searching and managing sources
  */
 export class SourceService {
-  private readonly movieRepository;
-  private readonly movieSourceRepository;
+  private readonly movieRepository: MovieRepository;
+  private readonly movieSourceRepository: MovieSourceRepository;
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
 
   private vpnConnected = false;
   private readonly searchOnlyBehindVpn = !ENV('DISABLE_VPN_CHECK');
   private readonly startPromise: Promise<void>;
-  private lastNoSourcesLogTime = 0;
-  private noSourcesLogInterval = 30000; // Start with 30 seconds, will increase exponentially
 
   constructor(
     db: Database,
@@ -51,16 +55,25 @@ export class SourceService {
     }
   }
 
+  private async checkForVpnConnection(action: string): Promise<boolean> {
+    if (this.searchOnlyBehindVpn) {
+      await this.startPromise;
+      if (!this.vpnConnected) {
+        logger.warn('SourceService', `VPN is not connected, skipping ${action}`);
+        await sleep(2000);
+        return false;
+      }
+      return this.vpnConnected;
+    }
+    return true;
+  }
+
   /**
    * Process movies that need source search
    * This method is designed to be run by the scheduler
    */
   public async searchSourcesForMovies(): Promise<void> {
-    await this.startPromise;
-
-    if (!this.vpnConnected) {
-      logger.warn('SourceService', 'VPN is not connected, skipping source search');
-      await sleep(2000);
+    if (!(await this.checkForVpnConnection('searchSourcesForMovies'))) {
       return;
     }
 
@@ -73,10 +86,7 @@ export class SourceService {
     }
 
     for (const movie of moviesToSearch) {
-      const sources = await this.searchSourcesForMovie({ ...movie }, false);
-      if (sources) {
-        await this.movieRepository.markSourceSearched(movie.id, sources.directory);
-      }
+      await this.searchSourcesForMovie(movie, false);
     }
   }
 
@@ -93,13 +103,7 @@ export class SourceService {
     },
     isOnDemand: boolean = false
   ): Promise<{ directory: string; sources: MovieSource[] } | void> {
-    await this.startPromise;
-
-    if (!this.vpnConnected) {
-      logger.warn(
-        'SourceService',
-        `VPN is not connected, skipping source search for movie ${movie.id} (${movie.title})`
-      );
+    if (!(await this.checkForVpnConnection('searchSourcesForMovie'))) {
       return;
     }
 
@@ -126,6 +130,7 @@ export class SourceService {
 
       if (!movieWithSources || !movieWithSources.sources?.length) {
         logger.debug('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
+        await this.movieRepository.markSourceSearchAttempt(movie.id);
         return;
       }
 
@@ -143,23 +148,10 @@ export class SourceService {
       }
 
       // Convert sources to MovieSource objects and save them
-      const sources = movieWithSources.sources.map(
-        (source): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
-          movieId: movie.id,
-          hash: source.hash,
-          magnetLink: source.magnetLink,
-          quality: source.quality,
-          resolution: source.resolution.height,
-          size: source.size,
-          videoCodec: source.videoCodec,
-          broadcasters: source.broadcasters,
-          watchers: source.watchers,
-          sourceUploadedAt: source.uploadDate,
-          url: source.url,
-          source: movieWithSources.source,
-          sourceType: source.source,
-          nextStatsCheckAt: new Date(),
-        })
+      const sources = providerSourcesToEntities(
+        movieWithSources.sources,
+        movie.id,
+        movieWithSources.source
       );
 
       const createdSources = await this.movieSourceRepository.createMany(sources);
@@ -167,6 +159,7 @@ export class SourceService {
         'SourceService',
         `Saved ${sources.length} sources for movie ${movie.id} (${movie.title})`
       );
+      await this.movieRepository.markSourceSearched(movie.id, movieWithSources.source);
       return { directory: movieWithSources.source, sources: createdSources };
     } catch (error) {
       logger.error(
@@ -215,8 +208,6 @@ export class SourceService {
       const searchPromise = (async () => {
         const sources = await this.searchSourcesForMovie(movie, true);
         if (sources) {
-          // On purpose without await so it returns faster
-          this.movieRepository.markSourceSearched(movie.id, sources.directory);
           if (status === 'pending') {
             status = 'success';
           } else {
@@ -276,10 +267,21 @@ export class SourceService {
     await Promise.all(
       sourcesToUpdate.map(async source => {
         try {
-          const { seeders, leechers } = await this.magnetService.getStats(source.hash);
-          const nextCheckTime = this.calculateNextStatsCheckTime(source, seeders, leechers);
+          const { broadcasters, watchers } = await this.magnetService.getStats(source.hash);
+          const nextCheckTime = scheduleNextCheck(
+            source.lastStatsCheck && source.nextStatsCheckAt
+              ? source.nextStatsCheckAt.getTime() - source.lastStatsCheck.getTime()
+              : undefined,
+            { old: source.broadcasters ?? 0, new: broadcasters },
+            { old: source.watchers ?? 0, new: watchers }
+          );
 
-          await this.movieSourceRepository.updateStats(source.id, seeders, leechers, nextCheckTime);
+          await this.movieSourceRepository.updateStats(
+            source.id,
+            broadcasters,
+            watchers,
+            nextCheckTime
+          );
           logger.debug(
             'SourceService',
             `Updated stats for source ${source.id} (quality: ${source.quality})`
@@ -318,22 +320,9 @@ export class SourceService {
 
     // Early exit if no movies need processing - avoid log spam with exponential backoff
     if (sourcesToProcess.length === 0) {
-      const now = Date.now();
-      const timeSinceLastLog = now - this.lastNoSourcesLogTime;
-
-      // Use exponential backoff for logging when consistently no sources found
-      if (timeSinceLastLog > this.noSourcesLogInterval) {
-        logger.debug('SourceService', 'No sources requiring source files found');
-        this.lastNoSourcesLogTime = now;
-
-        // Increase the log interval exponentially (double it, but cap at 10 minutes)
-        this.noSourcesLogInterval = Math.min(this.noSourcesLogInterval * 2, 600000); // Max 10 minutes
-      }
+      adaptiveLog('SourceService', 'No sources requiring source files found');
       return;
     }
-
-    // Reset log interval when sources are found again
-    this.noSourcesLogInterval = 30000; // Reset to 30 seconds
 
     logger.debug('SourceService', 'Searching source files for sources without them');
 
@@ -466,17 +455,9 @@ export class SourceService {
 
       const response = await enhancedFetch(url);
 
-      if (!response.ok) {
-        logger.warn(
-          'SourceService',
-          `Failed to download from URL: ${response.status} ${response.statusText}`
-        );
-        return null;
-      }
-
-      const contentType = response.headers.get('content-type');
-      if (!contentType?.includes('application/')) {
-        logger.warn('SourceService', `Invalid content type for file: ${contentType}`);
+      const validation = validateContentFileResponse(response);
+      if (!validation.isValid) {
+        logger.warn('SourceService', `Download validation failed: ${validation.error}`);
         return null;
       }
 
@@ -486,86 +467,6 @@ export class SourceService {
       logger.error('SourceService', `Error downloading from URL: ${url}`, error);
       return null;
     }
-  }
-
-  /**
-   * Calculate the next stats check time using exponential backoff based on changes
-   */
-  private calculateNextStatsCheckTime(
-    source: {
-      broadcasters?: number;
-      watchers?: number;
-      lastStatsCheck?: Date;
-      nextStatsCheckAt: Date;
-    },
-    newSeeders: number,
-    newLeechers: number
-  ): Date {
-    const currentSeeders = source.broadcasters ?? 0;
-    const currentLeechers = source.watchers ?? 0;
-
-    // Calculate percentage change for both seeders and leechers
-    const seedersChange =
-      currentSeeders === 0
-        ? newSeeders > 0
-          ? 100
-          : 0
-        : Math.abs((newSeeders - currentSeeders) / currentSeeders) * 100;
-
-    const leechersChange =
-      currentLeechers === 0
-        ? newLeechers > 0
-          ? 100
-          : 0
-        : Math.abs((newLeechers - currentLeechers) / currentLeechers) * 100;
-
-    // Use the maximum change between seeders and leechers
-    const maxChange = Math.max(seedersChange, leechersChange);
-
-    // Base intervals in hours
-    const MIN_INTERVAL = 6; // 6 hours
-    const MAX_INTERVAL = 72; // 3 days
-
-    // Calculate the current interval from the last check time to remember the backoff state
-    let currentInterval = MIN_INTERVAL;
-    if (source.lastStatsCheck && source.nextStatsCheckAt) {
-      const intervalMs = source.nextStatsCheckAt.getTime() - source.lastStatsCheck.getTime();
-      currentInterval = intervalMs / (1000 * 60 * 60); // Convert milliseconds to hours (preserving fractions)
-      currentInterval = Math.max(MIN_INTERVAL, Math.min(currentInterval, MAX_INTERVAL));
-    }
-
-    let nextInterval: number;
-
-    if (maxChange < 5) {
-      // Very small change - increase backoff (double it, but cap at max)
-      nextInterval = Math.min(currentInterval * 2, MAX_INTERVAL);
-    } else if (maxChange < 10) {
-      // Small change - keep constant
-      nextInterval = currentInterval;
-    } else if (maxChange > 50) {
-      // Huge change - reset to minimum
-      nextInterval = MIN_INTERVAL;
-    } else if (maxChange > 20) {
-      // Considerable change - reduce backoff
-      nextInterval = Math.max(currentInterval / 2, MIN_INTERVAL);
-    } else {
-      // 10-20% change - slight reduction
-      nextInterval = Math.max(currentInterval * 0.75, MIN_INTERVAL);
-    }
-
-    // Add randomness (±20% of the interval)
-    const randomFactor = 0.8 + Math.random() * 0.4; // 0.8 to 1.2
-    nextInterval *= randomFactor;
-
-    // Ensure bounds
-    nextInterval = Math.max(MIN_INTERVAL, Math.min(nextInterval, MAX_INTERVAL));
-
-    // Calculate next check time (convert hours to milliseconds for precision)
-    const nextCheckTime = new Date();
-    const intervalMs = nextInterval * 60 * 60 * 1000; // Convert hours to milliseconds
-    nextCheckTime.setTime(nextCheckTime.getTime() + intervalMs);
-
-    return nextCheckTime;
   }
 
   /**

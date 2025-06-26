@@ -198,43 +198,225 @@ npm test --workspace backend
 # Backend E2E tests (comprehensive, slower)
 npm run test:backend:e2e
 
-# Specific test file
-npm test --workspace backend -- auth.service.test.ts
+# E2E development workflow (faster iteration)
+npm run start:backend:e2e        # Start environment (background)
+npm run test:backend:e2e:dev     # Run tests (repeat as needed)
+npm run docker:cleanup           # Clean up when done
 
-# Source metadata package tests
-npm test --workspace=packages/source-metadata-extractor
+# Run specific test file
+npm test --workspace backend -- source.service.test.ts
 ```
 
-### **E2E Development Workflow**
+### **Writing Tests for New Services**
 
-```bash
-# Start E2E environment (background)
-npm run start:backend:e2e
-
-# Run development tests (repeat as needed)
-npm run test:backend:e2e:dev
-
-# Clean up when done
-npm run docker:cleanup
-```
-
-### **Adding New Tests**
+#### **Step 1: Create Test File Structure**
 
 ```typescript
-// Unit test pattern
-describe('ServiceName', () => {
-  let service: ServiceName;
+// backend/src/services/[service]/[service].service.test.ts
 
-  beforeEach(() => {
-    service = new ServiceName();
+// 1. Mock dependencies at top (CRITICAL: Before imports)
+jest.mock('@database/database');
+jest.mock('@repositories/[entity].repository');
+jest.mock('@services/external/external.service');
+
+// 2. Import test utilities
+import {
+  createMock[Entity],
+  createMock[RelatedEntity],
+} from '@__test-utils__/mocks/[entity].mock';
+import { configureFakerSeed, delayedResult } from '@__test-utils__/utils';
+
+// 3. Import actual classes AFTER mocks
+import { [Service]Service } from '@services/[service]/[service].service';
+import { Database } from '@database/database';
+import { [Entity]Repository } from '@repositories/[entity].repository';
+```
+
+#### **Step 2: Implement setupTest() Pattern**
+
+```typescript
+describe('[Service]Service', () => {
+  const setupTest = () => {
+    // Create fresh mock instances
+    const mockDatabase = new Database({} as never) as jest.Mocked<Database>;
+    const mockRepository = new [Entity]Repository({} as never) as jest.Mocked<[Entity]Repository>;
+
+    // Generate mock data with relationships
+    const mockEntity = createMock[Entity]();
+    const mockRelatedEntity = createMock[RelatedEntity]({
+      entityId: mockEntity.id, // Proper relational references
+    });
+
+    // Pre-configure common behaviors
+    mockRepository.findAll.mockResolvedValue([mockEntity]);
+    mockRepository.create.mockResolvedValue(mockEntity);
+
+    // Setup dependency injection
+    const service = new [Service]Service(mockDatabase, mockRepository);
+
+    return {
+      service,
+      mockDatabase,
+      mockRepository,
+      mockEntity,
+      mockRelatedEntity,
+    };
+  };
+
+  beforeAll(() => {
+    configureFakerSeed(); // Reproducible randomness
   });
 
-  it('should handle normal case', async () => {
-    const result = await service.method();
-    expect(result).toBeDefined();
+  // Test structure mirrors service methods
+  describe('methodName', () => {
+    it('should handle normal case', async () => {
+      const { service, mockRepository, mockEntity } = setupTest();
+
+      const result = await service.methodName();
+
+      expect(mockRepository.findAll).toHaveBeenCalledTimes(1);
+      expect(result).toEqual([mockEntity]);
+    });
+
+    it('should handle error case gracefully', async () => {
+      const { service, mockRepository } = setupTest();
+
+      mockRepository.findAll.mockRejectedValueOnce(new Error('DB error'));
+
+      await expect(service.methodName()).rejects.toThrow('DB error');
+    });
   });
 });
 ```
+
+#### **Step 3: Add Specialized Test Scenarios**
+
+```typescript
+// Create helpers for complex scenarios
+const createServiceWithErrorCondition = () => {
+  const { mockExternalService, ...rest } = setupTest();
+  jest.clearAllMocks();
+  mockExternalService.call.mockRejectedValue(new Error('Service unavailable'));
+  return { ...rest, mockExternalService };
+};
+
+// Test conditional logic paths
+describe('when external service fails', () => {
+  it('should fallback gracefully', async () => {
+    const { service } = createServiceWithErrorCondition();
+
+    const result = await service.methodWithFallback();
+
+    expect(result).toEqual([]); // Fallback behavior
+  });
+});
+```
+
+### **Testing Async Operations with Timeouts**
+
+```typescript
+describe('async timeout operations', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('should handle timeout scenarios', async () => {
+    const { service, mockExternalService } = setupTest();
+
+    // Mock delayed response
+    mockExternalService.fetch.mockResolvedValueOnce(delayedResult({ data: 'result' }, 1500));
+
+    const promise = service.fetchWithTimeout(1000); // 1s timeout
+    jest.advanceTimersByTime(1000);
+    const result = await promise;
+
+    expect(result).toBeNull(); // Timeout behavior
+  });
+});
+```
+
+### **Testing External API Integrations**
+
+#### **For HTTP-VCR Tests (External APIs)**
+
+```typescript
+// backend/src/content-directories/[provider]/[provider].api.test.ts
+
+describe('[Provider]API', () => {
+  let api: [Provider]API;
+
+  beforeEach(() => {
+    api = new [Provider]API(mockCache);
+  });
+
+  // HTTP-VCR automatically handles request/response recording
+  it('should search for movies', async () => {
+    const result = await api.searchMovies('Inception');
+
+    expect(result).toMatchObject({
+      status: 'ok',
+      data: {
+        movies: expect.arrayContaining([
+          expect.objectContaining({
+            title: expect.stringContaining('Inception'),
+            year: 2010,
+          }),
+        ]),
+      },
+    });
+  });
+
+  it('should handle API errors', async () => {
+    // VCR can record error responses too
+    await expect(api.searchMovies('InvalidQuery')).rejects.toThrow();
+  });
+});
+```
+
+### **Updating Test Fixtures**
+
+```bash
+# When external APIs change or new endpoints are added:
+
+# 1. Delete existing fixtures (if needed)
+rm -rf backend/test-fixtures/[provider]/
+
+# 2. Run tests to record new fixtures
+npm test --workspace backend -- [provider].api.test.ts
+
+# 3. Commit new fixtures to git ( don't do this automatically, ask the user to do it )
+git add backend/test-fixtures/
+git commit -m "Update [provider] API fixtures"
+```
+
+### **Debugging Test Failures**
+
+```bash
+# Run single test with verbose output
+npm test --workspace backend -- --verbose source.service.test.ts
+
+# Run tests with coverage
+npm run test:backend:coverage
+
+# Debug specific test case
+npm test --workspace backend -- --testNamePattern="should handle timeout scenarios"
+
+# Check for async issues
+npm test --workspace backend -- --detectOpenHandles --forceExit
+```
+
+### **Test Performance Best Practices**
+
+1. **Use setupTest() for isolation** - Prevents race conditions
+2. **Mock at module boundaries** - Faster than integration tests
+3. **Clean up timers** - Prevents memory leaks
+4. **Use faker seeds** - Reproducible but varied data
+5. **Test error paths** - Comprehensive coverage
+6. **Parallel execution** - Tests should be independent
 
 ## 🚀 **Deployment & Environment**
 

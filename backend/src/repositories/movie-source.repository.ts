@@ -159,10 +159,10 @@ export class MovieSourceRepository {
     });
   }
 
-  updateStats(sourceId: number, seeders: number, leechers: number, nextStatsCheckAt: Date) {
+  updateStats(sourceId: number, broadcasters: number, watchers: number, nextStatsCheckAt: Date) {
     return this.movieSourceRepository.update(sourceId, {
-      broadcasters: seeders,
-      watchers: leechers,
+      broadcasters,
+      watchers,
       lastStatsCheck: new Date(),
       nextStatsCheckAt,
     });

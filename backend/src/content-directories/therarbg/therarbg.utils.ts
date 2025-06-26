@@ -35,11 +35,11 @@ export function validateImdbId(imdbId: string): ImdbIdValidation {
  */
 export function filterSources(
   sources: ImdbDetailPost[],
-  { minSeeders = 2, minSizeMB = 100 }: { minSeeders?: number; minSizeMB?: number } = {}
+  { minBroadcasters = 2, minSizeMB = 100 }: { minBroadcasters?: number; minSizeMB?: number } = {}
 ): ImdbDetailPost[] {
   return sources.filter(source => {
-    // Minimum seeders
-    if (source.seeders < minSeeders) {
+    // Minimum broadcasters
+    if (source.seeders < minBroadcasters) {
       return false;
     }
 

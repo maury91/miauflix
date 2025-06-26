@@ -254,44 +254,267 @@ export class NewProviderDirectory extends AbstractContentDirectory<NewProviderAP
 
 ## 🧪 **Testing Patterns**
 
-### **Unit Test Structure**
+### **Enterprise Testing Architecture**
+
+The codebase uses sophisticated testing patterns for maintainable, reliable tests. Follow these **exact** patterns for consistency.
+
+### **1. Mock Module Declaration (Always at Top)**
 
 ```typescript
-// [file-name].test.ts
-import { [Service] } from './[service].service';
+// CRITICAL: Mock declarations MUST be at the top, before imports
+jest.mock('@database/database');
+jest.mock('@repositories/movie.repository');
+jest.mock('@services/download/download.service');
 
-describe('[Service]', () => {
-  let service: [Service];
+// Then imports come AFTER mocks
+import { SourceService } from '@services/source/source.service';
+import { Database } from '@database/database';
+import { MovieRepository } from '@repositories/movie.repository';
+```
 
-  beforeEach(() => {
-    service = new [Service]();
+### **2. Centralized Mock Data with Seeded Faker**
+
+```typescript
+// Use centralized factory functions with faker for realistic, reproducible data
+import {
+  createMockMovie,
+  createMockMovieSource,
+  createMockSourceMetadata,
+} from '@__test-utils__/mocks/movie.mock';
+import { configureFakerSeed } from '@__test-utils__/utils';
+
+describe('ServiceName', () => {
+  beforeAll(() => {
+    configureFakerSeed(); // Ensures reproducible randomness
   });
 
-  describe('method', () => {
-    it('should handle normal case', async () => {
-      const result = await service.method();
-      expect(result).toBeDefined();
+  // Use factory functions with overrides for specific test cases
+  const mockMovie = createMockMovie();
+  const mockMovieSource = createMockMovieSource({
+    movieId: mockMovie.id, // Proper relational references
+    quality: Quality.FHD, // Specific test requirements
+  });
+});
+```
+
+### **3. Auto-Generated Type-Safe Class Mocks**
+
+```typescript
+// Create type-safe mocks with Jest auto-generation
+const mockMovieRepository = new MovieRepository({} as never) as jest.Mocked<MovieRepository>;
+const mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
+
+// Benefits:
+// - {} as never bypasses constructor requirements
+// - jest.Mocked<T> provides typed mock methods
+// - All methods automatically become jest.MockedFunction
+// - Full TypeScript intellisense support
+```
+
+### **4. setupTest() Pattern for Test Isolation**
+
+```typescript
+// CRITICAL: Use setupTest() to prevent race conditions between tests
+const setupTest = () => {
+  // Create FRESH instances for every test
+  const mockMovieRepository = new MovieRepository({} as never) as jest.Mocked<MovieRepository>;
+  const mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
+
+  // Pre-configure common behaviors
+  mockMovieRepository.findMoviesPendingSourceSearch.mockResolvedValue([mockMovie]);
+  mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
+
+  // Setup dependency injection
+  const service = new SourceService(
+    mockDatabase,
+    mockVpnService,
+    mockContentDirectoryService,
+    mockSourceMetadataFileService
+  );
+
+  // Return everything needed for the test
+  return {
+    service,
+    mockMovieRepository,
+    mockDownloadService,
+    // ... all mocks and data
+  };
+};
+
+// Each test gets completely isolated instances
+it('should process movies', async () => {
+  const { service, mockMovieRepository } = setupTest();
+  // Test implementation...
+});
+```
+
+### **5. Specialized Test Helpers for Scenarios**
+
+```typescript
+// Create domain-specific setup functions for common scenarios
+const createServiceWithDisconnectedVpn = () => {
+  const { mockVpnService, ...rest } = setupTest();
+  jest.clearAllMocks();
+  mockVpnService.isVpnActive.mockResolvedValueOnce(false);
+  return {
+    ...rest,
+    mockVpnService,
+    service: new SourceService(/* modified dependencies */),
+  };
+};
+
+const createMockSourceForStats = (overrides: Partial<MovieSource> = {}): MovieSource => {
+  return createMockMovieSource({
+    file: Buffer.from('mock file'),
+    lastStatsCheck: new Date(Date.now() - 7 * 60 * 60 * 1000),
+    nextStatsCheckAt: new Date(Date.now() - 1000),
+    ...overrides,
+  });
+};
+```
+
+### **6. Advanced Async Testing with Time Control**
+
+```typescript
+import { delayedResult } from '@__test-utils__/utils';
+
+describe('async operations', () => {
+  beforeEach(() => {
+    jest.useFakeTimers(); // Enable time manipulation
+  });
+
+  afterEach(() => {
+    jest.useRealTimers(); // Clean up timers
+  });
+
+  it('should handle timeout scenarios', async () => {
+    // Mock delayed responses
+    mockContentDirectoryService.searchSourcesForMovie.mockResolvedValueOnce(
+      delayedResult({ sources: [mockSource1] }, 1500) // Custom utility for delays
+    );
+
+    const searchPromise = service.getSourcesForMovieWithOnDemandSearch(mockMovie, 1200);
+    jest.advanceTimersByTime(1200); // Precise time control
+    const sources = await searchPromise;
+
+    expect(sources).toEqual([]); // Verify timeout behavior
+  });
+});
+```
+
+### **7. Comprehensive Error Handling Tests**
+
+```typescript
+// Test ALL error paths explicitly
+it('should handle API service errors gracefully', async () => {
+  const { service, mockSourceMetadataFileService, mockMovieSourceRepository } = setupTest();
+
+  mockSourceMetadataFileService.getStats.mockRejectedValueOnce(new Error('Stats fetch failed'));
+
+  await service.syncStatsForSources();
+
+  // Verify method was called
+  expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledWith(sourceToUpdate.hash);
+  // Verify graceful failure (no update called)
+  expect(mockMovieSourceRepository.updateStats).not.toHaveBeenCalled();
+});
+```
+
+### **8. Side Effect Verification**
+
+```typescript
+// Test method calls and their parameters, not just return values
+expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
+  mockMovie.imdbId,
+  true, // isOnDemand
+  expect.anything() // contentDirectoriesSearched
+);
+
+// Verify call counts
+expect(mockMovieRepository.markSourceSearched).toHaveBeenCalledTimes(1);
+expect(mockMovieSourceRepository.createMany).toHaveBeenCalledTimes(1);
+```
+
+### **9. Test Structure Best Practices**
+
+```typescript
+describe('SourceService', () => {
+  // Helper functions at top
+  const setupTest = () => {
+    /* ... */
+  };
+  const createServiceWithDisconnectedVpn = () => {
+    /* ... */
+  };
+
+  beforeAll(() => {
+    configureFakerSeed(); // Reproducible randomness
+  });
+
+  // Mirror service method structure
+  describe('searchSourcesForMovies', () => {
+    it('should process movies without sources', async () => {
+      // Single responsibility per test
     });
 
-    it('should handle error case', async () => {
-      await expect(service.method()).rejects.toThrow();
+    it('should handle search failures gracefully', async () => {
+      // Error path testing
+    });
+  });
+
+  describe('getSourcesForMovie', () => {
+    describe('when movie has existing sources', () => {
+      it('should return immediately without triggering API calls', async () => {
+        // Nested describe for different scenarios
+      });
+    });
+
+    describe('when movie has no sources', () => {
+      it('should trigger high priority search', async () => {
+        // Test conditional logic paths
+      });
     });
   });
 });
 ```
 
-### **Mock Pattern for External APIs**
+### **Key Testing Principles**
+
+1. **Mock at Module Boundaries**: Use jest.mock() at the top level
+2. **Fresh State Per Test**: setupTest() prevents race conditions
+3. **Realistic Data**: Faker with seeds for reproducible variety
+4. **Type Safety**: Maintain full TypeScript benefits in tests
+5. **Error Path Coverage**: Test all failure scenarios explicitly
+6. **Time Control**: Use fake timers for async operation testing
+7. **Side Effect Verification**: Test method calls, not just return values
+8. **Test Isolation**: No shared state between tests
+
+### **HTTP-VCR Pattern for External APIs**
 
 ```typescript
-// Use Jest auto-mocks, don't make real API calls
-jest.mock('@services/external/external.service');
-import { ExternalService } from '@services/external/external.service';
+// For testing external API integrations, use HTTP-VCR fixtures
+// Tests run against pre-recorded responses, not live APIs
 
-const mockExternalService = new ExternalService() as jest.Mocked<ExternalService>;
+// Example: YTS API test
+it('should search for movies', async () => {
+  // HTTP-VCR automatically replays recorded response
+  const results = await ytsApi.searchMovies('Inception');
 
-beforeEach(() => {
-  mockExternalService.method.mockReturnValue('mocked-result');
+  expect(results).toMatchObject({
+    status: 'ok',
+    data: {
+      movies: expect.arrayContaining([
+        expect.objectContaining({
+          title: 'Inception',
+          year: 2010,
+        }),
+      ]),
+    },
+  });
 });
+
+// No manual mocking needed - VCR handles it
+// Run `npm test --workspace backend -- yts.api.test.ts` to update fixtures
 ```
 
 ## 📊 **State Management (Frontend)**
