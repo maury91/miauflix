@@ -8,11 +8,6 @@ import WebTorrent from 'webtorrent';
 
 import { ENV } from '@constants';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
-import {
-  bestTrackersURL,
-  blacklistedTrackersURL,
-  extra_trackers,
-} from '@services/source/trackers.const';
 import { enhancedFetch } from '@utils/fetch.util';
 
 export class DownloadService {
@@ -20,14 +15,21 @@ export class DownloadService {
   private bestTrackers: string[] = [];
   private bestTrackersOriginal: string[] = ['udp://tracker.opentrackr.org:1337'];
   private readonly ready: Promise<void>;
+  private readonly staticTrackers: string[];
+  private readonly bestTrackersDownloadUrl: string;
+  private readonly blacklistedTrackersDownloadUrl: string;
 
   constructor() {
+    this.staticTrackers = ENV('STATIC_TRACKERS');
+    this.bestTrackers = [...new Set([...this.staticTrackers])];
+    this.bestTrackersDownloadUrl = ENV('BEST_TRACKERS_DOWNLOAD_URL');
+    this.blacklistedTrackersDownloadUrl = ENV('BLACKLISTED_TRACKERS_DOWNLOAD_URL');
     this.client = new WebTorrent({
       maxConns: ENV('CONTENT_CONNECTION_LIMIT'),
       downloadLimit: Number(ENV('CONTENT_DOWNLOAD_LIMIT')),
       uploadLimit: Number(ENV('CONTENT_UPLOAD_LIMIT')),
       dht: ENV('DISABLE_DISCOVERY') ? false : undefined,
-      blocklist: [blacklistedTrackersURL],
+      blocklist: [this.blacklistedTrackersDownloadUrl],
     });
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
@@ -75,15 +77,15 @@ export class DownloadService {
 
   private async loadTrackers() {
     const [bestTrackers, blacklistedTrackers] = await Promise.all([
-      this.getTrackers(bestTrackersURL),
-      this.getIpSet(blacklistedTrackersURL),
+      this.getTrackers(this.bestTrackersDownloadUrl),
+      this.getIpSet(this.blacklistedTrackersDownloadUrl),
     ]);
 
     if (bestTrackers.length) {
       this.bestTrackers = bestTrackers;
       this.bestTrackersOriginal = [...bestTrackers];
     }
-    this.bestTrackers = [...new Set([...this.bestTrackers, ...extra_trackers])];
+    this.bestTrackers = [...new Set([...this.bestTrackers, ...this.staticTrackers])];
 
     if (blacklistedTrackers) {
       this.client.blocked = blacklistedTrackers;
@@ -94,12 +96,11 @@ export class DownloadService {
     const allTrackers = [...new Set([...trackers, ...this.bestTrackers])].filter(Boolean);
 
     const params = new URLSearchParams({
-      xt: `urn:btih:${hash}`,
       tr: allTrackers,
       dn: name,
     });
 
-    return `magnet:?${params.toString()}`;
+    return `magnet:?xt=urn:btih:${hash}&${params.toString()}`;
   }
 
   async getSourceMetadataFile(sourceLink: string, hash: string, timeout: number): Promise<Buffer> {
@@ -112,10 +113,10 @@ export class DownloadService {
         remove();
         rejectRaw(error);
       };
-
       const timeoutId = setTimeout(() => {
         reject(new ErrorWithStatus(`Timeout after ${timeout} ms while adding file`, 'timeout'));
       }, timeout);
+
       try {
         const onSourceMetadata = (sourceMetadata: Torrent) => {
           if (!sourceMetadata.torrentFile) {

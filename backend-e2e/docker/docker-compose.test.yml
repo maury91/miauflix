@@ -13,6 +13,9 @@ services:
       - TRAKT_API_URL=http://trakt-mock
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
+      - STATIC_TRACKERS=udp://tracker-mock
+      - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/trackers_best.txt
+      - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
       - DEBUG=*
     networks:
       - test-network
