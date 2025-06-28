@@ -50,6 +50,10 @@ export const transforms = {
     };
   },
 
+  stringArray: (): ValidatorTransform<string[]> => (value: string) => {
+    return { isValid: true, value: value.split(',').map(item => item.trim()) };
+  },
+
   number:
     (options?: { min?: number; max?: number; integer?: boolean }): ValidatorTransform<number> =>
     (value: string) => {

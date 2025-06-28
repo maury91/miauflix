@@ -1,5 +1,5 @@
 import type { Repository } from 'typeorm';
-import { In, IsNull, LessThanOrEqual, Not } from 'typeorm';
+import { And, In, IsNull, LessThanOrEqual, Not } from 'typeorm';
 
 import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
@@ -90,7 +90,7 @@ export class MovieRepository {
     // Find movies where no directories have been searched
     return this.movieRepository.find({
       where: {
-        imdbId: Not(IsNull()),
+        imdbId: And(Not(IsNull()), Not('')),
         contentDirectoriesSearched: '[]',
         nextSourceSearchAt: LessThanOrEqual(new Date()),
       },
