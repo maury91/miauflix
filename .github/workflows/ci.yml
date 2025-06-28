@@ -112,8 +112,8 @@ jobs:
             backend-e2e/docker-logs.txt
           retention-days: 7
 
-  # Build and publish Docker image only after all tests pass
-  build-and-push:
+  # Disabled until we are ready for production
+  # build-and-push:
     runs-on: ubuntu-latest
     needs: test
     permissions:
