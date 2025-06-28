@@ -830,7 +830,7 @@ declare module 'ip-set' {
 declare module 'load-ip-set' {
   import type { IPSet } from 'ip-set';
 
-  interface LoadIPSetOptions {
+  export interface LoadIPSetOptions {
     /** User agent string for HTTP requests */
     'user-agent'?: string;
     /** Request timeout in milliseconds */
@@ -846,9 +846,9 @@ declare module 'load-ip-set' {
     end?: string;
   }
 
-  type LoadIPSetInput = IPRange[] | string[] | string | null | undefined;
+  export type LoadIPSetInput = IPRange[] | string[] | string | null | undefined;
 
-  type LoadIPSetCallback = (error: Error | null, ipSet?: IPSet) => void;
+  export type LoadIPSetCallback = (error: Error | null, ipSet?: IPSet) => void;
 
   /**
    * Load an IP set from various sources
@@ -1207,4 +1207,35 @@ declare module 'bittorrent-tracker' {
   const BitTorrentTracker: typeof Client;
   export default BitTorrentTracker;
   export { Client, Server, Swarm };
+}
+
+declare module 'magnet-uri' {
+  declare const MagnetUri: MagnetUri.MagnetUri;
+
+  declare namespace MagnetUri {
+    interface MagnetUri {
+      (uri: string): Instance;
+      decode(uri: string): Instance;
+      encode(parsed: Instance): string;
+    }
+
+    interface Instance {
+      dn?: string[] | string | undefined;
+      tr?: string[] | string | undefined;
+      xs?: string[] | string | undefined;
+      as?: string[] | string | undefined;
+      ws?: string[] | string | undefined;
+      kt?: string[] | undefined;
+      ix?: number[] | number | undefined;
+      xt?: string[] | string | undefined;
+      infoHash?: string | undefined;
+      infoHashBuffer?: Buffer | undefined;
+      name?: string[] | string | undefined;
+      keywords?: string[] | string | undefined;
+      announce?: string[] | undefined;
+      urlList?: string[] | undefined;
+    }
+  }
+
+  export default MagnetUri;
 }
