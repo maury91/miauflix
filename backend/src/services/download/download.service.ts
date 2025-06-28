@@ -13,7 +13,6 @@ import { enhancedFetch } from '@utils/fetch.util';
 export class DownloadService {
   public readonly client: WebTorrent;
   private bestTrackers: string[] = [];
-  private bestTrackersOriginal: string[] = ['udp://tracker.opentrackr.org:1337'];
   private readonly ready: Promise<void>;
   private readonly staticTrackers: string[];
   private readonly bestTrackersDownloadUrl: string;
@@ -83,7 +82,6 @@ export class DownloadService {
 
     if (bestTrackers.length) {
       this.bestTrackers = bestTrackers;
-      this.bestTrackersOriginal = [...bestTrackers];
     }
     this.bestTrackers = [...new Set([...this.bestTrackers, ...this.staticTrackers])];
 
@@ -146,7 +144,7 @@ export class DownloadService {
     return new Promise((resolve, reject) => {
       const client = new BTClient({
         infoHash: infoHash.toLowerCase(),
-        announce: this.bestTrackersOriginal,
+        announce: this.bestTrackers,
         peerId: Buffer.from('01234567890123456789'), // 20-byte dummy peer ID
         port: 6881, // arbitrary port for scrape
       });
