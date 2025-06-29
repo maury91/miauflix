@@ -15,14 +15,11 @@ COPY tsconfig.json ./tsconfig.json
 # Copy the packages that backend depends on
 COPY packages/ ./packages/
 
-# Install all dependencies for building
 RUN npm ci && npm cache clean --force
-
-# Copy backend source code (needed for TypeScript project references)
-COPY backend/ ./backend/
-
-# Build libraries and backend
 RUN npm run build:libs
+
+# Build backend
+COPY backend/ ./backend/
 RUN npm run build --workspace=backend 
 
 # Move node_modules to the dist directory

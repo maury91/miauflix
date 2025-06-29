@@ -1,12 +1,14 @@
 import { logger } from '@logger';
-import { Quality } from '@miauflix/source-metadata-extractor';
 
 import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
 import type { MovieSource } from '@entities/movie-source.entity';
 import { MovieRepository } from '@repositories/movie.repository';
-import { MovieSourceRepository } from '@repositories/movie-source.repository';
+import {
+  MovieSourceRepository,
+  SourceProcessingResult,
+} from '@repositories/movie-source.repository';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { adaptiveLog } from '@utils/adaptive-logging.util';
@@ -326,7 +328,7 @@ export class SourceService {
 
     logger.debug('SourceService', 'Searching source files for sources without them');
 
-    const processSource = async (source: (typeof sourcesToProcess)[number]) => {
+    const processSource = async (source: SourceProcessingResult) => {
       logger.debug(
         'SourceService',
         `Processing source ${source.id} with quality ${source.quality}`
@@ -352,15 +354,7 @@ export class SourceService {
   /**
    * Search and save source file for a specific source
    */
-  private async downloadSourceFileForSource(source: {
-    id: number;
-    hash: string;
-    magnetLink: string;
-    quality: Quality | null;
-    movieId: number;
-    url?: string;
-    source: string;
-  }): Promise<void> {
+  private async downloadSourceFileForSource(source: SourceProcessingResult): Promise<void> {
     logger.debug(
       'SourceService',
       `Searching file for source ${source.id} (quality: ${source.quality})`
@@ -590,13 +584,12 @@ export class SourceService {
         }
 
         // Only update if sourceType is unknown or sourceUploadedAt is missing
-        const needsUpdate =
-          existingSource.sourceType === 'unknown' || !existingSource.sourceUploadedAt;
+        const needsUpdate = existingSource.sourceType === null || !existingSource.sourceUploadedAt;
 
         if (needsUpdate) {
           const updateData: Partial<MovieSource> = {};
 
-          if (existingSource.sourceType === 'unknown') {
+          if (existingSource.sourceType === null) {
             updateData.sourceType = source.source;
           }
 
