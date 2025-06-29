@@ -96,6 +96,14 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       required: false,
       transform: transforms.string(),
     }),
+    DOWNLOAD_ALL_SOURCE_FILES: variable({
+      description:
+        'Download metadata files for all sources instead of only the top 2 sources per media',
+      example: 'false',
+      defaultValue: 'false',
+      required: false,
+      transform: transforms.boolean(),
+    }),
   },
   test: async () => {
     // Placeholder for any test logic if needed
