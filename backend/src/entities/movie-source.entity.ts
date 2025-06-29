@@ -1,4 +1,4 @@
-import { Quality } from '@miauflix/source-metadata-extractor';
+import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 import {
   Column,
   CreateDateColumn,
@@ -15,6 +15,41 @@ import {
 import type { EncryptionService } from '@services/encryption/encryption.service';
 
 import { Movie } from './movie.entity';
+
+export type MovieSourceQuality = Quality | '3D';
+const QUALITIES: MovieSourceQuality[] = [
+  Quality.SD,
+  Quality.HD,
+  Quality.FHD,
+  Quality['2K'],
+  Quality['4K'],
+  Quality['8K'],
+  '3D',
+];
+
+const VIDEO_CODECS: VideoCodec[] = [
+  VideoCodec.VC1,
+  VideoCodec.MPEG2,
+  VideoCodec.MPEG4,
+  VideoCodec.XVID,
+  VideoCodec.VP8,
+  VideoCodec.VP9,
+  VideoCodec.X264,
+  VideoCodec.X265,
+  VideoCodec.AV1,
+  VideoCodec.X264_10BIT,
+  VideoCodec.X265_10BIT,
+  VideoCodec.AV1_10BIT,
+];
+
+const SOURCE_TYPES: Source[] = [
+  Source.WEB,
+  Source.BLURAY,
+  Source.HDTV,
+  Source.DVD,
+  Source.TS,
+  Source.CAM,
+];
 
 /**
  * Movie source entity to store information about available sources for movies
@@ -69,10 +104,14 @@ export class MovieSource {
 
   // URI link to the source, if available
   @Column({
-    type: 'varchar',
+    type: 'int',
     nullable: true,
+    transformer: {
+      to: (value: MovieSourceQuality | null) => (value ? QUALITIES.indexOf(value) : undefined),
+      from: (value?: number) => (value ? QUALITIES[value] : undefined),
+    },
   })
-  quality: Quality | null;
+  quality: MovieSourceQuality | null;
 
   @Column()
   resolution: number; // Vertical resolution in pixels ( used for sorting and filtering )
@@ -80,8 +119,15 @@ export class MovieSource {
   @Column()
   size: number; // Size in bytes
 
-  @Column({ nullable: true, type: 'varchar', length: 10 })
-  videoCodec: string | null; // e.g. "x264", "x265", "HVEC"
+  @Column({
+    nullable: true,
+    type: 'int',
+    transformer: {
+      to: (value: VideoCodec | null) => (value ? VIDEO_CODECS.indexOf(value) : undefined),
+      from: (value?: number) => (value ? VIDEO_CODECS[value] : undefined),
+    },
+  })
+  videoCodec: VideoCodec | null; // e.g. "x264", "x265", "HVEC"
 
   @Column({ nullable: true })
   broadcasters?: number;
@@ -93,10 +139,14 @@ export class MovieSource {
   source: string; // YTS, TheRARBG, etc.
 
   @Column({
-    type: 'varchar',
+    type: 'int',
     nullable: true,
+    transformer: {
+      to: (value: Source | null) => (value ? SOURCE_TYPES.indexOf(value) : undefined),
+      from: (value?: number) => (value ? SOURCE_TYPES[value] : undefined),
+    },
   })
-  sourceType: string | null; // e.g. "web", "cam", "bluray", "dvd", ...
+  sourceType: Source | null; // e.g. "web", "cam", "bluray", "dvd", ...
 
   @Column({
     type: 'blob',

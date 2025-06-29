@@ -1,3 +1,4 @@
+import type { Source } from '@miauflix/source-metadata-extractor';
 import { In, LessThan, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
@@ -156,6 +157,8 @@ export class MovieSourceRepository {
   updateSourceFile(sourceId: number, sourceFile: Buffer) {
     return this.movieSourceRepository.update(sourceId, {
       file: sourceFile,
+      magnetLink: '', // This information is now in the source file we can clear it
+      url: '', // We are not going to download it twice, we can clear it
     });
   }
 
@@ -332,7 +335,7 @@ LIMIT ?
    */
   updateSourceMetadata(
     sourceId: number,
-    updateData: { sourceType?: string | null; sourceUploadedAt?: Date }
+    updateData: { sourceType?: Source | null; sourceUploadedAt?: Date }
   ) {
     return this.movieSourceRepository.update(sourceId, updateData);
   }

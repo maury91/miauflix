@@ -19,13 +19,13 @@ export const providerSourceToEntity = (
   quality: providerSource.quality,
   resolution: providerSource.resolution.height,
   size: providerSource.size,
-  videoCodec: providerSource.videoCodec?.toString() || '',
+  videoCodec: providerSource.videoCodec,
   broadcasters: providerSource.broadcasters,
   watchers: providerSource.watchers,
   sourceUploadedAt: providerSource.uploadDate,
   url: providerSource.url,
   source: providerName,
-  sourceType: providerSource.source?.toString() || 'unknown',
+  sourceType: providerSource.source,
   nextStatsCheckAt: new Date(),
 });
 

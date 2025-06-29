@@ -31,16 +31,22 @@ export class EncryptionService {
   /**
    * Encrypt a string value using AES-256-GCM
    * Returns base64-encoded: IV (12 bytes) + AuthTag (16 bytes) + Encrypted Data
+   * To save space when plainEmpty is true, an empty string is encrypted as an empty string
    */
-  encryptString(plaintext: string, deterministic = false): string {
-    return this.encryptBuffer(Buffer.from(plaintext, 'utf8'), deterministic).toString('base64');
+  encryptString(plaintext: string, deterministic = false, plainEmpty = true): string {
+    return plaintext === '' && plainEmpty
+      ? ''
+      : this.encryptBuffer(Buffer.from(plaintext, 'utf8'), deterministic).toString('base64');
   }
 
   /**
    * Decrypt a previously encrypted value using AES-256-GCM
+   * To save space when plainEmpty is true, an empty string is decrypted as an empty string
    */
-  decryptString(encryptedValue: string): string {
-    return this.decryptBuffer(Buffer.from(encryptedValue, 'base64')).toString('utf8');
+  decryptString(encryptedValue: string, plainEmpty = true): string {
+    return encryptedValue === '' && plainEmpty
+      ? ''
+      : this.decryptBuffer(Buffer.from(encryptedValue, 'base64')).toString('utf8');
   }
 
   /**
