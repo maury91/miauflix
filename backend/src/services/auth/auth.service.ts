@@ -4,25 +4,43 @@ import { jwtVerify, SignJWT } from 'jose';
 import { hostname } from 'os';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
+import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import type { AuditLogService } from '@services/security/audit-log.service';
+import { InMemoryCache } from '@utils/in-memory-cache';
 import { generateSecurePassword } from '@utils/password.util';
 
-import { ENV } from '../../constants';
+import {
+  generateDeterministicSalt,
+  generateStreamingKey,
+  hashKeyWithSalt,
+  parseStreamingKey,
+  validateTokenPayload,
+} from './auth.util';
+
+interface StreamingToken {
+  movieId: number;
+  userId: string;
+}
 
 export class AuthService {
   private readonly userRepository: UserRepository;
   private readonly refreshTokenRepository: RefreshTokenRepository;
+  private readonly streamingKeyRepository: StreamingKeyRepository;
   private readonly secretKey: Uint8Array;
   private readonly refreshSecretKey: Uint8Array;
   private readonly issuer = 'miauflix-api';
   private readonly audience = 'miauflix-client';
+  private readonly streamingKeyTTL: number;
+  private readonly streamingKeySalt: string;
+  private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
 
   constructor(
     db: Database,
@@ -30,10 +48,13 @@ export class AuthService {
   ) {
     this.userRepository = db.getUserRepository();
     this.refreshTokenRepository = db.getRefreshTokenRepository();
+    this.streamingKeyRepository = db.getStreamingKeyRepository();
 
     // Convert the secret to a Uint8Array for jose
     this.secretKey = new TextEncoder().encode(ENV('JWT_SECRET'));
     this.refreshSecretKey = new TextEncoder().encode(ENV('REFRESH_TOKEN_SECRET'));
+    this.streamingKeyTTL = ENV('STREAM_TOKEN_EXPIRATION');
+    this.streamingKeySalt = ENV('STREAM_KEY_SALT');
   }
 
   /**
@@ -153,10 +174,11 @@ export class AuthService {
         audience: this.audience,
       });
 
-      const { userId, email, role } = payload;
-      if (!userId || !email || !role || typeof email !== 'string') {
+      if (!validateTokenPayload(payload)) {
         throw new InvalidTokenError();
       }
+
+      const { userId, email, role } = payload;
 
       return {
         userId,
@@ -225,5 +247,83 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  /**
+   * Generate URL-safe streaming key
+   *
+   * Creates streaming keys that embed user ID for direct database queries
+   * using deterministic salt based on user ID + predefined salt.
+   */
+  async generateStreamingKey(movieId: number, userId: string): Promise<string> {
+    const { streamingKey, storedHash } = await generateStreamingKey(userId, this.streamingKeySalt);
+
+    // Store in database
+    await this.streamingKeyRepository.create({
+      keyHash: storedHash,
+      movieId,
+      userId: parseInt(userId, 10),
+      expiresAt: new Date(Date.now() + this.streamingKeyTTL),
+    });
+
+    return streamingKey;
+  }
+
+  /**
+   * Find streaming key in database
+   */
+  private async findStreamingKey(key: string, userId: string): Promise<StreamingToken | null> {
+    try {
+      const deterministicSalt = generateDeterministicSalt(userId, this.streamingKeySalt);
+      const hashToFind = await hashKeyWithSalt(key, deterministicSalt);
+
+      const streamingKey = await this.streamingKeyRepository.findByKeyHash(hashToFind);
+
+      if (streamingKey && streamingKey.expiresAt > new Date()) {
+        return {
+          movieId: streamingKey.movieId,
+          userId: streamingKey.userId.toString(),
+        };
+      }
+    } catch {
+      return null;
+    }
+
+    return null;
+  }
+
+  /**
+   * Verify streaming key with cache-first approach
+   */
+  async verifyStreamingKey(key: string): Promise<StreamingToken> {
+    // Fast path: Check cache first
+    const cached = this.streamingKeyCache.get(key);
+    if (cached) {
+      return cached;
+    }
+
+    // Extract user ID and random key from the streaming key
+    const parsed = parseStreamingKey(key);
+    if (!parsed) {
+      throw new InvalidTokenError();
+    }
+
+    const { userId, randomKey } = parsed;
+
+    // Fallback: Direct database verification with deterministic salt
+    const streamingKey = await this.findStreamingKey(randomKey, userId);
+    if (streamingKey) {
+      // Cache the successful result for future requests
+      this.streamingKeyCache.setWithTTL(
+        key,
+        streamingKey,
+        // Cache until the key expires (or slightly before to be safe)
+        this.streamingKeyTTL * 0.9
+      );
+
+      return streamingKey;
+    }
+
+    throw new InvalidTokenError();
   }
 }

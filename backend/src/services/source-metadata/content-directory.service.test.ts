@@ -36,7 +36,6 @@ describe('ContentDirectoryService', () => {
         // Check source structure
         const source = result.sources[0];
         expect(source.quality).toBeDefined();
-        expect(source.resolution).toBeDefined();
         expect(source.videoCodec).toBeDefined();
         expect(source.size).toBeDefined();
         expect(source.magnetLink.startsWith('magnet:?xt=urn:btih:')).toBe(true);

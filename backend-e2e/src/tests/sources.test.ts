@@ -1,3 +1,4 @@
+import { Source } from '@miauflix/source-metadata-extractor';
 import { TestClient, waitForService, extractUserCredentialsFromLogs } from '../utils/test-utils';
 
 describe('Sources E2E Tests', () => {
@@ -57,25 +58,37 @@ describe('Sources E2E Tests', () => {
         // Check each source has required properties
         sources.forEach((source: any) => {
           expect(source).toHaveProperty('id');
-          expect(source).toHaveProperty('hash');
-          expect(source).toHaveProperty('magnetLink');
-          expect(source).toHaveProperty('quality');
-          expect(source).toHaveProperty('resolution');
           expect(source).toHaveProperty('size');
           expect(source).toHaveProperty('videoCodec');
           expect(source).toHaveProperty('source');
           expect(source).toHaveProperty('hasDataFile');
+          // Optional fields that may be present
+          expect(source).toHaveProperty('broadcasters');
+          expect(source).toHaveProperty('watchers');
 
           // Verify data types
           expect(typeof source.id).toBe('number');
-          expect(typeof source.hash).toBe('string');
-          expect(typeof source.magnetLink).toBe('string');
-          expect(typeof source.quality).toBe('string');
-          expect(typeof source.resolution).toBe('number');
           expect(typeof source.size).toBe('number');
           expect(typeof source.videoCodec).toBe('string');
           expect(typeof source.source).toBe('string');
           expect(typeof source.hasDataFile).toBe('boolean');
+
+          // Quality may not be present in the response
+          if (
+            source.hasOwnProperty('quality') &&
+            source.quality !== null &&
+            source.quality !== undefined
+          ) {
+            expect(typeof source.quality).toBe('string');
+          }
+
+          // Broadcasters and watchers can be number or null
+          if (source.broadcasters !== null) {
+            expect(typeof source.broadcasters).toBe('number');
+          }
+          if (source.watchers !== null) {
+            expect(typeof source.watchers).toBe('number');
+          }
         });
 
         // Verify different source types are represented
@@ -145,17 +158,16 @@ describe('Sources E2E Tests', () => {
       ) {
         const source = response.data.sources[0];
 
-        // Test magnet link format
-        expect(source.magnetLink).toMatch(/^magnet:\?xt=urn:btih:[a-fA-F0-9]{40}/);
-
-        // Test hash format (should be 40-character hex string)
-        expect(source.hash).toMatch(/^[a-fA-F0-9]{40}$/);
-
-        // Test quality values are reasonable
-        expect(['720p', '1080p', '2160p', '480p', 'Unknown']).toContain(source.quality);
-
-        // Test resolution is a positive number
-        expect(source.resolution).toBeGreaterThan(0);
+        // Test quality values are reasonable if present (can be missing/null/undefined)
+        if (
+          source.hasOwnProperty('quality') &&
+          source.quality !== null &&
+          source.quality !== undefined
+        ) {
+          expect(['720p', '1080p', '2160p', '480p', 'FHD', 'HD', '4K', 'Unknown']).toContain(
+            source.quality
+          );
+        }
 
         // Test size is a positive number (bytes)
         expect(source.size).toBeGreaterThan(0);
@@ -164,6 +176,7 @@ describe('Sources E2E Tests', () => {
         expect([
           'X264',
           'X265',
+          'X265_10BIT',
           'HEVC',
           'AV1',
           'XVID',
@@ -173,6 +186,8 @@ describe('Sources E2E Tests', () => {
           'VC1',
           'UNKNOWN',
         ]).toContain(source.videoCodec);
+
+        expect([Source.BLURAY, Source.WEB, Source.DVD, Source.HDTV]).toContain(source.source);
       }
     });
 

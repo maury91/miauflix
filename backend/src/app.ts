@@ -18,6 +18,7 @@ import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { StorageService } from '@services/storage/storage.service';
+import { StreamService } from '@services/stream/stream.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 import { TraktService } from '@services/trakt/trakt.service';
 
@@ -85,6 +86,7 @@ try {
     contentDirectoryService,
     magnetService
   );
+  const streamService = new StreamService(db, sourceService, downloadService, mediaService);
   // ToDo: Use the storage service in the right places
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const storageService = new StorageService(db); // For tracking download progress (used in streaming infrastructure)
@@ -184,6 +186,8 @@ try {
     contentDirectoryService,
     magnetService,
     traktService,
+    downloadService,
+    streamService,
   });
 
   // Error handling middleware - must be added first

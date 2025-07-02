@@ -1,4 +1,5 @@
 import type { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Quality } from '@miauflix/source-metadata-extractor';
 
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';
 
@@ -9,7 +10,7 @@ export interface MediaSource {
   id: number;
   qualityScore: number; // 1-5
   confidence: number; // 0-1
-  resolution: string; // "1080p"
+  quality: Quality | null; // "1080p"
   estimatedSize: string; // "~2.1GB"
   videoFormat: string; // "H.264"
   audioFormat: string; // "AAC"
@@ -46,7 +47,7 @@ export class MediaSourceMapper {
       id: internal.id,
       qualityScore,
       confidence,
-      resolution: internal.resolution,
+      quality: internal.quality,
       estimatedSize,
       videoFormat: internal.videoFormat,
       audioFormat: internal.audioFormat,
@@ -56,17 +57,27 @@ export class MediaSourceMapper {
   }
 
   /**
-   * Extract resolution from resolution number (height in pixels)
+   * Format quality for display using shared utility
    */
-  static formatResolution(resolutionHeight: number): string {
-    if (resolutionHeight >= 2160) return '2160p (4K)';
-    if (resolutionHeight >= 1440) return '1440p (2K)';
-    if (resolutionHeight >= 1080) return '1080p (Full HD)';
-    if (resolutionHeight >= 720) return '720p (HD)';
-    if (resolutionHeight >= 480) return '480p (SD)';
-    if (resolutionHeight >= 360) return '360p';
-    if (resolutionHeight >= 240) return '240p';
-    return `${resolutionHeight}p`;
+  static formatQuality(quality: Quality | '3D' | null): string {
+    switch (quality) {
+      case Quality['8K']:
+        return '2160p (4K)';
+      case Quality['4K']:
+        return '1440p (2K)';
+      case '3D':
+        return '1080p (3D)';
+      case Quality.FHD:
+        return '1080p (Full HD)';
+      case Quality.HD:
+        return '720p (HD)';
+      case Quality.SD:
+        return '480p (SD)';
+      case Quality.SD:
+        return '360p';
+      default:
+        return 'Unknown';
+    }
   }
 
   /**

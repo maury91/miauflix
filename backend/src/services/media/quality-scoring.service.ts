@@ -1,9 +1,10 @@
 import type { AudioCodec, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Quality } from '@miauflix/source-metadata-extractor';
 
 import { getVideoCodecQualityBonus } from '@utils/codec.util';
 
 export interface QualityMetrics {
-  resolution: string;
+  quality: Quality | null;
   videoCodec: VideoCodec | null;
   audioCodec?: AudioCodec | string;
   sourceType: string | null;
@@ -29,16 +30,16 @@ export class QualityScoringService {
     const sourceTypeScore = this.getSourceTypeScore(metrics.sourceType);
     score = sourceTypeScore;
 
-    // Resolution bonus (up to +1.5 points)
-    const resolutionBonus = this.getResolutionBonus(metrics.resolution);
-    score += resolutionBonus;
+    // Quality bonus (up to +1.5 points)
+    const qualityBonus = this.getQualityBonus(metrics.quality);
+    score += qualityBonus;
 
     // Video codec bonus (up to +0.5 points)
     const codecBonus = getVideoCodecQualityBonus(metrics.videoCodec);
     score += codecBonus;
 
     // File size optimization (can reduce score by up to -1 point)
-    const sizeAdjustment = this.getSizeQualityAdjustment(metrics.fileSize, metrics.resolution);
+    const sizeAdjustment = this.getSizeQualityAdjustment(metrics.fileSize, metrics.quality);
     score += sizeAdjustment;
 
     // Ensure score stays within bounds
@@ -79,25 +80,32 @@ export class QualityScoringService {
   }
 
   /**
-   * Get resolution bonus points
+   * Get qualoty bonus points
    */
-  private getResolutionBonus(resolution: string): number {
-    const res = resolution.toLowerCase();
-
-    if (res.includes('2160p') || res.includes('4k')) return 1.5;
-    if (res.includes('1440p')) return 1.2;
-    if (res.includes('1080p')) return 1.0;
-    if (res.includes('720p')) return 0.5;
-    if (res.includes('480p')) return 0.2;
-
-    return 0;
+  private getQualityBonus(quality: Quality | null): number {
+    switch (quality) {
+      case Quality['8K']:
+        return 1.5;
+      case Quality['4K']:
+        return 1.5;
+      case Quality['2K']:
+        return 1.2;
+      case Quality.FHD:
+        return 1.0;
+      case Quality.HD:
+        return 0.5;
+      case Quality.SD:
+        return 0.2;
+      default:
+        return 0.5;
+    }
   }
 
   /**
-   * Adjust score based on file size relative to expected size for resolution
+   * Adjust score based on file size relative to expected size for quality
    */
-  private getSizeQualityAdjustment(fileSize: number, resolution: string): number {
-    const expectedSize = this.getExpectedFileSize(resolution);
+  private getSizeQualityAdjustment(fileSize: number, quality: Quality | null): number {
+    const expectedSize = this.getExpectedFileSize(quality);
     if (expectedSize === 0) return 0;
 
     const ratio = fileSize / expectedSize;
@@ -118,19 +126,27 @@ export class QualityScoringService {
   }
 
   /**
-   * Get expected file size in bytes for resolution
+   * Get expected file size in bytes for quality
    */
-  private getExpectedFileSize(resolution: string): number {
-    const res = resolution.toLowerCase();
+  private getExpectedFileSize(quality: Quality | null): number {
+    if (!quality) return 0;
 
-    // Expected sizes for 90-120 minute movies (in bytes)
-    if (res.includes('2160p') || res.includes('4k')) return 8 * 1024 * 1024 * 1024; // 8GB
-    if (res.includes('1440p')) return 4 * 1024 * 1024 * 1024; // 4GB
-    if (res.includes('1080p')) return 2 * 1024 * 1024 * 1024; // 2GB
-    if (res.includes('720p')) return 1 * 1024 * 1024 * 1024; // 1GB
-    if (res.includes('480p')) return 0.7 * 1024 * 1024 * 1024; // 700MB
-
-    return 0;
+    switch (quality) {
+      case Quality['8K']:
+        return 16 * 1024 * 1024 * 1024; // 16GB
+      case Quality['4K']:
+        return 8 * 1024 * 1024 * 1024; // 8GB
+      case Quality['2K']:
+        return 4 * 1024 * 1024 * 1024; // 4GB
+      case Quality.FHD:
+        return 2 * 1024 * 1024 * 1024; // 2GB
+      case Quality.HD:
+        return 1 * 1024 * 1024 * 1024; // 1GB
+      case Quality.SD:
+        return 0.7 * 1024 * 1024 * 1024; // 700MB
+      default:
+        return 0;
+    }
   }
 
   /**
@@ -152,10 +168,8 @@ export class QualityScoringService {
     );
     if (hasKnownType) confidence += 0.1;
 
-    // Standard resolutions increase confidence
-    const standardRes = ['2160p', '1440p', '1080p', '720p', '480p'];
-    const hasStandardRes = standardRes.some(res => metrics.resolution.toLowerCase().includes(res));
-    if (hasStandardRes) confidence += 0.1;
+    // Having a quality increases confidence
+    if (metrics.quality) confidence += 0.1;
 
     return Math.max(0, Math.min(1, confidence));
   }

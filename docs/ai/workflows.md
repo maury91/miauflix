@@ -199,9 +199,10 @@ npm test --workspace backend
 npm run test:backend:e2e
 
 # E2E development workflow (faster iteration)
-npm run start:backend:e2e        # Start environment (background)
+npm run start:backend:e2e        # Start environment (interactive mode)
+npm run start:backend:e2e -- -d  # Start environment (detached mode)
 npm run test:backend:e2e:dev     # Run tests (repeat as needed)
-npm run docker:cleanup           # Clean up when done
+npm run stop:backend:e2e         # Stop detached environment
 
 # Run specific test file
 npm test --workspace backend -- source.service.test.ts
@@ -391,6 +392,26 @@ npm test --workspace backend -- [provider].api.test.ts
 # 3. Commit new fixtures to git ( don't do this automatically, ask the user to do it )
 git add backend/test-fixtures/
 git commit -m "Update [provider] API fixtures"
+```
+
+### **Log Management**
+
+E2E tests automatically manage log files to prevent disk space issues:
+
+```bash
+# Logs are automatically cleaned to keep only 10 most recent files
+# This happens during:
+# - Every test run cleanup
+# - When stopping detached environments
+
+# Manual log cleanup (if needed)
+backend-e2e/scripts/cleanup-logs.sh
+
+# View recent logs
+ls -la backend-e2e/logs/
+
+# View specific log file
+tail -f backend-e2e/logs/2025-07-02_13-06-46.log
 ```
 
 ### **Debugging Test Failures**

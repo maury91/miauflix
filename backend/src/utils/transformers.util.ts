@@ -17,7 +17,6 @@ export const providerSourceToEntity = (
   hash: providerSource.hash,
   magnetLink: providerSource.magnetLink,
   quality: providerSource.quality,
-  resolution: providerSource.resolution.height,
   size: providerSource.size,
   videoCodec: providerSource.videoCodec,
   broadcasters: providerSource.broadcasters,
@@ -27,6 +26,7 @@ export const providerSourceToEntity = (
   source: providerName,
   sourceType: providerSource.source,
   nextStatsCheckAt: new Date(),
+  streamingScore: 0, // TODO: calculate streaming score
 });
 
 /**

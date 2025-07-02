@@ -1,28 +1,4 @@
-import { AudioCodec, Quality } from '../types';
-
-/**
- * Extracts resolution information from quality enum
- */
-export function qualityToResolution(quality: Quality | undefined): {
-  width: number;
-  height: number;
-  label: string;
-} {
-  switch (quality) {
-    case Quality['8K']:
-      return { width: 7680, height: 4320, label: '8K' };
-    case Quality['4K']:
-      return { width: 3840, height: 2160, label: '4K' };
-    case Quality['2K']:
-      return { width: 2560, height: 1440, label: '2K' };
-    case Quality.FHD:
-      return { width: 1920, height: 1080, label: 'FHD' };
-    case Quality.HD:
-      return { width: 1280, height: 720, label: 'HD' };
-    default:
-      return { width: 854, height: 480, label: 'SD' };
-  }
-}
+import { AudioCodec } from '../types';
 
 /**
  * Calculates the approximate bitrate based on video size and duration

@@ -85,7 +85,6 @@ describe('SourceService', () => {
     const mockSource2 = createMockSourceMetadata({
       hash: mockMovieSource2.hash,
       quality: Quality.HD,
-      resolution: { width: 1280, height: 720, label: 'HD' },
       source: Source.BLURAY,
     });
 

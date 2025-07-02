@@ -21,6 +21,7 @@
     "start:backend": "npm -w backend start",
     "start:backend:prod": "npm -w backend run start:prod",
     "start:backend:e2e": "backend-e2e/scripts/env.sh dev",
+    "stop:backend:e2e": "backend-e2e/scripts/stop.sh",
     "start:frontend": "npm -w frontend run dev",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" --names \"backend,frontend\" --prefix-colors \"blue,green\"",
     "test": "npm run test:backend",

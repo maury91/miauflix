@@ -18,6 +18,21 @@ export class ConfigurationError extends Error {
   }
 }
 
+const timeMultipliers = {
+  s: 1000,
+  m: 60,
+  h: 60,
+  d: 24,
+};
+type TimeUnit = keyof typeof timeMultipliers;
+(Object.entries(timeMultipliers) as [TimeUnit, number][]).reduce(
+  (currentMultiplier, [key, value]) => {
+    timeMultipliers[key] = currentMultiplier * value;
+    return timeMultipliers[key];
+  },
+  1
+);
+
 // Combined validator-transforms
 export const transforms = {
   string: (options?: {
@@ -151,6 +166,35 @@ export const transforms = {
       };
     }
   },
+
+  time:
+    (units: TimeUnit[] = Object.keys(timeMultipliers) as TimeUnit[]): ValidatorTransform<number> =>
+    (value: string) => {
+      const regex = new RegExp(`^(\\d+)([${units.join('')}])$`);
+      const match = value.match(regex);
+
+      if (!match) {
+        return {
+          isValid: false,
+          error: `Must be a number followed by ${units.join(', ')} (e.g., 6h, 30m, 2d)`,
+          suggestions: ['6h', '30m', '2d', '3600s'],
+        };
+      }
+
+      const [, numberStr, unit] = match;
+      const number = parseInt(numberStr, 10);
+
+      if (!(unit in timeMultipliers)) {
+        return {
+          isValid: false,
+          error: `Unknown time unit: ${unit}`,
+          suggestions: units.map(u => `1${u}`),
+        };
+      }
+
+      const milliseconds = number * timeMultipliers[unit as TimeUnit];
+      return { isValid: true, value: milliseconds };
+    },
 
   optional:
     <T>(baseTransform: ValidatorTransform<T>): ValidatorTransform<T | undefined> =>

@@ -1,7 +1,6 @@
 import {
   calculateApproximateBitrate,
   detectAudioCodecFromChannels,
-  qualityToResolution,
 } from '@miauflix/source-metadata-extractor';
 import type { Cache } from 'cache-manager';
 
@@ -27,7 +26,6 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
     movieTitle: string,
     runtime: number
   ): SourceMetadata => {
-    const resolution = qualityToResolution(undefined); // YTS quality mapping needs to be implemented
     const videoCodec = mapYTSVideoCodec(sourceMetadata.video_codec, sourceMetadata.bit_depth);
     const audioCodec = detectAudioCodecFromChannels(sourceMetadata.audio_channels);
     const source = mapYTSTypeToSource(sourceMetadata.type);
@@ -40,7 +38,6 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
       language: [],
       magnetLink: `magnet:?xt=urn:btih:${sourceMetadata.hash}&dn=${encodeURIComponent(movieTitle)}`,
       quality: null, // ToDo: YTS quality mapping needs to be implemented
-      resolution,
       score: 0,
       size: sourceMetadata.size_bytes,
       source,

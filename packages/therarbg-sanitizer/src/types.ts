@@ -244,8 +244,8 @@ export interface ParsedName {
   title: string;
   /** The year if found */
   year?: string;
-  /** Resolution (720p, 1080p, 4K, etc.) */
-  resolution?: string;
+  /** Quality (720p, 1080p, 4K, etc.) */
+  quality?: string;
   /** Video codec (x264, x265, H.264, etc.) */
   videoCodec?: string;
   /** Audio codec/format (DTS, AAC, AC3, etc.) */
@@ -418,7 +418,6 @@ export interface NameMetadata {
   season?: number;
   episode?: number;
   quality?: string;
-  resolution?: number;
   videoCodec?: string;
   audioCodec?: string;
   source?: string;
