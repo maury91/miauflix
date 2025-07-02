@@ -6,6 +6,7 @@ import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import type { AuthService } from '@services/auth/auth.service';
+import type { DownloadService } from '@services/download/download.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
@@ -13,11 +14,13 @@ import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { SourceService } from '@services/source';
 import type { SourceMetadataFileService } from '@services/source';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
+import type { StreamService } from '@services/stream/stream.service';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { TraktService } from '@services/trakt/trakt.service';
 
 import { createAuthRoutes } from './auth.routes';
 import { createMovieRoutes } from './movie.routes';
+import { createStreamRoutes } from './stream.routes';
 import { createTraktRoutes } from './trakt.routes';
 
 export function createRoutes(deps: {
@@ -31,6 +34,8 @@ export function createRoutes(deps: {
   contentDirectoryService: ContentDirectoryService;
   magnetService: SourceMetadataFileService;
   traktService: TraktService;
+  downloadService: DownloadService;
+  streamService: StreamService;
 }) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(deps.auditLogService);
 
@@ -51,7 +56,17 @@ export function createRoutes(deps: {
     .route('/auth', createAuthRoutes(deps.authService, deps.auditLogService))
     .route(
       '/movies',
-      createMovieRoutes(deps.mediaService, deps.sourceService, deps.auditLogService)
+      createMovieRoutes(
+        deps.mediaService,
+        deps.sourceService,
+        deps.streamService,
+        deps.auditLogService,
+        deps.authService
+      )
+    )
+    .route(
+      '/stream',
+      createStreamRoutes(deps.authService, deps.streamService, deps.auditLogService)
     )
     .route('/trakt', createTraktRoutes(deps.traktService, deps.auditLogService))
     .get('/lists', rateLimitGuard(5), authGuard(), async c => {

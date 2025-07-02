@@ -17,7 +17,7 @@ import type { EncryptionService } from '@services/encryption/encryption.service'
 import { Movie } from './movie.entity';
 
 export type MovieSourceQuality = Quality | '3D';
-const QUALITIES: MovieSourceQuality[] = [
+export const QUALITIES: MovieSourceQuality[] = [
   Quality.SD,
   Quality.HD,
   Quality.FHD,
@@ -57,8 +57,10 @@ const SOURCE_TYPES: Source[] = [
 
 @Entity()
 @Unique(['movieId', 'hash']) // avoid duplicates per film
-@Index('idx_movie_rank', ['movieId', 'resolution', 'broadcasters', 'size'])
 @Index('idx_movie_source_no_file', ['movieId'], { where: '"file" IS NULL' }) // fast "file IS NULL" scans - partial index
+@Index('idx_movie_source_streaming_score', ['movieId', 'streamingScore'], {
+  where: '"file" IS NOT NULL',
+}) // fast scoring for playable sources
 export class MovieSource {
   static encryptionService: EncryptionService;
 
@@ -114,9 +116,6 @@ export class MovieSource {
   quality: MovieSourceQuality | null;
 
   @Column()
-  resolution: number; // Vertical resolution in pixels ( used for sorting and filtering )
-
-  @Column()
   size: number; // Size in bytes
 
   @Column({
@@ -162,6 +161,12 @@ export class MovieSource {
 
   @Column({ type: 'datetime', nullable: true })
   sourceUploadedAt?: Date;
+
+  @Column({
+    type: 'int',
+    default: 0,
+  })
+  streamingScore: number;
 
   @Column({ type: 'datetime', nullable: true })
   lastStatsCheck?: Date;

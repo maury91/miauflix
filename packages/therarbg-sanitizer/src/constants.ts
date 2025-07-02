@@ -322,7 +322,7 @@ function hashStringToNumber(str: string): number {
  * Common quality indicators found in names
  */
 export const QUALITY_PATTERNS = [
-  // Resolution patterns
+  // Quality patterns
   /\b(720p|1080p|2160p|4K|8K|480p|576p)\b/gi,
   // Video codec patterns
   /\b(x264|x265|H\.?264|H\.?265|HEVC|AVC|VP9|AV1|XviD|DivX)\b/gi,

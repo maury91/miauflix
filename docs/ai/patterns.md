@@ -54,6 +54,82 @@ export class [EntityName] {
 }
 ```
 
+## 🔧 **Function Extraction Patterns**
+
+### **⚠️ CRITICAL: When to Extract vs Keep Inline**
+
+Based on `AuthService` refactoring - follow these guidelines to avoid over-engineering:
+
+#### **✅ Extract to Utils When Logic Has:**
+
+- **Complex multi-step operations** (crypto, validation, parsing)
+- **Business logic worth testing** in isolation
+- **Reusability across services**
+- **Error handling and edge cases**
+
+```typescript
+// ✅ GOOD - Complex crypto logic deserves extraction
+export async function generateStreamingKey(
+  userId: string,
+  streamingKeySalt: string
+): Promise<{ streamingKey: string; storedHash: string }> {
+  const randomData = randomBytes(30);
+  const base64Key = randomData.toString('base64');
+  const randomKey = base64Key.replace(/\+/g, '-').replace(/\//g, '_');
+  const streamingKey = `${userId}:${randomKey}`;
+  const deterministicSalt = generateDeterministicSalt(userId, streamingKeySalt);
+  const storedHash = await hashKeyWithSalt(randomKey, deterministicSalt);
+  return { streamingKey, storedHash };
+}
+
+// ✅ GOOD - Validation with type guards
+export function validateTokenPayload(payload: any): payload is TokenPayload {
+  return (
+    payload &&
+    typeof payload.userId === 'string' &&
+    typeof payload.email === 'string' &&
+    payload.userId.length > 0
+  );
+}
+```
+
+#### **❌ Keep Inline When Logic Is:**
+
+- **Simple template strings** or basic operations
+- **Single-line calculations** or transformations
+- **Basic conditionals** without complex logic
+- **Standard library operations** (date manipulation, string formatting)
+
+```typescript
+// ❌ BAD - Over-engineered simple operations
+export function generateAdminEmail(hostname: string): string {
+  return `admin@${hostname}.local`; // Just use template inline!
+}
+
+export function toUrlSafeBase64(base64: string): string {
+  return base64.replace(/\+/g, '-').replace(/\//g, '_'); // 2 replace calls don't need a function!
+}
+
+export function addDaysToDate(date: Date, days: number): Date {
+  const newDate = new Date(date);
+  newDate.setDate(newDate.getDate() + days); // Basic date manipulation, keep inline
+  return newDate;
+}
+
+// ✅ GOOD - Keep simple operations inline
+const adminEmail = `admin@${hostname()}.local`;
+const urlSafeKey = base64Key.replace(/\+/g, '-').replace(/\//g, '_');
+const expiresAt = new Date();
+expiresAt.setDate(expiresAt.getDate() + 7);
+```
+
+#### **🎯 Rule of Thumb**
+
+**If the function is just wrapping a single operation or simple template, keep it inline.**
+**If the function encapsulates meaningful business logic or complex operations, extract it.**
+
+---
+
 ## 🎯 **Naming Conventions**
 
 ### **Files**
