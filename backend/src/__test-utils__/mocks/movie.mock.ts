@@ -112,16 +112,16 @@ export function createMockMovieSource(overrides: Partial<MovieSource> = {}): Mov
     magnetLink: overrides.magnetLink ?? generateMagnetLink(hash, title),
     url: overrides.url ?? sourceMetadata.url,
     quality: overrides.quality ?? faker.helpers.arrayElement([Quality.FHD, Quality.HD, Quality.SD]),
-    resolution:
-      overrides.resolution ??
-      (overrides.quality === Quality.FHD ? 1080 : overrides.quality === Quality.HD ? 720 : 480),
     size: overrides.size ?? sourceMetadata.size,
-    videoCodec: overrides.videoCodec ?? faker.helpers.arrayElement(['X264', 'X265', 'XVID']),
+    videoCodec:
+      overrides.videoCodec ??
+      faker.helpers.arrayElement([VideoCodec.X264, VideoCodec.X265, VideoCodec.XVID]),
     broadcasters: overrides.broadcasters ?? sourceMetadata.broadcasters,
     watchers: overrides.watchers ?? sourceMetadata.watchers,
     source: overrides.source ?? faker.helpers.arrayElement(['YTS', 'THERARBG', 'RARBG']),
     sourceType:
-      overrides.sourceType ?? faker.helpers.arrayElement(['BLURAY', 'WEB', 'HDTV', 'CAM']),
+      overrides.sourceType ??
+      faker.helpers.arrayElement([Source.BLURAY, Source.WEB, Source.HDTV, Source.CAM]),
     file: overrides.file ?? undefined,
     sourceUploadedAt: overrides.sourceUploadedAt ?? sourceMetadata.uploadDate,
     lastStatsCheck: overrides.lastStatsCheck ?? undefined,
@@ -129,6 +129,7 @@ export function createMockMovieSource(overrides: Partial<MovieSource> = {}): Mov
     createdAt: overrides.createdAt ?? faker.date.past(),
     updatedAt: overrides.updatedAt ?? faker.date.recent(),
     storage: overrides.storage ?? undefined,
+    streamingScore: overrides.streamingScore ?? 0,
     ...overrides,
   };
 }
@@ -138,20 +139,6 @@ export function createMockSourceMetadata(overrides: Partial<SourceMetadata> = {}
   const hash = overrides.hash ?? sourceMetadata.hash;
   const quality =
     overrides.quality ?? faker.helpers.arrayElement([Quality.FHD, Quality.HD, Quality.SD]);
-
-  // Generate resolution based on quality
-  const getResolutionForQuality = (q: Quality) => {
-    switch (q) {
-      case Quality.FHD:
-        return { width: 1920, height: 1080, label: 'FHD' };
-      case Quality.HD:
-        return { width: 1280, height: 720, label: 'HD' };
-      case Quality.SD:
-        return { width: 854, height: 480, label: 'SD' };
-      default:
-        return { width: 1920, height: 1080, label: 'FHD' };
-    }
-  };
 
   return {
     audioCodec:
@@ -171,7 +158,6 @@ export function createMockSourceMetadata(overrides: Partial<SourceMetadata> = {}
       }),
     magnetLink: overrides.magnetLink ?? generateMagnetLink(hash),
     quality,
-    resolution: overrides.resolution ?? getResolutionForQuality(quality),
     score: overrides.score ?? faker.number.float({ min: 0, max: 100, fractionDigits: 1 }),
     size: overrides.size ?? sourceMetadata.size,
     source:

@@ -632,7 +632,7 @@ describe('Sanitizer Functions', () => {
       // Should preserve technical metadata
       result.trb_posts.forEach((post: any) => {
         expect(post.name).toMatch(/\d{4}/); // Year
-        expect(post.name).toMatch(/(720p|1080p|2160p)/); // Resolution
+        expect(post.name).toMatch(/(720p|1080p|2160p)/); // Quality
         expect(post.name).toMatch(/(BluRay|WEB-DL|HDTV)/); // Source
         expect(post.name).toMatch(/(x264|x265|HEVC)/); // Codec
       });

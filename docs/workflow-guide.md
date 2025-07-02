@@ -505,8 +505,8 @@ curl http://localhost:3000/health
 docker-compose logs --tail=50
 
 # Restart environment
-npm run docker:cleanup
-npm run start:backend:e2e
+npm run stop:backend:e2e     # Stop detached environment
+npm run start:backend:e2e -- -d    # Start fresh environment in detached mode
 ```
 
 **Missing Environment Variables**
@@ -578,7 +578,9 @@ npm run lint:fix
 ```bash
 npm run dev:backend          # Start development servers
 npm run start:backend        # one-shot server
-npm run start:backend:e2e &  # dockerised watch server (mock data) in *detached* mode
+npm run start:backend:e2e    # dockerised watch server (mock data) - interactive mode
+npm run start:backend:e2e -- -d  # dockerised watch server (mock data) - detached mode
+npm run stop:backend:e2e     # Stop detached backend E2E environment
 npm run test:backend         # Jest unit tests
 npm run test:backend:e2e     # Full E2E cycle ( start docker, run tests, stop docker )
 npm run test:backend:e2e:dev # Full E2E tests ( requires running docker (start:backend:e2e) )

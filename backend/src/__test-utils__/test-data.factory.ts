@@ -1,4 +1,4 @@
-import { Quality } from '@miauflix/source-metadata-extractor';
+import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
@@ -52,10 +52,9 @@ export class TestDataFactory {
       hash: '0123456789abcdef0123456789abcdef01234567', // 40 char hex string
       magnetLink: 'magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567&dn=Test+Movie+2023',
       quality: Quality.FHD,
-      resolution: 1080,
       size: 2147483648, // 2GB
-      videoCodec: 'x264',
-      source: 'TEST',
+      videoCodec: VideoCodec.X264,
+      source: Source.WEB,
       broadcasters: 10,
       watchers: 100,
       ...overrides,
