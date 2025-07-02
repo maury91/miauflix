@@ -13,6 +13,7 @@ import { MovieSource } from '@entities/movie-source.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
+import { StreamingKey } from '@entities/streaming-key.entity';
 import { SyncState } from '@entities/sync-state.entity';
 import { TraktUser } from '@entities/trakt-user.entity';
 import { TVShow } from '@entities/tvshow.entity';
@@ -25,6 +26,7 @@ import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { StorageRepository } from '@repositories/storage.repository';
+import { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import { SyncStateRepository } from '@repositories/syncState.repository';
 import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
@@ -89,6 +91,7 @@ export class Database {
   private syncStateRepository: SyncStateRepository;
   private traktUserRepository: TraktUserRepository;
   private storageRepository: StorageRepository;
+  private streamingKeyRepository: StreamingKeyRepository;
 
   constructor(private readonly encryptionService: EncryptionService) {
     // Set up static encryption services for entities
@@ -115,6 +118,7 @@ export class Database {
         SyncState,
         TraktUser,
         Storage,
+        StreamingKey,
       ],
       synchronize: true,
       logger: new DatabaseLogger('all'),
@@ -135,6 +139,7 @@ export class Database {
     this.syncStateRepository = new SyncStateRepository(this.dataSource);
     this.traktUserRepository = new TraktUserRepository(this.dataSource);
     this.storageRepository = new StorageRepository(this);
+    this.streamingKeyRepository = new StreamingKeyRepository(this);
   }
 
   public async close(): Promise<void> {
@@ -197,5 +202,9 @@ export class Database {
 
   public getStorageRepository() {
     return this.storageRepository;
+  }
+
+  public getStreamingKeyRepository() {
+    return this.streamingKeyRepository;
   }
 }

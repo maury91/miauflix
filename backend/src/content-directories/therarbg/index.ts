@@ -1,8 +1,5 @@
 import { extractSourceMetadata } from '@miauflix/source-metadata-extractor';
-import {
-  calculateApproximateBitrate,
-  qualityToResolution,
-} from '@miauflix/source-metadata-extractor';
+import { calculateApproximateBitrate } from '@miauflix/source-metadata-extractor';
 import type { Cache } from 'cache-manager';
 
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
@@ -63,7 +60,6 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
           .map(tracker => tracker.tracker)
       ),
       quality: extractedMetadata.quality ?? null,
-      resolution: qualityToResolution(extractedMetadata.quality),
       score: 0, // ToDo: use scoringService to calculate score
       size: sourceMetadata.size,
       source: extractedMetadata.source ?? null,

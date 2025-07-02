@@ -47,7 +47,7 @@ export const createAuthMiddleware = (authService: AuthService) => {
 export const authGuard = (role?: UserRole) => {
   return createMiddleware<{
     Variables: {
-      user?: AuthUser;
+      user: AuthUser;
     };
   }>(async (c, next) => {
     const user = c.get('user');

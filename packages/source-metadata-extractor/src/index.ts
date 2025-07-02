@@ -5,8 +5,4 @@ export { extractSourceMetadata } from './core/extractor';
 export * from './types';
 
 // Utility functions
-export {
-  qualityToResolution,
-  calculateApproximateBitrate,
-  detectAudioCodecFromChannels,
-} from './utils';
+export { calculateApproximateBitrate, detectAudioCodecFromChannels } from './utils';

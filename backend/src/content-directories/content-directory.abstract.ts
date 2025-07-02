@@ -17,7 +17,6 @@ export interface SourceMetadata {
   magnetLink: string;
   /* Quality of the source ( 1080p, 720p, etc ) */
   quality: Quality | null;
-  resolution: { width: number; height: number; label: string };
   score: number;
   size: number;
   /* Where the media is coming from ( WEB, YTS, etc ) */

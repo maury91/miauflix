@@ -3,7 +3,7 @@ import {
   type MediaSourceInternal,
   MediaSourceMapper,
 } from '@dto/media-source.dto';
-import { AudioCodec, type VideoCodec } from '@miauflix/source-metadata-extractor';
+import { AudioCodec, Quality, type VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { MovieSource } from '@entities/movie-source.entity';
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';
@@ -33,7 +33,7 @@ export class DtoService {
       id: source.id,
       qualityScore: 0, // Will be calculated
       confidence: 0, // Will be calculated
-      resolution: MediaSourceMapper.formatResolution(source.resolution),
+      quality: source.quality === '3D' ? Quality.FHD : source.quality,
       estimatedSize: this.qualityScoringService.formatFileSize(source.size),
       videoFormat: formatVideoCodec(source.videoCodec),
       audioFormat: this.determineAudioFormat(source),
@@ -47,7 +47,7 @@ export class DtoService {
 
     // Calculate quality score using the quality scoring service
     const qualityMetrics: QualityMetrics = {
-      resolution: internal.resolution,
+      quality: internal.quality,
       videoCodec: source.videoCodec as VideoCodec | null,
       sourceType: source.sourceType,
       fileSize: source.size,

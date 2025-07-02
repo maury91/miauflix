@@ -2,7 +2,7 @@ import type { Source } from '@miauflix/source-metadata-extractor';
 import { In, LessThan, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
-import { MovieSource } from '@entities/movie-source.entity';
+import { MovieSource, QUALITIES } from '@entities/movie-source.entity';
 
 /* ------------------------------------------------------------------------- */
 /* REUSABLE CONSTANTS & SQL SNIPPET                                         */
@@ -23,6 +23,8 @@ CASE
   ELSE 1
 END
 `;
+
+const THREED_QUALITY_INDEX = QUALITIES.indexOf('3D');
 
 export type SourceProcessingResult = Omit<MovieSource, 'movie'> & SourceToProcessMetadata;
 
@@ -65,23 +67,21 @@ export class MovieSourceRepository {
       if (existing) {
         const {
           quality: existingQuality,
-          resolution: existingResolution,
           size: existingSize,
           videoCodec: existingVideoCodec,
           source: existingSource,
           sourceType: existingSourceType,
         } = existing;
-        const { quality, resolution, size, videoCodec, source: srcSource, sourceType } = source;
+        const { quality, size, videoCodec, source: srcSource, sourceType } = source;
         const isDuplicate =
           existingQuality === quality &&
-          existingResolution === resolution &&
           existingSize === size &&
           existingVideoCodec === videoCodec &&
           existingSource === srcSource &&
           existingSourceType === sourceType;
         if (!isDuplicate) {
           console.warn(
-            `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, resolution: existingResolution, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, resolution, size, videoCodec, source: srcSource, sourceType })}`
+            `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, size, videoCodec, source: srcSource, sourceType })}`
           );
         }
         return existing;
@@ -102,23 +102,21 @@ export class MovieSourceRepository {
         if (existing) {
           const {
             quality: existingQuality,
-            resolution: existingResolution,
             size: existingSize,
             videoCodec: existingVideoCodec,
             source: existingSource,
             sourceType: existingSourceType,
           } = existing;
-          const { quality, resolution, size, videoCodec, source: srcSource, sourceType } = source;
+          const { quality, size, videoCodec, source: srcSource, sourceType } = source;
           const isDuplicate =
             existingQuality === quality &&
-            existingResolution === resolution &&
             existingSize === size &&
             existingVideoCodec === videoCodec &&
             existingSource === srcSource &&
             existingSourceType === sourceType;
           if (!isDuplicate) {
             console.warn(
-              `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, resolution: existingResolution, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, resolution, size, videoCodec, source: srcSource, sourceType })}`
+              `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, size, videoCodec, source: srcSource, sourceType })}`
             );
           }
           results.push(existing);
@@ -211,13 +209,14 @@ export class MovieSourceRepository {
     return this.movieSourceRepository
       .createQueryBuilder('ms')
       .where('ms.movieId = :movieId', { movieId })
+      .andWhere(`ms.quality != ${THREED_QUALITY_INDEX}`)
       .addSelect(playabilityExpr, 'isPlayable')
       .setParameters({
         minBroadcastersPerGb: MIN_BROADCASTERS_PER_GB,
         minBroadcasterWatcherRatio: MIN_BROADCASTER_WATCHER_RATIO,
       })
       .orderBy('isPlayable', 'DESC') // prioritize streams that won't buffer
-      .addOrderBy('ms.resolution', 'DESC') // higher resolution preferred
+      .addOrderBy('ms.quality', 'DESC') // higher quality preferred
       .addOrderBy('ms.broadcasters', 'DESC') // more broadcasters = more reliable
       .addOrderBy('ms.size', 'ASC') // smaller file size preferred
       .limit(1)
@@ -273,13 +272,14 @@ ranked AS (
               < (SELECT min_bc_wc_ratio FROM params)          THEN 0
           ELSE 1
         END DESC,
-        ms.resolution   DESC,
+        ms.quality   DESC,
         ms.broadcasters DESC,
         ms.size         ASC
     ) AS within_movie_rank
   FROM movie_source ms
   JOIN movie_progress mp USING (movieId)
   WHERE ms.file IS NULL
+    AND ms.quality != ${THREED_QUALITY_INDEX}
 )
 SELECT *
 FROM ranked
@@ -338,5 +338,75 @@ LIMIT ?
     updateData: { sourceType?: Source | null; sourceUploadedAt?: Date }
   ) {
     return this.movieSourceRepository.update(sourceId, updateData);
+  }
+
+  /**
+   * Calculate streaming score for a movie source (0-10,000 scale)
+   * Components: Availability (4000) + Quality (3000) + Codec (2000) + Activity (1000) * AgePenalty
+   */
+  calculateStreamingScore(source: MovieSource): number {
+    // Availability Score (4000 points max)
+    let availabilityScore = 0;
+    if (source.broadcasters && source.broadcasters > 0) {
+      if (!source.watchers || source.watchers === 0) {
+        availabilityScore = Math.min(4000, source.broadcasters * 40); // Cap at 4000
+      } else {
+        const ratio = source.broadcasters / source.watchers;
+        availabilityScore = Math.min(4000, (source.broadcasters * 30 + ratio * 100) * 1.33);
+      }
+    }
+
+    // Quality Score (3000 points max)
+    const qualityScores: Record<number, number> = {
+      0: 500, // SD = 500 points
+      1: 1500, // HD = 1500 points
+      2: 2500, // FHD = 2500 points
+      3: 3000, // 2K = 3000 points
+      4: 3500, // 4K = 3500 points (will be capped)
+      5: 4000, // 8K = 4000 points (will be capped)
+      6: 0, // 3D = 0 points
+      // Note: 3D (index 6) is filtered out in queries
+    };
+    const qualityIndex = source.quality !== null ? Number(source.quality) : -1;
+    const qualityScore = Math.min(3000, qualityScores[qualityIndex] || 1000);
+
+    // Codec Efficiency Score (2000 points max)
+    const codecScores: Record<number, number> = {
+      0: 200, // VC1 = 200 points
+      1: 400, // MPEG2 = 400 points
+      2: 800, // MPEG4 = 800 points
+      3: 600, // XVID = 600 points
+      4: 1200, // VP8 = 1200 points
+      5: 1500, // VP9 = 1500 points
+      6: 1800, // X264 = 1800 points
+      7: 2200, // X265 = 2200 points (will be capped)
+      8: 2500, // AV1 = 2500 points (will be capped)
+      9: 2000, // X264_10BIT = 2000 points
+      10: 2800, // X265_10BIT = 2800 points (will be capped)
+      11: 3000, // AV1_10BIT = 3000 points (will be capped)
+    };
+    const codecIndex = source.videoCodec !== null ? Number(source.videoCodec) : -1;
+    const codecScore = Math.min(2000, codecScores[codecIndex] || 1000);
+
+    // Activity Score (1000 points max)
+    const totalActivity = (source.broadcasters || 0) + (source.watchers || 0);
+    const activityScore = Math.min(1000, totalActivity * 10); // 1 point per peer
+
+    // Age Penalty Multiplier
+    let agePenalty = 0.9; // Default for unknown age
+    if (source.sourceUploadedAt) {
+      const now = new Date();
+      const uploadDate = new Date(source.sourceUploadedAt);
+      const yearsOld = (now.getTime() - uploadDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
+
+      if (yearsOld < 1)
+        agePenalty = 1.0; // Recent = full score
+      else if (yearsOld < 2)
+        agePenalty = 0.85; // 1-2 years = 85%
+      else agePenalty = 0.7; // 2+ years = 70%
+    }
+
+    const totalScore = (availabilityScore + qualityScore + codecScore + activityScore) * agePenalty;
+    return Math.round(totalScore);
   }
 }

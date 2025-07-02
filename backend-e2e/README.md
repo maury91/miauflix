@@ -64,16 +64,22 @@ This will:
 For active development with hot reloading and automatic credential extraction:
 
 ```bash
-# Start development environment with hot reloading
+# Start development environment with hot reloading (interactive mode)
 npm run dev
 
-# OR start in detached mode
+# OR start in detached mode (environment runs in background)
+./scripts/env.sh dev -d
+
+# OR use the package.json script for detached mode (alternative)
 npm run dev:detached
 
 # In another terminal, run tests against the running services
 npm run test:only
 
 # Stop development environment
+./scripts/stop.sh
+
+# OR use the package.json script to stop (alternative)
 npm run dev:stop
 ```
 
@@ -226,6 +232,31 @@ The test environment requires the same environment variables as production:
 - `TRAKT_CLIENT_SECRET`: Used by Trakt mock for token validation
 - `JWT_SECRET`: Used by backend for authentication
 - `REFRESH_TOKEN_SECRET`: Used by backend for token refresh
+
+## Log Management
+
+The E2E testing system automatically manages log files to prevent disk space issues:
+
+- **Automatic Cleanup**: Keeps only the 10 most recent log files
+- **Cleanup Triggers**: Runs during test cleanup and when stopping environments
+- **Log Location**: `backend-e2e/logs/` directory
+- **Log Format**: `YYYY-MM-DD_HH-MM-SS.log`
+
+### Manual Log Management
+
+```bash
+# Manual log cleanup (keeps 10 most recent)
+./scripts/cleanup-logs.sh
+
+# View log directory
+ls -la logs/
+
+# View specific log file
+tail -f logs/2025-07-02_13-06-46.log
+
+# View latest log
+tail -f logs/$(ls -t logs/*.log | head -1)
+```
 
 ## Debugging
 
