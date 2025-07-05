@@ -98,6 +98,11 @@ export class Database {
     Movie.encryptionService = this.encryptionService;
     MovieSource.encryptionService = this.encryptionService;
 
+    logger.debug(
+      'DATABASE',
+      `Initializing database ${path.resolve(ENV('DATA_DIR'), 'database.sqlite')}`
+    );
+
     this.dataSource = new DataSource({
       type: 'sqlite',
       database: path.resolve(ENV('DATA_DIR'), 'database.sqlite'),

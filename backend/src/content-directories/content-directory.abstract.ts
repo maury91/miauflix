@@ -17,6 +17,7 @@ export interface SourceMetadata {
   magnetLink: string;
   /* Quality of the source ( 1080p, 720p, etc ) */
   quality: Quality | null;
+  is3D?: boolean;
   score: number;
   size: number;
   /* Where the media is coming from ( WEB, YTS, etc ) */

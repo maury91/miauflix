@@ -1,4 +1,6 @@
-import { Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+
+import type { YTSSourceMetadata } from './yts.types';
 
 /**
  * Maps YTS video codec information to our internal VideoCodec enum
@@ -76,5 +78,98 @@ export function mapYTSTypeToSource(type: string): Source | null {
   }
 
   // If no match found, return null
+  return null;
+}
+
+const estimateQualityByCodecAndBitrate = (
+  videoCodec: VideoCodec,
+  bitrate: number
+): Quality | null => {
+  // Bitrate is expected in Mbps
+  switch (videoCodec) {
+    case VideoCodec.AV1:
+    case VideoCodec.AV1_10BIT:
+      if (bitrate >= 14) return Quality['8K'];
+      if (bitrate >= 6) return Quality['4K'];
+      if (bitrate >= 3.5) return Quality['2K'];
+      if (bitrate >= 1.5) return Quality.FHD;
+      if (bitrate >= 1) return Quality.HD;
+      return Quality.SD;
+    case VideoCodec.X265:
+    case VideoCodec.X265_10BIT:
+      if (bitrate >= 20) return Quality['8K'];
+      if (bitrate >= 10) return Quality['4K'];
+      if (bitrate >= 4.5) return Quality['2K'];
+      if (bitrate >= 2) return Quality.FHD;
+      if (bitrate >= 1.5) return Quality.HD;
+      return Quality.SD;
+    case VideoCodec.X264:
+      if (bitrate >= 40) return Quality['8K'];
+      if (bitrate >= 20) return Quality['4K'];
+      if (bitrate >= 8) return Quality['2K'];
+      if (bitrate >= 4.5) return Quality.FHD;
+      if (bitrate >= 2.5) return Quality.HD;
+      return Quality.SD;
+    case VideoCodec.VP9:
+      if (bitrate >= 16) return Quality['8K'];
+      if (bitrate >= 8) return Quality['4K'];
+      if (bitrate >= 4) return Quality['2K'];
+      if (bitrate >= 1.8) return Quality.FHD;
+      if (bitrate >= 1.2) return Quality.HD;
+      return Quality.SD;
+    case VideoCodec.XVID:
+      if (bitrate >= 10) return Quality['4K'];
+      if (bitrate >= 5) return Quality['2K'];
+      if (bitrate >= 2.5) return Quality.FHD;
+      if (bitrate >= 1.25) return Quality.HD;
+      return Quality.SD;
+    default:
+      return null;
+  }
+};
+
+export function mapYTSQuality(
+  {
+    bit_depth,
+    quality,
+    size_bytes,
+    video_codec,
+  }: Pick<YTSSourceMetadata, 'bit_depth' | 'quality' | 'size_bytes' | 'video_codec'>,
+  runtimeInSeconds: number
+): Quality | null {
+  const qualityLower = quality.toLowerCase().trim();
+
+  if (qualityLower === '3d') {
+    return Quality.FHD;
+  }
+
+  if (qualityLower === '2160p' || qualityLower === '4k') {
+    return Quality['4K'];
+  }
+
+  if (qualityLower === '1440p' || qualityLower === '2k') {
+    return Quality['2K'];
+  }
+
+  if (qualityLower === '1080p' || qualityLower === 'fhd') {
+    return Quality.FHD;
+  }
+
+  if (qualityLower === '720p' || qualityLower === 'hd') {
+    return Quality.HD;
+  }
+
+  if (qualityLower === '480p' || qualityLower === 'sd') {
+    return Quality.SD;
+  }
+
+  if (video_codec) {
+    const videoCodec = mapYTSVideoCodec(video_codec, bit_depth);
+    if (videoCodec) {
+      const bitrateInMbps = (size_bytes * 8) / (runtimeInSeconds * 1000000);
+      return estimateQualityByCodecAndBitrate(videoCodec, bitrateInMbps);
+    }
+  }
+
   return null;
 }
