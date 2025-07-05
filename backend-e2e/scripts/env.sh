@@ -115,6 +115,10 @@ fi
 # Export the ports for docker-compose
 export PORT
 
+# Export user ID and group ID for Docker Compose to avoid permission issues
+export USER_ID=$(id -u)
+export GROUP_ID=$(id -g)
+
 # Load environment variables if .env exists
 if [[ -f "../.env" ]]; then
     export $(grep -v '^#' ../.env | xargs)

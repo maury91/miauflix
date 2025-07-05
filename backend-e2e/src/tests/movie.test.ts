@@ -183,21 +183,11 @@ describe('Movie Endpoints', () => {
 
       // Validate source data types
       expect(typeof source.id).toBe('number');
-      if (
-        source.hasOwnProperty('quality') &&
-        source.quality !== null &&
-        source.quality !== undefined
-      ) {
-        expect(typeof source.quality).toBe('string');
-      }
+      expect(typeof source.quality).toBe('string');
       expect(typeof source.size).toBe('number');
       expect(typeof source.videoCodec).toBe('string');
-      if (source.broadcasters !== null) {
-        expect(typeof source.broadcasters).toBe('number');
-      }
-      if (source.watchers !== null) {
-        expect(typeof source.watchers).toBe('number');
-      }
+      expect(typeof source.broadcasters).toBe('number');
+      expect(typeof source.watchers).toBe('number');
       expect(typeof source.source).toBe('string');
       expect(typeof source.hasDataFile).toBe('boolean');
     });

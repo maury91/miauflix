@@ -1,6 +1,7 @@
 import { TestClient, waitForService, extractUserCredentialsFromLogs } from '../utils/test-utils';
-import * as fs from 'fs';
 import sqlite3 from 'sqlite3';
+
+const DATABASE_FILE = '/usr/src/app/data/database.sqlite';
 
 describe('Database Encryption E2E Tests', () => {
   let client: TestClient;
@@ -38,7 +39,7 @@ describe('Database Encryption E2E Tests', () => {
     // Copy the database file from the container to a temp location
     const tempDbPath = path.join(tmpDbDir, `database.sqlite.testcopy.${Date.now()}`);
     try {
-      execSync(`docker cp ${containerName}:/app/data/database.sqlite ${tempDbPath}`);
+      execSync(`docker cp ${containerName}:${DATABASE_FILE} ${tempDbPath}`);
     } catch (err) {
       throw new Error(`Failed to copy database from container (${containerName}): ${err}`);
     }

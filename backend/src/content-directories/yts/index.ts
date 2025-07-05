@@ -9,7 +9,7 @@ import { AbstractContentDirectory } from '@content-directories/content-directory
 
 import { YTSApi } from './yts.api';
 import type { YTSSourceMetadata } from './yts.types';
-import { mapYTSTypeToSource, mapYTSVideoCodec } from './yts.utils';
+import { mapYTSQuality, mapYTSTypeToSource, mapYTSVideoCodec } from './yts.utils';
 
 export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
   protected readonly api: YTSApi;
@@ -29,6 +29,7 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
     const videoCodec = mapYTSVideoCodec(sourceMetadata.video_codec, sourceMetadata.bit_depth);
     const audioCodec = detectAudioCodecFromChannels(sourceMetadata.audio_channels);
     const source = mapYTSTypeToSource(sourceMetadata.type);
+    const quality = mapYTSQuality(sourceMetadata, runtime);
 
     return {
       audioCodec: audioCodec ? [audioCodec] : [],
@@ -37,7 +38,8 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
       hash: sourceMetadata.hash,
       language: [],
       magnetLink: `magnet:?xt=urn:btih:${sourceMetadata.hash}&dn=${encodeURIComponent(movieTitle)}`,
-      quality: null, // ToDo: YTS quality mapping needs to be implemented
+      quality,
+      is3D: sourceMetadata.quality.toLowerCase().trim() === '3d',
       score: 0,
       size: sourceMetadata.size_bytes,
       source,
