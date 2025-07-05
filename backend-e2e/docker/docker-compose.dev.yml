@@ -5,6 +5,8 @@ services:
       context: ../../
       dockerfile: backend-e2e/docker/backend.dev.Dockerfile
     environment:
+      - PUID=${USER_ID:-1001}
+      - PGID=${GROUP_ID:-1001}
       - PORT=3000
       - NODE_ENV=development
       - RATE_LIMIT_TEST_MODE=true
@@ -26,7 +28,7 @@ services:
       - ../../backend/package.json:/usr/src/app/backend/package.json:ro
       - ../../backend/tsconfig.json:/usr/src/app/backend/tsconfig.json:ro
       # Fresh database for each development session
-      - dev_database:/app/data
+      - dev_database:/usr/src/app/data
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
       interval: 0.5s
@@ -46,6 +48,7 @@ services:
     build:
       context: mock
       dockerfile: tmdb.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
     env_file:
       - ../../.env
     environment:
@@ -69,6 +72,7 @@ services:
     build:
       context: mock
       dockerfile: mock.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
     env_file:
       - ../../.env
     environment:
@@ -96,6 +100,7 @@ services:
     build:
       context: .
       dockerfile: mock/yts.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
     env_file:
       - ../../.env
     environment:

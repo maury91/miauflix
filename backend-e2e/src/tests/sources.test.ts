@@ -74,21 +74,11 @@ describe('Sources E2E Tests', () => {
           expect(typeof source.hasDataFile).toBe('boolean');
 
           // Quality may not be present in the response
-          if (
-            source.hasOwnProperty('quality') &&
-            source.quality !== null &&
-            source.quality !== undefined
-          ) {
-            expect(typeof source.quality).toBe('string');
-          }
+          expect(typeof source.quality).toBe('string');
 
           // Broadcasters and watchers can be number or null
-          if (source.broadcasters !== null) {
-            expect(typeof source.broadcasters).toBe('number');
-          }
-          if (source.watchers !== null) {
-            expect(typeof source.watchers).toBe('number');
-          }
+          expect(typeof source.broadcasters).toBe('number');
+          expect(typeof source.watchers).toBe('number');
         });
 
         // Verify different source types are represented
@@ -159,15 +149,9 @@ describe('Sources E2E Tests', () => {
         const source = response.data.sources[0];
 
         // Test quality values are reasonable if present (can be missing/null/undefined)
-        if (
-          source.hasOwnProperty('quality') &&
-          source.quality !== null &&
-          source.quality !== undefined
-        ) {
-          expect(['720p', '1080p', '2160p', '480p', 'FHD', 'HD', '4K', 'Unknown']).toContain(
-            source.quality
-          );
-        }
+        expect(['720p', '1080p', '2160p', '480p', 'FHD', 'HD', '4K', 'Unknown']).toContain(
+          source.quality
+        );
 
         // Test size is a positive number (bytes)
         expect(source.size).toBeGreaterThan(0);
