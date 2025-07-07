@@ -118,7 +118,6 @@ describe('SourceService', () => {
     mockMovieSourceRepository.updateStats.mockResolvedValue({} as UpdateResult);
     mockMovieSourceRepository.getNextSourcesToProcess.mockResolvedValue([]);
     mockMovieSourceRepository.updateSourceFile.mockResolvedValue({} as UpdateResult);
-    mockMovieSourceRepository.findMovieIdsWithUnknownSourceType.mockResolvedValue([]);
     mockMovieSourceRepository.updateSourceMetadata.mockResolvedValue({} as UpdateResult);
 
     // Setup service mocks
@@ -522,74 +521,6 @@ describe('SourceService', () => {
       await service.syncStatsForSources();
 
       expect(mockMovieSourceRepository.findSourceThatNeedsStatsUpdate).not.toHaveBeenCalled();
-    });
-  });
-
-  // ToDo: This may need to be removed because I added it when the content directory service was incomplete
-  // and I needed the database to be updated with the correct data
-  describe('resyncMovieSources', () => {
-    it('should update source metadata when movies need processing', async () => {
-      const {
-        service,
-        mockMovie,
-        mockMovieRepository,
-        mockMovieSourceRepository,
-        mockContentDirectoryService,
-      } = setupTest();
-
-      mockMovieSourceRepository.findMovieIdsWithUnknownSourceType.mockResolvedValueOnce([
-        mockMovie.id,
-      ]);
-      mockMovieRepository.findMoviesByIdsWithImdb.mockResolvedValueOnce([mockMovie]);
-
-      await service.resyncMovieSources();
-
-      expect(mockMovieSourceRepository.findMovieIdsWithUnknownSourceType).toHaveBeenCalled();
-      expect(mockMovieRepository.findMoviesByIdsWithImdb).toHaveBeenCalledWith([mockMovie.id], 1);
-      expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
-        mockMovie.imdbId
-      );
-    });
-
-    it('should skip when no movies need processing', async () => {
-      const { service, mockMovieRepository, mockContentDirectoryService } = setupTest();
-
-      await service.resyncMovieSources();
-
-      expect(mockMovieRepository.findMoviesByIdsWithImdb).not.toHaveBeenCalled();
-      expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
-    });
-
-    it('should handle tracker service errors gracefully', async () => {
-      const {
-        service,
-        mockMovie,
-        mockMovieSourceRepository,
-        mockMovieRepository,
-        mockContentDirectoryService,
-      } = setupTest();
-
-      mockMovieSourceRepository.findMovieIdsWithUnknownSourceType.mockResolvedValueOnce([
-        mockMovie.id,
-      ]);
-      mockMovieRepository.findMoviesByIdsWithImdb.mockResolvedValueOnce([mockMovie]);
-      mockContentDirectoryService.searchSourcesForMovie.mockRejectedValueOnce(
-        new Error('Resync failed')
-      );
-
-      await service.resyncMovieSources();
-
-      expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
-        mockMovie.imdbId
-      );
-      // Should not throw - error is handled internally
-    });
-
-    it('should skip when VPN is disconnected', async () => {
-      const { service, mockMovieSourceRepository } = createServiceWithDisconnectedVpn();
-      await service.resyncMovieSources();
-
-      expect(mockMovieSourceRepository.findMovieIdsWithUnknownSourceType).not.toHaveBeenCalled();
     });
   });
 
