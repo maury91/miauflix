@@ -26,6 +26,8 @@ services:
       - nordvpn
     environment:
       - DATA_DIR=/usr/data
+      - PUID=${USER_ID:-1000}
+      - PGID=${GROUP_ID:-1000}
       - DEBUG=SourceService,DataResolver
     volumes:
       - ./.env:/usr/src/app/.env
