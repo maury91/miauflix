@@ -120,8 +120,9 @@ export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
 
 # Load environment variables if .env exists
-if [[ -f "../.env" ]]; then
-    export $(grep -v '^#' ../.env | xargs)
+cd "$root_dir"
+if [[ -f ".env" ]]; then
+    export $(grep -v '^#' .env | xargs)
     echo "🔧 Loaded environment variables from .env file"
 else
     echo "⚠️  No .env file found, using default environment variables"
@@ -219,7 +220,7 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
         
         # For test mode, check if backend is ready
         echo "🔍 Checking if backend is ready..."
-        MAX_ATTEMPTS=30
+        MAX_ATTEMPTS=10
         ATTEMPT=1
         BACKEND_READY=false
 

@@ -316,21 +316,6 @@ LIMIT ?
   }
 
   /**
-   * Find movie IDs that have sources with unknown sourceType or missing sourceUploadedAt
-   */
-  async findMovieIdsWithUnknownSourceType(): Promise<number[]> {
-    const result = await this.movieSourceRepository
-      .createQueryBuilder('source')
-      .select('DISTINCT source.movieId', 'movieId')
-      .where('source.sourceType = :sourceType OR source.sourceUploadedAt IS NULL', {
-        sourceType: 'unknown',
-      })
-      .getRawMany<{ movieId: number }>();
-
-    return result.map(r => r.movieId);
-  }
-
-  /**
    * Update source metadata (sourceType and sourceUploadedAt)
    */
   updateSourceMetadata(

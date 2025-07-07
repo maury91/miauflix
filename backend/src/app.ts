@@ -137,12 +137,6 @@ try {
   );
 
   scheduler.scheduleTask(
-    'resyncMovieSources',
-    5, // 5 seconds
-    bind(sourceService, 'resyncMovieSources')
-  );
-
-  scheduler.scheduleTask(
     'cacheCleanup',
     6 * 60 * 60, // 6 hours
     bind(cacheService, 'cleanup')
