@@ -1,6 +1,8 @@
+/// <reference types="./types/webtorrent.d.ts" />
+
 import { hc } from 'hono/client';
 
-import type { RoutesApp } from '../../backend/src/routes';
+import type { RoutesApp } from './routes';
 
 // assign the client to a variable to calculate the type when compiling
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

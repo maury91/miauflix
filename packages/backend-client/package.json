@@ -1,11 +1,20 @@
 {
-  "name": "@miauflix/backend-schema",
+  "name": "@miauflix/backend-client",
   "description": "Hono client to make calls to the backend API",
   "version": "1.0.0",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "rm -rf dist && mkdir -p dist && cp ../../dist/backend-client/index.d.ts dist/ && tsc --project tsconfig.json"
+  },
+  "dependencies": {
+    "hono": "^4.7.10"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "hono": "^4.7.10"
   }
 }
