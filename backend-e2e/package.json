@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
-    "@miauflix/backend-schema": "file:../packages/backend-schema",
+    "@miauflix/backend-client": "file:../packages/backend-client",
     "hono": "^4.7.11",
     "sqlite3": "^5.0.11"
   },
