@@ -1,7 +1,7 @@
 /**
  * Test utilities for backend E2E tests
  */
-import { Client, hcWithType } from '@miauflix/backend-schema';
+import { Client, hcWithType } from '@miauflix/backend-client';
 
 export interface TestResponse<T = any> {
   status: number;
