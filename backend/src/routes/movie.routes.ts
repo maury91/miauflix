@@ -1,5 +1,4 @@
 import { zValidator } from '@hono/zod-validator';
-import type { Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 import { Quality } from '@miauflix/source-metadata-extractor';
 import { Hono } from 'hono';
 import { z } from 'zod';
@@ -13,32 +12,7 @@ import type { AuditLogService } from '@services/security/audit-log.service';
 import type { SourceService } from '@services/source/source.service';
 import type { StreamService } from '@services/stream/stream.service';
 
-interface MovieResponse {
-  id: number;
-  tmdbId: number;
-  imdbId: string | null;
-  title: string;
-  overview: string;
-  tagline: string;
-  releaseDate: string;
-  runtime: number;
-  poster: string;
-  backdrop: string;
-  logo: string;
-  genres: string[];
-  popularity: number;
-  rating: number;
-  sources?: Array<{
-    id: number;
-    quality: Quality | '3D' | null;
-    size: number;
-    videoCodec: VideoCodec | null;
-    broadcasters: number | null;
-    watchers: number | null;
-    source: Source | null;
-    hasDataFile: boolean;
-  }>;
-}
+import type { MovieResponse, StreamingKeyResponse } from './movie.types';
 
 export const createMovieRoutes = (
   mediaService: MediaService,
@@ -226,15 +200,16 @@ export const createMovieRoutes = (
           // Generate streaming key for movie (not tied to specific source)
           const streamingKey = await authService.generateStreamingKey(movieId, user.id);
 
-          return context.json({
+          const response: StreamingKeyResponse = {
             streamingKey,
             quality: selectedSource.quality,
             size: selectedSource.size,
             videoCodec: selectedSource.videoCodec,
-            broadcasters: selectedSource.broadcasters,
-            watchers: selectedSource.watchers,
+            broadcasters: selectedSource.broadcasters ?? null,
+            watchers: selectedSource.watchers ?? null,
             expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000), // 6 hours
-          });
+          };
+          return context.json(response);
         } catch (error: unknown) {
           console.error('Failed to generate streaming key:', error);
           return context.json({ error: 'Internal server error' }, 500);
