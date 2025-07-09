@@ -13,6 +13,7 @@ import { InvalidTokenError } from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
+import type { AuthTokens, StreamingToken } from '@services/auth/auth.types';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { InMemoryCache } from '@utils/in-memory-cache';
 import { generateSecurePassword } from '@utils/password.util';
@@ -24,11 +25,6 @@ import {
   parseStreamingKey,
   validateTokenPayload,
 } from './auth.util';
-
-interface StreamingToken {
-  movieId: number;
-  userId: string;
-}
 
 export class AuthService {
   private readonly userRepository: UserRepository;
@@ -118,7 +114,7 @@ export class AuthService {
     return isValid ? user : null;
   }
 
-  async generateTokens(user: User) {
+  async generateTokens(user: User): Promise<AuthTokens> {
     const accessToken = await this.generateAccessToken(user);
     const refreshToken = await this.generateRefreshToken(user);
 
@@ -212,7 +208,7 @@ export class AuthService {
   }
 
   async refreshAccessToken(refreshToken: string): Promise<{
-    tokens: { accessToken: string; refreshToken: string };
+    tokens: AuthTokens;
     email: string;
   } | null> {
     const refreshTokenPayload = await this.verifyRefreshToken(refreshToken);
