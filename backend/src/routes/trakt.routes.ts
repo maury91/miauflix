@@ -9,6 +9,13 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import type { AuditLogService } from '@services/security/audit-log.service';
 import type { TraktService } from '@services/trakt/trakt.service';
 
+import type {
+  DeviceAuthCheckResponse,
+  DeviceAuthResponse,
+  TraktAdminAssociateResponse,
+  TraktAssociationResponse,
+} from './trakt.types';
+
 export const createTraktRoutes = (traktService: TraktService, auditLogService: AuditLogService) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
 
@@ -23,14 +30,15 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
           try {
             const deviceAuth = await traktService.initiateDeviceAuth();
 
-            return context.json({
+            const response: DeviceAuthResponse = {
               success: true,
               codeUrl: deviceAuth.codeUrl,
               userCode: deviceAuth.userCode,
               deviceCode: deviceAuth.deviceCode,
               expiresIn: deviceAuth.expiresIn,
               interval: deviceAuth.interval,
-            });
+            };
+            return context.json(response);
           } catch (error) {
             console.error('Trakt device auth initiation failed:', error);
             return context.json(
@@ -71,7 +79,8 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
               });
             }
 
-            return context.json(result);
+            const response: DeviceAuthCheckResponse = result;
+            return context.json(response);
           } catch (error) {
             console.error('Trakt device auth check failed:', error);
             return context.json(
@@ -92,11 +101,12 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
           try {
             const association = await traktService.getUserTraktAssociation(authUser.id);
 
-            return context.json({
+            const response: TraktAssociationResponse = {
               associated: !!association,
               traktUsername: association?.traktUsername || null,
               traktSlug: association?.traktSlug || null,
-            });
+            };
+            return context.json(response);
           } catch (error) {
             console.error('Failed to get Trakt association:', error);
             return context.json({ error: 'Failed to get Trakt association' }, 500);
@@ -134,14 +144,15 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
               },
             });
 
-            return context.json({
+            const response: TraktAdminAssociateResponse = {
               success: true,
               association: {
                 id: association.id,
                 traktSlug: association.traktSlug,
                 userEmail: association.user?.email || null,
               },
-            });
+            };
+            return context.json(response);
           } catch (error) {
             console.error('Failed to associate Trakt user:', error);
             return context.json({ error: 'Failed to associate Trakt user' }, 500);
