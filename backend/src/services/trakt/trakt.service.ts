@@ -1,6 +1,7 @@
 import type { Database } from '@database/database';
 import type { TraktUserRepository } from '@repositories/trakt-user.repository';
 import type { UserRepository } from '@repositories/user.repository';
+import type { DeviceAuthCheckResponse } from '@services/trakt/trakt.types';
 
 import { TraktApi } from './trakt.api';
 
@@ -38,7 +39,7 @@ export class TraktService {
   /**
    * Check device authentication status and complete login
    */
-  async checkDeviceAuth(deviceCode: string, userId: string) {
+  async checkDeviceAuth(deviceCode: string, userId: string): Promise<DeviceAuthCheckResponse> {
     try {
       // Get the user first
       const user = await this.userRepository.findById(userId);
