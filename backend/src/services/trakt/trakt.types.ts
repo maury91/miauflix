@@ -294,3 +294,16 @@ export type TraktListItem =
   | TraktListItemMovie
   | TraktListItemSeason
   | TraktListItemShow;
+
+export interface DeviceAuthCheckSuccess {
+  success: true;
+  traktUsername: string;
+  traktSlug: string;
+}
+
+export interface DeviceAuthCheckPending {
+  success: false;
+  pending: true;
+}
+
+export type DeviceAuthCheckResponse = DeviceAuthCheckPending | DeviceAuthCheckSuccess;
