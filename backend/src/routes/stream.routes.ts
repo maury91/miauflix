@@ -8,6 +8,8 @@ import type { AuthService } from '@services/auth/auth.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import type { StreamService } from '@services/stream/stream.service';
 
+import type { StreamResponse } from './stream.types';
+
 export const createStreamRoutes = (
   authService: AuthService,
   streamService: StreamService,
@@ -62,18 +64,16 @@ export const createStreamRoutes = (
           );
         }
 
-        return context.json(
-          {
-            status: 'not implemented',
-            source: {
-              id: source.id,
-              quality: source.quality,
-              size: source.size,
-              videoCodec: source.videoCodec,
-            },
+        const response: StreamResponse = {
+          status: 'not implemented',
+          source: {
+            id: source.id,
+            quality: source.quality,
+            size: source.size,
+            videoCodec: source.videoCodec,
           },
-          501
-        );
+        };
+        return context.json(response, 501);
       } catch (error: unknown) {
         console.error('Failed to stream content:', error);
 

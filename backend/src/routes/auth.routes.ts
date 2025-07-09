@@ -9,6 +9,8 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import type { AuthService } from '@services/auth/auth.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 
+import type { LoginResponse, LogoutResponse, RefreshResponse, UserDto } from './auth.types';
+
 export const createAuthRoutes = (authService: AuthService, auditLogService: AuditLogService) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
 
@@ -44,7 +46,8 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
           context,
         });
 
-        return context.json(tokens);
+        const response: LoginResponse = tokens;
+        return context.json(response);
       }
     )
     .post(
@@ -70,7 +73,8 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
           context,
         });
 
-        return context.json(refreshResponse.tokens);
+        const response: RefreshResponse = refreshResponse.tokens;
+        return context.json(response);
       }
     )
     .post(
@@ -95,7 +99,8 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
           });
         }
 
-        return context.json({ message: 'Logged out successfully' });
+        const response: LogoutResponse = { message: 'Logged out successfully' };
+        return context.json(response);
       }
     )
     .post(
@@ -114,12 +119,12 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
         const { email, password, role } = context.req.valid('json');
 
         const newUser = await authService.createUser(email, password, role as UserRole);
-
-        return context.json({
+        const response: UserDto = {
           id: newUser.id,
           email: newUser.email,
           role: newUser.role,
-        });
+        };
+        return context.json(response);
       }
     );
 };
