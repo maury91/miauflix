@@ -1,6 +1,8 @@
 // Temporary API types - Phase 0 bootstrap
 // These types replace the @miauflix/types imports until proper integration
 
+export type VideoQualityStr = '2160' | '1440' | '1080' | '720';
+
 // User types
 export interface UserDto {
   id: number;
@@ -9,6 +11,8 @@ export interface UserDto {
   avatar?: string;
   createdAt: string;
   updatedAt: string;
+  // TODO: remove once backend provides proper slug
+  slug?: string;
 }
 
 export interface DeviceLoginDto {
@@ -17,6 +21,8 @@ export interface DeviceLoginDto {
   verificationUri: string;
   expiresIn: number;
   interval: number;
+  // TODO: backend response should include expiration date
+  expiresAt?: string;
 }
 
 export interface DeviceLoginStatusDto {
@@ -38,6 +44,9 @@ export interface MediaDto {
   genres?: string[];
   imdbId?: string;
   tmdbId?: number;
+  // Additional fields used in the UI
+  ids?: { slug: string };
+  images?: { backdrop: string; backdrops: string[]; logos: string[] };
 }
 
 export interface ExtendedMediaDto extends MediaDto {
@@ -53,6 +62,7 @@ export interface ExtendedMediaDto extends MediaDto {
 
 export interface ExtendedMovieDto extends ExtendedMediaDto {
   type: 'movie';
+  qualities?: VideoQualityStr[];
 }
 
 export interface ExtendedShowDto extends ExtendedMediaDto {
@@ -60,6 +70,7 @@ export interface ExtendedShowDto extends ExtendedMediaDto {
   seasons?: SeasonDto[];
   totalSeasons?: number;
   totalEpisodes?: number;
+  seasonsCount?: number;
 }
 
 export interface SeasonDto {
@@ -115,6 +126,9 @@ export interface ShowProgressDto {
   show: MediaDto;
   currentEpisode?: EpisodeDto;
   currentSeason?: number;
+  // TODO: remove once backend provides this info
+  season?: number;
+  episode?: number;
 }
 
 export interface TrackPlaybackRequest {
