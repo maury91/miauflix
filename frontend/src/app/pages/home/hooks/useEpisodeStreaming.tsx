@@ -1,27 +1,36 @@
-import { Falsy } from 'rxjs';
-import { useGetStreamUrlQuery } from '../../../../store/api/medias';
-import { DISABLE_STREAMING, IS_TIZEN } from '../../../../consts';
-import { skipToken } from '@reduxjs/toolkit/query';
 import { useMemo } from 'react';
+import { useGetStreamingKeyMutation } from '@store/api/movies';
+import { DISABLE_STREAMING, IS_TIZEN } from '@/consts';
+import { getStreamUrl } from '@/store/api/medias';
+import type { Quality } from '@miauflix/backend-client';
 
-export const useEpisodeStreaming = (episodeId: number | Falsy) => {
-  const { data: streamInfo, isLoading } = useGetStreamUrlQuery(
-    typeof episodeId === 'number' && !DISABLE_STREAMING
-      ? {
-          type: 'episode',
-          id: episodeId,
-          supportsHvec: IS_TIZEN, // Only Tizen supports HVEC, that may change in the future
-        }
-      : skipToken,
-    {
-      refetchOnMountOrArgChange: true,
+export const useEpisodeStreaming = (
+  episodeId: number | null,
+  quality: Quality | 'auto' = 'auto'
+) => {
+  const [getStreamingKey, { data: streamDetails, isLoading }] = useGetStreamingKeyMutation();
+
+  const streamInfo = useMemo(() => {
+    if (typeof episodeId === 'number' && !DISABLE_STREAMING) {
+      getStreamingKey({ id: String(episodeId), quality });
     }
-  );
+    return streamDetails;
+  }, [episodeId, getStreamingKey, streamDetails]);
+
+  // Get stream URL from streaming key
+  const streamUrl = useMemo(() => {
+    if (streamInfo?.streamingKey) {
+      return getStreamUrl(streamInfo.streamingKey, quality, IS_TIZEN);
+    }
+    return null;
+  }, [streamInfo]);
+
   return useMemo(
     () => ({
       streamInfo,
+      streamUrl,
       isLoading,
     }),
-    [streamInfo, isLoading]
+    [streamInfo, streamUrl, isLoading]
   );
 };

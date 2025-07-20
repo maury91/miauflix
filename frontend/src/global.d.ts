@@ -9,5 +9,12 @@ declare global {
   }
 }
 
+// Unplugin-icons type declarations
+declare module '~icons/*' {
+  import { ComponentType, SVGProps } from 'react';
+  const component: ComponentType<SVGProps<SVGSVGElement>>;
+  export default component;
+}
+
 // Must import or export something in order to work
 export type X = string;

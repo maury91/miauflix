@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { listsApi } from '../api/lists';
 import { Page } from '../../types';
-import { MediaDto } from '@miauflix/types';
+import type { MediaDto } from '@miauflix/backend-client';
 
 export interface AppState {
   currentPage: Page;
@@ -14,7 +14,7 @@ export interface AppState {
 }
 
 const initialState: AppState = {
-  currentPage: 'profile-selection',
+  currentPage: 'login',
   currentMedia: null,
   currentUserId: 0,
   currentProfile: null,
@@ -41,14 +41,14 @@ export const appSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addMatcher(listsApi.endpoints.getList.matchFulfilled, (state, action) => {
-      const backgroundsAndLogos = action.payload.data.map(movie => ({
-        backdrop: movie.images.backdrops.length ? movie.images.backdrops[0] : movie.images.backdrop,
-        logo: movie.images.logos[0],
+      const backgroundsAndLogos = action.payload.results.map((movie: MediaDto) => ({
+        backdrop: movie.backdrop,
+        logo: movie._type === 'movie' ? movie.logo : undefined,
       }));
       const backgroundsAndLogosShuffled = [...backgroundsAndLogos].sort(() => Math.random() - 0.5);
-      state.backgrounds = backgroundsAndLogos.map(({ backdrop }) => backdrop);
-      state.shuffledBackgrounds = backgroundsAndLogosShuffled.map(({ backdrop }) => backdrop);
-      state.logos = backgroundsAndLogosShuffled.map(({ logo }) => logo);
+      state.backgrounds = backgroundsAndLogos.map(({ backdrop }) => backdrop ?? '');
+      state.shuffledBackgrounds = backgroundsAndLogosShuffled.map(({ backdrop }) => backdrop ?? '');
+      state.logos = backgroundsAndLogosShuffled.map(({ logo }) => logo ?? '');
     });
   },
 });

@@ -11,31 +11,20 @@ export type Client = typeof client;
 
 export const hcWithType = (...args: Parameters<typeof hc>): Client => hc<RoutesApp>(...args);
 
+// Re-export utility types
+export type {
+  AudioCodec,
+  Language,
+  Quality,
+  Source,
+  VideoCodec,
+} from '@miauflix/source-metadata-extractor';
+
 // Re-export route DTOs for consumers
-export type {
-  AuthTokens,
-  CreateUserRequest,
-  CreateUserResponse,
-  LoginRequest,
-  LoginResponse,
-  LogoutRequest,
-  LogoutResponse,
-  RefreshRequest,
-  RefreshResponse,
-  UserDto,
-} from './routes/auth.types';
-export type { MovieResponse, MovieSourceDto, StreamingKeyResponse } from './routes/movie.types';
-export type {
-  StreamParams,
-  StreamQuery,
-  StreamResponse,
-  StreamSourceDto,
-} from './routes/stream.types';
-export type {
-  DeviceAuthCheckRequest,
-  DeviceAuthCheckResponse,
-  DeviceAuthResponse,
-  TraktAdminAssociateRequest,
-  TraktAdminAssociateResponse,
-  TraktAssociationResponse,
-} from './routes/trakt.types';
+export type * from './routes/auth.types';
+export type * from './routes/list.types';
+export type * from './routes/movie.types';
+export type * from './routes/progress.types';
+export type * from './routes/show.types';
+export type * from './routes/stream.types';
+export type * from './routes/trakt.types';

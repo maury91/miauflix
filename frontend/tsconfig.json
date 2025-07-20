@@ -36,10 +36,17 @@
     "noEmit": true,
 
     "paths": {
-      "@miauflix/types": ["./src/types/api"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/app/components/*"],
+      "@pages/*": ["./src/app/pages/*"],
+      "@store/*": ["./src/store/*"],
+      "@types/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@hooks/*": ["./src/app/hooks/*"],
+      "@consts/*": ["./src/consts/*"],
+      "@miauflix/types": ["./src/types/api"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/global.d.ts"],
   "exclude": ["node_modules", "tmp", "dist"]
 }

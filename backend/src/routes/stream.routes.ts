@@ -4,17 +4,15 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { AuthService } from '@services/auth/auth.service';
-import type { AuditLogService } from '@services/security/audit-log.service';
-import type { StreamService } from '@services/stream/stream.service';
 
-import type { StreamResponse } from './stream.types';
+import type { Deps, ErrorResponse } from './common.types';
 
-export const createStreamRoutes = (
-  authService: AuthService,
-  streamService: StreamService,
-  auditLogService: AuditLogService
-) => {
+export const createStreamRoutes = ({
+  authService,
+  streamService,
+  auditLogService,
+  downloadService,
+}: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
 
   return new Hono().get(
@@ -59,32 +57,51 @@ export const createStreamRoutes = (
           return context.json(
             {
               error: `No ${quality === 'auto' ? 'suitable' : quality} quality source available${codecMsg}`,
-            },
+            } satisfies ErrorResponse,
             404
           );
         }
 
-        const response: StreamResponse = {
-          status: 'not implemented',
-          source: {
-            id: source.id,
-            quality: source.quality,
-            size: source.size,
-            videoCodec: source.videoCodec,
-          },
-        };
-        return context.json(response, 501);
+        // Stream the file
+        const rangeHeader = context.req.header('range');
+        const { stream, headers, status } = await downloadService.streamFile(
+          source.hash,
+          rangeHeader
+        );
+
+        // Return the stream
+        return new Response(stream, {
+          status,
+          headers,
+        });
       } catch (error: unknown) {
         console.error('Failed to stream content:', error);
 
         if (error && typeof error === 'object' && 'message' in error) {
           const errorMessage = error.message as string;
           if (errorMessage.includes('Invalid token')) {
-            return context.json({ error: 'Invalid or expired streaming key' }, 401);
+            return context.json(
+              { error: 'Invalid or expired streaming key' } satisfies ErrorResponse,
+              401
+            );
+          }
+          if (errorMessage.includes('stream_timeout')) {
+            return context.json(
+              {
+                error: 'Stream loading timeout',
+              } satisfies ErrorResponse,
+              504
+            );
+          }
+          if (errorMessage.includes('no_files')) {
+            return context.json(
+              { error: 'No video files found in torrent' } satisfies ErrorResponse,
+              404
+            );
           }
         }
 
-        return context.json({ error: 'Internal server error' }, 500);
+        return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);
       }
     }
   );

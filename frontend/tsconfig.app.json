@@ -2,13 +2,20 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": [
-      "node",
-      "@nx/react/typings/cssmodule.d.ts",
-      "@nx/react/typings/image.d.ts",
-      "unplugin-icons/types/react",
-      "vite/client"
-    ]
+    "types": ["node", "unplugin-icons/types/react", "vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/app/components/*"],
+      "@pages/*": ["./src/app/pages/*"],
+      "@store/*": ["./src/store/*"],
+      "@types/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@hooks/*": ["./src/app/hooks/*"],
+      "@consts/*": ["./src/consts/*"],
+      "@consts": ["./src/consts.ts"],
+      "@miauflix/types": ["./src/types/api"]
+    }
   },
   "exclude": [
     "src/**/*.spec.ts",
