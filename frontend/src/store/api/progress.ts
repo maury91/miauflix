@@ -1,37 +1,62 @@
-import { MovieProgressDto, ShowProgressDto, TrackPlaybackRequest } from '../../types/api';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { hcWithType, ProgressRequest, ProgressListResponse } from '@miauflix/backend-client';
 import { API_URL } from '../../consts';
+
+const client = hcWithType(API_URL);
 
 export const progressApi = createApi({
   reducerPath: 'progressApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/progress` }),
+  baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
+  tagTypes: ['Progress'],
   endpoints: builder => ({
-    getProgress: builder.query<(MovieProgressDto | ShowProgressDto)[], number>({
-      query: userId => ({
-        url: '',
-        headers: {
-          'x-user-id': `${userId}`,
-        },
-      }),
+    // Track media progress
+    trackMediaProgress: builder.mutation<boolean, ProgressRequest>({
+      async queryFn(progressData) {
+        try {
+          const res = await client.progress.$post({
+            json: progressData,
+          });
+          if (res.status === 204) {
+            return { data: true };
+          }
+          if (res.status === 200) {
+            const data = (await res.json()) as { success?: boolean };
+            return { data: data?.success ?? true };
+          }
+          const data = (await res.json()) as { error?: string };
+          return {
+            error: {
+              status: res.status,
+              data: 'error' in data ? data.error : 'Failed to track progress',
+            },
+          };
+        } catch (error: any) {
+          return {
+            error: { status: error?.status || 500, data: error?.message || 'Unknown error' },
+          };
+        }
+      },
+      invalidatesTags: ['Progress'],
     }),
-    trackMediaProgress: builder.mutation<
-      void,
-      TrackPlaybackRequest & { id: number; userId: number }
-    >({
-      query: body => ({
-        url: `${body.id}`,
-        method: 'POST',
-        headers: {
-          'x-user-id': `${body.userId}`,
-        },
-        body: {
-          status: body.status,
-          progress: body.progress,
-          type: body.type,
-        },
-      }),
+
+    // Get progress list for the authenticated user
+    getProgress: builder.query<ProgressListResponse, void>({
+      async queryFn() {
+        try {
+          // For now, return empty array since the backend returns empty array
+          // TODO: Implement when backend is ready
+          return {
+            data: { progress: [] },
+          };
+        } catch (error: any) {
+          return {
+            error: { status: error?.status || 500, data: error?.message || 'Unknown error' },
+          };
+        }
+      },
+      providesTags: ['Progress'],
     }),
   }),
 });
 
-export const { useGetProgressQuery, useTrackMediaProgressMutation } = progressApi;
+export const { useTrackMediaProgressMutation, useGetProgressQuery } = progressApi;

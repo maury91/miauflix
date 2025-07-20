@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { pause, resume } from '@noriginmedia/norigin-spatial-navigation';
-import { IS_TV, PALETTE } from '../../../../consts';
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { ExtendedShowDto } from '@miauflix/types';
+import { IS_TV, PALETTE } from '@/consts';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { ShowResponse } from '@miauflix/backend-client';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import { useControls } from '../../../hooks/useControls';
 
@@ -65,7 +64,7 @@ const SeasonsItem = styled(BaseSeasonItem)`
 
 export const SeasonSelector: FC<{
   onSeasonChange: (season: number) => void;
-  seasons: ExtendedShowDto['seasons'];
+  seasons: ShowResponse['seasons'];
   selected: number;
 }> = ({ onSeasonChange, seasons, selected }) => {
   const selectedSeason = seasons[selected];
@@ -157,7 +156,7 @@ export const SeasonSelector: FC<{
         tabIndex={-1}
         onMouseEnter={IS_TV ? undefined : handleHover}
       >
-        {selectedSeason.title}
+        {selectedSeason.name}
       </ClosedDropdown>
       {open && (
         <>
@@ -170,7 +169,7 @@ export const SeasonSelector: FC<{
                 onClick={handleOpen}
                 onMouseEnter={IS_TV ? undefined : () => setTemporarySelected(index)}
               >
-                {season.title}
+                {season.name}
               </SeasonsItem>
             ))}
           </SeasonsList>

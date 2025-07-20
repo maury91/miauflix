@@ -1,7 +1,7 @@
-import styled from 'styled-components';
 import { FC } from 'react';
+import styled from 'styled-components';
+import { builtForTizen } from '@/consts';
 import { ProfileSlider, ProfileSliderProps } from '../components/profileSlider';
-import { builtForTizen, IS_TV } from '../../../../consts';
 import { Settings } from '../components/settings';
 import { FullScreenDiv } from '../../../components/fullScreenDiv';
 

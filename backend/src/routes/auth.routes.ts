@@ -3,15 +3,20 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
-import { InvalidTokenError, LoginError } from '@errors/auth.errors';
+import { InvalidTokenError } from '@errors/auth.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { AuthService } from '@services/auth/auth.service';
-import type { AuditLogService } from '@services/security/audit-log.service';
 
-import type { LoginResponse, LogoutResponse, RefreshResponse, UserDto } from './auth.types';
+import type {
+  CreateUserResponse,
+  LoginResponse,
+  LogoutResponse,
+  RefreshResponse,
+} from './auth.types';
+import type { Deps, ErrorResponse } from './common.types';
+import type { DeviceAuthResponse } from './trakt.types';
 
-export const createAuthRoutes = (authService: AuthService, auditLogService: AuditLogService) => {
+export const createAuthRoutes = ({ authService, auditLogService, traktService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
 
   return new Hono()
@@ -35,7 +40,7 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
             userEmail: email,
             context,
           });
-          throw new LoginError(email);
+          return context.json({ error: 'Invalid credentials' } satisfies ErrorResponse, 401);
         }
 
         const tokens = await authService.generateTokens(user);
@@ -46,8 +51,7 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
           context,
         });
 
-        const response: LoginResponse = tokens;
-        return context.json(response);
+        return context.json(tokens satisfies LoginResponse);
       }
     )
     .post(
@@ -73,8 +77,7 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
           context,
         });
 
-        const response: RefreshResponse = refreshResponse.tokens;
-        return context.json(response);
+        return context.json(refreshResponse.tokens satisfies RefreshResponse);
       }
     )
     .post(
@@ -99,8 +102,7 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
           });
         }
 
-        const response: LogoutResponse = { message: 'Logged out successfully' };
-        return context.json(response);
+        return context.json({ message: 'Logged out successfully' } satisfies LogoutResponse);
       }
     )
     .post(
@@ -119,12 +121,61 @@ export const createAuthRoutes = (authService: AuthService, auditLogService: Audi
         const { email, password, role } = context.req.valid('json');
 
         const newUser = await authService.createUser(email, password, role as UserRole);
-        const response: UserDto = {
-          id: newUser.id,
-          email: newUser.email,
-          role: newUser.role,
-        };
-        return context.json(response);
+        return context.json(
+          {
+            id: newUser.id,
+            email: newUser.email,
+            role: newUser.role,
+          } satisfies CreateUserResponse,
+          201
+        );
+      }
+    )
+    .post('/device/trakt', rateLimitGuard(2), async context => {
+      try {
+        const deviceAuth = await traktService.initiateDeviceAuth();
+
+        return context.json(deviceAuth satisfies DeviceAuthResponse);
+      } catch (error) {
+        console.error('Trakt device auth initiation failed:', error);
+        return context.json(
+          {
+            error: 'Failed to initiate Trakt authentication',
+          } satisfies ErrorResponse,
+          500
+        );
+      }
+    })
+    .post(
+      '/login/trakt',
+      rateLimitGuard(1),
+      zValidator(
+        'json',
+        z.object({
+          deviceCode: z.string().min(1),
+        })
+      ),
+      async context => {
+        const { deviceCode } = context.req.valid('json');
+
+        try {
+          const user = await traktService.checkDeviceLogin(deviceCode);
+          if (!user) {
+            return context.json(
+              { error: 'Trakt account not associated with a user' } satisfies ErrorResponse,
+              401
+            );
+          }
+
+          const tokens = await authService.generateTokens(user);
+          return context.json(tokens satisfies LoginResponse);
+        } catch (error) {
+          console.error('Trakt device auth check failed:', error);
+          return context.json(
+            { error: 'Failed to check Trakt authentication status' } satisfies ErrorResponse,
+            401
+          );
+        }
       }
     );
 };
