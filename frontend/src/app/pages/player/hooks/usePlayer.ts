@@ -1,4 +1,4 @@
-import { IS_TIZEN } from '../../../../consts';
+import { IS_TIZEN } from '@/consts';
 import { TizenPlayer } from '../platforms/tizen';
 import { WebPlayer } from '../platforms/web';
 import { Player, Track } from '../playerClassAbstract';

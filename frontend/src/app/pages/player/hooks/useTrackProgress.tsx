@@ -1,9 +1,9 @@
-import { Player, PlayerStatus } from '../playerClassAbstract';
-import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { useTrackMediaProgressMutation } from '../../../../store/api/progress';
 import { useCallback, useEffect } from 'react';
-import { TrackPlaybackRequest } from '@miauflix/types';
-import { setMediaProgress } from '../../../../store/slices/resume';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { useTrackMediaProgressMutation } from '@store/api/progress';
+import { ProgressRequest } from '@miauflix/backend-client';
+import { setMediaProgress } from '@store/slices/resume';
+import { Player, PlayerStatus } from '../playerClassAbstract';
 
 export const useTrackProgress = (player: Player) => {
   const dispatch = useAppDispatch();
@@ -13,16 +13,19 @@ export const useTrackProgress = (player: Player) => {
   const [updateMediaProgress] = useTrackMediaProgressMutation();
 
   const updateProgress = useCallback(
-    (args: Omit<TrackPlaybackRequest, 'type'>) => {
+    (args: Omit<ProgressRequest, 'type'>) => {
       updateMediaProgress({
-        id: mediaId,
-        userId,
-        type: mediaType,
+        type: mediaType === 'episode' ? 'episode' : 'movie',
+        // FixMe: Remove hardcoded values
+        movieId: mediaType === 'movie' ? String(mediaId) : undefined,
+        showId: mediaType === 'episode' ? String(mediaId) : undefined,
+        season: mediaType === 'episode' ? 1 : undefined, // Default to season 1 for now
+        episode: mediaType === 'episode' ? 1 : undefined, // Default to episode 1 for now
         ...args,
       });
       dispatch(setMediaProgress({ mediaId, progress: args.progress }));
     },
-    [dispatch, mediaId, mediaType, updateMediaProgress, userId]
+    [dispatch, mediaId, mediaType, updateMediaProgress]
   );
 
   useEffect(() => {
@@ -35,8 +38,8 @@ export const useTrackProgress = (player: Player) => {
       switch (status) {
         case 'PLAYING':
           updateProgress({
+            progress: Math.round(player.played() * 100) / 100,
             status: 'watching',
-            progress: (player.played() * 100) / player.videoLength(),
           });
           break;
         case 'PAUSED':
@@ -50,7 +53,7 @@ export const useTrackProgress = (player: Player) => {
         case 'NONE':
           if (statusChangeUpdate) {
             updateProgress({
-              status: 'stopped',
+              status: 'paused',
               progress: (player.played() * 100) / player.videoLength(),
             });
           }
@@ -75,7 +78,7 @@ export const useTrackProgress = (player: Player) => {
       }
       if (playerStatus === 'NONE') {
         updateProgress({
-          status: 'stopped',
+          status: 'paused',
           progress: (player.played() * 100) / player.videoLength(),
         });
       }
