@@ -61,7 +61,6 @@ Attempts to link the **same** Trakt ID to a different Miauflix user return **409
 ### Public Routes (Whitelisted)
 
 - `POST /auth/login` - Login with email and password
-
   - Body: `{ email: string, password: string }`
   - Returns: `{ accessToken: string, refreshToken: string }`
 
