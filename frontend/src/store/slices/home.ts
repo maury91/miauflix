@@ -1,10 +1,10 @@
-import { CategoryDto, MediaDto } from '@miauflix/types';
+import type { MovieResponse, ListDto, ShowResponse } from '@miauflix/backend-client';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { categoriesApi } from '../api/categories';
+import { listsApi } from '../api/lists';
 
 export interface HomeState {
-  category: CategoryDto;
-  selectedMedia: MediaDto | null;
+  category: { id: string; name: string; slug: string; description: string; url: string };
+  selectedMedia: MovieResponse | ShowResponse | null;
   selectedByCategory: Record<string, number>;
 }
 
@@ -12,6 +12,9 @@ const initialState: HomeState = {
   category: {
     id: '',
     name: '',
+    slug: '',
+    description: '',
+    url: '',
   },
   selectedMedia: null,
   selectedByCategory: {},
@@ -21,9 +24,9 @@ export const homeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-    changeCategory: (state, action: PayloadAction<CategoryDto>) => {
-      state.category = action.payload;
-      state.selectedByCategory[action.payload.id] = 0;
+    changeCategory: (state, action: PayloadAction<ListDto>) => {
+      state.category = { ...action.payload, id: action.payload.slug };
+      state.selectedByCategory[action.payload.slug] = 0;
     },
     setSelectedIndexForCategory: (
       state,
@@ -31,14 +34,14 @@ export const homeSlice = createSlice({
     ) => {
       state.selectedByCategory[action.payload.category] = action.payload.index;
     },
-    setSelectedMedia: (state, action: PayloadAction<MediaDto>) => {
+    setSelectedMedia: (state, action: PayloadAction<MovieResponse | ShowResponse>) => {
       state.selectedMedia = action.payload;
     },
   },
   extraReducers: builder => {
-    builder.addMatcher(categoriesApi.endpoints.getCategories.matchFulfilled, (state, action) => {
-      if (state.category.id === '') {
-        state.category = action.payload[0];
+    builder.addMatcher(listsApi.endpoints.getLists.matchFulfilled, (state, action) => {
+      if (state.category.slug === '') {
+        state.category = { ...action.payload[0], id: action.payload[0].slug };
       }
     });
   },

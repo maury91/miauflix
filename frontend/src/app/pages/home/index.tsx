@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { MediaDetails } from './components/mediaDetails';
-import { MediaDto } from '@miauflix/types';
+import { MediaDto } from '@miauflix/backend-client';
 import { Categories } from './components/categories';
 import { setFocus, updateAllLayouts } from '@noriginmedia/norigin-spatial-navigation';
 import { SIDEBAR_FOCUS_KEY } from './consts';

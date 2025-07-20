@@ -1,4 +1,5 @@
 declare module 'webtorrent' {
+  import { EventEmitter } from 'events';
   // Utility types
   type TorrentId = ArrayBufferView | Buffer | File | FileList | ParsedTorrent | Torrent | string;
 
@@ -208,7 +209,7 @@ declare module 'webtorrent' {
   }
 
   // Actual File class methods from the implementation
-  interface TorrentFile {
+  interface TorrentFile extends EventEmitter {
     /** File name */
     readonly name: string;
     /** File path within torrent */
@@ -258,6 +259,8 @@ declare module 'webtorrent' {
     // EventEmitter methods
     on(event: 'done', listener: () => void): this;
     once(event: 'done', listener: () => void): this;
+
+    [Symbol.asyncIterator](opts?: { start?: number; end?: number }): AsyncIterableIterator<Buffer>;
   }
 
   // Wire interface based on bittorrent-protocol

@@ -1,4 +1,5 @@
 import type { DataSource, Repository } from 'typeorm';
+import { In } from 'typeorm';
 
 import { Episode } from '@entities/episode.entity';
 import type { Genre } from '@entities/genre.entity';
@@ -18,6 +19,10 @@ export class TVShowRepository {
     this.tvShowTranslationRepository = datasource.getRepository(TVShowTranslation);
     this.seasonRepository = datasource.getRepository(Season);
     this.episodeRepository = datasource.getRepository(Episode);
+  }
+
+  async findByIds(ids: number[]): Promise<TVShow[]> {
+    return this.tvShowRepository.findBy({ id: In(ids) });
   }
 
   async findByTMDBId(tmdbId: number): Promise<TVShow | null> {

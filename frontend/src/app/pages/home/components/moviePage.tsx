@@ -1,18 +1,15 @@
-import React, { FC, useCallback, useEffect } from 'react';
-import { useAppDispatch } from '../../../../store/store';
+import { FC, useCallback, useEffect } from 'react';
+import { useAppDispatch } from '@store/store';
 import { FocusContext, setFocus, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import { MOVIE_PAGE } from '../consts';
-import { useGetStreamUrlQuery, useStopStreamMutation } from '../../../../store/api/medias';
-import { DISABLE_STREAMING, IS_TIZEN } from '../../../../consts';
-import { skipToken } from '@reduxjs/toolkit/query';
-import { setStreamUrl } from '../../../../store/slices/stream';
-import { navigateTo } from '../../../../store/slices/app';
+import { useGetStreamingKeyMutation } from '@store/api/movies';
+import { navigateTo } from '@store/slices/app';
 import LineMdPlay from '~icons/line-md/play';
-import { ExtendedMovieDto } from '@miauflix/types';
+import { MovieResponse } from '@miauflix/backend-client';
 import { MediaButton } from './mediaButton';
 
 interface MoviePageProps {
-  media: ExtendedMovieDto;
+  media: MovieResponse;
 }
 
 export const MoviePage: FC<MoviePageProps> = ({ media }) => {
@@ -21,59 +18,35 @@ export const MoviePage: FC<MoviePageProps> = ({ media }) => {
     focusKey: MOVIE_PAGE,
     isFocusBoundary: true,
   });
-  const { data: streamInfo, isLoading } = useGetStreamUrlQuery(
-    media && !DISABLE_STREAMING
-      ? {
-          type: 'movie',
-          id: media.id,
-          supportsHvec: IS_TIZEN, // Only Tizen supports HVEC, that may change in the future
-        }
-      : skipToken,
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  const [stopStream] = useStopStreamMutation();
-  const hasStreamUrl = !!streamInfo;
+  const [getStreamingKey, { data: streamDetails, isLoading }] = useGetStreamingKeyMutation();
 
   const goToStream = useCallback(() => {
-    if (streamInfo) {
-      dispatch(
-        setStreamUrl({
-          url: streamInfo.stream,
-          id: media.id,
-          type: 'movie',
-          streamId: streamInfo.streamId,
-        })
-      );
-      dispatch(navigateTo('player'));
-    }
-  }, [dispatch, media.id, streamInfo]);
+    getStreamingKey({ id: String(media.id), quality: 'auto' });
+  }, [getStreamingKey, media.id]);
 
   useEffect(() => {
-    return () => {
-      if (streamInfo) {
-        console.log('Stop stream ( movie page )');
-        // stopStream(streamInfo.streamId);
-      }
-    };
-  }, [stopStream, streamInfo]);
+    if (streamDetails) {
+      // TODO: Fix setStreamUrl to accept the correct parameters
+      // For now, we'll just navigate to player
+      dispatch(navigateTo('player'));
+    }
+  }, [dispatch, media.id, streamDetails]);
 
   useEffect(() => {
     focusSelf();
   }, [focusSelf]);
 
   useEffect(() => {
-    if (hasStreamUrl) {
+    if (streamDetails) {
       setFocus('watch-now');
     }
-  }, [hasStreamUrl]);
+  }, [streamDetails]);
 
   return (
     <FocusContext.Provider value={focusKey}>
       <div ref={ref}>
         <MediaButton
-          disabled={!streamInfo}
+          disabled={!streamDetails}
           icon={<LineMdPlay />}
           loading={isLoading}
           focusKey="watch-now"

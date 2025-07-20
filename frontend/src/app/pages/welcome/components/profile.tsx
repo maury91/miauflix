@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import MdiAdd from '~icons/mdi/add';
 import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from '../consts';
@@ -62,6 +62,9 @@ export const Profile: FC<{
   onOpen: (index: number) => void;
   onSelect: (index: number) => void;
 }> = ({ name, left, index, onOpen, onSelect }) => {
+  // FixMe: Refactor to be a useAvatar hook
+  const [avatarSrc, setAvatarSrc] = useState<string>('');
+
   const openProfile = useCallback(() => {
     onOpen(index);
   }, [index, onOpen]);
@@ -77,16 +80,27 @@ export const Profile: FC<{
     }
   }, [focused, index, onSelect]);
 
-  const createAvatarSvg = createAvatar(adventurer, {
-    seed: name,
-    backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf'],
-  });
+  useEffect(() => {
+    const createAvatarSvg = createAvatar(adventurer, {
+      seed: name,
+      backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf'],
+    });
+
+    // Handle the async toDataUri method
+    createAvatarSvg
+      .toDataUri()
+      .then(setAvatarSrc)
+      .catch(() => {
+        // Fallback to empty string if avatar generation fails
+        setAvatarSrc('');
+      });
+  }, [name]);
 
   return (
     <StyledProfile
       left={left}
       selected={focused}
-      src={createAvatarSvg.toDataUri()}
+      src={avatarSrc}
       ref={ref}
       onMouseEnter={() => focusSelf()}
       onClick={openProfile}
