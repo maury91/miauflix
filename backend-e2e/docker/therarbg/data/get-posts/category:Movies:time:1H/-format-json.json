@@ -1,0 +1,56 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "962bcd644ce2249b-FRA",
+    "content-type": "application/json",
+    "cross-origin-opener-policy": "same-origin",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "referrer-policy": "same-origin",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=tBvbYCT9CLTB6hlIgvavxFTy9tKk%2F%2B52zamkpU8%2FWQmPwre7Cqw%2BtR7k70RUfqYrvaoDOEIIomgvkaYP7rzqRZBjbrdb49FA3Luu\"}]}",
+    "server": "cloudflare",
+    "vary": "origin",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-proxy-cache": "MISS"
+  },
+  "data": {
+    "links": {
+      "next": null,
+      "previous": null
+    },
+    "page_size": 50,
+    "count": 2,
+    "total": 2,
+    "results": [
+      {
+        "pk": "85381a",
+        "n": "The frail gurgle 2025 1080p HDCAM x264 AC3",
+        "a": 1753110022,
+        "c": "Movies",
+        "s": 4402341478,
+        "t": "https://fake-cdn.example.com/fake-59941.jpg",
+        "u": "Spencer Schinner III",
+        "se": 4,
+        "le": 11,
+        "i": "tt5950044",
+        "h": "89ABCDEF0123456789ABCDEF0123456789ABCDEF",
+        "tg": ["AC3", "CAM", "1080p"]
+      },
+      {
+        "pk": "85381b",
+        "n": "DNA 2025 1080p DS4K 10bit JHS WEBRip The ill-fated causal DDP5 1 HEVC ESub",
+        "a": 1753109479,
+        "c": "Movies",
+        "s": 3972844748,
+        "t": null,
+        "u": "Alberto Medhurst II",
+        "se": 4,
+        "le": 3,
+        "i": "tt29471661",
+        "h": "C1F4F4FFF5F6F4F6F2F2F4F6B2F2F4F6B2F2F4F6",
+        "tg": ["4K", "1080p"]
+      }
+    ]
+  }
+}

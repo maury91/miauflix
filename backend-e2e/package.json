@@ -23,6 +23,7 @@
   "dependencies": {
     "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
     "@miauflix/backend-client": "file:../packages/backend-client",
+    "@miauflix/therarbg-sanitizer": "file:../packages/therarbg-sanitizer",
     "hono": "^4.7.11",
     "sqlite3": "^5.0.11"
   },
