@@ -1,5 +1,4 @@
 import { FC, useCallback, useEffect } from 'react';
-import { useDeviceLoginQuery } from '../../../../store/api/users';
 import { FullScreenDiv } from '../../../components/fullScreenDiv';
 import { DeviceLogin } from '../components/deviceLogin';
 import { IS_TV } from '../../../../consts';
@@ -8,6 +7,7 @@ import ArrowBackRounded from '~icons/material-symbols-light/arrow-back-rounded';
 import { useControls } from '../../../hooks/useControls';
 import { useAppDispatch } from '../../../../store/store';
 import { navigateToProfileSelection } from '../../../../store/slices/profileSelection';
+import { useDeviceLoginMutation } from '@/store/api/auth';
 
 const BackIcon = styled(ArrowBackRounded)`
   position: fixed;
@@ -19,8 +19,8 @@ const BackIcon = styled(ArrowBackRounded)`
 
 export const NewProfileScreen: FC = () => {
   const dispatch = useAppDispatch();
-  const { data: deviceLogin, refetch } = useDeviceLoginQuery();
-  const deviceLoginExpired = deviceLogin && Date.now() > deviceLogin.expiresAt;
+  const [getDeviceCode, { data: deviceLogin }] = useDeviceLoginMutation();
+  const deviceLoginExpired = deviceLogin && Date.now() > new Date(deviceLogin.expiresAt).getTime();
   const on = useControls('profile-selection');
 
   const onClose = useCallback(() => {
@@ -29,9 +29,9 @@ export const NewProfileScreen: FC = () => {
 
   useEffect(() => {
     if (deviceLoginExpired) {
-      refetch();
+      getDeviceCode();
     }
-  }, [deviceLoginExpired, refetch]);
+  }, [deviceLoginExpired, getDeviceCode]);
 
   useEffect(() => on(['back'], onClose), [on, onClose]);
 

@@ -1,17 +1,16 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useGetListQuery } from '../../../../store/api/lists';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { useGetListQuery } from '@store/api/lists';
+import { Slider } from '@components/slider';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { setSelectedIndexForCategory, setSelectedMedia } from '@store/slices/home';
 import { scaleImage } from '../utils/scaleImage';
-import { CategoryDto, MediaDto } from '@miauflix/types';
-import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { setSelectedIndexForCategory, setSelectedMedia } from '../../../../store/slices/home';
+import { ListDto, MediaDto } from '@miauflix/backend-client';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { CONTINUE_WATCHING_CATEGORY, HOME_PREFIX } from '../consts';
+import { HOME_PREFIX } from '../consts';
 import { CATEGORY_CONTAINER_TOP_MASK } from './categoriesContainer';
-import { Slider } from '../../../components/slider';
-import { useGetProgressQuery } from '../../../../store/api/progress';
 
 export const SLIDER_MARGIN = 10;
 
@@ -50,8 +49,9 @@ const useInfiniteList = (category: string, skip = false): ListHookReturn => {
   );
 
   const mediaCount = currentList.data?.total ?? 0;
-  const pagesCount = currentList.data?.totalPages ?? 0;
-  const pageSize = currentList.data?.pageSize ?? 1;
+  // FixMe: Remove hardcoded 20 items per page
+  const pagesCount = currentList.data?.total ? Math.ceil(currentList.data.total / 20) : 0; // Assuming 20 items per page
+  const pageSize = 20;
 
   useEffect(() => {
     setTotalPages(pagesCount);
@@ -61,13 +61,13 @@ const useInfiniteList = (category: string, skip = false): ListHookReturn => {
     const combinedData: (MediaDto | null)[] = new Array(Math.max(pageSize * (page - 1), 0)).fill(
       null
     );
-    for (const data of [
-      page === 0 ? { data: [] } : previousList.data,
+    for (const listData of [
+      page === 0 ? { results: [] } : previousList.data,
       currentList.data,
       nextList.data,
     ]) {
-      if (data) {
-        combinedData.push(...data.data);
+      if (listData) {
+        combinedData.push(...listData.results);
       }
     }
     return combinedData;
@@ -87,69 +87,73 @@ const useInfiniteList = (category: string, skip = false): ListHookReturn => {
   };
 };
 
-const SPECIAL_CATEGORIES = [CONTINUE_WATCHING_CATEGORY];
+// const SPECIAL_CATEGORIES = [CONTINUE_WATCHING_CATEGORY];
 
-const useSpecialList = (category: string): ListHookReturn => {
-  const userId = useAppSelector(state => state.app.currentUserId);
-  const { data: progressCategory } = useGetProgressQuery(
-    category === CONTINUE_WATCHING_CATEGORY ? userId : skipToken
-  );
+// const useSpecialList = (category: string): ListHookReturn => {
+//   const userId = useAppSelector(state => state.app.currentUserId);
+//   // FixMe: The get progress query should return a list of media items not a single item
+//   const { data: progressCategory } = useGetProgressQuery(
+//     category === CONTINUE_WATCHING_CATEGORY ? { type: 'show', id: userId } : skipToken
+//   );
 
-  if (progressCategory) {
-    const data = progressCategory
-      .map(media => (media.type === 'movie' ? media.movie : media.show))
-      .filter((media, index, arr) => arr.findIndex(({ id }) => id === media.id) === index)
-      .sort();
-    return {
-      data,
-      updateSelected: () => {
-        // nothing
-      },
-      mediaCount: data.length,
-    };
-  }
+//   if (progressCategory) {
+//     const data = progressCategory
+//       .map((media: any) => media.show)
+//       .filter(
+//         (media: any, index: number, arr: any[]) =>
+//           arr.findIndex(({ id }: any) => id === media.id) === index
+//       )
+//       .sort((a: any, b: any) => (a.title > b.title ? 1 : -1));
+//     return {
+//       data,
+//       updateSelected: () => {
+//         // nothing
+//       },
+//       mediaCount: data.length,
+//     };
+//   }
 
-  return {
-    data: [],
-    updateSelected: () => {
-      // nothing
-    },
-    mediaCount: 0,
-  };
-};
+//   return {
+//     data: [],
+//     updateSelected: () => {
+//       // nothing
+//     },
+//     mediaCount: 0,
+//   };
+// };
 
-const useSpecialCategories = (category: string) => {
-  const skipNormalCategory = SPECIAL_CATEGORIES.includes(category);
-  const normalListResult = useInfiniteList(category, skipNormalCategory);
-  const specialListResult = useSpecialList(CONTINUE_WATCHING_CATEGORY);
+// const useSpecialCategories = (category: string) => {
+//   const skipNormalCategory = SPECIAL_CATEGORIES.includes(category);
+//   const normalListResult = useInfiniteList(category, skipNormalCategory);
+//   const specialListResult = useSpecialList(CONTINUE_WATCHING_CATEGORY);
 
-  if (SPECIAL_CATEGORIES.includes(category)) {
-    return specialListResult;
-  }
-  return normalListResult;
-};
+//   if (SPECIAL_CATEGORIES.includes(category)) {
+//     return specialListResult;
+//   }
+//   return normalListResult;
+// };
 
 export const CategorySlider: FC<{
-  category: CategoryDto;
+  category: ListDto;
   index: number;
   onLeft: () => void;
   onSelect: (media: MediaDto) => void;
 }> = ({ category, index, onLeft, onSelect }) => {
   const dispatch = useAppDispatch();
   const page = useAppSelector(state => state.app.currentPage);
-  const { data, updateSelected, mediaCount } = useSpecialCategories(category.id);
+  const { data, updateSelected, mediaCount } = useInfiniteList(category.slug);
   const moviesProgress = useAppSelector(state => state.resume.movieProgress);
   const { margin } = useMediaBoxSizes();
-  const lastHovered = useAppSelector(state => state.home.selectedByCategory[category.id] || 0);
+  const lastHovered = useAppSelector(state => state.home.selectedByCategory[category.slug] || 0);
 
   const sliderData = useMemo(
     () =>
       data.map(media =>
         media
           ? {
-              backdrop: scaleImage(media.images.backdrop || media.images.backdrops[0]),
-              id: media.ids.slug,
-              logo: media.images.backdrop ? undefined : media.images.logos[0],
+              backdrop: scaleImage(media.backdrop || ''),
+              id: media._type === 'movie' ? String(media.id) : String(media.id),
+              logo: media._type === 'movie' ? media.logo : undefined,
               progress: moviesProgress[media.id] || 0,
             }
           : null
@@ -160,11 +164,11 @@ export const CategorySlider: FC<{
   const onHover = useCallback(
     (index: number) => {
       if (data[index]) {
-        dispatch(setSelectedMedia(data[index]));
-        dispatch(setSelectedIndexForCategory({ category: category.id, index }));
+        dispatch(setSelectedMedia(data[index] as any)); // TODO: Fix type conversion
+        dispatch(setSelectedIndexForCategory({ category: category.slug, index }));
       }
     },
-    [category.id, data, dispatch]
+    [category.slug, data, dispatch]
   );
 
   const onMediaSelect = useCallback(
@@ -188,7 +192,7 @@ export const CategorySlider: FC<{
         onLeft={onLeft}
         onMediaSelect={onMediaSelect}
         totalData={mediaCount}
-        sliderKey={HOME_PREFIX + category.id}
+        sliderKey={HOME_PREFIX + category.slug}
       />
     </CategorySliderContainer>
   );

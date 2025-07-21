@@ -1,0 +1,83 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21798",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8707b32a50b7a3ad0d7c941c187e0dff\"",
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 6ae82cc0c8a39c993134c2be90b4d120.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "TdiTSpqCo8VM5qWUviPePSbv0JXG_y2jo_9FCLij4N4ptfhz14MRAA==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1c",
+    "x-cache": "Miss from cloudfront",
+    "x-memc": "HIT",
+    "x-memc-age": "5319",
+    "x-memc-expires": "21798",
+    "x-memc-key": "69127d87b446bfc2b24bdf60c9fed71cd6b53af228434d180419e071ddcb9647",
+    "x-task-id": "52ca7a31aa5f4e8081a2827c9eecdeef"
+  },
+  "data": {
+    "_id": "52572dbb760ee3776a30208b",
+    "air_date": "1987-01-10",
+    "episodes": [
+      {
+        "air_date": "1987-01-10",
+        "episode_number": 1,
+        "episode_type": "standard",
+        "id": 166677,
+        "name": "Stiff Boar",
+        "overview": "Vilitas ultra viduo comparo aro baiulus titulus.",
+        "production_code": "",
+        "runtime": null,
+        "season_number": 0,
+        "show_id": 2261,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [],
+        "guest_stars": []
+      },
+      {
+        "air_date": null,
+        "episode_number": 2,
+        "episode_type": "standard",
+        "id": 166674,
+        "name": "Sacred Mongoose",
+        "overview": "Cognomen quis beneficium aperiam aiunt truculenter pecus. Saepe vomer aurum talus. Creta vilitas tum apparatus voluptas despecto theatrum.",
+        "production_code": "",
+        "runtime": null,
+        "season_number": 0,
+        "show_id": 2261,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [],
+        "guest_stars": []
+      },
+      {
+        "air_date": null,
+        "episode_number": 3,
+        "episode_type": "standard",
+        "id": 166680,
+        "name": "Joint Alpaca",
+        "overview": "Utrum acervus torqueo verbera territo audentia brevis.",
+        "production_code": "",
+        "runtime": null,
+        "season_number": 0,
+        "show_id": 2261,
+        "still_path": null,
+        "vote_average": 0,
+        "vote_count": 0,
+        "crew": [],
+        "guest_stars": []
+      }
+    ],
+    "name": "Specials",
+    "overview": "",
+    "id": 7056,
+    "poster_path": null,
+    "season_number": 0,
+    "vote_average": 0
+  }
+}
