@@ -18,7 +18,6 @@ The security logging system provides comprehensive audit trails for security-rel
 The system tracks the following event types:
 
 - **Authentication Events**:
-
   - `LOGIN`: Successful user login
   - `LOGOUT`: User logout
   - `LOGIN_FAILURE`: Failed login attempt
@@ -27,19 +26,16 @@ The system tracks the following event types:
   - `PASSWORD_RESET_COMPLETE`: Password reset completion
 
 - **Token Events**:
-
   - `TOKEN_REFRESH`: Access token refresh
   - `TOKEN_INVALIDATION`: Token invalidation
 
 - **User Management Events**:
-
   - `USER_CREATION`: New user creation
   - `USER_UPDATE`: User information update
   - `USER_DELETION`: User deletion
   - `ROLE_CHANGE`: User role change
 
 - **API Events**:
-
   - `API_ACCESS`: API endpoint access
   - `API_ERROR`: API error occurrence
 

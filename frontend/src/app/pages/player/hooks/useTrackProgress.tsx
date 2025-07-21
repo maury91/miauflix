@@ -1,9 +1,13 @@
-import { Player, PlayerStatus } from '../playerClassAbstract';
-import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { useTrackMediaProgressMutation } from '../../../../store/api/progress';
 import { useCallback, useEffect } from 'react';
-import { TrackPlaybackRequest } from '@miauflix/types';
-import { setMediaProgress } from '../../../../store/slices/resume';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { useTrackMediaProgressMutation } from '@store/api/progress';
+import { ProgressRequest } from '@miauflix/backend-client';
+import { setMediaProgress } from '@store/slices/resume';
+import { Player, PlayerStatus } from '../playerClassAbstract';
+
+const getProgressInPercentage = (player: Player) => {
+  return (player.played() * 100) / player.videoLength();
+};
 
 export const useTrackProgress = (player: Player) => {
   const dispatch = useAppDispatch();
@@ -13,72 +17,83 @@ export const useTrackProgress = (player: Player) => {
   const [updateMediaProgress] = useTrackMediaProgressMutation();
 
   const updateProgress = useCallback(
-    (args: Omit<TrackPlaybackRequest, 'type'>) => {
+    (args: Omit<ProgressRequest, 'type'>) => {
       updateMediaProgress({
-        id: mediaId,
-        userId,
-        type: mediaType,
+        type: mediaType === 'episode' ? 'episode' : 'movie',
+        // FixMe: Remove hardcoded values
+        movieId: mediaType === 'movie' ? String(mediaId) : undefined,
+        showId: mediaType === 'episode' ? String(mediaId) : undefined,
+        season: mediaType === 'episode' ? 1 : undefined, // Default to season 1 for now
+        episode: mediaType === 'episode' ? 1 : undefined, // Default to episode 1 for now
         ...args,
       });
       dispatch(setMediaProgress({ mediaId, progress: args.progress }));
     },
-    [dispatch, mediaId, mediaType, updateMediaProgress, userId]
+    [dispatch, mediaId, mediaType, updateMediaProgress]
   );
 
   useEffect(() => {
     let status: PlayerStatus | null = null;
     let statusChangeUpdate = false;
-    setInterval(() => {
+    const interval = setInterval(() => {
       if (!status) {
         return;
       }
+      const progress = getProgressInPercentage(player);
       switch (status) {
         case 'PLAYING':
           updateProgress({
             status: 'watching',
-            progress: (player.played() * 100) / player.videoLength(),
+            progress,
           });
           break;
         case 'PAUSED':
           if (statusChangeUpdate) {
             updateProgress({
               status: 'paused',
-              progress: (player.played() * 100) / player.videoLength(),
+              progress,
             });
           }
           break;
         case 'NONE':
           if (statusChangeUpdate) {
             updateProgress({
-              status: 'stopped',
-              progress: (player.played() * 100) / player.videoLength(),
+              status: 'paused',
+              progress,
             });
           }
           break;
       }
       statusChangeUpdate = true;
     }, 3000);
-    player.on('status', playerStatus => {
+
+    const removeStatusListener = player.on('status', playerStatus => {
       status = playerStatus;
       statusChangeUpdate = false;
+      const progress = getProgressInPercentage(player);
       if (playerStatus === 'PLAYING') {
         updateProgress({
           status: 'watching',
-          progress: (player.played() * 100) / player.videoLength(),
+          progress,
         });
       }
       if (playerStatus === 'PAUSED') {
         updateProgress({
           status: 'paused',
-          progress: (player.played() * 100) / player.videoLength(),
+          progress,
         });
       }
       if (playerStatus === 'NONE') {
         updateProgress({
-          status: 'stopped',
-          progress: (player.played() * 100) / player.videoLength(),
+          status: 'paused',
+          progress,
         });
       }
     });
+
+    return () => {
+      clearInterval(interval);
+      removeStatusListener();
+    };
   }, [mediaType, player, updateProgress]);
 };

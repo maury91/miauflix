@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 import { PlaybackSpeed, Player, PlayerLanguage, PlayerStatus, Track } from '../playerClassAbstract';
-import {
-  AudioTrackExtraInfo,
-  AVPlayListeners,
-  TextTrackExtraInfo,
-  TrackInfo,
-} from '../../../../tizen';
+import { AudioTrackExtraInfo, AVPlayListeners, TextTrackExtraInfo, TrackInfo } from '@/tizen';
 import { createRef } from 'react';
 
 // ToDo: extend it

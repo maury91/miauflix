@@ -1,6 +1,7 @@
 /// <reference types='vitest' />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 // Phase 0 Bootstrap: Comment out NX-specific imports for now
 // TODO: Re-enable in future phases when NX workspace is properly configured
@@ -60,7 +61,14 @@ export default defineConfig({
 
   plugins: [
     // Phase 0 Bootstrap: Simplified plugin configuration
-    Icons({ compiler: 'jsx', jsx: 'react' }),
+    Icons({
+      compiler: 'jsx',
+      jsx: 'react',
+      autoInstall: true,
+      scale: 1,
+      defaultStyle: '',
+      defaultClass: '',
+    }),
     react(),
     // TODO: Re-enable in future phases
     // webfontDownload(),
@@ -84,10 +92,17 @@ export default defineConfig({
     },
   },
 
-  // Phase 0 Bootstrap: Add basic resolve configuration
+  // Phase 0 Bootstrap: Add comprehensive resolve configuration
   resolve: {
     alias: {
-      '@': '/src',
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/app/components'),
+      '@pages': path.resolve(__dirname, './src/app/pages'),
+      '@store': path.resolve(__dirname, './src/store'),
+      '@types': path.resolve(__dirname, './src/types'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+      '@hooks': path.resolve(__dirname, './src/app/hooks'),
+      '@consts': path.resolve(__dirname, './src/consts'),
     },
   },
 });

@@ -13,10 +13,11 @@ import { Background, BackgroundContainer, SimpleBackground } from './components/
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { Home } from './pages/home';
 import { Logo } from './components/logo';
-import { useGetCategoriesQuery } from '../store/api/categories';
+import { useGetListsQuery } from '../store/api/lists';
 import { usePrefetch } from '../store/api/lists';
 import { usePreloadHomeImages } from './pages/home/hooks/usePreloadHomeImages';
 import { Player } from './pages/player';
+import LoginPage from '../pages/LoginPage';
 
 init({
   // debug: true,
@@ -28,7 +29,7 @@ pauseSpatialNavigation();
 gsap.registerPlugin(ExpoScaleEase);
 
 export function App() {
-  const { data: categories } = useGetCategoriesQuery();
+  const { data: categories } = useGetListsQuery();
   const firstCategory = useMemo(() => categories?.[0], [categories]);
   const prefetchList = usePrefetch('getList');
   const backgrounds = useAppSelector(state => state.app.backgrounds);
@@ -38,7 +39,7 @@ export function App() {
   useEffect(() => {
     if (firstCategory) {
       prefetchList({
-        category: firstCategory.id,
+        category: firstCategory.slug,
         page: 0,
       });
     }
@@ -81,6 +82,7 @@ export function App() {
       <Logo />
       <MotionConfig transition={{ duration: 0.5 }}>
         <AnimatePresence initial={false} mode="wait">
+          {currentPage === 'login' && <LoginPage key="login" />}
           {currentPage === 'profile-selection' && <ProfileSelection key="profile-selection" />}
           {(currentPage.startsWith('home') || currentPage === 'player') && <Home key="home" />}
           {currentPage === 'player' && <Player key="player" />}

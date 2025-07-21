@@ -5,22 +5,18 @@ import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { AuthService } from '@services/auth/auth.service';
-import type { MediaService } from '@services/media/media.service';
 import type { TranslatedMovie } from '@services/media/media.types';
-import type { AuditLogService } from '@services/security/audit-log.service';
-import type { SourceService } from '@services/source/source.service';
-import type { StreamService } from '@services/stream/stream.service';
 
+import type { Deps, ErrorResponse } from './common.types';
 import type { MovieResponse, StreamingKeyResponse } from './movie.types';
 
-export const createMovieRoutes = (
-  mediaService: MediaService,
-  sourceService: SourceService,
-  streamService: StreamService,
-  auditLogService: AuditLogService,
-  authService: AuthService
-) => {
+export const createMovieRoutes = ({
+  mediaService,
+  sourceService,
+  streamService,
+  auditLogService,
+  authService,
+}: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
   const supportedQualities: ['auto', ...Quality[]] = ['auto', ...Object.values(Quality)];
 
@@ -55,14 +51,14 @@ export const createMovieRoutes = (
 
           // Validate movie ID range
           if (movieId <= 0) {
-            return context.json({ error: 'Invalid movie ID' }, 400);
+            return context.json({ error: 'Invalid movie ID' } satisfies ErrorResponse, 400);
           }
 
           // Get the movie from the database or fetch from TMDB if not available
           const movie = await mediaService.getMovie(movieId);
 
           if (!movie) {
-            return context.json({ error: 'Movie not found' }, 404);
+            return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           }
 
           // Get translated version of the movie
@@ -73,6 +69,7 @@ export const createMovieRoutes = (
 
           // Build the response object
           const response: MovieResponse = {
+            type: 'movie',
             id: movieData.id,
             tmdbId: movieData.tmdbId,
             imdbId: movieData.imdbId,
@@ -113,7 +110,7 @@ export const createMovieRoutes = (
             }));
           }
 
-          return context.json(response);
+          return context.json(response satisfies MovieResponse);
         } catch (error: unknown) {
           console.error('Failed to get movie:', error);
 
@@ -121,7 +118,7 @@ export const createMovieRoutes = (
           if (error && typeof error === 'object' && 'response' in error) {
             const httpError = error as { response?: { status?: number }; status?: number };
             if (httpError?.response?.status === 404 || httpError?.status === 404) {
-              return context.json({ error: 'Movie not found' }, 404);
+              return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
             }
 
             // Handle other HTTP errors
@@ -130,11 +127,11 @@ export const createMovieRoutes = (
               httpError.response.status >= 400 &&
               httpError.response.status < 500
             ) {
-              return context.json({ error: 'Invalid request' }, 400);
+              return context.json({ error: 'Invalid request' } satisfies ErrorResponse, 400);
             }
           }
 
-          return context.json({ error: 'Internal server error' }, 500);
+          return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);
         }
       }
     )
@@ -161,13 +158,13 @@ export const createMovieRoutes = (
 
           // Validate movie ID range
           if (movieId <= 0) {
-            return context.json({ error: 'Invalid movie ID' }, 400);
+            return context.json({ error: 'Invalid movie ID' } satisfies ErrorResponse, 400);
           }
 
           // Check if movie exists
           const movie = await mediaService.getMovie(movieId);
           if (!movie) {
-            return context.json({ error: 'Movie not found' }, 404);
+            return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           }
 
           // Get sources for the movie to find the best matching source
@@ -182,7 +179,10 @@ export const createMovieRoutes = (
           );
 
           if (!sources || sources.length === 0) {
-            return context.json({ error: 'No sources available for this movie' }, 404);
+            return context.json(
+              { error: 'No sources available for this movie' } satisfies ErrorResponse,
+              404
+            );
           }
 
           // Find the best source based on quality preference
@@ -192,7 +192,7 @@ export const createMovieRoutes = (
             return context.json(
               {
                 error: `No ${quality === 'auto' ? 'suitable' : quality} quality source available`,
-              },
+              } satisfies ErrorResponse,
               404
             );
           }
@@ -200,7 +200,7 @@ export const createMovieRoutes = (
           // Generate streaming key for movie (not tied to specific source)
           const streamingKey = await authService.generateStreamingKey(movieId, user.id);
 
-          const response: StreamingKeyResponse = {
+          return context.json({
             streamingKey,
             quality: selectedSource.quality,
             size: selectedSource.size,
@@ -208,11 +208,10 @@ export const createMovieRoutes = (
             broadcasters: selectedSource.broadcasters ?? null,
             watchers: selectedSource.watchers ?? null,
             expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000), // 6 hours
-          };
-          return context.json(response);
+          } satisfies StreamingKeyResponse);
         } catch (error: unknown) {
           console.error('Failed to generate streaming key:', error);
-          return context.json({ error: 'Internal server error' }, 500);
+          return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);
         }
       }
     );
