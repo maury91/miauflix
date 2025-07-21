@@ -192,15 +192,17 @@ export const mediasApi = createApi({
   }),
 });
 
-export const getStreamUrl = async (
+export const getStreamUrl = (
   streamingKey: string,
   quality: Quality | 'auto',
   hvecSupport: boolean
 ) => {
-  return client.stream[':token'].$url({
-    param: { token: streamingKey },
-    query: { quality, hevc: hvecSupport ? 'true' : 'false' },
-  });
+  return client.stream[':token']
+    .$url({
+      param: { token: streamingKey },
+      query: { quality, hevc: hvecSupport ? 'true' : 'false' },
+    })
+    .toString();
 };
 
 export const {

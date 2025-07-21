@@ -4,6 +4,7 @@ export interface DeviceAuthResponse {
   deviceCode: string;
   expiresIn: number;
   interval: number;
+  expiresAt: string;
 }
 
 export interface DeviceAuthCheckRequest {

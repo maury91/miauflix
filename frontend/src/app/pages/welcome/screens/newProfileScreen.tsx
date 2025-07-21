@@ -20,7 +20,7 @@ const BackIcon = styled(ArrowBackRounded)`
 export const NewProfileScreen: FC = () => {
   const dispatch = useAppDispatch();
   const [getDeviceCode, { data: deviceLogin }] = useDeviceLoginMutation();
-  const deviceLoginExpired = deviceLogin && Date.now() > deviceLogin.expiresIn * 1000;
+  const deviceLoginExpired = deviceLogin && Date.now() > new Date(deviceLogin.expiresAt).getTime();
   const on = useControls('profile-selection');
 
   const onClose = useCallback(() => {
