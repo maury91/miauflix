@@ -5,6 +5,10 @@ import { ProgressRequest } from '@miauflix/backend-client';
 import { setMediaProgress } from '@store/slices/resume';
 import { Player, PlayerStatus } from '../playerClassAbstract';
 
+const getProgressInPercentage = (player: Player) => {
+  return (player.played() * 100) / player.videoLength();
+};
+
 export const useTrackProgress = (player: Player) => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector(state => state.app.currentUserId);
@@ -31,22 +35,23 @@ export const useTrackProgress = (player: Player) => {
   useEffect(() => {
     let status: PlayerStatus | null = null;
     let statusChangeUpdate = false;
-    setInterval(() => {
+    const interval = setInterval(() => {
       if (!status) {
         return;
       }
+      const progress = getProgressInPercentage(player);
       switch (status) {
         case 'PLAYING':
           updateProgress({
-            progress: Math.round(player.played() * 100) / 100,
             status: 'watching',
+            progress,
           });
           break;
         case 'PAUSED':
           if (statusChangeUpdate) {
             updateProgress({
               status: 'paused',
-              progress: (player.played() * 100) / player.videoLength(),
+              progress,
             });
           }
           break;
@@ -54,34 +59,41 @@ export const useTrackProgress = (player: Player) => {
           if (statusChangeUpdate) {
             updateProgress({
               status: 'paused',
-              progress: (player.played() * 100) / player.videoLength(),
+              progress,
             });
           }
           break;
       }
       statusChangeUpdate = true;
     }, 3000);
-    player.on('status', playerStatus => {
+
+    const removeStatusListener = player.on('status', playerStatus => {
       status = playerStatus;
       statusChangeUpdate = false;
+      const progress = getProgressInPercentage(player);
       if (playerStatus === 'PLAYING') {
         updateProgress({
           status: 'watching',
-          progress: (player.played() * 100) / player.videoLength(),
+          progress,
         });
       }
       if (playerStatus === 'PAUSED') {
         updateProgress({
           status: 'paused',
-          progress: (player.played() * 100) / player.videoLength(),
+          progress,
         });
       }
       if (playerStatus === 'NONE') {
         updateProgress({
           status: 'paused',
-          progress: (player.played() * 100) / player.videoLength(),
+          progress,
         });
       }
     });
+
+    return () => {
+      clearInterval(interval);
+      removeStatusListener();
+    };
   }, [mediaType, player, updateProgress]);
 };
