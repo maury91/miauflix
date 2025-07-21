@@ -297,8 +297,8 @@ export type TraktListItem =
 
 export interface DeviceAuthCheckSuccess {
   success: true;
-  traktUsername: string;
-  traktSlug: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface DeviceAuthCheckPending {
@@ -306,4 +306,12 @@ export interface DeviceAuthCheckPending {
   pending: true;
 }
 
-export type DeviceAuthCheckResponse = DeviceAuthCheckPending | DeviceAuthCheckSuccess;
+export interface DeviceAuthCheckError {
+  success: false;
+  error: string;
+}
+
+export type DeviceAuthCheckResponse =
+  | DeviceAuthCheckError
+  | DeviceAuthCheckPending
+  | DeviceAuthCheckSuccess;

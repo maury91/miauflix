@@ -1,0 +1,20 @@
+{
+  "name": "therarbg-mock",
+  "version": "1.0.0",
+  "description": "TheRARBG API Mock Server for E2E Testing",
+  "main": "index.ts",
+  "scripts": {
+    "start": "bun run index.ts",
+    "dev": "bun --watch index.ts"
+  },
+  "dependencies": {
+    "@miauflix/therarbg-sanitizer": "file:./therarbg-sanitizer",
+    "@miauflix/source-metadata-extractor": "file:./source-metadata-extractor"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  },
+  "overrides": {
+    "@miauflix/source-metadata-extractor": "file:./source-metadata-extractor"
+  }
+}

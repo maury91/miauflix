@@ -1,10 +1,10 @@
+import { FC } from 'react';
 import styled from 'styled-components';
 import OcticonPlay16 from '~icons/octicon/play-16';
 import MdiPaw from '~icons/mdi/paw';
 import LineMdPlayFilled from '~icons/line-md/play-filled';
-import { PALETTE } from '../../../../consts';
+import { PALETTE } from '@/consts';
 import { Button } from '../../../ui-elements/button';
-import { FC } from 'react';
 import { IconButton } from '../../../ui-elements/iconButton';
 import { PLAYER_PAUSE_BUTTON_FOCUS_KEY } from '../consts';
 

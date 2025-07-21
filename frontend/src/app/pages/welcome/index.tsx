@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { FocusContext, setFocus, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from './consts';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { useGetUsersQuery } from '../../../store/api/users';
 import { ProfileSelectionScreen } from './screens/profileSelectionScreen';
 import { NewProfileScreen } from './screens/newProfileScreen';
 import { FullScreenDiv } from '../../components/fullScreenDiv';
@@ -11,7 +10,12 @@ import { useAppSelector } from '../../../store/store';
 export const ProfileSelection = () => {
   const screen = useAppSelector(state => state.profileSelection.screen);
   const [lastScreen, setLastScreen] = useState(screen);
-  const { data: users } = useGetUsersQuery();
+
+  // FixMe: Refactor to use users state
+  // For now, we'll use an empty array since users are managed through auth flow
+  // In the future, this could come from auth state or local storage
+  const users: any[] = [];
+
   const { focusKey } = useFocusable({
     saveLastFocusedChild: true,
   });

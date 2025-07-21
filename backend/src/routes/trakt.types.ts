@@ -1,10 +1,10 @@
 export interface DeviceAuthResponse {
-  success: boolean;
   codeUrl: string;
   userCode: string;
   deviceCode: string;
   expiresIn: number;
   interval: number;
+  expiresAt: string;
 }
 
 export interface DeviceAuthCheckRequest {

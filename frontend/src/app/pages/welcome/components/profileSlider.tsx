@@ -1,57 +1,60 @@
-import { UserDto } from '@miauflix/types';
 import { FC, useCallback, useState } from 'react';
+import { UserDto } from '@miauflix/backend-client';
 import { useProfilesPosition } from '../hooks/useProfilesPosition';
 import { NewProfile, Profile } from './profile';
-import { chooseProfile } from '../../../../store/slices/app';
-import { useAppDispatch } from '../../../../store/store';
-import { navigateToNewProfile } from '../../../../store/slices/profileSelection';
+import { useAppDispatch } from '@store/store';
+import { chooseProfile } from '@store/slices/app';
+import { navigateToNewProfile } from '@store/slices/profileSelection';
 
 export interface ProfileSliderProps {
-  users?: UserDto[];
+  users: UserDto[];
 }
 
 export const ProfileSlider: FC<ProfileSliderProps> = ({ users }) => {
-  const [selected, setSelected] = useState(0);
   const dispatch = useAppDispatch();
-  const profilesCount = users?.length ?? 0;
-  const positions = useProfilesPosition(profilesCount, selected);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const positions = useProfilesPosition(users.length, selectedIndex);
 
-  const openProfile = useCallback(
-    (profileIndex: number) => {
-      if (users) {
-        dispatch(
-          chooseProfile({
-            id: users[profileIndex].id,
-            slug: users[profileIndex].slug,
-          })
-        );
-      }
+  const onProfileSelect = useCallback((index: number) => {
+    setSelectedIndex(index);
+  }, []);
+
+  const onProfileOpen = useCallback(
+    (index: number) => {
+      // For now, just select the profile
+      // In the future, this could open a profile details screen
+      dispatch(
+        chooseProfile({
+          id: index,
+          slug: `profile-${index}`,
+        })
+      );
     },
-    [dispatch, users]
+    [dispatch]
   );
 
-  const openNewProfile = useCallback(() => {
+  const onNewProfileOpen = useCallback(() => {
     dispatch(navigateToNewProfile());
   }, [dispatch]);
 
   return (
     <>
-      {users?.map(({ name }, index) => (
+      {users?.map((user, index) => (
         <Profile
-          key={index}
+          key={user.id}
+          name={user.email.split('@')[0] || `User ${index + 1}`}
           index={index}
           left={positions[index]}
-          name={name}
-          onOpen={openProfile}
-          onSelect={setSelected}
+          onOpen={onProfileOpen}
+          onSelect={onProfileSelect}
         />
       ))}
       <NewProfile
-        index={profilesCount}
-        left={positions[profilesCount]}
-        color="white"
-        onOpen={openNewProfile}
-        onSelect={setSelected}
+        color="#d81f27"
+        index={users.length}
+        left={positions[users.length]}
+        onOpen={onNewProfileOpen}
+        onSelect={onProfileSelect}
       />
     </>
   );

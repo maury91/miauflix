@@ -1,14 +1,21 @@
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
-import type IPSet from 'ip-set';
-import loadIPSet from 'load-ip-set';
+import { Readable } from 'streamx';
 import type { Torrent } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
 import { ENV } from '@constants';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
-import { enhancedFetch } from '@utils/fetch.util';
+
+import {
+  encodeRFC5987,
+  getContentType,
+  getIpSet,
+  getTrackers,
+  getVideoFile,
+  parseRangeHeader,
+} from './download.utils';
 
 export class DownloadService {
   public readonly client: WebTorrent;
@@ -36,48 +43,10 @@ export class DownloadService {
     this.ready = this.loadTrackers();
   }
 
-  private async getTrackers(url: string) {
-    try {
-      const response = await enhancedFetch(url);
-
-      if (response.status >= 200 && response.status < 300) {
-        const data = await response.text();
-        if (data) {
-          const trackers: string[] = data
-            .split('\n')
-            .map(line => line.split('#')[0].trim())
-            .filter(line => line.trim() !== '');
-          return trackers;
-        }
-      }
-    } catch (error) {
-      logger.error('DownloadService', 'Error fetching trackers:', error);
-    }
-    return [];
-  }
-
-  private getIpSet(url: string): Promise<IPSet | null> {
-    return new Promise(resolve => {
-      loadIPSet(
-        url,
-        {
-          'user-agent': 'Miauflix/1.0.0',
-        },
-        (err, ipSet) => {
-          if (err) {
-            logger.error('DownloadService', 'Error loading IP set:', err);
-            return resolve(null);
-          }
-          resolve(ipSet);
-        }
-      );
-    });
-  }
-
   private async loadTrackers() {
     const [bestTrackers, blacklistedTrackers] = await Promise.all([
-      this.getTrackers(this.bestTrackersDownloadUrl),
-      this.getIpSet(this.blacklistedTrackersDownloadUrl),
+      getTrackers(this.bestTrackersDownloadUrl),
+      getIpSet(this.blacklistedTrackersDownloadUrl),
     ]);
 
     if (bestTrackers.length) {
@@ -175,5 +144,81 @@ export class DownloadService {
       broadcasters: result.complete || 0,
       watchers: result.incomplete || 0,
     };
+  }
+
+  async getTorrent(hash: string): Promise<Torrent> {
+    const existingTorrent = await this.client.get(hash);
+    if (existingTorrent) {
+      return existingTorrent;
+    }
+    return new Promise((resolve, reject) => {
+      const torrent = this.client.add(hash, { destroyStoreOnDestroy: true });
+      torrent.on('ready', () => {
+        resolve(torrent);
+      });
+      torrent.on('error', (error: Error) => {
+        reject(error);
+      });
+    });
+  }
+
+  /**
+   * Stream a file from a torrent with range request support
+   * Based on WebTorrent server implementation
+   */
+  async streamFile(
+    hash: string,
+    rangeHeader?: string
+  ): Promise<{
+    stream: Readable;
+    headers: Record<string, string>;
+    status: number;
+  }> {
+    return new Promise(resolve => {
+      const handleRequest = async () => {
+        const torrent = await this.getTorrent(hash);
+        // Autofind the correct file
+        const file = getVideoFile(torrent);
+        const headers: Record<string, string> = {
+          'Accept-Ranges': 'bytes',
+          'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+          'Content-Disposition': `inline; filename*=UTF-8''${encodeRFC5987(file.name)}`,
+          'Content-Type': getContentType(file.name),
+          Expires: '0',
+          'transferMode.dlna.org': 'Streaming',
+          'contentFeatures.dlna.org':
+            'DLNA.ORG_OP=01;DLNA.ORG_CI=0;DLNA.ORG_FLAGS=01700000000000000000000000000000',
+          // CORS headers
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+          'Access-Control-Allow-Headers': 'Range',
+        };
+        let status = 200;
+        const range = parseRangeHeader(file.length, rangeHeader || '');
+        if (range) {
+          status = 206;
+          headers['Content-Range'] = `bytes ${range.start}-${range.end}/${file.length}`;
+          headers['Content-Length'] = String(range.end - range.start + 1);
+        } else {
+          headers['Content-Length'] = String(file.length);
+        }
+        // Create readable stream from file using WebTorrent's createReadStream
+        const iterator = file[Symbol.asyncIterator](range || {});
+
+        const stream = Readable.from(iterator);
+
+        resolve({
+          stream,
+          headers,
+          status,
+        });
+      };
+
+      if (this.client.ready) {
+        handleRequest();
+      } else {
+        this.client.once('ready', handleRequest);
+      }
+    });
   }
 }

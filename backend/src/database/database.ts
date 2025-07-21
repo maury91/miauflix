@@ -10,6 +10,7 @@ import { Genre, GenreTranslation } from '@entities/genre.entity';
 import { MediaList } from '@entities/list.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
+import { Progress } from '@entities/progress.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
@@ -24,6 +25,7 @@ import { GenreRepository } from '@repositories/genre.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
+import { ProgressRepository } from '@repositories/progress.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { StorageRepository } from '@repositories/storage.repository';
 import { StreamingKeyRepository } from '@repositories/streaming-key.repository';
@@ -92,6 +94,7 @@ export class Database {
   private traktUserRepository: TraktUserRepository;
   private storageRepository: StorageRepository;
   private streamingKeyRepository: StreamingKeyRepository;
+  private progressRepository: ProgressRepository;
 
   constructor(private readonly encryptionService: EncryptionService) {
     // Set up static encryption services for entities
@@ -124,6 +127,7 @@ export class Database {
         TraktUser,
         Storage,
         StreamingKey,
+        Progress,
       ],
       synchronize: true,
       logger: new DatabaseLogger('all'),
@@ -145,6 +149,7 @@ export class Database {
     this.traktUserRepository = new TraktUserRepository(this.dataSource);
     this.storageRepository = new StorageRepository(this);
     this.streamingKeyRepository = new StreamingKeyRepository(this);
+    this.progressRepository = new ProgressRepository(this.dataSource);
   }
 
   public async close(): Promise<void> {
@@ -211,5 +216,9 @@ export class Database {
 
   public getStreamingKeyRepository() {
     return this.streamingKeyRepository;
+  }
+
+  public getProgressRepository() {
+    return this.progressRepository;
   }
 }
