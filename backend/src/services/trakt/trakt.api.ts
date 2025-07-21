@@ -185,6 +185,7 @@ export class TraktApi {
       expiresIn: data.expires_in,
       interval: data.interval,
       userCode: data.user_code,
+      expiresAt: new Date(Date.now() + data.expires_in * 1000).toISOString(),
     };
   }
 

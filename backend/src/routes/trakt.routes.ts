@@ -35,6 +35,7 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
               deviceCode: deviceAuth.deviceCode,
               expiresIn: deviceAuth.expiresIn,
               interval: deviceAuth.interval,
+              expiresAt: deviceAuth.expiresAt,
             } satisfies DeviceAuthResponse);
           } catch (error) {
             console.error('Trakt device auth initiation failed:', error);
