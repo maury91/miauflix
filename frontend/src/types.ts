@@ -1,1 +1,1 @@
-export type Page = 'profile-selection' | 'home/details' | 'home/categories' | 'player';
+export type Page = 'login' | 'profile-selection' | 'home/details' | 'home/categories' | 'player';

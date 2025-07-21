@@ -1,4 +1,4 @@
-import { Page } from '../../types';
+import { Page } from '@/types';
 import { createContext, useContext } from 'react';
 
 export const pageContext = createContext<Page | null>(null);

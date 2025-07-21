@@ -1,16 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { authApi } from './api/auth';
 import { listsApi } from './api/lists';
-import { useDispatch, useSelector } from 'react-redux';
-import { usersApi } from './api/users';
+import { moviesApi } from './api/movies';
+import { progressApi } from './api/progress';
+import { showsApi } from './api/shows';
+import { mediasApi } from './api/medias';
 import app from './slices/app';
 import home from './slices/home';
 import profileSelection from './slices/profileSelection';
 import resume from './slices/resume';
 import stream from './slices/stream';
 import ui from './slices/ui';
-import { categoriesApi } from './api/categories';
-import { mediasApi } from './api/medias';
-import { progressApi } from './api/progress';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
 export const store = configureStore({
   reducer: {
@@ -21,22 +22,25 @@ export const store = configureStore({
     stream,
     ui,
     [listsApi.reducerPath]: listsApi.reducer,
-    [usersApi.reducerPath]: usersApi.reducer,
-    [categoriesApi.reducerPath]: categoriesApi.reducer,
-    [mediasApi.reducerPath]: mediasApi.reducer,
+    [moviesApi.reducerPath]: moviesApi.reducer,
     [progressApi.reducerPath]: progressApi.reducer,
+    [showsApi.reducerPath]: showsApi.reducer,
+    [mediasApi.reducerPath]: mediasApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(
       listsApi.middleware,
-      usersApi.middleware,
-      categoriesApi.middleware,
+      moviesApi.middleware,
+      progressApi.middleware,
+      showsApi.middleware,
       mediasApi.middleware,
-      progressApi.middleware
+      authApi.middleware
     ),
 });
 
-export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
-export const useAppSelector = useSelector.withTypes<RootState>();
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

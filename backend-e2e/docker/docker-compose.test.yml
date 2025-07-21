@@ -13,6 +13,7 @@ services:
       - TMDB_API_URL=http://tmdb-mock/3
       - YTS_API_URL=http://yts-mock
       - TRAKT_API_URL=http://trakt-mock
+      - THE_RARBG_API_URL=http://therarbg-mock
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
       - STATIC_TRACKERS=udp://tracker-mock
@@ -37,6 +38,8 @@ services:
       yts-mock:
         condition: service_healthy
       trakt-mock:
+        condition: service_healthy
+      therarbg-mock:
         condition: service_healthy
 
   # TMDB Mock Service
@@ -113,6 +116,31 @@ services:
       start_period: 10s
     volumes:
       - ./yts/data:/app/data
+    networks:
+      - test-network
+
+  # TheRARBG Mock Service
+  therarbg-mock:
+    build:
+      context: .
+      dockerfile: mock/therarbg.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
+    env_file:
+      - ../../.env
+    environment:
+      - DATA_DIR=/app/data
+      - API_BASE_URL=https://therarbg.to
+      - API_AUTH_HEADER_IS_BEARER=false
+      - API_KEY=none
+      - DISABLE_VPN_CHECK=true
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - ./therarbg/data:/app/data
     networks:
       - test-network
 

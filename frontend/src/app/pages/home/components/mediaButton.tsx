@@ -4,7 +4,7 @@ import { PALETTE } from '../../../../consts';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop';
 
-const StyledMediaButton = styled.div<{
+const StyledMediaButton = styled.button<{
   disabled?: boolean;
   focused: boolean;
   loading?: boolean;
@@ -32,6 +32,8 @@ const StyledMediaButton = styled.div<{
   margin-right: 1vw;
   ${({ disabled }) => (disabled ? '' : 'cursor: pointer;')}
   text-transform: uppercase;
+  border: none;
+  background: none;
 
   svg {
     margin: 0 0.5vw;
