@@ -72,7 +72,7 @@ try {
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
   const authService = new AuthService(db, auditLogService);
-  const traktService = new TraktService(db);
+  const traktService = new TraktService(db, authService);
   const mediaService = new MediaService(db, tmdbApi);
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);

@@ -32,7 +32,6 @@ const getLogoStyle = (currentPage: Page, margin: number) => {
   switch (currentPage) {
     case 'profile-selection':
       return profileSelectionLogo;
-    case 'home':
     case 'home/details':
     case 'home/categories':
       return homeLogo(margin);

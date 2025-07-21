@@ -16,6 +16,10 @@ export class MovieRepository {
     this.movieTranslationRepository = db.getRepository(MovieTranslation);
   }
 
+  async findByIds(ids: number[]): Promise<Movie[]> {
+    return this.movieRepository.findBy({ id: In(ids) });
+  }
+
   async findByTMDBId(tmdbId: number): Promise<Movie | null> {
     return this.movieRepository.findOne({ where: { tmdbId } });
   }

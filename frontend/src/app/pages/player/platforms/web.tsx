@@ -16,7 +16,6 @@ export class WebPlayer extends Player {
   private audioTracks: Track[] = [];
   private subtitleTracks: Track[] = [];
   private ready = false;
-  private player!: ReturnType<typeof videojs>;
   public container = (
     <VideoContainer ref={this.containerRef} preload="auto" crossOrigin="anonymous" />
   );
@@ -55,29 +54,6 @@ export class WebPlayer extends Player {
       console.error(error);
     });
     this.containerRef.current.load();
-
-    // this.player = videojs(
-    //   this.containerRef.current,
-    //   {
-    //     controls: true,
-    //     autoplay: false,
-    //     preload: 'auto',
-    //     crossOrigin: 'anonymous',
-    //     sources: [
-    //       {
-    //         src: url,
-    //         type: 'video/webm',
-    //       },
-    //     ],
-    //   },
-    //   () => {
-    //     this.ready = true;
-    //   }
-    // );
-    console.log(this.player);
-    // add source
-    // this.ready = true;
-    // console.log(this.containerRef.current, this.container);
     return true;
   }
 
@@ -201,5 +177,13 @@ export class WebPlayer extends Player {
   disableSubtitle(): boolean {
     console.log('Disabling subtitle');
     return true;
+  }
+
+  setSpeed(speed: number): boolean {
+    if (this.containerRef.current) {
+      this.containerRef.current.playbackRate = speed;
+      return true;
+    }
+    return false;
   }
 }

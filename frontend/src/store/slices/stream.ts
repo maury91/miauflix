@@ -1,22 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { StreamResponse, StreamSourceDto } from '@miauflix/backend-client';
 
 export interface StreamState {
   url: string;
+  source: StreamSourceDto | null;
+  status: string;
   id: number;
   streamId: string;
-  showSlug: string;
-  season: number;
-  episode: number;
+  showSlug?: string;
+  season?: number;
+  episode?: number;
   type: 'movie' | 'episode';
 }
 
 const initialState: StreamState = {
   url: '',
+  source: null,
+  status: '',
   id: 0,
-  showSlug: '',
   streamId: '',
-  season: 0,
-  episode: 0,
   type: 'movie',
 };
 
@@ -29,25 +31,40 @@ export const streamSlice = createSlice({
       action: PayloadAction<
         | {
             url: string;
+            response: StreamResponse;
             id: number;
             streamId: string;
-            type: 'movie';
+            type: 'movie' | 'episode';
+            showSlug?: string;
+            season?: number;
+            episode?: number;
           }
         | {
             url: string;
             id: number;
-            showSlug: string;
-            streamId: string;
-            season: number;
-            episode: number;
-            type: 'episode';
+            type: 'movie' | 'episode';
+            showSlug?: string;
+            season?: number;
+            episode?: number;
           }
       >
     ) => {
       state.url = action.payload.url;
       state.id = action.payload.id;
-      state.streamId = action.payload.streamId;
       state.type = action.payload.type;
+
+      // Handle full StreamResponse format
+      if ('response' in action.payload) {
+        state.source = action.payload.response.source;
+        state.status = action.payload.response.status;
+        state.streamId = action.payload.streamId;
+      } else {
+        // Handle simplified format for episodes
+        state.source = null;
+        state.status = 'streaming';
+        state.streamId = action.payload.url; // Use URL as streamId for episodes
+      }
+
       if (action.payload.type === 'episode') {
         state.season = action.payload.season;
         state.episode = action.payload.episode;

@@ -1,16 +1,58 @@
-import { MediaDto, Paginated } from '../../types/api';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_URL } from '../../consts';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { hcWithType, ListResponse, ListsResponse } from '@miauflix/backend-client';
+import { API_URL } from '@/consts';
 
-// ToDo: Rename into lists
+const client = hcWithType(API_URL);
+
 export const listsApi = createApi({
   reducerPath: 'listsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/lists/` }),
+  baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
   endpoints: builder => ({
-    getList: builder.query<Paginated<MediaDto>, { category: string; page: number }>({
-      query: ({ category, page }) => `${category}?page=${page}`,
+    getLists: builder.query<ListsResponse, void>({
+      async queryFn() {
+        try {
+          const res = await client.lists.$get({});
+          if (res.status === 200) {
+            const data = await res.json();
+            return { data };
+          }
+          const data = await res.json();
+          return {
+            error: {
+              status: res.status,
+              data: 'error' in data ? data.error : 'Failed to fetch lists',
+            },
+          };
+        } catch (error: any) {
+          return {
+            error: { status: error?.status || 500, data: error?.message || 'Unknown error' },
+          };
+        }
+      },
+    }),
+    // Returns a paginated list of medias
+    getList: builder.query<ListResponse, { category: string; page: number }>({
+      async queryFn({ category, page }) {
+        try {
+          const res = await client.list[':slug'].$get({
+            param: { slug: category },
+            query: { lang: 'en' },
+          });
+          if (res.status === 200) {
+            const data = await res.json();
+            return { data };
+          }
+          return {
+            error: { status: res.status, data: 'Failed to fetch list' },
+          };
+        } catch (error: any) {
+          return {
+            error: { status: error?.status || 500, data: error?.message || 'Unknown error' },
+          };
+        }
+      },
     }),
   }),
 });
 
-export const { useGetListQuery, usePrefetch } = listsApi;
+export const { useGetListQuery, useGetListsQuery, usePrefetch } = listsApi;

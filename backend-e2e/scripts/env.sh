@@ -159,6 +159,7 @@ cleanup() {
     if [[ -f $log_file ]]; then
         echo "📜 Full Logs saved to $log_file"
     else
+        docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE logs --tail 2000
         echo "⚠️  No logs were generated"
     fi
     
@@ -191,6 +192,8 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
 
     # Copy new build artifacts
     cp -r packages/yts-sanitizer backend-e2e/docker/dist
+    cp -r packages/therarbg-sanitizer backend-e2e/docker/dist
+    cp -r packages/source-metadata-extractor backend-e2e/docker/dist
 
     # Navigate to the integration tests directory
     cd ${backend_e2e_dir}

@@ -23,6 +23,7 @@
   "dependencies": {
     "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
     "@miauflix/backend-client": "file:../packages/backend-client",
+    "@miauflix/therarbg-sanitizer": "file:../packages/therarbg-sanitizer",
     "hono": "^4.7.11",
     "sqlite3": "^5.0.11"
   },
@@ -41,6 +42,12 @@
     "setupFilesAfterEnv": [
       "<rootDir>/src/test-setup.ts"
     ],
-    "testTimeout": 30000
+    "testTimeout": 30000,
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@miauflix/backend-client|hono)/)"
+    ],
+    "moduleNameMapper": {
+      "^@miauflix/backend-client$": "<rootDir>/../packages/backend-client/src/index.ts"
+    }
   }
 }

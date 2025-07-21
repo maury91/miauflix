@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import {
   FocusContext,
   getCurrentFocusKey,
@@ -8,8 +8,8 @@ import {
 } from '@noriginmedia/norigin-spatial-navigation';
 import MdiSearch from '~icons/mdi/search';
 import { CATEGORIES_FOCUS_KEY, MEDIA_DETAILS_FOCUS_KEY, SIDEBAR_FOCUS_KEY } from '../consts';
-import { PALETTE } from '../../../../consts';
-import { useAppSelector } from '../../../../store/store';
+import { PALETTE } from '@/consts';
+import { useAppSelector } from '@store/store';
 
 const HomeSidebarContainer = styled.div<{ opened: boolean }>`
   position: fixed;

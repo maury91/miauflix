@@ -1,7 +1,9 @@
 import type { Database } from '@database/database';
+import type { User } from '@entities/user.entity';
 import type { TraktUserRepository } from '@repositories/trakt-user.repository';
 import type { UserRepository } from '@repositories/user.repository';
-import type { DeviceAuthCheckResponse } from '@services/trakt/trakt.types';
+import type { AuthService } from '@services/auth/auth.service';
+import type { UserProfileResponse } from '@services/trakt/trakt.types';
 
 import { TraktApi } from './trakt.api';
 
@@ -9,11 +11,13 @@ export class TraktService {
   private readonly traktApi: TraktApi;
   private readonly traktUserRepository: TraktUserRepository;
   private readonly userRepository: UserRepository;
+  private readonly authService: AuthService;
 
-  constructor(db: Database) {
+  constructor(db: Database, authService: AuthService) {
     this.traktApi = new TraktApi();
     this.traktUserRepository = db.getTraktUserRepository();
     this.userRepository = db.getUserRepository();
+    this.authService = authService;
   }
 
   /**
@@ -39,7 +43,38 @@ export class TraktService {
   /**
    * Check device authentication status and complete login
    */
-  async checkDeviceAuth(deviceCode: string, userId: string): Promise<DeviceAuthCheckResponse> {
+  async checkDeviceLogin(deviceCode: string): Promise<User | null> {
+    try {
+      const tokenResponse = await this.traktApi.checkDeviceCode(deviceCode);
+
+      // Get user profile to get the slug
+      const profile = await this.traktApi.getProfile(tokenResponse.access_token);
+
+      // Check if the Trakt account is associated with a user
+      const traktUser = await this.traktUserRepository.findByTraktSlug(profile.ids.slug);
+      if (!traktUser || !traktUser.user) {
+        return null;
+      }
+
+      return traktUser.user;
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('pending')) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * Check device authentication status and complete login
+   */
+  async checkDeviceAuth(
+    deviceCode: string,
+    userId: string
+  ): Promise<{
+    user: User;
+    profile: UserProfileResponse;
+  } | null> {
     try {
       // Get the user first
       const user = await this.userRepository.findById(userId);
@@ -52,6 +87,13 @@ export class TraktService {
       // Get user profile to get the slug
       const profile = await this.traktApi.getProfile(tokenResponse.access_token);
 
+      // Check if the Trakt account is already associated with another user
+      const existingTraktUser = await this.traktUserRepository.findByTraktSlug(profile.ids.slug);
+      if (existingTraktUser && existingTraktUser.userId !== userId) {
+        // Disassociate the Trakt account from the old user
+        await this.traktUserRepository.disassociateUser(existingTraktUser.traktSlug);
+      }
+
       // Store/update tokens and associate with user
       await this.traktUserRepository.updateTokens(
         profile.ids.slug,
@@ -63,14 +105,10 @@ export class TraktService {
       // Associate the Trakt account with the user
       await this.traktUserRepository.associateUser(profile.ids.slug, user);
 
-      return {
-        success: true,
-        traktUsername: profile.username,
-        traktSlug: profile.ids.slug,
-      };
+      return { user, profile };
     } catch (error) {
       if (error instanceof Error && error.message.includes('pending')) {
-        return { success: false, pending: true };
+        return null;
       }
       throw error;
     }

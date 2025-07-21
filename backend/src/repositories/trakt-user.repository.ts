@@ -75,6 +75,13 @@ export class TraktUserRepository {
     });
   }
 
+  async disassociateUser(traktSlug: string): Promise<void> {
+    const traktUser = await this.findByTraktSlug(traktSlug);
+    if (traktUser) {
+      await this.repository.delete(traktUser.id);
+    }
+  }
+
   async updateTokens(
     traktSlug: string,
     accessToken: string,

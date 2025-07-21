@@ -14,9 +14,8 @@ import {
   PlayPauseIcon,
   TotalTime,
 } from '../ui/common';
-import { useBrokenStreamMutation } from '../../../../store/api/medias';
-import { useAppDispatch, useAppSelector } from '../../../../store/store';
-import { setStreamUrl } from '../../../../store/slices/stream';
+import { useReportBrokenStreamMutation } from '@store/api/medias';
+import { useAppDispatch, useAppSelector } from '@store/store';
 import { getCurrentFocusKey, setFocus } from '@noriginmedia/norigin-spatial-navigation';
 import { PLAYER_PAUSE_BUTTON_FOCUS_KEY } from '../consts';
 import { useControls } from '../../../hooks/useControls';
@@ -38,7 +37,7 @@ export const PlayerInterface: FC = () => {
   const [status, setStatus] = useState<PlayerStatus>('NONE');
   const [videoLength, setVideoLength] = useState(0);
   const virtualPlayed = useVirtualSeek(player);
-  const [markStreamAsBroken] = useBrokenStreamMutation();
+  const [markStreamAsBroken] = useReportBrokenStreamMutation();
   const [requestingNewStreamLoading, setRequestingNewStreamLoading] = useState(false);
   const oldStream = useAppSelector(state => state.stream);
 
@@ -46,16 +45,12 @@ export const PlayerInterface: FC = () => {
     player.pause();
     setRequestingNewStreamLoading(true);
     try {
-      const newStream = await markStreamAsBroken(oldStream.streamId);
-      if (newStream.data) {
-        dispatch(
-          setStreamUrl({
-            ...oldStream,
-            url: newStream.data.stream,
-            streamId: newStream.data.streamId,
-          })
-        );
-      }
+      await markStreamAsBroken({
+        streamingKey: oldStream.streamId,
+        reason: 'User reported broken stream',
+      });
+      // TODO: Implement new stream request logic
+      console.log('Stream reported as broken, new stream logic not implemented');
     } finally {
       setRequestingNewStreamLoading(false);
     }

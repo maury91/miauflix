@@ -6,9 +6,8 @@ import { AuditEventType } from '@entities/audit-log.entity';
 import { UserRole } from '@entities/user.entity';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { AuditLogService } from '@services/security/audit-log.service';
-import type { TraktService } from '@services/trakt/trakt.service';
 
+import type { Deps, ErrorResponse } from './common.types';
 import type {
   DeviceAuthCheckResponse,
   DeviceAuthResponse,
@@ -16,7 +15,7 @@ import type {
   TraktAssociationResponse,
 } from './trakt.types';
 
-export const createTraktRoutes = (traktService: TraktService, auditLogService: AuditLogService) => {
+export const createTraktRoutes = ({ traktService, auditLogService, authService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
 
   // Initiate Trakt device authentication (authenticated users only)
@@ -30,19 +29,20 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
           try {
             const deviceAuth = await traktService.initiateDeviceAuth();
 
-            const response: DeviceAuthResponse = {
-              success: true,
+            return context.json({
               codeUrl: deviceAuth.codeUrl,
               userCode: deviceAuth.userCode,
               deviceCode: deviceAuth.deviceCode,
               expiresIn: deviceAuth.expiresIn,
               interval: deviceAuth.interval,
-            };
-            return context.json(response);
+              expiresAt: deviceAuth.expiresAt,
+            } satisfies DeviceAuthResponse);
           } catch (error) {
             console.error('Trakt device auth initiation failed:', error);
             return context.json(
-              { success: false, error: 'Failed to initiate Trakt authentication' },
+              {
+                error: 'Failed to initiate Trakt authentication',
+              } satisfies ErrorResponse,
               500
             );
           }
@@ -66,26 +66,39 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
           try {
             const result = await traktService.checkDeviceAuth(deviceCode, authUser.id);
 
-            if (result.success) {
+            if (result) {
               await auditLogService.logSecurityEvent({
                 eventType: AuditEventType.API_ACCESS,
-                description: `User linked Trakt account: ${result.traktUsername}`,
+                description: `User linked Trakt account: ${result.profile.username}`,
                 userEmail: authUser.email,
                 context,
                 metadata: {
-                  traktSlug: result.traktSlug,
-                  traktUsername: result.traktUsername,
+                  traktSlug: result.profile.ids.slug,
+                  traktUsername: result.profile.username,
                 },
               });
+
+              const { accessToken, refreshToken } = await authService.generateTokens(result.user);
+
+              return context.json({
+                success: true,
+                accessToken,
+                refreshToken,
+              } satisfies DeviceAuthCheckResponse);
             }
 
-            const response: DeviceAuthCheckResponse = result;
-            return context.json(response);
+            return context.json({
+              success: false,
+              pending: true,
+            } satisfies DeviceAuthCheckResponse);
           } catch (error) {
+            // ToDo: handle errors correctly ( have custom errors that can be checked with instanceof )
             console.error('Trakt device auth check failed:', error);
             return context.json(
-              { success: false, error: 'Failed to check Trakt authentication status' },
-              500
+              {
+                error: 'Failed to check Trakt authentication status',
+              } satisfies ErrorResponse,
+              401
             );
           }
         }
@@ -109,7 +122,10 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
             return context.json(response);
           } catch (error) {
             console.error('Failed to get Trakt association:', error);
-            return context.json({ error: 'Failed to get Trakt association' }, 500);
+            return context.json(
+              { error: 'Failed to get Trakt association' } satisfies ErrorResponse,
+              500
+            );
           }
         }
       )
@@ -155,7 +171,10 @@ export const createTraktRoutes = (traktService: TraktService, auditLogService: A
             return context.json(response);
           } catch (error) {
             console.error('Failed to associate Trakt user:', error);
-            return context.json({ error: 'Failed to associate Trakt user' }, 500);
+            return context.json(
+              { error: 'Failed to associate Trakt user' } satisfies ErrorResponse,
+              500
+            );
           }
         }
       )

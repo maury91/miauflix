@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import pluralize from 'pluralize';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
-import React, { FC, useEffect, useMemo, useState } from 'react';
-import { useAppSelector } from '../../../../store/store';
+import { FC, useEffect, useState } from 'react';
+import { useAppSelector } from '@store/store';
 import { scaleImage } from '../utils/scaleImage';
-import { useGetExtendedInfoQuery } from '../../../../store/api/medias';
-import { IS_SLOW_DEVICE } from '../../../../consts';
+
+import { IS_SLOW_DEVICE } from '@/consts';
 import { motion, MotionConfig } from 'framer-motion';
 import {
   MediaPreviewContainer,
@@ -13,8 +13,7 @@ import {
   MediaPreviewShadow2nd,
 } from './media/mediaPreview';
 import { MediaQuality } from './media/mediaQuality';
-import { ExtendedMovieDto, ExtendedShowDto, MovieDto, ShowDto } from '@miauflix/types';
-import { skipToken } from '@reduxjs/toolkit/query';
+import { MovieResponse, ShowResponse } from '@miauflix/backend-client';
 import { MoviePage } from './moviePage';
 import { TvShowPage } from './tvShowPage';
 import { useControls } from '../../../hooks/useControls';
@@ -102,15 +101,15 @@ const MovieInformationSkeleton: FC = () => {
 
 const MovieInformation: FC<{
   expanded: boolean;
-  movie: ExtendedMovieDto | MovieDto;
+  movie: MovieResponse;
 }> = ({ expanded, movie }) => {
   return (
     <>
       <MediaTitle>{movie.title}</MediaTitle>
       <MediaSubTitle>
         {'runtime' in movie && <span>{movie.runtime} min</span>}
-        <span>{movie.year}</span>
-        {'qualities' in movie && <MediaQuality qualities={movie.qualities} />}
+        <span>{movie.releaseDate}</span> {/* FixMe: this should display the year */}
+        <MediaQuality qualities={movie.sources?.map(s => s.quality)} />
       </MediaSubTitle>
       {'overview' in movie && (
         <MediaDescription expanded={expanded}>{movie.overview}</MediaDescription>
@@ -121,18 +120,21 @@ const MovieInformation: FC<{
 
 const ShowInformation: FC<{
   expanded: boolean;
-  show: ExtendedShowDto | ShowDto;
+  show: ShowResponse;
 }> = ({ expanded, show }) => {
+  // Calculate seasonsCount from the seasons array
+  const seasonsCount = show.seasons?.length || 0;
+
   return (
     <>
       <MediaTitle>{show.title}</MediaTitle>
       <MediaSubTitle>
-        {'seasonsCount' in show && (
+        {seasonsCount > 0 && (
           <span>
-            {show.seasonsCount} {pluralize('season', show.seasonsCount)}
+            {seasonsCount} {pluralize('season', seasonsCount)}
           </span>
         )}
-        <span>{show.year}</span>
+        <span>{show.firstAirDate}</span>
       </MediaSubTitle>
       {'overview' in show && (
         <MediaDescription expanded={expanded}>{show.overview}</MediaDescription>
@@ -150,10 +152,8 @@ export const MediaDetails: FC<{
   const { margin } = useMediaBoxSizes();
   const [imageVisible, setImageVisible] = useState(false);
   const selectedMedia = useAppSelector(state => state.home.selectedMedia);
-  const imageSrc = selectedMedia ? scaleImage(selectedMedia.images.backdrops[0]) : '';
-  const { data: extendedMedia } = useGetExtendedInfoQuery(
-    selectedMedia ? { type: selectedMedia.type, id: selectedMedia.ids.slug } : skipToken
-  );
+  const imageSrc =
+    selectedMedia && selectedMedia.backdrop ? scaleImage(selectedMedia.backdrop) : '';
   const [displayedSrc, setDisplayedSrc] = useState(imageSrc);
   const on = useControls();
 
@@ -165,16 +165,6 @@ export const MediaDetails: FC<{
   });
 
   useEffect(() => on(['back'], onNavigateBack), [on, onNavigateBack]);
-
-  const possiblyExtendedMedia = useMemo(() => {
-    if (!selectedMedia) {
-      return null;
-    }
-    if (extendedMedia && extendedMedia.ids.slug === selectedMedia.ids.slug) {
-      return extendedMedia;
-    }
-    return selectedMedia;
-  }, [selectedMedia, extendedMedia]);
 
   useEffect(() => {
     setImageVisible(false);
@@ -197,7 +187,7 @@ export const MediaDetails: FC<{
     };
   }, [imageSrc]);
 
-  if (!possiblyExtendedMedia) {
+  if (!selectedMedia) {
     // Show skeleton
     return null;
   }
@@ -225,20 +215,18 @@ export const MediaDetails: FC<{
         <MediaPreviewShadow2nd />
         <MediaContainer width={window.innerWidth - margin}>
           <MediaInformationContainer width={window.innerWidth * 0.47 - margin / 2}>
-            {possiblyExtendedMedia.type === 'movie' && (
-              <MovieInformation expanded={expanded} movie={possiblyExtendedMedia} />
-            )}
-            {possiblyExtendedMedia.type === 'show' && (
-              <ShowInformation expanded={expanded} show={possiblyExtendedMedia} />
+            {selectedMedia.type === 'movie' ? (
+              <MovieInformation expanded={expanded} movie={selectedMedia} />
+            ) : (
+              <ShowInformation expanded={expanded} show={selectedMedia} />
             )}
           </MediaInformationContainer>
           <MediaPageContainer visible={expandedVisible}>
             {expanded &&
-              extendedMedia &&
-              (extendedMedia.type === 'movie' ? (
-                <MoviePage media={extendedMedia} />
+              (selectedMedia.type === 'movie' ? (
+                <MoviePage media={selectedMedia} />
               ) : (
-                <TvShowPage media={extendedMedia} />
+                <TvShowPage media={selectedMedia} />
               ))}
           </MediaPageContainer>
         </MediaContainer>

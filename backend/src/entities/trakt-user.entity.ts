@@ -16,11 +16,11 @@ export class TraktUser {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => User, { nullable: true })
+  @OneToOne(() => User)
   @JoinColumn()
   user: Relation<User>;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar' })
   userId: string;
 
   @Column({ type: 'varchar', unique: true })
