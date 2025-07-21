@@ -30,7 +30,7 @@ describe('Authentication Endpoints', () => {
     });
 
     expect(response.status).toBe(401);
-    expect(response.data).toHaveProperty('message');
+    expect(response.data).toHaveProperty('error');
   });
 
   it('should require authentication for protected endpoints', async () => {
@@ -52,8 +52,10 @@ describe('Authentication Endpoints', () => {
     expect(response.status).toBe(200);
     expect(response.data).toHaveProperty('accessToken');
     expect(response.data).toHaveProperty('refreshToken');
-    expect(typeof response.data.accessToken).toBe('string');
-    expect(typeof response.data.refreshToken).toBe('string');
+    if ('accessToken' in response.data) {
+      expect(typeof response.data.accessToken).toBe('string');
+      expect(typeof response.data.refreshToken).toBe('string');
+    }
   });
 
   it('should access protected endpoints when authenticated', async () => {
@@ -86,6 +88,10 @@ describe('Authentication Endpoints', () => {
     // Clear auth to test refresh without being authenticated
     client.clearAuth();
 
+    if (!('refreshToken' in loginResponse.data)) {
+      throw new Error('No refresh token in login response');
+    }
+
     // Use refresh token to get new access token
     const refreshResponse = await client.post(['auth', 'refresh'], {
       json: {
@@ -107,6 +113,10 @@ describe('Authentication Endpoints', () => {
 
     // Login first to get tokens
     const loginResponse = await client.login(userCredentials);
+
+    if (!('refreshToken' in loginResponse.data)) {
+      throw new Error('No refresh token in login response');
+    }
 
     // Logout using refresh token
     const logoutResponse = await client.logout(loginResponse.data.refreshToken);

@@ -1,8 +1,8 @@
-import { IS_TIZEN } from '../../consts';
-import { TVInputDeviceKeyName } from '../../tizen';
+import { IS_TIZEN } from '@/consts';
+import { TVInputDeviceKeyName } from '@/tizen';
 import { useCallback } from 'react';
-import { Page } from '../../types';
-import { store } from '../../store/store';
+import { Page } from '@/types';
+import { store } from '@/store/store';
 import { usePage } from '../contexts/page.context';
 
 const allControls = [

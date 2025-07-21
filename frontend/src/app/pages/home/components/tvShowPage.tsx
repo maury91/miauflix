@@ -1,156 +1,137 @@
-import { ExtendedShowDto } from '@miauflix/types';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  useGetShowSeasonQuery,
-  useGetShowSeasonsQuery,
-  useStopStreamMutation,
-} from '../../../../store/api/medias';
-import { useAppDispatch, useAppSelector } from '../../../../store/store';
+import { FC, useCallback, useEffect, useState } from 'react';
+import { useGetSeasonsQuery, useGetSeasonQuery } from '@store/api/shows';
+import { useAppDispatch, useAppSelector } from '@store/store';
 import { setFocus, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { MOVIE_PAGE } from '../consts';
-import { setStreamUrl } from '../../../../store/slices/stream';
-import { navigateTo } from '../../../../store/slices/app';
-import { SeasonSelector } from './seasonSelector';
-import { setFocusOnSlider, Slider } from '../../../components/slider';
-import { MediaButton } from './mediaButton';
-import LineMdPlay from '~icons/line-md/play';
-import { useEpisodeStreaming } from '../hooks/useEpisodeStreaming';
+import { SHOW_PAGE } from '../consts';
+import { setStreamUrl } from '@store/slices/stream';
+import { navigateTo } from '@store/slices/app';
 import { useGetSelectedEpisode } from '../hooks/useGetSelectedEpisode';
+import { useEpisodeStreaming } from '../hooks/useEpisodeStreaming';
+import { usePreloadHomeImages } from '../hooks/usePreloadHomeImages';
+import LineMdPlay from '~icons/line-md/play';
+import { ShowResponse } from '@miauflix/backend-client';
+import { MediaButton } from './mediaButton';
+import { SeasonSelector } from './seasonSelector';
+import { Slider } from '@components/slider';
 import { useGetSeasonEpisodes } from '../hooks/useGetSeasonEpisodes';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 interface TvShowPageProps {
-  media: ExtendedShowDto;
+  media: ShowResponse;
 }
-
-const usePreloadShowImages = (showId: string) => {
-  const show = useGetShowSeasonsQuery(showId);
-  useEffect(() => {
-    if (show.data) {
-      for (const season of show.data) {
-        for (const episode of season.episodes) {
-          if (episode.image) {
-            const img = new Image();
-            img.src = episode.image;
-          }
-        }
-      }
-    }
-  }, [show]);
-};
-
-export const useLatestWatchedSeasonAndEpisode = (
-  showId: string,
-  seasons: ExtendedShowDto['seasons']
-) => {
-  const progress = useAppSelector(state => state.resume.showProgress[showId]);
-  const [latestSeason, latestEpisode] = useMemo((): [number, number] => {
-    if (progress) {
-      const episodesWithProgress = Object.keys(progress);
-      return episodesWithProgress.reduce<[number, number]>(
-        ([latestSeason, latestEpisode], episode) => {
-          const [seasonNumber, episodeNumberRaw] = episode.split('-').map(Number);
-          // ToDo: removing 1 feels hacky, look for better solution
-          const episodeNumber = episodeNumberRaw - 1;
-          if (seasonNumber > latestSeason) {
-            return [seasonNumber, episodeNumber];
-          } else if (seasonNumber === latestSeason && episodeNumber > latestEpisode) {
-            return [seasonNumber, episodeNumber];
-          }
-          return [latestSeason, latestEpisode];
-        },
-        [0, 0]
-      );
-    }
-    return [0, 0];
-  }, [progress]);
-  return useMemo(() => {
-    const seasonIndex = seasons.findIndex(season => season.number === latestSeason);
-    if (seasonIndex !== -1) {
-      return [seasonIndex, latestEpisode];
-    }
-    const seasonIndexFirstSeason = seasons.findIndex(season => season.number === 1);
-    if (seasonIndexFirstSeason !== -1) {
-      return [seasonIndexFirstSeason, 0];
-    }
-    return [0, 0];
-  }, [latestEpisode, latestSeason, seasons]);
-};
 
 export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
   const page = useAppSelector(state => state.app.currentPage);
-  const [latestSeason, latestEpisode] = useLatestWatchedSeasonAndEpisode(media.id, media.seasons);
-  const [selectedSeason, setSelectedSeason] = useState(latestSeason);
+  const progress = useAppSelector(state => state.resume.showProgress[media.id]);
+
+  // Calculate latest watched season and episode
+  const [latestSeason, setLatestSeason] = useState<number>(() => {
+    if (progress) {
+      const episodesWithProgress = Object.keys(progress);
+      return episodesWithProgress.reduce<number>((latestSeason, episode) => {
+        const [seasonNumber] = episode.split('-').map(Number);
+        return seasonNumber > latestSeason ? seasonNumber : latestSeason;
+      }, 0);
+    }
+    return 0;
+  });
+
+  const [latestEpisode, setLatestEpisode] = useState<number>(() => {
+    if (progress) {
+      const episodesWithProgress = Object.keys(progress);
+      return episodesWithProgress.reduce<number>((latestEpisode, episode) => {
+        const [seasonNumber, episodeNumberRaw] = episode.split('-').map(Number);
+        if (seasonNumber === latestSeason) {
+          // ToDo: removing 1 feels hacky, look for better solution
+          const episodeNumber = episodeNumberRaw - 1;
+          return episodeNumber > latestEpisode ? episodeNumber : latestEpisode;
+        }
+        return latestEpisode;
+      }, 0);
+    }
+    return 0;
+  });
+
+  // Calculate season index based on latest season
+  const seasonIndex = media.seasons.findIndex(season => season.seasonNumber === latestSeason);
+  const initialSeasonIndex =
+    seasonIndex !== -1
+      ? seasonIndex
+      : media.seasons.findIndex(season => season.seasonNumber === 1) !== -1
+        ? media.seasons.findIndex(season => season.seasonNumber === 1)
+        : 0;
+
+  const { data: seasons } = useGetSeasonsQuery({ id: String(media.id) });
+  const [selectedSeason, setSelectedSeason] = useState(initialSeasonIndex);
   const [selectedEpisode, setSelectedEpisode] = useState(latestEpisode);
-  const { data: season } = useGetShowSeasonQuery(
+
+  const { data: season } = useGetSeasonQuery(
     page === 'home/details'
       ? {
-          showId: media.id,
-          season: media.seasons[selectedSeason].number,
+          id: String(media.id),
+          season: String(seasons ? seasons[selectedSeason]?.seasonNumber : 1),
         }
       : skipToken
   );
+
   const episode = useGetSelectedEpisode(season, selectedEpisode);
   const dispatch = useAppDispatch();
   const { ref } = useFocusable({
-    focusKey: MOVIE_PAGE,
+    focusKey: SHOW_PAGE,
     isFocusBoundary: true,
     preferredChildFocusKey: 'season-selector',
   });
-  const { streamInfo, isLoading } = useEpisodeStreaming(episode && episode.available && episode.id);
+
+  const { streamInfo, streamUrl, isLoading } = useEpisodeStreaming(
+    episode && episode.available ? episode.id : null
+  );
+
   const episodes = useGetSeasonEpisodes({
-    defaultBackground: media.images.backdrop,
+    defaultBackground: media.backdrop,
     loadingEpisode: isLoading ? selectedEpisode : false,
     media,
     season,
   });
-  usePreloadShowImages(media.id);
-  const [stopStream] = useStopStreamMutation();
 
-  // const hasStreamUrl = !!streamInfo;
+  const preloadHomeImages = usePreloadHomeImages();
 
   const handleSeasonChange = useCallback((season: number) => {
     setSelectedSeason(season);
+    setSelectedEpisode(0); // Reset episode when season changes
   }, []);
 
   const handleEpisodeChange = useCallback(
     (episode: number) => {
       if (episode !== selectedEpisode) {
-        if (streamInfo) {
-          console.log('Stopping stream (tv show page)');
-          // stopStream(streamInfo.streamId);
-        }
         setSelectedEpisode(episode);
       }
     },
-    [selectedEpisode, stopStream, streamInfo]
+    [selectedEpisode]
   );
 
   const goToStream = useCallback(() => {
-    if (episode && season && streamInfo && !isLoading) {
+    if (episode && season && streamUrl && !isLoading) {
       dispatch(
         setStreamUrl({
-          url: streamInfo.stream,
+          url: streamUrl,
           id: episode.id,
-          showSlug: media.id,
-          season: season.number,
-          episode: episode.number,
+          showSlug: media.id.toString(),
+          season: season.seasonNumber,
+          episode: episode.episodeNumber,
           type: 'episode',
-          streamId: streamInfo.streamId,
         })
       );
       dispatch(navigateTo('player'));
     }
-  }, [dispatch, episode, isLoading, media.id, season, streamInfo]);
+  }, [dispatch, episode, isLoading, media.id, season, streamUrl]);
 
   useEffect(() => {
     setFocus('season-selector');
-    // focusSelf();
   }, []);
 
   useEffect(() => {
     if (season) {
-      setFocusOnSlider(season.number);
+      // Auto-focus logic can be added here if needed
     }
   }, [season]);
 
@@ -185,7 +166,7 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
           focusKey="watch-now"
           onClick={goToStream}
         >
-          Watch S{season.number} E{episode.number}
+          Watch S{season.seasonNumber} E{episode.episodeNumber}
         </MediaButton>
       )}
       <SeasonSelector
@@ -196,10 +177,10 @@ export const TvShowPage: FC<TvShowPageProps> = ({ media }) => {
       {season && (
         <Slider
           data={episodes}
-          key={season.number}
+          key={season.seasonNumber}
           enabled={page === 'home/details'}
           lastHovered={latestEpisode}
-          sliderKey={season.number}
+          sliderKey={season.seasonNumber.toString()}
           totalData={episodes.length}
           onHover={handleEpisodeChange}
           onMediaSelect={goToStream}

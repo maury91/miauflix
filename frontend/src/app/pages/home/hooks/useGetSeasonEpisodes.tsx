@@ -1,12 +1,12 @@
-import { useAppSelector } from '../../../../store/store';
+import { useAppSelector } from '@store/store';
 import { useMemo } from 'react';
-import { ExtendedShowDto, SeasonDto } from '@miauflix/types';
+import { ShowResponse, SeasonResponse } from '@miauflix/backend-client';
 
 interface GetSeasonEpisodesArgs {
-  defaultBackground: string;
+  defaultBackground: string | null;
   loadingEpisode: number | false;
-  media: ExtendedShowDto;
-  season: SeasonDto | undefined;
+  media: ShowResponse;
+  season: SeasonResponse | undefined;
 }
 
 export const useGetSeasonEpisodes = ({ loadingEpisode, media, season }: GetSeasonEpisodesArgs) => {
@@ -15,18 +15,20 @@ export const useGetSeasonEpisodes = ({ loadingEpisode, media, season }: GetSeaso
   return useMemo(() => {
     if (season) {
       return season.episodes.map((episode, index) => {
-        const available = Date.now() > new Date(episode.firstAired).getTime();
+        const available = episode.airDate
+          ? Date.now() > new Date(episode.airDate).getTime()
+          : false;
         return {
           id: episode.id,
-          backdrop: available ? episode.image : media.images.backdrop,
-          progress: episodesProgress?.[`${season.number}-${episode.number}`] ?? 0,
+          backdrop: (available ? episode.still : media.backdrop) || '',
+          progress: episodesProgress?.[`${season.seasonNumber}-${episode.episodeNumber}`] ?? 0,
           available,
-          text: `S${season.number} E${episode.number}`,
+          text: `S${season.seasonNumber} E${episode.episodeNumber}`,
           playable: available,
           loading: index === loadingEpisode,
         };
       });
     }
     return [];
-  }, [episodesProgress, loadingEpisode, media.images.backdrop, season]);
+  }, [episodesProgress, loadingEpisode, media.backdrop, season]);
 };

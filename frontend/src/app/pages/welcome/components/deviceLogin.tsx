@@ -1,9 +1,9 @@
 import { FC, useEffect } from 'react';
-import { useCheckDeviceLoginStatusMutation } from '../../../../store/api/users';
+import { useCheckDeviceLoginStatusMutation } from '@store/api/auth';
+import { PALETTE } from '@/consts';
 import styled from 'styled-components';
 import QRCode, { QRCodeProps } from 'react-qr-code';
-import { PALETTE } from '../../../../consts';
-import { DeviceLoginDto } from '@miauflix/types';
+import { DeviceLoginDto } from '@/types/backend';
 
 const DeviceLoginDescription = styled.p`
   position: fixed;
@@ -38,8 +38,8 @@ export const DeviceLogin: FC<DeviceLoginProps> = ({ deviceLogin, onClose }) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const result = await checkDeviceLoginStatus(deviceLogin.deviceCode);
-      if (result.data?.loggedIn) {
+      const result = await checkDeviceLoginStatus({ deviceCode: deviceLogin.deviceCode });
+      if (!('error' in result) && result.data && 'accessToken' in result.data) {
         onClose();
       }
     }, deviceLogin.interval * 1000);
