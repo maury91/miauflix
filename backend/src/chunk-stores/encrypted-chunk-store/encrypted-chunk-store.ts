@@ -7,7 +7,7 @@ import { mkdir, rm } from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import RAF from 'random-access-file';
-import thunky from 'thunky/promise';
+import thunky from 'thunky/promise.js';
 
 import type AbstractChunkStore from '../abstract-chunk-store/abstract-chunk-store';
 
@@ -25,7 +25,7 @@ interface StorageFile {
   offset?: number;
 }
 
-interface StorageOptions {
+export interface EncryptedStorageOptions {
   name?: string;
   addUID?: boolean;
   path?: string;
@@ -88,7 +88,7 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
   public readonly lastChunkIndex?: number;
   private readonly encryptionKey: Buffer;
 
-  constructor(chunkLength: number, opts: StorageOptions) {
+  constructor(chunkLength: number, opts: EncryptedStorageOptions) {
     this.chunkLength = Number(chunkLength);
     if (!this.chunkLength) throw new Error('First argument must be a chunk length');
 

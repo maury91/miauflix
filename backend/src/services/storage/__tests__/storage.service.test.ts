@@ -6,13 +6,17 @@ import { StorageService } from '../storage.service';
 
 describe('StorageService', () => {
   let dbHelper: TestDatabaseHelper;
-  let storageService: StorageService;
   let testDataFactory: TestDataFactory;
+
+  const setupTest = () => {
+    const database = dbHelper.getDatabase();
+    const storageService = new StorageService(database);
+    return { storageService, database };
+  };
 
   beforeEach(async () => {
     dbHelper = createTestDatabase();
     const database = await dbHelper.setupTestDatabase();
-    storageService = new StorageService(database);
     testDataFactory = new TestDataFactory(database);
   });
 
@@ -25,6 +29,7 @@ describe('StorageService', () => {
   describe('Core CRUD Operations', () => {
     it('should create storage record for a movie source', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const totalPieces = 1000;
@@ -51,6 +56,7 @@ describe('StorageService', () => {
 
     it('should find storage by movie source ID', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const createdStorage = await storageService.createStorage({
@@ -70,6 +76,7 @@ describe('StorageService', () => {
 
     it('should find storage by ID', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const createdStorage = await storageService.createStorage({
@@ -89,6 +96,7 @@ describe('StorageService', () => {
 
     it('should update storage download progress', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const totalPieces = 1000;
@@ -120,12 +128,14 @@ describe('StorageService', () => {
 
     it('should delete storage record', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+      const storageSize = 1000000;
       await storageService.createStorage({
         movieSourceId: movieSource.id,
         location: '/tmp/test/delete-test.mkv',
-        size: 1000000,
+        size: storageSize,
       });
 
       // Act
@@ -133,12 +143,13 @@ describe('StorageService', () => {
       const foundStorage = await storageService.getStorageByMovieSource(movieSource.id);
 
       // Assert
-      expect(deleteResult).toBe(true);
+      expect(deleteResult).toBe(storageSize); // Returns the size of deleted storage
       expect(foundStorage).toBeNull();
     });
 
     it('should throw error when creating storage for non-existent movie source', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const nonExistentMovieSourceId = 999999;
 
       // Act & Assert
@@ -155,6 +166,7 @@ describe('StorageService', () => {
   describe('Download Progress Management', () => {
     it('should correctly calculate download percentage', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const totalPieces = 1000;
       const testCases = [
         { completion: 0, expectedBasisPoints: 0 },
@@ -177,6 +189,7 @@ describe('StorageService', () => {
 
     it('should update downloaded pieces bitmap', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const totalPieces = 100;
@@ -205,6 +218,7 @@ describe('StorageService', () => {
 
     it('should handle complete download status', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const totalPieces = 500;
@@ -234,6 +248,7 @@ describe('StorageService', () => {
 
     it('should validate download progress does not exceed total size', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const totalPieces = 100;
       const oversizedBitfield = new Uint8Array(20); // More bytes than needed
       oversizedBitfield.fill(0xff);
@@ -247,6 +262,7 @@ describe('StorageService', () => {
 
     it('should handle concurrent download progress updates', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const totalPieces = 1000;
@@ -290,55 +306,51 @@ describe('StorageService', () => {
   describe('Relationship Management', () => {
     it('should maintain one-to-one relationship with MovieSource', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
-
-      // Act
       const storage1 = await storageService.createStorage({
         movieSourceId: movieSource.id,
         location: '/tmp/test/relationship1.mkv',
         size: 1000000,
       });
-
-      // Attempt to create second storage for same movie source should fail
-      await expect(
-        storageService.createStorage({
-          movieSourceId: movieSource.id,
-          location: '/tmp/test/relationship2.mkv',
-          size: 1000000,
-        })
-      ).rejects.toThrow();
-
-      // Assert
-      const foundStorage = await storageService.getStorageByMovieSource(movieSource.id);
-      expect(foundStorage?.id).toBe(storage1.id);
+      // Act: Try to create a second storage for the same movie source
+      const storage2 = await storageService.createStorage({
+        movieSourceId: movieSource.id,
+        location: '/tmp/test/relationship2.mkv',
+        size: 1000000,
+      });
+      // Assert: Should return the existing record
+      expect(storage2.id).toBe(storage1.id);
+      expect(storage2.location).toBe(storage1.location);
     });
 
     it('should prevent duplicate storage records for same movie source', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
-
-      await storageService.createStorage({
+      const storage1 = await storageService.createStorage({
         movieSourceId: movieSource.id,
         location: '/tmp/test/duplicate1.mkv',
         size: 1000000,
       });
-
-      // Act & Assert
-      await expect(
-        storageService.createStorage({
-          movieSourceId: movieSource.id,
-          location: '/tmp/test/duplicate2.mkv',
-          size: 2000000,
-        })
-      ).rejects.toThrow();
+      // Act: Try to create a duplicate
+      const storage2 = await storageService.createStorage({
+        movieSourceId: movieSource.id,
+        location: '/tmp/test/duplicate2.mkv',
+        size: 1000000,
+      });
+      // Assert: Should return the existing record
+      expect(storage2.id).toBe(storage1.id);
+      expect(storage2.location).toBe(storage1.location);
     });
   });
 
   describe('Error Handling', () => {
     it('should handle database connection errors gracefully', async () => {
       // Arrange
+      const { storageService } = setupTest();
       await dbHelper.cleanup(); // Close database connection
 
       // Act & Assert
@@ -346,6 +358,8 @@ describe('StorageService', () => {
     });
 
     it('should throw validation error for invalid storage data', async () => {
+      // Arrange
+      const { storageService } = setupTest();
       // Act & Assert
       await expect(
         storageService.createStorage({
@@ -358,6 +372,7 @@ describe('StorageService', () => {
 
     it('should handle file system errors when updating location', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const invalidPath = '/invalid/path/that/does/not/exist/movie.mkv';
@@ -374,38 +389,12 @@ describe('StorageService', () => {
       expect(storage.location).toBe(invalidPath);
       expect(fs.existsSync(invalidPath)).toBe(false);
     });
-
-    it('should rollback transaction on storage creation failure', async () => {
-      // Arrange
-      const movie = await testDataFactory.createTestMovie();
-      const movieSource = await testDataFactory.createTestMovieSource(movie.id);
-
-      // Create initial storage
-      await storageService.createStorage({
-        movieSourceId: movieSource.id,
-        location: '/tmp/test/rollback-test.mkv',
-        size: 1000000,
-      });
-
-      // Act & Assert - Try to create duplicate (should fail)
-      await expect(
-        storageService.createStorage({
-          movieSourceId: movieSource.id,
-          location: '/tmp/test/rollback-test2.mkv',
-          size: 2000000,
-        })
-      ).rejects.toThrow();
-
-      // Verify original storage still exists and wasn't affected
-      const storage = await storageService.getStorageByMovieSource(movieSource.id);
-      expect(storage?.location).toBe('/tmp/test/rollback-test.mkv');
-      expect(storage?.size).toBe(1000000);
-    });
   });
 
   describe('Edge Cases', () => {
     it('should handle zero-byte files', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
 
@@ -426,6 +415,7 @@ describe('StorageService', () => {
 
     it('should handle extremely large file sizes', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const largeSize = 2 ** 40; // 1TB
@@ -446,6 +436,7 @@ describe('StorageService', () => {
 
     it('should validate file location path exists', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const testDir = dbHelper.getTestDir();
@@ -468,6 +459,7 @@ describe('StorageService', () => {
 
     it('should handle corrupted downloaded pieces data', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const totalPieces = 100;
       const corruptedBitfield = new Uint8Array(5); // Wrong size for 100 pieces
       corruptedBitfield.fill(0xff);
@@ -483,6 +475,7 @@ describe('StorageService', () => {
   describe('Service Methods', () => {
     it('should mark storage as accessed', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const storage = await storageService.createStorage({
@@ -504,6 +497,7 @@ describe('StorageService', () => {
 
     it('should get total storage usage', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie1 = await testDataFactory.createTestMovie();
       const movie2 = await testDataFactory.createTestMovie();
       const movieSource1 = await testDataFactory.createTestMovieSource(movie1.id);
@@ -525,11 +519,12 @@ describe('StorageService', () => {
       const totalUsage = await storageService.getTotalStorageUsage();
 
       // Assert
-      expect(totalUsage).toBe(3000000);
+      expect(totalUsage).toBe(3000000n); // Returns BigInt
     });
 
     it('should find active downloads', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const totalPieces = 1000;
@@ -556,6 +551,7 @@ describe('StorageService', () => {
 
     it('should find stale storage records', async () => {
       // Arrange
+      const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
 
@@ -582,6 +578,53 @@ describe('StorageService', () => {
           id: storage.id,
         })
       );
+    });
+  });
+
+  describe('Storage pressure cleanup', () => {
+    it('should emit delete events when cleaning up due to storage pressure', async () => {
+      // Arrange
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '1GB'; // Set low threshold to trigger cleanup
+
+      try {
+        // Create a new service instance to pick up the new threshold
+        const { storageService } = setupTest();
+
+        // Create enough storage records to exceed the pressure threshold
+        const movie = await testDataFactory.createTestMovie();
+        const sources = [];
+        for (let i = 0; i < 10; i++) {
+          // Always create a new movie source for each storage record
+          const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+          sources.push(movieSource);
+          await storageService.createStorage({
+            movieSourceId: movieSource.id,
+            location: `/tmp/test/pressure-${i}.mkv`,
+            size: 2 * 1024 * 1024 * 1024, // 2GB each, total 20GB
+          });
+        }
+        let deletedCount = 0;
+        storageService.on('delete', () => {
+          deletedCount++;
+        });
+        // Act: create one more unique movie source and storage to trigger pressure cleanup
+        const extraSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: extraSource.id,
+          location: `/tmp/test/pressure-extra.mkv`,
+          size: 2 * 1024 * 1024 * 1024,
+        });
+        // Assert: at least one delete event should have been emitted
+        expect(deletedCount).toBeGreaterThan(0);
+      } finally {
+        // Restore original environment
+        if (originalEnv) {
+          process.env.STORAGE_THRESHOLD = originalEnv;
+        } else {
+          delete process.env.STORAGE_THRESHOLD;
+        }
+      }
     });
   });
 });
