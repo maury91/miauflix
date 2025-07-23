@@ -19,6 +19,7 @@ services:
       - STATIC_TRACKERS=udp://tracker-mock
       - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/trackers_best.txt
       - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
+      - DOWNLOAD_PATH=/usr/src/app/downloads
       - DEBUG=*
     networks:
       - test-network
@@ -26,6 +27,7 @@ services:
       - '${PORT}:3000'
     volumes:
       - ../.env.test:/usr/src/app/.env:ro
+      - test_downloads:/usr/src/app/downloads
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
       interval: 0.5s
@@ -147,3 +149,7 @@ services:
 networks:
   test-network:
     driver: bridge
+
+volumes:
+  test_downloads:
+    name: miauflix_test_downloads
