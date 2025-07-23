@@ -6,7 +6,7 @@ import { mkdir, rm } from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import RAF from 'random-access-file';
-import thunky from 'thunky/promise';
+import thunky from 'thunky/promise.js';
 
 import type AbstractChunkStore from '../abstract-chunk-store/abstract-chunk-store';
 

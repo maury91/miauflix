@@ -1,6 +1,9 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import type { StorageService } from '@services/storage/storage.service';
+
 jest.mock('@services/download/download.service');
+jest.mock('@services/storage/storage.service');
 
 import { DownloadService } from '@services/download/download.service';
 
@@ -15,8 +18,19 @@ describe('ContentDirectoryService', () => {
     // Create a minimal mock cache with just the required methods
     const mockCache = new MockCache();
 
+    // Create a mock StorageService
+    const mockStorageService = {
+      createStorage: jest.fn(),
+      updateDownloadProgress: jest.fn(),
+      markAsAccessed: jest.fn(),
+      getStorageByMovieSource: jest.fn(),
+      removeStorage: jest.fn(),
+    } as unknown as jest.Mocked<StorageService>;
+
     // Create a mock DownloadService
-    const mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
+    const mockDownloadService = new DownloadService(
+      mockStorageService
+    ) as jest.Mocked<DownloadService>;
     mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
 
     service = new ContentDirectoryService(mockCache, mockDownloadService);

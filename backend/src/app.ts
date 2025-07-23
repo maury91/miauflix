@@ -77,7 +77,8 @@ try {
   const scheduler = new Scheduler();
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
-  const downloadService = new DownloadService();
+  const storageService = new StorageService(db);
+  const downloadService = new DownloadService(storageService);
   const contentDirectoryService = new ContentDirectoryService(cacheService.cache, downloadService);
   const magnetService = new SourceMetadataFileService(downloadService);
   const sourceService = new SourceService(
@@ -87,9 +88,6 @@ try {
     magnetService
   );
   const streamService = new StreamService(db, sourceService, downloadService, mediaService);
-  // ToDo: Use the storage service in the right places
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const storageService = new StorageService(db); // For tracking download progress (used in streaming infrastructure)
 
   await authService.configureUsers();
 

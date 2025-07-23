@@ -1,21 +1,33 @@
 import { logger } from '@logger';
+import { EventEmitter } from 'events';
 
+import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { Storage } from '@entities/storage.entity';
 import type { StorageRepository } from '@repositories/storage.repository';
+import { humanReadableBytes } from '@utils/numbers';
 
 /**
  * Service for tracking and managing storage of downloaded movie sources
  */
-export class StorageService {
+export class StorageService extends EventEmitter {
   private readonly storageRepository: StorageRepository;
+  private readonly maxStorageBytes: bigint;
 
   constructor(db: Database) {
+    super();
     this.storageRepository = db.getStorageRepository();
+    this.maxStorageBytes = this.calculateMaxStorageBytes();
+  }
+
+  private calculateMaxStorageBytes(): bigint {
+    // FixMe: Add support for percentage
+    return ENV('STORAGE_THRESHOLD');
   }
 
   /**
    * Create a new storage record for a movie source
+   * Checks storage pressure and performs cleanup if needed before creating new storage
    */
   async createStorage(params: {
     movieSourceId: number;
@@ -24,7 +36,19 @@ export class StorageService {
     downloadedPieces?: Uint8Array;
     totalPieces?: number;
   }): Promise<Storage> {
+    await this.periodicalCleanup();
+
     const { movieSourceId, location, size, downloadedPieces, totalPieces } = params;
+
+    // If a storage record already exists for this movieSourceId, return it
+    const existing = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    if (existing) {
+      logger.debug(
+        'StorageService',
+        `Storage record already exists for movie source ${movieSourceId}, returning existing record.`
+      );
+      return existing;
+    }
 
     // Create empty bitfield if not provided
     const bitfield = downloadedPieces || new Uint8Array(0);
@@ -45,14 +69,7 @@ export class StorageService {
       lastWriteAt: null,
     };
 
-    const storage = await this.storageRepository.create(storageData);
-
-    logger.debug(
-      'StorageService',
-      `Created storage record ${storage.id} for movie source ${movieSourceId} at ${location} with ${(downloaded / 100).toFixed(2)}% progress`
-    );
-
-    return storage;
+    return this.storageRepository.create(storageData);
   }
 
   /**
@@ -119,12 +136,13 @@ export class StorageService {
 
   /**
    * Remove storage record and associated data
+   * Emits 'delete' event
    */
-  async removeStorage(movieSourceId: number): Promise<boolean> {
+  async removeStorage(movieSourceId: number): Promise<number> {
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
     if (!storage) {
       logger.warn('StorageService', `Storage record not found for movie source ${movieSourceId}`);
-      return false;
+      return 0;
     }
 
     const success = await this.storageRepository.deleteByMovieSourceId(movieSourceId);
@@ -134,15 +152,16 @@ export class StorageService {
         'StorageService',
         `Removed storage record for movie source ${movieSourceId} at ${storage.location}`
       );
+      this.emit('delete', storage);
     }
 
-    return success;
+    return success ? storage.size : 0;
   }
 
   /**
    * Get total storage usage in bytes
    */
-  async getTotalStorageUsage(): Promise<number> {
+  async getTotalStorageUsage(): Promise<bigint> {
     return this.storageRepository.getTotalStorageUsage();
   }
 
@@ -197,5 +216,31 @@ export class StorageService {
     }
 
     return Math.round((downloadedPieces / totalPieces) * 10000);
+  }
+
+  /**
+   * Checks storage pressure and deletes old storage records if needed.
+   * Emits 'delete' event for each removed storage record.
+   */
+  async periodicalCleanup(): Promise<void> {
+    const totalUsage = await this.storageRepository.getTotalStorageUsage();
+    if (totalUsage > this.maxStorageBytes) {
+      logger.warn(
+        'StorageService',
+        `Storage pressure detected: ${humanReadableBytes(totalUsage)} used`
+      );
+      let cleanedUpSize = 0n;
+      // Cleanup until we are below the threshold
+      while (totalUsage - cleanedUpSize > this.maxStorageBytes) {
+        const staleStorage = await this.findStaleStorage(0, 1);
+        if (staleStorage.length === 0) break;
+        const removedSize = await this.removeStorage(staleStorage[0].movieSourceId);
+        cleanedUpSize += BigInt(removedSize);
+        logger.info(
+          'StorageService',
+          `Removed storage record for movie source ${staleStorage[0].movieSourceId} (${humanReadableBytes(removedSize)})`
+        );
+      }
+    }
   }
 }

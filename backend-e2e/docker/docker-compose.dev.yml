@@ -19,6 +19,7 @@ services:
       - STATIC_TRACKERS=udp://tracker-mock
       - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/trackers_best.txt
       - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
+      - DOWNLOAD_PATH=/usr/src/app/downloads
     networks:
       - test-network
     ports:
@@ -30,6 +31,7 @@ services:
       - ../../backend/tsconfig.json:/usr/src/app/backend/tsconfig.json:ro
       # Fresh database for each development session
       - dev_database:/usr/src/app/data
+      - dev_downloads:/usr/src/app/downloads
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
       interval: 0.5s
@@ -154,3 +156,5 @@ networks:
 volumes:
   dev_database:
     name: miauflix_dev_database
+  dev_downloads:
+    name: miauflix_dev_downloads

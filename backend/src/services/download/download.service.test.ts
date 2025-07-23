@@ -3,6 +3,8 @@ import { Client as BTClient } from 'bittorrent-tracker';
 import loadIPSet from 'load-ip-set';
 
 import { ENV } from '@constants';
+import type { Database } from '@database/database';
+import { StorageService } from '@services/storage/storage.service';
 import { enhancedFetch } from '@utils/fetch.util';
 
 import { mockedTorrentInstance } from '../../__mocks__/webtorrent';
@@ -14,12 +16,14 @@ jest.mock('@utils/fetch.util');
 jest.mock('bittorrent-tracker');
 jest.mock('load-ip-set');
 jest.mock('@logger');
+jest.mock('@services/storage/storage.service');
 
 describe('DownloadService', () => {
   let service: DownloadService;
   let mockBTClient: jest.Mocked<BTClient>;
   let mockEnhancedFetch: jest.MockedFunction<typeof enhancedFetch>;
   let mockLoadIPSet: jest.MockedFunction<typeof loadIPSet>;
+  let mockStorageService: jest.Mocked<StorageService>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -52,6 +56,9 @@ describe('DownloadService', () => {
 
     // Mock loadIPSet
     mockLoadIPSet = loadIPSet as jest.MockedFunction<typeof loadIPSet>;
+
+    // Mock StorageService as EventEmitter
+    mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
   });
 
   describe('tracker loading', () => {
@@ -68,7 +75,7 @@ describe('DownloadService', () => {
     });
 
     it('should load trackers and IP sets on initialization', async () => {
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -84,7 +91,7 @@ describe('DownloadService', () => {
     it('should handle tracker fetch errors gracefully', async () => {
       mockEnhancedFetch.mockRejectedValue(new Error('Network error'));
 
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -104,7 +111,7 @@ describe('DownloadService', () => {
         }
       );
 
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -132,7 +139,7 @@ describe('DownloadService', () => {
         }
       );
 
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
     });
 
     it('should generate a valid magnet link', () => {
@@ -443,7 +450,7 @@ describe('DownloadService', () => {
 
   describe('error handling', () => {
     it('should log WebTorrent client errors', () => {
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Get the error handler that was registered
       const errorHandler = mockedTorrentInstance.on.mock.calls.find(call => call[0] === 'error')[1];
