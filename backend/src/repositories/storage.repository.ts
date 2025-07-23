@@ -89,13 +89,13 @@ export class StorageRepository {
   /**
    * Get total storage usage in bytes
    */
-  async getTotalStorageUsage(): Promise<number> {
+  async getTotalStorageUsage(): Promise<bigint> {
     const result = await this.repository
       .createQueryBuilder('storage')
       .select('SUM(storage.size)', 'totalSize')
-      .getRawOne();
+      .getRawOne<{ totalSize: string }>();
 
-    return result?.totalSize || 0;
+    return BigInt(result?.totalSize || 0);
   }
 
   /**

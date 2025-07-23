@@ -1,13 +1,20 @@
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
+import { createHash } from 'crypto';
+import MemoryChunkStore from 'memory-chunk-store';
 import { Readable } from 'streamx';
-import type { Torrent } from 'webtorrent';
+import type { Torrent, TorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
 import { ENV } from '@constants';
+import type { MovieSource } from '@entities/movie-source.entity';
+import type { Storage } from '@entities/storage.entity';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
+import type { StorageService } from '@services/storage/storage.service';
 
+import type { EncryptedStorageOptions } from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
+import EncryptedChunkStore from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
 import {
   encodeRFC5987,
   getContentType,
@@ -17,6 +24,26 @@ import {
   parseRangeHeader,
 } from './download.utils';
 
+// Types for greedy streaming
+// export type DownloadPriority = 'full' | 'partial';
+
+export interface GreedyDownload {
+  movieSourceId: number;
+  torrent: Torrent;
+  storage: Storage;
+  // priority: DownloadPriority;
+  startTime: Date;
+}
+
+export interface DownloadProgress {
+  movieSourceId: number;
+  progress: number; // Percentage (0-100)
+  downloadedBytes: number;
+  totalBytes: number;
+  downloadSpeed: number; // bytes/second
+  isComplete: boolean;
+}
+
 export class DownloadService {
   public readonly client: WebTorrent;
   private bestTrackers: string[] = [];
@@ -25,7 +52,7 @@ export class DownloadService {
   private readonly bestTrackersDownloadUrl: string;
   private readonly blacklistedTrackersDownloadUrl: string;
 
-  constructor() {
+  constructor(private readonly storageService: StorageService) {
     this.staticTrackers = ENV('STATIC_TRACKERS');
     this.bestTrackers = [...new Set([...this.staticTrackers])];
     this.bestTrackersDownloadUrl = ENV('BEST_TRACKERS_DOWNLOAD_URL');
@@ -41,6 +68,15 @@ export class DownloadService {
       logger.error('DownloadService', 'Error:', error.message, error);
     });
     this.ready = this.loadTrackers();
+
+    // Subscribe to storageService 'delete' events
+    this.storageService.on('delete', storage => {
+      const torrent = this.client.get(storage.hash);
+      if (torrent) {
+        this.client.remove(torrent, { destroyStore: true });
+        logger.info('DownloadService', `Removed torrent for deleted storage: ${storage.location}`);
+      }
+    });
   }
 
   private async loadTrackers() {
@@ -99,7 +135,12 @@ export class DownloadService {
         }
         this.client.add(
           sourceLink,
-          { deselect: true, destroyStoreOnDestroy: true, skipVerify: true },
+          {
+            deselect: true,
+            destroyStoreOnDestroy: true,
+            skipVerify: true,
+            store: MemoryChunkStore,
+          },
           onSourceMetadata
         );
       } catch (error: unknown) {
@@ -159,6 +200,313 @@ export class DownloadService {
       torrent.on('error', (error: Error) => {
         reject(error);
       });
+    });
+  }
+
+  /**
+   * Start greedy download with storage tracking and priority management
+   * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
+   */
+  async startDownload(source: MovieSource): Promise<GreedyDownload> {
+    try {
+      logger.info('DownloadService', `Starting download for source ${source.id}`);
+
+      // Create storage record first
+      const storage = await this.storageService.createStorage({
+        movieSourceId: source.id,
+        location: this.generateStoragePath(source.hash),
+        size: source.size || 0,
+        downloadedPieces: new Uint8Array(0),
+        totalPieces: 0,
+      });
+
+      // Add torrent with priority-specific configuration
+      const torrent = await this.addTorrentWithPriority(
+        source.magnetLink,
+        source.hash,
+        storage.location
+      );
+
+      // Set up bitfield tracking
+      this.setupBitfieldTracking(torrent, source.id);
+
+      const greedyDownload: GreedyDownload = {
+        movieSourceId: source.id,
+        torrent,
+        storage,
+        startTime: new Date(),
+      };
+
+      logger.info(
+        'DownloadService',
+        `Successfully started greedy download for source ${source.id}`
+      );
+      return greedyDownload;
+    } catch (error) {
+      logger.error(
+        'DownloadService',
+        `Failed to start greedy download for source ${source.id}:`,
+        error
+      );
+      throw new ErrorWithStatus(
+        `Failed to start greedy download: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'greedy_download_failed'
+      );
+    }
+  }
+
+  /**
+   * Generate secure storage path for a torrent hash
+   * Uses salted hash to prevent hash exposure in file paths
+   */
+  private generateStoragePath(hash: string): string {
+    const storageDir = ENV('DOWNLOAD_PATH');
+    const salt = ENV('DOWNLOAD_SALT');
+
+    // Create a salted hash to prevent hash exposure
+    const downloadDir = createHash('sha256')
+      .update(hash + salt)
+      .digest('hex')
+      .substring(0, 16); // Use first 16 characters for shorter paths
+
+    return `${storageDir}/${downloadDir}`;
+  }
+
+  /**
+   * Add torrent with priority-specific configuration and encrypted chunk store
+   */
+  private async addTorrentWithPriority(
+    // FixMe: Use torrent file instead of magnet link ( cause we have it )
+    magnetLink: string,
+    hash: string,
+    storagePath: string
+  ): Promise<Torrent> {
+    return new Promise((resolve, reject) => {
+      try {
+        const torrentOptions: TorrentOptions<EncryptedStorageOptions> = {
+          path: storagePath,
+          deselect: false,
+          destroyStoreOnDestroy: true,
+          store: EncryptedChunkStore,
+          storeOpts: {
+            encryptionKey: ENV('SOURCE_SECURITY_KEY'),
+            filenameSalt: `download-${hash}`,
+          },
+        };
+
+        // FixMe: Before adding the torrent, check if it already exists using the hash
+        const torrent = this.client.add(magnetLink, torrentOptions);
+
+        torrent.on('ready', () => {
+          this.downloadOnlyVideoFiles(torrent);
+          resolve(torrent);
+        });
+
+        torrent.on('error', (error: Error) => {
+          reject(error);
+        });
+
+        // Add timeout for torrent addition
+        setTimeout(() => {
+          reject(new ErrorWithStatus('Timeout adding download', 'add_torrent_timeout'));
+        }, 30000); // 30 second timeout
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  private downloadOnlyVideoFiles(torrent: Torrent): void {
+    // FixMe: this should download only valid video files
+    torrent.files.forEach(file => file.select());
+  }
+
+  /**
+   * Get download progress for a movie source
+   */
+  async getDownloadProgress(movieSourceId: number): Promise<DownloadProgress | null> {
+    try {
+      const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
+      if (!storage) {
+        return null;
+      }
+
+      // Find the associated torrent
+      const torrent = this.client.torrents.find(t => t.path === storage.location);
+      if (!torrent) {
+        return {
+          movieSourceId,
+          progress: storage.downloaded / 100, // Convert from basis points
+          downloadedBytes: 0,
+          totalBytes: storage.size,
+          downloadSpeed: 0,
+          isComplete: storage.downloaded >= 10000,
+        };
+      }
+
+      return {
+        movieSourceId,
+        progress: torrent.progress * 100, // Convert to percentage
+        downloadedBytes: torrent.downloaded,
+        totalBytes: torrent.length,
+        downloadSpeed: torrent.downloadSpeed,
+        isComplete: torrent.done,
+      };
+    } catch (error) {
+      logger.warn(
+        'DownloadService',
+        `Failed to get download progress for source ${movieSourceId}:`,
+        error
+      );
+      return null;
+    }
+  }
+
+  /**
+   * Pause download for a movie source
+   */
+  async pauseDownload(movieSourceId: number): Promise<boolean> {
+    try {
+      const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
+      if (!storage) {
+        logger.warn('DownloadService', `No storage found for movie source ${movieSourceId}`);
+        return false;
+      }
+
+      const torrent = this.client.torrents.find(t => t.path === storage.location);
+      if (!torrent) {
+        logger.warn('DownloadService', `No active torrent found for movie source ${movieSourceId}`);
+        return false;
+      }
+
+      // Pause by deselecting all files
+      if (torrent.files && torrent.files.length > 0) {
+        torrent.files.forEach(file => file.deselect());
+        logger.info('DownloadService', `Paused download for movie source ${movieSourceId}`);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      logger.error(
+        'DownloadService',
+        `Failed to pause download for source ${movieSourceId}:`,
+        error
+      );
+      return false;
+    }
+  }
+
+  /**
+   * Resume download for a movie source
+   */
+  async resumeDownload(movieSourceId: number): Promise<boolean> {
+    try {
+      const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
+      if (!storage) {
+        logger.warn('DownloadService', `No storage found for movie source ${movieSourceId}`);
+        return false;
+      }
+
+      const torrent = this.client.torrents.find(t => t.path === storage.location);
+      if (!torrent) {
+        logger.warn('DownloadService', `No active torrent found for movie source ${movieSourceId}`);
+        return false;
+      }
+
+      // Resume by selecting files
+      if (torrent.files && torrent.files.length > 0) {
+        torrent.files.forEach(file => file.select());
+        logger.info('DownloadService', `Resumed download for movie source ${movieSourceId}`);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      logger.error(
+        'DownloadService',
+        `Failed to resume download for source ${movieSourceId}:`,
+        error
+      );
+      return false;
+    }
+  }
+
+  /**
+   * Remove/cancel download for a movie source
+   */
+  async cancelDownload(movieSourceId: number): Promise<boolean> {
+    try {
+      const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
+      if (!storage) {
+        logger.warn('DownloadService', `No storage found for movie source ${movieSourceId}`);
+        return false;
+      }
+
+      const torrent = this.client.torrents.find(t => t.path === storage.location);
+      if (torrent) {
+        this.client.remove(torrent);
+        logger.info('DownloadService', `Removed torrent for movie source ${movieSourceId}`);
+      }
+
+      // Remove storage record
+      await this.storageService.removeStorage(movieSourceId);
+      logger.info(
+        'DownloadService',
+        `Cancelled download and cleaned up storage for movie source ${movieSourceId}`
+      );
+
+      return true;
+    } catch (error) {
+      logger.error(
+        'DownloadService',
+        `Failed to cancel download for source ${movieSourceId}:`,
+        error
+      );
+      return false;
+    }
+  }
+
+  /**
+   * Set up bitfield tracking for storage service integration
+   */
+  private setupBitfieldTracking(torrent: Torrent, movieSourceId: number): void {
+    torrent.on('download', async () => {
+      try {
+        // Convert BitField to Uint8Array for storage service
+        const bitfieldBuffer = torrent.bitfield
+          ? Buffer.from(torrent.bitfield.buffer)
+          : new Uint8Array(0);
+        // Estimate total pieces based on torrent length and typical piece size
+        const estimatedPieceSize = 256 * 1024; // 256KB typical piece size
+        const totalPieces = Math.ceil(torrent.length / estimatedPieceSize);
+
+        await this.storageService.updateDownloadProgress({
+          movieSourceId,
+          downloadedPieces: new Uint8Array(bitfieldBuffer),
+          totalPieces,
+          size: torrent.length,
+        });
+      } catch (error) {
+        logger.warn(
+          'DownloadService',
+          `Failed to update download progress for source ${movieSourceId}:`,
+          error
+        );
+      }
+    });
+
+    torrent.on('done', async () => {
+      try {
+        await this.storageService.markAsAccessed(movieSourceId);
+        logger.info('DownloadService', `Download completed for movie source ${movieSourceId}`);
+      } catch (error) {
+        logger.warn(
+          'DownloadService',
+          `Failed to mark download as complete for source ${movieSourceId}:`,
+          error
+        );
+      }
     });
   }
 
