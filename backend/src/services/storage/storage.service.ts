@@ -1,5 +1,6 @@
 import { logger } from '@logger';
 import { EventEmitter } from 'events';
+import type TypedEmitter from 'typed-emitter';
 
 import { ENV } from '@constants';
 import type { Database } from '@database/database';
@@ -10,7 +11,9 @@ import { humanReadableBytes } from '@utils/numbers';
 /**
  * Service for tracking and managing storage of downloaded movie sources
  */
-export class StorageService extends EventEmitter {
+export class StorageService extends (EventEmitter as new () => TypedEmitter<{
+  delete: (storage: Storage) => void;
+}>) {
   private readonly storageRepository: StorageRepository;
   private readonly maxStorageBytes: bigint;
 
@@ -139,7 +142,7 @@ export class StorageService extends EventEmitter {
    * Emits 'delete' event
    */
   async removeStorage(movieSourceId: number): Promise<number> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    const storage = await this.storageRepository.findByMovieSourceIdWithRelation(movieSourceId);
     if (!storage) {
       logger.warn('StorageService', `Storage record not found for movie source ${movieSourceId}`);
       return 0;
