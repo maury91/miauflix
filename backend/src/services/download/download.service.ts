@@ -237,6 +237,14 @@ export class DownloadService {
         storage.location
       );
 
+      // Patch storage with correct totalPieces and size after torrent is ready
+      await this.storageService.updateDownloadProgress({
+        movieSourceId: source.id,
+        downloadedPieces: new Uint8Array(0),
+        totalPieces: torrent.numPieces,
+        size: torrent.length,
+      });
+
       // Set up bitfield tracking
       this.setupBitfieldTracking(torrent, source.id);
 
@@ -481,20 +489,17 @@ export class DownloadService {
    * Set up bitfield tracking for storage service integration
    */
   private setupBitfieldTracking(torrent: Torrent, movieSourceId: number): void {
-    torrent.on('download', async () => {
+    torrent.on('verified', async () => {
       try {
         // Convert BitField to Uint8Array for storage service
         const bitfieldBuffer = torrent.bitfield
           ? Buffer.from(torrent.bitfield.buffer)
           : new Uint8Array(0);
-        // Estimate total pieces based on torrent length and typical piece size
-        const estimatedPieceSize = 256 * 1024; // 256KB typical piece size
-        const totalPieces = Math.ceil(torrent.length / estimatedPieceSize);
 
         await this.storageService.updateDownloadProgress({
           movieSourceId,
           downloadedPieces: new Uint8Array(bitfieldBuffer),
-          totalPieces,
+          totalPieces: torrent.numPieces,
           size: torrent.length,
         });
       } catch (error) {
