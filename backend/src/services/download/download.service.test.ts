@@ -1,3 +1,8 @@
+import {
+  createMockStorageWithHash,
+  createMockStorageWithoutMovieSource,
+  createMockStorageWithUndefinedHash,
+} from '@__test-utils__/mocks/storage.mock';
 import { logger } from '@logger';
 import { Client as BTClient } from 'bittorrent-tracker';
 import loadIPSet from 'load-ip-set';
@@ -447,6 +452,96 @@ describe('DownloadService', () => {
   //       expect(mockBTClient.destroy).toHaveBeenCalled();
   //     });
   //   });
+
+  describe('storage delete event handling', () => {
+    it('should remove torrent when storage is deleted with valid hash', () => {
+      service = new DownloadService(mockStorageService);
+
+      // Mock a torrent in the client
+      const mockTorrent = {
+        infoHash: 'testhash123',
+        destroy: jest.fn(),
+      };
+      service.client.get = jest.fn().mockReturnValue(mockTorrent);
+      service.client.remove = jest.fn();
+
+      // Get the delete event handler that was registered
+      const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
+      const deleteHandler = deleteCall?.[1];
+      if (!deleteHandler) {
+        throw new Error('Delete event handler not found');
+      }
+
+      // Create a mock storage with MovieSource relation
+      const mockStorage = createMockStorageWithHash('testhash123', {
+        id: 1,
+        movieSourceId: 123,
+        location: '/test/location',
+      });
+
+      // Trigger the delete event
+      deleteHandler(mockStorage);
+
+      expect(service.client.get).toHaveBeenCalledWith('testhash123');
+      expect(service.client.remove).toHaveBeenCalledWith(mockTorrent, { destroyStore: true });
+      expect(logger.info).toHaveBeenCalledWith(
+        'DownloadService',
+        'Removed torrent for deleted storage: /test/location'
+      );
+    });
+
+    it('should handle storage deletion without hash gracefully', () => {
+      service = new DownloadService(mockStorageService);
+
+      // Get the delete event handler that was registered
+      const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
+      const deleteHandler = deleteCall?.[1];
+      if (!deleteHandler) {
+        throw new Error('Delete event handler not found');
+      }
+
+      // Create a mock storage without MovieSource relation
+      const mockStorage = createMockStorageWithoutMovieSource({
+        id: 1,
+        movieSourceId: 123,
+        location: '/test/location',
+      });
+
+      // Trigger the delete event
+      deleteHandler(mockStorage);
+
+      expect(logger.warn).toHaveBeenCalledWith(
+        'DownloadService',
+        'No hash found for storage 1, cannot remove torrent'
+      );
+    });
+
+    it('should handle storage deletion with undefined hash gracefully', () => {
+      service = new DownloadService(mockStorageService);
+
+      // Get the delete event handler that was registered
+      const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
+      const deleteHandler = deleteCall?.[1];
+      if (!deleteHandler) {
+        throw new Error('Delete event handler not found');
+      }
+
+      // Create a mock storage with undefined hash
+      const mockStorage = createMockStorageWithUndefinedHash({
+        id: 1,
+        movieSourceId: 123,
+        location: '/test/location',
+      });
+
+      // Trigger the delete event
+      deleteHandler(mockStorage);
+
+      expect(logger.warn).toHaveBeenCalledWith(
+        'DownloadService',
+        'No hash found for storage 1, cannot remove torrent'
+      );
+    });
+  });
 
   describe('error handling', () => {
     it('should log WebTorrent client errors', () => {
