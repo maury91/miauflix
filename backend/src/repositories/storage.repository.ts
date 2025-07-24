@@ -18,6 +18,13 @@ export class StorageRepository {
     return this.repository.findOne({ where: { movieSourceId } });
   }
 
+  async findByMovieSourceIdWithRelation(movieSourceId: number): Promise<Storage | null> {
+    return this.repository.findOne({
+      where: { movieSourceId },
+      relations: ['movieSource'],
+    });
+  }
+
   async create(storage: Partial<Storage>): Promise<Storage> {
     const newStorage = this.repository.create(storage);
     return this.repository.save(newStorage);

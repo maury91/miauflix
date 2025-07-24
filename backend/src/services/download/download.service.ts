@@ -71,7 +71,17 @@ export class DownloadService {
 
     // Subscribe to storageService 'delete' events
     this.storageService.on('delete', storage => {
-      const torrent = this.client.get(storage.hash);
+      // Get the hash from the associated MovieSource
+      const hash = storage.movieSource?.hash;
+      if (!hash) {
+        logger.warn(
+          'DownloadService',
+          `No hash found for storage ${storage.id}, cannot remove torrent`
+        );
+        return;
+      }
+
+      const torrent = this.client.get(hash);
       if (torrent) {
         this.client.remove(torrent, { destroyStore: true });
         logger.info('DownloadService', `Removed torrent for deleted storage: ${storage.location}`);
