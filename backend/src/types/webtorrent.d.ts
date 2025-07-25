@@ -78,7 +78,7 @@ declare module 'webtorrent' {
   }
 
   /** Torrent-specific options from actual TorrentOpts JSDoc */
-  interface TorrentOptions {
+  interface TorrentOptions<StoreOpts extends object = Record<string, unknown>> {
     /** Torrent trackers to use (added to list in .torrent or magnet uri) */
     announce?: string[];
     /** Array of web seeds */
@@ -94,7 +94,7 @@ declare module 'webtorrent' {
     /** Preloaded bitfield indicating downloaded pieces */
     bitfield?: ArrayLike<number> | Uint8Array;
     /** Custom chunk store constructor */
-    store?: ChunkStoreConstructor;
+    store?: ChunkStoreConstructor<StoreOpts>;
     /** Pre-loaded chunk store instance */
     preloadedStore?: ChunkStore;
     /** Number of pieces to cache in memory (default: 20, 0 = disable) */
@@ -102,7 +102,7 @@ declare module 'webtorrent' {
     /** Delete chunk store when torrent is destroyed */
     destroyStoreOnDestroy?: boolean;
     /** Custom options passed to the store */
-    storeOpts?: Record<string, unknown>;
+    storeOpts?: StoreOpts;
     /** Always choke seeders when seeding (default: true) */
     alwaysChokeSeeders?: boolean;
     /** Custom callback for announce parameters */
@@ -150,8 +150,8 @@ declare module 'webtorrent' {
     destroy(cb: (err: Error | null) => void): void;
   }
 
-  interface ChunkStoreConstructor {
-    new (chunkLength: number, opts: Record<string, unknown>): ChunkStore;
+  interface ChunkStoreConstructor<StoreOpts extends object = Record<string, unknown>> {
+    new (chunkLength: number, opts: StoreOpts): ChunkStore;
   }
 
   // Parse-torrent compatible interface
@@ -595,9 +595,9 @@ declare module 'webtorrent' {
 
     // Torrent management
     /** Add torrent from magnet, file, buffer, etc. */
-    add(
+    add<StoreOpts extends object = object>(
       torrentId: TorrentId,
-      opts?: TorrentOptions,
+      opts?: TorrentOptions<StoreOpts>,
       ontorrent?: (torrent: Torrent) => void
     ): Torrent;
     add(torrentId: TorrentId, ontorrent?: (torrent: Torrent) => void): Torrent;
@@ -792,7 +792,7 @@ declare module 'memory-chunk-store' {
     chunkLength: number;
     length: number;
 
-    constructor(chunkLength: number, opts?: Record<string, unknown>);
+    constructor(chunkLength: number, opts?: object);
 
     get(
       index: number,
