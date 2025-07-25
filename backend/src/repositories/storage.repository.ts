@@ -18,6 +18,13 @@ export class StorageRepository {
     return this.repository.findOne({ where: { movieSourceId } });
   }
 
+  async findByMovieSourceIdWithRelation(movieSourceId: number): Promise<Storage | null> {
+    return this.repository.findOne({
+      where: { movieSourceId },
+      relations: ['movieSource'],
+    });
+  }
+
   async create(storage: Partial<Storage>): Promise<Storage> {
     const newStorage = this.repository.create(storage);
     return this.repository.save(newStorage);
@@ -87,15 +94,34 @@ export class StorageRepository {
   }
 
   /**
+   * Find the most stale storage record (least recently accessed)
+   * Returns null if no storage records exist
+   */
+  async findMostStaleStorage(): Promise<Storage | null> {
+    return this.repository
+      .createQueryBuilder('storage')
+      .orderBy('storage.lastAccessAt', 'ASC')
+      .addOrderBy('storage.createdAt', 'ASC') // Secondary sort by creation date
+      .getOne();
+  }
+
+  /**
+   * Get total count of storage records
+   */
+  async getStorageCount(): Promise<number> {
+    return this.repository.count();
+  }
+
+  /**
    * Get total storage usage in bytes
    */
-  async getTotalStorageUsage(): Promise<number> {
+  async getTotalStorageUsage(): Promise<bigint> {
     const result = await this.repository
       .createQueryBuilder('storage')
       .select('SUM(storage.size)', 'totalSize')
-      .getRawOne();
+      .getRawOne<{ totalSize: string }>();
 
-    return result?.totalSize || 0;
+    return BigInt(result?.totalSize || 0);
   }
 
   /**

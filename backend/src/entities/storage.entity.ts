@@ -14,7 +14,6 @@ import { MovieSource } from './movie-source.entity';
 
 @Entity('storage')
 @Index('idx_storage_last_access', ['lastAccessAt'])
-@Index('idx_storage_location', ['location'])
 export class Storage {
   @PrimaryGeneratedColumn()
   id: number;

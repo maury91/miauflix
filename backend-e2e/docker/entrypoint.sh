@@ -39,6 +39,11 @@ fi
 echo "Setting ownership of /usr/src/app/data to $PUID:$PGID"
 chown -R $PUID:$PGID /usr/src/app/data
 
+# Ensure /usr/src/app/data/downloads exists and is owned by the correct user
+echo "Ensuring /usr/src/app/downloads exists and is owned by $PUID:$PGID"
+mkdir -p /usr/src/app/downloads
+chown -R $PUID:$PGID /usr/src/app/downloads
+
 # Ensure directories are writable
 chmod 755 /usr/src/app/data
 
