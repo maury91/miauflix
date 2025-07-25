@@ -4,34 +4,9 @@
 
 ## 🎯 **Critical Missing Features (Priority Tasks)**
 
-### 1. **Implement Stream Endpoint** (Blocks Video Playback)
+### 1. **Frontend JWT Integration**
 
-**Location**: `backend/src/routes/stream.routes.ts` (create new file)
-
-```typescript
-// Step 1: Create stream routes file
-import { Hono } from 'hono';
-import { authMiddleware } from '@middleware/auth.middleware';
-import { DownloadService } from '@services/download/download.service';
-
-const routes = new Hono();
-
-routes.get('/:sourceId', authMiddleware, async c => {
-  const { sourceId } = c.req.param();
-  const downloadService = new DownloadService(); // Already implemented
-
-  // Use existing media streaming infrastructure
-  const stream = await downloadService.getStreamForSource(sourceId);
-
-  // Set appropriate headers for video streaming
-  c.header('Content-Type', 'video/mp4');
-  c.header('Accept-Ranges', 'bytes');
-
-  return c.stream(stream);
-});
-
-export default routes;
-```
+The streaming endpoint already exists in [`backend/src/routes/stream.routes.ts`](../backend/src/routes/stream.routes.ts). The remaining high‑priority task is to integrate JWT authentication on the frontend so API requests include valid tokens.
 
 ```typescript
 // Step 2: Register in main routes (backend/src/routes/index.ts)
@@ -42,55 +17,29 @@ app.route('/stream', streamRoutes);
 
 **Note**: DownloadService already has peer-to-peer streaming client - just need to expose streaming endpoint.
 
-### 2. **Fix Frontend Build Issues**
+### 2. **Verify Frontend-Backend Integration**
 
-**Current Problems**: TypeScript errors, build failures
+**Current Status**: ✅ Frontend builds successfully
 
 ```bash
-# Step 1: Identify errors
+# Step 1: Verify build status
 cd frontend
-npm run type-check
-
-# Step 2: Common fixes needed
-# - Missing type imports
-# - Component prop type mismatches
-# - Redux store type issues
-
-# Step 3: Test build
 npm run build
+
+# Step 2: Verify integration points
+# - Frontend auth API connects to backend JWT endpoints
+# - Stream player connects to backend stream endpoint
+# - Token management and persistence work correctly
 ```
 
-### 3. **Implement Frontend JWT Authentication**
+### 3. **Complete Frontend Authentication Flow**
 
-**Missing Files to Create**:
+**Status**: Frontend auth API exists, need to verify/implement missing pieces
 
-```typescript
-// frontend/src/store/api/auth.ts
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-export const authApi = createApi({
-  reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/auth' }),
-  endpoints: builder => ({
-    login: builder.mutation<LoginResponse, LoginRequest>({
-      query: credentials => ({
-        url: '/login',
-        method: 'POST',
-        body: credentials,
-      }),
-    }),
-    refresh: builder.mutation<TokenResponse, void>({
-      query: () => ({
-        url: '/refresh',
-        method: 'POST',
-      }),
-    }),
-  }),
-});
-```
+**Verify/implement missing pieces**:
 
 ```typescript
-// frontend/src/store/slices/auth.ts
+// frontend/src/store/slices/auth.ts (may not exist)
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
@@ -506,4 +455,4 @@ NORDVPN_PRIVATE_KEY=your_key
 
 ---
 
-**Remember**: Most infrastructure is already built and working. Focus on the 2 missing pieces (stream endpoint, frontend JWT) rather than rebuilding existing systems.
+**Remember**: Most infrastructure is already built and working. Focus on the remaining missing piece (frontend JWT integration) rather than rebuilding existing systems.
