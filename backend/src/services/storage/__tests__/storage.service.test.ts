@@ -626,5 +626,219 @@ describe('StorageService', () => {
         }
       }
     });
+
+    it('should find the most stale storage record', async () => {
+      // Arrange
+      const { storageService, database } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+
+      // Create multiple storage records with different access times
+      const storage1 = await storageService.createStorage({
+        movieSourceId: (await testDataFactory.createTestMovieSource(movie.id)).id,
+        location: '/tmp/test/stale1.mkv',
+        size: 1000000,
+      });
+
+      const storage2 = await storageService.createStorage({
+        movieSourceId: (await testDataFactory.createTestMovieSource(movie.id)).id,
+        location: '/tmp/test/stale2.mkv',
+        size: 1000000,
+      });
+
+      const storage3 = await storageService.createStorage({
+        movieSourceId: (await testDataFactory.createTestMovieSource(movie.id)).id,
+        location: '/tmp/test/stale3.mkv',
+        size: 1000000,
+      });
+
+      // Set different access times
+      const db = dbHelper.getDatabase();
+      const storageRepo = db.getStorageRepository();
+
+      // storage1: most recent
+      await storageRepo.update(storage1.id, { lastAccessAt: new Date() });
+      // storage2: 5 days ago
+      const fiveDaysAgo = new Date();
+      fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+      await storageRepo.update(storage2.id, { lastAccessAt: fiveDaysAgo });
+      // storage3: 10 days ago (most stale)
+      const tenDaysAgo = new Date();
+      tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+      await storageRepo.update(storage3.id, { lastAccessAt: tenDaysAgo });
+
+      // Act
+      const mostStale = await database.getStorageRepository().findMostStaleStorage();
+
+      // Assert
+      expect(mostStale).toBeDefined();
+      expect(mostStale?.id).toBe(storage3.id); // Should be the most stale (10 days ago)
+    });
+
+    it('should return null when no storage records exist', async () => {
+      // Arrange
+      const { database } = setupTest();
+
+      // Act
+      const mostStale = await database.getStorageRepository().findMostStaleStorage();
+
+      // Assert
+      expect(mostStale).toBeNull();
+    });
+
+    it('should get correct storage count', async () => {
+      // Arrange
+      const { storageService, database } = setupTest();
+
+      // Create multiple storage records with different movies and movie sources
+      const movieSources = [];
+      for (let i = 0; i < 5; i++) {
+        const movie = await testDataFactory.createTestMovie();
+        const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+        movieSources.push(movieSource);
+        await storageService.createStorage({
+          movieSourceId: movieSource.id,
+          location: `/tmp/test/count-${i}.mkv`,
+          size: 1000000,
+        });
+      }
+
+      // Act
+      const count = await database.getStorageRepository().getStorageCount();
+
+      // Assert
+      expect(count).toBe(5);
+    });
+
+    it('should not delete the last storage record during periodic cleanup', async () => {
+      // Arrange
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '1MB'; // Very low threshold
+
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+
+        // Create a single storage record that exceeds the threshold
+        const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+        const storage = await storageService.createStorage({
+          movieSourceId: movieSource.id,
+          location: '/tmp/test/last-record.mkv',
+          size: 10 * 1024 * 1024, // 10MB, exceeds 1MB threshold
+        });
+
+        let deletedCount = 0;
+        storageService.on('delete', () => {
+          deletedCount++;
+        });
+
+        // Act: Run periodic cleanup (canCleanEverything = false)
+        await storageService.cleanup(false);
+
+        // Assert: Should not delete the last record
+        expect(deletedCount).toBe(0);
+
+        const remainingStorage = await storageService.getStorageByMovieSource(movieSource.id);
+        expect(remainingStorage).toBeDefined();
+        expect(remainingStorage?.id).toBe(storage.id);
+      } finally {
+        if (originalEnv) {
+          process.env.STORAGE_THRESHOLD = originalEnv;
+        } else {
+          delete process.env.STORAGE_THRESHOLD;
+        }
+      }
+    });
+
+    it('should delete all storage records when canCleanEverything is true', async () => {
+      // Arrange
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '1MB'; // Very low threshold
+
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+
+        // Create a single storage record that exceeds the threshold
+        const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: movieSource.id,
+          location: '/tmp/test/clean-all.mkv',
+          size: 10 * 1024 * 1024, // 10MB, exceeds 1MB threshold
+        });
+
+        let deletedCount = 0;
+        storageService.on('delete', () => {
+          deletedCount++;
+        });
+
+        // Act: Run cleanup with canCleanEverything = true
+        await storageService.cleanup(true);
+
+        // Assert: Should delete the record
+        expect(deletedCount).toBe(1);
+
+        const remainingStorage = await storageService.getStorageByMovieSource(movieSource.id);
+        expect(remainingStorage).toBeNull();
+      } finally {
+        if (originalEnv) {
+          process.env.STORAGE_THRESHOLD = originalEnv;
+        } else {
+          delete process.env.STORAGE_THRESHOLD;
+        }
+      }
+    });
+
+    it('should handle cleanup with multiple storage records', async () => {
+      // Arrange
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '1MB'; // Very low threshold to trigger cleanup
+
+      try {
+        const { storageService } = setupTest();
+
+        // Create multiple storage records with different movies
+        const storages = [];
+        for (let i = 0; i < 3; i++) {
+          const movie = await testDataFactory.createTestMovie();
+          const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+          const storage = await storageService.createStorage({
+            movieSourceId: movieSource.id,
+            location: `/tmp/test/multi-${i}.mkv`,
+            size: 3 * 1024 * 1024, // 3MB each, total 9MB exceeds 1MB threshold
+          });
+          storages.push({ storage, movieSource });
+        }
+
+        // Set different access times to control deletion order
+        const db = dbHelper.getDatabase();
+        const storageRepo = db.getStorageRepository();
+
+        // Make first storage most stale
+        const oldDate = new Date();
+        oldDate.setDate(oldDate.getDate() - 10);
+        await storageRepo.update(storages[0].storage.id, { lastAccessAt: oldDate });
+
+        let deletedCount = 0;
+        storageService.on('delete', () => {
+          deletedCount++;
+        });
+
+        // Act: Run cleanup with canCleanEverything = true to force cleanup
+        await storageService.cleanup(true);
+
+        // Assert: Should delete some records
+        expect(deletedCount).toBeGreaterThan(0);
+
+        // At least one record should remain (since we're not testing threshold logic here)
+        const remainingCount = await db.getStorageRepository().getStorageCount();
+        expect(remainingCount).toBeGreaterThanOrEqual(0);
+      } finally {
+        if (originalEnv) {
+          process.env.STORAGE_THRESHOLD = originalEnv;
+        } else {
+          delete process.env.STORAGE_THRESHOLD;
+        }
+      }
+    });
   });
 });

@@ -39,7 +39,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     downloadedPieces?: Uint8Array;
     totalPieces?: number;
   }): Promise<Storage> {
-    await this.periodicalCleanup();
+    await this.cleanup(true); // Allow deleting everything when adding new storage
 
     const { movieSourceId, location, size, downloadedPieces, totalPieces } = params;
 
@@ -224,26 +224,80 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Checks storage pressure and deletes old storage records if needed.
    * Emits 'delete' event for each removed storage record.
+   * @param canCleanEverything - If false, avoids deleting the last storage record
    */
-  async periodicalCleanup(): Promise<void> {
-    const totalUsage = await this.storageRepository.getTotalStorageUsage();
-    if (totalUsage > this.maxStorageBytes) {
-      logger.warn(
-        'StorageService',
-        `Storage pressure detected: ${humanReadableBytes(totalUsage)} used`
-      );
-      let cleanedUpSize = 0n;
-      // Cleanup until we are below the threshold
-      while (totalUsage - cleanedUpSize > this.maxStorageBytes) {
-        const staleStorage = await this.findStaleStorage(0, 1);
-        if (staleStorage.length === 0) break;
-        const removedSize = await this.removeStorage(staleStorage[0].movieSourceId);
-        cleanedUpSize += BigInt(removedSize);
+  async cleanup(canCleanEverything = false): Promise<void> {
+    let currentUsage = await this.storageRepository.getTotalStorageUsage();
+    if (currentUsage <= this.maxStorageBytes) {
+      return; // No cleanup needed
+    }
+
+    logger.warn(
+      'StorageService',
+      `Storage pressure detected: ${humanReadableBytes(currentUsage)} used`
+    );
+
+    const maxCleanupAttempts = 100; // Safety limit to prevent infinite loops
+    let cleanupAttempts = 0;
+    let totalCleanedUp = 0n;
+
+    // Get total storage count to check if we're about to delete the last element
+
+    while (currentUsage > this.maxStorageBytes && cleanupAttempts < maxCleanupAttempts) {
+      const removalCandidate = await this.storageRepository.findMostStaleStorage();
+      if (!removalCandidate) {
+        logger.warn('StorageService', 'No storage records found');
+        break;
+      }
+
+      const totalStorageCount = await this.storageRepository.getStorageCount();
+      // During periodic cleanup, avoid deleting the last storage record
+      if (!canCleanEverything && totalStorageCount - cleanupAttempts <= 1) {
         logger.info(
           'StorageService',
-          `Removed storage record for movie source ${staleStorage[0].movieSourceId} (${humanReadableBytes(removedSize)})`
+          'Stopping periodic cleanup to avoid deleting the last storage record'
         );
+        break;
       }
+
+      const removedSize = await this.removeStorage(removalCandidate.movieSourceId);
+
+      if (removedSize > 0) {
+        totalCleanedUp += BigInt(removedSize);
+        logger.info(
+          'StorageService',
+          `Removed storage record for movie source ${removalCandidate.movieSourceId} (${humanReadableBytes(removedSize)})`
+        );
+
+        // Recalculate current usage to get accurate state
+        currentUsage = await this.storageRepository.getTotalStorageUsage();
+      } else {
+        logger.warn(
+          'StorageService',
+          `Failed to remove storage record for movie source ${removalCandidate.movieSourceId}`
+        );
+        // If we can't remove this record, we can't continue since it's the most stale
+        break;
+      }
+
+      cleanupAttempts++;
+    }
+
+    if (cleanupAttempts >= maxCleanupAttempts) {
+      logger.error(
+        'StorageService',
+        `Storage cleanup stopped after ${maxCleanupAttempts} attempts. Current usage: ${humanReadableBytes(currentUsage)}`
+      );
+    } else if (currentUsage <= this.maxStorageBytes) {
+      logger.info(
+        'StorageService',
+        `Storage cleanup completed successfully. Cleaned up ${humanReadableBytes(totalCleanedUp)}, current usage: ${humanReadableBytes(currentUsage)}`
+      );
+    } else {
+      logger.warn(
+        'StorageService',
+        `Storage cleanup completed but usage still exceeds threshold. Cleaned up ${humanReadableBytes(totalCleanedUp)}, current usage: ${humanReadableBytes(currentUsage)}`
+      );
     }
   }
 }
