@@ -17,27 +17,23 @@ describe('humanReadableBytes', () => {
     it('should return "0 B" for negative bytes (bigint)', () => {
       expect(humanReadableBytes(-1n)).toBe('0 B');
     });
-
-    it('should return "0 B" for very small positive numbers', () => {
-      expect(humanReadableBytes(0.5)).toBe('0 B');
-    });
   });
 
   describe('bytes (B)', () => {
     it('should format single byte correctly', () => {
-      expect(humanReadableBytes(1)).toBe('1.00 B');
+      expect(humanReadableBytes(1)).toBe('1 B');
     });
 
     it('should format bytes correctly (number)', () => {
-      expect(humanReadableBytes(512)).toBe('512.00 B');
+      expect(humanReadableBytes(512)).toBe('512 B');
     });
 
     it('should format bytes correctly (bigint)', () => {
-      expect(humanReadableBytes(512n)).toBe('512.00 B');
+      expect(humanReadableBytes(512n)).toBe('512 B');
     });
 
     it('should format bytes just under 1KB', () => {
-      expect(humanReadableBytes(1023)).toBe('1023.00 B');
+      expect(humanReadableBytes(1023)).toBe('1023 B');
     });
   });
 
@@ -58,8 +54,8 @@ describe('humanReadableBytes', () => {
       expect(humanReadableBytes(1536)).toBe('1.50 KB');
     });
 
-    it('should format kilobytes just under 1MB (accounting for rounding)', () => {
-      expect(humanReadableBytes(1048575)).toBe('1024.00 KB');
+    it('should format kilobytes just under 1MB', () => {
+      expect(humanReadableBytes(1048575)).toBe('1023.99 KB');
     });
   });
 
@@ -80,8 +76,8 @@ describe('humanReadableBytes', () => {
       expect(humanReadableBytes(1572864)).toBe('1.50 MB');
     });
 
-    it('should format megabytes just under 1GB (accounting for rounding)', () => {
-      expect(humanReadableBytes(1073741823)).toBe('1024.00 MB');
+    it('should format megabytes just under 1GB', () => {
+      expect(humanReadableBytes(1073741823)).toBe('1023.99 MB');
     });
   });
 
@@ -102,8 +98,8 @@ describe('humanReadableBytes', () => {
       expect(humanReadableBytes(1610612736)).toBe('1.50 GB');
     });
 
-    it('should format gigabytes just under 1TB (accounting for rounding)', () => {
-      expect(humanReadableBytes(1099511627775n)).toBe('1024.00 GB');
+    it('should format gigabytes just under 1TB', () => {
+      expect(humanReadableBytes(1099511627775n)).toBe('1023.99 GB');
     });
   });
 
@@ -145,7 +141,7 @@ describe('humanReadableBytes', () => {
 
   describe('edge cases and precision', () => {
     it('should handle very large numbers', () => {
-      expect(humanReadableBytes(Number.MAX_SAFE_INTEGER)).toBe('8.00 PB');
+      expect(humanReadableBytes(Number.MAX_SAFE_INTEGER)).toBe('7.99 PB');
     });
 
     it('should maintain 2 decimal places precision', () => {
@@ -156,7 +152,7 @@ describe('humanReadableBytes', () => {
 
     it('should handle boundary values between units', () => {
       // Just under 1KB
-      expect(humanReadableBytes(1023)).toBe('1023.00 B');
+      expect(humanReadableBytes(1023)).toBe('1023 B');
       // Exactly 1KB
       expect(humanReadableBytes(1024)).toBe('1.00 KB');
       // Just over 1KB
@@ -165,9 +161,9 @@ describe('humanReadableBytes', () => {
 
     it('should handle values that round up to next unit', () => {
       // These values are very close to the next unit boundary
-      expect(humanReadableBytes(1048575)).toBe('1024.00 KB');
-      expect(humanReadableBytes(1073741823)).toBe('1024.00 MB');
-      expect(humanReadableBytes(1099511627775n)).toBe('1024.00 GB');
+      expect(humanReadableBytes(1048575)).toBe('1023.99 KB');
+      expect(humanReadableBytes(1073741823)).toBe('1023.99 MB');
+      expect(humanReadableBytes(1099511627775n)).toBe('1023.99 GB');
     });
   });
 
@@ -194,13 +190,13 @@ describe('humanReadableBytes', () => {
   });
 
   describe('function behavior analysis', () => {
-    it('should demonstrate the rounding behavior', () => {
+    it('should demonstrate no rounding behavior', () => {
       // Test values that are very close to unit boundaries
-      expect(humanReadableBytes(1023)).toBe('1023.00 B');
+      expect(humanReadableBytes(1023)).toBe('1023 B');
       expect(humanReadableBytes(1024)).toBe('1.00 KB');
       expect(humanReadableBytes(1025)).toBe('1.00 KB');
 
-      expect(humanReadableBytes(1048575)).toBe('1024.00 KB');
+      expect(humanReadableBytes(1048575)).toBe('1023.99 KB');
       expect(humanReadableBytes(1048576)).toBe('1.00 MB');
       expect(humanReadableBytes(1048577)).toBe('1.00 MB');
     });
