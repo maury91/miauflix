@@ -94,6 +94,25 @@ export class StorageRepository {
   }
 
   /**
+   * Find the most stale storage record (least recently accessed)
+   * Returns null if no storage records exist
+   */
+  async findMostStaleStorage(): Promise<Storage | null> {
+    return this.repository
+      .createQueryBuilder('storage')
+      .orderBy('storage.lastAccessAt', 'ASC')
+      .addOrderBy('storage.createdAt', 'ASC') // Secondary sort by creation date
+      .getOne();
+  }
+
+  /**
+   * Get total count of storage records
+   */
+  async getStorageCount(): Promise<number> {
+    return this.repository.count();
+  }
+
+  /**
    * Get total storage usage in bytes
    */
   async getTotalStorageUsage(): Promise<bigint> {
