@@ -39,8 +39,6 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     downloadedPieces?: Uint8Array;
     totalPieces?: number;
   }): Promise<Storage> {
-    await this.cleanup(true); // Allow deleting everything when adding new storage
-
     const { movieSourceId, location, size, downloadedPieces, totalPieces } = params;
 
     // If a storage record already exists for this movieSourceId, return it
@@ -52,6 +50,9 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       );
       return existing;
     }
+
+    // Cleanup before creating new storage
+    await this.cleanup(true);
 
     // Create empty bitfield if not provided
     const bitfield = downloadedPieces || new Uint8Array(0);
@@ -241,8 +242,6 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     let cleanupAttempts = 0;
     let totalCleanedUp = 0n;
 
-    // Get total storage count to check if we're about to delete the last element
-
     while (currentUsage > this.maxStorageBytes && cleanupAttempts < maxCleanupAttempts) {
       const removalCandidate = await this.storageRepository.findMostStaleStorage();
       if (!removalCandidate) {
@@ -250,14 +249,17 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         break;
       }
 
-      const totalStorageCount = await this.storageRepository.getStorageCount();
       // During periodic cleanup, avoid deleting the last storage record
-      if (!canCleanEverything && totalStorageCount - cleanupAttempts <= 1) {
-        logger.info(
-          'StorageService',
-          'Stopping periodic cleanup to avoid deleting the last storage record'
-        );
-        break;
+      // Get current count each time for maximum accuracy
+      if (!canCleanEverything) {
+        const currentStorageCount = await this.storageRepository.getStorageCount();
+        if (currentStorageCount <= 1) {
+          logger.info(
+            'StorageService',
+            'Stopping periodic cleanup to avoid deleting the last storage record'
+          );
+          break;
+        }
       }
 
       const removedSize = await this.removeStorage(removalCandidate.movieSourceId);
