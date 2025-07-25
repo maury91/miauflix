@@ -2,7 +2,7 @@
 
 > **Status Updated:** 2025-06-25 - Verified against actual implementation
 
-The backend provides comprehensive torrent infrastructure with WebTorrent integration. **Note:** The streaming endpoint is not yet implemented, but all supporting infrastructure exists.
+The backend provides comprehensive torrent infrastructure with WebTorrent integration. **Note:** The streaming endpoint is fully implemented and production-ready.
 
 ## ✅ Current Implementation (Fully Functional)
 
@@ -32,22 +32,22 @@ The backend provides comprehensive torrent infrastructure with WebTorrent integr
 - ✅ **Rate Limiting**: Configurable rate limiting per endpoint
 - ✅ **Error Handling**: Comprehensive error handling and audit logging
 
-## ❌ Missing Implementation
+## ✅ Streaming Implementation (Complete)
 
-### Critical Missing Component
+### Stream Endpoint (Implemented)
 
-**Stream Endpoint**: The `/api/stream/:sourceId` endpoint is not implemented. This is the only missing piece preventing video streaming.
+**Stream Endpoint**: The `/stream/:token` endpoint is fully implemented and production-ready. This enables complete video streaming functionality.
 
-**Required Implementation:**
+**Implementation:**
 
 ```typescript
-// Missing: routes/stream.routes.ts
-app.get('/api/stream/:sourceId', authGuard(), async c => {
-  // 1. Lookup MovieSource by ID
-  // 2. Add torrent to DownloadService client
-  // 3. Handle Range requests for video streaming
-  // 4. Pipe WebTorrent stream to HTTP response
-  // 5. Cleanup on connection close
+// Implemented: routes/stream.routes.ts
+app.get('/stream/:token', rateLimitGuard(60), async c => {
+  // 1. Verify streaming key with timing attack protection
+  // 2. Get best source based on quality and codec preferences
+  // 3. Handle Range requests for video seeking
+  // 4. Stream file with proper headers
+  // 5. Error handling for various scenarios
 });
 ```
 
@@ -55,7 +55,6 @@ app.get('/api/stream/:sourceId', authGuard(), async c => {
 
 - **Viewport Preload Queue**: `/api/ui/viewport` endpoint for priority-based preloading
 - **Stream Session Management**: User-specific streaming sessions
-- **Seeking Support**: Jump to specific timestamps (requires stream endpoint first)
 
 ## 🏗️ Available Infrastructure for Streaming
 
