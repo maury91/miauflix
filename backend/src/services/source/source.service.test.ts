@@ -6,6 +6,7 @@ jest.mock('@services/source/source-metadata-file.service');
 jest.mock('@services/security/vpn.service');
 jest.mock('@services/download/download.service');
 jest.mock('@services/source-metadata/content-directory.service');
+jest.mock('@services/storage/storage.service');
 
 import {
   createMockMovie,
@@ -26,6 +27,7 @@ import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceService } from '@services/source/source.service';
 import { SourceMetadataFileService } from '@services/source/source-metadata-file.service';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
+import { StorageService } from '@services/storage/storage.service';
 
 describe('SourceService', () => {
   // Helper functions to reduce duplication
@@ -96,7 +98,11 @@ describe('SourceService', () => {
     const mockDatabase = new Database({} as EncryptionService) as jest.Mocked<Database>;
 
     // Mock services
-    const mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
+    const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
+
+    const mockDownloadService = new DownloadService(
+      mockStorageService
+    ) as jest.Mocked<DownloadService>;
     const mockContentDirectoryService = new ContentDirectoryService(
       {} as never,
       mockDownloadService

@@ -1,8 +1,15 @@
+import {
+  createMockStorageWithHash,
+  createMockStorageWithoutMovieSource,
+  createMockStorageWithUndefinedHash,
+} from '@__test-utils__/mocks/storage.mock';
 import { logger } from '@logger';
 import { Client as BTClient } from 'bittorrent-tracker';
 import loadIPSet from 'load-ip-set';
 
 import { ENV } from '@constants';
+import type { Database } from '@database/database';
+import { StorageService } from '@services/storage/storage.service';
 import { enhancedFetch } from '@utils/fetch.util';
 
 import { mockedTorrentInstance } from '../../__mocks__/webtorrent';
@@ -14,12 +21,14 @@ jest.mock('@utils/fetch.util');
 jest.mock('bittorrent-tracker');
 jest.mock('load-ip-set');
 jest.mock('@logger');
+jest.mock('@services/storage/storage.service');
 
 describe('DownloadService', () => {
   let service: DownloadService;
   let mockBTClient: jest.Mocked<BTClient>;
   let mockEnhancedFetch: jest.MockedFunction<typeof enhancedFetch>;
   let mockLoadIPSet: jest.MockedFunction<typeof loadIPSet>;
+  let mockStorageService: jest.Mocked<StorageService>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -52,6 +61,9 @@ describe('DownloadService', () => {
 
     // Mock loadIPSet
     mockLoadIPSet = loadIPSet as jest.MockedFunction<typeof loadIPSet>;
+
+    // Mock StorageService as EventEmitter
+    mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
   });
 
   describe('tracker loading', () => {
@@ -68,7 +80,7 @@ describe('DownloadService', () => {
     });
 
     it('should load trackers and IP sets on initialization', async () => {
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -84,7 +96,7 @@ describe('DownloadService', () => {
     it('should handle tracker fetch errors gracefully', async () => {
       mockEnhancedFetch.mockRejectedValue(new Error('Network error'));
 
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -104,7 +116,7 @@ describe('DownloadService', () => {
         }
       );
 
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -132,7 +144,7 @@ describe('DownloadService', () => {
         }
       );
 
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
     });
 
     it('should generate a valid magnet link', () => {
@@ -441,9 +453,99 @@ describe('DownloadService', () => {
   //     });
   //   });
 
+  describe('storage delete event handling', () => {
+    it('should remove torrent when storage is deleted with valid hash', () => {
+      service = new DownloadService(mockStorageService);
+
+      // Mock a torrent in the client
+      const mockTorrent = {
+        infoHash: 'testhash123',
+        destroy: jest.fn(),
+      };
+      service.client.get = jest.fn().mockReturnValue(mockTorrent);
+      service.client.remove = jest.fn();
+
+      // Get the delete event handler that was registered
+      const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
+      const deleteHandler = deleteCall?.[1];
+      if (!deleteHandler) {
+        throw new Error('Delete event handler not found');
+      }
+
+      // Create a mock storage with MovieSource relation
+      const mockStorage = createMockStorageWithHash('testhash123', {
+        id: 1,
+        movieSourceId: 123,
+        location: '/test/location',
+      });
+
+      // Trigger the delete event
+      deleteHandler(mockStorage);
+
+      expect(service.client.get).toHaveBeenCalledWith('testhash123');
+      expect(service.client.remove).toHaveBeenCalledWith(mockTorrent, { destroyStore: true });
+      expect(logger.info).toHaveBeenCalledWith(
+        'DownloadService',
+        'Removed torrent for deleted storage: /test/location'
+      );
+    });
+
+    it('should handle storage deletion without hash gracefully', () => {
+      service = new DownloadService(mockStorageService);
+
+      // Get the delete event handler that was registered
+      const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
+      const deleteHandler = deleteCall?.[1];
+      if (!deleteHandler) {
+        throw new Error('Delete event handler not found');
+      }
+
+      // Create a mock storage without MovieSource relation
+      const mockStorage = createMockStorageWithoutMovieSource({
+        id: 1,
+        movieSourceId: 123,
+        location: '/test/location',
+      });
+
+      // Trigger the delete event
+      deleteHandler(mockStorage);
+
+      expect(logger.warn).toHaveBeenCalledWith(
+        'DownloadService',
+        'No hash found for storage 1, cannot remove torrent'
+      );
+    });
+
+    it('should handle storage deletion with undefined hash gracefully', () => {
+      service = new DownloadService(mockStorageService);
+
+      // Get the delete event handler that was registered
+      const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
+      const deleteHandler = deleteCall?.[1];
+      if (!deleteHandler) {
+        throw new Error('Delete event handler not found');
+      }
+
+      // Create a mock storage with undefined hash
+      const mockStorage = createMockStorageWithUndefinedHash({
+        id: 1,
+        movieSourceId: 123,
+        location: '/test/location',
+      });
+
+      // Trigger the delete event
+      deleteHandler(mockStorage);
+
+      expect(logger.warn).toHaveBeenCalledWith(
+        'DownloadService',
+        'No hash found for storage 1, cannot remove torrent'
+      );
+    });
+  });
+
   describe('error handling', () => {
     it('should log WebTorrent client errors', () => {
-      service = new DownloadService();
+      service = new DownloadService(mockStorageService);
 
       // Get the error handler that was registered
       const errorHandler = mockedTorrentInstance.on.mock.calls.find(call => call[0] === 'error')[1];
