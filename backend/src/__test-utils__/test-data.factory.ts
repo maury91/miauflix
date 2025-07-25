@@ -47,10 +47,14 @@ export class TestDataFactory {
   ): Promise<MovieSource> {
     const movieSourceRepository = this.database.getMovieSourceRepository();
 
+    // Generate a unique hash for each movie source
+    const hash = overrides.hash ?? this.generateRandomHash();
+    const magnetLink = overrides.magnetLink ?? this.generateMagnetLink(hash);
+
     const defaultMovieSource: Partial<MovieSource> = {
       movieId,
-      hash: '0123456789abcdef0123456789abcdef01234567', // 40 char hex string
-      magnetLink: 'magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567&dn=Test+Movie+2023',
+      hash,
+      magnetLink,
       quality: Quality.FHD,
       size: 2147483648, // 2GB
       videoCodec: VideoCodec.X264,

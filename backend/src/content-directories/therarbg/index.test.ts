@@ -1,12 +1,15 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
+import type { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
+import { StorageService } from '@services/storage/storage.service';
 
 import { TherarbgContentDirectory } from './index';
 import type { ImdbDetailPost, ImdbMetadata } from './therarbg.types';
 
 jest.mock('@services/download/download.service');
+jest.mock('@services/storage/storage.service');
 
 describe('TherarbgContentDirectory', () => {
   let contentDirectory: TherarbgContentDirectory;
@@ -15,7 +18,9 @@ describe('TherarbgContentDirectory', () => {
 
   beforeEach(() => {
     mockCache = new MockCache();
-    mockDownloadService = new DownloadService() as jest.Mocked<DownloadService>;
+    const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
+
+    mockDownloadService = new DownloadService(mockStorageService) as jest.Mocked<DownloadService>;
 
     // Mock the generateLink method to return proper magnet links
     mockDownloadService.generateLink.mockImplementation((hash: string, trackers: string[]) => {

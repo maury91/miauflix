@@ -8,8 +8,10 @@ import { theRarbgConfigurationDefinition } from '@content-directories/therarbg/t
 import { ytsConfigurationDefinition } from '@content-directories/yts/yts.configuration';
 import { type ServiceConfiguration, type VariableInfo } from '@mytypes/configuration';
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
+import { downloadConfigurationDefinition } from '@services/download/download.configuration';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
+import { storageConfigurationDefinition } from '@services/storage/storage.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
 import { serviceConfiguration, transforms, variable } from '@utils/config';
@@ -76,6 +78,8 @@ export const services = {
   TRAKT: traktConfigurationDefinition,
   VPN: vpnConfigurationDefinition,
   YTS: ytsConfigurationDefinition,
+  DOWNLOAD: downloadConfigurationDefinition,
+  STORAGE: storageConfigurationDefinition,
 };
 
 export type Variables = {
@@ -299,6 +303,7 @@ export async function validateConfiguration(
 ): Promise<void> {
   const { forceReconfigure = false, configOnly = false } = options;
   const servicesNeedingConfiguration = new Set<ServiceKey>();
+  const allMissingRequiredVars = new Set<string>();
   const changedEnvVariables = new Set<string>();
   const autoConfiguredVars = new Set<string>();
 
@@ -327,6 +332,7 @@ export async function validateConfiguration(
 
       if (missingRequiredVars.length > 0) {
         servicesNeedingConfiguration.add(serviceKey as ServiceKey);
+        missingRequiredVars.forEach(varName => allMissingRequiredVars.add(varName));
       }
     }
   }
@@ -353,7 +359,7 @@ export async function validateConfiguration(
   if (servicesNeedingConfiguration.size > 0 || forceReconfigure) {
     if (isNonInteractiveEnvironment()) {
       throw new Error(
-        'Configuration is incomplete and cannot be completed in a non-interactive environment. Please set the required environment variables.'
+        `Configuration is incomplete and cannot be completed in a non-interactive environment. Please set the required environment variables [${Array.from(allMissingRequiredVars).join(', ')}].`
       );
     }
 
