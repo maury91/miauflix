@@ -30,7 +30,7 @@ export class MediaService {
   private genreCache = new Map<number, GenreWithLanguages>();
 
   constructor(
-    private readonly db: Database,
+    db: Database,
     private readonly tmdbApi: TMDBApi,
     private readonly defaultLanguage: string = 'en'
   ) {
@@ -40,16 +40,16 @@ export class MediaService {
     this.syncStateRepository = db.getSyncStateRepository();
   }
 
-  public async getMovie(
-    movieId: number | string,
+  public async getMovieByTmdbId(
+    tmdbId: number | string,
     movieSummary?: MovieMediaSummary
   ): Promise<Movie | null> {
     // Check if the movie is available in the local DB
-    let movie = await this.movieRepository.findByTMDBId(Number(movieId));
+    let movie = await this.movieRepository.findByTMDBId(Number(tmdbId));
     if (!movie) {
       try {
         // If not, fetch from TMDB and save it to the local DB
-        const { translations, ...movieDetails } = await this.getMovieDetails(movieId);
+        const { translations, ...movieDetails } = await this.getMovieDetails(tmdbId);
         movie = await this.movieRepository.create(movieDetails);
 
         await Promise.all(
@@ -67,7 +67,7 @@ export class MediaService {
       } catch (err) {
         logger.error(
           'MediaService',
-          `Error fetching movie with TMDB ID ${movieId}:`,
+          `Error fetching movie with TMDB ID ${tmdbId}:`,
           err,
           err instanceof Error ? err.stack : undefined
         );
@@ -96,6 +96,10 @@ export class MediaService {
       }
     }
     return movie;
+  }
+
+  public async getMovieById(id: number): Promise<Movie | null> {
+    return this.movieRepository.findById(id);
   }
 
   private async updateMovie(movie: Movie) {
@@ -140,12 +144,15 @@ export class MediaService {
     };
   }
 
-  public async getTVShow(showId: number, tvShowSummary?: TVShowMediaSummary): Promise<TVShow> {
+  public async getTVShowByTmdbId(
+    showTmdbId: number,
+    tvShowSummary?: TVShowMediaSummary
+  ): Promise<TVShow> {
     // Check if the TV show is available in the local DB
-    let show = await this.tvShowRepository.findByTMDBId(showId);
+    let show = await this.tvShowRepository.findByTMDBId(showTmdbId);
     if (!show) {
       // If not, fetch from TMDB and save it to the local DB
-      const showDetails = await this.tmdbApi.getTVShowDetails(showId);
+      const showDetails = await this.tmdbApi.getTVShowDetails(showTmdbId);
       const genresIds = showDetails.genres.map(genre => genre.id);
       const genres = await this.getGenres(genresIds);
 

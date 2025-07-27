@@ -69,9 +69,9 @@ export class ListService {
     const mediaResults = await Promise.all(
       medias.map(async mediaData => {
         if (mediaData._type === 'movie') {
-          return this.mediaService.getMovie(mediaData.id, mediaData);
+          return this.mediaService.getMovieByTmdbId(mediaData.id, mediaData);
         }
-        return this.mediaService.getTVShow(mediaData.id, mediaData);
+        return this.mediaService.getTVShowByTmdbId(mediaData.id, mediaData);
       })
     );
 
