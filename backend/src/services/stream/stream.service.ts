@@ -30,7 +30,7 @@ export class StreamService {
     allowHevc = true
   ): Promise<MovieSource | null> {
     // First, get the movie (will fetch from TMDB if not in database)
-    const movie = await this.mediaService.getMovie(movieId);
+    const movie = await this.mediaService.getMovieByTmdbId(movieId);
     if (!movie) {
       logger.warn('StreamService', `Movie with ID ${movieId} not found`);
       return null;
