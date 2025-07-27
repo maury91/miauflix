@@ -12,7 +12,7 @@ This document presents a comprehensive research-based strategy for implementing 
 - **E2E Framework**: Docker Compose with production builds (no internal mocking allowed)
 - **Authentication**: JWT-based with admin user auto-generation
 - **Mock Infrastructure**: Comprehensive API mocking for TMDB, Trakt, YTS
-- **Missing Component**: `/api/stream/:sourceId` endpoint for video streaming
+- **Streaming Endpoint Available**: `/stream/:token` endpoint implemented for video streaming
 
 ### Core Constraints
 
@@ -44,7 +44,6 @@ Testing torrent streaming presents unique challenges not found in traditional AP
 
 **❌ Gaps:**
 
-- No streaming endpoint implementation
 - No BitTorrent-specific testing infrastructure
 - Missing controlled torrent environment
 - No HTTP range request testing
@@ -54,19 +53,16 @@ Testing torrent streaming presents unique challenges not found in traditional AP
 ### Tools & Resources Investigated
 
 1. **BitTorrent Tracker Solutions**
-
    - `webtorrent/bittorrent-tracker`: Official WebTorrent tracker
    - `quoorex/docker-bittorrent-tracker`: Dockerized tracker with configuration
    - Custom tracker implementations
 
 2. **Mock Seeding Solutions**
-
    - WebTorrent CLI for programmatic seeding
    - Custom Node.js seeder containers
    - File serving with deterministic content
 
 3. **HTTP Range Request Testing**
-
    - `danvk/RangeHTTPServer`: Python-based range request server
    - `jakearchibald/range-request-test`: Browser-based range testing
    - Custom Node.js range request implementations
