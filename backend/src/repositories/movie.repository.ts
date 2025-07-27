@@ -20,8 +20,12 @@ export class MovieRepository {
     return this.movieRepository.findBy({ id: In(ids) });
   }
 
+  async findById(id: number): Promise<Movie | null> {
+    return this.movieRepository.findOneBy({ id });
+  }
+
   async findByTMDBId(tmdbId: number): Promise<Movie | null> {
-    return this.movieRepository.findOne({ where: { tmdbId } });
+    return this.movieRepository.findOneBy({ tmdbId });
   }
 
   async create(movie: Partial<Movie>): Promise<Movie> {

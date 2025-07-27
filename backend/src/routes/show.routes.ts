@@ -34,7 +34,7 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
           }
 
           // Get the show from the database or fetch from TMDB if not available
-          const show = await mediaService.getTVShow(showId);
+          const show = await mediaService.getTVShowByTmdbId(showId);
 
           if (!show) {
             return context.json({ error: 'Show not found' } satisfies ErrorResponse, 404);

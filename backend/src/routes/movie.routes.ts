@@ -55,7 +55,7 @@ export const createMovieRoutes = ({
           }
 
           // Get the movie from the database or fetch from TMDB if not available
-          const movie = await mediaService.getMovie(movieId);
+          const movie = await mediaService.getMovieByTmdbId(movieId);
 
           if (!movie) {
             return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
@@ -136,13 +136,13 @@ export const createMovieRoutes = ({
       }
     )
     .post(
-      '/:id/:quality',
+      '/:tmdbId/:quality',
       rateLimitGuard(5), // 5 requests per second for streaming key generation
       authGuard(),
       zValidator(
         'param',
         z.object({
-          id: z.string().regex(/^\d+$/, 'Movie ID must be a number'),
+          tmdbId: z.string().regex(/^\d+$/, 'Movie TMDB ID must be a number'),
           quality: z.enum<Quality | 'auto', typeof supportedQualities>(supportedQualities, {
             errorMap: () => ({
               message: `Quality must be one of: ${supportedQualities.join(', ')}`,
@@ -153,8 +153,8 @@ export const createMovieRoutes = ({
       async context => {
         try {
           const user = context.get('user');
-          const { id, quality } = context.req.valid('param');
-          const movieId = parseInt(id, 10);
+          const { tmdbId, quality } = context.req.valid('param');
+          const movieId = parseInt(tmdbId, 10);
 
           // Validate movie ID range
           if (movieId <= 0) {
@@ -162,7 +162,7 @@ export const createMovieRoutes = ({
           }
 
           // Check if movie exists
-          const movie = await mediaService.getMovie(movieId);
+          const movie = await mediaService.getMovieByTmdbId(movieId);
           if (!movie) {
             return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           }
@@ -198,7 +198,7 @@ export const createMovieRoutes = ({
           }
 
           // Generate streaming key for movie (not tied to specific source)
-          const streamingKey = await authService.generateStreamingKey(movieId, user.id);
+          const streamingKey = await authService.generateStreamingKey(movie.id, user.id);
 
           return context.json({
             streamingKey,

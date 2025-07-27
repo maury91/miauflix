@@ -258,7 +258,7 @@ export class AuthService {
     await this.streamingKeyRepository.create({
       keyHash: storedHash,
       movieId,
-      userId: parseInt(userId, 10),
+      userId,
       expiresAt: new Date(Date.now() + this.streamingKeyTTL),
     });
 
@@ -278,7 +278,7 @@ export class AuthService {
       if (streamingKey && streamingKey.expiresAt > new Date()) {
         return {
           movieId: streamingKey.movieId,
-          userId: streamingKey.userId.toString(),
+          userId: streamingKey.userId,
         };
       }
     } catch {
