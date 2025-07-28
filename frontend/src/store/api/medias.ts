@@ -128,11 +128,14 @@ export const mediasApi = createApi({
       providesTags: (result, error, { id }) => [{ type: 'Media', id }],
     }),
 
-    generateStreamingKey: builder.mutation<StreamingKeyResponse, { id: number; quality: string }>({
-      async queryFn({ id, quality }) {
+    generateStreamingKey: builder.mutation<
+      StreamingKeyResponse,
+      { tmdbId: number; quality: string }
+    >({
+      async queryFn({ tmdbId, quality }) {
         try {
-          const res = await client.movies[':id'][':quality'].$post({
-            param: { id: id.toString(), quality: quality as any },
+          const res = await client.movies[':tmdbId'][':quality'].$post({
+            param: { tmdbId: tmdbId.toString(), quality: quality as any },
           });
           const data = await res.json();
 
@@ -157,7 +160,7 @@ export const mediasApi = createApi({
           };
         }
       },
-      invalidatesTags: (result, error, { id }) => [{ type: 'Media', id }],
+      invalidatesTags: (result, error, { tmdbId }) => [{ type: 'Media', id: tmdbId }],
     }),
 
     // Stop stream (placeholder - no backend endpoint exists)
