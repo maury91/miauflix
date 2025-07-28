@@ -25,14 +25,14 @@ export class StreamService {
    * Get the best movie source for streaming based on quality preference
    */
   async getBestSourceForStreaming(
-    movieId: number,
+    tmdbMovieId: number,
     quality: Quality | 'auto',
     allowHevc = true
   ): Promise<MovieSource | null> {
     // First, get the movie (will fetch from TMDB if not in database)
-    const movie = await this.mediaService.getMovieByTmdbId(movieId);
+    const movie = await this.mediaService.getMovieByTmdbId(tmdbMovieId);
     if (!movie) {
-      logger.warn('StreamService', `Movie with ID ${movieId} not found`);
+      logger.warn('StreamService', `Movie with ID ${tmdbMovieId} not found`);
       return null;
     }
 
@@ -48,7 +48,7 @@ export class StreamService {
     );
 
     if (!sources.length) {
-      logger.warn('StreamService', `No sources found for movie ID ${movieId}`);
+      logger.warn('StreamService', `No sources found for movie ID ${tmdbMovieId}`);
       return null;
     }
 
@@ -56,7 +56,7 @@ export class StreamService {
     const streamableSources = filterSources(sources, allowHevc);
 
     if (!streamableSources.length) {
-      logger.warn('StreamService', `No streamable sources found for movie ID ${movieId}`);
+      logger.warn('StreamService', `No streamable sources found for movie ID ${tmdbMovieId}`);
       const nonStreamableSources = filterHevcSources(sources, allowHevc);
       if (nonStreamableSources.length) {
         // ToDo: Use source service to have a source with file

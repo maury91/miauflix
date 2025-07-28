@@ -227,7 +227,7 @@ export class DownloadService {
       // Patch storage with correct totalPieces and size after torrent is ready
       await this.storageService.updateDownloadProgress({
         movieSourceId: source.id,
-        downloadedPieces: torrent.bitfield.buffer,
+        downloadedPieces: torrent.bitfield?.buffer || new Uint8Array(0),
         totalPieces: torrent.numPieces,
         size: torrent.length,
       });
@@ -503,7 +503,7 @@ export class DownloadService {
     torrent.on('verified', async () => {
       try {
         // Convert BitField to Uint8Array for storage service
-        const bitfieldBuffer = torrent.bitfield
+        const bitfieldBuffer = torrent.bitfield?.buffer
           ? Buffer.from(torrent.bitfield.buffer)
           : new Uint8Array(0);
 
