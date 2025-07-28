@@ -33,14 +33,14 @@ services:
       - DEBUG=SourceService,DataResolver,DownloadService
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
-      interval: 0.5s
+      interval: 30s
       timeout: 2s
-      retries: 30
+      retries: 3
       start_period: 10s
     volumes:
       - ./.env:/usr/src/app/.env
       - ./data:/usr/data/
-      - /home/vscode/downloads:/usr/src/app/downloads
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
       - backend_node_modules:/usr/src/app/node_modules
     network_mode: service:vpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service

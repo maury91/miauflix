@@ -20,7 +20,7 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
       zValidator(
         'param',
         z.object({
-          id: z.string().regex(/^\d+$/, 'Show ID must be a number'),
+          id: z.string().regex(/^\d+$/, 'TMDB Show ID must be a number'),
         })
       ),
       async context => {
