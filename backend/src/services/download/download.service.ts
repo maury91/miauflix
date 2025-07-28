@@ -305,16 +305,45 @@ export class DownloadService {
         const existingTorrent = this.client.torrents.find(t => t.infoHash === hash);
         if (existingTorrent) {
           resolve(existingTorrent);
+          return;
         }
 
         const timeoutId = setTimeout(() => {
           reject(new ErrorWithStatus('Timeout adding download', 'add_torrent_timeout'));
         }, timeout);
 
-        this.client.add(file || magnetLink || hash, torrentOptions, function (torrent) {
-          clearTimeout(timeoutId);
-          resolve(torrent);
-        });
+        try {
+          const temporaryTorrent = this.client.add(
+            file || magnetLink || hash,
+            torrentOptions,
+            torrent => {
+              clearTimeout(timeoutId);
+              temporaryTorrent.off('error', onError);
+              resolve(torrent);
+            }
+          );
+
+          const onError = (error: Error) => {
+            // Torrent always gets destroyed on error, no need to listen further
+            temporaryTorrent.off('error', onError);
+            if ('message' in error && error.message === `Cannot add duplicate torrent ${hash}`) {
+              // Search again, maybe some race condition happened
+              const existingTorrent = this.client.torrents.find(t => t.infoHash === hash);
+              if (existingTorrent) {
+                resolve(existingTorrent);
+                return;
+              }
+            }
+            logger.error('DownloadService', `Error adding torrent ${hash}:`, error);
+            reject(error);
+          };
+
+          temporaryTorrent.on('error', onError);
+        } catch (error) {
+          // The only case I could find where it throws here is when the client is destroyed
+          logger.error('DownloadService', `Error adding torrent ${hash}:`, error);
+          reject(error);
+        }
       } catch (error) {
         reject(error);
       }
