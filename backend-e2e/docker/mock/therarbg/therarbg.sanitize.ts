@@ -6,7 +6,7 @@
  * across all projects.
  */
 
-import { sanitize as sanitizeFromPkg } from '@miauflix/therarbg-sanitizer';
+import { sanitize as sanitizeTherarbg } from '@miauflix/therarbg-sanitizer';
 
 /**
  * Main sanitization function for TheRARBG API responses
@@ -17,7 +17,7 @@ export function sanitize(data: any, url?: string): any {
   console.log('🔧 Input data type:', typeof data);
   console.log('🔧 Input data keys:', data && typeof data === 'object' ? Object.keys(data) : 'N/A');
 
-  const sanitized = sanitizeFromPkg(data, url, {
+  const sanitized = sanitizeTherarbg(data, url, {
     maxItems: 50,
     useLegalHashes: true,
     legalHashStrategy: 'imdb-based',
