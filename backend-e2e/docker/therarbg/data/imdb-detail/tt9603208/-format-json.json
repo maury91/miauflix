@@ -2,18 +2,11 @@
   "headers": {
     "age": "13523",
     "alt-svc": "h3=\":443\"; ma=86400",
-    "cf-cache-status": "DYNAMIC",
-    "cf-ray": "966bb88b6e6cd2cb-FRA",
     "content-type": "application/json",
     "cross-origin-opener-policy": "same-origin",
     "expires": "Tue, 29 Jul 2025 10:26:08 GMT",
-    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
     "referrer-policy": "same-origin",
-    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=EaM5QaHrFsFnBUrVwLuleYYvK%2B2Hl2QZw8PbB9O8NSC2IhCWO9sMvm2OlY1%2Fq9ltsrRv1rJLOY7yY875h5OAC6zgizJY1IOxh%2F0S\"}]}",
-    "server": "cloudflare",
     "vary": "origin, accept-encoding",
-    "x-content-type-options": "nosniff",
-    "x-frame-options": "DENY",
     "x-proxy-cache": "STALE"
   },
   "data": {
