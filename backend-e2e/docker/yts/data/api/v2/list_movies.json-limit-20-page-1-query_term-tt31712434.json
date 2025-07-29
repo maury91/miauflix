@@ -1,0 +1,119 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "966bb8646d18718b-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=eHMi%2F29MFYbpKOmZdYyhb%2Bcf2NcHTXGG3H8DMfEq2C98BF068wPV%2B7EVr6Z8gEkcWX%2BArtsISJIYG7G%2FjAnb5SAKZX52\"}]}",
+    "server": "cloudflare",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "10200475",
+    "set-cookie": "PHPSESSID=tib4n8mqg67rfv5up1uc7uv63g; Path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 69172,
+          "url": "https://loathsome-invention.net/sys",
+          "imdb_code": "tt31681349",
+          "title": "Innocent Wallaby",
+          "title_english": "Basic Dog",
+          "title_long": "Genetic Mite",
+          "slug": "innocent-wallaby-2025",
+          "year": 2025,
+          "rating": 3.7,
+          "runtime": 148,
+          "genres": ["Action", "Drama", "Thriller"],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "",
+          "language": "hi",
+          "mpa_rating": "",
+          "background_image": "https://respectful-spork.com/var/spool",
+          "background_image_original": "https://jealous-molding.com/bin",
+          "small_cover_image": "https://ill-informed-stalk.info/net",
+          "medium_cover_image": "https://austere-exchange.org/rescue",
+          "large_cover_image": "https://well-informed-otter.info/net",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/A2E3023730B962B2ADC7CC10834957212D9ADF87",
+              "hash": "A2E3023730B962B2ADC7CC10834957212D9ADF87",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 74,
+              "peers": 8,
+              "size": "1.2 GB",
+              "size_bytes": 1288490189,
+              "date_uploaded": "2025-05-24 23:20:12",
+              "date_uploaded_unix": 1748121612
+            },
+            {
+              "url": "https://yts.mx/torrent/download/D4BB886DB6C607AF9C90A7A68F80B1E275CE8A51",
+              "hash": "D4BB886DB6C607AF9C90A7A68F80B1E275CE8A51",
+              "quality": "1080p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "5.1",
+              "seeds": 44,
+              "peers": 7,
+              "size": "2.47 GB",
+              "size_bytes": 2652142305,
+              "date_uploaded": "2025-05-25 00:51:54",
+              "date_uploaded_unix": 1748127114
+            },
+            {
+              "url": "https://yts.mx/torrent/download/2A23C985CB7731B7CA9D2C12D9F6E9D9A7CFC330",
+              "hash": "2A23C985CB7731B7CA9D2C12D9F6E9D9A7CFC330",
+              "quality": "1080p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x265",
+              "bit_depth": "10",
+              "audio_channels": "5.1",
+              "seeds": 46,
+              "peers": 6,
+              "size": "2.23 GB",
+              "size_bytes": 2394444268,
+              "date_uploaded": "2025-05-25 08:04:25",
+              "date_uploaded_unix": 1748153065
+            }
+          ],
+          "date_uploaded": "2025-05-24 23:20:12",
+          "date_uploaded_unix": 1748121612
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1753782713,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

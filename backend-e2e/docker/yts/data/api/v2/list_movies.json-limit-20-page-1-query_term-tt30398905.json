@@ -1,0 +1,103 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "966bb932ae0b718b-FRA",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "pragma": "no-cache",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=eGcxfbLQQvHU1B%2BbVhA5wOi08%2BBMpynaUJ%2BYRpRDkGcsmgzXv6TgJ1kfBqhPUn9Qs2G9nbnml8qwD14IKN5jh3Nwb9Pa\"}]}",
+    "server": "cloudflare",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
+    "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/6.5)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "25169134",
+    "set-cookie": "PHPSESSID=ua2rnsknnie6160avo12hjtf1t; Path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 67614,
+          "url": "https://sunny-rap.name/var/spool",
+          "imdb_code": "tt70571983",
+          "title": "Confused Tiglon",
+          "title_english": "Elegant Catfish",
+          "title_long": "Defeated Firefly",
+          "slug": "confused-tiglon-2024",
+          "year": 2024,
+          "rating": 5.3,
+          "runtime": 103,
+          "genres": ["Family", "Fantasy"],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "pEuU2uCTo7z",
+          "language": "de",
+          "mpa_rating": "",
+          "background_image": "https://grateful-bone.biz/usr/src",
+          "background_image_original": "https://fluffy-manservant.net/sbin",
+          "small_cover_image": "https://milky-neighbor.net/opt",
+          "medium_cover_image": "https://feisty-calcification.net/opt/include",
+          "large_cover_image": "https://present-samovar.org/mnt",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "https://yts.mx/torrent/download/A603268DF94A9A7EEC751D55A512D4C6490A1B2B",
+              "hash": "A603268DF94A9A7EEC751D55A512D4C6490A1B2B",
+              "quality": "720p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 14,
+              "peers": 5,
+              "size": "944.03 MB",
+              "size_bytes": 989887201,
+              "date_uploaded": "2025-03-16 01:47:03",
+              "date_uploaded_unix": 1742086023
+            },
+            {
+              "url": "https://yts.mx/torrent/download/1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "hash": "1F46E1D019E9FC20331EC1F6F67A25C2F0B19335",
+              "quality": "1080p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "5.1",
+              "seeds": 23,
+              "peers": 9,
+              "size": "1.89 GB",
+              "size_bytes": 2029372047,
+              "date_uploaded": "2025-03-16 02:58:20",
+              "date_uploaded_unix": 1742090300
+            }
+          ],
+          "date_uploaded": "2025-03-16 01:47:03",
+          "date_uploaded_unix": 1742086023
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1753782746,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}
