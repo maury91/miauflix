@@ -245,7 +245,7 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
 
     # Extract admin credentials using separate script
     echo "🔍 Extracting admin credentials..."
-    if ! ./scripts/extract-credentials.sh 60 "$PROJECT_NAME" "$DOCKER_COMPOSE_FILE"; then
+    if ! ./scripts/extract-credentials.sh 15 "$PROJECT_NAME" "$DOCKER_COMPOSE_FILE"; then
         echo "⚠️  Continuing without credentials - some tests may be skipped"
     fi
 else
