@@ -56,7 +56,7 @@
           "state": "ok",
           "torrents": [
             {
-              "url": "https://yts.mx/torrent/download/ADB23AD41C1132004AF856494D4C465B41511067",
+              "url": "http://yts-mock/torrent/download/ADB23AD41C1132004AF856494D4C465B41511067",
               "hash": "ADB23AD41C1132004AF856494D4C465B41511067",
               "quality": "3D",
               "type": "bluray",
@@ -72,7 +72,7 @@
               "date_uploaded_unix": 1497676835
             },
             {
-              "url": "https://yts.mx/torrent/download/D21A0DB753CE50231BA029F6612F66769206526C",
+              "url": "http://yts-mock/torrent/download/D21A0DB753CE50231BA029F6612F66769206526C",
               "hash": "D21A0DB753CE50231BA029F6612F66769206526C",
               "quality": "720p",
               "type": "bluray",
@@ -88,7 +88,7 @@
               "date_uploaded_unix": 1495164381
             },
             {
-              "url": "https://yts.mx/torrent/download/D9A57B6F4E3296746079577C340057035D4E8567",
+              "url": "http://yts-mock/torrent/download/D9A57B6F4E3296746079577C340057035D4E8567",
               "hash": "D9A57B6F4E3296746079577C340057035D4E8567",
               "quality": "1080p",
               "type": "bluray",
@@ -104,7 +104,7 @@
               "date_uploaded_unix": 1495173404
             },
             {
-              "url": "https://yts.mx/torrent/download/EA63ED45B33EB3960E5BA8190F04458339B4F5C3",
+              "url": "http://yts-mock/torrent/download/EA63ED45B33EB3960E5BA8190F04458339B4F5C3",
               "hash": "EA63ED45B33EB3960E5BA8190F04458339B4F5C3",
               "quality": "2160p",
               "type": "bluray",
