@@ -109,7 +109,7 @@ jobs:
           name: e2e-test-logs
           path: |
             backend-e2e/admin-credentials.json
-            backend-e2e/docker-logs.txt
+            backend-e2e/logs/*.log
           retention-days: 7
 
   # Disabled until we are ready for production
