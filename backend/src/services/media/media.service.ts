@@ -234,9 +234,11 @@ export class MediaService {
       }
     }
 
-    await this.tvShowRepository.markAsWatching(show.id);
-
     return show;
+  }
+
+  public async markShowAsWatching(showId: number): Promise<void> {
+    await this.tvShowRepository.markAsWatching(showId);
   }
 
   public async syncIncompleteSeasons() {

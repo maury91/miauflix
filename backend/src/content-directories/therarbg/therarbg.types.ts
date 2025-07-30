@@ -91,7 +91,7 @@ export interface ImdbDetailPost {
   episode: number; // 0 in case of movies
   timestamp: string;
   last_checked: string;
-  files: SourceFile[];
+  files: SourceFile[] | null;
   trackers: TrackerInfo[];
   has_torrent: boolean;
   images: string[];
@@ -108,11 +108,16 @@ export interface ImdbDetailPost {
   imdb_data: number;
 }
 
-export interface SourceFile {
-  name: string;
-  size: number;
-  full_location: string;
-}
+export type SourceFile =
+  | {
+      name: string;
+      size: number;
+      full_location: string;
+    }
+  | {
+      name: string[];
+      size: number[];
+    };
 
 export interface TrackerInfo {
   seeders: number;
