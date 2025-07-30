@@ -72,6 +72,11 @@ export class TVShow {
   })
   rating: number;
 
+  @Column({
+    default: false,
+  })
+  watching: boolean = false;
+
   @OneToMany(() => Season, season => season.tvShow)
   seasons: Relation<Season>[];
 
