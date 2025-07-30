@@ -67,6 +67,8 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
             sources: [], // TODO: Implement sources
           };
 
+          await mediaService.markShowAsWatching(showId);
+
           return context.json(response satisfies ShowResponse);
         } catch (error: unknown) {
           console.error('Failed to get show:', error);
