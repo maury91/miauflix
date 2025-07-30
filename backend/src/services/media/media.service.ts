@@ -1,5 +1,6 @@
 import { logger } from '@logger';
 
+import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
 import { Movie } from '@entities/movie.entity';
@@ -26,6 +27,7 @@ export class MediaService {
   private readonly movieRepository: MovieRepository;
   private readonly tvShowRepository: TVShowRepository;
   private readonly genreRepository: GenreRepository;
+
   private readonly syncStateRepository: SyncStateRepository;
   private genreCache = new Map<number, GenreWithLanguages>();
 
@@ -232,12 +234,23 @@ export class MediaService {
       }
     }
 
+    await this.tvShowRepository.markAsWatching(show.id);
+
     return show;
   }
 
   public async syncIncompleteSeasons() {
-    const incompleteSeason = await this.tvShowRepository.findIncompleteSeason();
-    if (incompleteSeason) {
+    const episodeSyncMode = ENV('EPISODE_SYNC_MODE');
+
+    const incompleteSeasons =
+      episodeSyncMode === 'GREEDY'
+        ? await this.tvShowRepository.findIncompleteSeasons()
+        : await this.findIncompleteSeasonsForWatchingShows();
+
+    if (incompleteSeasons && incompleteSeasons.length > 0) {
+      // Process the first incomplete season (maintain current behavior of processing one at a time)
+      const incompleteSeason = incompleteSeasons[0];
+
       const seasonDetails = await this.tmdbApi.getSeason(
         incompleteSeason.tvShow.tmdbId,
         incompleteSeason.seasonNumber
@@ -261,6 +274,29 @@ export class MediaService {
 
       await this.tvShowRepository.markSeasonAsSynced(incompleteSeason);
     }
+  }
+
+  /**
+   * Find incomplete seasons for TV shows where users have marked as watching
+   * This is used in ON_DEMAND mode to only sync shows the user is actively watching
+   */
+  private async findIncompleteSeasonsForWatchingShows(): Promise<Season[]> {
+    // Get TV show IDs where users have marked shows as watching
+    const watchingShowIds = await this.getWatchingTVShowIds();
+
+    if (watchingShowIds.length === 0) {
+      return [];
+    }
+
+    // Find incomplete seasons for these shows
+    return await this.tvShowRepository.findIncompleteSeasonsByShowIds(watchingShowIds);
+  }
+
+  /**
+   * Get TV show IDs where users have marked shows as watching
+   */
+  private async getWatchingTVShowIds(): Promise<number[]> {
+    return await this.tvShowRepository.getWatchingTVShowIds();
   }
 
   public async syncMovies() {
