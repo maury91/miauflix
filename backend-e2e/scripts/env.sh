@@ -205,9 +205,9 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Start all services
     echo "🚀 Starting the $MODE environment with Docker Compose..."
     if [[ "$MODE" == "dev" ]]; then
-        docker compose --env-file ../.env -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
+        COMPOSE_BAKE=true docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
     else
-        docker compose --env-file ../.env -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
+        COMPOSE_BAKE=true docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
     fi
 
     docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" logs --since 1m  --follow &> "$log_file" &

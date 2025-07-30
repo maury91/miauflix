@@ -50,8 +50,6 @@ services:
       context: mock
       dockerfile: tmdb.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://api.themoviedb.org/3
@@ -74,8 +72,6 @@ services:
       context: mock
       dockerfile: mock.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://api.trakt.tv
@@ -102,8 +98,6 @@ services:
       context: .
       dockerfile: mock/yts.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://yts.mx/api/v2
@@ -127,8 +121,6 @@ services:
       context: .
       dockerfile: mock/therarbg.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://therarbg.to
