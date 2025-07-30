@@ -118,11 +118,11 @@ backend/src/services/source/source.service.ts
 - `backend/src/entities/genre.entity.ts` - Genre categorization
 - `backend/src/services/trakt/` - Trakt.tv integration
 
-### **Streaming (Missing 1 Endpoint)**
+### **Streaming (Implemented)**
 
 - `backend/src/services/download/download.service.ts` - WebTorrent client (complete)
-- `backend/src/routes/stream.routes.ts` - **MISSING** stream endpoint
-- `frontend/src/app/pages/player/` - Video player UI (exists but needs backend connection)
+- `backend/src/routes/stream.routes.ts` - Streaming endpoint implementation
+- `frontend/src/app/pages/player/` - Video player UI (connects to backend)
 
 ## 🔧 **Configuration & Environment**
 
