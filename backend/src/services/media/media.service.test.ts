@@ -57,6 +57,7 @@ const mockDb = {
   getMovieRepository: () => mockMovieRepo,
   getTVShowRepository: () => ({}),
   getGenreRepository: () => mockGenreRepo,
+  getProgressRepository: () => ({}),
   getSyncStateRepository: () => mockSyncStateRepo,
   getSeasonRepository: () => ({}),
 } as unknown as Database;

@@ -14,6 +14,7 @@
 - **Database Layer**: 13 entities with AES-256-GCM encryption, complete repository pattern
 - **Background Tasks**: 7 scheduled tasks running continuously (0.1s - 5s intervals)
 - **API Infrastructure**: All routes except streaming endpoint implemented
+- **Episode Sync Management**: Smart episode syncing with GREEDY/ON_DEMAND modes and watching flags
 
 ### ❌ **Only 2 Things Missing (Critical Blockers)**
 
@@ -62,10 +63,42 @@
 
 ```typescript
 // These are production-ready, don't rebuild:
-backend/src/services/auth/auth.service.ts       // 228 lines, 18 methods
-backend/src/services/source/source.service.ts   // 719 lines, 24 methods
-backend/src/services/download/download.service.ts // 179 lines
-backend/src/services/media/                      // TMDB + Trakt integration
+backend / src / services / auth / auth.service.ts; // 228 lines, 18 methods
+backend / src / services / source / source.service.ts; // 719 lines, 24 methods
+backend / src / services / download / download.service.ts; // 179 lines
+backend / src / services / media / media.service.ts; // TMDB + Trakt integration + episode sync
+```
+
+## 🎬 **Episode Sync Management (New Feature)**
+
+### **Configuration**
+
+- **Environment Variable**: `EPISODE_SYNC_MODE`
+- **Values**: `GREEDY` (sync all episodes) or `ON_DEMAND` (sync only watched shows)
+- **Default**: `ON_DEMAND`
+
+### **How It Works**
+
+1. **GREEDY Mode**: Background task syncs all incomplete seasons (original behavior)
+2. **ON_DEMAND Mode**:
+   - Shows are marked as "watching" when user accesses them
+   - Background task only syncs episodes for shows where `watching: true`
+   - Efficient tracking without heavy progress queries
+
+### **Database Changes**
+
+- **TVShow Entity**: Added `watching: boolean` field (default: false)
+- **TVShowRepository**: Methods to manage watching status
+- **MediaService**: Automatically marks shows as watching on access
+
+### **Usage**
+
+```bash
+# Set sync mode
+export EPISODE_SYNC_MODE=ON_DEMAND  # Default behavior
+export EPISODE_SYNC_MODE=GREEDY     # Sync all episodes
+
+# Background task automatically adapts to mode
 ```
 
 ## 🧪 **Testing Infrastructure**
