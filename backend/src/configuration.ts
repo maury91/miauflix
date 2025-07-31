@@ -63,6 +63,13 @@ const serverConfigurationDefinition = serviceConfiguration({
       example: 'your-secure-random-string',
       transform: transforms.optional(transforms.string({ minLength: 16 })),
     }),
+    DISABLE_BACKGROUND_TASKS: variable({
+      description: 'Disable all background tasks for testing on-demand functionality',
+      required: false,
+      defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
   },
   test: async () => {
     // No test needed for CORS configuration
