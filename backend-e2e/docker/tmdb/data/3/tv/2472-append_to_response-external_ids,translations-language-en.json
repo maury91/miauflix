@@ -4,7 +4,14 @@
     "cache-control": "public, max-age=10347",
     "content-type": "application/json;charset=utf-8",
     "etag": "W/\"c59d17c636d142c546a2dc47e19d4353\"",
-    "vary": "accept-encoding, Origin"
+    "server": "openresty",
+    "vary": "accept-encoding, Origin",
+    "via": "1.1 8b889e35789d2b97f2ba8771acc9a008.cloudfront.net (CloudFront)",
+    "x-amz-cf-id": "EXcFpxKsR316-zh1uKrJDSIgx_mbGUqd4JOvMjOMAfxpDre13CTaqQ==",
+    "x-amz-cf-pop": "FRA60-P3",
+    "x-az": "us-east-1b",
+    "x-cache": "Miss from cloudfront",
+    "x-task-id": "bec4a5a123e544fb9ba3d3c9002f9f25"
   },
   "data": {
     "adult": false,
