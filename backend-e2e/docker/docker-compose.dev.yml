@@ -20,6 +20,7 @@ services:
       - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/trackers_best.txt
       - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
       - DOWNLOAD_PATH=/usr/src/app/downloads
+      - ENABLE_TRACING=true
     networks:
       - test-network
     ports:
@@ -32,10 +33,11 @@ services:
       # Fresh database for each development session
       - dev_database:/usr/src/app/data
       - dev_downloads:/usr/src/app/downloads
+      - ../../traces:/tmp:rw
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
-      interval: 0.5s
-      timeout: 2s
+      interval: 10s
+      timeout: 5s
       retries: 30
       start_period: 10s
     depends_on:
@@ -130,6 +132,7 @@ services:
       - API_BASE_URL=https://therarbg.to
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=none
+      - OWN_URL=http://therarbg-mock
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s
