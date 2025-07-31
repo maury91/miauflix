@@ -5,10 +5,22 @@
     "age": "0",
     "alt-svc": "h3=\":443\"; ma=86400",
     "cache-control": "no-store, no-cache, must-revalidate",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "94ce6e417a4fbb55-FRA",
     "content-type": "application/json; charset=utf-8",
     "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "nel": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
     "pragma": "no-cache",
+    "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=vASfBeuME%2B1OCpgdxE4hefbJPewQGlgI22gQ%2FLiLwzufS6tFAxQaapzif1Yc8kxt%2FwfKNyXZ1BAdGVgE8UUULA4jNdTC9wQuFcsbZ2F%2FZbcpNHSoUm5Z%2BQ%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+    "server": "cloudflare",
+    "server-timing": "cfL4;desc=\"?proto=TCP&rtt=630&min_rtt=566&rtt_var=341&sent=5&recv=6&lost=0&retrans=0&sent_bytes=3170&recv_bytes=859&delivery_rate=4018501&cwnd=178&unsent_bytes=0&cid=a94f983faa169a35&ts=178&x=0\"",
+    "speculation-rules": "\"/cdn-cgi/speculation\"",
+    "strict-transport-security": "max-age=0; includeSubDomains; preload",
     "vary": "Accept-Encoding",
+    "via": "1.1 varnish (Varnish/5.2)",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-varnish": "499542",
     "set-cookie": "PHPSESSID=tpukt199lo5t006gts5oce0os4; path=/"
   },
   "data": {
@@ -45,7 +57,7 @@
           "state": "ok",
           "torrents": [
             {
-              "url": "http://yts-mock/torrent/download/FC740D9A71BB7C34EEBA556FC0CE526C54DD4780",
+              "url": "https://yts.mx/torrent/download/FC740D9A71BB7C34EEBA556FC0CE526C54DD4780",
               "hash": "FC740D9A71BB7C34EEBA556FC0CE526C54DD4780",
               "quality": "720p",
               "type": "bluray",
@@ -61,7 +73,7 @@
               "date_uploaded_unix": 1446330605
             },
             {
-              "url": "http://yts-mock/torrent/download/A723892753A9B5F64AD89A92C422027AD163246E",
+              "url": "https://yts.mx/torrent/download/A723892753A9B5F64AD89A92C422027AD163246E",
               "hash": "A723892753A9B5F64AD89A92C422027AD163246E",
               "quality": "1080p",
               "type": "bluray",
@@ -77,7 +89,7 @@
               "date_uploaded_unix": 1446330608
             },
             {
-              "url": "http://yts-mock/torrent/download/A668A0822456A0421A35AA225AB086D3CF6555F1",
+              "url": "https://yts.mx/torrent/download/A668A0822456A0421A35AA225AB086D3CF6555F1",
               "hash": "A668A0822456A0421A35AA225AB086D3CF6555F1",
               "quality": "2160p",
               "type": "bluray",
