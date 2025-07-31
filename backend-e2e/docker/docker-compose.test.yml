@@ -21,6 +21,7 @@ services:
       - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
       - DOWNLOAD_PATH=/usr/src/app/downloads
       - DEBUG=*
+      - ENABLE_TRACING=true
     networks:
       - test-network
     ports:
@@ -28,10 +29,11 @@ services:
     volumes:
       - ../.env.test:/usr/src/app/.env:ro
       - test_downloads:/usr/src/app/downloads
+      - ../../traces:/tmp:rw
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
-      interval: 0.5s
-      timeout: 2s
+      interval: 10s
+      timeout: 5s
       retries: 30
       start_period: 10s
     depends_on:

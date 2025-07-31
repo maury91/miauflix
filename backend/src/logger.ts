@@ -1,4 +1,4 @@
-import process from 'node:process';
+import { getTraceContextString } from '@utils/trace-context';
 
 type Severity = 'debug' | 'error' | 'info' | 'warn';
 
@@ -21,7 +21,8 @@ const print = (severity: Severity, service: string, message: string, ...metadata
   }
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(5, 22);
-  const formattedMessage = `[${timestamp}] [${service}] ${message}`;
+  const traceContext = getTraceContextString();
+  const formattedMessage = `[${timestamp}] [${service}]${traceContext} ${message}`;
   // Only stringify metadata if it exists
   const metadataFormatted = metadata.map(m =>
     typeof m === 'undefined' ? '' : m instanceof Error ? m : ` ${JSON.stringify(m, null, 2)}`

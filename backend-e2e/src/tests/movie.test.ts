@@ -33,7 +33,7 @@ describe('Movie Endpoints', () => {
         query: {},
       });
 
-      expect(response.status).toBe(401);
+      expect(response).toBeHttpStatus(401);
       expect(response.data).toHaveProperty('message');
 
       // Restore auth for other tests
@@ -54,7 +54,7 @@ describe('Movie Endpoints', () => {
         query: {},
       });
 
-      expect(response.status).toBe(404);
+      expect(response).toBeHttpStatus(404);
       expect(response.data).toHaveProperty('error', 'Movie not found');
     });
 
@@ -71,7 +71,7 @@ describe('Movie Endpoints', () => {
         query: {},
       });
 
-      expect(response.status).toBe(400);
+      expect(response).toBeHttpStatus(400);
       expect(response.data).toHaveProperty('error');
     });
 
@@ -92,7 +92,7 @@ describe('Movie Endpoints', () => {
         throw new Error('Movie not found - ensure the backend has the TMDB data loaded');
       }
 
-      expect(response.status).toBe(200);
+      expect(response).toBeHttpStatus(200);
       expect(response.data).toHaveProperty('id');
       expect(response.data).toHaveProperty('tmdbId');
       expect(response.data).toHaveProperty('title');
@@ -132,11 +132,7 @@ describe('Movie Endpoints', () => {
         query: { lang: 'es' },
       });
 
-      if (response.status === 404) {
-        throw new Error('Movie not found for Spanish language');
-      }
-
-      expect(response.status).toBe(200);
+      expect(response).toBeHttpStatus(200);
       expect(response.data).toHaveProperty('title');
       expect(response.data).toHaveProperty('overview');
     });
@@ -153,11 +149,7 @@ describe('Movie Endpoints', () => {
         query: { includeSources: 'true' },
       });
 
-      if (response.status === 404) {
-        throw new Error('Movie not found for Spanish language');
-      }
-
-      expect(response.status).toBe(200);
+      expect(response).toBeHttpStatus(200);
       expect(response.data).toHaveProperty('sources');
 
       if (!('sources' in response.data)) {
@@ -204,11 +196,7 @@ describe('Movie Endpoints', () => {
         query: {},
       });
 
-      if (response.status === 404) {
-        throw new Error('Movie not found for Spanish language');
-      }
-
-      expect(response.status).toBe(200);
+      expect(response).toBeHttpStatus(200);
       expect(response.data).not.toHaveProperty('sources');
     });
 
@@ -259,6 +247,27 @@ describe('Movie Endpoints', () => {
       expect([400, 404]).toContain(response.status);
     });
   });
+
+  describe.skip('POST /movies/:tmdbId/:quality', () => {
+    it('should generate a streaming key for a valid movie', async () => {
+      if (!userCredentials) {
+        throw new Error(
+          'No user credentials available for testing - ensure backend is running and generating admin user'
+        );
+      }
+
+      const response = await client.post(['movies', ':tmdbId', ':quality'], {
+        param: { tmdbId: '550', quality: 'auto' },
+      });
+
+      expect(response).toBeHttpStatus(200);
+      expect(response.data).toHaveProperty('streamingKey');
+      if ('streamingKey' in response.data) {
+        expect(typeof response.data.streamingKey).toBe('string');
+      }
+    });
+  });
+
   // Performance test: on-demand source request for unprocessed movie
   it('should request a source on-demand for an unprocessed movie in under 1 second', async () => {
     if (!userCredentials) {
@@ -279,7 +288,7 @@ describe('Movie Endpoints', () => {
 
     const durationMs = Date.now() - start;
 
-    expect(response.status).toBe(200);
+    expect(response).toBeHttpStatus(200);
     expect(response.data).toHaveProperty('sources');
     expect(durationMs).toBeLessThan(1000);
   });
