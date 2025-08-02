@@ -7,6 +7,7 @@ import path from 'path';
 import sqlite3 from 'sqlite3';
 
 import { ENV } from '@constants';
+import { traced } from '@utils/tracing.util';
 
 export class CacheService {
   private db: sqlite3.Database;
@@ -126,6 +127,7 @@ export class CacheService {
   /**
    * Perform actual cleanup - delete expired entries
    */
+  @traced('CacheService')
   async cleanup(): Promise<void> {
     logger.debug('CacheService', 'Starting cache cleanup...');
 

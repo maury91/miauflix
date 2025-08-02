@@ -3,6 +3,7 @@ import { createMiddleware } from 'hono/factory';
 import type { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
 import type { AuthService } from '@services/auth/auth.service';
+import { withSpan } from '@utils/tracing.util';
 
 export interface AuthUser {
   id: string;
@@ -22,25 +23,27 @@ export const createAuthMiddleware = (authService: AuthService) => {
       user?: AuthUser;
     };
   }>(async (c, next) => {
-    const authorization = c.req.header('authorization');
+    return withSpan('AuthMiddleware.verifyToken', async () => {
+      const authorization = c.req.header('authorization');
 
-    if (authorization?.startsWith('Bearer ')) {
-      const token = authorization.substring('Bearer '.length);
+      if (authorization?.startsWith('Bearer ')) {
+        const token = authorization.substring('Bearer '.length);
 
-      try {
-        const payload = await authService.verifyAccessToken(token);
+        try {
+          const payload = await authService.verifyAccessToken(token);
 
-        c.set('user', {
-          id: payload.userId,
-          email: payload.email,
-          role: payload.role as UserRole,
-        } satisfies AuthUser);
-      } catch {
-        // Invalid token, but continue to next middleware
+          c.set('user', {
+            id: payload.userId,
+            email: payload.email,
+            role: payload.role as UserRole,
+          } satisfies AuthUser);
+        } catch {
+          // Invalid token, but continue to next middleware
+        }
       }
-    }
 
-    await next();
+      await next();
+    });
   });
 };
 
