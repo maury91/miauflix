@@ -13,6 +13,7 @@ import type { TVShowRepository } from '@repositories/tvshow.repository';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { MovieMediaSummary, TVShowMediaSummary } from '@services/tmdb/tmdb.types';
 import { sleep } from '@utils/time';
+import { traced } from '@utils/tracing.util';
 
 import type { GenreWithLanguages, TranslatedMedia } from './media.types';
 
@@ -42,6 +43,7 @@ export class MediaService {
     this.syncStateRepository = db.getSyncStateRepository();
   }
 
+  @traced('MediaService')
   public async getMovieByTmdbId(
     tmdbId: number | string,
     movieSummary?: MovieMediaSummary
@@ -100,6 +102,7 @@ export class MediaService {
     return movie;
   }
 
+  @traced('MediaService')
   public async getMovieById(id: number): Promise<Movie | null> {
     return this.movieRepository.findById(id);
   }
@@ -237,10 +240,12 @@ export class MediaService {
     return show;
   }
 
+  @traced('MediaService')
   public async markShowAsWatching(showId: number): Promise<void> {
     await this.tvShowRepository.markAsWatching(showId);
   }
 
+  @traced('MediaService')
   public async syncIncompleteSeasons() {
     const episodeSyncMode = ENV('EPISODE_SYNC_MODE');
 
@@ -301,6 +306,7 @@ export class MediaService {
     return await this.tvShowRepository.getWatchingTVShowIds();
   }
 
+  @traced('MediaService')
   public async syncMovies() {
     const lastMovieSync = await this.syncStateRepository.getLastSync(MOVIE_SYNC_NAME);
     const now = new Date();
@@ -375,6 +381,7 @@ export class MediaService {
     }
   }
 
+  @traced('MediaService')
   public async mediasWithLanguage(
     medias: (Movie | TVShow)[],
     language: string

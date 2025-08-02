@@ -21,6 +21,8 @@ services:
       - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
       - DOWNLOAD_PATH=/usr/src/app/downloads
       - ENABLE_TRACING=true
+      - DEBUG=*,-require-in-the-middle
+      - DISABLE_BACKGROUND_TASKS=true
     networks:
       - test-network
     ports:

@@ -12,6 +12,7 @@ import type { MovieSource } from '@entities/movie-source.entity';
 import type { Storage } from '@entities/storage.entity';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import type { StorageService } from '@services/storage/storage.service';
+import { traced } from '@utils/tracing.util';
 
 import type { EncryptedStorageOptions } from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
 import EncryptedChunkStore from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
@@ -121,6 +122,7 @@ export class DownloadService {
     return `magnet:?xt=urn:btih:${hash}&${params.toString()}`;
   }
 
+  @traced('DownloadService')
   async getSourceMetadataFile(sourceLink: string, hash: string, timeout: number): Promise<Buffer> {
     return new Promise((resolve, rejectRaw) => {
       const remove = () => {
@@ -193,6 +195,7 @@ export class DownloadService {
     });
   }
 
+  @traced('DownloadService')
   async getStats(infoHash: string): Promise<{ broadcasters: number; watchers: number }> {
     await this.ready;
     const result = await this.scrape(infoHash);
@@ -206,6 +209,7 @@ export class DownloadService {
    * Start greedy download with storage tracking and priority management
    * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
    */
+  @traced('DownloadService')
   async startDownload(source: MovieSource): Promise<GreedyDownload> {
     try {
       logger.info('DownloadService', `Starting download for source ${source.id}`);
@@ -353,6 +357,7 @@ export class DownloadService {
   /**
    * Get download progress for a movie source
    */
+  @traced('DownloadService')
   async getDownloadProgress(movieSourceId: number): Promise<DownloadProgress | null> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -394,6 +399,7 @@ export class DownloadService {
   /**
    * Pause download for a movie source
    */
+  @traced('DownloadService')
   async pauseDownload(movieSourceId: number): Promise<boolean> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -429,6 +435,7 @@ export class DownloadService {
   /**
    * Resume download for a movie source
    */
+  @traced('DownloadService')
   async resumeDownload(movieSourceId: number): Promise<boolean> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -464,6 +471,7 @@ export class DownloadService {
   /**
    * Remove/cancel download for a movie source
    */
+  @traced('DownloadService')
   async cancelDownload(movieSourceId: number): Promise<boolean> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -540,6 +548,7 @@ export class DownloadService {
    * Stream a file from a torrent with range request support
    * Based on WebTorrent server implementation
    */
+  @traced('DownloadService')
   async streamFile(
     movieSource: MovieSource,
     rangeHeader?: string

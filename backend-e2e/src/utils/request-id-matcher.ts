@@ -17,10 +17,10 @@ declare global {
 /**
  * Custom matcher to check HTTP status codes with request ID display
  */
-export const toBeHttpStatus = (received: any, expectedStatus: number) => {
+export const toBeHttpStatus = (received: TestResponse | number, expectedStatus: number) => {
   // Handle both TestResponse objects and direct status numbers
   const actualStatus =
-    typeof received === 'object' && received.status !== undefined ? received.status : received;
+    typeof received === 'object' && 'status' in received ? received.status : received;
 
   const pass = actualStatus === expectedStatus;
 
@@ -32,7 +32,7 @@ export const toBeHttpStatus = (received: any, expectedStatus: number) => {
   } else {
     // If we have a TestResponse object, show request ID
     const requestIdInfo =
-      typeof received === 'object' && received.requestId
+      typeof received === 'object' && 'requestId' in received && received.requestId
         ? `\n🔍 Request ID: ${received.requestId} (use this to trace in logs/traces)`
         : '\n⚠️  No request ID found in response headers';
 
@@ -47,7 +47,7 @@ export const toBeHttpStatus = (received: any, expectedStatus: number) => {
  * Custom matcher to check if response has a request ID
  */
 export const toHaveRequestId = (received: TestResponse) => {
-  const pass = !!received.requestId;
+  const pass = typeof received === 'object' && 'requestId' in received && !!received.requestId;
 
   if (pass) {
     return {
