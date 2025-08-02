@@ -99,7 +99,7 @@ jobs:
           path: |
             backend-e2e/admin-credentials.json
             backend-e2e/logs/*.log
-            traces/traces.log
+            backend-e2e/logs/traces/*.log
           retention-days: 7
 
   # Disabled until we are ready for production
