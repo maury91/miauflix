@@ -1,3 +1,4 @@
+import { otel } from '@hono/otel';
 import { Hono } from 'hono';
 
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
@@ -18,6 +19,11 @@ export function createRoutes(deps: Deps) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(deps.auditLogService);
 
   return new Hono()
+    .use(
+      otel({
+        augmentSpan: true,
+      })
+    )
     .use(traceContextMiddleware)
     .use(createAuthMiddleware(deps.authService))
     .use(createAuditLogMiddleware(deps.auditLogService))

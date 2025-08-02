@@ -20,7 +20,8 @@ services:
       - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/trackers_best.txt
       - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
       - DOWNLOAD_PATH=/usr/src/app/downloads
-      - DEBUG=*
+      - DEBUG=*,-require-in-the-middle
+      - DISABLE_BACKGROUND_TASKS=true
       - ENABLE_TRACING=true
     networks:
       - test-network
@@ -29,7 +30,7 @@ services:
     volumes:
       - ../.env.test:/usr/src/app/.env:ro
       - test_downloads:/usr/src/app/downloads
-      - ../../traces:/tmp:rw
+      - ../logs/traces:/tmp:rw
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
       interval: 10s
