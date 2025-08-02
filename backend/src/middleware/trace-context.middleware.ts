@@ -1,3 +1,4 @@
+import { logger } from '@logger';
 import type { Context, Next } from 'hono';
 
 import { getCurrentTraceId } from '@utils/trace-context';
@@ -9,6 +10,7 @@ import { getCurrentTraceId } from '@utils/trace-context';
 export const traceContextMiddleware = async (c: Context, next: Next) => {
   // Get the current trace ID
   const traceId = getCurrentTraceId();
+  logger.debug('Router', `[${c.req.method}] ${c.req.path}`);
 
   // Add trace ID to response headers if available
   if (traceId) {

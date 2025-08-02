@@ -4,45 +4,81 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export class FileSpanExporter implements SpanExporter {
-  private logFile: string;
-  private logStream: fs.WriteStream | null = null;
+  private logStreams: Map<string, { stream: fs.WriteStream; lastAccess: number }> = new Map();
 
-  constructor(logFile?: string) {
-    this.logFile = logFile || path.join(process.cwd(), 'traces.log');
+  constructor(
+    private logFileBaseName = path.join(process.cwd(), 'traces'),
+    private streamTTL = 1000 * 60
+  ) {
     this.ensureLogDirectory();
+    setInterval(this.deleteHangingStreams.bind(this), this.streamTTL);
+  }
+
+  private getLogFile(traceId: string): string {
+    return path.join(this.logFileBaseName, `${traceId}.log`);
+  }
+
+  private deleteHangingStreams(): void {
+    const now = Date.now();
+    for (const [traceId, { lastAccess, stream }] of this.logStreams) {
+      if (now - lastAccess > this.streamTTL) {
+        stream.end();
+        this.logStreams.delete(traceId);
+      }
+    }
   }
 
   private ensureLogDirectory(): void {
-    const dir = path.dirname(this.logFile);
+    const dir = path.dirname(this.getLogFile(''));
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
   }
 
-  private getLogStream(): fs.WriteStream {
-    if (!this.logStream) {
-      this.logStream = fs.createWriteStream(this.logFile, {
-        flags: 'a', // Append mode
-        encoding: 'utf8',
-      });
+  private getLogStream(traceId: string): fs.WriteStream {
+    const logFile = this.getLogFile(traceId);
+
+    if (this.logStreams.has(traceId)) {
+      const { stream } = this.logStreams.get(traceId)!;
+      this.logStreams.set(traceId, { stream, lastAccess: Date.now() });
+      return stream;
+    } else {
+      try {
+        const stream = fs.createWriteStream(logFile, {
+          flags: 'a', // Append mode
+          encoding: 'utf8',
+        });
+        stream.on('error', error => {
+          console.error('Error writing traces to file:', error);
+          this.logStreams.delete(traceId);
+        });
+        this.logStreams.set(traceId, { stream, lastAccess: Date.now() });
+        return stream;
+      } catch (error) {
+        console.error('Error creating log stream:', error);
+        this.logStreams.delete(traceId);
+        throw error;
+      }
     }
-    return this.logStream;
   }
 
   export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void): void {
     try {
-      const stream = this.getLogStream();
+      const traceId = spans[0].spanContext().traceId;
+      const stream = this.getLogStream(traceId);
 
       for (const span of spans) {
         const traceData = {
           timestamp: new Date().toISOString(),
-          traceId: span.spanContext().traceId,
+          traceId: traceId,
           spanId: span.spanContext().spanId,
           name: span.name,
           kind: span.kind,
           startTime: span.startTime,
           endTime: span.endTime,
-          duration: span.endTime[0] - span.startTime[0],
+          duration:
+            (span.endTime[0] - span.startTime[0]) * 1000 +
+            (span.endTime[1] - span.startTime[1]) / 1000000,
           attributes: span.attributes,
           events: span.events,
           status: span.status,
@@ -50,7 +86,7 @@ export class FileSpanExporter implements SpanExporter {
         };
 
         // Write as JSON for easy parsing, with trace ID prominently displayed
-        const logLine = `[${traceData.traceId}] ${JSON.stringify(traceData)}\n`;
+        const logLine = `${JSON.stringify(traceData)}\n`;
         stream.write(logLine);
       }
 
@@ -63,14 +99,11 @@ export class FileSpanExporter implements SpanExporter {
 
   shutdown(): Promise<void> {
     return new Promise(resolve => {
-      if (this.logStream) {
-        this.logStream.end(() => {
-          this.logStream = null;
-          resolve();
-        });
-      } else {
-        resolve();
+      for (const [traceId, { stream }] of this.logStreams) {
+        stream.end();
+        this.logStreams.delete(traceId);
       }
+      resolve();
     });
   }
 }

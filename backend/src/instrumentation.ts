@@ -1,13 +1,12 @@
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
   SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
 } from '@opentelemetry/semantic-conventions';
-import * as path from 'path';
 
 import { FileSpanExporter } from './instrumentation/file-exporter';
 
@@ -27,7 +26,7 @@ if (!tracingEnabled) {
   console.log('🔍 Tracing enabled - initializing OpenTelemetry...');
 
   // Configure the trace file location - use /tmp for Docker containers
-  const traceFile = process.env.TRACE_FILE || path.join('/tmp', 'traces.log');
+  const traceFile = process.env.TRACE_FILE || '/tmp';
 
   // Create the file exporter
   const fileExporter = new FileSpanExporter(traceFile);
@@ -39,11 +38,7 @@ if (!tracingEnabled) {
       [ATTR_SERVICE_VERSION]: '1.0.0',
       [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV || 'development',
     }),
-    spanProcessor: new BatchSpanProcessor(fileExporter, {
-      maxExportBatchSize: 100,
-      maxQueueSize: 1000,
-      exportTimeoutMillis: 5000,
-    }),
+    spanProcessor: new SimpleSpanProcessor(fileExporter),
     instrumentations: [
       getNodeAutoInstrumentations({
         // Disable file system instrumentation to reduce noise

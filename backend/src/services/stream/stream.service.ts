@@ -8,6 +8,7 @@ import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceService } from '@services/source/source.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
+import { traced } from '@utils/tracing.util';
 
 export class StreamService {
   private readonly movieSourceRepository: MovieSourceRepository;
@@ -24,6 +25,7 @@ export class StreamService {
   /**
    * Get the best movie source for streaming based on quality preference
    */
+  @traced('StreamService')
   async getBestSourceForStreaming(
     tmdbMovieId: number,
     quality: Quality | 'auto',
@@ -96,6 +98,7 @@ export class StreamService {
   /**
    * Get streaming statistics for a source
    */
+  @traced('StreamService')
   async getStreamingStats(source: MovieSource): Promise<{
     broadcasters: number;
     watchers: number;
@@ -114,6 +117,7 @@ export class StreamService {
   /**
    * Get a movie source by ID
    */
+  @traced('StreamService')
   async getSourceById(sourceId: number): Promise<MovieSource | null> {
     try {
       return await this.movieSourceRepository.findById(sourceId);

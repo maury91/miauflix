@@ -4,6 +4,7 @@ import type { AbstractContentDirectory } from '@content-directories/content-dire
 import { TherarbgContentDirectory } from '@content-directories/therarbg';
 import { YTSContentDirectory } from '@content-directories/yts';
 import type { DownloadService } from '@services/download/download.service';
+import { traced } from '@utils/tracing.util';
 
 /**
  * Service for searching content from various directory sources
@@ -22,7 +23,8 @@ export class ContentDirectoryService {
    * Get the status of the content directory services
    * @returns Status of the content directory services
    */
-  public status() {
+  @traced('ContentDirectoryService')
+  public async status() {
     return this.movieDirectories.map(contentDirectory => contentDirectory.status());
   }
 
@@ -34,6 +36,7 @@ export class ContentDirectoryService {
    * @param contentDirectoriesSearched - The content directories that have already been searched (default: [])
    * @returns A movie object with normalized sources or null if not found
    */
+  @traced('ContentDirectoryService')
   public async searchSourcesForMovie(
     imdbId: string,
     highPriority = false,
