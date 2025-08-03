@@ -8,6 +8,7 @@ import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceService } from '@services/source/source.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
+import { traced } from '@utils/tracing.util';
 
 export class StreamService {
   private readonly movieSourceRepository: MovieSourceRepository;
@@ -24,15 +25,16 @@ export class StreamService {
   /**
    * Get the best movie source for streaming based on quality preference
    */
+  @traced('StreamService')
   async getBestSourceForStreaming(
-    movieId: number,
+    tmdbMovieId: number,
     quality: Quality | 'auto',
     allowHevc = true
   ): Promise<MovieSource | null> {
     // First, get the movie (will fetch from TMDB if not in database)
-    const movie = await this.mediaService.getMovie(movieId);
+    const movie = await this.mediaService.getMovieByTmdbId(tmdbMovieId);
     if (!movie) {
-      logger.warn('StreamService', `Movie with ID ${movieId} not found`);
+      logger.warn('StreamService', `Movie with ID ${tmdbMovieId} not found`);
       return null;
     }
 
@@ -48,7 +50,7 @@ export class StreamService {
     );
 
     if (!sources.length) {
-      logger.warn('StreamService', `No sources found for movie ID ${movieId}`);
+      logger.warn('StreamService', `No sources found for movie ID ${tmdbMovieId}`);
       return null;
     }
 
@@ -56,7 +58,7 @@ export class StreamService {
     const streamableSources = filterSources(sources, allowHevc);
 
     if (!streamableSources.length) {
-      logger.warn('StreamService', `No streamable sources found for movie ID ${movieId}`);
+      logger.warn('StreamService', `No streamable sources found for movie ID ${tmdbMovieId}`);
       const nonStreamableSources = filterHevcSources(sources, allowHevc);
       if (nonStreamableSources.length) {
         // ToDo: Use source service to have a source with file
@@ -96,6 +98,7 @@ export class StreamService {
   /**
    * Get streaming statistics for a source
    */
+  @traced('StreamService')
   async getStreamingStats(source: MovieSource): Promise<{
     broadcasters: number;
     watchers: number;
@@ -114,6 +117,7 @@ export class StreamService {
   /**
    * Get a movie source by ID
    */
+  @traced('StreamService')
   async getSourceById(sourceId: number): Promise<MovieSource | null> {
     try {
       return await this.movieSourceRepository.findById(sourceId);

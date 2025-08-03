@@ -1,5 +1,6 @@
 import { logger } from '@logger';
 
+import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
 import { Movie } from '@entities/movie.entity';
@@ -12,6 +13,7 @@ import type { TVShowRepository } from '@repositories/tvshow.repository';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { MovieMediaSummary, TVShowMediaSummary } from '@services/tmdb/tmdb.types';
 import { sleep } from '@utils/time';
+import { traced } from '@utils/tracing.util';
 
 import type { GenreWithLanguages, TranslatedMedia } from './media.types';
 
@@ -26,11 +28,12 @@ export class MediaService {
   private readonly movieRepository: MovieRepository;
   private readonly tvShowRepository: TVShowRepository;
   private readonly genreRepository: GenreRepository;
+
   private readonly syncStateRepository: SyncStateRepository;
   private genreCache = new Map<number, GenreWithLanguages>();
 
   constructor(
-    private readonly db: Database,
+    db: Database,
     private readonly tmdbApi: TMDBApi,
     private readonly defaultLanguage: string = 'en'
   ) {
@@ -40,16 +43,17 @@ export class MediaService {
     this.syncStateRepository = db.getSyncStateRepository();
   }
 
-  public async getMovie(
-    movieId: number | string,
+  @traced('MediaService')
+  public async getMovieByTmdbId(
+    tmdbId: number | string,
     movieSummary?: MovieMediaSummary
   ): Promise<Movie | null> {
     // Check if the movie is available in the local DB
-    let movie = await this.movieRepository.findByTMDBId(Number(movieId));
+    let movie = await this.movieRepository.findByTMDBId(Number(tmdbId));
     if (!movie) {
       try {
         // If not, fetch from TMDB and save it to the local DB
-        const { translations, ...movieDetails } = await this.getMovieDetails(movieId);
+        const { translations, ...movieDetails } = await this.getMovieDetails(tmdbId);
         movie = await this.movieRepository.create(movieDetails);
 
         await Promise.all(
@@ -67,7 +71,7 @@ export class MediaService {
       } catch (err) {
         logger.error(
           'MediaService',
-          `Error fetching movie with TMDB ID ${movieId}:`,
+          `Error fetching movie with TMDB ID ${tmdbId}:`,
           err,
           err instanceof Error ? err.stack : undefined
         );
@@ -96,6 +100,11 @@ export class MediaService {
       }
     }
     return movie;
+  }
+
+  @traced('MediaService')
+  public async getMovieById(id: number): Promise<Movie | null> {
+    return this.movieRepository.findById(id);
   }
 
   private async updateMovie(movie: Movie) {
@@ -140,12 +149,15 @@ export class MediaService {
     };
   }
 
-  public async getTVShow(showId: number, tvShowSummary?: TVShowMediaSummary): Promise<TVShow> {
+  public async getTVShowByTmdbId(
+    showTmdbId: number,
+    tvShowSummary?: TVShowMediaSummary
+  ): Promise<TVShow> {
     // Check if the TV show is available in the local DB
-    let show = await this.tvShowRepository.findByTMDBId(showId);
+    let show = await this.tvShowRepository.findByTMDBId(showTmdbId);
     if (!show) {
       // If not, fetch from TMDB and save it to the local DB
-      const showDetails = await this.tmdbApi.getTVShowDetails(showId);
+      const showDetails = await this.tmdbApi.getTVShowDetails(showTmdbId);
       const genresIds = showDetails.genres.map(genre => genre.id);
       const genres = await this.getGenres(genresIds);
 
@@ -228,9 +240,24 @@ export class MediaService {
     return show;
   }
 
+  @traced('MediaService')
+  public async markShowAsWatching(showId: number): Promise<void> {
+    await this.tvShowRepository.markAsWatching(showId);
+  }
+
+  @traced('MediaService')
   public async syncIncompleteSeasons() {
-    const incompleteSeason = await this.tvShowRepository.findIncompleteSeason();
-    if (incompleteSeason) {
+    const episodeSyncMode = ENV('EPISODE_SYNC_MODE');
+
+    const incompleteSeasons =
+      episodeSyncMode === 'GREEDY'
+        ? await this.tvShowRepository.findIncompleteSeasons()
+        : await this.findIncompleteSeasonsForWatchingShows();
+
+    if (incompleteSeasons && incompleteSeasons.length > 0) {
+      // Process the first incomplete season (maintain current behavior of processing one at a time)
+      const incompleteSeason = incompleteSeasons[0];
+
       const seasonDetails = await this.tmdbApi.getSeason(
         incompleteSeason.tvShow.tmdbId,
         incompleteSeason.seasonNumber
@@ -256,6 +283,30 @@ export class MediaService {
     }
   }
 
+  /**
+   * Find incomplete seasons for TV shows where users have marked as watching
+   * This is used in ON_DEMAND mode to only sync shows the user is actively watching
+   */
+  private async findIncompleteSeasonsForWatchingShows(): Promise<Season[]> {
+    // Get TV show IDs where users have marked shows as watching
+    const watchingShowIds = await this.getWatchingTVShowIds();
+
+    if (watchingShowIds.length === 0) {
+      return [];
+    }
+
+    // Find incomplete seasons for these shows
+    return await this.tvShowRepository.findIncompleteSeasonsByShowIds(watchingShowIds);
+  }
+
+  /**
+   * Get TV show IDs where users have marked shows as watching
+   */
+  private async getWatchingTVShowIds(): Promise<number[]> {
+    return await this.tvShowRepository.getWatchingTVShowIds();
+  }
+
+  @traced('MediaService')
   public async syncMovies() {
     const lastMovieSync = await this.syncStateRepository.getLastSync(MOVIE_SYNC_NAME);
     const now = new Date();
@@ -330,6 +381,7 @@ export class MediaService {
     }
   }
 
+  @traced('MediaService')
   public async mediasWithLanguage(
     medias: (Movie | TVShow)[],
     language: string

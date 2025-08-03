@@ -33,7 +33,11 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
       name: sourceMetadata.name,
       type: sourceMetadata.type, // This is file type ( mp4, mkv, etc ) but also sometimes the codec ( x264, x265, etc )
       size: sourceMetadata.size,
-      files: sourceMetadata.files,
+      files:
+        sourceMetadata.files?.map(file => ({
+          name: Array.isArray(file.name) ? file.name[0] : file.name,
+          size: Array.isArray(file.size) ? file.size[0] : file.size,
+        })) ?? [],
       category: sourceMetadata.category_str,
       trackerMetadata: {
         imdbId: sourceMetadata.imdb,

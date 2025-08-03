@@ -21,8 +21,8 @@ export const MoviePage: FC<MoviePageProps> = ({ media }) => {
   const [getStreamingKey, { data: streamDetails, isLoading }] = useGetStreamingKeyMutation();
 
   const goToStream = useCallback(() => {
-    getStreamingKey({ id: String(media.id), quality: 'auto' });
-  }, [getStreamingKey, media.id]);
+    getStreamingKey({ tmdbId: media.tmdbId.toString(), quality: 'auto' });
+  }, [getStreamingKey, media.tmdbId]);
 
   useEffect(() => {
     if (streamDetails) {

@@ -121,4 +121,6 @@ export interface SanitizationOptions {
   useLegalHashes?: boolean;
   /** Probability of using a legal hash vs random hash (default: 0.6) */
   legalHashProbability?: number;
+  /** Change the download URL origin with a fixed string (default: none) */
+  changeDownloadUrlOrigin?: string;
 }
