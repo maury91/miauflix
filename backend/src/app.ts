@@ -1,3 +1,4 @@
+import './instrumentation';
 import 'reflect-metadata';
 
 import { serve } from '@hono/node-server';
@@ -98,47 +99,56 @@ try {
     logger.debug('App', 'VPN disconnected');
   });
 
-  scheduler.scheduleTask(
-    'refreshLists',
-    60 * 60, // 1 hour
-    bind(listSynchronizer, 'synchronize')
-  );
+  // Check if background tasks should be disabled
+  const disableBackgroundTasks = ENV('DISABLE_BACKGROUND_TASKS');
 
-  scheduler.scheduleTask(
-    'syncMovies',
-    1.5 * 60 * 60, // 1.5 hour
-    bind(mediaService, 'syncMovies')
-  );
+  if (disableBackgroundTasks) {
+    logger.info('App', 'Background tasks disabled - running in on-demand mode only');
+  } else {
+    logger.info('App', 'Starting background tasks...');
 
-  scheduler.scheduleTask(
-    'syncIncompleteSeasons',
-    1, // 1 second
-    bind(mediaService, 'syncIncompleteSeasons')
-  );
+    scheduler.scheduleTask(
+      'refreshLists',
+      60 * 60, // 1 hour
+      bind(listSynchronizer, 'synchronize')
+    );
 
-  scheduler.scheduleTask(
-    'movieSourceSearch',
-    0.1, // 0.1 second
-    bind(sourceService, 'searchSourcesForMovies')
-  );
+    scheduler.scheduleTask(
+      'syncMovies',
+      1.5 * 60 * 60, // 1.5 hour
+      bind(mediaService, 'syncMovies')
+    );
 
-  scheduler.scheduleTask(
-    'dataFileSearch',
-    0.2, // 0.2 second (slightly slower than source search to prioritize finding new sources first)
-    bind(sourceService, 'syncMissingSourceFiles')
-  );
+    scheduler.scheduleTask(
+      'syncIncompleteSeasons',
+      1, // 1 second
+      bind(mediaService, 'syncIncompleteSeasons')
+    );
 
-  scheduler.scheduleTask(
-    'updateSourcesStats',
-    2, // 2 seconds
-    bind(sourceService, 'syncStatsForSources')
-  );
+    scheduler.scheduleTask(
+      'movieSourceSearch',
+      0.1, // 0.1 second
+      bind(sourceService, 'searchSourcesForMovies')
+    );
 
-  scheduler.scheduleTask(
-    'cacheCleanup',
-    6 * 60 * 60, // 6 hours
-    bind(cacheService, 'cleanup')
-  );
+    scheduler.scheduleTask(
+      'dataFileSearch',
+      0.2, // 0.2 second (slightly slower than source search to prioritize finding new sources first)
+      bind(sourceService, 'syncMissingSourceFiles')
+    );
+
+    scheduler.scheduleTask(
+      'updateSourcesStats',
+      2, // 2 seconds
+      bind(sourceService, 'syncStatsForSources')
+    );
+
+    scheduler.scheduleTask(
+      'cacheCleanup',
+      6 * 60 * 60, // 6 hours
+      bind(cacheService, 'cleanup')
+    );
+  }
 
   // Graceful shutdown handlers
   const gracefulShutdown = async (signal: string) => {

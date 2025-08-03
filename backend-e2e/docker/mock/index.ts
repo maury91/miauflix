@@ -23,6 +23,28 @@ const headersToOmit = [
   'transfer-encoding',
   'connection',
   'date',
+  'via',
+  'nel',
+  'speculation-rules',
+  'x-varnish',
+  'x-frame-options',
+  'x-content-type-options',
+  'x-xss-protection',
+  'x-powered-by',
+  'x-request-id',
+  'strict-transport-security',
+  'server',
+  'server-timing',
+  'report-to',
+  /^x-amz.*/,
+  /^x-az.*/,
+  /^x-azure.*/,
+  /^x-aws.*/,
+  /^cf.*/,
+  /^x-cdn.*/,
+  /^x-memc.*/,
+  /^x-cache.*/,
+  /^x-task.*/,
 ];
 
 if (!DATA_DIR) {
@@ -72,7 +94,12 @@ function omitHeaders(headers: Headers): Record<string, string> | undefined {
   for (const [key, value] of typeof headers.entries === 'function'
     ? headers.entries()
     : Object.entries(headers)) {
-    if (!headersToOmit.includes(key.toLowerCase())) {
+    const lowerKey = key.toLowerCase();
+    if (
+      !headersToOmit.some(pattern =>
+        pattern instanceof RegExp ? pattern.test(lowerKey) : pattern === lowerKey
+      )
+    ) {
       result[key] = value;
     }
   }
@@ -101,7 +128,10 @@ Bun.serve({
       if (await Bun.file(filePath).exists()) {
         console.log(`Loading cached response from ${filePath}`);
         const fileContent = await Bun.file(filePath).json();
-        return new Response(JSON.stringify(fileContent.data), {
+        const data = fileContent.headers?.['content-type']?.includes('application/json')
+          ? JSON.stringify(fileContent.data)
+          : fileContent.data;
+        return new Response(data, {
           headers: fileContent.headers || { 'Content-Type': 'application/json' },
           status: fileContent.status || 200,
         });
@@ -135,6 +165,15 @@ Bun.serve({
           [API_AUTH_HEADER]: API_AUTH_HEADER_IS_BEARER ? `Bearer ${API_KEY}` : API_KEY,
         },
       });
+
+      if (!apiResponse.headers.get('content-type')?.includes('application/json')) {
+        await saveResponse(filePath, {
+          headers: omitHeaders(apiResponse.headers),
+          data: await apiResponse.text(),
+        });
+        return apiResponse;
+      }
+
       const data = await apiResponse.json();
 
       // Apply sanitization

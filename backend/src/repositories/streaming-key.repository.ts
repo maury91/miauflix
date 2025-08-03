@@ -10,12 +10,9 @@ export class StreamingKeyRepository {
     this.streamingKeyRepository = db.getRepository(StreamingKey);
   }
 
-  async create(streamingKeyData: {
-    keyHash: string;
-    movieId: number;
-    userId: number;
-    expiresAt: Date;
-  }): Promise<StreamingKey> {
+  async create(
+    streamingKeyData: Pick<StreamingKey, 'expiresAt' | 'keyHash' | 'movieId' | 'userId'>
+  ): Promise<StreamingKey> {
     const streamingKey = this.streamingKeyRepository.create(streamingKeyData);
     return this.streamingKeyRepository.save(streamingKey);
   }
@@ -23,10 +20,6 @@ export class StreamingKeyRepository {
   async findByKeyHash(keyHash: string): Promise<StreamingKey | null> {
     return this.streamingKeyRepository.findOne({
       where: { keyHash },
-      select: {
-        movieId: true,
-        userId: true,
-      },
     });
   }
 
@@ -44,7 +37,7 @@ export class StreamingKeyRepository {
     return result.affected || 0;
   }
 
-  async deleteByUserId(userId: number): Promise<number> {
+  async deleteByUserId(userId: string): Promise<number> {
     const result = await this.streamingKeyRepository.delete({ userId });
     return result.affected || 0;
   }

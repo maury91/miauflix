@@ -34,7 +34,7 @@ export class StreamingKey {
   user: Relation<User>;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column({ type: 'datetime' })
   expiresAt: Date;
