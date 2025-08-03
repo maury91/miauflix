@@ -279,7 +279,13 @@ export function traced<
 
     descriptor.value = async function (this: This, ...args: Args): Promise<Return> {
       const span = TracingUtil.createServiceSpan(serviceName, propertyName, {
-        'method.args': JSON.stringify(args),
+        'method.args': (() => {
+          try {
+            return JSON.stringify(args);
+          } catch {
+            return '[Serialization Error]';
+          }
+        })(),
       });
 
       if (span) {

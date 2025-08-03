@@ -5,13 +5,14 @@ import * as path from 'path';
 
 export class FileSpanExporter implements SpanExporter {
   private logStreams: Map<string, { stream: fs.WriteStream; lastAccess: number }> = new Map();
+  private cleanupInterval: NodeJS.Timeout;
 
   constructor(
     private logFileBaseName = path.join(process.cwd(), 'traces'),
     private streamTTL = 1000 * 60
   ) {
     this.ensureLogDirectory();
-    setInterval(this.deleteHangingStreams.bind(this), this.streamTTL);
+    this.cleanupInterval = setInterval(this.deleteHangingStreams.bind(this), this.streamTTL);
   }
 
   private getLogFile(traceId: string): string {
@@ -50,6 +51,7 @@ export class FileSpanExporter implements SpanExporter {
         });
         stream.on('error', error => {
           console.error('Error writing traces to file:', error);
+          stream.end();
           this.logStreams.delete(traceId);
         });
         this.logStreams.set(traceId, { stream, lastAccess: Date.now() });
@@ -99,6 +101,9 @@ export class FileSpanExporter implements SpanExporter {
 
   shutdown(): Promise<void> {
     return new Promise(resolve => {
+      if (this.cleanupInterval) {
+        clearInterval(this.cleanupInterval);
+      }
       for (const [traceId, { stream }] of this.logStreams) {
         stream.end();
         this.logStreams.delete(traceId);
