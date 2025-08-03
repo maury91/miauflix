@@ -1,5 +1,5 @@
 # --- Build Stage ---
-FROM node:20-slim AS builder
+FROM node:22-slim AS builder
 WORKDIR /usr/src/app
 
 # Install build tools (no unnecessary recommends)
@@ -38,7 +38,7 @@ RUN npm run build --workspace=backend
 RUN touch .env
 
 # --- Runtime Stage ---
-FROM node:20-slim
+FROM node:22-slim
 WORKDIR /usr/src/app
 
 # Install gosu and curl for entrypoint/healthcheck
