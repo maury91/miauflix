@@ -2,12 +2,14 @@ import { logger } from '@logger';
 
 import type { Movie } from '@entities/movie.entity';
 import type { TVShow } from '@entities/tvshow.entity';
+import { traced } from '@utils/tracing.util';
 
 import type { ListService } from './list.service';
 
 export class ListSynchronizer {
   constructor(private readonly listService: ListService) {}
 
+  @traced('ListSynchronizer')
   async synchronize(): Promise<void> {
     const lists = await this.listService.getLists();
     for (const { slug } of lists) {

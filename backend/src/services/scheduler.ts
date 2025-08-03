@@ -1,6 +1,8 @@
 import { logger } from '@logger';
 import { clearInterval, setTimeout } from 'timers';
 
+import { TracingUtil } from '@utils/tracing.util';
+
 export class Scheduler {
   private tasks: Map<string, NodeJS.Timeout>;
 
@@ -16,7 +18,19 @@ export class Scheduler {
     const executeTask = async () => {
       try {
         logger.debug('Scheduler', `Executing task: ${taskName}`);
-        await task();
+
+        // Create a new trace context for this task execution (like Hono does for HTTP requests)
+        const taskSpan = TracingUtil.createTaskSpan(taskName, {
+          'task.interval': interval,
+          'task.execution_time': new Date().toISOString(),
+        });
+
+        if (taskSpan) {
+          await TracingUtil.executeInSpan(taskSpan, () => task());
+        } else {
+          await task();
+        }
+
         logger.debug('Scheduler', `Task ${taskName} completed successfully`);
       } catch (err) {
         logger.error('Scheduler', `Task ${taskName} failed with error:`, err);

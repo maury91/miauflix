@@ -76,7 +76,7 @@ export class VpnDetectionService {
     },
   ];
 
-  constructor(private readonly checkIntervalMs: number = 500) {
+  constructor(private readonly checkIntervalMs: number = 5000) {
     if (this.disabled) {
       this.lastVpnStatus = true;
     } else {

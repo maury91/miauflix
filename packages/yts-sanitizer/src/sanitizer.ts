@@ -34,7 +34,8 @@ export function sanitizeSourceMetadata(
   if (!sourceMetadata || typeof sourceMetadata !== 'object') return sourceMetadata;
 
   const sanitized = { ...sourceMetadata };
-  const { legalHashProbability = DEFAULT_OPTIONS.legalHashProbability } = options;
+  const { legalHashProbability = DEFAULT_OPTIONS.legalHashProbability, changeDownloadUrlOrigin } =
+    options;
 
   // Sanitize hash
   if (sanitized.hash && typeof sanitized.hash === 'string' && sanitized.hash.length >= 20) {
@@ -48,6 +49,11 @@ export function sanitizeSourceMetadata(
       }
     } while (seen.has(sanitized.hash));
     seen.add(sanitized.hash);
+  }
+
+  if (sanitized.url && changeDownloadUrlOrigin) {
+    const originalOrigin = new URL(sanitized.url).origin;
+    sanitized.url = sanitized.url.replace(originalOrigin, changeDownloadUrlOrigin);
   }
 
   return sanitized;

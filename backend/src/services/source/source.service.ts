@@ -16,6 +16,7 @@ import { RateLimiter } from '@utils/rateLimiter';
 import { scheduleNextCheck } from '@utils/scheduling.util';
 import { SingleFlight } from '@utils/singleflight.util';
 import { sleep } from '@utils/time';
+import { traced } from '@utils/tracing.util';
 import { providerSourcesToEntities } from '@utils/transformers.util';
 import { validateContentFileResponse } from '@utils/validation.util';
 
@@ -73,6 +74,7 @@ export class SourceService {
    * Process movies that need source search
    * This method is designed to be run by the scheduler
    */
+  @traced('SourceService')
   public async searchSourcesForMovies(): Promise<void> {
     if (!(await this.checkForVpnConnection('searchSourcesForMovies'))) {
       return;
@@ -174,6 +176,7 @@ export class SourceService {
   /**
    * Find all sources for a specific movie
    */
+  @traced('SourceService')
   public async getSourcesForMovie(movieId: number): Promise<MovieSource[]> {
     return this.movieSourceRepository.findByMovieId(movieId);
   }
@@ -246,11 +249,13 @@ export class SourceService {
   /**
    * Find all sources with source metadata files for a specific movie
    */
+  @traced('SourceService')
   public async getSourcesWithFilesForMovie(movieId: number): Promise<MovieSource[]> {
     const sources = await this.movieSourceRepository.findByMovieId(movieId);
     return sources.filter(source => source.file !== null);
   }
 
+  @traced('SourceService')
   public async syncStatsForSources(): Promise<void> {
     await this.startPromise;
 
@@ -302,6 +307,7 @@ export class SourceService {
    * Find and download data files for sources that don't have them yet
    * This method prioritizes by movie popularity and ensures fair distribution
    */
+  @traced('SourceService')
   public async syncMissingSourceFiles(): Promise<void> {
     await this.startPromise;
 

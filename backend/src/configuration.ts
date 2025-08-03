@@ -9,6 +9,7 @@ import { ytsConfigurationDefinition } from '@content-directories/yts/yts.configu
 import { type ServiceConfiguration, type VariableInfo } from '@mytypes/configuration';
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
 import { downloadConfigurationDefinition } from '@services/download/download.configuration';
+import { mediaConfigurationDefinition } from '@services/media/media.configuration';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { storageConfigurationDefinition } from '@services/storage/storage.configuration';
@@ -62,6 +63,13 @@ const serverConfigurationDefinition = serviceConfiguration({
       example: 'your-secure-random-string',
       transform: transforms.optional(transforms.string({ minLength: 16 })),
     }),
+    DISABLE_BACKGROUND_TASKS: variable({
+      description: 'Disable all background tasks for testing on-demand functionality',
+      required: false,
+      defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
   },
   test: async () => {
     // No test needed for CORS configuration
@@ -80,6 +88,7 @@ export const services = {
   YTS: ytsConfigurationDefinition,
   DOWNLOAD: downloadConfigurationDefinition,
   STORAGE: storageConfigurationDefinition,
+  MEDIA: mediaConfigurationDefinition,
 };
 
 export type Variables = {

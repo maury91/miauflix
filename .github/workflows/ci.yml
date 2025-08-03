@@ -85,17 +85,6 @@ jobs:
         run: npm ci
         working-directory: backend-e2e
 
-      - name: Create environment file
-        run: |
-          cat > .env << EOF
-          # Mock API keys for E2E tests
-          TMDB_API_ACCESS_TOKEN=mock-tmdb-token-for-testing
-          TRAKT_CLIENT_ID=mock-trakt-client-id
-          TRAKT_CLIENT_SECRET=mock-trakt-client-secret
-          JWT_SECRET=mock-jwt-secret-for-testing-only
-          REFRESH_TOKEN_SECRET=mock-refresh-token-secret-for-testing
-          EOF
-
       - name: Run E2E tests
         run: npm run test:backend:e2e
         env:
@@ -109,7 +98,8 @@ jobs:
           name: e2e-test-logs
           path: |
             backend-e2e/admin-credentials.json
-            backend-e2e/docker-logs.txt
+            backend-e2e/logs/*.log
+            backend-e2e/logs/traces/*.log
           retention-days: 7
 
   # Disabled until we are ready for production

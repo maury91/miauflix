@@ -7,6 +7,7 @@ import { TVShow } from '@entities/tvshow.entity';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { MediaSummaryList } from '@services/tmdb/tmdb.types';
+import { traced } from '@utils/tracing.util';
 
 import type { MediaService } from './media.service';
 import type { TranslatedMedia } from './media.types';
@@ -51,6 +52,7 @@ export class ListService {
     this.mediaListRepository = db.getMediaListRepository();
   }
 
+  @traced('ListService')
   async getListContentFromApi(
     slug: string,
     page: number
@@ -69,9 +71,9 @@ export class ListService {
     const mediaResults = await Promise.all(
       medias.map(async mediaData => {
         if (mediaData._type === 'movie') {
-          return this.mediaService.getMovie(mediaData.id, mediaData);
+          return this.mediaService.getMovieByTmdbId(mediaData.id, mediaData);
         }
-        return this.mediaService.getTVShow(mediaData.id, mediaData);
+        return this.mediaService.getTVShowByTmdbId(mediaData.id, mediaData);
       })
     );
 
@@ -99,6 +101,7 @@ export class ListService {
     return mediaList;
   }
 
+  @traced('ListService')
   async updateListContent(slug: string, medias: (Movie | TVShow)[]): Promise<MediaList> {
     const mediaList = await this.getOrCreateList(slug, false);
 
@@ -117,6 +120,7 @@ export class ListService {
     return await this.mediaListRepository.saveMediaList(mediaList);
   }
 
+  @traced('ListService')
   async getListBySlug(slug: string): Promise<MediaList> {
     const mediaList = await this.getOrCreateList(slug, true);
 
@@ -127,6 +131,7 @@ export class ListService {
     return mediaList;
   }
 
+  @traced('ListService')
   async getListContent(slug: string, language = 'en'): Promise<TranslatedMedia[]> {
     const mediaList = await this.getListBySlug(slug);
     if (!mediaList.movies) {
@@ -141,6 +146,7 @@ export class ListService {
     return medias.sort((a, b) => b.popularity - a.popularity);
   }
 
+  @traced('ListService')
   async getLists() {
     return Object.entries(this.lists).map(([slug, list]) => ({
       slug,

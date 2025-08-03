@@ -20,6 +20,9 @@ services:
       - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/trackers_best.txt
       - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
       - DOWNLOAD_PATH=/usr/src/app/downloads
+      - ENABLE_TRACING=true
+      - DEBUG=*,-require-in-the-middle
+      - DISABLE_BACKGROUND_TASKS=true
     networks:
       - test-network
     ports:
@@ -32,10 +35,11 @@ services:
       # Fresh database for each development session
       - dev_database:/usr/src/app/data
       - dev_downloads:/usr/src/app/downloads
+      - ../../traces:/tmp:rw
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
-      interval: 0.5s
-      timeout: 2s
+      interval: 10s
+      timeout: 5s
       retries: 30
       start_period: 10s
     depends_on:
@@ -54,8 +58,6 @@ services:
       context: mock
       dockerfile: tmdb.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://api.themoviedb.org/3
@@ -78,8 +80,6 @@ services:
       context: mock
       dockerfile: mock.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://api.trakt.tv
@@ -106,13 +106,12 @@ services:
       context: .
       dockerfile: mock/yts.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://yts.mx/api/v2
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=none
+      - OWN_URL=http://yts-mock
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s
@@ -130,14 +129,12 @@ services:
       context: .
       dockerfile: mock/therarbg.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    env_file:
-      - ../../.env
     environment:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://therarbg.to
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=none
-      - DISABLE_VPN_CHECK=true
+      - OWN_URL=http://therarbg-mock
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s

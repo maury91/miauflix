@@ -17,6 +17,7 @@ import type { AuthTokens, StreamingToken } from '@services/auth/auth.types';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { InMemoryCache } from '@utils/in-memory-cache';
 import { generateSecurePassword } from '@utils/password.util';
+import { traced } from '@utils/tracing.util';
 
 import {
   generateDeterministicSalt,
@@ -56,6 +57,7 @@ export class AuthService {
   /**
    * Configures initial admin user if none exists
    */
+  @traced('AuthService')
   async configureUsers(): Promise<void> {
     // Check if any admin user exists
     const adminUsers = await this.userRepository.findByRole(UserRole.ADMIN);
@@ -77,6 +79,7 @@ export class AuthService {
     console.log('Please change these credentials after first login.');
   }
 
+  @traced('AuthService')
   async createUser(email: string, password: string, role: UserRole = UserRole.USER): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
@@ -106,6 +109,7 @@ export class AuthService {
     return newUser;
   }
 
+  @traced('AuthService')
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.userRepository.findByEmail(email);
     if (!user) return null;
@@ -114,6 +118,7 @@ export class AuthService {
     return isValid ? user : null;
   }
 
+  @traced('AuthService')
   async generateTokens(user: User): Promise<AuthTokens> {
     const accessToken = await this.generateAccessToken(user);
     const refreshToken = await this.generateRefreshToken(user);
@@ -124,6 +129,7 @@ export class AuthService {
     };
   }
 
+  @traced('AuthService')
   private async generateAccessToken(user: User): Promise<string> {
     const now = Math.floor(Date.now() / 1000);
 
@@ -140,6 +146,7 @@ export class AuthService {
       .sign(this.secretKey);
   }
 
+  @traced('AuthService')
   private async generateRefreshToken(user: User): Promise<string> {
     const now = new Date();
     const token = uuidv4();
@@ -163,6 +170,7 @@ export class AuthService {
       .sign(this.refreshSecretKey);
   }
 
+  @traced('AuthService')
   async verifyAccessToken(token: string) {
     try {
       const { payload } = await jwtVerify<JWTPayload & { userId: string }>(token, this.secretKey, {
@@ -186,6 +194,7 @@ export class AuthService {
     }
   }
 
+  @traced('AuthService')
   async verifyRefreshToken(refreshToken: string) {
     try {
       const { payload } = await jwtVerify<JWTPayload & { token: string }>(
@@ -207,6 +216,7 @@ export class AuthService {
     }
   }
 
+  @traced('AuthService')
   async refreshAccessToken(refreshToken: string): Promise<{
     tokens: AuthTokens;
     email: string;
@@ -234,6 +244,7 @@ export class AuthService {
     };
   }
 
+  @traced('AuthService')
   async logout(refreshToken: string): Promise<User | null> {
     const tokenEntity = await this.refreshTokenRepository.findByToken(refreshToken);
 
@@ -251,6 +262,7 @@ export class AuthService {
    * Creates streaming keys that embed user ID for direct database queries
    * using deterministic salt based on user ID + predefined salt.
    */
+  @traced('AuthService')
   async generateStreamingKey(movieId: number, userId: string): Promise<string> {
     const { streamingKey, storedHash } = await generateStreamingKey(userId, this.streamingKeySalt);
 
@@ -258,7 +270,7 @@ export class AuthService {
     await this.streamingKeyRepository.create({
       keyHash: storedHash,
       movieId,
-      userId: parseInt(userId, 10),
+      userId,
       expiresAt: new Date(Date.now() + this.streamingKeyTTL),
     });
 
@@ -268,6 +280,7 @@ export class AuthService {
   /**
    * Find streaming key in database
    */
+  @traced('AuthService')
   private async findStreamingKey(key: string, userId: string): Promise<StreamingToken | null> {
     try {
       const deterministicSalt = generateDeterministicSalt(userId, this.streamingKeySalt);
@@ -278,7 +291,7 @@ export class AuthService {
       if (streamingKey && streamingKey.expiresAt > new Date()) {
         return {
           movieId: streamingKey.movieId,
-          userId: streamingKey.userId.toString(),
+          userId: streamingKey.userId,
         };
       }
     } catch {
@@ -291,6 +304,7 @@ export class AuthService {
   /**
    * Verify streaming key with cache-first approach
    */
+  @traced('AuthService')
   async verifyStreamingKey(key: string): Promise<StreamingToken> {
     // Fast path: Check cache first
     const cached = this.streamingKeyCache.get(key);
