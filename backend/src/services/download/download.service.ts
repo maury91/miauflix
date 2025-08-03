@@ -4,7 +4,7 @@ import { Client as BTClient } from 'bittorrent-tracker';
 import { createHash } from 'crypto';
 import MemoryChunkStore from 'memory-chunk-store';
 import { Readable } from 'streamx';
-import type { Torrent, TorrentOptions } from 'webtorrent';
+import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
 import { ENV } from '@constants';
@@ -12,6 +12,7 @@ import type { MovieSource } from '@entities/movie-source.entity';
 import type { Storage } from '@entities/storage.entity';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import type { StorageService } from '@services/storage/storage.service';
+import { traced } from '@utils/tracing.util';
 
 import type { EncryptedStorageOptions } from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
 import EncryptedChunkStore from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
@@ -51,19 +52,24 @@ export class DownloadService {
   private readonly staticTrackers: string[];
   private readonly bestTrackersDownloadUrl: string;
   private readonly blacklistedTrackersDownloadUrl: string;
+  private readonly scrapeTrackers: string[];
 
   constructor(private readonly storageService: StorageService) {
     this.staticTrackers = ENV('STATIC_TRACKERS');
+    this.scrapeTrackers = ENV('SCRAPE_TRACKERS');
     this.bestTrackers = [...new Set([...this.staticTrackers])];
     this.bestTrackersDownloadUrl = ENV('BEST_TRACKERS_DOWNLOAD_URL');
     this.blacklistedTrackersDownloadUrl = ENV('BLACKLISTED_TRACKERS_DOWNLOAD_URL');
-    this.client = new WebTorrent({
+    const options: WebTorrentOptions = {
       maxConns: ENV('CONTENT_CONNECTION_LIMIT'),
       downloadLimit: Number(ENV('CONTENT_DOWNLOAD_LIMIT')),
       uploadLimit: Number(ENV('CONTENT_UPLOAD_LIMIT')),
-      dht: ENV('DISABLE_DISCOVERY') ? false : undefined,
-      blocklist: [this.blacklistedTrackersDownloadUrl],
-    });
+      // blocklist: [this.blacklistedTrackersDownloadUrl],
+    };
+    if (ENV('DISABLE_DISCOVERY')) {
+      options.dht = false;
+    }
+    this.client = new WebTorrent(options);
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
     });
@@ -116,6 +122,7 @@ export class DownloadService {
     return `magnet:?xt=urn:btih:${hash}&${params.toString()}`;
   }
 
+  @traced('DownloadService')
   async getSourceMetadataFile(sourceLink: string, hash: string, timeout: number): Promise<Buffer> {
     return new Promise((resolve, rejectRaw) => {
       const remove = () => {
@@ -164,7 +171,7 @@ export class DownloadService {
     return new Promise((resolve, reject) => {
       const client = new BTClient({
         infoHash: infoHash.toLowerCase(),
-        announce: this.bestTrackers,
+        announce: this.scrapeTrackers,
         peerId: Buffer.from('01234567890123456789'), // 20-byte dummy peer ID
         port: 6881, // arbitrary port for scrape
       });
@@ -188,6 +195,7 @@ export class DownloadService {
     });
   }
 
+  @traced('DownloadService')
   async getStats(infoHash: string): Promise<{ broadcasters: number; watchers: number }> {
     await this.ready;
     const result = await this.scrape(infoHash);
@@ -197,30 +205,17 @@ export class DownloadService {
     };
   }
 
-  async getTorrent(hash: string): Promise<Torrent> {
-    const existingTorrent = await this.client.get(hash);
-    if (existingTorrent) {
-      return existingTorrent;
-    }
-    return new Promise((resolve, reject) => {
-      const torrent = this.client.add(hash, { destroyStoreOnDestroy: true });
-      torrent.on('ready', () => {
-        resolve(torrent);
-      });
-      torrent.on('error', (error: Error) => {
-        reject(error);
-      });
-    });
-  }
-
   /**
    * Start greedy download with storage tracking and priority management
    * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
    */
+  @traced('DownloadService')
   async startDownload(source: MovieSource): Promise<GreedyDownload> {
     try {
       logger.info('DownloadService', `Starting download for source ${source.id}`);
 
+      // FixMe: Create or get storage
+      // If storage already exists use the bitfield for the torrent
       // Create storage record first
       const storage = await this.storageService.createStorage({
         movieSourceId: source.id,
@@ -231,16 +226,12 @@ export class DownloadService {
       });
 
       // Add torrent with priority-specific configuration
-      const torrent = await this.addTorrentWithPriority(
-        source.magnetLink,
-        source.hash,
-        storage.location
-      );
+      const torrent = await this.addTorrent(source, storage);
 
       // Patch storage with correct totalPieces and size after torrent is ready
       await this.storageService.updateDownloadProgress({
         movieSourceId: source.id,
-        downloadedPieces: new Uint8Array(0),
+        downloadedPieces: torrent.bitfield?.buffer || new Uint8Array(0),
         totalPieces: torrent.numPieces,
         size: torrent.length,
       });
@@ -293,55 +284,80 @@ export class DownloadService {
   /**
    * Add torrent with priority-specific configuration and encrypted chunk store
    */
-  private async addTorrentWithPriority(
-    // FixMe: Use torrent file instead of magnet link ( cause we have it )
-    magnetLink: string,
-    hash: string,
-    storagePath: string
+  private async addTorrent(
+    { magnetLink, hash, file }: Pick<MovieSource, 'file' | 'hash' | 'magnetLink'>,
+    { location, downloadedPieces }: Storage,
+    timeout: number = 30000
   ): Promise<Torrent> {
     return new Promise((resolve, reject) => {
       try {
         const torrentOptions: TorrentOptions<EncryptedStorageOptions> = {
-          path: storagePath,
-          deselect: false,
-          destroyStoreOnDestroy: true,
+          path: location,
+          deselect: true,
           store: EncryptedChunkStore,
+          announce: this.bestTrackers,
           storeOpts: {
             encryptionKey: ENV('SOURCE_SECURITY_KEY'),
             filenameSalt: `download-${hash}`,
           },
         };
 
-        // FixMe: Before adding the torrent, check if it already exists using the hash
-        const torrent = this.client.add(magnetLink, torrentOptions);
+        if (downloadedPieces) {
+          torrentOptions.bitfield = downloadedPieces;
+        }
 
-        torrent.on('ready', () => {
-          this.downloadOnlyVideoFiles(torrent);
-          resolve(torrent);
-        });
+        const existingTorrent = this.client.torrents.find(t => t.infoHash === hash);
+        if (existingTorrent) {
+          resolve(existingTorrent);
+          return;
+        }
 
-        torrent.on('error', (error: Error) => {
-          reject(error);
-        });
-
-        // Add timeout for torrent addition
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           reject(new ErrorWithStatus('Timeout adding download', 'add_torrent_timeout'));
-        }, 30000); // 30 second timeout
+        }, timeout);
+
+        try {
+          const temporaryTorrent = this.client.add(
+            file || magnetLink || hash,
+            torrentOptions,
+            torrent => {
+              clearTimeout(timeoutId);
+              temporaryTorrent.off('error', onError);
+              resolve(torrent);
+            }
+          );
+
+          const onError = (error: Error) => {
+            // Torrent always gets destroyed on error, no need to listen further
+            temporaryTorrent.off('error', onError);
+            if ('message' in error && error.message === `Cannot add duplicate torrent ${hash}`) {
+              // Search again, maybe some race condition happened
+              const existingTorrent = this.client.torrents.find(t => t.infoHash === hash);
+              if (existingTorrent) {
+                resolve(existingTorrent);
+                return;
+              }
+            }
+            logger.error('DownloadService', `Error adding torrent ${hash}:`, error);
+            reject(error);
+          };
+
+          temporaryTorrent.on('error', onError);
+        } catch (error) {
+          // The only case I could find where it throws here is when the client is destroyed
+          logger.error('DownloadService', `Error adding torrent ${hash}:`, error);
+          reject(error);
+        }
       } catch (error) {
         reject(error);
       }
     });
   }
 
-  private downloadOnlyVideoFiles(torrent: Torrent): void {
-    // FixMe: this should download only valid video files
-    torrent.files.forEach(file => file.select());
-  }
-
   /**
    * Get download progress for a movie source
    */
+  @traced('DownloadService')
   async getDownloadProgress(movieSourceId: number): Promise<DownloadProgress | null> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -383,6 +399,7 @@ export class DownloadService {
   /**
    * Pause download for a movie source
    */
+  @traced('DownloadService')
   async pauseDownload(movieSourceId: number): Promise<boolean> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -418,6 +435,7 @@ export class DownloadService {
   /**
    * Resume download for a movie source
    */
+  @traced('DownloadService')
   async resumeDownload(movieSourceId: number): Promise<boolean> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -453,6 +471,7 @@ export class DownloadService {
   /**
    * Remove/cancel download for a movie source
    */
+  @traced('DownloadService')
   async cancelDownload(movieSourceId: number): Promise<boolean> {
     try {
       const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
@@ -492,7 +511,7 @@ export class DownloadService {
     torrent.on('verified', async () => {
       try {
         // Convert BitField to Uint8Array for storage service
-        const bitfieldBuffer = torrent.bitfield
+        const bitfieldBuffer = torrent.bitfield?.buffer
           ? Buffer.from(torrent.bitfield.buffer)
           : new Uint8Array(0);
 
@@ -529,8 +548,9 @@ export class DownloadService {
    * Stream a file from a torrent with range request support
    * Based on WebTorrent server implementation
    */
+  @traced('DownloadService')
   async streamFile(
-    hash: string,
+    movieSource: MovieSource,
     rangeHeader?: string
   ): Promise<{
     stream: Readable;
@@ -539,9 +559,11 @@ export class DownloadService {
   }> {
     return new Promise(resolve => {
       const handleRequest = async () => {
-        const torrent = await this.getTorrent(hash);
+        const { torrent } = await this.startDownload(movieSource);
         // Autofind the correct file
         const file = getVideoFile(torrent);
+        file.select();
+
         const headers: Record<string, string> = {
           'Accept-Ranges': 'bytes',
           'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',

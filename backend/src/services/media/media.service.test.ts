@@ -57,6 +57,7 @@ const mockDb = {
   getMovieRepository: () => mockMovieRepo,
   getTVShowRepository: () => ({}),
   getGenreRepository: () => mockGenreRepo,
+  getProgressRepository: () => ({}),
   getSyncStateRepository: () => mockSyncStateRepo,
   getSeasonRepository: () => ({}),
 } as unknown as Database;
@@ -87,7 +88,7 @@ describe('MediaService', () => {
       // Arrange
       mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null);
       // Act
-      const movie = await mediaService.getMovie(theWildRobotTMDBID);
+      const movie = await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
 
       // Assert - Check that fetch was called with expected URL
       const movieDetailsCalls = mockFetch.mock.calls.filter(
@@ -118,7 +119,7 @@ describe('MediaService', () => {
       mockMovieRepo.findByTMDBId.mockResolvedValueOnce(existingMovie);
 
       // Act
-      const movie = await mediaService.getMovie(theWildRobotTMDBID);
+      const movie = await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
 
       // Assert
       expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(theWildRobotTMDBID);
@@ -132,7 +133,7 @@ describe('MediaService', () => {
       mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null); // Movie not in DB
 
       // Act
-      await mediaService.getMovie(theWildRobotTMDBID);
+      await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
 
       // Assert
       expect(mockMovieRepo.create).toHaveBeenCalled();
@@ -147,7 +148,7 @@ describe('MediaService', () => {
       mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null); // Movie not in DB
 
       // Act
-      await mediaService.getMovie(theWildRobotTMDBID);
+      await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
 
       // Assert
       expect(mockMovieRepo.create).toHaveBeenCalled();

@@ -213,7 +213,13 @@ export class DynamicRateLimit {
           );
         }
       } catch (error) {
-        logger.error('DynamicRateLimit', 'Failed to load status from file:', error);
+        // If the file doesn't exist, that's fine - we'll start with defaults
+        // Only log as error if it's not a "file not found" error
+        if (error instanceof Error && 'code' in error && error.code !== 'ENOENT') {
+          logger.error('DynamicRateLimit', 'Failed to load status from file:', error);
+        } else {
+          logger.debug('DynamicRateLimit', 'No existing status file found, starting with defaults');
+        }
       }
     }
   }

@@ -2,7 +2,7 @@
 
 > **CRITICAL**: Read this before making any code changes. Contains essential project status info.
 
-## 📊 Current Implementation Status (Updated 2025-06-23)
+## 📊 Current Implementation Status (Updated 2025-06-30)
 
 ### ✅ **Backend: 95% Complete and Production-Ready**
 
@@ -64,6 +64,38 @@ backend/src/services/auth/auth.service.ts       // 325 lines, ~15 methods
 backend/src/services/source/source.service.ts   // 464 lines
 backend/src/services/download/download.service.ts // 587 lines
 backend/src/services/media/                      // TMDB + Trakt integration
+```
+
+## 🎬 **Episode Sync Management (New Feature)**
+
+### **Configuration**
+
+- **Environment Variable**: `EPISODE_SYNC_MODE`
+- **Values**: `GREEDY` (sync all episodes) or `ON_DEMAND` (sync only watched shows)
+- **Default**: `ON_DEMAND`
+
+### **How It Works**
+
+1. **GREEDY Mode**: Background task syncs all incomplete seasons (original behavior)
+2. **ON_DEMAND Mode**:
+   - Shows are marked as "watching" when user accesses them
+   - Background task only syncs episodes for shows where `watching: true`
+   - Efficient tracking without heavy progress queries
+
+### **Database Changes**
+
+- **TVShow Entity**: Added `watching: boolean` field (default: false)
+- **TVShowRepository**: Methods to manage watching status
+- **MediaService**: Automatically marks shows as watching on access
+
+### **Usage**
+
+```bash
+# Set sync mode
+export EPISODE_SYNC_MODE=ON_DEMAND  # Default behavior
+export EPISODE_SYNC_MODE=GREEDY     # Sync all episodes
+
+# Background task automatically adapts to mode
 ```
 
 ## 🧪 **Testing Infrastructure**

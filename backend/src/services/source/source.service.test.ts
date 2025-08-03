@@ -135,7 +135,7 @@ describe('SourceService', () => {
       trailerCode: 'abcd1234',
     });
 
-    mockContentDirectoryService.status.mockReturnValue([
+    mockContentDirectoryService.status.mockResolvedValue([
       {
         queue: 0,
         successes: [],
