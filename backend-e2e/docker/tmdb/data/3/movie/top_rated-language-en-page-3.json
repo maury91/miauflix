@@ -5,18 +5,7 @@
     "cache-control": "public, max-age=27067",
     "content-type": "application/json;charset=utf-8",
     "etag": "W/\"7881f326b1aa935b520f2b8ba23f43d5\"",
-    "server": "openresty",
-    "vary": "accept-encoding, Origin",
-    "via": "1.1 89f400f550feb1d74a18ecb2070103ac.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "gKYmNEeeJY-xgjmEoASw31cXCTIW8RWPdzvI_LL7kzBwn7-fK0kyqA==",
-    "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Hit from cloudfront",
-    "x-memc": "HIT",
-    "x-memc-age": "1571",
-    "x-memc-expires": "27067",
-    "x-memc-key": "7eda72ce04f1906e66af777683e2118e",
-    "x-task-id": "6d1d4eaa71e14ad08eb39a932a2b7fc2"
+    "vary": "accept-encoding, Origin"
   },
   "status": 200,
   "data": {
