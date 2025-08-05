@@ -7,6 +7,7 @@ export interface TestResponse<T = any> {
   status: number;
   data: T;
   headers: Record<string, string>;
+  requestId?: string; // Add request ID for tracing
 }
 
 type ExtractResponseType<T> = T extends (
@@ -89,10 +90,14 @@ export class TestClient {
       headers[key] = value;
     });
 
+    // Extract request ID from headers for tracing
+    const requestId = headers['x-trace-id'] || headers['x-request-id'] || undefined;
+
     return {
       status,
       data: response,
       headers,
+      requestId,
     };
   }
 

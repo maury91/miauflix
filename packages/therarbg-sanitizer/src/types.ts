@@ -139,11 +139,16 @@ export interface ImdbDetailPost {
   imdb_data: number;
 }
 
-export interface SourceFile {
-  name: string;
-  size: number;
-  full_location?: string;
-}
+export type SourceFile =
+  | {
+      name: string;
+      size: number;
+      full_location: string;
+    }
+  | {
+      name: string[];
+      size: number[];
+    };
 
 export interface TrackerInfo {
   seeders: number;
@@ -365,11 +370,7 @@ export interface TheRARBGPost {
   episode: number;
   timestamp: string;
   last_checked: string;
-  files: Array<{
-    name: string;
-    size: number;
-    full_location: string;
-  }>;
+  files: SourceFile[];
   trackers: Array<{
     seeders: number;
     tracker: string;

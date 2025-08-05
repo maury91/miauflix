@@ -4,6 +4,7 @@ import type {
   SanitizationOptions,
   GetPostsResponse,
   GetPosts,
+  SourceFile,
 } from './types';
 import { DEFAULT_OPTIONS } from './constants';
 import {
@@ -184,14 +185,27 @@ export function sanitizePost(
   // Sanitize file paths
   if (sanitized.files && Array.isArray(sanitized.files)) {
     sanitized.files = sanitized.files.map((file, index) => {
+      if (Array.isArray(file.name)) {
+        if (file.name.length === 0) {
+          return file;
+        }
+        // Extract original extension
+        const originalExtension = file.name[0].split('.').pop() || 'mkv';
+
+        return {
+          size: Array.isArray(file.size) ? file.size : [file.size],
+          name: [`fake_file_${index}.${originalExtension}`],
+        } satisfies SourceFile;
+      }
+
       // Extract original extension
       const originalExtension = file.name.split('.').pop() || 'mkv';
 
       return {
-        ...file,
         name: `fake_file_${index}.${originalExtension}`,
+        size: Array.isArray(file.size) ? file.size[0] : file.size,
         full_location: `fake_path_${index}/fake_file_${index}.${originalExtension}`,
-      };
+      } satisfies SourceFile;
     });
   }
 

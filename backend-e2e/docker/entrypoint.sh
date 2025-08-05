@@ -47,6 +47,11 @@ chown -R $PUID:$PGID /usr/src/app/downloads
 # Ensure directories are writable
 chmod 755 /usr/src/app/data
 
+# Ensure /tmp is writable by the application user (for trace files)
+echo "Setting ownership of /tmp to $PUID:$PGID"
+chown -R $PUID:$PGID /tmp
+chmod 755 /tmp
+
 echo "-------------------------------------"
 echo "Starting application as UID: $PUID, GID: $PGID"
 echo "-------------------------------------"

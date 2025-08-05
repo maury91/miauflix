@@ -11,22 +11,13 @@ const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.P
 // Make backend URL available globally
 global.BACKEND_URL = BACKEND_URL;
 
-// Add custom matchers if needed
+// Import custom matchers
+import { toBeHttpStatus, toHaveRequestId } from './utils/request-id-matcher';
+
+// Add custom matchers
 expect.extend({
-  toBeHttpStatus(received: number, expected: number) {
-    const pass = received === expected;
-    if (pass) {
-      return {
-        message: () => `Expected HTTP status not to be ${expected}`,
-        pass: true,
-      };
-    } else {
-      return {
-        message: () => `Expected HTTP status ${expected} but received ${received}`,
-        pass: false,
-      };
-    }
-  },
+  toBeHttpStatus,
+  toHaveRequestId,
 });
 
 declare global {
@@ -35,6 +26,7 @@ declare global {
   namespace jest {
     interface Matchers<R> {
       toBeHttpStatus(expected: number): R;
+      toHaveRequestId(): R;
     }
   }
 }

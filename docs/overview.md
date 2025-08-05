@@ -73,7 +73,6 @@ Start here and go deeper as needed:
 
 ### ❌ Missing Critical Components
 
-- **Stream Endpoint**: `/api/stream/:sourceId` not implemented (prevents video playback)
 - **Viewport Preload**: `/api/ui/viewport` endpoint missing (performance optimization)
 
 > **Tip:** Consult Level 2 docs when exploring, then Level 3 guides when building features. Specialized docs provide deep technical implementation details. Check implementation status in task-file-mapping.md before starting development.
