@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 
 export const UserIcon: FC<{ color?: string; size?: number }> = ({
   color = 'inherit',

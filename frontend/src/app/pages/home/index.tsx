@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { MediaDetails } from './components/mediaDetails';
-import { MediaDto } from '@miauflix/backend-client';
-import { Categories } from './components/categories';
+import type { MediaDto } from '@miauflix/backend-client';
 import { setFocus, updateAllLayouts } from '@noriginmedia/norigin-spatial-navigation';
-import { SIDEBAR_FOCUS_KEY } from './consts';
-import { FullScreenDiv } from '../../components/fullScreenDiv';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
-import { HomeSidebar } from './components/sidebar';
-import { PageProvider } from '../../contexts/page.context';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { navigateTo, setCurrentMedia } from '../../../store/slices/app';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { FullScreenDiv } from '../../components/fullScreenDiv';
+import { PageProvider } from '../../contexts/page.context';
+import { Categories } from './components/categories';
+import { MediaDetails } from './components/mediaDetails';
+import { HomeSidebar } from './components/sidebar';
+import { SIDEBAR_FOCUS_KEY } from './consts';
 
 export const Home = () => {
   const dispatch = useAppDispatch();

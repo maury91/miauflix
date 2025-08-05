@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+
 import { progressApi } from '../api/progress';
 // Remove legacy progress DTO imports
 // Use backend-client DTOs or 'any' as a fallback for MediaProgress

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import LoginForm from '../components/LoginForm';
+
 import DeviceLogin from '../components/DeviceLogin';
+import LoginForm from '../components/LoginForm';
 
 const LoginPage: React.FC = () => {
   const [showDeviceLogin, setShowDeviceLogin] = useState(false);

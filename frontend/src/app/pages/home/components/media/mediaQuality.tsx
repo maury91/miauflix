@@ -1,7 +1,8 @@
-import { FC } from 'react';
-import { VideoQualityStr } from '@/types/video';
-import MaterialSymbolsLight4kOutline from '~icons/material-symbols-light/4k-outline';
+import type { FC } from 'react';
+
+import type { VideoQualityStr } from '@/types/video';
 import MaterialSymbolsLight2kOutline from '~icons/material-symbols-light/2k-outline';
+import MaterialSymbolsLight4kOutline from '~icons/material-symbols-light/4k-outline';
 import MaterialSymbolsLightFullHdOutline from '~icons/material-symbols-light/full-hd-outline';
 import MaterialSymbolsLightHdOutline from '~icons/material-symbols-light/hd-outline';
 

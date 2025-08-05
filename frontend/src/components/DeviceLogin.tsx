@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { useDeviceLoginMutation, useCheckDeviceLoginStatusMutation } from '../store/api/auth';
+import React, { useEffect, useState } from 'react';
+
+import { useCheckDeviceLoginStatusMutation, useDeviceLoginMutation } from '../store/api/auth';
 
 const DeviceLogin: React.FC = () => {
   const [getDeviceCode, { data: deviceCodeData, isLoading: isDeviceCodeLoading }] =

@@ -1,4 +1,4 @@
-import { TVInputDeviceKeyName } from './tizen';
+import type { TVInputDeviceKeyName } from './tizen';
 
 declare global {
   interface Window {
@@ -11,7 +11,7 @@ declare global {
 
 // Unplugin-icons type declarations
 declare module '~icons/*' {
-  import { ComponentType, SVGProps } from 'react';
+  import type { ComponentType, SVGProps } from 'react';
   const component: ComponentType<SVGProps<SVGSVGElement>>;
   export default component;
 }

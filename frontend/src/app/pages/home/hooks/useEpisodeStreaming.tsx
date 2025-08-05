@@ -1,8 +1,9 @@
-import { useMemo, useEffect } from 'react';
+import type { Quality } from '@miauflix/backend-client';
 import { useGetStreamingKeyMutation } from '@store/api/movies';
+import { useEffect, useMemo } from 'react';
+
 import { DISABLE_STREAMING, IS_TIZEN } from '@/consts';
 import { getStreamUrl } from '@/store/api/medias';
-import type { Quality } from '@miauflix/backend-client';
 
 export const useEpisodeStreaming = (
   episodeId: number | null,

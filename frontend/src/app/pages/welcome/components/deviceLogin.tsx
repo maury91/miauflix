@@ -1,9 +1,12 @@
-import { FC, useEffect } from 'react';
 import { useCheckDeviceLoginStatusMutation } from '@store/api/auth';
-import { PALETTE } from '@/consts';
+import type { FC } from 'react';
+import { useEffect } from 'react';
+import type { QRCodeProps } from 'react-qr-code';
+import QRCode from 'react-qr-code';
 import styled from 'styled-components';
-import QRCode, { QRCodeProps } from 'react-qr-code';
-import { DeviceLoginDto } from '@/types/backend';
+
+import { PALETTE } from '@/consts';
+import type { DeviceLoginDto } from '@/types/backend';
 
 const DeviceLoginDescription = styled.p`
   position: fixed;

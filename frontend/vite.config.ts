@@ -86,7 +86,7 @@ export default defineConfig({
     outDir: tizenBuild ? '../dist/frontend-tizen' : '../dist/frontend',
     emptyOutDir: true,
     reportCompressedSize: true,
-    target: tizenBuild ? 'es2019' : 'modules',
+    target: tizenBuild ? 'es2019' : 'esnext',
     commonjsOptions: {
       transformMixedEsModules: true,
     },

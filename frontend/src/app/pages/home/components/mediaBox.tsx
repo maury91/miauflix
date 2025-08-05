@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { IS_TV, PALETTE } from '@/consts';
 
 export const MEDIA_BOX_HEIGHT = 20;

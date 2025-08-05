@@ -57,6 +57,7 @@ COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/dist /usr/src/app/p
 COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/package.json /usr/src/app/packages/therarbg-sanitizer/package.json
 # Copy all node_modules from root (workspace dependencies)
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
+COPY --from=builder /usr/src/app/backend/node_modules /usr/src/app/backend/node_modules
 COPY --from=builder /usr/src/app/.env /usr/src/app/.env
 
 # Copy entrypoint script

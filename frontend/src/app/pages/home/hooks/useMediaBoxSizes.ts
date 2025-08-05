@@ -1,5 +1,6 @@
-import { useWindowSize } from '../../../hooks/useWindowSize';
 import { useMemo } from 'react';
+
+import { useWindowSize } from '../../../hooks/useWindowSize';
 
 export const useMediaBoxSizes = () => {
   const { width, height } = useWindowSize();

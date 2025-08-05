@@ -1,22 +1,26 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useGetListsQuery } from '@store/api/lists';
-import { gsap } from 'gsap';
+import { useControls } from '@hooks/useControls';
+import type { MediaDto } from '@miauflix/backend-client';
+import { ListDto } from '@miauflix/backend-client';
 import {
   FocusContext,
   getCurrentFocusKey,
   setFocus,
   useFocusable,
 } from '@noriginmedia/norigin-spatial-navigation';
+import { useGetListsQuery } from '@store/api/lists';
+import { changeCategory } from '@store/slices/home';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { gsap } from 'gsap';
+import type { FC } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { IS_TV } from '@/consts';
+
+import { debounce } from '../../../utils/debounce';
 import { CATEGORIES_FOCUS_KEY, HOME_PREFIX, SLIDER_PREFIX } from '../consts';
 import { CategoriesContainer, CategoriesWrapper } from './categoriesContainer';
 import { CategorySlider, SLIDER_MARGIN } from './categorySlider';
-import { ListDto, MediaDto } from '@miauflix/backend-client';
-import { useAppDispatch, useAppSelector } from '@store/store';
 import { MEDIA_BOX_HEIGHT } from './mediaBox';
-import { debounce } from '../../../utils/debounce';
-import { IS_TV } from '@/consts';
-import { useControls } from '@hooks/useControls';
-import { changeCategory } from '@store/slices/home';
 
 const HOME_SLIDER_PREFIX = SLIDER_PREFIX + HOME_PREFIX;
 

@@ -1,5 +1,7 @@
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { FC, useEffect, useState } from 'react';
+
 import { usePlayerContext } from '../context';
 
 const SubtitleDisplay = styled.p<{ index: number }>`
