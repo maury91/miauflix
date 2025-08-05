@@ -1,10 +1,12 @@
-import { FC, useCallback, useState } from 'react';
-import { UserDto } from '@miauflix/backend-client';
-import { useProfilesPosition } from '../hooks/useProfilesPosition';
-import { NewProfile, Profile } from './profile';
-import { useAppDispatch } from '@store/store';
+import type { UserDto } from '@miauflix/backend-client';
 import { chooseProfile } from '@store/slices/app';
 import { navigateToNewProfile } from '@store/slices/profileSelection';
+import { useAppDispatch } from '@store/store';
+import type { FC } from 'react';
+import { useCallback, useState } from 'react';
+
+import { useProfilesPosition } from '../hooks/useProfilesPosition';
+import { NewProfile, Profile } from './profile';
 
 export interface ProfileSliderProps {
   users: UserDto[];

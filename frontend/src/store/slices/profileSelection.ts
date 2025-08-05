@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { listsApi } from '../api/lists';
+
 import { Page } from '../../types';
+import { listsApi } from '../api/lists';
 
 export interface ProfileSelectionState {
   screen: 'profile-selection' | 'new-profile' | 'settings';

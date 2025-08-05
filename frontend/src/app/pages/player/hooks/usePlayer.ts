@@ -1,8 +1,10 @@
+import { useEffect, useMemo, useState } from 'react';
+
 import { IS_TIZEN } from '@/consts';
+
 import { TizenPlayer } from '../platforms/tizen';
 import { WebPlayer } from '../platforms/web';
-import { Player, Track } from '../playerClassAbstract';
-import { useEffect, useMemo, useState } from 'react';
+import type { Player, Track } from '../playerClassAbstract';
 
 const getPlayer = (): Player => {
   if (IS_TIZEN) {

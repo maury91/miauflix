@@ -1,5 +1,6 @@
-import { Player } from './playerClassAbstract';
 import { createContext, useContext } from 'react';
+
+import type { Player } from './playerClassAbstract';
 
 interface PlayerContext {
   player: Player | null;

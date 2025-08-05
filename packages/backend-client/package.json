@@ -11,9 +11,7 @@
   "dependencies": {
     "hono": "^4.7.10"
   },
-  "devDependencies": {
-    "typescript": "^5.8.3"
-  },
+  "devDependencies": {},
   "peerDependencies": {
     "hono": "^4.7.10"
   }

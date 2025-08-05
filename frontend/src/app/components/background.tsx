@@ -1,7 +1,9 @@
+import type { MotionConfigContext } from 'framer-motion';
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+
 import { useAppSelector } from '../../store/store';
-import { AnimatePresence, motion, MotionConfig, MotionConfigContext } from 'framer-motion';
 import { usePrevious } from '../hooks/usePrevious';
 
 type BackgroundDirections = 'top' | 'left' | 'full' | 'none';

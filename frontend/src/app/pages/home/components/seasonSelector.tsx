@@ -1,8 +1,11 @@
-import styled from 'styled-components';
-import { IS_TV, PALETTE } from '@/consts';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { ShowResponse } from '@miauflix/backend-client';
+import type { ShowResponse } from '@miauflix/backend-client';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import type { FC } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+
+import { IS_TV, PALETTE } from '@/consts';
+
 import { useControls } from '../../../hooks/useControls';
 
 const BaseSeasonItem = styled.div<{ focused: boolean }>`

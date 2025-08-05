@@ -28,13 +28,7 @@ export const createStreamRoutes = ({
     zValidator(
       'query',
       z.object({
-        quality: z
-          .enum(['auto', ...Object.values(Quality)] as const, {
-            errorMap: () => ({
-              message: `Quality must be one of: auto, ${Object.values(Quality).join(', ')}`,
-            }),
-          })
-          .optional(),
+        quality: z.enum(['auto', ...Object.values(Quality)]).optional(),
         hevc: z
           .string()
           .optional()
