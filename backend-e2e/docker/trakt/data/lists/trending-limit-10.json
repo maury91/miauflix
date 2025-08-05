@@ -2,27 +2,19 @@
   "headers": {
     "alt-svc": "h3=\":443\"; ma=86400",
     "cache-control": "max-age=300, public",
-    "cf-cache-status": "DYNAMIC",
-    "cf-ray": "9464ad1acc31dbb3-FRA",
     "content-type": "application/json; charset=utf-8",
     "etag": "W/\"fb3a890ae4d47940ec0c0d2a26574053\"",
     "expires": "Tue, 27 May 2025 10:07:21 GMT",
     "referrer-policy": "strict-origin-when-cross-origin",
-    "server": "cloudflare",
-    "speculation-rules": "\"/cdn-cgi/speculation\"",
     "vary": "Accept-Encoding",
-    "x-content-type-options": "nosniff",
     "x-download-options": "noopen",
-    "x-frame-options": "SAMEORIGIN",
     "x-pagination-item-count": "21795",
     "x-pagination-limit": "10",
     "x-pagination-page": "1",
     "x-pagination-page-count": "2180",
     "x-permitted-cross-domain-policies": "none",
     "x-ratelimit": "{\"name\":\"UNAUTHED_API_GET_LIMIT\",\"period\":300,\"limit\":1000,\"remaining\":999,\"until\":\"2025-05-27T10:05:00Z\"}",
-    "x-request-id": "38cb6143-a1ec-4815-8cd4-a63d0946a15e",
-    "x-runtime": "0.526724",
-    "x-xss-protection": "0"
+    "x-runtime": "0.526724"
   },
   "data": [
     {
