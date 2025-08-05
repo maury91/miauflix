@@ -1,27 +1,18 @@
-import process from 'node:process';
+import debugModule from 'debug';
+
+import { getTraceContextString } from '@utils/trace-context';
 
 type Severity = 'debug' | 'error' | 'info' | 'warn';
 
-// Read and parse the DEBUG environment variable
-const debugEnv = process.env.DEBUG || '';
-const debugAll = debugEnv === '*';
-const debugServices = new Set(debugAll ? [] : debugEnv.split(',').filter(Boolean));
-
-const shouldShowDebug = (service: string): boolean => {
-  if (debugAll) {
-    return true;
-  }
-  return debugServices.has(service);
-};
-
 const print = (severity: Severity, service: string, message: string, ...metadata: unknown[]) => {
   // Skip debug logs if the service is not enabled
-  if (severity === 'debug' && !shouldShowDebug(service)) {
+  if (severity === 'debug' && !debugModule.enabled(service)) {
     return;
   }
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(5, 22);
-  const formattedMessage = `[${timestamp}] [${service}] ${message}`;
+  const traceContext = getTraceContextString();
+  const formattedMessage = `[${timestamp}] [${service}]${traceContext} ${message}`;
   // Only stringify metadata if it exists
   const metadataFormatted = metadata.map(m =>
     typeof m === 'undefined' ? '' : m instanceof Error ? m : ` ${JSON.stringify(m, null, 2)}`

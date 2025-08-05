@@ -29,7 +29,7 @@ describe('Authentication Endpoints', () => {
       password: 'wrongpassword',
     });
 
-    expect(response.status).toBe(401);
+    expect(response).toBeHttpStatus(401);
     expect(response.data).toHaveProperty('error');
   });
 
@@ -37,7 +37,7 @@ describe('Authentication Endpoints', () => {
     // Try to access a protected endpoint without authentication
     const response = await client.get(['lists']);
 
-    expect(response.status).toBe(401);
+    expect(response).toBeHttpStatus(401);
   });
 
   it('should login with valid credentials', async () => {
@@ -49,7 +49,7 @@ describe('Authentication Endpoints', () => {
 
     const response = await client.login(userCredentials);
 
-    expect(response.status).toBe(200);
+    expect(response).toBeHttpStatus(200);
     expect(response.data).toHaveProperty('accessToken');
     expect(response.data).toHaveProperty('refreshToken');
     if ('accessToken' in response.data) {
@@ -71,7 +71,7 @@ describe('Authentication Endpoints', () => {
     // Now try to access a protected endpoint
     const response = await client.get(['lists']);
 
-    expect(response.status).toBe(200);
+    expect(response).toBeHttpStatus(200);
     expect(response.data).toBeDefined();
   });
 
@@ -99,7 +99,7 @@ describe('Authentication Endpoints', () => {
       },
     });
 
-    expect(refreshResponse.status).toBe(200);
+    expect(refreshResponse).toBeHttpStatus(200);
     expect(refreshResponse.data).toHaveProperty('accessToken');
     expect(refreshResponse.data).toHaveProperty('refreshToken');
   });
@@ -121,7 +121,7 @@ describe('Authentication Endpoints', () => {
     // Logout using refresh token
     const logoutResponse = await client.logout(loginResponse.data.refreshToken);
 
-    expect(logoutResponse.status).toBe(200);
+    expect(logoutResponse).toBeHttpStatus(200);
     expect(logoutResponse.data).toHaveProperty('message');
   });
 

@@ -94,6 +94,8 @@ describe('Database Encryption E2E Tests', () => {
         query: { includeSources: 'true' },
       });
 
+      expect(movieResponse).toBeHttpStatus(200);
+
       if (
         movieResponse.status !== 200 ||
         'sources' in movieResponse.data === false ||
