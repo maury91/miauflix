@@ -1,8 +1,10 @@
+import { otel } from '@hono/otel';
 import { Hono } from 'hono';
 
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 
 import { createAuthRoutes } from './auth.routes';
 import type { Deps } from './common.types';
@@ -17,6 +19,12 @@ export function createRoutes(deps: Deps) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(deps.auditLogService);
 
   return new Hono()
+    .use(
+      otel({
+        augmentSpan: true,
+      })
+    )
+    .use(traceContextMiddleware)
     .use(createAuthMiddleware(deps.authService))
     .use(createAuditLogMiddleware(deps.auditLogService))
     .get('/health', rateLimitGuard(10), c => {

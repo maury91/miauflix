@@ -1,5 +1,5 @@
 services:
-  nordvpn:
+  vpn:
     image: ghcr.io/bubuntux/nordlynx
     hostname: nordvpn
     container_name: nordvpn
@@ -23,17 +23,26 @@ services:
       dockerfile: backend.Dockerfile
     container_name: miauflix-backend
     depends_on:
-      - nordvpn
+      vpn:
+        condition: service_healthy
     environment:
       - DATA_DIR=/usr/data
       - PUID=${USER_ID:-1000}
       - PGID=${GROUP_ID:-1000}
-      - DEBUG=SourceService,DataResolver
+      - DISABLE_VPN_CHECK=true
+      - DEBUG=SourceService,DataResolver,DownloadService
+    healthcheck:
+      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
+      interval: 30s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
     volumes:
       - ./.env:/usr/src/app/.env
       - ./data:/usr/data/
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
       - backend_node_modules:/usr/src/app/node_modules
-    network_mode: service:nordvpn # Route traffic through NordVPN
+    network_mode: service:vpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service
     restart: unless-stopped
 

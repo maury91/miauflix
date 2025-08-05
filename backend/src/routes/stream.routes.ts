@@ -9,6 +9,7 @@ import type { Deps, ErrorResponse } from './common.types';
 
 export const createStreamRoutes = ({
   authService,
+  mediaService,
   streamService,
   auditLogService,
   downloadService,
@@ -42,9 +43,14 @@ export const createStreamRoutes = ({
         // Verify streaming key (includes timing attack protection)
         const keyData = await authService.verifyStreamingKey(token);
         const { movieId } = keyData;
+        const movie = await mediaService.getMovieById(movieId);
+
+        if (!movie) {
+          return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
+        }
 
         // Get the best source based on quality and codec preferences
-        const source = await streamService.getBestSourceForStreaming(movieId, quality, hevc);
+        const source = await streamService.getBestSourceForStreaming(movie.tmdbId, quality, hevc);
 
         if (!source) {
           const codecMsg = hevc === false ? ' (H.265 excluded)' : '';
@@ -58,10 +64,7 @@ export const createStreamRoutes = ({
 
         // Stream the file
         const rangeHeader = context.req.header('range');
-        const { stream, headers, status } = await downloadService.streamFile(
-          source.hash,
-          rangeHeader
-        );
+        const { stream, headers, status } = await downloadService.streamFile(source, rangeHeader);
 
         // Return the stream
         return new Response(stream, {

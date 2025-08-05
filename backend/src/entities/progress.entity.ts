@@ -4,7 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  Relation,
+  type Relation,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -21,7 +21,7 @@ export class Progress {
   user: Relation<User>;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column('float')
   progress: number; // 0-100

@@ -31,12 +31,9 @@ interface CategoriesProps {
 }
 
 const useCategories = () => {
-  const { data: categories, isLoading: areCategoriesLoading } = useGetListsQuery();
+  const { data: categories, isLoading } = useGetListsQuery();
 
-  return useMemo(
-    () => (areCategoriesLoading ? [] : (categories ?? [])),
-    [areCategoriesLoading, categories]
-  );
+  return useMemo<ListDto[]>(() => (isLoading ? [] : (categories ?? [])), [isLoading, categories]);
 };
 
 export const Categories: FC<CategoriesProps> = ({ onLeft, onMediaSelect, visible }) => {

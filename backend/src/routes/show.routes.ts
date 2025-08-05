@@ -20,7 +20,7 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
       zValidator(
         'param',
         z.object({
-          id: z.string().regex(/^\d+$/, 'Show ID must be a number'),
+          id: z.string().regex(/^\d+$/, 'TMDB Show ID must be a number'),
         })
       ),
       async context => {
@@ -34,7 +34,7 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
           }
 
           // Get the show from the database or fetch from TMDB if not available
-          const show = await mediaService.getTVShow(showId);
+          const show = await mediaService.getTVShowByTmdbId(showId);
 
           if (!show) {
             return context.json({ error: 'Show not found' } satisfies ErrorResponse, 404);
@@ -66,6 +66,8 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
             seasons: [], // TODO: Implement seasons
             sources: [], // TODO: Implement sources
           };
+
+          await mediaService.markShowAsWatching(showId);
 
           return context.json(response satisfies ShowResponse);
         } catch (error: unknown) {

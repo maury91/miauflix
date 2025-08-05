@@ -7,6 +7,7 @@ import type { Database } from '@database/database';
 import type { Storage } from '@entities/storage.entity';
 import type { StorageRepository } from '@repositories/storage.repository';
 import { humanReadableBytes } from '@utils/numbers';
+import { traced } from '@utils/tracing.util';
 
 /**
  * Service for tracking and managing storage of downloaded movie sources
@@ -32,6 +33,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * Create a new storage record for a movie source
    * Checks storage pressure and performs cleanup if needed before creating new storage
    */
+  @traced('StorageService')
   async createStorage(params: {
     movieSourceId: number;
     location: string;
@@ -60,7 +62,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     // Calculate downloaded progress from bitfield if provided
     const downloaded =
       totalPieces && bitfield.length > 0
-        ? this.calculateProgressFromBitfield(bitfield, totalPieces)
+        ? await this.calculateProgressFromBitfield(bitfield, totalPieces)
         : 0;
 
     const storageData: Partial<Storage> = {
@@ -79,6 +81,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Update download progress and bitfield for a storage record
    */
+  @traced('StorageService')
   async updateDownloadProgress(params: {
     movieSourceId: number;
     downloadedPieces: Uint8Array;
@@ -94,7 +97,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     }
 
     // Calculate downloaded progress from bitfield
-    const downloaded = this.calculateProgressFromBitfield(downloadedPieces, totalPieces);
+    const downloaded = await this.calculateProgressFromBitfield(downloadedPieces, totalPieces);
 
     await this.storageRepository.updateDownloadProgress(
       storage.id,
@@ -112,6 +115,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Mark a storage record as accessed
    */
+  @traced('StorageService')
   async markAsAccessed(movieSourceId: number): Promise<void> {
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
     if (!storage) {
@@ -127,6 +131,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Get storage information for a movie source
    */
+  @traced('StorageService')
   async getStorageByMovieSource(movieSourceId: number): Promise<Storage | null> {
     return this.storageRepository.findByMovieSourceId(movieSourceId);
   }
@@ -134,6 +139,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Get storage information by storage ID
    */
+  @traced('StorageService')
   async getStorageById(id: number): Promise<Storage | null> {
     return this.storageRepository.findById(id);
   }
@@ -142,6 +148,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * Remove storage record and associated data
    * Emits 'delete' event
    */
+  @traced('StorageService')
   async removeStorage(movieSourceId: number): Promise<number> {
     const storage = await this.storageRepository.findByMovieSourceIdWithRelation(movieSourceId);
     if (!storage) {
@@ -165,6 +172,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Get total storage usage in bytes
    */
+  @traced('StorageService')
   async getTotalStorageUsage(): Promise<bigint> {
     return this.storageRepository.getTotalStorageUsage();
   }
@@ -173,6 +181,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * Find storage records that haven't been accessed recently
    * Useful for cleanup operations
    */
+  @traced('StorageService')
   async findStaleStorage(daysSinceLastAccess: number, limit?: number): Promise<Storage[]> {
     return this.storageRepository.findOldUnaccessed(daysSinceLastAccess, limit);
   }
@@ -180,6 +189,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Get storage records with completed downloads (100% progress)
    */
+  @traced('StorageService')
   async getCompletedDownloads(): Promise<Storage[]> {
     return this.storageRepository.findByDownloadedRange(10000, 10000);
   }
@@ -187,6 +197,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Get storage records currently downloading (0% < progress < 100%)
    */
+  @traced('StorageService')
   async getActiveDownloads(): Promise<Storage[]> {
     return this.storageRepository.findByDownloadedRange(1, 9999);
   }
@@ -194,7 +205,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Validate bitfield data integrity
    */
-  validateBitfield(bitfield: Uint8Array, expectedPieces: number): boolean {
+  @traced('StorageService')
+  async validateBitfield(bitfield: Uint8Array, expectedPieces: number): Promise<boolean> {
     const expectedBytes = Math.ceil(expectedPieces / 8);
     return bitfield.length === expectedBytes;
   }
@@ -202,7 +214,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   /**
    * Calculate actual download percentage from bitfield
    */
-  calculateProgressFromBitfield(bitfield: Uint8Array, totalPieces: number): number {
+  @traced('StorageService')
+  async calculateProgressFromBitfield(bitfield: Uint8Array, totalPieces: number): Promise<number> {
     if (totalPieces === 0) return 0;
 
     let downloadedPieces = 0;
@@ -227,6 +240,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * Emits 'delete' event for each removed storage record.
    * @param canCleanEverything - If false, avoids deleting the last storage record
    */
+  @traced('StorageService')
   async cleanup(canCleanEverything = false): Promise<void> {
     let currentUsage = await this.storageRepository.getTotalStorageUsage();
     if (currentUsage <= this.maxStorageBytes) {

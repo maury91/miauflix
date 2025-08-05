@@ -36,16 +36,10 @@
     "docker:cleanup": "./scripts/docker-publish.sh cleanup"
   },
   "dependencies": {
-    "concurrently": "latest",
-    "filename-reserved-regex": "^3.0.0",
-    "load-ip-set": "^3.0.1",
-    "thunky": "^1.1.0"
+    "concurrently": "latest"
   },
   "devDependencies": {
-    "@types/filename-reserved-regex": "^3.0.0",
     "@types/jest": "^30.0.0",
-    "@types/random-access-file": "^4.0.0",
-    "@types/thunky": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
     "eslint": "^8.57.1",
@@ -57,7 +51,6 @@
     "jest": "^30.0.5",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
-    "random-access-file": "^4.1.2",
     "typescript": "^5.9.2"
   },
   "type": "module",

@@ -6,8 +6,6 @@ export interface FileInfo {
   name: string;
   /** File size in bytes */
   size: number;
-  /** Full path within the source */
-  full_location: string;
 }
 
 /**

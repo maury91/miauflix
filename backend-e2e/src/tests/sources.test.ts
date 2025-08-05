@@ -38,11 +38,7 @@ describe('Sources E2E Tests', () => {
         query: { includeSources: 'true' },
       });
 
-      if (response.status === 404) {
-        throw new Error('Movie 550 not found - test data is required for source testing');
-      }
-
-      expect(response.status).toBe(200);
+      expect(response).toBeHttpStatus(200);
       expect(response.data).toHaveProperty('sources');
 
       if ('sources' in response.data === false) {
@@ -184,9 +180,8 @@ describe('Sources E2E Tests', () => {
 
       const response = await client.get(['movies', ':id'], { param: { id: '550' }, query: {} });
 
-      if (response.status === 200) {
-        expect(response.data).not.toHaveProperty('sources');
-      }
+      expect(response).toBeHttpStatus(200);
+      expect(response.data).not.toHaveProperty('sources');
     });
 
     it('should handle movies with no available sources gracefully', async () => {

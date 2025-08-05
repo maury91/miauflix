@@ -1,4 +1,5 @@
 import { ENV } from '@constants';
+import { tracedApi } from '@utils/tracing.util';
 
 import type {
   DeviceCodeResponse,
@@ -145,24 +146,28 @@ export class TraktApi {
     return true;
   }
 
+  @tracedApi('TraktApi')
   public async getTrendingLists() {
     const url = `${this.apiUrl}/lists/trending?limit=50`;
     const response = await this.request<TraktList>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response.items.map(item => item.list);
   }
 
+  @tracedApi('TraktApi')
   public async getPopularLists() {
     const url = `${this.apiUrl}/lists/popular`;
     const response = await this.request<TraktList>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response.items.map(item => item.list);
   }
 
+  @tracedApi('TraktApi')
   public async getList(listId: string) {
     const url = `${this.apiUrl}/lists/${listId}/items`;
     const response = await this.request<TraktListItem>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response;
   }
 
+  @tracedApi('TraktApi')
   public async getDeviceCode() {
     const response = await fetch(`${this.apiUrl}/oauth/device/code`, {
       method: 'POST',
@@ -189,6 +194,7 @@ export class TraktApi {
     };
   }
 
+  @tracedApi('TraktApi')
   public async checkDeviceCode(deviceCode: string): Promise<DeviceTokenResponse> {
     const response = await fetch(`${this.apiUrl}/oauth/device/token`, {
       method: 'POST',
@@ -213,6 +219,7 @@ export class TraktApi {
     return (await response.json()) as DeviceTokenResponse;
   }
 
+  @tracedApi('TraktApi')
   public async getProfile(accessToken: string, slug = 'me'): Promise<UserProfileResponse> {
     const response = await fetch(`${this.apiUrl}/users/${slug}`, {
       headers: {
@@ -230,6 +237,7 @@ export class TraktApi {
     return (await response.json()) as UserProfileResponse;
   }
 
+  @tracedApi('TraktApi')
   public async refreshToken(refreshTokenValue: string): Promise<DeviceTokenResponse> {
     const response = await fetch(`${this.apiUrl}/oauth/token`, {
       method: 'POST',
