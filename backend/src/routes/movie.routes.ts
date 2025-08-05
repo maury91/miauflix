@@ -143,11 +143,7 @@ export const createMovieRoutes = ({
         'param',
         z.object({
           id: z.string().regex(/^\d+$/, 'Movie ID must be a number'),
-          quality: z.enum<Quality | 'auto', typeof supportedQualities>(supportedQualities, {
-            errorMap: () => ({
-              message: `Quality must be one of: ${supportedQualities.join(', ')}`,
-            }),
-          }),
+          quality: z.enum(supportedQualities),
         })
       ),
       async context => {

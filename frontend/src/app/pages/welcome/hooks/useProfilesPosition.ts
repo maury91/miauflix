@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { FOCUSED_PROFILE_SIZE, PROFILE_SIZE } from '../components/profile';
 
 const PROFILE_GAP = 5;

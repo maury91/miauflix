@@ -1,23 +1,24 @@
-import { ProfileSelection } from './pages/welcome';
-import { useEffect, useMemo } from 'react';
-import { useAppSelector } from '../store/store';
-import { gsap } from 'gsap';
-import { ExpoScaleEase } from 'gsap/EasePack';
-import { introAnimation } from './animations/intro';
 import {
   init,
   pause as pauseSpatialNavigation,
   resume as resumeSpatialNavigation,
 } from '@noriginmedia/norigin-spatial-navigation';
-import { Background, BackgroundContainer, SimpleBackground } from './components/background';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { Home } from './pages/home';
-import { Logo } from './components/logo';
+import { gsap } from 'gsap';
+import { ExpoScaleEase } from 'gsap/EasePack';
+import { useEffect, useMemo } from 'react';
+
+import LoginPage from '../pages/LoginPage';
 import { useGetListsQuery } from '../store/api/lists';
 import { usePrefetch } from '../store/api/lists';
+import { useAppSelector } from '../store/store';
+import { introAnimation } from './animations/intro';
+import { Background, BackgroundContainer, SimpleBackground } from './components/background';
+import { Logo } from './components/logo';
+import { Home } from './pages/home';
 import { usePreloadHomeImages } from './pages/home/hooks/usePreloadHomeImages';
 import { Player } from './pages/player';
-import LoginPage from '../pages/LoginPage';
+import { ProfileSelection } from './pages/welcome';
 
 init({
   // debug: true,

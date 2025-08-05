@@ -1,5 +1,7 @@
-import type { MovieResponse, ListDto, ShowResponse } from '@miauflix/backend-client';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { ListDto, MovieResponse, ShowResponse } from '@miauflix/backend-client';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+
 import { listsApi } from '../api/lists';
 
 export interface HomeState {

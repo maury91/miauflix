@@ -1,8 +1,11 @@
-import React, { FC, useEffect, useRef } from 'react';
+import { setFocus } from '@noriginmedia/norigin-spatial-navigation';
 import { gsap } from 'gsap';
-import { useMediaBoxSizes } from '../pages/home/hooks/useMediaBoxSizes';
-import { useCategoryNavigation } from '../pages/home/hooks/useCategoryNavigation';
+import type { FC } from 'react';
+import React, { useEffect, useRef } from 'react';
+import styled from 'styled-components';
+
 import { IS_TV, PALETTE } from '../../consts';
+import { usePrevious } from '../hooks/usePrevious';
 import {
   MEDIA_BOX_HEIGHT,
   MediaBox,
@@ -10,11 +13,10 @@ import {
   OuterMediaHighlight,
   OuterMediaHighlightBackground,
 } from '../pages/home/components/mediaBox';
-import styled from 'styled-components';
-import { usePrevious } from '../hooks/usePrevious';
-import { LoadingIndicator } from '../ui-elements/loadingIndicator';
-import { setFocus } from '@noriginmedia/norigin-spatial-navigation';
 import { SLIDER_PREFIX } from '../pages/home/consts';
+import { useCategoryNavigation } from '../pages/home/hooks/useCategoryNavigation';
+import { useMediaBoxSizes } from '../pages/home/hooks/useMediaBoxSizes';
+import { LoadingIndicator } from '../ui-elements/loadingIndicator';
 
 const CategoryContent = styled.div`
   position: relative;

@@ -1,5 +1,7 @@
+import type { ProgressListResponse, ProgressRequest } from '@miauflix/backend-client';
+import { hcWithType } from '@miauflix/backend-client';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { hcWithType, ProgressRequest, ProgressListResponse } from '@miauflix/backend-client';
+
 import { API_URL } from '../../consts';
 
 const client = hcWithType(API_URL);
