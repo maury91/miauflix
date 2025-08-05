@@ -19,10 +19,13 @@ describe('Health Endpoint', () => {
   it('should return 200 OK for health check', async () => {
     const response = await client.get(['health']);
 
-    expect(response.status).toBeHttpStatus(200);
+    expect(response).toBeHttpStatus(200);
     expect(response.data).toEqual({
       status: 'ok',
     });
+
+    // Verify request ID is present for tracing
+    expect(response).toHaveRequestId();
   });
 
   it('should respond quickly to health checks', async () => {
@@ -32,14 +35,14 @@ describe('Health Endpoint', () => {
 
     const responseTime = endTime - startTime;
 
-    expect(response.status).toBe(200);
+    expect(response).toBeHttpStatus(200);
     expect(responseTime).toBeLessThan(1000); // Should respond within 1 second
   });
 
   it('should have correct content type for health response', async () => {
     const response = await client.get(['health']);
 
-    expect(response.status).toBe(200);
+    expect(response).toBeHttpStatus(200);
     expect(response.headers['content-type']).toMatch(/application\/json/);
   });
 
@@ -49,7 +52,7 @@ describe('Health Endpoint', () => {
 
     const response = await client.get(['health']);
 
-    expect(response.status).toBe(200);
+    expect(response).toBeHttpStatus(200);
     expect(response.data.status).toBe('ok');
   });
 });

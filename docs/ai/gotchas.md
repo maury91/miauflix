@@ -153,6 +153,22 @@ afterEach(() => {
 - Stats updates (2s intervals)
 - List sync (1h intervals)
 - Movie metadata sync (1.5h intervals)
+- **Episode sync (1s intervals)** - Now mode-aware (GREEDY/ON_DEMAND)
+
+### 🎬 **Episode Sync Behavior**
+
+#### **GREEDY Mode** (`EPISODE_SYNC_MODE=GREEDY`)
+
+- Syncs all incomplete seasons for all shows
+- Original behavior, high resource usage
+- Good for complete episode libraries
+
+#### **ON_DEMAND Mode** (`EPISODE_SYNC_MODE=ON_DEMAND`) - **Default**
+
+- Only syncs episodes for shows marked as "watching"
+- Shows automatically marked as watching when accessed via API
+- Efficient resource usage, user-driven syncing
+- Background task adapts automatically based on mode
 
 **Impact**:
 
@@ -161,16 +177,16 @@ afterEach(() => {
 
 ## 🎯 **Frontend Build Issues**
 
-### ❌ **Current frontend has TypeScript errors**
+### ✅ **Frontend builds successfully**
 
-- Build currently fails
-- Several type mismatches need fixing
-- Don't assume frontend is production-ready
+- Build currently passes
+- No TypeScript errors
+- Frontend is ready for feature development
 
-### ✅ **Fix TypeScript errors before adding features**
+### ✅ **Verify build status before adding features**
 
 ```bash
-cd frontend && npm run type-check  # See current errors
+npm run build -w frontend  # Verify build status
 ```
 
 ## 🔒 **Security Constraints**

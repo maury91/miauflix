@@ -15,7 +15,7 @@ export const useEpisodeStreaming = (
   // Trigger the mutation when episodeId or quality changes
   useEffect(() => {
     if (typeof episodeId === 'number' && !DISABLE_STREAMING) {
-      getStreamingKey({ id: String(episodeId), quality });
+      getStreamingKey({ tmdbId: String(episodeId), quality });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeId, quality]);

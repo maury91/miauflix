@@ -39,11 +39,13 @@ export const moviesApi = createApi({
     ),
     getStreamingKey: builder.mutation<
       StreamingKeyResponse,
-      { id: string; quality: Quality | 'auto' }
+      { tmdbId: string; quality: Quality | 'auto' }
     >({
-      async queryFn({ id, quality }) {
+      async queryFn({ tmdbId, quality }) {
         try {
-          const res = await client.movies[':id'][':quality'].$post({ param: { id, quality } });
+          const res = await client.movies[':tmdbId'][':quality'].$post({
+            param: { tmdbId, quality },
+          });
           if (res.status === 200) {
             const data = await res.json();
             // Convert string date to Date object

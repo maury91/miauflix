@@ -2,38 +2,36 @@
 
 > **CRITICAL**: Read this before making any code changes. Contains essential project status info.
 
-## 📊 Current Implementation Status (Updated 2025-06-23)
+## 📊 Current Implementation Status (Updated 2025-06-30)
 
 ### ✅ **Backend: 95% Complete and Production-Ready**
 
 **DO NOT rebuild these systems - they are already complete:**
 
-- **Authentication**: Full JWT system with refresh tokens (AuthService: 228 lines, 18 methods)
+- **Authentication**: Full JWT system with refresh tokens (AuthService: 325 lines, ~15 methods)
 - **Source Discovery**: Multi-provider content aggregation (YTS + THERARBG) with background processing
-- **Media Streaming Infrastructure**: Complete client with peer-to-peer networking (DownloadService: 179 lines)
+- **Media Streaming Infrastructure**: Complete client with peer-to-peer networking (DownloadService: 587 lines)
 - **Database Layer**: 13 entities with AES-256-GCM encryption, complete repository pattern
 - **Background Tasks**: 7 scheduled tasks running continuously (0.1s - 5s intervals)
-- **API Infrastructure**: All routes except streaming endpoint implemented
+- **API Infrastructure**: All routes implemented, including streaming endpoint
 
-### ❌ **Only 2 Things Missing (Critical Blockers)**
+### ❌ **Remaining Missing Component**
 
-1. **Stream Endpoint**: `/api/stream/:sourceId` - prevents video playback
-2. **Frontend JWT Integration**: Token management and authentication flow
+1. **Frontend JWT Integration**: Token management and authentication flow
 
 ### ⚠️ **Frontend Status**
 
 - **Framework**: React + Redux Toolkit + Vite (well-structured)
-- **Issue**: Currently has TypeScript errors and build problems
+- **Build Status**: ✅ Builds successfully (no TypeScript errors)
 - **Missing**: JWT authentication integration with backend
 
 ## 🎯 **What This Means for Development**
 
 ### **DO THIS** ✅
 
-- Focus on the 2 missing components above
-- Fix frontend TypeScript/build issues
+- Focus on the remaining missing component above
 - Connect frontend to existing backend auth
-- Implement the stream endpoint
+- Implement frontend authentication flow
 
 ### **DON'T DO THIS** ❌
 
@@ -62,10 +60,42 @@
 
 ```typescript
 // These are production-ready, don't rebuild:
-backend/src/services/auth/auth.service.ts       // 228 lines, 18 methods
-backend/src/services/source/source.service.ts   // 719 lines, 24 methods
-backend/src/services/download/download.service.ts // 179 lines
+backend/src/services/auth/auth.service.ts       // 325 lines, ~15 methods
+backend/src/services/source/source.service.ts   // 464 lines
+backend/src/services/download/download.service.ts // 587 lines
 backend/src/services/media/                      // TMDB + Trakt integration
+```
+
+## 🎬 **Episode Sync Management (New Feature)**
+
+### **Configuration**
+
+- **Environment Variable**: `EPISODE_SYNC_MODE`
+- **Values**: `GREEDY` (sync all episodes) or `ON_DEMAND` (sync only watched shows)
+- **Default**: `ON_DEMAND`
+
+### **How It Works**
+
+1. **GREEDY Mode**: Background task syncs all incomplete seasons (original behavior)
+2. **ON_DEMAND Mode**:
+   - Shows are marked as "watching" when user accesses them
+   - Background task only syncs episodes for shows where `watching: true`
+   - Efficient tracking without heavy progress queries
+
+### **Database Changes**
+
+- **TVShow Entity**: Added `watching: boolean` field (default: false)
+- **TVShowRepository**: Methods to manage watching status
+- **MediaService**: Automatically marks shows as watching on access
+
+### **Usage**
+
+```bash
+# Set sync mode
+export EPISODE_SYNC_MODE=ON_DEMAND  # Default behavior
+export EPISODE_SYNC_MODE=GREEDY     # Sync all episodes
+
+# Background task automatically adapts to mode
 ```
 
 ## 🧪 **Testing Infrastructure**
@@ -78,11 +108,11 @@ backend/src/services/media/                      // TMDB + Trakt integration
 ## 🚨 **Critical Context for AI Assistants**
 
 1. **Previous Documentation Was Wrong**: Massive 95%+ implementation was documented as "incomplete"
-2. **Focus is Key**: Only 2 missing pieces, don't get distracted by "todo" lists
+2. **Focus is Key**: Only 1 missing piece, don't get distracted by "todo" lists
 3. **Background Tasks Active**: 7 tasks running every 0.1-5 seconds, system is live
-4. **Frontend Needs Attention**: Has build issues but good architecture
-5. **Stream Endpoint is Blocker**: This single endpoint prevents video playback
+4. **Frontend Builds Successfully**: No TypeScript errors, good architecture
+5. **Stream Endpoint Implemented**: Streaming available at `/stream/:token`
 
 ---
 
-**Bottom Line**: This is a nearly-complete, sophisticated streaming platform that needs 2 specific features, not a ground-up rebuild.
+**Bottom Line**: This is a nearly-complete, sophisticated streaming platform that needs 1 specific feature, not a ground-up rebuild.

@@ -180,7 +180,10 @@ describe('StorageService', () => {
         const bitfield = testDataFactory.createBitfield(totalPieces, testCase.completion);
 
         // Act
-        const calculated = storageService.calculateProgressFromBitfield(bitfield, totalPieces);
+        const calculated = await storageService.calculateProgressFromBitfield(
+          bitfield,
+          totalPieces
+        );
 
         // Assert
         expect(calculated).toBe(testCase.expectedBasisPoints);
@@ -254,7 +257,7 @@ describe('StorageService', () => {
       oversizedBitfield.fill(0xff);
 
       // Act
-      const isValid = storageService.validateBitfield(oversizedBitfield, totalPieces);
+      const isValid = await storageService.validateBitfield(oversizedBitfield, totalPieces);
 
       // Assert
       expect(isValid).toBe(false);
@@ -465,7 +468,7 @@ describe('StorageService', () => {
       corruptedBitfield.fill(0xff);
 
       // Act
-      const isValid = storageService.validateBitfield(corruptedBitfield, totalPieces);
+      const isValid = await storageService.validateBitfield(corruptedBitfield, totalPieces);
 
       // Assert
       expect(isValid).toBe(false);

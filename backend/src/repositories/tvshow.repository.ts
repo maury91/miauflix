@@ -45,6 +45,22 @@ export class TVShowRepository {
     });
   }
 
+  async findIncompleteSeasonsByShowIds(showIds: number[]): Promise<Season[]> {
+    if (showIds.length === 0) {
+      return [];
+    }
+
+    return this.seasonRepository.find({
+      where: {
+        synced: false,
+        tvShow: { id: In(showIds) },
+      },
+      relations: {
+        tvShow: true,
+      },
+    });
+  }
+
   async findIncompleteSeason(): Promise<Season | null> {
     return this.seasonRepository.findOne({
       where: { synced: false },
@@ -161,5 +177,31 @@ export class TVShowRepository {
 
   async updateSeasonDetails(season: Season, seasonData: Partial<Season>): Promise<void> {
     await this.seasonRepository.update({ id: season.id }, seasonData);
+  }
+
+  /**
+   * Get TV show IDs where the user has marked shows as watching
+   */
+  async getWatchingTVShowIds(): Promise<number[]> {
+    const watchingShows = await this.tvShowRepository.find({
+      where: { watching: true },
+      select: ['id'],
+    });
+
+    return watchingShows.map(show => show.id);
+  }
+
+  /**
+   * Mark a TV show as watching
+   */
+  async markAsWatching(tvShowId: number): Promise<void> {
+    await this.tvShowRepository.update({ id: tvShowId }, { watching: true });
+  }
+
+  /**
+   * Mark a TV show as not watching
+   */
+  async markAsNotWatching(tvShowId: number): Promise<void> {
+    await this.tvShowRepository.update({ id: tvShowId }, { watching: false });
   }
 }
