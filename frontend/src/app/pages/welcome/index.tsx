@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
 import { FocusContext, setFocus, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from './consts';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { ProfileSelectionScreen } from './screens/profileSelectionScreen';
-import { NewProfileScreen } from './screens/newProfileScreen';
-import { FullScreenDiv } from '../../components/fullScreenDiv';
+import { useEffect, useState } from 'react';
+
 import { useAppSelector } from '../../../store/store';
+import { FullScreenDiv } from '../../components/fullScreenDiv';
+import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from './consts';
+import { NewProfileScreen } from './screens/newProfileScreen';
+import { ProfileSelectionScreen } from './screens/profileSelectionScreen';
 
 export const ProfileSelection = () => {
   const screen = useAppSelector(state => state.profileSelection.screen);

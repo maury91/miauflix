@@ -1,7 +1,14 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { getCurrentFocusKey, setFocus } from '@noriginmedia/norigin-spatial-navigation';
+import { useReportBrokenStreamMutation } from '@store/api/medias';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+import { useControls } from '../../../hooks/useControls';
+import { PLAYER_PAUSE_BUTTON_FOCUS_KEY } from '../consts';
 import { usePlayerContext } from '../context';
-import { PlayerStatus } from '../playerClassAbstract';
 import { useVirtualSeek } from '../hooks/useVirtualSeek';
+import type { PlayerStatus } from '../playerClassAbstract';
 import {
   BrokenStreamButton,
   PauseIcon,
@@ -14,11 +21,6 @@ import {
   PlayPauseIcon,
   TotalTime,
 } from '../ui/common';
-import { useReportBrokenStreamMutation } from '@store/api/medias';
-import { useAppDispatch, useAppSelector } from '@store/store';
-import { getCurrentFocusKey, setFocus } from '@noriginmedia/norigin-spatial-navigation';
-import { PLAYER_PAUSE_BUTTON_FOCUS_KEY } from '../consts';
-import { useControls } from '../../../hooks/useControls';
 
 const formatTime = (time: number) => {
   const hours = Math.floor(time / 3600);

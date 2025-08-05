@@ -1,11 +1,11 @@
+import { gsap } from 'gsap';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 
 import App from './app/app';
-import { store } from './store/store';
-import { Provider } from 'react-redux';
-import { gsap } from 'gsap';
 import { IS_SLOW_DEVICE } from './consts';
+import { store } from './store/store';
 
 if (IS_SLOW_DEVICE) {
   gsap.ticker.fps(24);

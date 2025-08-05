@@ -1,11 +1,14 @@
-import { FC, useCallback, useEffect } from 'react';
-import { useAppDispatch } from '@store/store';
+import type { MovieResponse } from '@miauflix/backend-client';
 import { FocusContext, setFocus, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { MOVIE_PAGE } from '../consts';
 import { useGetStreamingKeyMutation } from '@store/api/movies';
 import { navigateTo } from '@store/slices/app';
+import { useAppDispatch } from '@store/store';
+import type { FC } from 'react';
+import { useCallback, useEffect } from 'react';
+
 import LineMdPlay from '~icons/line-md/play';
-import { MovieResponse } from '@miauflix/backend-client';
+
+import { MOVIE_PAGE } from '../consts';
 import { MediaButton } from './mediaButton';
 
 interface MoviePageProps {

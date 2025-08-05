@@ -1,9 +1,12 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import styled from 'styled-components';
+
 import { builtForTizen } from '@/consts';
-import { ProfileSlider, ProfileSliderProps } from '../components/profileSlider';
-import { Settings } from '../components/settings';
+
 import { FullScreenDiv } from '../../../components/fullScreenDiv';
+import type { ProfileSliderProps } from '../components/profileSlider';
+import { ProfileSlider } from '../components/profileSlider';
+import { Settings } from '../components/settings';
 
 const ProfileSelectionTitle = styled.h1`
   position: fixed;

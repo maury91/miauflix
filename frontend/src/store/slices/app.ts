@@ -1,7 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { listsApi } from '../api/lists';
-import { Page } from '../../types';
 import type { MediaDto } from '@miauflix/backend-client';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+
+import type { Page } from '../../types';
+import { listsApi } from '../api/lists';
 
 export interface AppState {
   currentPage: Page;

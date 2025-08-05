@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export type PlayerLanguage = 'en' | 'es' | 'it' | 'de' | 'fr' | 'lt'; // Add more languages in the future
 export interface Track {

@@ -16,9 +16,9 @@ export class MockCache implements Cache {
   public stores = [];
   public wrap = jest.fn();
 
-  async get<T>(key: string): Promise<T | null> {
+  async get<T>(key: string): Promise<T | undefined> {
     this.mockGetFn(key);
-    return (this.store.get(key) as T) || null;
+    return (this.store.get(key) as T) || undefined;
   }
 
   async set<T>(key: string, value: T, ttl?: number): Promise<T> {

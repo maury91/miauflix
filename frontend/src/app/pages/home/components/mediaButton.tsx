@@ -1,8 +1,11 @@
-import React, { FC, PropsWithChildren, useCallback } from 'react';
-import styled from 'styled-components';
-import { PALETTE } from '../../../../consts';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import type { FC, PropsWithChildren } from 'react';
+import React, { useCallback } from 'react';
+import styled from 'styled-components';
+
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop';
+
+import { PALETTE } from '../../../../consts';
 
 const StyledMediaButton = styled.button<{
   disabled?: boolean;

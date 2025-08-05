@@ -1,7 +1,8 @@
-import { FC } from 'react';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { SettingsIcon } from '../../../ui-elements/icons/settings.icon';
+import type { FC } from 'react';
 import styled from 'styled-components';
+
+import { SettingsIcon } from '../../../ui-elements/icons/settings.icon';
 import { SETTINGS_ITEM } from '../consts';
 
 export const StyledSettings = styled.div<{

@@ -1,5 +1,5 @@
 # --- Build Stage ---
-FROM node:20-slim AS builder
+FROM node:22-slim AS builder
 WORKDIR /usr/src/app
 
 # Install build tools (no unnecessary recommends)
@@ -38,7 +38,7 @@ RUN npm run build --workspace=backend
 RUN touch .env
 
 # --- Runtime Stage ---
-FROM node:20-slim
+FROM node:22-slim
 WORKDIR /usr/src/app
 
 # Install gosu and curl for entrypoint/healthcheck
@@ -57,6 +57,7 @@ COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/dist /usr/src/app/p
 COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/package.json /usr/src/app/packages/therarbg-sanitizer/package.json
 # Copy all node_modules from root (workspace dependencies)
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
+COPY --from=builder /usr/src/app/backend/node_modules /usr/src/app/backend/node_modules
 COPY --from=builder /usr/src/app/.env /usr/src/app/.env
 
 # Copy entrypoint script
