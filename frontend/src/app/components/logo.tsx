@@ -1,9 +1,10 @@
-import { Logo as SVGLogo } from '../ui-elements/logo';
-import { useAppSelector } from '../../store/store';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
-import { Page } from '../../types';
 import styled from 'styled-components';
+
+import { useAppSelector } from '../../store/store';
+import type { Page } from '../../types';
 import { useMediaBoxSizes } from '../pages/home/hooks/useMediaBoxSizes';
+import { Logo as SVGLogo } from '../ui-elements/logo';
 
 const profileSelectionLogo = {
   top: '5vh',

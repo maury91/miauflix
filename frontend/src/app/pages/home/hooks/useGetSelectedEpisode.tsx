@@ -1,4 +1,4 @@
-import { SeasonResponse } from '@miauflix/backend-client';
+import type { SeasonResponse } from '@miauflix/backend-client';
 import { useMemo } from 'react';
 
 export const useGetSelectedEpisode = (

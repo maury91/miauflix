@@ -1,9 +1,10 @@
-import { useCallback, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '@store/store';
+import type { ProgressRequest } from '@miauflix/backend-client';
 import { useTrackMediaProgressMutation } from '@store/api/progress';
-import { ProgressRequest } from '@miauflix/backend-client';
 import { setMediaProgress } from '@store/slices/resume';
-import { Player, PlayerStatus } from '../playerClassAbstract';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import { useCallback, useEffect } from 'react';
+
+import type { Player, PlayerStatus } from '../playerClassAbstract';
 
 const getProgressInPercentage = (player: Player) => {
   return (player.played() * 100) / player.videoLength();
