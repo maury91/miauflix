@@ -1,7 +1,10 @@
-import styled from 'styled-components';
-import { PlaybackSpeed, Player, PlayerLanguage, PlayerStatus, Track } from '../playerClassAbstract';
-import { AudioTrackExtraInfo, AVPlayListeners, TextTrackExtraInfo, TrackInfo } from '@/tizen';
 import { createRef } from 'react';
+import styled from 'styled-components';
+
+import type { AudioTrackExtraInfo, AVPlayListeners, TextTrackExtraInfo, TrackInfo } from '@/tizen';
+
+import type { PlaybackSpeed, PlayerLanguage, PlayerStatus, Track } from '../playerClassAbstract';
+import { Player } from '../playerClassAbstract';
 
 // ToDo: extend it
 const languageMap: Record<PlayerLanguage, RegExp> = {

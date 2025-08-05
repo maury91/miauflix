@@ -1,5 +1,6 @@
-import { Page } from '@/types';
 import { createContext, useContext } from 'react';
+
+import type { Page } from '@/types';
 
 export const pageContext = createContext<Page | null>(null);
 

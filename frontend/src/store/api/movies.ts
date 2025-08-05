@@ -1,5 +1,7 @@
+import type { MovieResponse, Quality, StreamingKeyResponse } from '@miauflix/backend-client';
+import { hcWithType } from '@miauflix/backend-client';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { hcWithType, MovieResponse, Quality, StreamingKeyResponse } from '@miauflix/backend-client';
+
 import { API_URL } from '../../consts';
 
 const client = hcWithType(API_URL);

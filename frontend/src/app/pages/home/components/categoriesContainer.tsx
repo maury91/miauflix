@@ -1,7 +1,9 @@
 import styled from 'styled-components';
+
 import { IS_SLOW_DEVICE } from '@/consts';
-import { MEDIA_BOX_HEIGHT } from './mediaBox';
+
 import { SLIDER_MARGIN } from './categorySlider';
+import { MEDIA_BOX_HEIGHT } from './mediaBox';
 
 export const CATEGORY_CONTAINER_TOP_MASK = 8;
 

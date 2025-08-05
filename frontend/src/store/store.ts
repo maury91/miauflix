@@ -1,17 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
+import type { TypedUseSelectorHook } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { authApi } from './api/auth';
 import { listsApi } from './api/lists';
+import { mediasApi } from './api/medias';
 import { moviesApi } from './api/movies';
 import { progressApi } from './api/progress';
 import { showsApi } from './api/shows';
-import { mediasApi } from './api/medias';
 import app from './slices/app';
 import home from './slices/home';
 import profileSelection from './slices/profileSelection';
 import resume from './slices/resume';
 import stream from './slices/stream';
 import ui from './slices/ui';
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 
 export const store = configureStore({
   reducer: {

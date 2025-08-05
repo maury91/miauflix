@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 
 export const AddIcon: FC<{ color?: string; size?: string }> = ({
   color = 'inherit',

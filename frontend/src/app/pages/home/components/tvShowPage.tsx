@@ -1,20 +1,23 @@
-import { FC, useCallback, useEffect, useState } from 'react';
-import { useGetSeasonsQuery, useGetSeasonQuery } from '@store/api/shows';
-import { useAppDispatch, useAppSelector } from '@store/store';
+import { Slider } from '@components/slider';
+import type { ShowResponse } from '@miauflix/backend-client';
 import { setFocus, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { SHOW_PAGE } from '../consts';
-import { setStreamUrl } from '@store/slices/stream';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { useGetSeasonQuery, useGetSeasonsQuery } from '@store/api/shows';
 import { navigateTo } from '@store/slices/app';
-import { useGetSelectedEpisode } from '../hooks/useGetSelectedEpisode';
-import { useEpisodeStreaming } from '../hooks/useEpisodeStreaming';
-import { usePreloadHomeImages } from '../hooks/usePreloadHomeImages';
+import { setStreamUrl } from '@store/slices/stream';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
 import LineMdPlay from '~icons/line-md/play';
-import { ShowResponse } from '@miauflix/backend-client';
+
+import { SHOW_PAGE } from '../consts';
+import { useEpisodeStreaming } from '../hooks/useEpisodeStreaming';
+import { useGetSeasonEpisodes } from '../hooks/useGetSeasonEpisodes';
+import { useGetSelectedEpisode } from '../hooks/useGetSelectedEpisode';
+import { usePreloadHomeImages } from '../hooks/usePreloadHomeImages';
 import { MediaButton } from './mediaButton';
 import { SeasonSelector } from './seasonSelector';
-import { Slider } from '@components/slider';
-import { useGetSeasonEpisodes } from '../hooks/useGetSeasonEpisodes';
-import { skipToken } from '@reduxjs/toolkit/query';
 
 interface TvShowPageProps {
   media: ShowResponse;
