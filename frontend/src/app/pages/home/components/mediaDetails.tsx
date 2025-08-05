@@ -1,24 +1,26 @@
-import styled from 'styled-components';
-import pluralize from 'pluralize';
-import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
-import { FC, useEffect, useState } from 'react';
+import type { MovieResponse, ShowResponse } from '@miauflix/backend-client';
+import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
 import { useAppSelector } from '@store/store';
-import { scaleImage } from '../utils/scaleImage';
+import { motion, MotionConfig } from 'framer-motion';
+import pluralize from 'pluralize';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import { IS_SLOW_DEVICE } from '@/consts';
-import { motion, MotionConfig } from 'framer-motion';
+
+import { useControls } from '../../../hooks/useControls';
+import { MEDIA_DETAILS_FOCUS_KEY } from '../consts';
+import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
+import { scaleImage } from '../utils/scaleImage';
 import {
   MediaPreviewContainer,
   MediaPreviewShadow,
   MediaPreviewShadow2nd,
 } from './media/mediaPreview';
 import { MediaQuality } from './media/mediaQuality';
-import { MovieResponse, ShowResponse } from '@miauflix/backend-client';
 import { MoviePage } from './moviePage';
 import { TvShowPage } from './tvShowPage';
-import { useControls } from '../../../hooks/useControls';
-import { FocusContext, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import { MEDIA_DETAILS_FOCUS_KEY } from '../consts';
 
 const MediaImage = styled(motion.div)<{ src: string }>`
   position: absolute;

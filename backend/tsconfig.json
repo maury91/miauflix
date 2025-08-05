@@ -1,7 +1,8 @@
 {
+  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
     "lib": ["ESNext"],
-    "target": "ES2021",
+    "target": "ES2022",
     "module": "ES2022",
     "composite": true,
     "moduleResolution": "node",
@@ -37,12 +38,12 @@
     }
   },
   "include": ["src/**/*", "src/types/webtorrent.d.ts"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": true,
     "experimentalSpecifierResolution": "node",
     "transpileOnly": true,
     "logError": true,
     "require": ["tsconfig-paths/register"]
-  },
-  "exclude": ["node_modules", "dist"]
+  }
 }

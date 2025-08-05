@@ -1,4 +1,4 @@
-import { FC, SVGAttributes } from 'react';
+import type { FC, SVGAttributes } from 'react';
 
 export const Logo: FC<SVGAttributes<SVGElement>> = props => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="20.129 227.599 255.72 70.204" {...props}>

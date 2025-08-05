@@ -1,5 +1,6 @@
-import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop';
 import styled from 'styled-components';
+
+import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop';
 
 export const LoadingIndicator = styled(LineMdLoadingTwotoneLoop)`
   position: absolute;

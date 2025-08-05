@@ -1,7 +1,9 @@
-import { Player, PlayerEvents, Track } from '../playerClassAbstract';
 import { createRef } from 'react';
 import styled from 'styled-components';
 import videojs from 'video.js';
+
+import type { Track } from '../playerClassAbstract';
+import { Player, PlayerEvents } from '../playerClassAbstract';
 
 const VideoContainer = styled.video`
   position: fixed;

@@ -1,6 +1,10 @@
-import React, { useCallback, useState } from 'react';
-import { ArrowPressHandler, useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import type { ArrowPressHandler } from '@noriginmedia/norigin-spatial-navigation';
+import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+
 import { IS_TV } from '@/consts';
+
 import { SLIDER_PREFIX } from '../consts';
 import { useMediaBoxSizes } from './useMediaBoxSizes';
 

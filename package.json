@@ -43,13 +43,22 @@
   },
   "devDependencies": {
     "@types/filename-reserved-regex": "^3.0.0",
+    "@types/jest": "^30.0.0",
     "@types/random-access-file": "^4.0.0",
     "@types/thunky": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^9.1.7",
+    "jest": "^30.0.5",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
     "random-access-file": "^4.1.2",
-    "typescript": "^4.5.0"
+    "typescript": "^5.9.2"
   },
   "type": "module",
   "lint-staged": {

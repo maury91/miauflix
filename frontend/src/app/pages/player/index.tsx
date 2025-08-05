@@ -1,13 +1,14 @@
 import { useCallback, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
+
 import { navigateTo } from '../../../store/slices/app';
-import { usePlayer } from './hooks/usePlayer';
-import { PlayerProvider } from './context';
-import { PlayerInterface } from './components/playerInterface';
-import { useInitialProgress } from './hooks/useInitialProgress';
-import { useTrackProgress } from './hooks/useTrackProgress';
-import { PlayerSubtitles } from './components/playerSubtitles';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { useControls } from '../../hooks/useControls';
+import { PlayerInterface } from './components/playerInterface';
+import { PlayerSubtitles } from './components/playerSubtitles';
+import { PlayerProvider } from './context';
+import { useInitialProgress } from './hooks/useInitialProgress';
+import { usePlayer } from './hooks/usePlayer';
+import { useTrackProgress } from './hooks/useTrackProgress';
 
 export const Player = () => {
   const dispatch = useAppDispatch();

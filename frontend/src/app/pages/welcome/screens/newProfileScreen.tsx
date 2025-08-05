@@ -1,13 +1,16 @@
-import { FC, useCallback, useEffect } from 'react';
-import { FullScreenDiv } from '../../../components/fullScreenDiv';
-import { DeviceLogin } from '../components/deviceLogin';
-import { IS_TV } from '../../../../consts';
+import type { FC } from 'react';
+import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import ArrowBackRounded from '~icons/material-symbols-light/arrow-back-rounded';
-import { useControls } from '../../../hooks/useControls';
-import { useAppDispatch } from '../../../../store/store';
-import { navigateToProfileSelection } from '../../../../store/slices/profileSelection';
+
 import { useDeviceLoginMutation } from '@/store/api/auth';
+import ArrowBackRounded from '~icons/material-symbols-light/arrow-back-rounded';
+
+import { IS_TV } from '../../../../consts';
+import { navigateToProfileSelection } from '../../../../store/slices/profileSelection';
+import { useAppDispatch } from '../../../../store/store';
+import { FullScreenDiv } from '../../../components/fullScreenDiv';
+import { useControls } from '../../../hooks/useControls';
+import { DeviceLogin } from '../components/deviceLogin';
 
 const BackIcon = styled(ArrowBackRounded)`
   position: fixed;

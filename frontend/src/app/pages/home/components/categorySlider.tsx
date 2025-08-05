@@ -1,16 +1,18 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
-import { useGetListQuery } from '@store/api/lists';
 import { Slider } from '@components/slider';
-import { useAppDispatch, useAppSelector } from '@store/store';
-import { setSelectedIndexForCategory, setSelectedMedia } from '@store/slices/home';
-import { scaleImage } from '../utils/scaleImage';
-import { ListDto, MediaDto } from '@miauflix/backend-client';
-import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
-import { MEDIA_BOX_HEIGHT } from './mediaBox';
+import type { ListDto, MediaDto } from '@miauflix/backend-client';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useGetListQuery } from '@store/api/lists';
+import { setSelectedIndexForCategory, setSelectedMedia } from '@store/slices/home';
+import { useAppDispatch, useAppSelector } from '@store/store';
+import type { FC } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+
 import { HOME_PREFIX } from '../consts';
+import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
+import { scaleImage } from '../utils/scaleImage';
 import { CATEGORY_CONTAINER_TOP_MASK } from './categoriesContainer';
+import { MEDIA_BOX_HEIGHT } from './mediaBox';
 
 export const SLIDER_MARGIN = 10;
 

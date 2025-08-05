@@ -1,6 +1,7 @@
-import { useGetListsQuery, useGetListQuery } from '@store/api/lists';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { useGetListQuery, useGetListsQuery } from '@store/api/lists';
 import { useCallback, useEffect, useState } from 'react';
+
 import { scaleImage } from '../utils/scaleImage';
 
 export const usePreloadHomeImages = () => {
