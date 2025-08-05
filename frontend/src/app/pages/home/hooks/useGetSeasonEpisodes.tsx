@@ -1,6 +1,6 @@
+import type { SeasonResponse, ShowResponse } from '@miauflix/backend-client';
 import { useAppSelector } from '@store/store';
 import { useMemo } from 'react';
-import { ShowResponse, SeasonResponse } from '@miauflix/backend-client';
 
 interface GetSeasonEpisodesArgs {
   defaultBackground: string | null;

@@ -1,6 +1,7 @@
-import { Player } from '../playerClassAbstract';
 import { useCallback, useEffect, useState } from 'react';
+
 import { useControls } from '../../../hooks/useControls';
+import type { Player } from '../playerClassAbstract';
 
 function calculateStep(elapsed: number) {
   return (Math.pow(elapsed / 1000, 1.5) + 1) * 20000;

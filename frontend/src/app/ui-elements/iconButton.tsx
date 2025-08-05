@@ -1,6 +1,8 @@
-import React, { FC, useCallback } from 'react';
 import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import type { FC } from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
+
 import { PALETTE } from '../../consts';
 
 const StyledIconButton = styled.div<{

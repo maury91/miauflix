@@ -1,10 +1,13 @@
-import styled from 'styled-components';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
-import MdiAdd from '~icons/mdi/add';
-import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from '../consts';
-import { createAvatar } from '@dicebear/core';
 import { adventurer } from '@dicebear/collection';
+import { createAvatar } from '@dicebear/core';
+import { useFocusable } from '@noriginmedia/norigin-spatial-navigation';
+import type { FC } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+import MdiAdd from '~icons/mdi/add';
+
+import { NEW_PROFILE_ITEM, PROFILE_ITEM_PREFIX } from '../consts';
 
 export const PROFILE_SIZE = 12;
 export const FOCUSED_PROFILE_SIZE = 16;
