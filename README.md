@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Powered%20by-Node.js-green)](https://nodejs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
-[![CI Status](https://github.com/maury91/miauflix-bun/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix-bun/actions/workflows/ci.yml)
+[![CI Status](https://github.com/maury91/miauflix/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix/actions/workflows/ci.yml)
 
 **The self-hosted streaming service that meows!**
 
@@ -87,7 +87,7 @@ miauflix/
 > Just want to try it? Here's the fastest path:
 
 ```bash
-git clone <repository-url> && cd miauflix-bun
+git clone <repository-url> && cd miauflix
 docker compose run --rm backend npm run start:backend -- --only-config
 docker compose up
 ```
@@ -109,7 +109,7 @@ First command runs the configuration wizard (TMDB API key, etc.), then start the
 
 ```bash
 git clone <repository-url>
-cd miauflix-bun
+cd miauflix
 ```
 
 #### 2. Configure your environment

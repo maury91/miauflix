@@ -1,5 +1,5 @@
 # Basic Serena configuration
-project_root: '/home/vscode/projects/miauflix-bun'
+project_root: '/home/vscode/projects/miauflix'
 language_servers:
   - typescript
   - python
