@@ -2,14 +2,7 @@
   "headers": {
     "alt-svc": "h3=\":443\"; ma=86400",
     "content-type": "application/json;charset=utf-8",
-    "server": "openresty",
-    "vary": "accept-encoding, Origin",
-    "via": "1.1 6bf2ca4ea5a5c92a1d7cd2f9767e8674.cloudfront.net (CloudFront)",
-    "x-amz-cf-id": "tjKFekS_NeF2PIsK-Uby0mQYvbrtl1xrlKX5Hy0MGyTH02h1Z6A5Pw==",
-    "x-amz-cf-pop": "FRA60-P3",
-    "x-az": "us-east-1a",
-    "x-cache": "Error from cloudfront",
-    "x-task-id": "85a6078dcab74afaa4c1c2eb8c47b6a9"
+    "vary": "accept-encoding, Origin"
   },
   "status": 404,
   "data": {

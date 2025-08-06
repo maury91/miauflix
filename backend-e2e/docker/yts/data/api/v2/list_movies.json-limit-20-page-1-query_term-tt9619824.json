@@ -5,21 +5,10 @@
     "age": "0",
     "alt-svc": "h3=\":443\"; ma=86400",
     "cache-control": "no-store, no-cache, must-revalidate",
-    "cf-cache-status": "DYNAMIC",
-    "cf-ray": "95b98a456e7c30c6-FRA",
     "content-type": "application/json; charset=utf-8",
     "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
-    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
     "pragma": "no-cache",
-    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=v9%2F9RAI%2F9nBqTPkUmez%2BHxALFVKw3oXxg6w4vAdIXFj0ITliPH8tCuSk5DrCFpwlqO7aQLu%2BfpUf56Ys4vAJcSSeg0LV\"}]}",
-    "server": "cloudflare",
-    "speculation-rules": "\"/cdn-cgi/speculation\"",
-    "strict-transport-security": "max-age=0; includeSubDomains; preload",
     "vary": "Accept-Encoding",
-    "via": "1.1 varnish (Varnish/6.2)",
-    "x-content-type-options": "nosniff",
-    "x-frame-options": "DENY",
-    "x-varnish": "17729003",
     "set-cookie": "PHPSESSID=sdlf1qfn45kdv4cgpe1sbnt4jk; Path=/"
   },
   "data": {
@@ -56,7 +45,7 @@
           "state": "ok",
           "torrents": [
             {
-              "url": "https://yts.mx/torrent/download/FDD0188526EF9FE0934934500A0FD29C3A7D2FFE",
+              "url": "http://yts-mock/torrent/download/FDD0188526EF9FE0934934500A0FD29C3A7D2FFE",
               "hash": "FDD0188526EF9FE0934934500A0FD29C3A7D2FFE",
               "quality": "720p",
               "type": "web",
@@ -72,7 +61,7 @@
               "date_uploaded_unix": 1749927206
             },
             {
-              "url": "https://yts.mx/torrent/download/CC15FAE224F3E86524DF0D6C4D3005A2FAA414FC",
+              "url": "http://yts-mock/torrent/download/CC15FAE224F3E86524DF0D6C4D3005A2FAA414FC",
               "hash": "CC15FAE224F3E86524DF0D6C4D3005A2FAA414FC",
               "quality": "1080p",
               "type": "web",
@@ -88,7 +77,7 @@
               "date_uploaded_unix": 1749931653
             },
             {
-              "url": "https://yts.mx/torrent/download/BFCE4D5A8F55AA745F3D1AD0CEFD7F0E9AC3D48B",
+              "url": "http://yts-mock/torrent/download/BFCE4D5A8F55AA745F3D1AD0CEFD7F0E9AC3D48B",
               "hash": "BFCE4D5A8F55AA745F3D1AD0CEFD7F0E9AC3D48B",
               "quality": "1080p",
               "type": "web",
@@ -104,7 +93,7 @@
               "date_uploaded_unix": 1749959253
             },
             {
-              "url": "https://yts.mx/torrent/download/A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
+              "url": "http://yts-mock/torrent/download/A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
               "hash": "A84E83132DB0F5B8674F6C1B4EEB75A0444CDF9B",
               "quality": "2160p",
               "type": "web",

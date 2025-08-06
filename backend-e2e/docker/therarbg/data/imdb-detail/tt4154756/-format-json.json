@@ -1,0 +1,2826 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cf-cache-status": "DYNAMIC",
+    "cf-ray": "967c82823b34d272-FRA",
+    "content-type": "application/json",
+    "cross-origin-opener-policy": "same-origin",
+    "expires": "Thu, 31 Jul 2025 14:04:58 GMT",
+    "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+    "referrer-policy": "same-origin",
+    "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=q3LLpPCwoKBJcaQRs4xUktL7EsChF1Hc7N6KrBYgWDeej%2F5%2FO3Xeys5VcBi2ZXdS%2F5%2FUyg%2FVZzSIWosQW9K4XBL1MdinsVyd%2BW5d\"}]}",
+    "server": "cloudflare",
+    "vary": "origin, accept-encoding",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "x-proxy-cache": "STALE"
+  },
+  "data": {
+    "imdb": {
+      "imdb_id": "tt4154756",
+      "tmdb_id": 299536,
+      "name": "thoughtful softdrink: The despise",
+      "content_type": "Movie",
+      "thumbnail": "https://fake-cdn.example.com/fake-79949.jpg",
+      "image": "https://fake-cdn.example.com/fake-3256.jpg",
+      "award": {
+        "wins": 48,
+        "nominations": 80
+      },
+      "genre_list": ["Action", "Adventure", "Sci-Fi"],
+      "genre": "Action, Adventure, Sci-Fi",
+      "theme_list": ["Vin Diesel", "vin-diesel"],
+      "release_detailed": {
+        "day": 27,
+        "date": "2018-04-27T00:00:00.000Z",
+        "year": 2018,
+        "month": 4,
+        "originLocations": [
+          {
+            "cca2": "US",
+            "country": "United States"
+          },
+          {
+            "cca2": "XX",
+            "country": "Norway"
+          }
+        ],
+        "releaseLocation": {
+          "cca2": "US",
+          "country": "United States"
+        }
+      },
+      "spoken_languages": [
+        {
+          "id": "en",
+          "language": "English"
+        }
+      ],
+      "actors": ["Travis Hessel", "Joanna Little DDS", "Mr. Derrick Hessel"],
+      "top_credits": [
+        {
+          "id": "creator",
+          "name": "Creators",
+          "credits": ["Clyde Shanahan", "Bill Turcotte", "Mrs. Brittany Jerde"]
+        },
+        {
+          "id": "cast",
+          "name": "Stars",
+          "credits": ["Travis Hessel", "Joanna Little DDS", "Mr. Derrick Hessel"]
+        }
+      ],
+      "directors": ["Kristine Kuphal", "Gina VonRueden"],
+      "runtime": "8940",
+      "rating": "8.4",
+      "rating_count": 1304487,
+      "director": "Ollie Farrell MD",
+      "cast": "Travis Hessel, Joanna Little DDS, Mr. Derrick Hessel",
+      "plot": "tt4154756",
+      "budget": 300000000,
+      "video_list": [
+        {
+          "key": "fake_video_tt4154756_0",
+          "site": "YouTube"
+        },
+        {
+          "key": "fake_video_tt4154756_1",
+          "site": "YouTube"
+        }
+      ],
+      "rott_url": "https://fake-cdn.example.com/fake-5926",
+      "rott_score_official": 85,
+      "rott_score_audience": 92,
+      "mpa_rating": "PG-13",
+      "critics_consensus": "<em>Avengers: Infinity War</em> ably juggles a dizzying array of MCU heroes in the fight against their gravest threat yet, and the result is a thrilling, emotionally resonant blockbuster that (mostly) realizes its gargantuan ambitions.",
+      "is_recomended": true,
+      "has_post": true,
+      "updated_at": "2025-05-11T04:27:53.301310Z",
+      "created_at": "2023-07-19T12:21:36.243729Z"
+    },
+    "trb_posts": [
+      {
+        "eid": "862cf1",
+        "pid": 79536262,
+        "category": 207,
+        "category_str": "Movies",
+        "type": null,
+        "genre": [],
+        "status": "vip",
+        "name": "Beyond.the.sudden.hole.2018.1080p.BluRay.x264.Atmos.TrueHD7.1-WiKi",
+        "short_name": null,
+        "num_files": 4,
+        "size": 23557414741,
+        "size_char": null,
+        "thumbnail": null,
+        "seeders": 25,
+        "leechers": 42,
+        "username": "Kevin O'Reilly",
+        "downloads": 0,
+        "added": 1750146604,
+        "descr": "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n\r\nUIndex.org - Your Gateway to the Latest Torrents! Try: https://uindex.org\r\n\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n                                                                                \r\n                                                WiKi PROUDLY PRESENTS      \r\n         \r\n         Avengers.Infinity.War.2018.1080p.BluRay.x264.Atmos.TrueHD7.1-WiKi\r\n\r\n\r\n\r\n         NAME.................: Beyond the sudden hole\r\n         GENRE................: Adventure Action Sci-Fi Superhero\r\n         RATiNG...............: 8.4/10 (1.3M votes)\r\n         iMDB.................: http://www.imdb.com/title/tt4154756/\r\n         RELEASE DATE.........: 2025-06-15\r\n         ENCODE BY............: A @ WiKi\r\n         RUNTiME..............: 2h:29m:21s\r\n         FiLE SiZE............: 21.9 GiB\r\n         ViDEO CODEC..........: x264: 2pass-High@L4.1 @ 15.1 Mbps \r\n         RESOLUTION...........: 1920x804 (2.40:1)\r\n         FRAMERATE............: 23.976 fps   \r\n         AUDiO CODEC..........: English Atmos/ TrueHD @ 4534 Kbps\r\n         AUDiO CODEC..........: English AC-3 @ 640 Kbps\r\n         AUDiO CODEC..........: Mandarin AC-3 @ 640 Kbps                             \r\n         SUBTiTLES............: S_TEXT/Sup(chs)/(cht)/(eng)\r\n         SOURCE...............: TW 2D Blu-Ray 1080p AVC DTS-HD MA7.1-TTG\r\n                                                             \r\n\r\n\r\n=========================================================================\r\n                                                                            \r\n                                RiPPER NOTES                                \r\n                                                                            \r\n                                                                                \r\n                                                                                \r\n           Just use ur brain to watch or burn it with ur favorite soft.         \r\n                                                                                \r\n                     x264 show u the best video quality  :)                     \r\n                                                                                \r\n                                                                                \r\n                                                                                \r\n ========================================================================= \r\n                                                                            \r\n                                                                            \r\n                                 OTHER iNFO                                 \r\n                                                                            \r\n                                                                                \r\n                                                                                \r\n            WE ARE LOOKiNG FOR EUR/JAP/HK BluRay SUPPLiERS &amp; RiPPERS.           \r\n                                                                                \r\n               PLS CONTACT US WiTH THiS EMAiL : GRP_WiKi@MSN.COM                \r\n                                                                   \r\n                 ASCii MADE BY MeGUI , UPDATED AT 08.07.11",
+        "imdb": "tt4154756",
+        "language": null,
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2025-06-17T10:35:41.096141Z",
+        "last_checked": "2025-06-17T10:36:08.096029Z",
+        "files": [
+          {
+            "size": [104],
+            "name": ["fake_file_0.md5"]
+          },
+          {
+            "size": [23557407841],
+            "name": ["fake_file_1.mkv"]
+          },
+          {
+            "size": [6667],
+            "name": ["fake_file_2.nfo"]
+          },
+          {
+            "size": [129],
+            "name": ["fake_file_3.txt"]
+          }
+        ],
+        "trackers": [],
+        "has_torrent": false,
+        "images": null,
+        "is_recomended": false,
+        "source": "TP",
+        "source_list": ["TP"],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "862cf2",
+        "pid": 79536261,
+        "category": 207,
+        "category_str": "Movies",
+        "type": null,
+        "genre": [],
+        "status": "vip",
+        "name": "Beyond.the.sudden.hole.2018.1080p.BluRay.x265.10bit.Atmos.TrueHD7.1-WiKi",
+        "short_name": null,
+        "num_files": 4,
+        "size": 15184933511,
+        "size_char": null,
+        "thumbnail": null,
+        "seeders": 15,
+        "leechers": 26,
+        "username": "Kevin O'Reilly",
+        "downloads": 0,
+        "added": 1750146460,
+        "descr": "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n\r\nUIndex.org - Your Gateway to the Latest Torrents! Try: https://uindex.org\r\n\r\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n                                                                                \r\n                                                WiKi PROUDLY PRESENTS      \r\n         \r\n         Avengers.Infinity.War.2018.1080p.BluRay.x265.10bit.Atmos.TrueHD7.1-WiKi\r\n\r\n\r\n\r\n         NAME.................: Beyond the sudden hole\r\n         GENRE................: Adventure Action Sci-Fi Superhero\r\n         RATiNG...............: 8.4/10 (1.3M votes)\r\n         iMDB.................: http://www.imdb.com/title/tt4154756/\r\n         RELEASE DATE.........: 2025-06-15\r\n         ENCODE BY............: dong1010\r\n         RUNTiME..............: 2h:29m:21s\r\n         FiLE SiZE............: 14.1 GiB\r\n         ViDEO CODEC..........: x265_Main 10@L4@Main @ 7633 Kbps  \r\n         RESOLUTION...........: 1920x804 (2.40:1)\r\n         FRAMERATE............: 23.976 fps   \r\n         AUDiO CODEC..........: English Atmos/ TrueHD @ 4534 Kbps\r\n         AUDiO CODEC..........: English AC-3 @ 640 Kbps\r\n         AUDiO CODEC..........: Mandarin AC-3 @ 640 Kbps                             \r\n         SUBTiTLES............: S_TEXT/Sup(chs)/(cht)/(eng)\r\n         SOURCE...............: TW 2D Blu-Ray 1080p AVC DTS-HD MA7.1-TTG\r\n                                                             \r\n\r\n\r\n=========================================================================\r\n                                                                            \r\n                                RiPPER NOTES                                \r\n                                                                            \r\n                                                                                \r\n                                                                                \r\n           Just use ur brain to watch or burn it with ur favorite soft.         \r\n                                                                                \r\n                     x264 show u the best video quality  :)                     \r\n                                                                                \r\n                                                                                \r\n                                                                                \r\n ========================================================================= \r\n                                                                            \r\n                                                                            \r\n                                 OTHER iNFO                                 \r\n                                                                            \r\n                                                                                \r\n                                                                                \r\n            WE ARE LOOKiNG FOR EUR/JAP/HK BluRay SUPPLiERS &amp; RiPPERS.           \r\n                                                                                \r\n               PLS CONTACT US WiTH THiS EMAiL : GRP_WiKi@MSN.COM                \r\n                                                                   \r\n                 ASCii MADE BY MeGUI , UPDATED AT 08.07.11",
+        "imdb": "tt4154756",
+        "language": null,
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2025-06-17T10:35:34.653868Z",
+        "last_checked": "2025-06-17T10:36:08.566954Z",
+        "files": [
+          {
+            "size": [110],
+            "name": ["fake_file_0.md5"]
+          },
+          {
+            "size": [15184926599],
+            "name": ["fake_file_1.mkv"]
+          },
+          {
+            "size": [6673],
+            "name": ["fake_file_2.nfo"]
+          },
+          {
+            "size": [129],
+            "name": ["fake_file_3.txt"]
+          }
+        ],
+        "trackers": [],
+        "has_torrent": false,
+        "images": null,
+        "is_recomended": false,
+        "source": "TP",
+        "source_list": ["TP"],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "710b71",
+        "pid": 16322923,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p Bluray x264 CeeTorrents",
+        "short_name": null,
+        "num_files": 0,
+        "size": 2609192632,
+        "size_char": "2.43 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-5339.png",
+        "seeders": 24,
+        "leechers": 22,
+        "username": "Santiago Kessler",
+        "downloads": 400,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2025-02-21T20:50:25.016251Z",
+        "last_checked": "2025-05-10T13:54:58.760611Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 2607928803,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          },
+          {
+            "name": "fake_file_1.txt",
+            "size": 201,
+            "full_location": "fake_path_1/fake_file_1.txt"
+          },
+          {
+            "name": "fake_file_2.JPG",
+            "size": 77639,
+            "full_location": "fake_path_2/fake_file_2.JPG"
+          },
+          {
+            "name": "fake_file_3.JPG",
+            "size": 80915,
+            "full_location": "fake_path_3/fake_file_3.JPG"
+          },
+          {
+            "name": "fake_file_4.JPG",
+            "size": 63858,
+            "full_location": "fake_path_4/fake_file_4.JPG"
+          },
+          {
+            "name": "fake_file_5.JPG",
+            "size": 143727,
+            "full_location": "fake_path_5/fake_file_5.JPG"
+          },
+          {
+            "name": "fake_file_6.JPG",
+            "size": 236727,
+            "full_location": "fake_path_6/fake_file_6.JPG"
+          },
+          {
+            "name": "fake_file_7.txt",
+            "size": 468,
+            "full_location": "fake_path_7/fake_file_7.txt"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 5,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 5,
+            "completed": 134,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 6,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 5,
+            "completed": 203,
+            "scrape_error": null
+          },
+          {
+            "seeders": 5,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 6,
+            "completed": 58,
+            "scrape_error": null
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 4,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 2,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 5,
+            "scrape_error": null
+          },
+          {
+            "seeders": 2,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "75d8d6",
+        "pid": 6174299,
+        "category": null,
+        "category_str": "Movies",
+        "type": "HEVC/x265",
+        "genre": null,
+        "status": null,
+        "name": "Beyond the sudden hole 2018 2160p Bluray x265 DDP Atmos KiNGDOM",
+        "short_name": null,
+        "num_files": 0,
+        "size": 15247133900,
+        "size_char": "14.2 GB",
+        "thumbnail": null,
+        "seeders": 9,
+        "leechers": 8,
+        "username": "Ms. Elvira MacGyver",
+        "downloads": 276,
+        "added": 0,
+        "descr": "udp://exodus.desync.com:6969/announce<br>http://tracker.files.fm:6969/announce<br>udp://oh.fuuuuuck.com:6969/announce<br>udp://open.demonoid.ch:6969/announce<br>udp://open.stealth.si:80/announce<br>udp://tracker.publictracker.xyz:6969/announce<br>udp://open.demonii.com:1337/announce<br>udp://bt2.archive.org:6969/announce<br>udp://tracker-udp.gbitt.info:80/announce<br>udp://tracker.torrent.eu.org:451/announce<br>https://tracker.madtia.cc/announce<br>udp://inferno.demonoid.is:3391/announce",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2024-07-26T16:26:26.308932Z",
+        "last_checked": "2025-06-13T13:28:40.263036Z",
+        "files": null,
+        "trackers": [
+          {
+            "seeders": 3,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 3,
+            "completed": 194,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.openbittorrent.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.internetwarriors.net:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.leechers-paradise.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.coppersurfer.tk:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 2,
+            "completed": 22,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://open.demonii.si:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 2,
+            "completed": 60,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": false,
+        "images": [
+          "https://fake-cdn.example.com/fake-30328.svg",
+          "https://fake-cdn.example.com/fake-30329.svg",
+          "https://fake-cdn.example.com/fake-30330.svg",
+          "https://fake-cdn.example.com/fake-30331.svg",
+          "https://fake-cdn.example.com/fake-30332.svg",
+          "https://fake-cdn.example.com/fake-30333.svg"
+        ],
+        "is_recomended": false,
+        "source": "1",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "76f7d5",
+        "pid": 6121741,
+        "category": null,
+        "category_str": "Movies",
+        "type": "HEVC/x265",
+        "genre": null,
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p 10bit IMAX DS4K DSNP WEB Rip Or",
+        "short_name": null,
+        "num_files": 0,
+        "size": 9448928051,
+        "size_char": "8.8 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-46251.jpg",
+        "seeders": 18,
+        "leechers": 8,
+        "username": "Percy Adams",
+        "downloads": 2358,
+        "added": 0,
+        "descr": "Media-Info<br>General<br>Unique ID                                : 3286399312847881591567218666341682040 (0x278EFFEFD575C24462DABF9F0C04B78)<br>Complete name                            : Avengers.Infinity.War.2018.1080p.10bit.IMAX.DS4K.DSNP.WEB-Rip.[Org.BD.Hindi.DDP5.1-English.DDP7.1].HEVC-NmCT.mkv<br>Format                                   : Matroska<br>Format version                           : Version 4<br>File size                                : 8.81 GiB<br>Duration                                 : 2 h 29 min<br>Overall bit rate                         : 8 450 kb/s<br>Frame rate                               : 23.976 FPS<br>Movie name                               : Avengers : Infinity War (2018) [IMAX] - NmCT<br>Encoded date                             : 2024-06-03 13:16:09 UTC<br>Writing application                      : mkvmerge v83.0 ('Circle Of Friends') 64-bit<br>Writing library                          : libebml v1.4.5 + libmatroska v1.7.1<br>Cover                                    : Yes<br>Attachments                              : cover.jpg<br>Video<br>ID                                       : 1<br>Format                                   : HEVC<br>Format/Info                              : High Efficiency Video Coding<br>Format profile                           : Main 10@L4.1@High<br>Codec ID                                 : V_MPEGH/ISO/HEVC<br>Duration                                 : 2 h 29 min<br>Bit rate                                 : 7 040 kb/s<br>Width                                    : 1 920 pixels<br>Height                                   : 1 010 pixels<br>Display aspect ratio                     : 1.901<br>Frame rate mode                          : Constant<br>Frame rate                               : 23.976 (24000/1001) FPS<br>Color space                              : YUV<br>Chroma subsampling                       : 4:2:0<br>Bit depth                                : 10 bits<br>Bits/(Pixel*Frame)                       : 0.151<br>Stream size                              : 7.34 GiB (83%)<br>Default                                  : Yes<br>Forced                                   : No<br>Audio #1<br>ID                                       : 2<br>Format                                   : AC-3<br>Format/Info                              : Audio Coding 3<br>Commercial name                          : Dolby Digital<br>Codec ID                                 : A_AC3<br>Duration                                 : 2 h 29 min<br>Bit rate mode                            : Constant<br>Bit rate                                 : 640 kb/s<br>Channel(s)                               : 6 channels<br>Channel layout                           : L R C LFE Ls Rs<br>Sampling rate                            : 48.0 kHz<br>Frame rate                               : 31.250 FPS (1536 SPF)<br>Compression mode                         : Lossy<br>Stream size                              : 684 MiB (8%)<br>Title                                    : [Org. हिंदी] [Dolby Digital Plus 5.1] [48kHz] [640Kb/s]<br>Language                                 : Hindi<br>Service kind                             : Complete Main<br>Default                                  : Yes<br>Forced                                   : Yes<br>Dialog Normalization                     : -31 dB<br>compr                                    : 4.54 dB<br>dynrng                                   : 4.54 dB<br>cmixlev                                  : -3.0 dB<br>surmixlev                                : -6 dB<br>dmixmod                                  : Lo/Ro<br>ltrtcmixlev                              : -3.0 dB<br>ltrtsurmixlev                            : -4.5 dB<br>lorocmixlev                              : -3.0 dB<br>lorosurmixlev                            : -4.5 dB<br>dialnorm_Average                         : -31 dB<br>dialnorm_Minimum                         : -31 dB<br>dialnorm_Maximum                         : -31 dB<br>Audio #2<br>ID                                       : 3<br>Format                                   : E-AC-3<br>Format/Info                              : Enhanced AC-3<br>Commercial name                          : Dolby Digital Plus<br>Format profile                           : Blu-ray Disc<br>Format settings                          : Dolby Surround EX<br>Codec ID                                 : A_EAC3<br>Duration                                 : 2 h 29 min<br>Bit rate mode                            : Constant<br>Bit rate                                 : 768 kb/s<br>Channel(s)                               : 8 channels<br>Channel layout                           : L R C LFE Ls Rs Lb Rb<br>Sampling rate                            : 48.0 kHz<br>Frame rate                               : 31.250 FPS (1536 SPF)<br>Compression mode                         : Lossy<br>Stream size                              : 820 MiB (9%)<br>Title                                    : [Dolby Digital Plus 7.1] [48kHz] [768Kb/s]<br>Language                                 : English<br>Service kind                             : Complete Main<br>Default                                  : No<br>Forced                                   : No<br>Dialog Normalization                     : -26 dB<br>compr                                    : -0.28 dB<br>cmixlev                                  : -3.0 dB<br>surmixlev                                : -3 dB<br>dmixmod                                  : Lo/Ro<br>ltrtcmixlev                              : -3.0 dB<br>ltrtsurmixlev                            : -3.0 dB<br>lorocmixlev                              : -3.0 dB<br>lorosurmixlev                            : -3.0 dB<br>dialnorm_Average                         : -26 dB<br>dialnorm_Minimum                         : -26 dB<br>dialnorm_Maximum                         : -26 dB<br>Text #1<br>ID                                       : 4<br>Format                                   : UTF-8<br>Codec ID                                 : S_TEXT/UTF8<br>Codec ID/Info                            : UTF-8 Plain Text<br>Duration                                 : 2 h 28 min<br>Bit rate                                 : 43 b/s<br>Frame rate                               : 0.196 FPS<br>Count of elements                        : 1741<br>Stream size                              : 47.1 KiB (0%)<br>Title                                    : English<br>Language                                 : English<br>Default                                  : No<br>Forced                                   : No<br>Text #2<br>ID                                       : 5<br>Format                                   : UTF-8<br>Codec ID                                 : S_TEXT/UTF8<br>Codec ID/Info                            : UTF-8 Plain Text<br>Duration                                 : 2 h 28 min<br>Bit rate                                 : 48 b/s<br>Frame rate                               : 0.232 FPS<br>Count of elements                        : 2067<br>Stream size                              : 52.9 KiB (0%)<br>Title                                    : English [SDH]<br>Language                                 : English<br>Default                                  : No<br>Forced                                   : No<br>Menu<br>00:00:00.000                             : en:Chapter 1<br>00:11:28.729                             : en:Chapter 2<br>00:18:13.884                             : en:Chapter 3<br>00:27:23.808                             : en:Chapter 4<br>00:35:48.813                             : en:Chapter 5<br>00:42:23.541                             : en:Chapter 6<br>00:54:12.874                             : en:Chapter 7<br>00:59:36.739                             : en:Chapter 8<br>01:05:07.153                             : en:Chapter 9<br>01:10:53.666                             : en:Chapter 10<br>01:17:06.955                             : en:Chapter 11<br>01:24:14.758                             : en:Chapter 12<br>01:31:08.004                             : en:Chapter 13<br>01:42:00.405                             : en:Chapter 14<br>01:45:57.809                             : en:Chapter 15<br>01:53:04.068                             : en:Chapter 16<br>01:58:52.917                             : en:Chapter 17<br>02:03:58.180                             : en:Chapter 18<br>02:11:13.282                             : en:Chapter 19<br>02:17:31.284                             : en:Chapter 20",
+        "imdb": "tt4154756",
+        "language": "Hindi",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2024-06-04T16:11:53.888930Z",
+        "last_checked": "2025-05-10T18:30:59.723533Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 9463728306,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 0,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 0,
+            "completed": 1848,
+            "scrape_error": null
+          },
+          {
+            "seeders": 4,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 1,
+            "completed": 55,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 129,
+            "scrape_error": null
+          },
+          {
+            "seeders": 7,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 3,
+            "completed": 294,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 0,
+            "completed": 29,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 3,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [
+          "https://fake-cdn.example.com/fake-52728.svg",
+          "https://fake-cdn.example.com/fake-52729.svg",
+          "https://fake-cdn.example.com/fake-52730.svg",
+          "https://fake-cdn.example.com/fake-52731.svg",
+          "https://fake-cdn.example.com/fake-52732.svg",
+          "https://fake-cdn.example.com/fake-52733.svg",
+          "https://fake-cdn.example.com/fake-52734.svg",
+          "https://fake-cdn.example.com/fake-52735.svg",
+          "https://fake-cdn.example.com/fake-52736.svg",
+          "https://fake-cdn.example.com/fake-52737.svg",
+          "https://fake-cdn.example.com/fake-71017.svg",
+          "https://fake-cdn.example.com/fake-71016.svg",
+          "https://fake-cdn.example.com/fake-71015.svg",
+          "https://fake-cdn.example.com/fake-71014.svg",
+          "https://fake-cdn.example.com/fake-71013.svg"
+        ],
+        "is_recomended": false,
+        "source": "1",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "77b966",
+        "pid": 15971433,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p BluRay DDP5 1 x265 10bit GalaxyRG265",
+        "short_name": null,
+        "num_files": 0,
+        "size": 3167538380,
+        "size_char": "2.95 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-40396.jpg",
+        "seeders": 119,
+        "leechers": 51,
+        "username": "Nelson Crist",
+        "downloads": 11470,
+        "added": 0,
+        "descr": "MEDIAINFO<br>Container = Matroska (mkv)<br>Duration = 02:29:21.248<br>Filesize = 3 GiB<br>Overall bitrate = 2 830 kb/s<br>ViDEO<br>Codec info = HEVC Main 10@L4@Main | V_MPEGH/ISO/HEVC<br>Resolution = 1920x1080<br>Display AR = 1.778 | 16:9<br>Bitrate = 24.7 Mb/s<br>Framerate = CFR 23.976<br>Color space = YUV<br>Chroma subsampling = 4:2:0<br>Encoder = x265 - 3.5:[Linux][GCC 10.2.1][64 bit] 10bit<br>AUDiO<br>Codec info = E-AC-3 | A_EAC3<br>Channels = 6<br>Bitrate = CBR 384 kb/s<br>Samplerate = 48.0 kHz<br>Language = English<br>Included subtitles<br>English",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2024-04-05T17:53:51.696301Z",
+        "last_checked": "2025-06-09T02:27:43.837937Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 3170537258,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          },
+          {
+            "name": "fake_file_1.txt",
+            "size": 71,
+            "full_location": "fake_path_1/fake_file_1.txt"
+          },
+          {
+            "name": "fake_file_2.txt",
+            "size": 479,
+            "full_location": "fake_path_2/fake_file_2.txt"
+          },
+          {
+            "name": "fake_file_3.txt",
+            "size": 67,
+            "full_location": "fake_path_3/fake_file_3.txt"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 52,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 19,
+            "completed": 8376,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.openbittorrent.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.internetwarriors.net:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.leechers-paradise.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.coppersurfer.tk:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 19,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 16,
+            "completed": 577,
+            "scrape_error": null
+          },
+          {
+            "seeders": 2,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://open.demonii.si:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 46,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 16,
+            "completed": 2517,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [
+          "https://fake-cdn.example.com/fake-84983.jpg",
+          "https://fake-cdn.example.com/fake-84982.jpg",
+          "https://fake-cdn.example.com/fake-84981.jpg",
+          "https://fake-cdn.example.com/fake-84980.jpg",
+          "https://fake-cdn.example.com/fake-84979.jpg",
+          "https://fake-cdn.example.com/fake-84978.jpg"
+        ],
+        "is_recomended": true,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "775517",
+        "pid": 15936357,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 Eng Fre Ger Ita Spa Jpn 2160p BluRay Remux HDR HEVC Atmos SGF",
+        "short_name": null,
+        "num_files": 0,
+        "size": 64231235911,
+        "size_char": "59.82 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-86420.jpg",
+        "seeders": 22,
+        "leechers": 23,
+        "username": "Guillermo Hilpert",
+        "downloads": 374,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2024-03-17T00:00:32.822840Z",
+        "last_checked": "2025-05-17T01:45:44.116257Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 64234651305,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 7,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 7,
+            "completed": 230,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.openbittorrent.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.internetwarriors.net:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.leechers-paradise.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.coppersurfer.tk:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 7,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 4,
+            "completed": 21,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 4,
+            "completed": 23,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://open.demonii.si:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 7,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 8,
+            "completed": 100,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "69e9c9",
+        "pid": 15828078,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 BD3D 1080p BluRay REMUX AVC DTS HD MA 7 1 Asmo",
+        "short_name": null,
+        "num_files": 0,
+        "size": 44130788966,
+        "size_char": "41.10 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-82330.jpg",
+        "seeders": 2,
+        "leechers": 25,
+        "username": "Daryl Marquardt",
+        "downloads": 3,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2024-01-12T14:31:42.657510Z",
+        "last_checked": "2025-05-10T21:53:50.497512Z",
+        "files": [
+          {
+            "name": "fake_file_0.iso",
+            "size": 44129189888,
+            "full_location": "fake_path_0/fake_file_0.iso"
+          },
+          {
+            "name": "fake_file_1.nfo",
+            "size": 601,
+            "full_location": "fake_path_1/fake_file_1.nfo"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 0,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 8,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 6,
+            "completed": 3,
+            "scrape_error": null
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 6,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 3,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 2,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "6ad32d",
+        "pid": 15735615,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 IMAX 4K HDR DV 2160p WEBDL Ita Eng x265 NAHOM",
+        "short_name": null,
+        "num_files": 0,
+        "size": 19896435998,
+        "size_char": "18.53 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-71756.png",
+        "seeders": 31,
+        "leechers": 11,
+        "username": "Noel Hauck",
+        "downloads": 1065,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-11-16T13:21:07.488770Z",
+        "last_checked": "2025-06-03T05:47:51.996986Z",
+        "files": [
+          {
+            "name": "fake_file_0.txt",
+            "size": 38,
+            "full_location": "fake_path_0/fake_file_0.txt"
+          },
+          {
+            "name": "fake_file_1.txt",
+            "size": 64,
+            "full_location": "fake_path_1/fake_file_1.txt"
+          },
+          {
+            "name": "fake_file_2.txt",
+            "size": 375,
+            "full_location": "fake_path_2/fake_file_2.txt"
+          },
+          {
+            "name": "fake_file_3.png",
+            "size": 143111,
+            "full_location": "fake_path_3/fake_file_3.png"
+          },
+          {
+            "name": "fake_file_4.mkv",
+            "size": 19893372323,
+            "full_location": "fake_path_4/fake_file_4.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 16,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 5,
+            "completed": 743,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.openbittorrent.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.internetwarriors.net:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.leechers-paradise.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.coppersurfer.tk:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 2,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://open.demonii.si:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 15,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 4,
+            "completed": 322,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "6d203d",
+        "pid": 4481440,
+        "category": null,
+        "category_str": "Movies",
+        "type": "Dubs/Dual Audio",
+        "genre": ["Action", "Adventure", "Science Fiction"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p BluRay Hindi English x264 DD 5 1 MSubs LOKiHD Telly",
+        "short_name": "Beyond the sudden hole",
+        "num_files": 0,
+        "size": 5261334937,
+        "size_char": "4.9 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-35416.jpg",
+        "seeders": 0,
+        "leechers": 0,
+        "username": "Patti Beatty",
+        "downloads": 0,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "Hindi",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-10-28T00:22:38.485243Z",
+        "last_checked": "2025-05-11T14:16:58.864553Z",
+        "files": null,
+        "trackers": [],
+        "has_torrent": false,
+        "images": [
+          "https://fake-cdn.example.com/fake-25963.png",
+          "https://fake-cdn.example.com/fake-25962.png",
+          "https://fake-cdn.example.com/fake-25961.jpg",
+          "https://fake-cdn.example.com/fake-25960.png",
+          "https://fake-cdn.example.com/fake-25959.png",
+          "https://fake-cdn.example.com/fake-25958.png",
+          "https://fake-cdn.example.com/fake-25957.png",
+          "https://fake-cdn.example.com/fake-25956.png"
+        ],
+        "is_recomended": false,
+        "source": "1",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "60d9d4",
+        "pid": 4812190,
+        "category": null,
+        "category_str": "Movies",
+        "type": "Dubs/Dual Audio",
+        "genre": ["Action", "Adventure", "Science Fiction"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p BluRay x265 HEVC Org Hindi AC3 5 1 English DTS AC3 5 1 MSub MeGUiL",
+        "short_name": "Beyond the sudden hole",
+        "num_files": 0,
+        "size": 16428249907,
+        "size_char": "15.3 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-56396.jpg",
+        "seeders": 0,
+        "leechers": 3,
+        "username": "Krista Boyle",
+        "downloads": 0,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "Hindi",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-10-26T04:39:22.320670Z",
+        "last_checked": "2025-05-14T02:17:28.168985Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 16372003010,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          },
+          {
+            "name": "fake_file_1.mkv",
+            "size": 108888063,
+            "full_location": "fake_path_1/fake_file_1.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 0,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [
+          "https://fake-cdn.example.com/fake-2847.jpg",
+          "https://fake-cdn.example.com/fake-2846.png",
+          "https://fake-cdn.example.com/fake-2845.png",
+          "https://fake-cdn.example.com/fake-2844.png",
+          "https://fake-cdn.example.com/fake-2843.png",
+          "https://fake-cdn.example.com/fake-2842.png",
+          "https://fake-cdn.example.com/fake-2841.png",
+          "https://fake-cdn.example.com/fake-2840.png",
+          "https://fake-cdn.example.com/fake-2839.png",
+          "https://fake-cdn.example.com/fake-2838.png",
+          "https://fake-cdn.example.com/fake-17106.png",
+          "https://fake-cdn.example.com/fake-17105.png",
+          "https://fake-cdn.example.com/fake-17104.png"
+        ],
+        "is_recomended": false,
+        "source": "1",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "60c5fd",
+        "pid": 15692985,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p BluRay DD 7 1 x265 EDGE2020",
+        "short_name": null,
+        "num_files": 0,
+        "size": 3092376453,
+        "size_char": "2.88 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-46054.jpg",
+        "seeders": 34,
+        "leechers": 13,
+        "username": "Mr. Ira Hermann",
+        "downloads": 2829,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-10-26T03:12:30.333518Z",
+        "last_checked": "2025-05-14T04:54:53.048889Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 3088716203,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 7,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 2,
+            "completed": 1639,
+            "scrape_error": null
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 2,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 10,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 1,
+            "completed": 819,
+            "scrape_error": null
+          },
+          {
+            "seeders": 7,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 1,
+            "completed": 352,
+            "scrape_error": null
+          },
+          {
+            "seeders": 2,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 4,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 5,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 1,
+            "completed": 17,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 4,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "6164f5",
+        "pid": 5074689,
+        "category": null,
+        "category_str": "Movies",
+        "type": "h.264/x264",
+        "genre": null,
+        "status": null,
+        "name": "Beyond the sudden hole x264 1080p ITALiAN MaDHeX MaDcReW _MaTTi _",
+        "short_name": null,
+        "num_files": 0,
+        "size": 3221225472,
+        "size_char": "3 GB",
+        "thumbnail": null,
+        "seeders": 0,
+        "leechers": 1,
+        "username": "Felicia Stoltenberg",
+        "downloads": 0,
+        "added": 0,
+        "descr": "[Storyline]<br>https://www.imdb.com/title/tt4154756/<br>[INFO]<br>Complete name                            : Z:\\home\\stream\\index\\Movies\\<br>[email protected]<br>_.mp4<br>Format                                   : MPEG-4<br>Format profile                           : Base Media<br>Codec ID                                 : isom (isom/iso2/avc1/mp41)<br>File size                                : 3.00 GiB<br>Duration                                 : 2 h 29 min<br>Overall bit rate                         : 2 873 kb/s<br>Movie name                               :<br>[email protected]<br>Performer                                : MadCrew<br>Description                              : MadCrew<br>Copyright                                : MaDHeX<br>Comment                                  : visit www.madcrew.download<br>Video<br>ID                                       : 1<br>Format                                   : AVC<br>Format/Info                              : Advanced Video Codec<br>Format profile                           :<br>[email protected]<br>Format settings                          : CABAC / 4 Ref Frames<br>Format settings, CABAC                   : Yes<br>Format settings, Reference frames        : 4 frames<br>Codec ID                                 : avc1<br>Codec ID/Info                            : Advanced Video Coding<br>Duration                                 : 2 h 29 min<br>Bit rate                                 : 2 671 kb/s<br>Width                                    : 1 920 pixels<br>Height                                   : 800 pixels<br>Display aspect ratio                     : 2.40:1<br>Frame rate mode                          : Constant<br>Frame rate                               : 23.976 (24000/1001) FPS<br>Color space                              : YUV<br>Chroma subsampling                       : 4:2:0<br>Bit depth                                : 8 bits<br>Scan type                                : Progressive<br>Bits/(Pixel*Frame)                       : 0.073<br>Stream size                              : 2.79 GiB (93%)<br>Writing library                          : x264 core 148 r2795 aaa9aa8<br>Encoding settings                        : cabac=1 / ref=3 / deblock=1:0:0 / analyse=0x3:0x113 / me=hex / subme=7 / psy=1 / psy_rd=1.00:0.00 / mixed_ref=1 / me_range=16 / chroma_me=1 / trellis=1 / 8x8dct=1 / cqm=0 / deadzone=21,11 / fast_pskip=1 / chroma_qp_offset=-2 / threads=1 / lookahead_threads=1 / sliced_threads=0 / nr=0 / decimate=1 / interlaced=0 / bluray_compat=0 / constrained_intra=0 / bframes=3 / b_pyramid=2 / b_adapt=1 / b_bias=0 / direct=1 / weightb=1 / open_gop=0 / weightp=2 / keyint=250 / keyint_min=23 / scenecut=40 / intra_refresh=0 / rc_lookahead=40 / rc=crf / mbtree=1 / crf=22.0 / qcomp=0.60 / qpmin=0 / qpmax=69 / qpstep=4 / ip_ratio=1.40 / aq=1:1.00<br>Menus                                    : 3<br>Codec configuration box                  : avcC<br>Audio<br>ID                                       : 2<br>Format                                   : AAC LC<br>Format/Info                              : Advanced Audio Codec Low Complexity<br>Codec ID                                 : mp4a-40-2<br>Duration                                 : 2 h 29 min<br>Bit rate mode                            : Constant<br>Bit rate                                 : 197 kb/s<br>Channel(s)                               : 6 channels<br>Channel layout                           : C L R Ls Rs LFE<br>Sampling rate                            : 48.0 kHz<br>Frame rate                               : 46.875 FPS (1024 SPF)<br>Compression mode                         : Lossy<br>Stream size                              : 211 MiB (7%)<br>Default                                  : Yes<br>Alternate group                          : 1<br>Menus                                    : 3<br>Menu #1<br>ID                                       : 3<br>Codec ID                                 : text<br>Duration                                 : 2 h 29 min<br>Language                                 : English<br>Bit rate mode                            : CBR<br>Menu For                                 : 1,2<br>Bit rate mode                            : Constant",
+        "imdb": "tt4154756",
+        "language": "Italian",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-10-24T13:57:54.962605Z",
+        "last_checked": "2025-05-15T18:10:21.967252Z",
+        "files": null,
+        "trackers": [],
+        "has_torrent": false,
+        "images": [
+          "https://fake-cdn.example.com/fake-38749.jpg",
+          "https://fake-cdn.example.com/fake-38750.png"
+        ],
+        "is_recomended": false,
+        "source": "1",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "615d39",
+        "pid": 5083055,
+        "category": null,
+        "category_str": "Movies",
+        "type": "HD",
+        "genre": ["Action", "Adventure", "Science Fiction"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 720p BluRay x264 MoviesFD7",
+        "short_name": "Beyond the sudden hole",
+        "num_files": 0,
+        "size": 1288490188,
+        "size_char": "1.2 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-7435.jpg",
+        "seeders": 0,
+        "leechers": 0,
+        "username": "Mae Swift-Kuvalis",
+        "downloads": 1,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-10-24T13:06:25.043327Z",
+        "last_checked": "2025-05-15T19:25:19.755165Z",
+        "files": null,
+        "trackers": [],
+        "has_torrent": false,
+        "images": [
+          "https://fake-cdn.example.com/fake-88360.jpg",
+          "https://fake-cdn.example.com/fake-88359.jpg",
+          "https://fake-cdn.example.com/fake-88358.jpg",
+          "https://fake-cdn.example.com/fake-88357.jpg",
+          "https://fake-cdn.example.com/fake-88356.jpg"
+        ],
+        "is_recomended": false,
+        "source": "1",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "62fb4a",
+        "pid": 5176098,
+        "category": null,
+        "category_str": "Movies",
+        "type": "HD",
+        "genre": ["Action", "Adventure", "Science Fiction"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p HDR Bluray AV1 Opus Multi4 dAV1nci",
+        "short_name": "Beyond the sudden hole",
+        "num_files": 0,
+        "size": 4402341478,
+        "size_char": "4.1 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-2565.jpg",
+        "seeders": 14,
+        "leechers": 8,
+        "username": "Jennie Stiedemann-Langosh",
+        "downloads": 235,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-10-24T00:32:34.500494Z",
+        "last_checked": "2025-05-16T05:42:11.827300Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 4453656568,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 5,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 2,
+            "completed": 179,
+            "scrape_error": null
+          },
+          {
+            "seeders": 2,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 1,
+            "completed": 6,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 1,
+            "completed": 33,
+            "scrape_error": null
+          },
+          {
+            "seeders": 4,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 2,
+            "completed": 15,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 2,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [
+          "https://fake-cdn.example.com/fake-72206.png",
+          "https://fake-cdn.example.com/fake-72205.png",
+          "https://fake-cdn.example.com/fake-72204.png",
+          "https://fake-cdn.example.com/fake-72203.png"
+        ],
+        "is_recomended": false,
+        "source": "1",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "658604",
+        "pid": 15615822,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 Bluray 2160p AV1 HDR10 EN FR DE ITA AC3 5 1 UH UserHEVC",
+        "short_name": null,
+        "num_files": 0,
+        "size": 15440407429,
+        "size_char": "14.38 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-45999.jpg",
+        "seeders": 45,
+        "leechers": 36,
+        "username": "Kristopher Rutherford",
+        "downloads": 2137,
+        "added": 0,
+        "descr": "===================== General =====================<br>Complete name               : Avengers.Infinity.War.2018.Bluray.2160p.AV1.HDR10.AC3.5.1-UH.mkv<br>Format                      : Matroska<br>Formatversion               : Version 4 / Version 2<br>File size                   : 14.4 GB<br>Duration (ms)               : 2h 29mn<br>Overall bit rate            : 13.8 Mbps<br>Encoded date                : UTC 2023-09-15 23:17:01<br>Writing application         : mkvmerge v78.0 ('Running') 64-bit<br>Writing library             : libebml v1.4.4 + libmatroska v1.7.1 / Lavf60.3.100<br>===================== Video =====================<br>Id                          : 1<br>Format                      : V_AV1<br>Codec Id                    : V_AV1<br>Duration (ms)               : 2h 29mn<br>Bit rate                    : 12.3 Mbps<br>Width                       : 3 840 pixels<br>Height                      : 1 608 pixels<br>Display aspect ratio        : 2.40:1<br>Frame rate mode             : Constant<br>Frame rate                  : 23.976 (24000/1001) fps<br>Bits/(Pixel*Frame)          : 0.083<br>Stream size                 : 12.8 GB (89%)<br>Default                     : Yes<br>Forced                      : No<br>===================== Audio #1 =====================<br>Id                          : 2<br>Format                      : AC-3<br>Format info                 : Audio Coding 3<br>Mode extension              : CM (complete main)<br>Formatsettings, Endianness  : Big<br>Codec Id                    : A_AC3<br>Duration (ms)               : 2h 29mn<br>Bit rate mode               : Constant<br>Bit rate                    : 640 Kbps<br>Channel(s)                  : 6 channels<br>Channel positions           : Front: L C R, Side: L R, LFE<br>Sampling rate               : 48.0 KHz<br>Frame rate                  : 31.250 fps (1536 spf)<br>Compression mode            : Lossy<br>Stream size                 : 684 MB (5%)<br>Language                    : English<br>Default                     : Yes<br>Forced                      : No<br>===================== Audio #2 =====================<br>Id                          : 3<br>Format                      : Opus<br>Codec Id                    : A_OPUS<br>Duration (ms)               : 2h 29mn<br>Bit rate                    : 274 Kbps<br>Channel(s)                  : 6 channels<br>Channel positions           : Front: L C R, Rear: L R, LFE<br>Sampling rate               : 48.0 KHz<br>Frame rate                  : 50.000 fps (960 spf)<br>Compression mode            : Lossy<br>Stream size                 : 292 MB (2%)<br>Language                    : German<br>Default                     : No<br>Forced                      : No<br>===================== Audio #3 =====================<br>Id                          : 4<br>Format                      : Opus<br>Codec Id                    : A_OPUS<br>Duration (ms)               : 2h 29mn<br>Bit rate                    : 274 Kbps<br>Channel(s)                  : 6 channels<br>Channel positions           : Front: L C R, Rear: L R, LFE<br>Sampling rate               : 48.0 KHz<br>Frame rate                  : 50.000 fps (960 spf)<br>Compression mode            : Lossy<br>Stream size                 : 292 MB (2%)<br>Language                    : French<br>Default                     : No<br>Forced                      : No<br>===================== Audio #4 =====================<br>Id                          : 5<br>Format                      : Opus<br>Codec Id                    : A_OPUS<br>Duration (ms)               : 2h 29mn<br>Bit rate                    : 274 Kbps<br>Channel(s)                  : 6 channels<br>Channel positions           : Front: L C R, Rear: L R, LFE<br>Sampling rate               : 48.0 KHz<br>Frame rate                  : 50.000 fps (960 spf)<br>Compression mode            : Lossy<br>Stream size                 : 293 MB (2%)<br>Language                    : Italian<br>Default                     : No<br>Forced                      : No<br>===================== Text #1 =====================<br>Id                          : 6<br>Format                      : PGS<br>Muxing mode                 : zlib<br>Codec Id                    : S_HDMV/PGS<br>Codec info                  : Picture based subtitle format used on BDs/HD-DVDs<br>Duration (ms)               : 2h 28mn<br>Bit rate                    : 32.7 Kbps<br>Countof elements            : 4134<br>Stream size                 : 34.7 MB (0%)<br>Language                    : English<br>Default                     : No<br>Forced                      : No<br>===================== Text #2 =====================<br>Id                          : 7<br>Format                      : PGS<br>Muxing mode                 : zlib<br>Codec Id                    : S_HDMV/PGS<br>Codec info                  : Picture based subtitle format used on BDs/HD-DVDs<br>Duration (ms)               : 2h 27mn<br>Bit rate                    : 23.8 Kbps<br>Countof elements            : 2962<br>Stream size                 : 25.2 MB (0%)<br>Language                    : German<br>Default                     : No<br>Forced                      : No<br>===================== Text #3 =====================<br>Id                          : 8<br>Format                      : PGS<br>Muxing mode                 : zlib<br>Codec Id                    : S_HDMV/PGS<br>Codec info                  : Picture based subtitle format used on BDs/HD-DVDs<br>Duration (ms)               : 2h 28mn<br>Bit rate                    : 21.4 Kbps<br>Countof elements            : 2988<br>Stream size                 : 22.8 MB (0%)<br>Language                    : French<br>Default                     : No<br>Forced                      : No<br>===================== Text #4 =====================<br>Id                          : 9<br>Format                      : PGS<br>Muxing mode                 : zlib<br>Codec Id                    : S_HDMV/PGS<br>Codec info                  : Picture based subtitle format used on BDs/HD-DVDs<br>Duration (ms)               : 2h 28mn<br>Bit rate                    : 26.7 Kbps<br>Countof elements            : 3156<br>Stream size                 : 28.4 MB (0%)<br>Language                    : Italian<br>Default                     : No<br>Forced                      : No",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-09-17T01:09:24.898907Z",
+        "last_checked": "2025-05-20T06:47:07.475771Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 15436047981,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 1,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 0,
+            "completed": 286,
+            "scrape_error": null
+          },
+          {
+            "seeders": 9,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 14,
+            "completed": 88,
+            "scrape_error": null
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 1,
+            "scrape_error": null
+          },
+          {
+            "seeders": 26,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 14,
+            "completed": 1577,
+            "scrape_error": null
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 0,
+            "completed": 107,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 7,
+            "completed": 78,
+            "scrape_error": null
+          },
+          {
+            "seeders": 2,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "66f5ce",
+        "pid": 15563346,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p 10bit UHD Blu ray DDP 7 1 HEVC NmCT",
+        "short_name": null,
+        "num_files": 0,
+        "size": 12627203850,
+        "size_char": "11.76 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-21866.jpg",
+        "seeders": 20,
+        "leechers": 8,
+        "username": "Percy Adams",
+        "downloads": 422,
+        "added": 0,
+        "descr": "None",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-08-20T12:34:10.253188Z",
+        "last_checked": "2025-05-20T21:59:08.065669Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 12627462548,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 4,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 4,
+            "completed": 246,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 5,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 2,
+            "completed": 107,
+            "scrape_error": null
+          },
+          {
+            "seeders": 5,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 0,
+            "completed": 56,
+            "scrape_error": null
+          },
+          {
+            "seeders": 3,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 13,
+            "scrape_error": null
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "6660cf",
+        "pid": 15516195,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 720p DSNP WEBRip 900MB x264 GalaxyRG",
+        "short_name": null,
+        "num_files": 0,
+        "size": 940729958,
+        "size_char": "897.15 MB",
+        "thumbnail": "https://fake-cdn.example.com/fake-51866.jpg",
+        "seeders": 49,
+        "leechers": 11,
+        "username": "Nelson Crist",
+        "downloads": 5265,
+        "added": 0,
+        "descr": "MEDIAINFO<br>Container = Matroska (mkv)<br>Duration = 02:29:17.742<br>Filesize = 897 MiB<br>Overall bitrate = 840 kb/s<br>ViDEO<br>Codec info = AVC<br>[email protected]<br>| V_MPEG4/ISO/AVC<br>Resolution = 1280x672<br>Display AR = 1.901 | 1.901<br>Bitrate = 7 282 kb/s<br>Framerate = CFR 23.976<br>Color space = YUV<br>Chroma subsampling = 4:2:0<br>Encoder = x264 - core 157<br>AUDiO<br>Codec info = AAC | A_AAC-2<br>Channels = 2<br>Bitrate = 768 kb/s<br>Samplerate = 48.0 kHz<br>Language = English<br>Included subtitles<br>English",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-28T13:01:32.488527Z",
+        "last_checked": "2025-05-21T13:23:39.460946Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 940732209,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          },
+          {
+            "name": "fake_file_1.txt",
+            "size": 71,
+            "full_location": "fake_path_1/fake_file_1.txt"
+          },
+          {
+            "name": "fake_file_2.txt",
+            "size": 718,
+            "full_location": "fake_path_2/fake_file_2.txt"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 13,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 3,
+            "completed": 3429,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 15,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 3,
+            "completed": 1463,
+            "scrape_error": null
+          },
+          {
+            "seeders": 14,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 2,
+            "completed": 313,
+            "scrape_error": null
+          },
+          {
+            "seeders": 4,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 60,
+            "scrape_error": null
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [
+          "https://fake-cdn.example.com/fake-90661.jpg",
+          "https://fake-cdn.example.com/fake-90660.jpg",
+          "https://fake-cdn.example.com/fake-90659.jpg",
+          "https://fake-cdn.example.com/fake-90658.jpg",
+          "https://fake-cdn.example.com/fake-90657.jpg",
+          "https://fake-cdn.example.com/fake-90656.jpg"
+        ],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "66604a",
+        "pid": 15516026,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 1080p DSNP WEB DL DDPA 5 1 H 264 PiRaTeS TGx",
+        "short_name": null,
+        "num_files": 0,
+        "size": 9019431321,
+        "size_char": "8.40 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-53043.jpg",
+        "seeders": 11,
+        "leechers": 3,
+        "username": "Dr. Juana Howell",
+        "downloads": 702,
+        "added": 0,
+        "descr": "MEDIAINFO<br>Container = Matroska (mkv)<br>Duration = 02:29:17.699<br>Filesize = 8 GiB<br>Overall bitrate = 8 052 kb/s<br>ViDEO<br>Codec info = AVC<br>[email protected]<br>| V_MPEG4/ISO/AVC<br>Resolution = 1920x1080<br>Display AR = 1.778 | 16:9<br>Bitrate = 7 282 kb/s<br>Framerate = CFR 23.976<br>Color space = YUV<br>Chroma subsampling = 4:2:0<br>Encoder =<br>AUDiO<br>Codec info = E-AC-3 | A_EAC3<br>Channels = 6<br>Bitrate = CBR 768 kb/s<br>Samplerate = 48.0 kHz<br>Language = English<br>Included subtitles<br>English",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-28T12:37:44.071368Z",
+        "last_checked": "2025-05-21T13:25:58.770815Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 9016343112,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          },
+          {
+            "name": "fake_file_1.txt",
+            "size": 71,
+            "full_location": "fake_path_1/fake_file_1.txt"
+          },
+          {
+            "name": "fake_file_2.txt",
+            "size": 718,
+            "full_location": "fake_path_2/fake_file_2.txt"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 3,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 1,
+            "completed": 432,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 4,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 0,
+            "completed": 162,
+            "scrape_error": null
+          },
+          {
+            "seeders": 4,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 0,
+            "completed": 84,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 24,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [
+          "https://fake-cdn.example.com/fake-21758.jpg",
+          "https://fake-cdn.example.com/fake-21757.jpg",
+          "https://fake-cdn.example.com/fake-21756.jpg",
+          "https://fake-cdn.example.com/fake-21755.jpg",
+          "https://fake-cdn.example.com/fake-21754.jpg",
+          "https://fake-cdn.example.com/fake-21753.jpg"
+        ],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "541fa7",
+        "pid": 8462,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Drama", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 3D bluray YTS",
+        "short_name": "Beyond the sudden hole",
+        "num_files": 0,
+        "size": 2566242959,
+        "size_char": "2.39 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-84423.jpg",
+        "seeders": 16,
+        "leechers": 9,
+        "username": "Darren Walker",
+        "downloads": 0,
+        "added": 0,
+        "descr": "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment, the fate of Earth and existence has never been more uncertain.—Marvel Studios",
+        "imdb": "tt4154756",
+        "language": "en",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": "_XkUdr0EDwk",
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-22T17:17:03.883136Z",
+        "last_checked": "2025-06-11T17:56:49.498279Z",
+        "files": null,
+        "trackers": [],
+        "has_torrent": false,
+        "images": [
+          "https://fake-cdn.example.com/fake-97476.jpg",
+          "https://fake-cdn.example.com/fake-97475.jpg"
+        ],
+        "is_recomended": false,
+        "source": "YN",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "48cbf0",
+        "pid": 15146628,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 PROPER 2160p BluRay REMUX HEVC DTS HD MA TrueHD 7 1 Atmos FGT",
+        "short_name": null,
+        "num_files": 0,
+        "size": 64424509440,
+        "size_char": "60.02 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-93316.jpg",
+        "seeders": 64,
+        "leechers": 20,
+        "username": "Kristopher Rutherford",
+        "downloads": 2628,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-01T21:45:42.638141Z",
+        "last_checked": "2025-07-11T10:21:17.002806Z",
+        "files": null,
+        "trackers": [
+          {
+            "seeders": 25,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 9,
+            "completed": 1167,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.openbittorrent.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.internetwarriors.net:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.leechers-paradise.org:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.coppersurfer.tk:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 8,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 6,
+            "completed": 197,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://open.demonii.si:1337/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 31,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 5,
+            "completed": 1264,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": false,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "573a39",
+        "pid": 15066715,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 BluRay 1080p DTS HD MA 7 1 AC3 x264 MgB",
+        "short_name": null,
+        "num_files": 0,
+        "size": 18790481920,
+        "size_char": "17.55 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-74498.jpg",
+        "seeders": 5,
+        "leechers": 0,
+        "username": "Ms. Mabel Roberts",
+        "downloads": 0,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-01T20:53:30.039012Z",
+        "last_checked": "2025-06-16T16:34:57.006157Z",
+        "files": null,
+        "trackers": [],
+        "has_torrent": false,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "56f728",
+        "pid": 14631582,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 IMAX 1080p DSNP WEB DL x265 HEVC 10bit EAC3 5 1 Silence QxR",
+        "short_name": null,
+        "num_files": 0,
+        "size": 7194070220,
+        "size_char": "6.75 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-24499.jpg",
+        "seeders": 15,
+        "leechers": 2,
+        "username": "Dixie Hermann",
+        "downloads": 0,
+        "added": 0,
+        "descr": "General<br>Format : Matroska<br>File Size : 6.75 GiB<br>Duration : 2 h 29 min<br>Overall Bit Rate : 6473 kb/s<br>Video<br>Format : HEVC<br>Format Profile : Main<br>[email protected]<br>@Main<br>Bit Rate : 5701 kb/s<br>Dimensions : 1920 pixels x 1012 pixels<br>Display Aspect Ratio : 1.897<br>Frame Rate : 23.976 (24000/1001) FPS<br>Writing Library : x265 3.5+20-4c4aee0bc:[DJATOM's Mod][Windows][GCC 10.2.1][64 bit] 10bit<br>Encoding Settings : cpuid=1111039 / frame-threads=4 / numa-pools=24 / wpp / no-pmode / no-pme / no-psnr / no-ssim / log-level=2 / input-csp=1 / input-res=1920x1012 / interlace=0 / total-frames=214769 / level-idc=0 / high-tier=1 / uhd-bd=0 / ref=5 / no-allow-non-conformance / no-repeat-headers / annexb / no-aud / no-hrd / info / hash=0 / no-temporal-layers / open-gop / min-keyint=23 / keyint=250 / gop-lookahead=0 / bframes=8 / b-adapt=2 / b-pyramid / bframe-bias=0 / rc-lookahead=80 / lookahead-slices=4 / scenecut=40 / hist-scenecut=0 / radl=0 / no-splice / no-intra-refresh / ctu=64 / min-cu-size=8 / no-rect / no-amp / max-tu-size=32 / tu-inter-depth=1 / tu-intra-depth=1 / limit-tu=0 / rdoq-level=2 / dynamic-rd=0.00 / no-ssim-rd / signhide / no-tskip / nr-intra=0 / nr-inter=0 / no-constrained-intra / no-strong-intra-smoothing / max-merge=3 / limit-refs=3 / limit-modes / me=3 / subme=5 / merange=57 / temporal-mvp / no-frame-dup / no-hme / weightp / no-weightb / no-analyze-src-pics / deblock=-3:-3 / no-sao / no-sao-non-deblock / rd=4 / selective-sao=0 / no-early-skip / rskip / no-fast-intra / no-tskip-fast / no-cu-lossless / no-b-intra / no-splitrd-skip / rdpenalty=0 / psy-rd=2.00 / psy-rdoq=1.00 / no-rd-refine / no-lossless / cbqpoffs=0 / crqpoffs=0 / rc=abr / bitrate=5700 / qcomp=0.60 / qpstep=4 / stats-write=0 / stats-read=2 / cplxblur=20.0 / qblur=0.5 / ipratio=1.40 / pbratio=1.30 / aq-mode=3 / aq-strength=1.00 / cutree / zone-count=0 / no-strict-cbr / qg-size=32 / no-rc-grain / qpmax=69 / qpmin=0 / no-const-vbv / sar=0 / overscan=0 / videoformat=5 / range=0 / colorprim=1 / transfer=1 / colormatrix=1 / chromaloc=0 / display-window=0 / cll=0,0 / min-luma=0 / max-luma=1023 / log2-max-poc-lsb=8 / vui-timing-info / vui-hrd-info / slices=1 / no-opt-qp-pps / no-opt-ref-list-length-pps / no-multi-pass-opt-rps / scenecut-bias=0.05 / hist-threshold=0.03 / no-opt-cu-delta-qp / no-aq-motion / no-hdr10 / no-hdr10-opt / no-dhdr10-opt / no-idr-recovery-sei / analysis-reuse-level=0 / analysis-save-reuse-level=0 / analysis-load-reuse-level=0 / scale-factor=0 / refine-intra=0 / refine-inter=0 / refine-mv=1 / refine-ctu-distortion=0 / no-limit-sao / ctu-info=0 / no-lowpass-dct / refine-analysis-type=0 / copy-pic=1 / max-ausize-factor=1.0 / no-dynamic-refine / no-single-sei / no-hevc-aq / no-svt / no-field / qp-adaptation-range=1.00 / scenecut-aware-qp=0conformance-window-offsets / right=0 / bottom=0 / decoder-max-rate=0 / no-vbv-live-multi-pass<br>Audio #1 :<br>English / E-AC-3 / 15 objects / 6 channels / 768 kb/s / English<br>Subtitle #1 :<br>Chinese / UTF-8 / 41 b/s / Chinese Simplified<br>Subtitle #10 :<br>German / UTF-8 / 36 b/s / German<br>Subtitle #11 :<br>Icelandic / UTF-8 / 44 b/s / Icelandic<br>Subtitle #12 :<br>Italian / UTF-8 / 42 b/s / Italian<br>Subtitle #13 :<br>Japanese / UTF-8 / 34 b/s / Japanese<br>Subtitle #14 :<br>Korean / UTF-8 / 35 b/s / Korean<br>Subtitle #15 :<br>Norwegian Bokmal / UTF-8 / 37 b/s / Norwegian<br>Subtitle #16 :<br>Portuguese / UTF-8 / 41 b/s / Portuguese<br>Subtitle #17 :<br>Portuguese / UTF-8 / 40 b/s / Brazilian Portuguese<br>Subtitle #18 :<br>Spanish / UTF-8 / 39 b/s / European Spanish<br>Subtitle #19 :<br>Spanish / UTF-8 / 38 b/s / Spanish<br>Subtitle #2 :<br>Chinese / UTF-8 / 34 b/s / Chinese Traditional<br>Subtitle #20 :<br>Swedish / UTF-8 / 38 b/s / Swedish<br>Subtitle #21 :<br>Chinese / UTF-8 / 29 b/s / Mandarin (Guoyu)<br>Subtitle #3 :<br>Danish / UTF-8 / 38 b/s / Danish<br>Subtitle #4 :<br>Dutch / UTF-8 / 37 b/s / Dutch<br>Subtitle #5 :<br>English / UTF-8 / 43 b/s / English<br>Subtitle #6 :<br>English / UTF-8 / 48 b/s / English [SDH]<br>Subtitle #7 :<br>Finnish / UTF-8 / 39 b/s / Finnish<br>Subtitle #8 :<br>French / UTF-8 / 40 b/s / French Canadian<br>Subtitle #9 :<br>French / UTF-8 / 35 b/s / French",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-01T17:10:28.674573Z",
+        "last_checked": "2025-06-13T22:19:26.621484Z",
+        "files": null,
+        "trackers": [],
+        "has_torrent": false,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "554669",
+        "pid": 14505875,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 BluRay 1080p DTS AC3 x264 3Li",
+        "short_name": null,
+        "num_files": 0,
+        "size": 9985798963,
+        "size_char": "9.38 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-2194.jpg",
+        "seeders": 44,
+        "leechers": 17,
+        "username": "Don Veum I",
+        "downloads": 874,
+        "added": 0,
+        "descr": null,
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-01T16:23:19.216617Z",
+        "last_checked": "2025-05-11T13:12:46.881433Z",
+        "files": [
+          {
+            "name": "fake_file_0.mkv",
+            "size": 9913564992,
+            "full_location": "fake_path_0/fake_file_0.mkv"
+          },
+          {
+            "name": "fake_file_1.mkv",
+            "size": 51202789,
+            "full_location": "fake_path_1/fake_file_1.mkv"
+          },
+          {
+            "name": "fake_file_2.mkv",
+            "size": 86811227,
+            "full_location": "fake_path_2/fake_file_2.mkv"
+          },
+          {
+            "name": "fake_file_3.png",
+            "size": 276160,
+            "full_location": "fake_path_3/fake_file_3.png"
+          },
+          {
+            "name": "fake_file_4.jpg",
+            "size": 970817,
+            "full_location": "fake_path_4/fake_file_4.jpg"
+          },
+          {
+            "name": "fake_file_5.png",
+            "size": 1614655,
+            "full_location": "fake_path_5/fake_file_5.png"
+          },
+          {
+            "name": "fake_file_6.png",
+            "size": 1743229,
+            "full_location": "fake_path_6/fake_file_6.png"
+          },
+          {
+            "name": "fake_file_7.png",
+            "size": 1243280,
+            "full_location": "fake_path_7/fake_file_7.png"
+          },
+          {
+            "name": "fake_file_8.png",
+            "size": 1620962,
+            "full_location": "fake_path_8/fake_file_8.png"
+          },
+          {
+            "name": "fake_file_9.png",
+            "size": 1350317,
+            "full_location": "fake_path_9/fake_file_9.png"
+          },
+          {
+            "name": "fake_file_10.png",
+            "size": 1681722,
+            "full_location": "fake_path_10/fake_file_10.png"
+          },
+          {
+            "name": "fake_file_11.png",
+            "size": 1576466,
+            "full_location": "fake_path_11/fake_file_11.png"
+          },
+          {
+            "name": "fake_file_12.png",
+            "size": 1406765,
+            "full_location": "fake_path_12/fake_file_12.png"
+          },
+          {
+            "name": "fake_file_13.png",
+            "size": 1358476,
+            "full_location": "fake_path_13/fake_file_13.png"
+          },
+          {
+            "name": "fake_file_14.png",
+            "size": 1573004,
+            "full_location": "fake_path_14/fake_file_14.png"
+          },
+          {
+            "name": "fake_file_15.png",
+            "size": 1780779,
+            "full_location": "fake_path_15/fake_file_15.png"
+          },
+          {
+            "name": "fake_file_16.png",
+            "size": 1707083,
+            "full_location": "fake_path_16/fake_file_16.png"
+          },
+          {
+            "name": "fake_file_17.nfo",
+            "size": 1453,
+            "full_location": "fake_path_17/fake_file_17.nfo"
+          }
+        ],
+        "trackers": [
+          {
+            "seeders": 0,
+            "tracker": "udp://open.stealth.si:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 10,
+            "tracker": "udp://exodus.desync.com:6969/announce",
+            "leechers": 1,
+            "completed": 18,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.cyberia.is:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 17,
+            "tracker": "udp://tracker.opentrackr.org:1337/announce",
+            "leechers": 8,
+            "completed": 524,
+            "scrape_error": null
+          },
+          {
+            "seeders": 14,
+            "tracker": "udp://tracker.torrent.eu.org:451/announce",
+            "leechers": 3,
+            "completed": 317,
+            "scrape_error": null
+          },
+          {
+            "seeders": 2,
+            "tracker": "udp://explodie.org:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.birkenwald.de:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.moeking.me:6969/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://ipv4.tracker.harry.lu:80/announce",
+            "leechers": 0,
+            "completed": 0,
+            "scrape_error": "Failed to scrape UDP tracker"
+          },
+          {
+            "seeders": 1,
+            "tracker": "udp://tracker.tiny-vps.com:6969/announce",
+            "leechers": 2,
+            "completed": 15,
+            "scrape_error": null
+          },
+          {
+            "seeders": 0,
+            "tracker": "udp://tracker.therarbg.to:6969/announce",
+            "leechers": 1,
+            "completed": 0,
+            "scrape_error": null
+          }
+        ],
+        "has_torrent": true,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {},
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      },
+      {
+        "eid": "54ef67",
+        "pid": 15435998,
+        "category": null,
+        "category_str": "Movies",
+        "type": null,
+        "genre": ["Action", "Adventure", "Fantasy", "Sci-Fi"],
+        "status": null,
+        "name": "Beyond the sudden hole 2018 2160p x265 10bit HDR UHD BD Atmos Prof",
+        "short_name": null,
+        "num_files": 0,
+        "size": 21260088115,
+        "size_char": "19.84 GB",
+        "thumbnail": "https://fake-cdn.example.com/fake-56075.jpg",
+        "seeders": 20,
+        "leechers": 46,
+        "username": "Terri Renner",
+        "downloads": 0,
+        "added": 0,
+        "descr": "General<br>Format                                   : Matroska<br>Format version                           : Version 4<br>File size                                : 19.8 GiB<br>Duration                                 : 2 h 29 min<br>Overall bit rate mode                    : Variable<br>Overall bit rate                         : 19.0 Mb/s<br>Encoded date                             : UTC 2023-06-19 07:07:30<br>Writing application                      : mkvmerge v74.0.0 ('You Oughta Know') 64-bit<br>Writing library                          : libebml v1.4.4 + libmatroska v1.7.1<br>Video<br>ID                                       : 1<br>Format                                   : HEVC<br>Format/Info                              : High Efficiency Video Coding<br>Format profile                           : Main<br>[email protected]<br>@Main<br>HDR format                               : SMPTE ST 2086, HDR10 compatible<br>Codec ID                                 : V_MPEGH/ISO/HEVC<br>Duration                                 : 2 h 29 min<br>Bit rate                                 : 13.5 Mb/s<br>Width                                    : 3 840 pixels<br>Height                                   : 1 608 pixels<br>Display aspect ratio                     : 2.40:1<br>Frame rate mode                          : Variable<br>Frame rate                               : 23.976 (24000/1001) FPS<br>Color space                              : YUV<br>Chroma subsampling                       : 4:2:0 (Type 2)<br>Bit depth                                : 10 bits<br>Bits/(Pixel*Frame)                       : 0.091<br>Stream size                              : 14.1 GiB (71%)<br>Writing library                          : x265 3.5+37+12-4e46995bc:[Windows][MSVC 1931][64 bit] 10bit<br>Encoding settings                        : cpuid=1111039 / frame-threads=5 / numa-pools=32 / wpp / no-pmode / no-pme / no-psnr / no-ssim / log-level=2 / input-csp=1 / input-res=3840x1608 / interlace=0 / total-frames=214872 / level-idc=0 / high-tier=1 / uhd-bd=0 / ref=5 / no-allow-non-conformance / repeat-headers / annexb / aud / no-eob / no-eos / no-hrd / info / hash=0 / no-temporal-layers / open-gop / min-keyint=23 / keyint=250 / gop-lookahead=0 / bframes=8 / b-adapt=2 / b-pyramid / bframe-bias=0 / rc-lookahead=60 / lookahead-slices=0 / scenecut=40 / no-hist-scenecut / radl=0 / no-splice / no-intra-refresh / ctu=64 / min-cu-size=8 / rect / amp / max-tu-size=32 / tu-inter-depth=4 / tu-intra-depth=4 / limit-tu=0 / rdoq-level=2 / dynamic-rd=0.00 / no-ssim-rd / signhide / tskip / nr-intra=0 / nr-inter=0 / no-constrained-intra / strong-intra-smoothing / max-merge=5 / limit-refs=0 / no-limit-modes / me=3 / subme=5 / merange=92 / temporal-mvp / no-frame-dup / no-hme / weightp / weightb / no-analyze-src-pics / deblock=0:0 / sao / no-sao-non-deblock / rd=6 / selective-sao=4 / no-early-skip / no-rskip / no-fast-intra / no-tskip-fast / no-cu-lossless / b-intra / no-splitrd-skip / rdpenalty=0 / psy-rd=2.00 / psy-rdoq=1.00 / no-rd-refine / no-lossless / cbqpoffs=0 / crqpoffs=0 / rc=crf / crf=18.0 / qcomp=0.60 / qpstep=4 / stats-write=0 / stats-read=0 / ipratio=1.40 / pbratio=1.30 / aq-mode=5 / aq-strength=1.00 / aq-bias-strength=1.00 / cutree / zone-count=0 / no-strict-cbr / qg-size=32 / no-rc-grain / qpmax=69 / qpmin=0 / no-const-vbv / sar=0 / overscan=0 / videoformat=5 / range=0 / colorprim=9 / transfer=16 / colormatrix=9 / chromaloc=1 / chromaloc-top=2 / chromaloc-bottom=2 / display-window=0 / master-display=G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,1) / cll=0,0 / min-luma=0 / max-luma=1023 / log2-max-poc-lsb=8 / vui-timing-info / vui-hrd-info / slices=1 / no-opt-qp-pps / no-opt-ref-list-length-pps / no-multi-pass-opt-rps / scenecut-bias=0.05 / hist-threshold=0.03 / no-opt-cu-delta-qp / no-aq-motion / hdr10 / no-hdr10-opt / no-dhdr10-opt / no-idr-recovery-sei / analysis-reuse-level=0 / analysis-save-reuse-level=0 / analysis-load-reuse-level=0 / scale-factor=0 / refine-intra=0 / refine-inter=0 / refine-mv=1 / refine-ctu-distortion=0 / no-limit-sao / ctu-info=0 / no-lowpass-dct / refine-analysis-type=0 / copy-pic=1 / max-ausize-factor=1.0 / no-dynamic-refine / no-single-sei / no-hevc-aq / no-svt / no-field / qp-adaptation-range=1.00 / scenecut-aware-qp=0conformance-window-offsets / right=0 / bottom=0 / decoder-max-rate=0 / no-vbv-live-multi-pass<br>Default                                  : Yes<br>Forced                                   : No<br>Color range                              : Limited<br>Color primaries                          : BT.2020<br>Transfer characteristics                 : PQ<br>Matrix coefficients                      : BT.2020 non-constant<br>Mastering display color primaries        : Display P3<br>Mastering display luminance              : min: 0.0001 cd/m2, max: 1000 cd/m2<br>Audio #1<br>ID                                       : 2<br>Format                                   : MLP FBA 16-ch<br>Format/Info                              : Meridian Lossless Packing FBA with 16-channel presentation<br>Commercial name                          : Dolby TrueHD with Dolby Atmos<br>Codec ID                                 : A_TRUEHD<br>Duration                                 : 2 h 29 min<br>Bit rate mode                            : Variable<br>Bit rate                                 : 4 534 kb/s<br>Maximum bit rate                         : 6 930 kb/s<br>Channel(s)                               : 8 channels<br>Channel layout                           : L R C LFE Ls Rs Lb Rb<br>Sampling rate                            : 48.0 kHz<br>Frame rate                               : 1 200.000 FPS (40 SPF)<br>Compression mode                         : Lossless<br>Stream size                              : 4.73 GiB (24%)<br>Title                                    : Atmos TrueHD 7.1<br>Language                                 : English<br>Default                                  : Yes<br>Forced                                   : No<br>Number of dynamic objects                : 13<br>Bed channel count                        : 1 channel<br>Bed channel configuration                : LFE<br>Audio #2<br>ID                                       : 3<br>Format                                   : AC-3<br>Format/Info                              : Audio Coding 3<br>Commercial name                          : Dolby Digital<br>Codec ID                                 : A_AC3<br>Duration                                 : 2 h 29 min<br>Bit rate mode                            : Constant<br>Bit rate                                 : 640 kb/s<br>Channel(s)                               : 6 channels<br>Channel layout                           : L R C LFE Ls Rs<br>Sampling rate                            : 48.0 kHz<br>Frame rate                               : 31.250 FPS (1536 SPF)<br>Compression mode                         : Lossy<br>Stream size                              : 684 MiB (3%)<br>Title                                    : AC3 5.1 Compatibility Track<br>Language                                 : English<br>Service kind                             : Complete Main<br>Default                                  : No<br>Forced                                   : No<br>Audio #3<br>ID                                       : 4<br>Format                                   : AC-3<br>Format/Info                              : Audio Coding 3<br>Commercial name                          : Dolby Digital<br>Codec ID                                 : A_AC3<br>Duration                                 : 2 h 29 min<br>Bit rate mode                            : Constant<br>Bit rate                                 : 192 kb/s<br>Channel(s)                               : 2 channels<br>Channel layout                           : L R<br>Sampling rate                            : 48.0 kHz<br>Frame rate                               : 31.250 FPS (1536 SPF)<br>Compression mode                         : Lossy<br>Stream size                              : 205 MiB (1%)<br>Title                                    : AC3 2.0 Commentary by Directors Anthony Russo & Joe Russo and Screenwriters Christopher Markus & Stephen McFeely<br>Language                                 : English<br>Service kind                             : Complete Main<br>Default                                  : No<br>Forced                                   : No<br>Text #1<br>ID                                       : 5<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 10 min<br>Bit rate                                 : 779 b/s<br>Frame rate                               : 0.017 FPS<br>Count of elements                        : 132<br>Stream size                              : 745 KiB (0%)<br>Title                                    : Forced for non-English dialogue<br>Language                                 : English<br>Default                                  : Yes<br>Forced                                   : No<br>Text #2<br>ID                                       : 6<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 32.4 kb/s<br>Frame rate                               : 0.456 FPS<br>Count of elements                        : 3670<br>Stream size                              : 31.0 MiB (0%)<br>Title                                    : SDH<br>Language                                 : English<br>Default                                  : No<br>Forced                                   : No<br>Text #3<br>ID                                       : 7<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 16.2 kb/s<br>Frame rate                               : 0.361 FPS<br>Count of elements                        : 2908<br>Stream size                              : 15.6 MiB (0%)<br>Title                                    : Traditional (Hong Kong)<br>Language                                 : Chinese<br>Default                                  : No<br>Forced                                   : No<br>Text #4<br>ID                                       : 8<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 17.8 kb/s<br>Frame rate                               : 0.372 FPS<br>Count of elements                        : 2998<br>Stream size                              : 17.1 MiB (0%)<br>Title                                    : Traditional (Taiwan)<br>Language                                 : Chinese<br>Default                                  : No<br>Forced                                   : No<br>Text #5<br>ID                                       : 9<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 27.4 kb/s<br>Frame rate                               : 0.366 FPS<br>Count of elements                        : 2946<br>Stream size                              : 26.3 MiB (0%)<br>Language                                 : French<br>Default                                  : No<br>Forced                                   : No<br>Text #6<br>ID                                       : 10<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 13.4 kb/s<br>Frame rate                               : 0.364 FPS<br>Count of elements                        : 2930<br>Stream size                              : 12.9 MiB (0%)<br>Language                                 : Korean<br>Default                                  : No<br>Forced                                   : No<br>Text #7<br>ID                                       : 11<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 26.9 kb/s<br>Frame rate                               : 0.361 FPS<br>Count of elements                        : 2906<br>Stream size                              : 25.8 MiB (0%)<br>Title                                    : Latin American<br>Language                                 : Spanish<br>Default                                  : No<br>Forced                                   : No<br>Text #8<br>ID                                       : 12<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 16.1 kb/s<br>Frame rate                               : 0.361 FPS<br>Count of elements                        : 2912<br>Stream size                              : 15.5 MiB (0%)<br>Language                                 : Thai<br>Default                                  : No<br>Forced                                   : No<br>Text #9<br>ID                                       : 13<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 78.7 kb/s<br>Frame rate                               : 0.653 FPS<br>Count of elements                        : 5252<br>Stream size                              : 75.5 MiB (0%)<br>Title                                    : Commentary by director Ryan Coogler and production designer Hannah Beachler<br>Language                                 : English<br>Default                                  : No<br>Forced                                   : No<br>Text #10<br>ID                                       : 14<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 65.5 kb/s<br>Frame rate                               : 0.628 FPS<br>Count of elements                        : 5061<br>Stream size                              : 62.9 MiB (0%)<br>Title                                    : Commentary by director Ryan Coogler and production designer Hannah Beachler<br>Language                                 : French<br>Default                                  : No<br>Forced                                   : No<br>Text #11<br>ID                                       : 15<br>Format                                   : PGS<br>Muxing mode                              : zlib<br>Codec ID                                 : S_HDMV/PGS<br>Codec ID/Info                            : Picture based subtitle format used on BDs/HD-DVDs<br>Duration                                 : 2 h 14 min<br>Bit rate                                 : 66.0 kb/s<br>Frame rate                               : 0.623 FPS<br>Count of elements                        : 5020<br>Stream size                              : 63.4 MiB (0%)<br>Title                                    : Commentary by director Ryan Coogler and production designer Hannah Beachler<br>Language                                 : Spanish<br>Default                                  : No<br>Forced                                   : No<br>Menu<br>00:00:00.000                             : en:\"Thanos is Coming\"<br>00:11:28.730                             : en:Infinity Stones<br>00:18:13.884                             : en:Fight for the Time Stone<br>00:27:23.809                             : en:\"Who the Hell are You Guys?\"<br>00:35:48.813                             : en:Wanda and Vision<br>00:42:23.541                             : en:Knowhere<br>00:54:12.875                             : en:Avengers Assemble<br>00:59:36.740                             : en:\"Take the Fight To Him\"<br>01:05:07.153                             : en:The Soul Stone<br>01:10:53.666                             : en:Nidavellir<br>01:17:06.956                             : en:Titan<br>01:24:14.758                             : en:Vormir<br>01:31:08.004                             : en:\"Wakanda Forever\"<br>01:42:00.406                             : en:Stormbreaker<br>01:45:57.810                             : en:Titan Confrontation<br>01:53:04.069                             : en:\"A Vision Situation\"<br>01:58:52.917                             : en:The Time Stone<br>02:03:58.181                             : en:The End Game<br>02:11:13.282                             : en:Aftermath<br>02:17:31.285                             : en:End Credits",
+        "imdb": "tt4154756",
+        "language": "English",
+        "info_hash": "3456789ABCDEF0123456789ABCDEF0123456789A",
+        "textlanguage": null,
+        "trailer": null,
+        "season": 0,
+        "episode": 0,
+        "timestamp": "2023-07-01T12:00:32.205177Z",
+        "last_checked": "2025-06-10T05:02:18.850267Z",
+        "files": null,
+        "trackers": [],
+        "has_torrent": false,
+        "images": [],
+        "is_recomended": false,
+        "source": "T",
+        "source_list": [],
+        "extra_data": {
+          "pending_torrent": false
+        },
+        "upvotes": 0,
+        "downvotes": 0,
+        "report_count": 0,
+        "comment_count": 0,
+        "imdb_data": 9959
+      }
+    ]
+  }
+}
