@@ -1,9 +1,10 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
-# Miauflix-Bun Project Rules
+
+# Miauflix Project Rules
 
 ## 🎯 General Approach
 
@@ -165,7 +166,7 @@ afterEach(() => {
 ### Key Services (All Implemented - DON'T REBUILD)
 
 - `AuthService` - JWT authentication with refresh tokens (228 lines, 18 methods)
-- `SourceService` - Multi-provider torrent source aggregation (719 lines, 24 methods)  
+- `SourceService` - Multi-provider torrent source aggregation (719 lines, 24 methods)
 - `DownloadService` - WebTorrent client management (179 lines)
 - `MediaService` - TMDB integration and movie metadata
 - `TraktService` - Trakt.tv integration for lists
@@ -205,8 +206,9 @@ npm run build
 ### 3. **Implement Frontend JWT Authentication**
 
 **Missing Files to Create**:
+
 - `frontend/src/store/api/auth.ts` - API calls
-- `frontend/src/store/slices/auth.ts` - Auth state management  
+- `frontend/src/store/slices/auth.ts` - Auth state management
 - `frontend/src/app/pages/login/` - Login UI
 
 **Note**: Backend JWT system is complete - just need frontend integration.
@@ -243,7 +245,7 @@ npm run build
 ## 💡 **Development Priorities**
 
 1. **Stream Endpoint Implementation** - Only missing piece for video playback
-2. **Frontend TypeScript Fixes** - Fix build errors before adding features  
+2. **Frontend TypeScript Fixes** - Fix build errors before adding features
 3. **Frontend JWT Integration** - Connect to existing backend auth
 4. **Documentation Updates** - Keep docs synchronized with implementation
 
