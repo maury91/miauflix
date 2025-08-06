@@ -30,13 +30,13 @@ Start here and go deeper as needed:
 
 ### Infrastructure & Operations
 
-| Document                                                          | Focus Area | Key Topics                                                  | Status                                       |
-| ----------------------------------------------------------------- | ---------- | ----------------------------------------------------------- | -------------------------------------------- |
-| [**Security Implementation**](../backend/docs/security.md)        | Security   | Encryption, audit logging, security middleware              | ✅ Complete                                  |
-| [**Media Services**](../backend/docs/media-services.md)           | Streaming  | Video streaming, torrent integration, quality management    | ⚠️ Partially complete                        |
-| [**Streaming Services**](../backend/docs/streaming-services.md)   | Streaming  | **Updated:** WebTorrent infrastructure vs missing endpoints | ⚠️ Infrastructure complete, endpoint missing |
-| [**VPN Fallback System**](../backend/docs/vpn-fallback-system.md) | Network    | VPN management, failover strategies, network resilience     | ✅ Complete                                  |
-| [**Reverse Proxy Setup**](../backend/docs/reverse-proxy.md)       | Deployment | Nginx configuration, SSL setup, load balancing              | ✅ Complete                                  |
+| Document                                                          | Focus Area | Key Topics                                                    | Status                |
+| ----------------------------------------------------------------- | ---------- | ------------------------------------------------------------- | --------------------- |
+| [**Security Implementation**](../backend/docs/security.md)        | Security   | Encryption, audit logging, security middleware                | ✅ Complete           |
+| [**Media Services**](../backend/docs/media-services.md)           | Streaming  | Video streaming, torrent integration, quality management      | ⚠️ Partially complete |
+| [**Streaming Services**](../backend/docs/streaming-services.md)   | Streaming  | **Updated:** WebTorrent infrastructure and streaming endpoint | ✅ Complete           |
+| [**VPN Fallback System**](../backend/docs/vpn-fallback-system.md) | Network    | VPN management, failover strategies, network resilience       | ✅ Complete           |
+| [**Reverse Proxy Setup**](../backend/docs/reverse-proxy.md)       | Deployment | Nginx configuration, SSL setup, load balancing                | ✅ Complete           |
 
 ## 🗺️ Documentation Navigation
 
@@ -67,12 +67,14 @@ Start here and go deeper as needed:
 
 - **Source Aggregation**: Multi-provider system (YTS + THERARBG) with background processing
 - **WebTorrent Infrastructure**: Complete client with tracker management and stats scraping
+- **Streaming Infrastructure**: Complete `/stream/:token` endpoint with quality selection and range requests
 - **Authentication**: Full JWT system with refresh tokens and role-based access
 - **Database Layer**: Complete entity model with encryption and repository pattern
 - **Background Tasks**: All 7 scheduled tasks operational
 
-### ❌ Missing Critical Components
+### ❌ Missing Secondary Components
 
 - **Viewport Preload**: `/api/ui/viewport` endpoint missing (performance optimization)
+- **Frontend JWT Integration**: Frontend needs to connect to existing backend authentication
 
 > **Tip:** Consult Level 2 docs when exploring, then Level 3 guides when building features. Specialized docs provide deep technical implementation details. Check implementation status in task-file-mapping.md before starting development.
