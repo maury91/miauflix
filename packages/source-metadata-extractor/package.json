@@ -31,7 +31,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/miauflix/miauflix-bun.git",
+    "url": "https://github.com/miauflix/miauflix.git",
     "directory": "packages/source-metadata-extractor"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 ## 📚 Backend Documentation Overview
 
-This directory organizes the **miauflix-bun** backend docs by complexity.
+This directory organizes the **miauflix** backend docs by complexity.
 Start here and go deeper as needed:
 
 | Level | File                                                                          | What You'll Find                                                         |
