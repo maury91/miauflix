@@ -1,6 +1,6 @@
-# Workflow Guide for miauflix-bun
+# Workflow Guide for miauflix
 
-This guide provides practical, step-by-step workflows for common development tasks in the miauflix-bun project. It focuses on actionable procedures and real-world scenarios developers will encounter.
+This guide provides practical, step-by-step workflows for common development tasks in the miauflix project. It focuses on actionable procedures and real-world scenarios developers will encounter.
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ Before starting any workflow, ensure you have:
 ```bash
 # Clone and setup
 git clone <repository-url>
-cd miauflix-bun
+cd miauflix
 
 # Install dependencies (always from root)
 npm install
@@ -87,7 +87,6 @@ This is the most complex workflow in the project. Follow these steps to integrat
 ### Step 1: API Analysis and Planning
 
 1. **Review API Documentation**
-
    - Rate limits and authentication requirements
    - Data structure and response formats
    - Available endpoints and parameters
@@ -195,7 +194,6 @@ npm run test:backend -- newservice.api.test.ts
    ```
 
 2. **Identify Copyrighted Content**
-
    - Movie/TV show titles
    - Plot descriptions
    - Poster/image URLs
@@ -398,7 +396,6 @@ npm run docker:cleanup
 ### Encryption and Data Protection
 
 1. **Encryption Algorithm Verification**
-
    - Verify AES-256-GCM usage
    - Check key management practices
    - Validate IV/salt generation
@@ -695,4 +692,4 @@ For detailed testing information, see **[Testing Infrastructure](testing-infrast
 - Ensure SQLite database permissions and directory structure
 - Test external API connectivity (TMDB, Trakt) separately
 
-This workflow guide provides the practical foundation for efficient development in the miauflix-bun project while maintaining compliance with security and testing requirements.
+This workflow guide provides the practical foundation for efficient development in the miauflix project while maintaining compliance with security and testing requirements.

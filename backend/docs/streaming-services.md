@@ -113,12 +113,13 @@ DISABLE_VPN_CHECK=false   # VPN required for source search
 - ✅ Authentication and security middleware
 - ✅ Background processing and scheduling
 
-### ❌ Phase 2: Streaming Endpoint (Missing)
+### ✅ Phase 2: Streaming Endpoint (Complete)
 
-- ❌ `/api/stream/:sourceId` route implementation
-- ❌ Range request handling for video streaming
-- ❌ Stream session management
-- ❌ Connection cleanup on client disconnect
+- ✅ `/stream/:token` route implementation with streaming key authentication
+- ✅ Range request handling for video streaming and seeking
+- ✅ Quality and codec preference selection (auto, specific quality, HEVC support)
+- ✅ Comprehensive error handling and rate limiting (60 req/min)
+- ✅ Stream source optimization and fallback logic
 
 ### 📋 Phase 3: Advanced Features (Planned)
 
@@ -127,13 +128,15 @@ DISABLE_VPN_CHECK=false   # VPN required for source search
 - 📋 Adaptive quality streaming
 - 📋 Subtitle integration
 
-## Implementation Estimate
+## Implementation Status
 
-**Stream Endpoint**: ~8 hours (as per `backend#stream` todo)
+**Stream Endpoint**: ✅ COMPLETED
 
-- All infrastructure exists
-- Requires HTTP Range request handling
-- WebTorrent stream piping to HTTP response
-- Connection cleanup and error handling
+- All infrastructure exists and is operational
+- HTTP Range request handling implemented
+- WebTorrent stream piping to HTTP response working
+- Connection cleanup and error handling implemented
+- Quality selection and codec preferences supported
+- Streaming key authentication with timing attack protection
 
-**Impact**: Once implemented, enables full video streaming functionality with all security, authentication, and source discovery already working.
+**Current Status**: Full video streaming functionality is operational with all security, authentication, and source discovery working in production.

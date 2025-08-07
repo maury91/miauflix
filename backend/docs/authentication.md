@@ -2,7 +2,7 @@
 
 ### Overview
 
-Miauflix-bun uses a **hybrid authentication model**: local e-mail/password accounts (**required**) with an optional Trakt.tv link (**one per user**).  
+Miauflix uses a **hybrid authentication model**: local e-mail/password accounts (**required**) with an optional Trakt.tv link (**one per user**).  
 Authentication is enforced with the `authGuard` middleware **only on routes that need it**; a few endpoints remain public (see list below).
 
 ## Security Features
