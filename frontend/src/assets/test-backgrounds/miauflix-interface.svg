@@ -1,0 +1,109 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Balanced background gradient using Miauflix colors -->
+    <radialGradient id="bgGradient" cx="50%" cy="30%" r="100%">
+      <stop offset="0%" style="stop-color:#2d3748;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a202c;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Movie card gradient -->
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a5568;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d3748;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Miauflix accent card -->
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f56565;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#db202c;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="1920" height="1080" fill="url(#bgGradient)"/>
+  
+  <!-- Top navigation bar -->
+  <rect x="0" y="0" width="1920" height="80" fill="#0d1117" opacity="0.9"/>
+  <rect x="40" y="20" width="120" height="40" fill="#db202c" rx="8"/> <!-- Miauflix logo -->
+  <rect x="200" y="30" width="80" height="20" fill="#718096" rx="4"/> <!-- Nav item -->
+  <rect x="300" y="30" width="60" height="20" fill="#718096" rx="4"/> <!-- Nav item -->
+  <rect x="380" y="30" width="70" height="20" fill="#718096" rx="4"/> <!-- Nav item -->
+  
+  <!-- Search bar -->
+  <rect x="1400" y="25" width="300" height="30" fill="#2d3748" rx="15" stroke="#4a5568" stroke-width="1"/>
+  <circle cx="1680" cy="40" r="8" fill="#718096"/>
+  
+  <!-- Profile icon -->
+  <circle cx="1800" cy="40" r="20" fill="#718096"/>
+  
+  <!-- Hero section -->
+  <rect x="80" y="120" width="1760" height="320" fill="url(#cardGradient)" rx="12" stroke="#4a5568" stroke-width="1"/>
+  <rect x="100" y="140" width="840" height="280" fill="#2d3748" rx="8" stroke="#4a5568" stroke-width="1"/> <!-- Hero image -->
+  <rect x="960" y="180" width="300" height="40" fill="#e2e8f0" rx="4"/> <!-- Title -->
+  <rect x="960" y="240" width="500" height="16" fill="#a0aec0" rx="2"/> <!-- Description line 1 -->
+  <rect x="960" y="265" width="450" height="16" fill="#a0aec0" rx="2"/> <!-- Description line 2 -->
+  <rect x="960" y="290" width="380" height="16" fill="#a0aec0" rx="2"/> <!-- Description line 3 -->
+  <rect x="960" y="340" width="120" height="40" fill="#db202c" rx="6"/> <!-- Play button -->
+  <rect x="1100" y="340" width="100" height="40" fill="#4a5568" rx="6" stroke="#718096" stroke-width="1"/>
+  
+  <!-- Content rows -->
+  <!-- Row 1: Continue Watching -->
+  <text x="80" y="500" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#e2e8f0">Continue Watching</text>
+  
+  <!-- Movie cards row 1 -->
+  <g transform="translate(80, 520)">
+    <rect x="0" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="10" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="10" y="140" width="180" height="12" fill="#a0aec0" rx="2"/>
+    
+    <!-- Highlighted/selected card with Miauflix colors -->
+    <rect x="300" y="0" width="280" height="160" fill="url(#accentGradient)" rx="8" stroke="#db202c" stroke-width="2"/>
+    <rect x="310" y="10" width="260" height="120" fill="#fed7d7" rx="4" stroke="#f56565" stroke-width="1"/>
+    <rect x="310" y="140" width="160" height="12" fill="#2d3748" rx="2"/>
+    
+    <rect x="600" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="610" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="610" y="140" width="200" height="12" fill="#a0aec0" rx="2"/>
+    
+    <rect x="900" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="910" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="910" y="140" width="170" height="12" fill="#a0aec0" rx="2"/>
+    
+    <rect x="1200" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="1210" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="1210" y="140" width="190" height="12" fill="#a0aec0" rx="2"/>
+  </g>
+  
+  <!-- Row 2: Trending Now -->
+  <text x="80" y="740" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#e2e8f0">Trending Now</text>
+  
+  <!-- Movie cards row 2 -->
+  <g transform="translate(80, 760)">
+    <rect x="0" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="10" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="10" y="140" width="160" height="12" fill="#a0aec0" rx="2"/>
+    
+    <rect x="300" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="310" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="310" y="140" width="220" height="12" fill="#a0aec0" rx="2"/>
+    
+    <rect x="600" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="610" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="610" y="140" width="140" height="12" fill="#a0aec0" rx="2"/>
+    
+    <rect x="900" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="910" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="910" y="140" width="210" height="12" fill="#a0aec0" rx="2"/>
+    
+    <rect x="1200" y="0" width="280" height="160" fill="url(#cardGradient)" rx="8" stroke="#4a5568" stroke-width="1"/>
+    <rect x="1210" y="10" width="260" height="120" fill="#2d3748" rx="4" stroke="#4a5568" stroke-width="1"/>
+    <rect x="1210" y="140" width="180" height="12" fill="#a0aec0" rx="2"/>
+  </g>
+  
+  <!-- Semi-transparent overlay in center for logo visibility -->
+  <rect x="760" y="400" width="400" height="280" fill="rgba(45, 55, 72, 0.4)" rx="20"/>
+  
+  <!-- Subtle Miauflix branding elements -->
+  <circle cx="1850" cy="1050" r="15" fill="#db202c" opacity="0.6"/>
+  <rect x="40" y="1040" width="60" height="4" fill="#db202c" opacity="0.6" rx="2"/>
+</svg>

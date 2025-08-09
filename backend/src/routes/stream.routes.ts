@@ -67,7 +67,7 @@ export const createStreamRoutes = ({
         const { stream, headers, status } = await downloadService.streamFile(source, rangeHeader);
 
         // Return the stream
-        return new Response(stream, {
+        return new Response(stream as unknown as BodyInit, {
           status,
           headers,
         });

@@ -47,6 +47,6 @@
       "@miauflix/types": ["./src/types/api"]
     }
   },
-  "include": ["src/**/*", "src/global.d.ts"],
+  "include": ["src/**/*", "src/global.d.ts", ".storybook/*.ts", "build-ssr.ts"],
   "exclude": ["node_modules", "tmp", "dist"]
 }

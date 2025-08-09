@@ -76,7 +76,7 @@ export class DownloadService {
     this.ready = this.loadTrackers();
 
     // Subscribe to storageService 'delete' events
-    this.storageService.on('delete', storage => {
+    this.storageService.on('delete', async storage => {
       // Get the hash from the associated MovieSource
       const hash = storage.movieSource?.hash;
       if (!hash) {
@@ -87,7 +87,7 @@ export class DownloadService {
         return;
       }
 
-      const torrent = this.client.get(hash);
+      const torrent = await this.client.get(hash);
       if (torrent) {
         this.client.remove(torrent, { destroyStore: true });
         logger.info('DownloadService', `Removed torrent for deleted storage: ${storage.location}`);
@@ -115,7 +115,7 @@ export class DownloadService {
     const allTrackers = [...new Set([...trackers, ...this.bestTrackers])].filter(Boolean);
 
     const params = new URLSearchParams({
-      tr: allTrackers,
+      tr: allTrackers.join(','),
       dn: name,
     });
 

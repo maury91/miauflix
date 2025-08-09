@@ -11,11 +11,20 @@ if (IS_SLOW_DEVICE) {
   gsap.ticker.fps(24);
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>
-);
+// Client-side hydration component
+export function ClientApp() {
+  return (
+    <StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </StrictMode>
+  );
+}
+
+// Hydrate instead of render to match SSR content
+const appElement = document.getElementById('app') as HTMLElement;
+const root = ReactDOM.createRoot(appElement);
+
+// Use hydrate for SSR compatibility
+root.render(<ClientApp />);
