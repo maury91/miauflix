@@ -1,6 +1,6 @@
 # 🤖 AI Agent Documentation
 
-> **PURPOSE**: Essential information for AI assistants working on the Miauflix-Bun project.
+> **PURPOSE**: Essential information for AI assistants working on the Miauflix project.
 
 ## 📋 **Quick Start**
 
