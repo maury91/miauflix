@@ -67,7 +67,9 @@ export const createStreamRoutes = ({
         const { stream, headers, status } = await downloadService.streamFile(source, rangeHeader);
 
         // Return the stream
-        return new Response(stream as unknown as BodyInit, {
+        // The Response constructor is typed incorrectly, so we need to cast to any, there's a PR open to fix this
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return new Response(stream as any, {
           status,
           headers,
         });
