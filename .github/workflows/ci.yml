@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -46,7 +46,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -75,7 +75,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -100,6 +100,98 @@ jobs:
             backend-e2e/admin-credentials.json
             backend-e2e/logs/*.log
             backend-e2e/logs/traces/*.log
+          retention-days: 7
+
+  frontend-visual-tests:
+    runs-on: ubuntu-latest
+    needs: lint-and-type-check
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        working-directory: frontend
+
+      - name: Verify Playwright installation
+        run: npx playwright --version
+        working-directory: frontend
+
+      - name: Build frontend
+        run: npm run build:frontend
+
+      - name: Start Storybook server
+        run: |
+          npm -w frontend run storybook &
+          echo $! > storybook.pid
+          echo "Started Storybook with PID $(cat storybook.pid)"
+        env:
+          NODE_ENV: test
+
+      - name: Wait for Storybook to be ready
+        run: |
+          timeout=60
+          count=0
+          echo "Waiting for Storybook server to be ready..."
+          until curl -f http://localhost:6006 > /dev/null 2>&1; do
+            if [ $count -ge $timeout ]; then
+              echo "Timeout waiting for Storybook server"
+              if [ -f storybook.pid ]; then
+                echo "Killing Storybook process $(cat storybook.pid)"
+                kill $(cat storybook.pid) || true
+                rm -f storybook.pid
+              fi
+              exit 1
+            fi
+            echo "Waiting for Storybook... ($count/$timeout)"
+            sleep 1
+            count=$((count + 1))
+          done
+          echo "Storybook server is ready!"
+
+      - name: Run visual tests
+        run: npm run test:frontend:visual
+        env:
+          NODE_ENV: test
+        timeout-minutes: 10
+
+      - name: Stop Storybook server
+        if: always()
+        run: |
+          if [ -f storybook.pid ]; then
+            echo "Stopping Storybook process $(cat storybook.pid)"
+            kill $(cat storybook.pid) || true
+            rm -f storybook.pid
+          fi
+          # Also kill any remaining node processes on port 6006
+          pkill -f "storybook.*6006" || true
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            frontend/playwright-report/
+            frontend/test-results/
+          retention-days: 7
+
+      - name: Upload visual test screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-failures
+          path: frontend/test-results/
           retention-days: 7
 
   # Disabled until we are ready for production
