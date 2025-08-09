@@ -154,11 +154,19 @@ describe('DownloadService', () => {
 
       const result = service.generateLink(hash, trackers, name);
 
-      expect(result).toMatchInlineSnapshot(
-        `"magnet:?xt=urn:btih:abcdef1234567890abcdef1234567890abcdef12&tr=udp%3A%2F%2Ftracker5.example.com%3A1337%2Cudp%3A%2F%2Ftracker2.example.com%3A1337%2Cudp%3A%2F%2Ftracker3.example.com%3A1337%2Cudp%3A%2F%2Ftracker1.example.com%3A1337&dn=Test+Movie"`
-      );
-      expect(result).toContain('dn=Test+Movie'); // URL encoding uses + for spaces
+      // Check that each tracker is a separate 'tr' parameter
       expect(result).toContain('tr=udp%3A%2F%2Ftracker5.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker2.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker3.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker1.example.com%3A1337');
+      expect(result).toContain('dn=Test+Movie'); // URL encoding uses + for spaces
+
+      // Verify the structure: should have multiple tr= parameters, not comma-separated
+      const trParams = result.match(/tr=[^&]+/g);
+      expect(trParams).toHaveLength(4);
+
+      // Verify no comma-separated trackers
+      expect(result).not.toContain('tr=udp%3A%2F%2Ftracker5.example.com%3A1337%2C');
     });
 
     it('should handle empty trackers array', () => {
@@ -167,9 +175,17 @@ describe('DownloadService', () => {
 
       const result = service.generateLink(hash, trackers);
 
-      expect(result).toMatchInlineSnapshot(
-        `"magnet:?xt=urn:btih:abcdef1234567890abcdef1234567890abcdef12&tr=udp%3A%2F%2Ftracker2.example.com%3A1337%2Cudp%3A%2F%2Ftracker3.example.com%3A1337%2Cudp%3A%2F%2Ftracker1.example.com%3A1337&dn="`
-      );
+      // Should only contain the best trackers (no user trackers)
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker2.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker3.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker1.example.com%3A1337');
+
+      // Verify the structure: should have 3 tr= parameters
+      const trParams = result.match(/tr=[^&]+/g);
+      expect(trParams).toHaveLength(3);
+
+      // Verify no comma-separated trackers
+      expect(result).not.toContain('tr=udp%3A%2F%2Ftracker2.example.com%3A1337%2C');
     });
 
     it('should deduplicate trackers', () => {
@@ -178,9 +194,18 @@ describe('DownloadService', () => {
 
       const result = service.generateLink(hash, trackers);
 
-      expect(result).toMatchInlineSnapshot(
-        `"magnet:?xt=urn:btih:abcdef1234567890abcdef1234567890abcdef12&tr=udp%3A%2F%2Ftracker4.example.com%3A1337%2Cudp%3A%2F%2Ftracker2.example.com%3A1337%2Cudp%3A%2F%2Ftracker3.example.com%3A1337%2Cudp%3A%2F%2Ftracker1.example.com%3A1337&dn="`
-      );
+      // Should deduplicate user trackers and include best trackers
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker4.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker2.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker3.example.com%3A1337');
+      expect(result).toContain('tr=udp%3A%2F%2Ftracker1.example.com%3A1337');
+
+      // Verify the structure: should have 4 tr= parameters (1 unique user + 3 best)
+      const trParams = result.match(/tr=[^&]+/g);
+      expect(trParams).toHaveLength(4);
+
+      // Verify no comma-separated trackers
+      expect(result).not.toContain('tr=udp%3A%2F%2Ftracker4.example.com%3A1337%2C');
     });
   });
 

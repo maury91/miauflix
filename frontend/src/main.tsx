@@ -22,9 +22,14 @@ export function ClientApp() {
   );
 }
 
-// Hydrate instead of render to match SSR content
-const appElement = document.getElementById('app') as HTMLElement;
-const root = ReactDOM.createRoot(appElement);
-
-// Use hydrate for SSR compatibility
-root.render(<ClientApp />);
+// Hydrate when SSR markup exists; otherwise render
+const appElement = document.getElementById('app');
+if (appElement?.hasChildNodes()) {
+  ReactDOM.hydrateRoot(appElement, <ClientApp />);
+} else if (appElement) {
+  ReactDOM.createRoot(appElement).render(<ClientApp />);
+} else {
+  // Helps debug unexpected container changes
+  // eslint-disable-next-line no-console
+  console.error('App root element #app not found.');
+}

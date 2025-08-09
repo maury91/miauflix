@@ -52,9 +52,39 @@ export function App() {
   useEffect(() => {
     if (backgrounds.length && logoRef.current) {
       const backgroundImg = new Image();
-      backgroundImg.src = backgrounds[0];
-      backgroundImg.onload = () => {
+
+      const handleLoad = () => {
         logoRef.current?.start();
+      };
+
+      const handleError = (error: Event | string) => {
+        console.warn('Background image failed to load:', error);
+        // Start logo animation anyway to prevent UI from getting stuck
+        logoRef.current?.start();
+      };
+
+      // Set up event listeners
+      backgroundImg.onload = handleLoad;
+      backgroundImg.onerror = handleError;
+
+      // Set the source to trigger loading
+      backgroundImg.src = backgrounds[0];
+
+      // Handle case where image is already cached/complete
+      if (backgroundImg.complete) {
+        if (backgroundImg.naturalWidth > 0) {
+          // Image loaded successfully
+          handleLoad();
+        } else {
+          // Image failed to load
+          handleError('Image failed to load (cached)');
+        }
+      }
+
+      // Cleanup function to prevent memory leaks
+      return () => {
+        backgroundImg.onload = null;
+        backgroundImg.onerror = null;
       };
     }
   }, [backgrounds, preloadHomeImages]);
