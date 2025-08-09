@@ -1,6 +1,6 @@
 import { useControls } from '@hooks/useControls';
 import type { MediaDto } from '@miauflix/backend-client';
-import { ListDto } from '@miauflix/backend-client';
+import type { ListDto } from '@miauflix/backend-client';
 import {
   FocusContext,
   getCurrentFocusKey,

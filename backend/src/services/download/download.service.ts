@@ -114,10 +114,16 @@ export class DownloadService {
   generateLink(hash: string, trackers: string[], name = ''): string {
     const allTrackers = [...new Set([...trackers, ...this.bestTrackers])].filter(Boolean);
 
-    const params = new URLSearchParams({
-      tr: allTrackers.join(','),
-      dn: name,
+    const params = new URLSearchParams();
+
+    // Add each tracker as a separate 'tr' parameter for magnet URI compliance
+    allTrackers.forEach(tracker => {
+      params.append('tr', tracker);
     });
+
+    if (name) {
+      params.set('dn', name);
+    }
 
     return `magnet:?xt=urn:btih:${hash}&${params.toString()}`;
   }
@@ -549,14 +555,7 @@ export class DownloadService {
    * Based on WebTorrent server implementation
    */
   @traced('DownloadService')
-  async streamFile(
-    movieSource: MovieSource,
-    rangeHeader?: string
-  ): Promise<{
-    stream: Readable;
-    headers: Record<string, string>;
-    status: number;
-  }> {
+  async streamFile(movieSource: MovieSource, rangeHeader?: string): Promise<Response> {
     return new Promise(resolve => {
       const handleRequest = async () => {
         const { torrent } = await this.startDownload(movieSource);
@@ -587,16 +586,36 @@ export class DownloadService {
         } else {
           headers['Content-Length'] = String(file.length);
         }
+
         // Create readable stream from file using WebTorrent's createReadStream
         const iterator = file[Symbol.asyncIterator](range || {});
+        const readableStream = Readable.from(iterator);
 
-        const stream = Readable.from(iterator);
+        // Convert Node.js Readable to ReadableStream (Web Streams API)
+        const webReadableStream = new ReadableStream({
+          start(controller) {
+            readableStream.on('data', (chunk: Buffer) => {
+              controller.enqueue(chunk);
+            });
 
-        resolve({
-          stream,
-          headers,
-          status,
+            readableStream.on('end', () => {
+              controller.close();
+            });
+
+            readableStream.on('error', (error: Error) => {
+              logger.error('DownloadService', 'Stream error:', error);
+              controller.error(error);
+            });
+          },
         });
+
+        // Create Response with the Web ReadableStream and headers
+        const response = new Response(webReadableStream, {
+          status,
+          headers,
+        });
+
+        resolve(response);
       };
 
       if (this.client.ready) {

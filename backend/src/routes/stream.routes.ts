@@ -64,15 +64,7 @@ export const createStreamRoutes = ({
 
         // Stream the file
         const rangeHeader = context.req.header('range');
-        const { stream, headers, status } = await downloadService.streamFile(source, rangeHeader);
-
-        // Return the stream
-        // The Response constructor is typed incorrectly, so we need to cast to any, there's a PR open to fix this
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return new Response(stream as any, {
-          status,
-          headers,
-        });
+        return await downloadService.streamFile(source, rangeHeader);
       } catch (error: unknown) {
         console.error('Failed to stream content:', error);
 

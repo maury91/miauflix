@@ -2,11 +2,11 @@
 import './ssr-mocks';
 
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { ServerStyleSheet } from 'styled-components';
 
-import App from './app/app';
+import { App } from './app/app';
 import { store } from './store/store';
 
 interface RenderResult {
@@ -29,7 +29,7 @@ export function render(_clientAssets: string[] = []): RenderResult {
     );
 
     // Render to HTML string
-    const appHtml = ReactDOMServer.renderToString(sheet.collectStyles(appElement));
+    const appHtml = renderToString(sheet.collectStyles(appElement));
 
     // Get the collected styles
     const styleTags = sheet.getStyleTags();
