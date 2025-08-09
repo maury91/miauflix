@@ -14,9 +14,18 @@ export default defineConfig(async env => {
   }
   const baseConfig = configFile.config;
 
+  // Convert existing aliases (object or array) into an array of { find, replacement }
+  const baseAliases = Array.isArray(baseConfig.resolve?.alias)
+    ? baseConfig.resolve.alias
+    : Object.entries(baseConfig.resolve?.alias ?? {}).map(([find, replacement]) => ({
+        find,
+        replacement: replacement as string,
+      }));
+
   return mergeConfig(baseConfig, {
     resolve: {
       alias: [
+        ...baseAliases,
         // Replace problematic imports with SSR-safe mocks
         { find: /^gsap$/, replacement: path.resolve(dirname, 'src/ssr-mocks.ts') },
         { find: /^gsap\/.*$/, replacement: path.resolve(dirname, 'src/ssr-mocks.ts') },
