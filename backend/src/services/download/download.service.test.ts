@@ -454,7 +454,7 @@ describe('DownloadService', () => {
   //   });
 
   describe('storage delete event handling', () => {
-    it('should remove torrent when storage is deleted with valid hash', () => {
+    it('should remove torrent when storage is deleted with valid hash', async () => {
       service = new DownloadService(mockStorageService);
 
       // Mock a torrent in the client
@@ -480,7 +480,7 @@ describe('DownloadService', () => {
       });
 
       // Trigger the delete event
-      deleteHandler(mockStorage);
+      await deleteHandler(mockStorage);
 
       expect(service.client.get).toHaveBeenCalledWith('testhash123');
       expect(service.client.remove).toHaveBeenCalledWith(mockTorrent, { destroyStore: true });

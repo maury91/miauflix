@@ -1,3 +1,5 @@
+import storybook from 'eslint-plugin-storybook';
+
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -12,7 +14,7 @@ export default [
       sourceType: 'module',
       parser: tsParser,
       parserOptions: {
-        project: 'tsconfig.app.json',
+        project: 'tsconfig.json',
         tsconfigRootDir: process.cwd(),
         ecmaFeatures: { jsx: true },
       },
@@ -33,4 +35,5 @@ export default [
       '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
+  ...storybook.configs['flat/recommended'],
 ];
