@@ -42,7 +42,7 @@ Miauflix is a self-hosted streaming platform that discovers and streams media co
 
 - REST API built with Hono framework
 - Service classes for business logic (Auth, Media, Source, Download)
-- Routes: `/movies`, `/auth`, `/stream` (in progress)
+- Routes: `/movies`, `/auth`, `/stream` (complete)
 - Middleware: JWT auth, rate limiting, audit logging
 
 #### 3. Database
@@ -64,17 +64,14 @@ Miauflix is a self-hosted streaming platform that discovers and streams media co
 #### Media Entities
 
 1. **Movie**: Film metadata with TMDB integration
-
    - Fields: `tmdbId`, `title`, `overview`, `releaseDate`, `poster`, `backdrop`, `runtime`, `budget`, `revenue`, `popularity`, `rating`
    - Relationships: `MovieSource[]`, `Genre[]`, `MovieTranslation[]`
 
 2. **TVShow**: Television series metadata (CORRECTED SCHEMA)
-
    - Fields: `tmdbId`, `name`, `overview`, `firstAirDate`, `poster`, `backdrop`, `status`, `tagline`, `type`, `inProduction`, `episodeRunTime[]`, `popularity`, `rating`
    - Relationships: `Season[]`, `Genre[]`, `TVShowTranslation[]`
 
 3. **Season**: TV show season information
-
    - Fields: `seasonNumber`, `name`, `overview`, `airDate`, `episodeCount`, `poster`
    - Relationships: `TVShow`, `Episode[]`
 
@@ -91,7 +88,6 @@ Miauflix is a self-hosted streaming platform that discovers and streams media co
 #### User Management
 
 6. **User**: Application users with role-based access
-
    - Fields: `username`, `passwordHash`, `role`, `isActive`
    - Relationships: `RefreshToken[]`, `TraktUser?`
 
@@ -102,12 +98,10 @@ Miauflix is a self-hosted streaming platform that discovers and streams media co
 #### Content Organization
 
 8. **MediaList**: Curated content collections
-
    - Fields: `name`, `description`, `isPublic`
    - Relationships: `Movie[]`, `TVShow[]`
 
 9. **Genre**: Content categorization
-
    - Fields: `tmdbId`, `name`
    - Relationships: `Movie[]`, `TVShow[]`, `GenreTranslation[]`
 
@@ -118,11 +112,9 @@ Miauflix is a self-hosted streaming platform that discovers and streams media co
 #### System Management
 
 11. **Storage**: Download progress tracking
-
     - Fields: `infoHash`, `downloadProgress`, `uploadProgress`, `status`, `peers`, `downloaded`, `uploaded`
 
 12. **SyncState**: Synchronization state tracking
-
     - Fields: `key`, `lastSync`, `data`
 
 13. **AuditLog**: Security and activity logging
@@ -141,28 +133,24 @@ Miauflix is a self-hosted streaming platform that discovers and streams media co
 The system implements automated background processing with the following scheduled tasks:
 
 1. **List Refresh** (`refreshLists`)
-
    - **Interval**: 1 hour (3600 seconds)
    - **Function**: Synchronizes media lists and categories
    - **Service**: `ListSynchronizer.synchronize()`
    - **Status**: ✅ Active
 
 2. **Movie Synchronization** (`syncMovies`)
-
    - **Interval**: 1.5 hours (5400 seconds)
    - **Function**: Updates movie metadata from TMDB
    - **Service**: `MediaService.syncMovies()`
    - **Status**: ✅ Active
 
 3. **Season Completion** (`syncIncompleteSeasons`)
-
    - **Interval**: 1 second
    - **Function**: Completes partial TV show season data
    - **Service**: `MediaService.syncIncompleteSeasons()`
    - **Status**: ✅ Active
 
 4. **Movie Source Discovery** (`movieSourceSearch`)
-
    - **Interval**: 0.1 seconds (100ms)
    - **Function**: **✅ FULLY IMPLEMENTED** - Multi-provider torrent source discovery (YTS + THERARBG)
    - **Service**: `SourceService.searchSourcesForMovies()`
@@ -170,7 +158,6 @@ The system implements automated background processing with the following schedul
    - **Status**: ✅ Production ready
 
 5. **Torrent File Processing** (`dataFileSearch`)
-
    - **Interval**: 0.2 seconds (200ms)
    - **Function**: **✅ FULLY IMPLEMENTED** - Downloads and validates torrent files
    - **Service**: `SourceService.syncMissingSourceFiles()`
@@ -178,7 +165,6 @@ The system implements automated background processing with the following schedul
    - **Status**: ✅ Production ready
 
 6. **Source Statistics Update** (`updateSourcesStats`)
-
    - **Interval**: 2 seconds
    - **Function**: **✅ FULLY IMPLEMENTED** - Updates seeds/peers statistics via tracker scraping
    - **Service**: `SourceService.syncStatsForSources()`
@@ -221,13 +207,11 @@ The system implements automated background processing with the following schedul
 - **Encryption**: AES-256-GCM field-level encryption for sensitive data
 - **VPN Detection**: Automatic VPN status monitoring with service integration
 
-### ❌ Missing Critical Components
+#### Streaming Endpoint (Now Complete)
 
-#### Streaming Endpoint (Single Missing Piece)
-
-- **Stream Route**: `/api/stream/:sourceId` endpoint not implemented
-- **Impact**: Prevents video playback despite all infrastructure being ready
-- **Estimate**: ~8 hours implementation (Range request handling, stream piping)
+- **Stream Route**: `/stream/:token` endpoint fully implemented
+- **Features**: Range request handling, quality selection, HEVC support, rate limiting
+- **Impact**: Full video playback functionality is now operational
 
 #### Viewport Preload (Secondary Priority)
 

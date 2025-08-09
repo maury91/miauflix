@@ -1,6 +1,6 @@
-# Roo Code Configuration for miauflix-bun
+# Roo Code Configuration for miauflix
 
-This document provides comprehensive documentation for the Roo Code configuration implemented in the miauflix-bun project. The configuration is designed to optimize development workflows for a media streaming platform with specialized modes, testing patterns, and integration workflows.
+This document provides comprehensive documentation for the Roo Code configuration implemented in the miauflix project. The configuration is designed to optimize development workflows for a media streaming platform with specialized modes, testing patterns, and integration workflows.
 
 ## Overview
 
@@ -15,7 +15,7 @@ The Roo Code configuration consists of four main configuration files in the [`.r
 
 ### Project Structure
 
-The configuration defines miauflix-bun as a **media-streaming-platform** with the following tech stack:
+The configuration defines miauflix as a **media-streaming-platform** with the following tech stack:
 
 ```json
 {
