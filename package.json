@@ -7,7 +7,7 @@
     "lint:fix": "npm -w backend run lint -- --fix",
     "format": "prettier --write \"{backend,backend-e2e,packages,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "format:check": "prettier --check \"{backend,backend-e2e,packages,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
-    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){ process.exit(1)} \" || husky",
+    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production' && !process.env.CI){ process.exit(1)} \" || (command -v husky >/dev/null 2>&1 && husky || true)",
     "build": "npm -w backend run build && npm -w frontend run build",
     "build:backend": "npm -w backend run build",
     "build:frontend": "npm -w frontend run build",

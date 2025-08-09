@@ -45,10 +45,19 @@ const getLogoStyle = (currentPage: Page, margin: number) => {
 export const Logo = () => {
   const { margin } = useMediaBoxSizes();
   const currentPage = useAppSelector(state => state.app.currentPage);
+  const logoStyle = getLogoStyle(currentPage, margin);
+
+  // Check if we're in SSR using the flag set in ssr-mocks.ts
+  const isSSR = typeof window !== 'undefined' && window.__SSR__;
+
   return (
     <MotionConfig transition={{ duration: 0.4 }}>
       <AnimatePresence initial={false}>
-        <LogoContainer key="logoLeft" animate={getLogoStyle(currentPage, margin)}>
+        <LogoContainer
+          key="logoLeft"
+          animate={isSSR ? undefined : logoStyle}
+          style={isSSR ? logoStyle : undefined}
+        >
           <SVGLogo />
         </LogoContainer>
       </AnimatePresence>
