@@ -17,7 +17,7 @@
     "build:source-metadata-extractor": "npm -w packages/source-metadata-extractor run build",
     "build:libs": "npm run build:source-metadata-extractor && npm run build:therarbg-sanitizer && npm run build:yts-sanitizer",
     "build:all:backend": "npm run build:libs && npm run build:backend && npm run build:backend-client",
-    "build:all": "npm run build:all:backend && npm run build:all:frontend",
+    "build:all": "npm run build:all:backend && npm run build:frontend",
     "start": "npm run start:backend",
     "start:backend": "npm -w backend start",
     "start:backend:prod": "npm -w backend run start:prod",
