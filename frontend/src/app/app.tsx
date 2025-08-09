@@ -87,6 +87,7 @@ export function App() {
         backgroundImg.onerror = null;
       };
     }
+    return () => {};
   }, [backgrounds, preloadHomeImages]);
 
   return (
