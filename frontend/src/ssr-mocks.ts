@@ -63,6 +63,14 @@ if (
     configurable: true,
     value: 1080,
   });
+
+  // Set SSR detection flag after JSDOM initialization
+  Object.defineProperty(dom.window, '__SSR__', {
+    writable: false,
+    configurable: false,
+    value: true,
+  });
+  globalThis.__SSR__ = true;
 }
 
 // Mock gsap for SSR
