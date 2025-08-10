@@ -1,9 +1,9 @@
+import { createHash } from 'node:crypto';
+
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
-import { createHash } from 'crypto';
 import MemoryChunkStore from 'memory-chunk-store';
-import { Readable } from 'streamx';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
@@ -76,7 +76,7 @@ export class DownloadService {
     this.ready = this.loadTrackers();
 
     // Subscribe to storageService 'delete' events
-    this.storageService.on('delete', storage => {
+    this.storageService.on('delete', async storage => {
       // Get the hash from the associated MovieSource
       const hash = storage.movieSource?.hash;
       if (!hash) {
@@ -87,7 +87,7 @@ export class DownloadService {
         return;
       }
 
-      const torrent = this.client.get(hash);
+      const torrent = await this.client.get(hash);
       if (torrent) {
         this.client.remove(torrent, { destroyStore: true });
         logger.info('DownloadService', `Removed torrent for deleted storage: ${storage.location}`);
@@ -114,10 +114,16 @@ export class DownloadService {
   generateLink(hash: string, trackers: string[], name = ''): string {
     const allTrackers = [...new Set([...trackers, ...this.bestTrackers])].filter(Boolean);
 
-    const params = new URLSearchParams({
-      tr: allTrackers,
-      dn: name,
+    const params = new URLSearchParams();
+
+    // Add each tracker as a separate 'tr' parameter for magnet URI compliance
+    allTrackers.forEach(tracker => {
+      params.append('tr', tracker);
     });
+
+    if (name) {
+      params.set('dn', name);
+    }
 
     return `magnet:?xt=urn:btih:${hash}&${params.toString()}`;
   }
@@ -549,14 +555,7 @@ export class DownloadService {
    * Based on WebTorrent server implementation
    */
   @traced('DownloadService')
-  async streamFile(
-    movieSource: MovieSource,
-    rangeHeader?: string
-  ): Promise<{
-    stream: Readable;
-    headers: Record<string, string>;
-    status: number;
-  }> {
+  async streamFile(movieSource: MovieSource, rangeHeader?: string): Promise<Response> {
     return new Promise(resolve => {
       const handleRequest = async () => {
         const { torrent } = await this.startDownload(movieSource);
@@ -587,16 +586,60 @@ export class DownloadService {
         } else {
           headers['Content-Length'] = String(file.length);
         }
-        // Create readable stream from file using WebTorrent's createReadStream
-        const iterator = file[Symbol.asyncIterator](range || {});
 
-        const stream = Readable.from(iterator);
+        const webReadableStream = new ReadableStream({
+          async start(controller) {
+            try {
+              const iterator = file[Symbol.asyncIterator](range || {});
 
-        resolve({
-          stream,
-          headers,
-          status,
+              while (true) {
+                const result = await iterator.next();
+
+                if (result.done) {
+                  controller.close();
+                  break;
+                }
+
+                // Check if the stream has been cancelled
+                if (controller.desiredSize === null) {
+                  break;
+                }
+
+                // Wait for backpressure to clear if needed
+                if (controller.desiredSize !== null && controller.desiredSize <= 0) {
+                  await new Promise(resolve => {
+                    const checkBackpressure = () => {
+                      const desiredSize = controller.desiredSize;
+                      if (desiredSize !== null && desiredSize > 0) {
+                        resolve(undefined);
+                      } else {
+                        setTimeout(checkBackpressure, 10);
+                      }
+                    };
+                    checkBackpressure();
+                  });
+                }
+
+                controller.enqueue(result.value);
+              }
+            } catch (error) {
+              controller.error(error);
+            }
+          },
+
+          cancel() {
+            // Clean up if the stream is cancelled
+            logger.debug('DownloadService', 'Stream cancelled by client');
+          },
         });
+
+        // Create Response with the Web ReadableStream and headers
+        const response = new Response(webReadableStream, {
+          status,
+          headers,
+        });
+
+        resolve(response);
       };
 
       if (this.client.ready) {

@@ -223,10 +223,8 @@ Frontend needs to integrate with existing backend authentication system.
 
 ## 💡 **Development Priorities**
 
-1. **Stream Endpoint Implementation** - Only missing piece for video playback
-2. **Frontend TypeScript Fixes** - Fix build errors before adding features
-3. **Frontend JWT Integration** - Connect to existing backend auth
-4. **Documentation Updates** - Keep docs synchronized with implementation
+2. **Frontend JWT Integration** - Connect to existing backend auth
+3. **Documentation Updates** - Keep docs synchronized with implementation
 
 ## 📁 **Quick File References**
 
