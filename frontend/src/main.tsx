@@ -3,7 +3,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 
-import App from './app/app';
+import { App } from './app/app';
 import { IS_SLOW_DEVICE } from './consts';
 import { store } from './store/store';
 
