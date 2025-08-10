@@ -9,8 +9,7 @@ if (
   typeof document === 'undefined' &&
   !process.env['STORYBOOK'] &&
   !process.env['VITEST'] &&
-  !process.env['JEST_WORKER_ID'] &&
-  !process.env['NODE_ENV']?.includes('test')
+  !process.env['JEST_WORKER_ID']
 ) {
   const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
     url: 'http://localhost:4173',
