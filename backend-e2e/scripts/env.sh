@@ -182,7 +182,7 @@ trap cleanup EXIT INT TERM
 if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Build libraries only when starting fresh - ensure we're in root directory
     cd "$root_dir"
-    npm run build:all
+    npm run build:all:backend
     npm install # Links the libraries 
 
     # Clean up previous build artifacts

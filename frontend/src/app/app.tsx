@@ -6,13 +6,15 @@ import {
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ExpoScaleEase } from 'gsap/EasePack';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+
+import { IS_TIZEN } from '@/consts';
 
 import LoginPage from '../pages/LoginPage';
 import { useGetListsQuery } from '../store/api/lists';
 import { usePrefetch } from '../store/api/lists';
 import { useAppSelector } from '../store/store';
-import { introAnimation } from './animations/intro';
+import { IntroAnimation, type LogoAnimationHandle } from './animations/intro';
 import { Background, BackgroundContainer, SimpleBackground } from './components/background';
 import { Logo } from './components/logo';
 import { Home } from './pages/home';
@@ -36,6 +38,7 @@ export function App() {
   const backgrounds = useAppSelector(state => state.app.backgrounds);
   const currentPage = useAppSelector(state => state.app.currentPage);
   const preloadHomeImages = usePreloadHomeImages();
+  const logoRef = useRef<LogoAnimationHandle>(null);
 
   useEffect(() => {
     if (firstCategory) {
@@ -47,49 +50,90 @@ export function App() {
   }, [firstCategory, prefetchList]);
 
   useEffect(() => {
-    if (backgrounds.length) {
+    if (backgrounds.length && logoRef.current) {
       const backgroundImg = new Image();
+
+      const handleLoad = () => {
+        logoRef.current?.start();
+      };
+
+      const handleError = (error: Event | string) => {
+        console.warn('Background image failed to load:', error);
+        // Start logo animation anyway to prevent UI from getting stuck
+        logoRef.current?.start();
+      };
+
+      // Set up event listeners
+      backgroundImg.onload = handleLoad;
+      backgroundImg.onerror = handleError;
+
+      // Set the source to trigger loading
       backgroundImg.src = backgrounds[0];
-      backgroundImg.onload = () =>
-        introAnimation(() => {
-          resumeSpatialNavigation();
-          preloadHomeImages();
-        });
+
+      // Handle case where image is already cached/complete
+      if (backgroundImg.complete) {
+        if (backgroundImg.naturalWidth > 0) {
+          // Image loaded successfully
+          handleLoad();
+        } else {
+          // Image failed to load
+          handleError('Image failed to load (cached)');
+        }
+      }
+
+      // Cleanup function to prevent memory leaks
+      return () => {
+        backgroundImg.onload = null;
+        backgroundImg.onerror = null;
+      };
     }
+    return () => {};
   }, [backgrounds, preloadHomeImages]);
 
   return (
-    <MotionConfig transition={{ duration: 1 }}>
-      <AnimatePresence initial={false}>
-        {currentPage === 'profile-selection' && (
-          <BackgroundContainer
-            key="background"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <Background />
-          </BackgroundContainer>
-        )}
-        {currentPage.startsWith('home') && (
-          <SimpleBackground
-            key="simple-background"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
-        )}
-      </AnimatePresence>
-      <Logo />
-      <MotionConfig transition={{ duration: 0.5 }}>
-        <AnimatePresence initial={false} mode="wait">
-          {currentPage === 'login' && <LoginPage key="login" />}
-          {currentPage === 'profile-selection' && <ProfileSelection key="profile-selection" />}
-          {(currentPage.startsWith('home') || currentPage === 'player') && <Home key="home" />}
-          {currentPage === 'player' && <Player key="player" />}
+    <>
+      <MotionConfig transition={{ duration: 1 }}>
+        <AnimatePresence initial={false}>
+          {currentPage === 'profile-selection' && (
+            <BackgroundContainer
+              key="background"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <Background />
+            </BackgroundContainer>
+          )}
+          {currentPage.startsWith('home') && (
+            <SimpleBackground
+              key="simple-background"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+          )}
         </AnimatePresence>
+        <Logo />
+        <MotionConfig transition={{ duration: 0.5 }}>
+          <AnimatePresence initial={false} mode="wait">
+            {currentPage === 'login' && <LoginPage key="login" />}
+            {currentPage === 'profile-selection' && <ProfileSelection key="profile-selection" />}
+            {(currentPage.startsWith('home') || currentPage === 'player') && <Home key="home" />}
+            {currentPage === 'player' && <Player key="player" />}
+          </AnimatePresence>
+        </MotionConfig>
       </MotionConfig>
-    </MotionConfig>
+      <IntroAnimation
+        ref={logoRef}
+        duration={2.5}
+        delay={1}
+        onComplete={() => {
+          resumeSpatialNavigation();
+          preloadHomeImages();
+        }}
+        lowResourceAnimation={IS_TIZEN}
+      />
+    </>
   );
 }
 

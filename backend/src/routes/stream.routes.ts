@@ -64,13 +64,7 @@ export const createStreamRoutes = ({
 
         // Stream the file
         const rangeHeader = context.req.header('range');
-        const { stream, headers, status } = await downloadService.streamFile(source, rangeHeader);
-
-        // Return the stream
-        return new Response(stream, {
-          status,
-          headers,
-        });
+        return await downloadService.streamFile(source, rangeHeader);
       } catch (error: unknown) {
         console.error('Failed to stream content:', error);
 
