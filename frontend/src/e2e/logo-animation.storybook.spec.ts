@@ -138,7 +138,11 @@ test.describe('Logo Animation - Storybook Visual Tests', () => {
           .progress-text {
             color: #999;
             font-size: 10px;
-            font-family: monospace;
+            font-family: 'DejaVu Sans Mono';
+            font-variant-ligatures: none;
+            font-smooth: never;
+            -webkit-font-smoothing: none;
+            -moz-osx-font-smoothing: auto;
             margin: 0 8px;
             width: 30px;
             display: block;
