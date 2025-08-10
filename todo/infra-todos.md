@@ -174,21 +174,18 @@ Single-port deployment where Nginx handles static assets and proxies API request
 ### Tasks
 
 1. **Nginx Configuration**
-
    - Frontend static file serving with optimized caching
    - API proxy configuration for `/api/*` routes
    - Gzip compression for all text assets
    - Security headers and CORS configuration
 
 2. **Docker Integration**
-
    - Multi-stage build for frontend compilation
    - Nginx container with custom configuration
    - Volume mounting for assets and logs
    - Health checks for both frontend and backend
 
 3. **Routing & Caching**
-
    - React Router SPA support (catch-all to index.html)
    - API request proxying with WebSocket support
    - Static asset caching with proper ETags
@@ -287,14 +284,12 @@ Implements research findings from `docs/e2e-torrent-streaming-research.md` to cr
 #### Container Infrastructure (3 SP)
 
 1. **BitTorrent Tracker Setup**
-
    - Deploy `quoorex/bittorrent-tracker` container
    - Configure HTTP, UDP, WebSocket support
    - Health checks and stats endpoint integration
    - Network isolation within test environment
 
 2. **Torrent Seeder Container**
-
    - Build custom Node.js container with WebTorrent
    - Health endpoint with torrent inventory (`/health`, `/torrents`)
    - Predetermined test content seeding
@@ -308,7 +303,6 @@ Implements research findings from `docs/e2e-torrent-streaming-research.md` to cr
 #### Test Content Generation (2 SP)
 
 4. **Synthetic Video Creation**
-
    - FFmpeg-based deterministic video generation
    - Multiple resolutions: 720p (1MB), 1080p (5MB), 4K (20MB)
    - Known characteristics for predictable testing
@@ -448,7 +442,7 @@ Mount logs on tmpfs and rotate archives to reduce storage and improve security.
 
 ### Steps
 
-1. Update `backend.Dockerfile`:
+1. Update `Dockerfile`:
 
    ```dockerfile
    RUN mkdir -p /var/log/miauflix
@@ -653,21 +647,18 @@ Automated Docker image building and publication to container registries with mul
 ### Tasks
 
 1. **Multi-Architecture Builds**
-
    - AMD64 and ARM64 support for cross-platform deployment
    - Buildx configuration for multi-platform images
    - Architecture-specific optimizations
    - Testing on different platforms
 
 2. **Registry Publication**
-
    - Docker Hub automated publishing
    - GitHub Container Registry integration
    - Private registry support option
    - Image signing and security scanning
 
 3. **CI/CD Integration**
-
    - Automated builds on release tags
    - Version management and tagging strategy
    - Build artifact caching for faster builds
@@ -726,21 +717,18 @@ Package and publish Miauflix as a Tizen application for Samsung Smart TVs with T
 ### Tasks
 
 1. **Tizen Application Structure**
-
    - Tizen web application manifest and configuration
    - TV-specific UI adaptations and navigation
    - Remote control input handling
    - Screen size and resolution optimizations
 
 2. **Build Pipeline**
-
    - Tizen Studio integration for packaging
    - Code signing with Samsung certificates
    - Application validation and testing
    - Automated packaging from CI/CD
 
 3. **TV-Specific Features**
-
    - D-pad navigation implementation
    - Voice control integration
    - Samsung Smart TV API utilization

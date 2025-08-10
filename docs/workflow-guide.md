@@ -573,16 +573,23 @@ npm run lint:fix
 ### Essential NPM Scripts
 
 ```bash
-npm run dev:backend          # Start development servers
-npm run start:backend        # one-shot server
-npm run start:backend:e2e    # dockerised watch server (mock data) - interactive mode
-npm run start:backend:e2e -- -d  # dockerised watch server (mock data) - detached mode
+# Backend Development
+npm run start:backend        # Interactive configuration and start backend
+npm run start:backend:e2e    # Dockerised watch server (mock data) - interactive mode
+npm run start:backend:e2e -- -d  # Dockerised watch server (mock data) - detached mode
 npm run stop:backend:e2e     # Stop detached backend E2E environment
+npm run config               # Interactive configuration setup and start server
+npm run config-only          # Configuration only (no server start)
+
+# Frontend Development
+npm run start:frontend       # Frontend with hot reload (recommended for development)
+npm run dev:frontend         # Same as start:frontend
+npm run dev:frontend:ssr     # Frontend with SSR build + preview (for testing SSR)
+
+# Testing
 npm run test:backend         # Jest unit tests
 npm run test:backend:e2e     # Full E2E cycle ( start docker, run tests, stop docker )
 npm run test:backend:e2e:dev # Full E2E tests ( requires running docker (start:backend:e2e) )
-npm run config               # interactive configuration setup and start server
-npm run config-only          # configuration only (no server start)
 ```
 
 ### Quality Assurance
@@ -676,10 +683,49 @@ Comprehensive testing setup with multiple test types:
 
 For detailed testing information, see **[Testing Infrastructure](testing-infrastructure.md)**.
 
-### Development Workflow
+### Frontend Development Workflow
+
+For efficient frontend development, choose the appropriate mode:
+
+#### **Hot Reload Development (Recommended)**
+
+```bash
+npm run start:frontend
+# or
+npm run dev:frontend
+```
+
+**Benefits:**
+
+- ✅ **Instant feedback** - Changes appear immediately without manual refresh
+- 🚀 **Fast iteration** - Perfect for UI development, styling, and component work
+- 💻 **Client-side rendering** - No SSR overhead during development
+
+**Use for:** Daily development, component styling, UI work, debugging
+
+#### **SSR Testing Mode**
+
+```bash
+npm run dev:frontend:ssr
+```
+
+**Benefits:**
+
+- 🔍 **Production-like behavior** - Matches production SSR functionality
+- 📱 **SEO testing** - Verify meta tags and initial page load
+- 🎯 **SSR debugging** - Test server-side rendering issues
+
+**Limitations:**
+
+- ❌ **No hot reload** - Requires manual rebuild after changes
+- ⏳ **Slower feedback** - Build step required for each change
+
+**Use for:** Testing SSR functionality, production verification, SEO testing
+
+### Backend Development Workflow
 
 1. **Initial Setup**: Run `npm run config-only` for first-time configuration
-2. **Development**: Use `npm run dev:backend` for hot-reload development
+2. **Development**: Use `npm run start:backend` for configuration and startup
 3. **Testing**: Run `npm run test:backend` for unit tests
 4. **E2E Testing**: Use `npm run test:backend:e2e` for full integration testing
 5. **Production**: Build with `npm run build:all` and run with `npm run start:backend`

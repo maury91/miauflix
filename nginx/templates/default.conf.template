@@ -39,8 +39,11 @@ server {
     # Access log
     access_log  /var/log/nginx/host.access.log  main;
 
-    # Proxy for the backend service
-    location / {
+    # Serve static frontend files
+    root   /usr/share/nginx/html;
+
+    # Proxy API/backend routes under /api -> backend root (strip /api prefix)
+    location /api/ {
         # Backend service is running in the nordvpn container
         proxy_pass http://nordvpn:3000;
         proxy_http_version 1.1;
@@ -52,6 +55,11 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Reverse-Proxy-Secret ${REVERSE_PROXY_SECRET};
         proxy_cache_bypass $http_upgrade;
+    }
+
+    # SPA fallback for all other routes
+    location / {
+        try_files $uri $uri/ /index.html;
     }
 
     # Error pages
