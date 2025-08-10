@@ -35,7 +35,7 @@ describe('Authentication Endpoints', () => {
 
   it('should require authentication for protected endpoints', async () => {
     // Try to access a protected endpoint without authentication
-    const response = await client.get(['lists']);
+    const response = await client.get(['api', 'lists']);
 
     expect(response).toBeHttpStatus(401);
   });
@@ -69,7 +69,7 @@ describe('Authentication Endpoints', () => {
     await client.login(userCredentials);
 
     // Now try to access a protected endpoint
-    const response = await client.get(['lists']);
+    const response = await client.get(['api', 'lists']);
 
     expect(response).toBeHttpStatus(200);
     expect(response.data).toBeDefined();
@@ -93,7 +93,7 @@ describe('Authentication Endpoints', () => {
     }
 
     // Use refresh token to get new access token
-    const refreshResponse = await client.post(['auth', 'refresh'], {
+    const refreshResponse = await client.post(['api', 'auth', 'refresh'], {
       json: {
         refreshToken: loginResponse.data.refreshToken,
       },
@@ -138,7 +138,7 @@ describe('Authentication Endpoints', () => {
     for (let i = 0; i < 6; i++) {
       promises.push(
         client.post(
-          ['auth', 'login'],
+          ['api', 'auth', 'login'],
           {
             json: invalidCredentials,
           },
