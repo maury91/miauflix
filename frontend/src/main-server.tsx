@@ -1,7 +1,6 @@
 // Import SSR mocks first to set up global mocks (including JSDOM)
 import './ssr-mocks';
 
-import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { ServerStyleSheet } from 'styled-components';
@@ -22,10 +21,10 @@ export function render(_clientAssets: string[] = []): RenderResult {
 
   try {
     // Render the real App component wrapped with Provider
-    const appElement = React.createElement(
-      Provider,
-      { store, children: [] },
-      React.createElement(App)
+    const appElement = (
+      <Provider store={store}>
+        <App />
+      </Provider>
     );
 
     // Render to HTML string

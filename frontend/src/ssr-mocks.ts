@@ -88,6 +88,8 @@ export const gsap = {
   }),
 };
 
+export default gsap;
+
 export const ExpoScaleEase = {};
 
 // Mock framer-motion for SSR
