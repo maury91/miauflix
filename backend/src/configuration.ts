@@ -28,10 +28,12 @@ const serverConfigurationDefinition = serviceConfiguration({
   description: 'Server configuration',
   variables: {
     CORS_ORIGIN: variable({
-      description: "Allowed origins for CORS (use '*' for all origins)",
+      description: "Allowed origins for CORS (comma-separated list or '*' for all origins)",
       required: false,
-      defaultValue: '*',
-      example: 'http://localhost:3000',
+      defaultValue:
+        'http://localhost:3000,http://localhost:4173,http://localhost:4174,http://localhost:4175',
+      example: 'http://localhost:3000,https://myapp.com',
+      transform: transforms.stringArray(),
     }),
     PORT: variable({
       description: 'Port for the server to listen on',
@@ -67,6 +69,18 @@ const serverConfigurationDefinition = serviceConfiguration({
       description: 'Disable all background tasks for testing on-demand functionality',
       required: false,
       defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
+    FRONTEND_DIR: variable({
+      description: 'If set, the backend will serve static frontend files from this directory',
+      required: false,
+      example: '/usr/src/app/public',
+    }),
+    ENABLE_FRONTEND: variable({
+      description: 'Enable the frontend',
+      required: false,
+      defaultValue: 'true',
       example: 'true',
       transform: transforms.boolean(),
     }),

@@ -23,6 +23,7 @@ services:
       - ENABLE_TRACING=true
       - DEBUG=*,-require-in-the-middle
       - DISABLE_BACKGROUND_TASKS=true
+      - FRONTEND_DIR=/usr/src/app/public
     networks:
       - test-network
     ports:
@@ -36,8 +37,10 @@ services:
       - dev_database:/usr/src/app/data
       - dev_downloads:/usr/src/app/downloads
       - ../../traces:/tmp:rw
+      # Mount built frontend to be served as static assets
+      - ../../dist/frontend:/usr/src/app/public:ro
     healthcheck:
-      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
+      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
       interval: 10s
       timeout: 5s
       retries: 30

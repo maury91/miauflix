@@ -32,7 +32,7 @@ export const mediasApi = createApi({
     getMovie: builder.query<MovieResponse, { id: number; includeSources?: boolean }>({
       async queryFn({ id, includeSources }) {
         try {
-          const res = await client.movies[':id'].$get({
+          const res = await client.api.movies[':id'].$get({
             param: { id: id.toString() },
             query: { lang: 'en', includeSources: includeSources ? 'true' : 'false' },
           });
@@ -65,7 +65,7 @@ export const mediasApi = createApi({
     getShow: builder.query<ShowResponse, { id: number }>({
       async queryFn({ id }) {
         try {
-          const res = await client.shows[':id'].$get({
+          const res = await client.api.shows[':id'].$get({
             param: { id: id.toString() },
           });
           const data = await res.json();
@@ -97,7 +97,7 @@ export const mediasApi = createApi({
     getShowSeasons: builder.query<unknown[], { id: number }>({
       async queryFn({ id }) {
         try {
-          const res = await client.shows[':id'].seasons.$get({
+          const res = await client.api.shows[':id'].seasons.$get({
             param: { id: id.toString() },
           });
           const data = await res.json();
@@ -114,7 +114,7 @@ export const mediasApi = createApi({
     getShowSeason: builder.query<unknown, { id: number; season: number }>({
       async queryFn({ id, season }) {
         try {
-          const res = await client.shows[':id'].seasons[':season'].$get({
+          const res = await client.api.shows[':id'].seasons[':season'].$get({
             param: { id: id.toString(), season: season.toString() },
           });
           const data = await res.json();
@@ -134,7 +134,7 @@ export const mediasApi = createApi({
     >({
       async queryFn({ tmdbId, quality }) {
         try {
-          const res = await client.movies[':tmdbId'][':quality'].$post({
+          const res = await client.api.movies[':tmdbId'][':quality'].$post({
             param: { tmdbId: tmdbId.toString(), quality: quality as any },
           });
           const data = await res.json();
@@ -200,7 +200,7 @@ export const getStreamUrl = (
   quality: Quality | 'auto',
   hvecSupport: boolean
 ) => {
-  return client.stream[':token']
+  return client.api.stream[':token']
     .$url({
       param: { token: streamingKey },
       query: { quality, hevc: hvecSupport ? 'true' : 'false' },

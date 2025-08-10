@@ -16,8 +16,8 @@ type ExtractResponseType<T> = T extends (
   ? R
   : T;
 
-export type AuthTokens = ExtractResponseType<Client['auth']['login']['$post']>;
-export type LoginCredentials = Parameters<Client['auth']['login']['$post']>[0]['json'];
+export type AuthTokens = ExtractResponseType<Client['api']['auth']['login']['$post']>;
+export type LoginCredentials = Parameters<Client['api']['auth']['login']['$post']>[0]['json'];
 
 /**
  * HTTP client configured for E2E testing
@@ -48,7 +48,7 @@ export class TestClient {
    * Login and set auth token
    */
   async login(credentials: LoginCredentials): Promise<TestResponse<AuthTokens>> {
-    const response = await this.client.auth.login.$post({
+    const response = await this.client.api.auth.login.$post({
       json: credentials,
     });
 
@@ -69,8 +69,8 @@ export class TestClient {
    */
   async logout(
     refreshToken: string
-  ): Promise<TestResponse<ExtractResponseType<Client['auth']['logout']['$post']>>> {
-    const response = await this.client.auth.logout.$post({
+  ): Promise<TestResponse<ExtractResponseType<Client['api']['auth']['logout']['$post']>>> {
+    const response = await this.client.api.auth.logout.$post({
       json: {
         refreshToken,
       },
@@ -323,7 +323,7 @@ export async function waitForService(client: TestClient, timeout: number = 30000
   await waitFor(
     async () => {
       try {
-        const response = await client.get(['health']);
+        const response = await client.get(['api', 'health']);
         return response.status === 200;
       } catch {
         return false;

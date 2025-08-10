@@ -29,12 +29,49 @@ npm run check:ts                     # TypeScript type checking
 # Start development environment
 npm run dev                          # Starts backend and frontend concurrently
 npm run start:backend               # Backend only
-npm run start:frontend              # Frontend only
+
+# Frontend development
+npm run start:frontend              # Frontend with hot reload (recommended for development)
+npm run dev:frontend                # Same as start:frontend
+npm run dev:frontend:ssr            # Frontend with SSR build + preview (for testing SSR)
 
 # Backend configuration
 npm run config                      # Interactive configuration wizard
 npm run config-only                 # Configuration wizard only
 ```
+
+### Frontend Development Workflow
+
+For frontend development, there are two main approaches:
+
+1. **Development with Hot Reload (Recommended)**:
+
+   ```bash
+   npm run start:frontend
+   # or
+   npm run dev:frontend
+   ```
+
+   - Uses Vite dev server with instant hot reload
+   - Perfect for UI development and styling
+   - Changes appear immediately without manual refresh
+   - No SSR (Server-Side Rendering) - uses client-side rendering only
+
+2. **SSR Testing Mode**:
+
+   ```bash
+   npm run dev:frontend:ssr
+   ```
+
+   - Builds the application with SSR and serves it via preview
+   - Use this to test SSR functionality specifically
+   - No hot reload - requires manual rebuild after changes
+   - Matches production behavior more closely
+
+**When to use each:**
+
+- **Use `npm run start:frontend`** for day-to-day development, component styling, and UI work
+- **Use `npm run dev:frontend:ssr`** only when you need to test SSR-specific functionality or debug SSR issues
 
 ### Testing Commands
 

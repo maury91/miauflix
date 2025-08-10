@@ -2,6 +2,8 @@ import type { MediaDto } from '@miauflix/backend-client';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
+import type { AuthState, InitializationState } from '@/types/auth';
+
 import type { Page } from '../../types';
 import { listsApi } from '../api/lists';
 
@@ -13,6 +15,8 @@ export interface AppState {
   backgrounds: string[];
   shuffledBackgrounds: string[];
   logos: string[];
+  initialization: InitializationState;
+  auth: AuthState;
 }
 
 const initialState: AppState = {
@@ -23,6 +27,17 @@ const initialState: AppState = {
   backgrounds: [],
   shuffledBackgrounds: [],
   logos: [],
+  initialization: {
+    isComplete: false,
+    serverAvailable: false,
+    profileCount: 0,
+    currentStep: 'health',
+    error: undefined,
+  },
+  auth: {
+    currentProfileId: undefined,
+    isAuthenticated: false,
+  },
 };
 
 export const appSlice = createSlice({
@@ -40,6 +55,22 @@ export const appSlice = createSlice({
     setCurrentMedia: (state, action: PayloadAction<MediaDto | null>) => {
       state.currentMedia = action.payload;
     },
+    setCurrentProfile: (state, action: PayloadAction<string | undefined>) => {
+      state.auth.currentProfileId = action.payload;
+      state.auth.isAuthenticated = !!action.payload;
+    },
+    updateInitialization: (state, action: PayloadAction<Partial<InitializationState>>) => {
+      state.initialization = { ...state.initialization, ...action.payload };
+    },
+    resetInitialization: state => {
+      state.initialization = {
+        isComplete: false,
+        serverAvailable: false,
+        profileCount: 0,
+        currentStep: 'health',
+        error: undefined,
+      };
+    },
   },
   extraReducers: builder => {
     builder.addMatcher(listsApi.endpoints.getList.matchFulfilled, (state, action) => {
@@ -55,5 +86,12 @@ export const appSlice = createSlice({
   },
 });
 
-export const { chooseProfile, navigateTo, setCurrentMedia } = appSlice.actions;
+export const {
+  chooseProfile,
+  navigateTo,
+  setCurrentMedia,
+  setCurrentProfile,
+  updateInitialization,
+  resetInitialization,
+} = appSlice.actions;
 export default appSlice.reducer;
