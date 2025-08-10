@@ -117,19 +117,13 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
-
-      - name: Install frontend dependencies
-        run: npm ci
-        working-directory: frontend
+        run: npm ci --include=dev
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-        working-directory: frontend
+        run: npx -w frontend playwright install --with-deps chromium
 
       - name: Verify Playwright installation
-        run: npx playwright --version
-        working-directory: frontend
+        run: npx -w frontend playwright --version
 
       - name: Build everything
         run: npm run build:all
