@@ -11,6 +11,8 @@ dist
 # Test files
 backend-e2e/admin-credentials.json
 coverage
+frontend/test-results
+frontend/playwright-report
 
 # Environment files
 .env
@@ -63,3 +65,5 @@ pids
 
 # Other
 .research
+*storybook.log
+storybook-static
