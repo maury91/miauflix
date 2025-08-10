@@ -1,9 +1,9 @@
+import { createHash } from 'node:crypto';
+
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
-import { createHash } from 'crypto';
 import MemoryChunkStore from 'memory-chunk-store';
-import { Readable } from 'streamx';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
@@ -587,25 +587,49 @@ export class DownloadService {
           headers['Content-Length'] = String(file.length);
         }
 
-        // Create readable stream from file using WebTorrent's createReadStream
-        const iterator = file[Symbol.asyncIterator](range || {});
-        const readableStream = Readable.from(iterator);
-
-        // Convert Node.js Readable to ReadableStream (Web Streams API)
         const webReadableStream = new ReadableStream({
-          start(controller) {
-            readableStream.on('data', (chunk: Buffer) => {
-              controller.enqueue(chunk);
-            });
+          async start(controller) {
+            try {
+              const iterator = file[Symbol.asyncIterator](range || {});
 
-            readableStream.on('end', () => {
-              controller.close();
-            });
+              while (true) {
+                const result = await iterator.next();
 
-            readableStream.on('error', (error: Error) => {
-              logger.error('DownloadService', 'Stream error:', error);
+                if (result.done) {
+                  controller.close();
+                  break;
+                }
+
+                // Check if the stream has been cancelled
+                if (controller.desiredSize === null) {
+                  break;
+                }
+
+                // Wait for backpressure to clear if needed
+                if (controller.desiredSize !== null && controller.desiredSize <= 0) {
+                  await new Promise(resolve => {
+                    const checkBackpressure = () => {
+                      const desiredSize = controller.desiredSize;
+                      if (desiredSize !== null && desiredSize > 0) {
+                        resolve(undefined);
+                      } else {
+                        setTimeout(checkBackpressure, 10);
+                      }
+                    };
+                    checkBackpressure();
+                  });
+                }
+
+                controller.enqueue(result.value);
+              }
+            } catch (error) {
               controller.error(error);
-            });
+            }
+          },
+
+          cancel() {
+            // Clean up if the stream is cancelled
+            logger.debug('DownloadService', 'Stream cancelled by client');
           },
         });
 

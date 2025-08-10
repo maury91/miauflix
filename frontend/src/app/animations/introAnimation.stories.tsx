@@ -146,6 +146,9 @@ export const InteractiveControls: InteractiveControlsStory = {
       }
     }, []);
 
+    // @ts-expect-error - this is a custom property for testing
+    window.seek = seek;
+
     const onReady = useCallback(() => {
       seek(args.seekPosition);
     }, [args.seekPosition, seek]);

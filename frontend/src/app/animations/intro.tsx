@@ -204,9 +204,10 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           { filter: 'blur(0px)' },
           {
             filter: 'blur(10px)',
-            duration: duration * 0.8,
+            duration: duration * 0.6,
+            ease: 'power2.inOut',
           },
-          duration * 0.3
+          duration * 0.35
         );
       }
 
@@ -315,6 +316,12 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
 
         // Seek using progress
         introAnimation.progress(clampedProgress);
+
+        // Force immediate evaluation of all timeline state for consistent rendering
+        introAnimation.invalidate();
+
+        // Ensure all CSS properties are applied immediately
+        gsap.set({}, { force3D: false }); // Force style recalculation
 
         // Update our tracking
         if (onProgress) {
