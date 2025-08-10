@@ -100,6 +100,7 @@ jobs:
             backend-e2e/admin-credentials.json
             backend-e2e/logs/*.log
             backend-e2e/logs/traces/*.log
+          if-no-files-found: ignore
           retention-days: 7
 
   frontend-visual-tests:
@@ -119,15 +120,24 @@ jobs:
       - name: Install dependencies
         run: npm ci --include=dev
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
       - name: Install Playwright browsers
         run: npx -w frontend playwright install --with-deps chromium
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
 
       - name: Verify Playwright installation
         run: npx -w frontend playwright --version
 
       - name: Build everything
         run: npm run build:all
-
 
       - name: Run visual tests
         run: npm run test:frontend:visual
@@ -143,6 +153,7 @@ jobs:
           path: |
             frontend/playwright-report/
             frontend/test-results/
+          if-no-files-found: ignore
           retention-days: 7
 
       - name: Upload visual test screenshots
@@ -151,6 +162,7 @@ jobs:
         with:
           name: visual-test-failures
           path: frontend/test-results/
+          if-no-files-found: ignore
           retention-days: 7
 
   # Disabled until we are ready for production
