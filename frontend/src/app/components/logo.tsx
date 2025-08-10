@@ -24,6 +24,14 @@ const playerLogo = {
   opacity: 0,
 };
 
+const loginLogo = {
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  height: '8vh',
+  width: '29vh',
+};
+
 const LogoContainer = styled(motion.div)`
   position: fixed;
   z-index: 100;
@@ -38,8 +46,10 @@ const getLogoStyle = (currentPage: Page, margin: number) => {
       return homeLogo(margin);
     case 'player':
       return playerLogo;
+    case 'login':
+    default:
+      return loginLogo;
   }
-  return {};
 };
 
 export const Logo = () => {

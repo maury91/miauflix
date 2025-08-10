@@ -1,5 +1,6 @@
 // Import SSR mocks first to set up global mocks (including JSDOM)
 import './ssr-mocks';
+import './styles/global.css';
 
 import { renderToString } from 'react-dom/server';
 import { Provider } from 'react-redux';

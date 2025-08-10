@@ -185,6 +185,12 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     npm run build:all:backend
     npm install # Links the libraries 
 
+    # Build frontend only in dev so static assets are available/mounted
+    if [[ "$MODE" == "dev" ]]; then
+        echo "🧱 Building frontend for development (API_URL=http://localhost:$PORT) ..."
+        VITE_API_URL="http://localhost:$PORT" npm run build:frontend
+    fi
+
     # Clean up previous build artifacts
     cleanupArtifacts
     cd ${root_dir}

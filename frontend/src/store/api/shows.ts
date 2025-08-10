@@ -13,7 +13,7 @@ export const showsApi = createApi({
     getShow: builder.query<ShowResponse, { id: string }>({
       async queryFn({ id }) {
         try {
-          const res = await client.shows[':id'].$get({
+          const res = await client.api.shows[':id'].$get({
             param: { id },
           });
           if (res.status === 200) {
@@ -37,7 +37,7 @@ export const showsApi = createApi({
     getSeasons: builder.query<SeasonResponse[], { id: string }>({
       async queryFn({ id }) {
         try {
-          const res = await client.shows[':id'].seasons.$get({
+          const res = await client.api.shows[':id'].seasons.$get({
             param: { id },
           });
           if (res.status === 200) {
@@ -62,7 +62,7 @@ export const showsApi = createApi({
       async queryFn({ id, season }) {
         try {
           // FixMe: the problem is on the backend side, the generated type is "{}"
-          const res = await client.shows[':id'].seasons[':season'].$get({
+          const res = await client.api.shows[':id'].seasons[':season'].$get({
             param: { id, season },
           });
           if (res.status === 200) {

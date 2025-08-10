@@ -46,7 +46,7 @@ build_images() {
     print_status "Building and compiling backend image..."
     docker build -t "${REGISTRY}/${REPOSITORY}:${VERSION}" \
                  -t "${REGISTRY}/${REPOSITORY}:latest" \
-                 -f backend.Dockerfile .
+                 -f Dockerfile .
     
     print_status "Backend image built successfully!"
 }

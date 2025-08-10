@@ -1,3 +1,5 @@
+import './styles/global.css';
+
 import { gsap } from 'gsap';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
