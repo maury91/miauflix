@@ -19,10 +19,11 @@ if (
   });
 
   // Set globals from JSDOM carefully to avoid property assignment issues
-  const globalThis = global as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-
-  // Copy window properties instead of assigning the objects directly
-  globalThis.window = dom.window;
+  if (!globalThis.window) {
+    globalThis.window = dom.window as unknown as Window & typeof globalThis;
+  } else {
+    Object.assign(globalThis.window, dom.window);
+  }
   globalThis.document = dom.window.document;
 
   // Copy critical constructor functions
@@ -49,7 +50,7 @@ if (
     globalThis.navigator = {
       userAgent: 'Mozilla/5.0 (JSDOM)',
       platform: 'Node.js',
-    };
+    } as Navigator;
   }
 
   // Set up window properties for responsive design
@@ -142,10 +143,9 @@ export const useFocusable = () => ({
   focusKey: '',
   focusSelf: () => {},
 });
-export const FocusContext = { Provider: ({ children }: { children: React.ReactNode }) => children };
+export const FocusContext = {
+  Provider: ({ children }: { children: React.ReactNode; value?: unknown }) => children,
+};
 export const setFocus = () => {};
 export const getCurrentFocusKey = () => '';
 export const updateAllLayouts = () => {};
-
-// Check if we're in SSR environment
-export const isSSR = typeof window === 'undefined';
