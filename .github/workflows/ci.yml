@@ -135,6 +135,8 @@ jobs:
 
       - name: Verify Playwright installation
         run: npx -w frontend playwright --version
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
 
       - name: Build everything
         run: npm run build:all
@@ -143,6 +145,7 @@ jobs:
         run: npm run test:frontend:visual
         env:
           NODE_ENV: test
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         timeout-minutes: 10
 
       - name: Upload Playwright report
