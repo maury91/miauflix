@@ -30,7 +30,7 @@
     "strict": true,
 
     /* Vite */
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -47,6 +47,12 @@
       "@miauflix/types": ["./src/types/api"]
     }
   },
-  "include": ["src/**/*", "src/global.d.ts"],
+  "include": [
+    "vitest.shims.d.ts",
+    "src/**/*",
+    "src/global.d.ts",
+    ".storybook/**/*.ts",
+    "build-ssr.ts"
+  ],
   "exclude": ["node_modules", "tmp", "dist"]
 }
