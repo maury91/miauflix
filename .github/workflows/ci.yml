@@ -142,7 +142,7 @@ jobs:
         run: npm run build:all
 
       - name: Run visual tests
-        run: npm run test:frontend:visual
+        run: touch ../.env && npm run test:frontend:visual
         env:
           NODE_ENV: test
           PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
