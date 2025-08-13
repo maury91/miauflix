@@ -55,6 +55,10 @@ export function App() {
   const onAnimationComplete = useCallback(() => {
     resumeSpatialNavigation();
     preloadHomeImages();
+
+    // Dispatch custom event when Intro animation completes
+    const event = new CustomEvent('miauflix:intro:animation:complete');
+    window.dispatchEvent(event);
   }, [preloadHomeImages]);
 
   useEffect(() => {

@@ -12,6 +12,7 @@ dist
 backend-e2e/admin-credentials.json
 coverage
 frontend/test-results
+frontend/test-results-e2e
 frontend/playwright-report
 
 # Environment files

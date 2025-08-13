@@ -1,10 +1,16 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
+ * Playwright configuration for integrated testing with backend-e2e environment
+ * This config assumes the backend-e2e Docker environment is already running
+ * and serves the built frontend application.
+ *
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
   testDir: './e2e',
+  /* Only run e2e test files */
+  testMatch: '**/*.e2e.spec.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -14,11 +20,11 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env['CI'] ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html'], ['json', { outputFile: 'test-results/results.json' }]],
+  reporter: [['html'], ['json', { outputFile: 'test-results-e2e/results.json' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:4174',
+    /* Base URL - use backend-e2e environment or fallback to default port */
+    baseURL: process.env['BACKEND_URL'] || 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -26,10 +32,10 @@ export default defineConfig({
     /* Take screenshot on failure */
     screenshot: 'only-on-failure',
 
-    /* Video recording for debugging animation tests */
+    /* Video recording for debugging */
     video: 'retain-on-failure',
 
-    /* Longer timeout for animation tests */
+    /* Longer timeout for e2e environment */
     actionTimeout: 15000,
     navigationTimeout: 30000,
 
@@ -52,50 +58,31 @@ export default defineConfig({
       },
     },
 
-    {
-      name: 'firefox-desktop',
-      use: {
-        ...devices['Desktop Firefox'],
-        viewport: { width: 1920, height: 1080 },
-      },
-    },
+    // {
+    //   name: 'firefox-desktop',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
+    //     viewport: { width: 1920, height: 1080 },
+    //   },
+    // },
 
-    {
-      name: 'webkit-desktop',
-      use: {
-        ...devices['Desktop Safari'],
-        viewport: { width: 1920, height: 1080 },
-      },
-    },
-
-    /* Storybook visual tests with optimized settings */
-    {
-      name: 'storybook-chromium',
-      testMatch: '**/*.storybook.spec.ts',
-      use: {
-        ...devices['Desktop Chrome'],
-        viewport: { width: 1920, height: 1080 },
-        video: 'retain-on-failure',
-        launchOptions: {
-          args: [
-            '--disable-web-security',
-            '--disable-features=VizDisplayCompositor',
-            '--disable-backgrounding-occluded-windows',
-            '--disable-renderer-backgrounding',
-          ],
-        },
-      },
-    },
+    // {
+    //   name: 'webkit-desktop',
+    //   use: {
+    //     ...devices['Desktop Safari'],
+    //     viewport: { width: 1920, height: 1080 },
+    //   },
+    // },
 
     /* Test against mobile viewports. */
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
     },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    },
+    // {
+    //   name: 'Mobile Safari',
+    //   use: { ...devices['iPhone 12'] },
+    // },
 
     /* High DPI testing */
     {
@@ -108,28 +95,15 @@ export default defineConfig({
     },
   ],
 
-  /* Run your local dev server before starting tests */
-  webServer: [
-    {
-      command: 'npm run build && vite preview',
-      url: 'http://localhost:4174',
-      reuseExistingServer: !process.env['CI'],
-      timeout: 120000,
-    },
-    {
-      command: 'npx storybook dev -p 6006 --no-open',
-      url: 'http://localhost:6006',
-      reuseExistingServer: !process.env['CI'],
-      timeout: 120000,
-    },
-  ],
+  /* No webServer - relies on external backend-e2e environment */
+  /* The backend-e2e environment should be started separately */
 
   /* Test output directory */
-  outputDir: './test-results',
+  outputDir: './test-results-e2e',
 
   /* Screenshot comparison settings */
   expect: {
-    // More lenient thresholds for animation screenshots
+    // More lenient thresholds for e2e testing
     toHaveScreenshot: {
       threshold: 0.2,
       maxDiffPixels: 500,
@@ -140,6 +114,6 @@ export default defineConfig({
     },
   },
 
-  /* Global setup and teardown */
-  globalSetup: process.env['ANIMATION_TESTS'] ? './e2e/global-setup.ts' : undefined,
+  /* Global setup for e2e testing */
+  globalSetup: './e2e/global-setup.e2e.ts',
 });
