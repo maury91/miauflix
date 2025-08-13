@@ -58,8 +58,8 @@ export function useAppInitialization(): AppInitializationResult {
             const profiles = await authUtils.getStoredProfiles();
             const profile = profiles[0];
 
-            // Check if token is still valid
-            const hasValidToken = await authUtils.hasValidToken(profile.profileId);
+            // Try to get a valid token (this will attempt refresh if needed)
+            const hasValidToken = await authUtils.ensureValidToken(profile.profileId);
 
             if (hasValidToken) {
               dispatch(setCurrentProfile(profile.profileId));

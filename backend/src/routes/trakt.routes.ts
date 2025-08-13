@@ -78,12 +78,15 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
                 },
               });
 
-              const { accessToken, refreshToken } = await authService.generateTokens(result.user);
+              // Extract user agent for audit logging
+              const userAgent = context.req.header('user-agent');
+              const authResult = await authService.generateTokens(result.user, context, userAgent);
+              const { accessToken } = authResult;
 
               return context.json({
                 success: true,
                 accessToken,
-                refreshToken,
+                refreshToken: authResult.refreshToken,
               } satisfies DeviceAuthCheckResponse);
             }
 

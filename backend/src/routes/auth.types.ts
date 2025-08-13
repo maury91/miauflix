@@ -1,4 +1,3 @@
-import type { AuthTokens } from '@services/auth/auth.types';
 export type { AuthTokens } from '@services/auth/auth.types';
 
 export interface LoginRequest {
@@ -6,16 +5,15 @@ export interface LoginRequest {
   password: string;
 }
 
-export type LoginResponse = AuthTokens;
-
-export interface RefreshRequest {
-  refreshToken: string;
+export interface LoginResponse {
+  accessToken: string;
+  session: string;
+  user: UserDto;
 }
 
-export type RefreshResponse = AuthTokens;
-
-export interface LogoutRequest {
-  refreshToken: string;
+export interface RefreshResponse {
+  accessToken: string;
+  user: UserDto;
 }
 
 export interface LogoutResponse {
