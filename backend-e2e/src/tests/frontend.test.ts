@@ -49,14 +49,14 @@ describe('Frontend Serving', () => {
 
       // Test common asset paths that might exist
       const commonAssets = [
-        '/assets/index.css',
-        '/assets/index.js',
-        '/static/css/main.css',
-        '/static/js/main.js',
+        'assets/index.css',
+        'assets/index.js',
+        'static/css/main.css',
+        'static/js/main.js',
       ];
 
       for (const assetPath of commonAssets) {
-        const assetResponse = await fetch(global.BACKEND_URL + assetPath.substring(1));
+        const assetResponse = await fetch(global.BACKEND_URL + assetPath);
         if (assetResponse.status === 200) {
           console.log(`✅ Found asset at ${assetPath}`);
           return; // At least one asset is served
@@ -170,10 +170,10 @@ describe('Frontend Serving', () => {
 
   it('should fallback to index.html for client-side routing', async () => {
     // Test that SPA routing paths fallback to index.html
-    const spaRoutes = ['/login', '/movies', '/tv', '/settings'];
+    const spaRoutes = ['login', 'movies', 'tv', 'settings'];
 
     for (const route of spaRoutes) {
-      const response = await fetch(global.BACKEND_URL + route.substring(1));
+      const response = await fetch(global.BACKEND_URL + route);
 
       if (response.status === 200) {
         expect(response.headers.get('content-type')).toMatch(/text\/html/);

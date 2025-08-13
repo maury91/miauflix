@@ -5,7 +5,7 @@ import { serve } from '@hono/node-server';
 import { logger } from '@logger';
 
 import { Database } from '@database/database';
-import { AuthError, LoginError, RoleError } from '@errors/auth.errors';
+import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import { AuthService } from '@services/auth/auth.service';
 import { CacheService } from '@services/cache/cache.service';
 import { DownloadService } from '@services/download/download.service';
@@ -196,7 +196,7 @@ try {
   app.onError((err, c) => {
     logger.error('App', `An error occured: ${err.name}: ${err.message}`);
 
-    if (err instanceof AuthError) {
+    if (err instanceof AuthError || err instanceof InvalidTokenError) {
       return c.json(
         {
           error: 'Authentication required',

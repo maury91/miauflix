@@ -63,6 +63,12 @@ export default defineConfig({
     port: 4174,
     host: 'localhost',
   },
+  define: {
+    // Build-time configuration for access token storage
+    __ACCESS_TOKEN_STORAGE_MODE__: JSON.stringify(
+      process.env.TOKEN_STORAGE_MODE === 'sessionStorage' ? 'sessionStorage' : 'memory'
+    ),
+  },
   plugins: [
     // Phase 0 Bootstrap: Simplified plugin configuration
     Icons({

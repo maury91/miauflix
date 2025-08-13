@@ -19,15 +19,32 @@ type ExtractResponseType<T> = T extends (
 export type AuthTokens = ExtractResponseType<Client['api']['auth']['login']['$post']>;
 export type LoginCredentials = Parameters<Client['api']['auth']['login']['$post']>[0]['json'];
 
+const removeTrailingSlash = (url: string) => {
+  return url.endsWith('/') ? url.slice(0, -1) : url;
+};
+
 /**
- * HTTP client configured for E2E testing
+ * HTTP client configured for E2E testing with session-based authentication support
  */
 export class TestClient {
   public client: Client;
   private authToken: string | null = null;
+  private cookieJar: Map<string, string> = new Map();
+  private currentSession: string | null = null;
 
   constructor(baseURL: string = global.BACKEND_URL) {
-    this.client = hcWithType(baseURL);
+    // Remove trailing slash from baseURL for Origin header
+    const cleanURL = removeTrailingSlash(baseURL);
+
+    this.client = hcWithType(baseURL, {
+      init: {
+        credentials: 'include', // Enable cookie handling
+        headers: {
+          Origin: cleanURL,
+          Referer: cleanURL,
+        },
+      },
+    });
   }
 
   /**
@@ -38,49 +55,228 @@ export class TestClient {
   }
 
   /**
-   * Clear authorization header
+   * Clear authorization header and session data
    */
   clearAuth(): void {
     this.authToken = null;
+    this.cookieJar.clear();
+    this.currentSession = null;
   }
 
   /**
-   * Login and set auth token
+   * Get current session ID
    */
-  async login(credentials: LoginCredentials): Promise<TestResponse<AuthTokens>> {
-    const response = await this.client.api.auth.login.$post({
-      json: credentials,
+  getCurrentSession(): string | null {
+    return this.currentSession;
+  }
+
+  /**
+   * Set current session ID
+   */
+  setCurrentSession(sessionId: string): void {
+    this.currentSession = sessionId;
+  }
+
+  /**
+   * Get stored cookies for debugging
+   */
+  getCookies(): Map<string, string> {
+    return new Map(this.cookieJar);
+  }
+
+  /**
+   * Clear all stored cookies
+   */
+  clearCookies(): void {
+    this.cookieJar.clear();
+  }
+
+  /**
+   * Set a cookie value
+   */
+  setCookie(name: string, value: string): void {
+    this.cookieJar.set(name, value);
+  }
+
+  /**
+   * Parse and store cookies from response headers
+   */
+  private storeCookies(headers: Headers): void {
+    const setCookieHeaders = headers.get('set-cookie');
+    if (setCookieHeaders) {
+      // Handle multiple Set-Cookie headers
+      const cookies = setCookieHeaders.split(', ');
+      for (const cookie of cookies) {
+        const [nameValue] = cookie.split(';');
+        const [name, value] = nameValue.split('=');
+        if (name && value) {
+          this.cookieJar.set(name.trim(), value.trim());
+        }
+      }
+    }
+  }
+
+  /**
+   * Get cookie header string for requests
+   */
+  private getCookieHeader(): string {
+    const cookies: string[] = [];
+    this.cookieJar.forEach((value, name) => {
+      cookies.push(`${name}=${value}`);
+    });
+    return cookies.join('; ');
+  }
+
+  /**
+   * Login with session-based authentication
+   */
+  async login(
+    credentials: LoginCredentials,
+    throwOnError: boolean = true
+  ): Promise<TestResponse<AuthTokens>> {
+    // Use native fetch instead of Hono client due to JSON payload issue
+    const baseURL = removeTrailingSlash(global.BACKEND_URL);
+    const response = await fetch(`${baseURL}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Origin: baseURL,
+        Referer: baseURL,
+      },
+      credentials: 'include',
+      body: JSON.stringify(credentials),
     });
 
     const data = await this.parseResponse(response);
 
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
+      // Store access token
       this.setAuthToken(data.accessToken);
+
+      // Store session ID
+      if (data.session) {
+        this.setCurrentSession(data.session);
+      }
+
+      // Parse and store cookies (refresh token should be in HttpOnly cookie)
+      this.storeCookies(response.headers);
+
       return this.formatResponse(response.status, data, response.headers);
     }
 
-    // For non-200 responses, still return the response (don't throw)
-    // This allows tests to check the error response
-    return this.formatResponse(response.status, data, response.headers);
+    // For non-2xx responses, throw by default or return based on flag
+    const errorResponse = this.formatResponse(response.status, data, response.headers);
+    if (throwOnError) {
+      throw new Error(`Login failed with status ${response.status}: ${JSON.stringify(data)}`);
+    }
+
+    return errorResponse;
   }
 
   /**
-   * Logout and clear auth token
+   * Logout using session-based authentication
    */
   async logout(
-    refreshToken: string
-  ): Promise<TestResponse<ExtractResponseType<Client['api']['auth']['logout']['$post']>>> {
-    const response = await this.client.api.auth.logout.$post({
-      json: {
-        refreshToken,
+    sessionId?: string
+  ): Promise<
+    TestResponse<ExtractResponseType<Client['api']['auth']['logout'][':session']['$post']>>
+  > {
+    const session = sessionId ?? this.currentSession;
+    if (!session && sessionId === undefined) {
+      throw new Error('No session ID available for logout. Login first or provide session ID.');
+    }
+
+    // Use session or empty string for testing malformed session IDs
+    const sessionParam = session || '';
+
+    // Create a client with cookies in init headers (Hono client header merging issue workaround)
+    const cookieHeader = this.getCookieHeader();
+    const clientWithCookies = hcWithType(global.BACKEND_URL, {
+      init: {
+        credentials: 'include',
+        headers: {
+          Origin: removeTrailingSlash(global.BACKEND_URL),
+          Referer: removeTrailingSlash(global.BACKEND_URL),
+          Cookie: cookieHeader,
+        },
       },
     });
-    this.clearAuth();
+
+    const response = await clientWithCookies.api.auth.logout[':session'].$post({
+      param: { session: sessionParam },
+    });
+
+    // Only clear auth if we're logging out the current session
+    if (sessionParam === this.currentSession) {
+      this.clearAuth();
+    }
     return this.formatResponse(
       response.status,
       await this.parseResponse(response),
       response.headers
     );
+  }
+
+  /**
+   * Refresh tokens using session-based authentication
+   */
+  async refreshToken(
+    sessionId?: string,
+    dryRun: boolean = false
+  ): Promise<
+    TestResponse<ExtractResponseType<Client['api']['auth']['refresh'][':session']['$post']>>
+  > {
+    const session = sessionId ?? this.currentSession;
+    if (!session && sessionId === undefined) {
+      throw new Error('No session ID available for refresh. Login first or provide session ID.');
+    }
+
+    // Use session or empty string for testing malformed session IDs
+    const sessionParam = session || '';
+
+    // Prepare headers with cookies
+    const headers: Record<string, string> = {};
+    const cookieHeader = this.getCookieHeader();
+    if (cookieHeader) {
+      headers['Cookie'] = cookieHeader;
+    }
+
+    // Prepare query parameters
+    const query: Record<string, string> = {};
+    if (dryRun) {
+      query.dry_run = 'true';
+    }
+
+    // Create a client with cookies in init headers (Hono client header merging issue workaround)
+    const clientWithCookies = hcWithType(global.BACKEND_URL, {
+      init: {
+        credentials: 'include',
+        headers: {
+          Origin: removeTrailingSlash(global.BACKEND_URL),
+          Referer: removeTrailingSlash(global.BACKEND_URL),
+          Cookie: cookieHeader,
+        },
+      },
+    });
+
+    const response = await clientWithCookies.api.auth.refresh[':session'].$post({
+      param: { session: sessionParam },
+      query,
+    });
+
+    const data = await this.parseResponse(response);
+
+    if (response.status === 200) {
+      // Update access token if provided (not in dry-run mode)
+      if (data.accessToken) {
+        this.setAuthToken(data.accessToken);
+      }
+
+      // Parse and store any new cookies (new refresh token)
+      this.storeCookies(response.headers);
+    }
+
+    return this.formatResponse(response.status, data, response.headers);
   }
 
   private formatResponse<T>(status: number, response: T, rawHeaders: Headers): TestResponse<T> {
@@ -178,6 +374,26 @@ export class TestClient {
     >
   >;
 
+  // 4-level endpoint
+  public async post<
+    K1 extends keyof Client,
+    K2 extends keyof Client[K1],
+    K3 extends keyof Client[K1][K2],
+    K4 extends keyof Client[K1][K2][K3],
+  >(
+    endpoint: [K1, K2, K3, K4],
+    args: Client[K1][K2][K3][K4] extends { $post: (args: infer P) => any } ? NoInfer<P> : never,
+    options?: Client[K1][K2][K3][K4] extends { $post: (args: any, options: infer P) => any }
+      ? NoInfer<P>
+      : never
+  ): Promise<
+    TestResponse<
+      Client[K1][K2][K3][K4] extends { $post: (args: any) => Promise<{ json(): Promise<infer R> }> }
+        ? R
+        : never
+    >
+  >;
+
   // Implementation for POST
   public async post(endpoint: string[], args?: any, options?: any): Promise<TestResponse<any>> {
     let currentClient: any = this.client;
@@ -196,14 +412,51 @@ export class TestClient {
       throw new Error(`Endpoint ${endpoint.join('.')} does not have a $post method`);
     }
 
-    // Prepare headers for authentication
-    const requestOptions = options || {};
+    // Create a client with headers in init (Hono client header merging issue workaround)
+    const headers: Record<string, string> = {
+      Origin: removeTrailingSlash(global.BACKEND_URL),
+      Referer: removeTrailingSlash(global.BACKEND_URL),
+    };
+
+    // Add authorization header if available
     if (this.authToken) {
-      if (!requestOptions.headers) requestOptions.headers = {};
-      requestOptions.headers['Authorization'] = this.authToken;
+      headers['Authorization'] = this.authToken;
     }
 
-    const response = await currentClient.$post(args, requestOptions);
+    // Add cookie header if available
+    const cookieHeader = this.getCookieHeader();
+    if (cookieHeader) {
+      headers['Cookie'] = cookieHeader;
+    }
+
+    // Merge with any headers passed in options
+    if (options?.headers) {
+      Object.assign(headers, options.headers);
+    }
+
+    const clientWithHeaders = hcWithType(global.BACKEND_URL, {
+      init: {
+        credentials: 'include',
+        headers,
+      },
+    });
+
+    // Navigate to the correct endpoint on the new client
+    let targetClient: any = clientWithHeaders;
+    for (const segment of endpoint) {
+      if (targetClient && typeof targetClient[segment] !== 'undefined') {
+        targetClient = targetClient[segment];
+      } else {
+        throw new Error(
+          `Invalid endpoint path: ${endpoint.join('.')} - segment '${segment}' not found`
+        );
+      }
+    }
+
+    const response = await targetClient.$post(args);
+
+    // Store any cookies from the response
+    this.storeCookies(response.headers);
 
     return this.formatResponse(
       response.status,
@@ -263,30 +516,59 @@ export class TestClient {
 
   // Implementation for GET
   public async get(endpoint: string[], args?: any, options?: any): Promise<TestResponse<any>> {
-    let currentClient: any = this.client;
+    // Use native fetch instead of Hono client for consistency
+    const baseURL = removeTrailingSlash(global.BACKEND_URL);
 
-    for (const segment of endpoint) {
-      if (currentClient && typeof currentClient[segment] !== 'undefined') {
-        currentClient = currentClient[segment];
-      } else {
-        throw new Error(
-          `Invalid endpoint path: ${endpoint.join('.')} - segment '${segment}' not found`
-        );
+    // Build URL from endpoint array
+    let url = `${baseURL}/${endpoint.join('/')}`;
+
+    // Handle path parameters (like :id)
+    if (args?.param) {
+      for (const [key, value] of Object.entries(args.param)) {
+        url = url.replace(`:${key}`, String(value));
       }
     }
 
-    if (!currentClient || typeof currentClient.$get !== 'function') {
-      throw new Error(`Endpoint ${endpoint.join('.')} does not have a $get method`);
+    // Add query parameters
+    if (args?.query) {
+      const searchParams = new URLSearchParams();
+      for (const [key, value] of Object.entries(args.query)) {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      }
+      if (searchParams.toString()) {
+        url += `?${searchParams.toString()}`;
+      }
     }
 
-    // Prepare headers for authentication
-    const requestOptions = options || {};
+    // Prepare headers
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      Origin: baseURL,
+      Referer: baseURL,
+      ...(options?.headers || {}),
+    };
+
+    // Add authorization header if available
     if (this.authToken) {
-      if (!requestOptions.headers) requestOptions.headers = {};
-      requestOptions.headers['Authorization'] = this.authToken;
+      headers['Authorization'] = this.authToken;
     }
 
-    const response = await currentClient.$get(args, requestOptions);
+    // Add cookie header if available
+    const cookieHeader = this.getCookieHeader();
+    if (cookieHeader) {
+      headers['Cookie'] = cookieHeader;
+    }
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers,
+      credentials: 'include',
+    });
+
+    // Store any cookies from the response
+    this.storeCookies(response.headers);
 
     return this.formatResponse(
       response.status,
@@ -382,10 +664,11 @@ export async function extractUserCredentialsFromLogs(): Promise<{
     const credentials = JSON.parse(credentialsContent);
 
     if (credentials.adminEmail && credentials.adminPassword) {
-      return {
+      const result = {
         email: credentials.adminEmail,
         password: credentials.adminPassword,
       };
+      return result;
     }
 
     console.log('⚠️ Invalid credentials format in file:', credentialsPath);

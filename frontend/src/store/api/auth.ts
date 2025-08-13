@@ -1,5 +1,4 @@
 import type {
-  AuthTokens,
   DeviceAuthCheckPending,
   DeviceAuthCheckResponse,
   DeviceAuthCheckSuccess,
@@ -13,11 +12,58 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { API_URL } from '@/consts';
 import type { ProfileToken } from '@/types/auth';
-import { secureStorage } from '@/utils/secureStorage';
+import { accessTokenStorage, getStorageMode } from '@/utils/accessTokenStorage';
+import { secureStorage } from '@/utils/storage';
 
 import { navigateTo, setCurrentProfile } from '../slices/app';
+import type { RootState } from '../store';
 
-const client = hcWithType(API_URL);
+// Access token storage utility functions
+const getAccessToken = (sessionId?: string): string | null => {
+  if (!sessionId) return null;
+  const tokenData = accessTokenStorage.retrieve(sessionId);
+  return tokenData?.accessToken || null;
+};
+
+const getCurrentUser = (sessionId?: string): { id: string; email: string; role: string } | null => {
+  if (!sessionId) return null;
+  const tokenData = accessTokenStorage.retrieve(sessionId);
+  return tokenData?.user || null;
+};
+
+const getTokenDataBySession = (sessionId: string) => {
+  return accessTokenStorage.retrieve(sessionId);
+};
+
+const storeTokenData = (
+  accessToken: string,
+  user: { id: string; email: string; role: string },
+  session: string
+): void => {
+  accessTokenStorage.store({ accessToken, user, session, timestamp: Date.now() });
+};
+
+const clearTokenData = (sessionId?: string): void => {
+  if (sessionId) {
+    accessTokenStorage.remove(sessionId);
+  } else {
+    accessTokenStorage.clear();
+  }
+};
+
+const getAllStoredSessions = (): string[] => {
+  return accessTokenStorage.getAllSessions();
+};
+
+// Log storage mode for debugging
+console.log(`🔒 Access token storage mode: ${getStorageMode()}`);
+
+// Create client with credentials for cookie handling
+const client = hcWithType(API_URL, {
+  init: {
+    credentials: 'include',
+  },
+});
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -28,32 +74,35 @@ export const authApi = createApi({
         try {
           const res = await client.api.auth.login.$post({ json: credentials });
           if (res.status === 200) {
-            const tokens: AuthTokens = await res.json();
+            const loginData: LoginResponse = await res.json();
 
-            // Create profile-token entry
+            // Store access token, user, and session
+            storeTokenData(loginData.accessToken, loginData.user, loginData.session);
+
+            // Create profile entry (for user management, not token storage)
             const profileToken: ProfileToken = {
-              profileId: `${credentials.email}_${Date.now()}`, // Generate unique profile ID
-              profileName: profileName || credentials.email,
-              accessToken: tokens.accessToken,
-              refreshToken: tokens.refreshToken,
-              expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours from now
+              profileId: loginData.session, // Use session as profile ID for proper identification
+              profileName: profileName || loginData.user.email,
+              expiresAt: Date.now() + 24 * 60 * 60 * 1000, // For UI purposes
             };
 
-            // Store the profile-token
+            // Store the profile metadata securely (no tokens)
             await secureStorage.addProfile(profileToken);
 
             // Set as current profile
-            dispatch(setCurrentProfile(profileToken.profileId));
+            // FixMe: do not use dispatch, use the extraReducers in the app slice
+            dispatch(setCurrentProfile(loginData.session));
 
             // Check profile count for navigation
             const profileCount = await secureStorage.getProfileCount();
+            // FixMe: do not use dispatch, use the extraReducers in the app slice
             if (profileCount > 1) {
               dispatch(navigateTo('profile-selection'));
             } else {
               dispatch(navigateTo('home/categories'));
             }
 
-            return { data: tokens };
+            return { data: loginData };
           }
           const data = await res.json();
           return {
@@ -170,37 +219,38 @@ export const authApi = createApi({
       },
     }),
 
-    refreshToken: builder.mutation<RefreshResponse, { profileId: string }>({
-      async queryFn({ profileId }, { dispatch }) {
+    refreshToken: builder.mutation<RefreshResponse | { valid: true }, void>({
+      async queryFn(_, { dispatch, getState }) {
         try {
-          const profiles = await secureStorage.getProfiles();
-          const profile = profiles.find(p => p.profileId === profileId);
-
-          if (!profile) {
-            return {
-              error: { status: 404, data: 'Profile not found' },
-            };
+          // Refresh token using current session
+          const sessionId = (getState() as RootState).app.auth.currentProfileId;
+          if (!sessionId) {
+            throw new Error('No session available for refresh');
           }
-
-          const res = await client.api.auth.refresh.$post({
-            json: { refreshToken: profile.refreshToken },
+          const res = await client.api.auth.refresh[':session'].$post({
+            param: { session: sessionId },
+            query: {},
           });
 
           if (res.status === 200) {
-            const tokens: AuthTokens = await res.json();
+            const refreshData = await res.json();
 
-            // Update stored profile with new tokens
-            await secureStorage.updateProfile(profileId, {
-              accessToken: tokens.accessToken,
-              refreshToken: tokens.refreshToken,
-              expiresAt: Date.now() + 24 * 60 * 60 * 1000,
-            });
+            // Check if it's a normal refresh response (not dry-run)
+            if ('accessToken' in refreshData) {
+              // Update stored access token
+              const currentSessionId = sessionId;
+              storeTokenData(refreshData.accessToken, refreshData.user, currentSessionId);
 
-            return { data: tokens };
+              return { data: refreshData };
+            } else {
+              // Dry-run response
+              return { data: refreshData };
+            }
           }
 
-          // If refresh fails, remove the invalid profile
-          await secureStorage.removeProfile(profileId);
+          // If refresh fails, clear tokens and redirect to login
+          clearTokenData();
+          // FixMe: do not use dispatch, use the extraReducers in the app slice
           dispatch(navigateTo('login'));
 
           const data = await res.json();
@@ -211,8 +261,8 @@ export const authApi = createApi({
             },
           };
         } catch (error: any) {
-          // Remove profile on error
-          await secureStorage.removeProfile(profileId);
+          // Clear tokens on error
+          clearTokenData();
           dispatch(navigateTo('login'));
           return {
             error: { status: error?.status || 500, data: error?.message || 'Unknown error' },
@@ -224,23 +274,21 @@ export const authApi = createApi({
     logout: builder.mutation<void, { profileId: string }>({
       async queryFn({ profileId }, { dispatch }) {
         try {
-          const profiles = await secureStorage.getProfiles();
-          const profile = profiles.find(p => p.profileId === profileId);
-
-          if (profile) {
-            // Call backend logout
-            try {
-              await client.api.auth.logout.$post({
-                json: { refreshToken: profile.refreshToken },
-              });
-            } catch (error) {
-              // Continue with local cleanup even if backend call fails
-              console.warn('Backend logout failed:', error);
-            }
-
-            // Remove from storage
-            await secureStorage.removeProfile(profileId);
+          // Call backend logout using session (profileId is the session)
+          try {
+            await client.api.auth.logout[':session'].$post({
+              param: { session: profileId },
+            });
+          } catch (error) {
+            // Continue with local cleanup even if backend call fails
+            console.warn('Backend logout failed:', error);
           }
+
+          // Clear stored token for this session
+          clearTokenData(profileId);
+
+          // Remove profile from storage
+          await secureStorage.removeProfile(profileId);
 
           // Check if there are other profiles
           const remainingCount = await secureStorage.getProfileCount();
@@ -283,16 +331,34 @@ export const authUtils = {
     return await secureStorage.getProfileCount();
   },
 
-  async hasValidToken(profileId: string): Promise<boolean> {
-    const profiles = await secureStorage.getProfiles();
-    const profile = profiles.find(p => p.profileId === profileId);
+  // Get current access token from storage
+  getCurrentAccessToken(sessionId?: string): string | null {
+    return getAccessToken(sessionId);
+  },
 
-    if (!profile) return false;
+  // Get current user from storage
+  getCurrentUser(sessionId?: string): { id: string; email: string; role: string } | null {
+    return getCurrentUser(sessionId);
+  },
 
-    // Check if token is expired (with 5 minute buffer)
-    const expiresAt = profile.expiresAt || 0;
-    const bufferTime = 5 * 60 * 1000; // 5 minutes
-    return Date.now() < expiresAt - bufferTime;
+  // Get token data for a specific session
+  getTokenDataBySession(sessionId: string) {
+    return getTokenDataBySession(sessionId);
+  },
+
+  // Get all stored sessions
+  getAllStoredSessions(): string[] {
+    return getAllStoredSessions();
+  },
+
+  // Check if user is currently authenticated
+  isAuthenticated(sessionId?: string): boolean {
+    if (sessionId) {
+      return getAccessToken(sessionId) !== null;
+    }
+    // Check if any session is authenticated
+    const sessions = getAllStoredSessions();
+    return sessions.some(session => getAccessToken(session) !== null);
   },
 
   async getCurrentProfile(profileId?: string): Promise<ProfileToken | null> {
@@ -303,6 +369,52 @@ export const authUtils = {
   },
 
   async clearAllProfiles() {
+    // Clear stored tokens
+    clearTokenData();
+    // Clear stored profiles
     await secureStorage.clearAll();
+  },
+
+  // Check if there is stored encrypted data
+  hasStoredData(): boolean {
+    return secureStorage.hasStoredData();
+  },
+
+  // Auto-refresh token mechanism
+  async ensureValidToken(sessionId: string): Promise<boolean> {
+    if (!getAccessToken(sessionId)) {
+      // Try to refresh if we don't have an access token for this session
+      try {
+        const res = await client.api.auth.refresh[':session'].$post({
+          param: { session: sessionId },
+          query: {},
+        });
+        if (res.status === 200) {
+          const refreshData = await res.json();
+          // Check if it's a normal refresh response (not dry-run)
+          if ('accessToken' in refreshData) {
+            storeTokenData(refreshData.accessToken, refreshData.user, sessionId);
+            return true;
+          }
+        }
+      } catch (error) {
+        // Refresh failed
+      }
+      return false;
+    }
+    return true;
+  },
+
+  // Clear tokens (for logout or errors)
+  clearTokens(sessionId?: string) {
+    clearTokenData(sessionId);
+  },
+
+  // Helper method to get active sessions with valid tokens
+  getActiveSessions(): string[] {
+    return getAllStoredSessions().filter(sessionId => {
+      const tokenData = getTokenDataBySession(sessionId);
+      return tokenData && tokenData.accessToken;
+    });
   },
 };
