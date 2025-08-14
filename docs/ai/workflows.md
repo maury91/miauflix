@@ -147,6 +147,11 @@ npm test --workspace backend
 # Backend E2E tests (comprehensive, slower)
 npm run test:backend:e2e
 
+# E2E tests with scope control
+npm run test:e2e                 # Run all tests (backend + frontend)
+npm run test:backend:e2e         # Run only backend tests
+npm run test:frontend:e2e        # Run only frontend tests
+
 # E2E development workflow (faster iteration)
 npm run start:backend:e2e        # Start environment (interactive mode)
 npm run start:backend:e2e -- -d  # Start environment (detached mode)
