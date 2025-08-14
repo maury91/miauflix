@@ -86,7 +86,7 @@ jobs:
         working-directory: backend-e2e
 
       - name: Run E2E tests
-        run: npm run test:backend:e2e
+        run: npm run test:e2e
         env:
           NODE_ENV: test
         timeout-minutes: 10

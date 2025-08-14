@@ -15,6 +15,7 @@ MODE="$1"
 script_dir=$(dirname $(realpath "$0"))
 backend_e2e_dir=$(dirname "$script_dir")
 root_dir=$(dirname "$backend_e2e_dir")
+frontend_dir="$root_dir/frontend"
 log_file="$backend_e2e_dir/logs/$(date +'%Y-%m-%d_%H-%M-%S').log"
 
 mkdir -p "$(dirname "$log_file")"
@@ -39,6 +40,29 @@ for arg in "$@"; do
     fi
 done
 
+# Parse test scope flags
+FRONTEND_ONLY=false
+BACKEND_ONLY=false
+for arg in "$@"; do
+    if [[ "$arg" == "--frontend-only" ]]; then
+        FRONTEND_ONLY=true
+        # Remove --frontend-only from args
+        set -- "${@/--frontend-only/}"
+        break
+    elif [[ "$arg" == "--backend-only" ]]; then
+        BACKEND_ONLY=true
+        # Remove --backend-only from args
+        set -- "${@/--backend-only/}"
+        break
+    fi
+done
+
+# Validate that only one scope flag is used
+if [[ "$FRONTEND_ONLY" == "true" && "$BACKEND_ONLY" == "true" ]]; then
+    echo "❌ Error: Cannot use both --frontend-only and --backend-only flags"
+    exit 1
+fi
+
 # Rest are test arguments
 if [[ "$MODE" != "dev" && "$MODE" != "test" ]]; then
     echo "❌ Usage: $0 <dev|test> [options...] [test-args...]"
@@ -47,8 +71,10 @@ if [[ "$MODE" != "dev" && "$MODE" != "test" ]]; then
     echo "  $0 dev                                    # Start development environment"
     echo "  $0 dev -d                                 # Start development environment in detached mode"
     echo "  $0 test                                   # Run all tests"
+    echo "  $0 test --backend-only                    # Run only backend tests"
+    echo "  $0 test --frontend-only                   # Run only frontend tests"
     echo "  $0 test movie.test.ts                     # Run specific test"
-    echo "  $0 test --testNamePattern=\"Movie\"        # Run matching tests"
+    echo "  $0 test --testNamePattern=\"Movie\"       # Run matching tests"
     echo ""
     echo "To stop detached development environment:"
     echo "  ./scripts/stop.sh"
@@ -182,8 +208,8 @@ trap cleanup EXIT INT TERM
 if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Build libraries only when starting fresh - ensure we're in root directory
     cd "$root_dir"
-    npm run build:all:backend
-    npm install # Links the libraries 
+    # We don't need to build the frontend, it will be built inside Docker, we need this for the backend client used outside of Docker
+    npm run build:backend
 
     # Build frontend only in dev so static assets are available/mounted
     if [[ "$MODE" == "dev" ]]; then
@@ -280,16 +306,43 @@ if [[ "$MODE" == "dev" ]]; then
     fi
 else
     # Test mode - run tests and exit
-    echo "🧪 Running integration tests..."
-    
-    # Pass any additional arguments to npm test (e.g., test name patterns)
-    if [ $# -gt 0 ]; then
-        echo "🎯 Running specific tests: $*"
-        npm test -- "$@"
+    BACKEND_TEST_PASSED=true
+    FRONTEND_TEST_PASSED=true
+
+    # Run backend tests if not frontend-only
+    if [[ "$FRONTEND_ONLY" != "true" ]]; then
+        echo "🧪 Running backend integration tests..."
+        
+        # Pass any additional arguments to npm test (e.g., test name patterns)
+        if [ $# -gt 0 ]; then
+            echo "🎯 Running specific tests: $*"
+            npm test -- "$@" || BACKEND_TEST_PASSED=false
+        else
+            echo "🧪 Running all tests..."
+            npm test || BACKEND_TEST_PASSED=false
+        fi
     else
-        echo "🧪 Running all tests..."
-        npm test
+        echo "⏭️  Skipping backend tests (--frontend-only flag)"
     fi
-    
+
+    # Run frontend tests if not backend-only
+    if [[ "$BACKEND_ONLY" != "true" ]]; then
+        echo "🧪 Running frontend integration tests..."
+        cd ${frontend_dir}
+        npm run test:e2e || FRONTEND_TEST_PASSED=false
+    else
+        echo "⏭️  Skipping frontend tests (--backend-only flag)"
+    fi
+
+    if [[ "$BACKEND_TEST_PASSED" == "false" || "$FRONTEND_TEST_PASSED" == "false" ]]; then
+        if [[ "$BACKEND_TEST_PASSED" == "false" ]]; then
+            echo "❌ Backend tests failed"
+        fi
+        if [[ "$FRONTEND_TEST_PASSED" == "false" ]]; then
+            echo "❌ Frontend tests failed"
+        fi
+        exit 1
+    fi
+
     echo "✅ E2E tests completed"
 fi

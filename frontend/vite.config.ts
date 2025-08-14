@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import storybookTest from '@storybook/addon-vitest/vitest-plugin';
 import react from '@vitejs/plugin-react';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 import path from 'path';
 // Phase 0 Bootstrap: Comment out NX-specific imports for now
 // TODO: Re-enable in future phases when NX workspace is properly configured
@@ -58,15 +59,29 @@ export default defineConfig({
   server: {
     port: 4173,
     host: 'localhost',
+    proxy: {
+      '/api': {
+        target: process.env.BACKEND_URL || 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   preview: {
     port: 4174,
     host: 'localhost',
+    proxy: {
+      '/api': {
+        target: process.env.API_URL || 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   define: {
     // Build-time configuration for access token storage
     __ACCESS_TOKEN_STORAGE_MODE__: JSON.stringify(
-      process.env.TOKEN_STORAGE_MODE === 'sessionStorage' ? 'sessionStorage' : 'memory'
+      process.env.TOKEN_STORAGE_MODE === 'session' ? 'session' : 'memory'
     ),
   },
   plugins: [
@@ -149,6 +164,10 @@ export default defineConfig({
     // nxViteTsPaths(),
     // nxCopyAssetsPlugin(assets),
     // ...(tizenBuild ? tizenPlugins : []),
+    basicSsl({
+      /** name of certification */
+      name: 'miauflix-vite',
+    }),
   ],
   // Uncomment this if you are using workers.
   // worker: {
