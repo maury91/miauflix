@@ -7,11 +7,11 @@
  * - sessionStorage: Uses sessionStorage (survives page refresh, cleared on browser close)
  *
  * The storage mode is hardcoded at build time via Vite's define config:
- * - __ACCESS_TOKEN_STORAGE_MODE__ = 'memory' | 'sessionStorage'
+ * - __ACCESS_TOKEN_STORAGE_MODE__ = 'memory' | 'session'
  */
 
 // Build-time configuration - will be replaced by Vite
-declare const __ACCESS_TOKEN_STORAGE_MODE__: 'memory' | 'sessionStorage';
+declare const __ACCESS_TOKEN_STORAGE_MODE__: 'memory' | 'session';
 
 interface TokenData {
   accessToken: string;
@@ -178,12 +178,13 @@ function createAccessTokenStorage(): BaseAccessTokenStorage {
     typeof __ACCESS_TOKEN_STORAGE_MODE__ !== 'undefined' ? __ACCESS_TOKEN_STORAGE_MODE__ : 'memory';
 
   switch (mode) {
-    case 'sessionStorage':
+    case 'session': {
       const sessionStorage = new SessionStorageAccessTokenStorage();
       if (!sessionStorage.isAvailable()) {
         return new MemoryAccessTokenStorage();
       }
       return sessionStorage;
+    }
     case 'memory':
     default:
       return new MemoryAccessTokenStorage();

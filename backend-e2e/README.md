@@ -49,14 +49,16 @@ The `scripts/env.sh` script orchestrates the entire process for both development
 
 ```bash
 # From the backend-e2e directory
-./scripts/env.sh test
+./scripts/env.sh test                    # Run all tests (backend + frontend)
+./scripts/env.sh test --backend-only     # Run only backend tests
+./scripts/env.sh test --frontend-only    # Run only frontend tests
 ```
 
 This will:
 
 1. Start all services (backend + mocks)
 2. Wait for services to be healthy
-3. Run tests
+3. Run tests (all, backend-only, or frontend-only based on flags)
 4. Clean up automatically
 
 ### Development Workflow
@@ -104,6 +106,10 @@ npm run test:watch
 
 # Run tests against running services
 npm test
+
+# Run specific test scopes
+./scripts/env.sh test --backend-only     # Backend tests only
+./scripts/env.sh test --frontend-only    # Frontend tests only
 
 # Clean up all containers and volumes
 npm run clean

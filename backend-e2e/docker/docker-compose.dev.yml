@@ -81,7 +81,7 @@ services:
   trakt-mock:
     build:
       context: mock
-      dockerfile: mock.Dockerfile
+      dockerfile: trakt.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
     environment:
       - DATA_DIR=/app/data
