@@ -109,20 +109,12 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting tests */
-  webServer: [
-    {
-      command: 'npm run build && vite preview',
-      url: 'http://localhost:4174',
-      reuseExistingServer: !process.env['CI'],
-      timeout: 120000,
-    },
-    {
-      command: 'npx storybook dev -p 6006 --no-open',
-      url: 'http://localhost:6006',
-      reuseExistingServer: !process.env['CI'],
-      timeout: 120000,
-    },
-  ],
+  webServer: {
+    command: 'npx storybook dev -p 6006 --no-open',
+    url: 'http://localhost:6006',
+    reuseExistingServer: !process.env['CI'],
+    timeout: 120000,
+  },
 
   /* Test output directory */
   outputDir: './test-results',
