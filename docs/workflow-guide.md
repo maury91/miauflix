@@ -588,7 +588,9 @@ npm run dev:frontend:ssr     # Frontend with SSR build + preview (for testing SS
 
 # Testing
 npm run test:backend         # Jest unit tests
-npm run test:backend:e2e     # Full E2E cycle ( start docker, run tests, stop docker )
+npm run test:e2e             # Full E2E cycle ( start docker, run tests, stop docker )
+npm run test:backend:e2e     # Backend E2E tests only
+npm run test:frontend:e2e    # Frontend E2E tests only
 npm run test:backend:e2e:dev # Full E2E tests ( requires running docker (start:backend:e2e) )
 ```
 
