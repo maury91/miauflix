@@ -115,11 +115,10 @@ jobs:
       - name: Build frontend
         run: npm run build:frontend
         if: steps.verify-playwright.outcome == 'success'
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
 
       - name: Run visual tests
         run: touch ../.env && npm run test:frontend:visual
+        if: steps.verify-playwright.outcome == 'success'
         env:
           NODE_ENV: test
           PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright

@@ -22,40 +22,26 @@ mkdir -p "$(dirname "$log_file")"
 
 shift # Remove first argument
 
-# Parse detached flag for dev mode
-DETACHED_MODE=false
-if [[ "$MODE" == "dev" && "$1" == "-d" ]]; then
-    DETACHED_MODE=true
-    shift # Remove -d flag
-fi
-
-# Parse -v flag for verbosity
-VERBOSE=0
-for arg in "$@"; do
-    if [[ "$arg" == "-v" ]]; then
-        VERBOSE=1
-        # Remove -v from args
-        set -- "${@/-v/}"
-        break
-    fi
-done
-
 # Parse test scope flags
 FRONTEND_ONLY=false
 BACKEND_ONLY=false
+DETACHED_FLAG=false
+VERBOSE=0
+filtered_args=()
 for arg in "$@"; do
-    if [[ "$arg" == "--frontend-only" ]]; then
-        FRONTEND_ONLY=true
-        # Remove --frontend-only from args
-        set -- "${@/--frontend-only/}"
-        break
-    elif [[ "$arg" == "--backend-only" ]]; then
-        BACKEND_ONLY=true
-        # Remove --backend-only from args
-        set -- "${@/--backend-only/}"
-        break
-    fi
+  case "$arg" in
+    --frontend-only) FRONTEND_ONLY=true ;;
+    --backend-only)  BACKEND_ONLY=true ;;
+    -d) DETACHED_FLAG=true ;;
+    -v) VERBOSE=1 ;;
+    *) filtered_args+=("$arg") ;;
+  esac
 done
+set -- "${filtered_args[@]}"
+
+if  [[ "$MODE" == "dev" && "$DETACHED_FLAG" == "true" ]];  then
+    DETACHED_MODE=true
+fi
 
 # Validate that only one scope flag is used
 if [[ "$FRONTEND_ONLY" == "true" && "$BACKEND_ONLY" == "true" ]]; then
@@ -310,6 +296,7 @@ else
     FRONTEND_TEST_PASSED=true
     
     export BACKEND_URL="http://localhost:$PORT"
+    cd ${root_dir}
 
     # Run backend tests if not frontend-only
     if [[ "$FRONTEND_ONLY" != "true" ]]; then
@@ -318,10 +305,10 @@ else
         # Pass any additional arguments to npm test (e.g., test name patterns)
         if [ $# -gt 0 ]; then
             echo "🎯 Running specific tests: $*"
-            npm test -- "$@" || BACKEND_TEST_PASSED=false
+            npm test -w backend -- "$@" || BACKEND_TEST_PASSED=false
         else
             echo "🧪 Running all tests..."
-            npm test || BACKEND_TEST_PASSED=false
+            npm test -w backend || BACKEND_TEST_PASSED=false
         fi
     else
         echo "⏭️  Skipping backend tests (--frontend-only flag)"
@@ -330,8 +317,7 @@ else
     # Run frontend tests if not backend-only
     if [[ "$BACKEND_ONLY" != "true" ]]; then
         echo "🧪 Running frontend integration tests..."
-        cd ${frontend_dir}
-        npm run test:e2e || FRONTEND_TEST_PASSED=false
+        npm run test:e2e -w frontend || FRONTEND_TEST_PASSED=false
     else
         echo "⏭️  Skipping frontend tests (--backend-only flag)"
     fi
