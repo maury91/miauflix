@@ -26,6 +26,7 @@ shift # Remove first argument
 FRONTEND_ONLY=false
 BACKEND_ONLY=false
 DETACHED_FLAG=false
+DETACHED_MODE=false
 VERBOSE=0
 filtered_args=()
 for arg in "$@"; do
