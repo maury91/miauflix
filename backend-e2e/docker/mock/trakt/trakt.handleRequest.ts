@@ -66,21 +66,15 @@ function generateMockOAuthResponses(path: string, method: string, body?: any): a
  * Returns null if the request should be handled by the default logic
  * Returns HandleRequestResponse if the request was handled
  */
-export const handleRequest = async (
-  params: HandleRequestParams
-): Promise<HandleRequestResponse | null> => {
-  const {
-    req,
-    path,
-    queryParams,
-    method,
-    filePath,
-    API_KEY,
-    API_SECRET,
-    API_BASE_URL,
-    API_HEADERS,
-  } = params;
-
+export const handleRequest = async ({
+  req,
+  path,
+  method,
+  API_KEY,
+  API_SECRET,
+  API_BASE_URL = 'https://api.trakt.tv',
+  API_HEADERS,
+}: HandleRequestParams): Promise<HandleRequestResponse | null> => {
   // Only handle POST requests for OAuth endpoints
   if (method !== 'POST' || !path.startsWith('/oauth/')) {
     return null; // Let default handler process it

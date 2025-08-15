@@ -6,7 +6,7 @@ import {
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ExpoScaleEase } from 'gsap/EasePack';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { IS_TIZEN } from '@/consts';
 import { useAppInitialization } from '@/hooks/useAppInitialization';
@@ -51,10 +51,12 @@ export function App() {
   const backgrounds = useAppSelector(state => state.app.backgrounds);
   const preloadHomeImages = usePreloadHomeImages();
   const logoRef = useRef<LogoAnimationHandle>(null);
+  const [introAnimationComplete, setIntroAnimationComplete] = useState(false);
 
   const onAnimationComplete = useCallback(() => {
     resumeSpatialNavigation();
     preloadHomeImages();
+    setIntroAnimationComplete(true);
 
     // Dispatch custom event when Intro animation completes
     const event = new CustomEvent('miauflix:intro:animation:complete');
@@ -188,11 +190,13 @@ export function App() {
         </MotionConfig>
       </MotionConfig>
 
-      <IntroAnimation
-        ref={logoRef}
-        onComplete={onAnimationComplete}
-        lowResourceAnimation={IS_TIZEN}
-      />
+      {!introAnimationComplete && (
+        <IntroAnimation
+          ref={logoRef}
+          onComplete={onAnimationComplete}
+          lowResourceAnimation={IS_TIZEN}
+        />
+      )}
     </>
   );
 }

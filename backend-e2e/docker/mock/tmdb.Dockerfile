@@ -14,7 +14,7 @@ RUN bun install
 COPY . ./
 
 # Expose port
-EXPOSE 3000
+EXPOSE 80
 
 # Copy TMDB-specific sanitizer to replace the identity sanitizer
 COPY tmdb/tmdb.sanitize.ts sanitize.ts

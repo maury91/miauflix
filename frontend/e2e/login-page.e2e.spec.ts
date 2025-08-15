@@ -1,4 +1,6 @@
-import { test, expect, type Page } from '@playwright/test';
+/// <reference types="./global.d.ts" />
+
+import { expect, test } from '@playwright/test';
 
 test.describe('Login Page - E2E Testing', () => {
   test.beforeEach(async ({ page }) => {
@@ -8,7 +10,7 @@ test.describe('Login Page - E2E Testing', () => {
 
       window.addEventListener('miauflix:intro:animation:complete', () => {
         console.log('🎬 Animation complete event received!');
-        (window as any)._miauflixAnimationComplete = true;
+        window._miauflixAnimationComplete = true;
       });
 
       console.log('🔧 Event listener setup complete');
@@ -19,7 +21,7 @@ test.describe('Login Page - E2E Testing', () => {
 
     // Wait for the animation to complete
     await page.waitForFunction(
-      () => (window as any)._miauflixAnimationComplete === true,
+      () => window._miauflixAnimationComplete === true,
       {},
       { timeout: 10000 }
     );

@@ -1,4 +1,5 @@
 import type {
+  BaseVariableInfo,
   DefaultVariableInfo,
   ServiceConfiguration,
   SkipUserInteractionVariableInfo,
@@ -196,6 +197,10 @@ export const transforms = {
       return { isValid: true, value: milliseconds };
     },
 
+  domain: (): ValidatorTransform<string> => (value: string) => {
+    return transforms.string({ pattern: /^(?:[\w-]+\.)+[\w-]+$/i })(value);
+  },
+
   optional:
     <T>(baseTransform: ValidatorTransform<T>): ValidatorTransform<T | undefined> =>
     (value: string) => {
@@ -209,6 +214,7 @@ export const transforms = {
 // Helper to create validated variable with automatic type inference
 export function variable<T>(
   config: { transform: ValidatorTransform<T> } & (
+    | BaseVariableInfo
     | DefaultVariableInfo
     | SkipUserInteractionVariableInfo
   )

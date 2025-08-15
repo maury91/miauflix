@@ -14,10 +14,13 @@ RUN bun install
 COPY . ./
 
 # Expose port
-EXPOSE 3000
+EXPOSE 80
 
 # Copy Trakt-specific request handler to enable POST OAuth support
 COPY trakt/trakt.handleRequest.ts ./handleRequest.ts
+
+# Fix relative import after relocation (../types -> ./types)
+RUN sed -i 's#\\\.\\\./types#./types#g' ./handleRequest.ts
 
 # Start the mock server using the "start" script from package.json
 CMD ["bun", "start"]

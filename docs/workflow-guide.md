@@ -574,24 +574,24 @@ npm run lint:fix
 
 ```bash
 # Backend Development
-npm run start:backend        # Interactive configuration and start backend
-npm run start:backend:e2e    # Dockerised watch server (mock data) - interactive mode
-npm run start:backend:e2e -- -d  # Dockerised watch server (mock data) - detached mode
-npm run stop:backend:e2e     # Stop detached backend E2E environment
-npm run config               # Interactive configuration setup and start server
-npm run config-only          # Configuration only (no server start)
+npm run start:backend             # Interactive configuration and start backend
+npm run start:backend:e2e         # Dockerised watch server (mock data) - interactive mode (requires docker:cleanup)
+npm run start:backend:e2e -- -d   # Dockerised watch server (mock data) - detached mode (requires docker:cleanup)
+npm run stop:backend:e2e          # Stop detached backend E2E environment (requires docker:cleanup)
+npm run config                    # Interactive configuration setup and start server
+npm run config-only               # Configuration only (no server start)
 
 # Frontend Development
-npm run start:frontend       # Frontend with hot reload (recommended for development)
-npm run dev:frontend         # Same as start:frontend
-npm run dev:frontend:ssr     # Frontend with SSR build + preview (for testing SSR)
+npm run start:frontend            # Frontend with hot reload (recommended for development)
+npm run dev:frontend              # Same as start:frontend
+npm run dev:frontend:ssr          # Frontend with SSR build + preview (for testing SSR)
 
 # Testing
-npm run test:backend         # Jest unit tests
-npm run test:e2e             # Full E2E cycle ( start docker, run tests, stop docker )
-npm run test:backend:e2e     # Backend E2E tests only
-npm run test:frontend:e2e    # Frontend E2E tests only
-npm run test:backend:e2e:dev # Full E2E tests ( requires running docker (start:backend:e2e) )
+npm run test:backend              # Jest unit tests
+npm run test:e2e                  # Full E2E cycle ( start docker, run tests, stop docker )
+npm run test:backend:e2e          # Backend E2E tests only
+npm run test:frontend:e2e         # Frontend E2E tests only
+npm run test:backend:e2e:dev      # Full E2E tests ( requires running docker (start:backend:e2e) )
 ```
 
 ### Quality Assurance
