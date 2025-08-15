@@ -179,11 +179,11 @@ function createAccessTokenStorage(): BaseAccessTokenStorage {
 
   switch (mode) {
     case 'session': {
-      const sessionStorage = new SessionStorageAccessTokenStorage();
-      if (!sessionStorage.isAvailable()) {
+      const sessionTokenStorage = new SessionStorageAccessTokenStorage();
+      if (!sessionTokenStorage.isAvailable()) {
         return new MemoryAccessTokenStorage();
       }
-      return sessionStorage;
+      return sessionTokenStorage;
     }
     case 'memory':
     default:

@@ -1,6 +1,6 @@
 import { sanitize } from './sanitize';
 import { handleRequest } from './handleRequest';
-import type { HandleRequestParams, HandleRequestResponse } from './types';
+import type { HandleRequestParams, HandleRequestResponse, HttpMethod } from './types';
 
 const PORT = 80;
 const DATA_DIR = process.env.DATA_DIR;
@@ -125,14 +125,19 @@ async function defaultHandleRequest({
     };
   }
 
-  if (!API_KEY) {
-    console.error('API Key is not configured');
+  if (!API_KEY || !API_BASE_URL) {
+    if (!API_KEY) {
+      console.error('API Key is not configured');
+    }
+    if (!API_BASE_URL) {
+      console.error('API Base URL is not configured');
+    }
     return {
       data: null,
       store: false,
       response: new Response(
         JSON.stringify({
-          error: 'This request is not cached and API_KEY is not configured',
+          error: 'This request is not cached and API_KEY or API_BASE_URL is not configured',
         }),
         {
           status: 404,
@@ -150,9 +155,10 @@ async function defaultHandleRequest({
   }
 
   // Make the request to API
+  const incomingHeaders = Object.fromEntries(req.headers.entries());
   const apiResponse = await fetch(apiUrl.toString(), {
     headers: {
-      ...req.headers,
+      ...incomingHeaders,
       ...API_HEADERS,
       [API_AUTH_HEADER]: API_AUTH_HEADER_IS_BEARER ? `Bearer ${API_KEY}` : API_KEY,
     },
@@ -188,7 +194,7 @@ Bun.serve({
     const url = new URL(req.url);
     const path = url.pathname;
     const queryParams = Object.fromEntries(url.searchParams.entries());
-    const method = req.method;
+    const method = req.method as HttpMethod;
 
     if (path === '/health') {
       return new Response('OK', { status: 200 });
@@ -230,6 +236,7 @@ Bun.serve({
       if (store) {
         await saveResponse(filePath, {
           headers: omitHeaders(response.headers),
+          status: response.status,
           data,
         });
       }
