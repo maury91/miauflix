@@ -87,6 +87,8 @@ npm run stop:backend:e2e            # Stop Docker environment
 
 # Frontend tests
 npm run test:frontend               # Unit tests (limited coverage)
+npm run test:e2e                    # E2E tests with full backend integration
+npm run test:visual                 # Visual regression tests (Storybook components)
 ```
 
 ### Code Quality
@@ -381,3 +383,5 @@ This is a **sophisticated, production-ready streaming platform** with:
 - ✅ Frontend builds successfully without errors
 
 **The only remaining work is JWT authentication integration** - connecting the React application's authentication flow to the existing, fully-functional backend authentication endpoints. The infrastructure is complete; focus development efforts on user authentication, token management, and protected routes in the frontend.
+
+- always run npm commands from the workspace root, never from subfolders
