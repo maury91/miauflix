@@ -70,13 +70,16 @@ export default defineConfig({
   preview: {
     port: 4174,
     host: 'localhost',
-    proxy: {
-      '/api': {
-        target: process.env.API_URL || 'http://localhost:3000',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
+    proxy:
+      process.env.DISABLE_API_PROXY !== 'true'
+        ? {
+            '/api': {
+              target: process.env.API_URL || 'http://localhost:3000',
+              changeOrigin: true,
+              secure: false,
+            },
+          }
+        : undefined,
   },
   define: {
     // Build-time configuration for access token storage
