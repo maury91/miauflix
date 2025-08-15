@@ -85,41 +85,6 @@ jobs:
         run: npm ci
         working-directory: backend-e2e
 
-      - name: Run E2E tests
-        run: npm run test:e2e
-        env:
-          NODE_ENV: test
-        timeout-minutes: 10
-
-      - name: Upload E2E test artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: e2e-test-logs
-          path: |
-            backend-e2e/admin-credentials.json
-            backend-e2e/logs/*.log
-            backend-e2e/logs/traces/*.log
-          if-no-files-found: ignore
-          retention-days: 7
-
-  frontend-visual-tests:
-    runs-on: ubuntu-latest
-    needs: lint-and-type-check
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.x'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --include=dev
-
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
@@ -134,12 +99,24 @@ jobs:
           PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
 
       - name: Verify Playwright installation
+        id: verify-playwright
         run: npx -w frontend playwright --version
         env:
           PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
 
-      - name: Build everything
-        run: npm run build:all
+      - name: Run E2E tests
+        run: npm run test:e2e
+        if: steps.verify-playwright.outcome == 'success'
+        env:
+          NODE_ENV: test
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+        timeout-minutes: 10
+
+      - name: Build frontend
+        run: npm run build:frontend
+        if: steps.verify-playwright.outcome == 'success'
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
 
       - name: Run visual tests
         run: touch ../.env && npm run test:frontend:visual
@@ -147,6 +124,18 @@ jobs:
           NODE_ENV: test
           PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
         timeout-minutes: 10
+
+      - name: Upload E2E test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-logs
+          path: |
+            backend-e2e/admin-credentials.json
+            backend-e2e/logs/*.log
+            backend-e2e/logs/traces/*.log
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Upload Playwright report
         if: always()
