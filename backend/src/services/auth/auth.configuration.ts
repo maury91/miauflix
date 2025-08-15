@@ -46,7 +46,9 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       description: 'Domain for refresh token cookies (leave empty for same-origin)',
       example: 'example.com',
       required: false,
-      transform: transforms.optional(transforms.domain()),
+      transform: transforms.optional(
+        transforms.domain({ allowLocalhost: process.env.NODE_ENV !== 'production' })
+      ),
     }),
     COOKIE_SECURE: variable({
       description: 'Whether to use secure flag for cookies (HTTPS only)',
