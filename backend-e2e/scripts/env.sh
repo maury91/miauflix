@@ -296,7 +296,7 @@ else
     FRONTEND_TEST_PASSED=true
     
     export BACKEND_URL="http://localhost:$PORT"
-    cd ${root_dir}
+    cd ${backend_e2e_dir}
 
     # Run backend tests if not frontend-only
     if [[ "$FRONTEND_ONLY" != "true" ]]; then
@@ -305,14 +305,16 @@ else
         # Pass any additional arguments to npm test (e.g., test name patterns)
         if [ $# -gt 0 ]; then
             echo "🎯 Running specific tests: $*"
-            npm test -w backend -- "$@" || BACKEND_TEST_PASSED=false
+            npm test -- "$@" || BACKEND_TEST_PASSED=false
         else
             echo "🧪 Running all tests..."
-            npm test -w backend || BACKEND_TEST_PASSED=false
+            npm test || BACKEND_TEST_PASSED=false
         fi
     else
         echo "⏭️  Skipping backend tests (--frontend-only flag)"
     fi
+
+    cd ${root_dir}
 
     # Run frontend tests if not backend-only
     if [[ "$BACKEND_ONLY" != "true" ]]; then
