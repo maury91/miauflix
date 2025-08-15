@@ -88,7 +88,7 @@ jobs:
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
-          path: ~/.cache/ms-playwright
+          path: .cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
@@ -96,20 +96,20 @@ jobs:
       - name: Install Playwright browsers
         run: npx -w frontend playwright install --with-deps chromium
         env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
 
       - name: Verify Playwright installation
         id: verify-playwright
         run: npx -w frontend playwright --version
         env:
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
 
       - name: Run E2E tests
         run: npm run test:e2e
         if: steps.verify-playwright.outcome == 'success'
         env:
           NODE_ENV: test
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
         timeout-minutes: 10
 
       - name: Build frontend
@@ -121,7 +121,7 @@ jobs:
         if: steps.verify-playwright.outcome == 'success'
         env:
           NODE_ENV: test
-          PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
         timeout-minutes: 10
 
       - name: Upload E2E test artifacts
