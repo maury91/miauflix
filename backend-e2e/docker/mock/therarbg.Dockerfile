@@ -18,7 +18,7 @@ RUN bun install
 COPY mock/ ./
 
 # Expose port
-EXPOSE 3000
+EXPOSE 80
 
 # Copy TheRARBG-specific sanitizer to replace the identity sanitizer
 COPY mock/therarbg/therarbg.sanitize.ts ./sanitize.ts

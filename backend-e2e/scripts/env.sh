@@ -308,6 +308,8 @@ else
     # Test mode - run tests and exit
     BACKEND_TEST_PASSED=true
     FRONTEND_TEST_PASSED=true
+    
+    export BACKEND_URL="http://localhost:$PORT"
 
     # Run backend tests if not frontend-only
     if [[ "$FRONTEND_ONLY" != "true" ]]; then
