@@ -7,6 +7,9 @@ import { expect, test } from '@playwright/test';
  * Tests the complete login flow including authentication with valid credentials
  */
 test.describe('Comprehensive Login Tests', () => {
+  // Configurable timeout constants
+  const LOGIN_API_TIMEOUT = 10000; // 10 seconds for login API response
+
   let adminEmail: string | undefined;
   let adminPassword: string | undefined;
 
@@ -143,25 +146,31 @@ test.describe('Comprehensive Login Tests', () => {
 
     console.log('✅ Admin credentials filled, attempting login...');
 
-    // Listen for network requests
-    let loginRequestMade = false;
-    page.on('request', request => {
-      if (request.url().includes('/api/auth/login')) {
-        loginRequestMade = true;
-        console.log('📡 Login API request detected');
-      }
-    });
+    // Set up deterministic wait for login API response
+    const loginResponsePromise = page.waitForResponse(
+      response => response.url().includes('/api/auth/login'),
+      { timeout: LOGIN_API_TIMEOUT }
+    );
 
     // Submit the form
+    console.log('📡 Submitting login form...');
     await submitButton.click();
 
-    // Wait a moment for the request to be made
-    await page.waitForTimeout(2000);
+    // Wait for the actual API response
+    try {
+      const loginResponse = await loginResponsePromise;
+      const statusCode = loginResponse.status();
+      console.log(`✅ Login API response received with status: ${statusCode}`);
 
-    if (loginRequestMade) {
-      console.log('✅ Login request was successfully made to the backend');
-    } else {
-      console.log('⚠️ No login request detected - may indicate frontend/backend connection issue');
+      if (statusCode === 200) {
+        console.log('✅ Login was successful');
+      } else {
+        console.log(`ℹ️ Login failed with status: ${statusCode}`);
+      }
+    } catch {
+      console.log(
+        '⚠️ Login API request timed out or failed - may indicate frontend/backend connection issue'
+      );
     }
 
     // Check for any error messages or success indicators
