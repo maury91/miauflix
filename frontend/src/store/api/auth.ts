@@ -189,7 +189,7 @@ export const authApi = createApi({
     }),
 
     checkDeviceLoginStatus: builder.mutation<
-      { accessToken: string; refreshToken: string } | { success: false },
+      { accessToken: string; refreshToken: string; success: true } | { success: false },
       { deviceCode: string }
     >({
       async queryFn({ deviceCode }) {

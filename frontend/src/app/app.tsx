@@ -11,7 +11,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IS_TIZEN } from '@/consts';
 import { useAppInitialization } from '@/hooks/useAppInitialization';
 
-import LoginPage from '../pages/LoginPage';
 import { useGetListsQuery } from '../store/api/lists';
 import { usePrefetch } from '../store/api/lists';
 import { useAppSelector } from '../store/store';
@@ -20,6 +19,7 @@ import { Background, BackgroundContainer, SimpleBackground } from './components/
 import { Logo } from './components/logo';
 import { Home } from './pages/home';
 import { usePreloadHomeImages } from './pages/home/hooks/usePreloadHomeImages';
+import LoginPage from './pages/login/LoginPage';
 import { Player } from './pages/player';
 import { ProfileSelection } from './pages/welcome';
 
