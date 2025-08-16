@@ -21,6 +21,7 @@ const LogoText = styled.h1`
   letter-spacing: 0;
   fill: #db202c;
   stroke: #db202c;
+  margin: 0;
 `;
 
 const M = styled(
