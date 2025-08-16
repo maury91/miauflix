@@ -133,7 +133,7 @@ backend/src/configuration.ts           # Interactive setup system
 
 # Docker setup
 docker-compose.yml                      # Main orchestration
-backend.Dockerfile                     # Backend container
+Dockerfile                              # Miauflix container (backend + frontend)
 nginx/conf.d/default.conf.template     # Web server config
 ```
 

@@ -147,6 +147,11 @@ npm test --workspace backend
 # Backend E2E tests (comprehensive, slower)
 npm run test:backend:e2e
 
+# E2E tests with scope control
+npm run test:e2e                 # Run all tests (backend + frontend)
+npm run test:backend:e2e         # Run only backend tests
+npm run test:frontend:e2e        # Run only frontend tests
+
 # E2E development workflow (faster iteration)
 npm run start:backend:e2e        # Start environment (interactive mode)
 npm run start:backend:e2e -- -d  # Start environment (detached mode)
@@ -403,9 +408,58 @@ npm run start:backend  # Interactive configuration wizard
 docker-compose up
 
 # Start development servers
-npm run dev --workspace backend
-npm run dev --workspace frontend
+npm run start:backend
+npm run start:frontend  # Hot reload development (recommended)
+npm run dev:frontend:ssr  # SSR testing mode
 ```
+
+### **Frontend Development Workflows**
+
+#### **Hot Reload Development (Daily Development)**
+
+```bash
+npm run start:frontend
+# or
+npm run dev:frontend
+```
+
+**Benefits:**
+
+- ✅ Instant hot reload - see changes immediately
+- 🚀 Fast feedback loop for UI development
+- 💻 Client-side rendering - no SSR overhead
+
+**Use for:** Component development, styling, debugging, daily development work
+
+#### **SSR Testing Mode (Production Testing)**
+
+```bash
+npm run dev:frontend:ssr
+```
+
+**Benefits:**
+
+- 🔍 Production-like SSR behavior
+- 📱 SEO and meta tag testing
+- 🎯 Server-side rendering verification
+
+**Limitations:**
+
+- ❌ No hot reload - requires manual rebuild
+- ⏳ Slower iteration cycle
+
+**Use for:** Testing SSR functionality, production verification, debugging SSR issues
+
+#### **When to Use Each Mode**
+
+| Task                      | Recommended Mode           | Reason                        |
+| ------------------------- | -------------------------- | ----------------------------- |
+| Component styling         | `npm run start:frontend`   | Instant visual feedback       |
+| UI development            | `npm run start:frontend`   | Hot reload for fast iteration |
+| Debugging React issues    | `npm run start:frontend`   | Client-side dev tools         |
+| Testing SSR functionality | `npm run dev:frontend:ssr` | Production-like behavior      |
+| SEO verification          | `npm run dev:frontend:ssr` | Server-rendered meta tags     |
+| Production simulation     | `npm run dev:frontend:ssr` | Matches deployment behavior   |
 
 ### **Environment Configuration**
 

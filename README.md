@@ -123,6 +123,7 @@ First command runs the configuration wizard (TMDB API key, etc.), then start the
 ### Prerequisites
 
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js](https://nodejs.org/) (for local development)
 - VPN subscription (for VPN functionality, currently only NordVPN is supported)
 - [TMDB API Access Token](https://developer.themoviedb.org/docs) (for media content)
 - [Trakt.tv API Client ID](https://trakt.tv/oauth/applications) (optional, for list synchronization)
@@ -242,6 +243,53 @@ docker compose up -d
 
 - 🌐 Backend API: `https://yourdomain.com/`
 - ✅ Health check: `https://yourdomain.com/health`
+
+## 💻 Local Development
+
+For local development without Docker:
+
+### Frontend Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start frontend with hot reload (recommended for development)
+npm run start:frontend
+# or
+npm run dev:frontend
+```
+
+The frontend development server provides:
+
+- ✅ **Hot reload** - Changes appear instantly without manual refresh
+- 🔥 **Fast feedback** - Perfect for UI development and styling
+- 🚀 **Client-side rendering** - No SSR overhead during development
+
+### Frontend SSR Testing
+
+```bash
+# Test with Server-Side Rendering (for production-like behavior)
+npm run dev:frontend:ssr
+```
+
+Use SSR mode when:
+
+- 🔍 **Testing SSR functionality** - Debug server-side rendering issues
+- 🎯 **Production verification** - Ensure production-like behavior
+- 📱 **SEO testing** - Verify meta tags and initial page load
+
+> **Note**: SSR mode requires manual rebuild after changes - use regular dev mode for active development.
+
+### Backend Development
+
+```bash
+# Interactive configuration and start
+npm run start:backend
+
+# Development with Docker (includes mock data)
+npm run start:backend:e2e
+```
 
 ## 🔄 CI/CD
 

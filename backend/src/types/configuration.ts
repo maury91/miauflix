@@ -1,4 +1,4 @@
-type BaseVariableInfo = {
+export type BaseVariableInfo = {
   description: string;
   example?: string;
   link?: string;

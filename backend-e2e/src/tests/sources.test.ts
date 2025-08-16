@@ -33,7 +33,7 @@ describe('Sources E2E Tests', () => {
       }
 
       // Request movie with sources included
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' },
         query: { includeSources: 'true' },
       });
@@ -102,7 +102,7 @@ describe('Sources E2E Tests', () => {
       const allSourceTypes = new Set<string>();
 
       for (const movieId of movieIds) {
-        const response = await client.get(['movies', ':id'], {
+        const response = await client.get(['api', 'movies', ':id'], {
           param: { id: movieId },
           query: { includeSources: 'true' },
         });
@@ -131,7 +131,7 @@ describe('Sources E2E Tests', () => {
         );
       }
 
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' },
         query: { includeSources: 'true' },
       });
@@ -178,7 +178,10 @@ describe('Sources E2E Tests', () => {
         );
       }
 
-      const response = await client.get(['movies', ':id'], { param: { id: '550' }, query: {} });
+      const response = await client.get(['api', 'movies', ':id'], {
+        param: { id: '550' },
+        query: {},
+      });
 
       expect(response).toBeHttpStatus(200);
       expect(response.data).not.toHaveProperty('sources');
@@ -192,7 +195,7 @@ describe('Sources E2E Tests', () => {
       }
 
       // Use a very obscure movie ID that likely has no sources
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '999888777' },
         query: { includeSources: 'true' },
       });

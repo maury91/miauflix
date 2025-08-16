@@ -13,7 +13,7 @@ export const listsApi = createApi({
     getLists: builder.query<ListsResponse, void>({
       async queryFn() {
         try {
-          const res = await client.lists.$get({});
+          const res = await client.api.lists.$get({});
           if (res.status === 200) {
             const data = await res.json();
             return { data };
@@ -36,7 +36,7 @@ export const listsApi = createApi({
     getList: builder.query<ListResponse, { category: string; page: number }>({
       async queryFn({ category, page }) {
         try {
-          const res = await client.list[':slug'].$get({
+          const res = await client.api.list[':slug'].$get({
             param: { slug: category },
             query: { lang: 'en' },
           });

@@ -1,0 +1,48 @@
+/* Global CSS to prevent white flash on page load */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000000 !important;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000 !important;
+}
+
+/* Reset any default styling that might cause flashing */
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure styled-components styles don't override our background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  z-index: -1;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}

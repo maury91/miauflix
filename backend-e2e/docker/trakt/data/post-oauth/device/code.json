@@ -1,0 +1,12 @@
+{
+  "headers": {
+    "content-type": "application/json"
+  },
+  "data": {
+    "device_code": "f3b13f17f91cde69bc2ea60d98ef930224b2f831551226f7c85ff8ead073a375",
+    "user_code": "77776C8D",
+    "verification_url": "https://trakt.tv/activate",
+    "expires_in": 600,
+    "interval": 5
+  }
+}

@@ -28,7 +28,7 @@ describe('Movie Endpoints', () => {
       // Clear auth to test unauthorized access
       client.clearAuth();
 
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' }, // Use a valid movie ID for testing
         query: {},
       });
@@ -49,7 +49,7 @@ describe('Movie Endpoints', () => {
         );
       }
 
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '999999999' }, // Use a valid movie ID for testing
         query: {},
       });
@@ -66,7 +66,7 @@ describe('Movie Endpoints', () => {
       }
 
       // Test invalid movie ID (non-numeric)
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: 'invalid-id' }, // Use a valid movie ID for testing
         query: {},
       });
@@ -83,7 +83,7 @@ describe('Movie Endpoints', () => {
       }
 
       // Use a popular movie ID that should exist (Fight Club)
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' }, // Use a valid movie ID for testing
         query: {},
       });
@@ -127,7 +127,7 @@ describe('Movie Endpoints', () => {
       }
 
       // Test with Spanish language
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' }, // Use a valid movie ID for testing
         query: { lang: 'es' },
       });
@@ -144,7 +144,7 @@ describe('Movie Endpoints', () => {
         );
       }
 
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' }, // Use a valid movie ID for testing
         query: { includeSources: 'true' },
       });
@@ -191,7 +191,7 @@ describe('Movie Endpoints', () => {
         );
       }
 
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' }, // Use a valid movie ID for testing
         query: {},
       });
@@ -213,7 +213,7 @@ describe('Movie Endpoints', () => {
         .fill(0)
         .map(() =>
           client.get(
-            ['movies', ':id'],
+            ['api', 'movies', ':id'],
             {
               param: { id: '550' }, // Use a valid movie ID for testing
               query: {},
@@ -238,7 +238,7 @@ describe('Movie Endpoints', () => {
       }
 
       // Test with edge case movie ID that might cause issues
-      const response = await client.get(['movies', ':id'], {
+      const response = await client.get(['api', 'movies', ':id'], {
         param: { id: '0' },
         query: {},
       });
@@ -248,25 +248,25 @@ describe('Movie Endpoints', () => {
     });
   });
 
-  describe.skip('POST /movies/:tmdbId/:quality', () => {
-    it('should generate a streaming key for a valid movie', async () => {
-      if (!userCredentials) {
-        throw new Error(
-          'No user credentials available for testing - ensure backend is running and generating admin user'
-        );
-      }
+  // describe.skip('POST /movies/:tmdbId/:quality', () => {
+  //   it('should generate a streaming key for a valid movie', async () => {
+  //     if (!userCredentials) {
+  //       throw new Error(
+  //         'No user credentials available for testing - ensure backend is running and generating admin user'
+  //       );
+  //     }
 
-      const response = await client.post(['movies', ':tmdbId', ':quality'], {
-        param: { tmdbId: '550', quality: 'auto' },
-      });
+  //     const response = await client.post(['api', 'movies', ':tmdbId', ':quality'], {
+  //       param: { tmdbId: '550', quality: 'auto' },
+  //     });
 
-      expect(response).toBeHttpStatus(200);
-      expect(response.data).toHaveProperty('streamingKey');
-      if ('streamingKey' in response.data) {
-        expect(typeof response.data.streamingKey).toBe('string');
-      }
-    });
-  });
+  //     expect(response).toBeHttpStatus(200);
+  //     expect(response.data).toHaveProperty('streamingKey');
+  //     if ('streamingKey' in response.data) {
+  //       expect(typeof response.data.streamingKey).toBe('string');
+  //     }
+  //   });
+  // });
 
   // Performance test: on-demand source request for unprocessed movie
   it('should request a source on-demand for an unprocessed movie in under 1 second', async () => {
@@ -281,7 +281,7 @@ describe('Movie Endpoints', () => {
     const start = Date.now();
 
     // Request the movie with sources included (on-demand)
-    const response = await client.get(['movies', ':id'], {
+    const response = await client.get(['api', 'movies', ':id'], {
       param: { id: `${unprocessedMovieId}` },
       query: { includeSources: 'true' },
     });

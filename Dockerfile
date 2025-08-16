@@ -12,14 +12,15 @@ COPY package.json package-lock.json ./
 COPY tsconfig.json ./
 
 # Create package directories and copy ONLY their package.json files for dependency resolution
-RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer backend
+RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer backend frontend
 COPY backend/package.json ./backend/
+COPY frontend/package.json ./frontend/
 COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
 COPY packages/yts-sanitizer/package.json ./packages/yts-sanitizer/
 COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
 
 # Temporarily remove problematic prepare scripts that require source code
-RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json
+RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 
 # Install dependencies (this layer will be cached unless dependencies change)
 RUN npm ci
@@ -27,12 +28,16 @@ RUN npm ci
 # NOW copy the full source code (including original package.json files)
 COPY packages/ ./packages/
 COPY backend/ ./backend/
+COPY frontend/ ./frontend/
 
 # Build shared libs first (required for backend build)
 RUN npm run build:libs
 
 # Build backend
 RUN npm run build --workspace=backend
+
+# Build frontend
+RUN VITE_API_URL=/ npm run build:frontend
 
 # Create empty .env file for runtime stage
 RUN touch .env
@@ -59,6 +64,11 @@ COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/package.json /usr/s
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
 COPY --from=builder /usr/src/app/backend/node_modules /usr/src/app/backend/node_modules
 COPY --from=builder /usr/src/app/.env /usr/src/app/.env
+# Copy built frontend into public directory to be served by backend (and shared with nginx)
+COPY --from=builder /usr/src/app/dist/frontend /usr/src/app/public
+
+# Set default frontend directory for static serving
+ENV FRONTEND_DIR=/usr/src/app/public
 
 # Copy entrypoint script
 COPY backend-e2e/docker/entrypoint.sh /usr/local/bin/entrypoint.sh

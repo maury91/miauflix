@@ -103,7 +103,7 @@ export EPISODE_SYNC_MODE=GREEDY     # Sync all episodes
 - **E2E Tests**: Docker-based with mock services
 - **Unit Tests**: Jest with comprehensive mocks
 - **HTTP Fixtures**: Pre-recorded API responses (don't make real API calls in tests)
-- **Commands**: `npm test --workspace backend`, `npm run test:backend:e2e`
+- **Commands**: `npm test --workspace backend`, `npm run test:e2e`, `npm run test:backend:e2e`, `npm run test:frontend:e2e`
 
 ## 🚨 **Critical Context for AI Assistants**
 

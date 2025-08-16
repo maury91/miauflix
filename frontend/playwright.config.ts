@@ -4,7 +4,7 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './src/e2e',
+  testDir: './e2e',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -109,20 +109,12 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting tests */
-  webServer: [
-    {
-      command: 'npm run start',
-      url: 'http://localhost:4174',
-      reuseExistingServer: !process.env['CI'],
-      timeout: 120000,
-    },
-    {
-      command: 'npm run storybook',
-      url: 'http://localhost:6006',
-      reuseExistingServer: !process.env['CI'],
-      timeout: 120000,
-    },
-  ],
+  webServer: {
+    command: 'npx storybook dev -p 6006 --no-open',
+    url: 'http://localhost:6006',
+    reuseExistingServer: !process.env['CI'],
+    timeout: 120000,
+  },
 
   /* Test output directory */
   outputDir: './test-results',
@@ -141,5 +133,5 @@ export default defineConfig({
   },
 
   /* Global setup and teardown */
-  globalSetup: process.env['ANIMATION_TESTS'] ? './src/e2e/global-setup.ts' : undefined,
+  globalSetup: process.env['ANIMATION_TESTS'] ? './e2e/global-setup.ts' : undefined,
 });

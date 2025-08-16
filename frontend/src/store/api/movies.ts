@@ -14,7 +14,7 @@ export const moviesApi = createApi({
       {
         async queryFn({ id, lang, includeSources }) {
           try {
-            const res = await client.movies[':id'].$get({
+            const res = await client.api.movies[':id'].$get({
               param: { id },
               query: { lang, includeSources: includeSources?.toString() },
             });
@@ -43,7 +43,7 @@ export const moviesApi = createApi({
     >({
       async queryFn({ tmdbId, quality }) {
         try {
-          const res = await client.movies[':tmdbId'][':quality'].$post({
+          const res = await client.api.movies[':tmdbId'][':quality'].$post({
             param: { tmdbId, quality },
           });
           if (res.status === 200) {

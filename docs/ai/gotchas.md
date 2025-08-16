@@ -235,7 +235,11 @@ repositories/[entity-name].repository.ts
 ```bash
 # For backend changes:
 npm run test:backend                    # Unit tests (fast)
-npm run test:backend:e2e               # Full E2E (slower)
+npm run test:e2e                        # Full E2E (slower)
+npm run test:backend:e2e                # Backend E2E only
+
+# For frontend changes:
+npm run test:frontend:e2e               # Frontend E2E only
 
 # For Docker E2E development:
 npm run start:backend:e2e              # Start environment

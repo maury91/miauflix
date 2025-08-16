@@ -89,7 +89,9 @@ npm test --workspace backend
 npm test --workspace backend -- --testPathPattern=media.service.test.ts
 
 # Run E2E tests (spins up Docker environment)
-npm run test:backend:e2e
+npm run test:e2e                    # Run all tests (backend + frontend)
+npm run test:backend:e2e            # Run only backend tests
+npm run test:frontend:e2e           # Run only frontend tests
 
 # Development E2E workflow
 npm run start:backend:e2e  # Start environment (background)
