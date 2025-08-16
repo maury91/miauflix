@@ -15,7 +15,6 @@ MODE="$1"
 script_dir=$(dirname $(realpath "$0"))
 backend_e2e_dir=$(dirname "$script_dir")
 root_dir=$(dirname "$backend_e2e_dir")
-frontend_dir="$root_dir/frontend"
 log_file="$backend_e2e_dir/logs/$(date +'%Y-%m-%d_%H-%M-%S').log"
 
 mkdir -p "$(dirname "$log_file")"
@@ -215,7 +214,7 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     cp -r packages/source-metadata-extractor backend-e2e/docker/dist
 
     # Navigate to the integration tests directory
-    cd ${backend_e2e_dir}
+    cd "${backend_e2e_dir}"
     rm -rf logs/traces/* 2>/dev/null || true
 
     # Make sure all previous containers are removed
@@ -267,7 +266,7 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
 else
     echo "🔄 Using existing containers - skipping Docker startup"
     # Still need to set up logging for existing containers, but from the right directory
-    cd ${backend_e2e_dir}
+    cd "$backend_e2e_dir"
     docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" logs --since 1m  --follow &> "$log_file" &
     logged_pid=$!
 fi
@@ -297,7 +296,7 @@ else
     FRONTEND_TEST_PASSED=true
     
     export BACKEND_URL="http://localhost:$PORT"
-    cd ${backend_e2e_dir}
+    cd "$backend_e2e_dir"
 
     # Run backend tests if not frontend-only
     if [[ "$FRONTEND_ONLY" != "true" ]]; then
@@ -315,7 +314,7 @@ else
         echo "⏭️  Skipping backend tests (--frontend-only flag)"
     fi
 
-    cd ${root_dir}
+    cd "$root_dir"
 
     # Run frontend tests if not backend-only
     if [[ "$BACKEND_ONLY" != "true" ]]; then
