@@ -1,4 +1,6 @@
 import { sanitize } from './sanitize';
+import { handleRequest } from './handleRequest';
+import type { HandleRequestParams, HandleRequestResponse, HttpMethod } from './types';
 
 const PORT = 80;
 const DATA_DIR = process.env.DATA_DIR;
@@ -59,7 +61,7 @@ async function ensureDir(dir: string): Promise<void> {
     await Bun.write(Bun.file(`${dir}/.gitkeep`), '');
   }
 }
-function getFilePath(urlPath: string, queryParams: Record<string, string>): string {
+function getFilePath(urlPath: string, queryParams: Record<string, string>, method: string): string {
   const sanitizedPath = urlPath.replace(/^\//, '');
   const processedParams = { ...queryParams };
 
@@ -80,7 +82,9 @@ function getFilePath(urlPath: string, queryParams: Record<string, string>): stri
         .replace(/[\/\\?%*:|"<>]/g, '_'); // Replace invalid filename chars
   }
 
-  return `${DATA_DIR}/${sanitizedPath}${queryString}.json`;
+  // Include method in filename for non-GET requests
+  const methodPrefix = method !== 'GET' ? `${method.toLowerCase()}-` : '';
+  return `${DATA_DIR}/${methodPrefix}${sanitizedPath}${queryString}.json`;
 }
 
 async function saveResponse(filePath: string, response: any): Promise<void> {
@@ -106,22 +110,97 @@ function omitHeaders(headers: Headers): Record<string, string> | undefined {
   return Object.keys(result).length > 0 ? result : undefined;
 }
 
+async function defaultHandleRequest({
+  req,
+  path,
+  queryParams,
+  method,
+  filePath,
+}: HandleRequestParams): Promise<HandleRequestResponse> {
+  if (method !== 'GET') {
+    return {
+      data: null,
+      store: false,
+      response: new Response('Method not supported', { status: 405 }),
+    };
+  }
+
+  if (!API_KEY || !API_BASE_URL) {
+    if (!API_KEY) {
+      console.error('API Key is not configured');
+    }
+    if (!API_BASE_URL) {
+      console.error('API Base URL is not configured');
+    }
+    return {
+      data: null,
+      store: false,
+      response: new Response(
+        JSON.stringify({
+          error: 'This request is not cached and API_KEY or API_BASE_URL is not configured',
+        }),
+        {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      ),
+    };
+  }
+
+  console.log(`Calling real API for ${filePath}`);
+
+  const apiUrl = new URL(path, API_BASE_URL);
+  for (const [key, value] of Object.entries(queryParams)) {
+    apiUrl.searchParams.append(key, value);
+  }
+
+  // Make the request to API
+  const incomingHeaders = Object.fromEntries(req.headers.entries());
+  const apiResponse = await fetch(apiUrl.toString(), {
+    headers: {
+      ...incomingHeaders,
+      ...API_HEADERS,
+      [API_AUTH_HEADER]: API_AUTH_HEADER_IS_BEARER ? `Bearer ${API_KEY}` : API_KEY,
+    },
+  });
+
+  if (!apiResponse.headers.get('content-type')?.includes('application/json')) {
+    return {
+      data: await apiResponse.text(),
+      store: true,
+      response: apiResponse,
+    };
+  }
+
+  const data = await apiResponse.json();
+
+  // Apply sanitization
+  const sanitizedData = sanitize(data, apiUrl.toString());
+
+  // Apply sanitization and return the response
+  return {
+    data: sanitizedData,
+    store: true,
+    response: new Response(JSON.stringify(sanitizedData), {
+      headers: omitHeaders(apiResponse.headers),
+      status: apiResponse.status,
+    }),
+  };
+}
+
 Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
     const path = url.pathname;
     const queryParams = Object.fromEntries(url.searchParams.entries());
+    const method = req.method as HttpMethod;
 
     if (path === '/health') {
       return new Response('OK', { status: 200 });
     }
 
-    if (req.method !== 'GET') {
-      return new Response('Method not supported', { status: 405 });
-    }
-
-    const filePath = getFilePath(path, queryParams);
+    const filePath = getFilePath(path, queryParams, method);
 
     try {
       // Check if the response is cached
@@ -137,59 +216,32 @@ Bun.serve({
         });
       }
 
-      if (!API_KEY) {
-        console.error('API Key is not configured');
-        return new Response(
-          JSON.stringify({
-            error: 'This request is not cached and API_KEY is not configured',
-          }),
-          {
-            status: 404,
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
-      }
+      const requestParams: HandleRequestParams = {
+        req,
+        path,
+        queryParams,
+        method,
+        filePath,
+        API_KEY,
+        API_SECRET,
+        API_BASE_URL,
+        API_HEADERS,
+        API_AUTH_HEADER,
+        API_AUTH_HEADER_IS_BEARER,
+      };
 
-      console.log(`Calling real API for ${filePath}`);
+      const { data, store, response } =
+        (await handleRequest(requestParams)) || (await defaultHandleRequest(requestParams));
 
-      const apiUrl = new URL(path, API_BASE_URL);
-      for (const [key, value] of Object.entries(queryParams)) {
-        apiUrl.searchParams.append(key, value);
-      }
-
-      // Make the request to API
-      const apiResponse = await fetch(apiUrl.toString(), {
-        headers: {
-          ...req.headers,
-          ...API_HEADERS,
-          [API_AUTH_HEADER]: API_AUTH_HEADER_IS_BEARER ? `Bearer ${API_KEY}` : API_KEY,
-        },
-      });
-
-      if (!apiResponse.headers.get('content-type')?.includes('application/json')) {
+      if (store) {
         await saveResponse(filePath, {
-          headers: omitHeaders(apiResponse.headers),
-          data: await apiResponse.text(),
+          headers: omitHeaders(response.headers),
+          status: response.status,
+          data,
         });
-        return apiResponse;
       }
 
-      const data = await apiResponse.json();
-
-      // Apply sanitization
-      const sanitizedData = sanitize(data, apiUrl.toString());
-
-      // Save the response for future use
-      await saveResponse(filePath, {
-        headers: omitHeaders(apiResponse.headers),
-        data: sanitizedData,
-      });
-
-      // Apply sanitization and return the response
-      return new Response(JSON.stringify(sanitizedData), {
-        headers: omitHeaders(apiResponse.headers),
-        status: apiResponse.status,
-      });
+      return response;
     } catch (error) {
       console.error('Error handling request:', error);
       return new Response(JSON.stringify({ error: 'Failed to process request', details: error }), {

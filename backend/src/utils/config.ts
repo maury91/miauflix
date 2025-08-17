@@ -1,4 +1,5 @@
 import type {
+  BaseVariableInfo,
   DefaultVariableInfo,
   ServiceConfiguration,
   SkipUserInteractionVariableInfo,
@@ -196,6 +197,22 @@ export const transforms = {
       return { isValid: true, value: milliseconds };
     },
 
+  domain:
+    (options?: { allowLocalhost?: boolean }): ValidatorTransform<string> =>
+    (value: string) => {
+      const v = value.trim();
+      // RFC 1035/1123-ish hostname: total <=253, labels 1–63, no leading/trailing hyphens
+      const DOMAIN_RE =
+        /^(?=.{1,253}$)(?:(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.)+(?:(?!-)[A-Za-z0-9-]{2,63}(?<!-))$/;
+      if (options?.allowLocalhost && v.toLowerCase() === 'localhost') {
+        return { isValid: true, value: v };
+      }
+      if (!DOMAIN_RE.test(v)) {
+        return { isValid: false, error: 'Must be a valid domain (e.g., example.com)' };
+      }
+      return { isValid: true, value: v };
+    },
+
   optional:
     <T>(baseTransform: ValidatorTransform<T>): ValidatorTransform<T | undefined> =>
     (value: string) => {
@@ -209,6 +226,7 @@ export const transforms = {
 // Helper to create validated variable with automatic type inference
 export function variable<T>(
   config: { transform: ValidatorTransform<T> } & (
+    | BaseVariableInfo
     | DefaultVariableInfo
     | SkipUserInteractionVariableInfo
   )

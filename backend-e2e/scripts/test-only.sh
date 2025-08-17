@@ -37,7 +37,7 @@ fi
 BACKEND_URL="http://localhost:$PORT"
 
 # Test if backend is responding
-if ! curl -f -s "$BACKEND_URL/health" > /dev/null; then
+if ! curl -f -s "$BACKEND_URL/api/health" > /dev/null; then
     echo "❌ Backend service is not responding at $BACKEND_URL"
     echo "💡 Make sure you've started the services first:"
     echo "   ./scripts/env.sh dev          # Interactive mode"

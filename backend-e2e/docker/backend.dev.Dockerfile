@@ -12,6 +12,7 @@ RUN apt-get update && \
 # Copy package files
 COPY package.json package-lock.json ./
 COPY backend/package.json ./backend/
+COPY frontend/package.json ./frontend/
 
 # Copy the packages that backend depends on
 COPY packages/ ./packages/
@@ -33,6 +34,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Create necessary directories
 RUN mkdir -p /usr/src/app/data && \
+    mkdir -p /usr/src/app/public && \
     touch /usr/src/app/.env
 
 # Create default user but we'll override this at runtime

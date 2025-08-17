@@ -46,7 +46,9 @@ cd backend && npm test
 | ---------------------------------------------- | ------------------------------------ | ------- | -------------------------------------------- |
 | [`npm run test`](package.json)                 | Run backend unit tests               | root    | -                                            |
 | [`npm run test:backend`](package.json)         | Run backend unit tests               | root    | -                                            |
-| [`npm run test:backend:e2e`](package.json)     | Run E2E tests with Docker lifecycle  | root    | Docker management                            |
+| [`npm run test:e2e`](package.json)             | Run E2E tests with Docker lifecycle  | root    | Docker management                            |
+| [`npm run test:backend:e2e`](package.json)     | Run backend E2E tests only           | root    | Docker management                            |
+| [`npm run test:frontend:e2e`](package.json)    | Run frontend E2E tests only          | root    | Docker management                            |
 | [`npm run test:backend:e2e:dev`](package.json) | Run E2E tests against running Docker | root    | Requires [`start:backend:e2e`](package.json) |
 | [`npm run start:backend:e2e`](package.json)    | Start E2E environment with Docker    | root    | Manages Docker containers                    |
 | [`npm run lint:fix`](package.json)             | Fix linting issues                   | root    | -                                            |
@@ -345,9 +347,12 @@ Each external service follows standardized patterns:
 ### Testing Strategy
 
 1. **Unit Tests**: [`npm run test:backend`](package.json) for individual components
-2. **Integration Tests**: [`npm run test:backend:e2e`](package.json) for full system
-3. **Development Testing**: [`npm run test:backend:e2e:dev`](package.json) against running environment
-4. **Fixture-based Testing**: Use HTTP-VCR for external API tests
+2. **Integration Tests**: [`npm run test:e2e`](package.json) for full system
+3. **Scoped Integration Tests**:
+   - `npm run test:backend:e2e` for backend-only testing
+   - `npm run test:frontend:e2e` for frontend-only testing
+4. **Development Testing**: [`npm run test:backend:e2e:dev`](package.json) against running environment
+5. **Fixture-based Testing**: Use HTTP-VCR for external API tests
 
 ### Security Compliance
 

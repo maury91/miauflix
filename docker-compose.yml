@@ -1,3 +1,5 @@
+env_file: .env
+
 services:
   vpn:
     image: ghcr.io/bubuntux/nordlynx
@@ -17,11 +19,12 @@ services:
       - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
     restart: unless-stopped
 
-  backend:
+  miauflix:
     build:
       context: .
-      dockerfile: backend.Dockerfile
-    container_name: miauflix-backend
+      dockerfile: Dockerfile
+    image: miauflix
+    container_name: miauflix
     depends_on:
       vpn:
         condition: service_healthy
@@ -30,9 +33,12 @@ services:
       - PUID=${USER_ID:-1000}
       - PGID=${GROUP_ID:-1000}
       - DISABLE_VPN_CHECK=true
+      - COOKIE_DOMAIN=${DOMAIN}
+      - COOKIE_SECURE=true
+      - ENABLE_FRONTEND=false # Frontend is served by nginx
       - DEBUG=SourceService,DataResolver,DownloadService
     healthcheck:
-      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/health']
+      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
       interval: 30s
       timeout: 2s
       retries: 3
@@ -41,7 +47,8 @@ services:
       - ./.env:/usr/src/app/.env
       - ./data:/usr/data/
       - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
-      - backend_node_modules:/usr/src/app/node_modules
+      - miauflix_node_modules:/usr/src/app/node_modules
+      - frontend_static:/usr/src/app/public
     network_mode: service:vpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service
     restart: unless-stopped
@@ -57,6 +64,7 @@ services:
       - ./nginx/templates:/etc/nginx/templates
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
+      - frontend_static:/usr/share/nginx/html:ro
     env_file: .env
     environment:
       - REVERSE_PROXY_SECRET=${REVERSE_PROXY_SECRET}
@@ -66,7 +74,7 @@ services:
       - SSL_CERTIFICATE_KEY=${SSL_CERTIFICATE_KEY}
       - SSL_DHPARAM=${SSL_DHPARAM}
     depends_on:
-      - backend
+      - miauflix
     restart: unless-stopped
 
   certbot:
@@ -80,5 +88,7 @@ services:
       - nginx
 
 volumes:
-  backend_node_modules:
-    name: backend_node_modules
+  miauflix_node_modules:
+    name: miauflix_node_modules
+  frontend_static:
+    name: frontend_static
