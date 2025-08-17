@@ -14,18 +14,18 @@
     "clean": "docker compose -f docker/docker-compose.test.yml down -v --remove-orphans && docker compose -f docker/docker-compose.dev.yml down -v --remove-orphans"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.0",
-    "@types/node": "^20.0.0",
-    "jest": "^29.5.0",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.0.0"
+    "@types/jest": "30.0.0",
+    "@types/node": "22.0.0",
+    "jest": "30.0.5",
+    "ts-jest": "29.4.1",
+    "typescript": "5.9.2"
   },
   "dependencies": {
     "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
     "@miauflix/backend-client": "file:../packages/backend-client",
     "@miauflix/therarbg-sanitizer": "file:../packages/therarbg-sanitizer",
-    "hono": "^4.7.11",
-    "sqlite3": "^5.0.11"
+    "hono": "4.9.2",
+    "sqlite3": "5.0.11"
   },
   "jest": {
     "preset": "ts-jest",
