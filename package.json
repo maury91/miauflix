@@ -47,21 +47,21 @@
     "concurrently": "latest"
   },
   "devDependencies": {
-    "@dotenvx/dotenvx": "^1.48.4",
-    "@types/jest": "^30.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
-    "@typescript-eslint/parser": "^8.39.0",
-    "eslint": "^8.57.1",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "husky": "^9.1.7",
-    "jest": "^30.0.5",
-    "lint-staged": "^16.0.0",
-    "prettier": "^3.5.3",
-    "tsc-alias": "^1.8.16",
-    "typescript": "^5.9.2"
+    "@dotenvx/dotenvx": "1.48.4",
+    "@types/jest": "30.0.0",
+    "@typescript-eslint/eslint-plugin": "8.39.1",
+    "@typescript-eslint/parser": "8.39.1",
+    "eslint": "8.57.1",
+    "eslint-plugin-import": "2.32.0",
+    "eslint-plugin-react-hooks": "4.6.2",
+    "eslint-plugin-react-refresh": "0.4.20",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "husky": "9.1.7",
+    "jest": "30.0.5",
+    "lint-staged": "16.1.5",
+    "prettier": "3.6.2",
+    "tsc-alias": "1.8.16",
+    "typescript": "5.9.2"
   },
   "type": "module",
   "lint-staged": {
@@ -71,6 +71,11 @@
     "backend/src/**/*.ts": [
       "npm run lint:fix"
     ]
+  },
+  "overrides": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sass": "^1.90.0"
   },
   "workspaces": [
     "frontend",

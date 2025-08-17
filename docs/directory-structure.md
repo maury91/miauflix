@@ -63,8 +63,10 @@
 │
 ├─ 🎨 assets/           Static files
 │  ├─ Poppins/          → Font files
-│  ├─ svgs/             → Icons and graphics
-│  └─ app.scss          → Main styles
+│  └─ svgs/             → Icons and graphics
+│
+├─ 🎨 styles/           → Styles
+│  └─ global.css       → Main styles
 │
 └─ 📝 types/            TypeScript definitions
 ```

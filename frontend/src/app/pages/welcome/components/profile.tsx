@@ -89,14 +89,7 @@ export const Profile: FC<{
       backgroundColor: ['b6e3f4', 'c0aede', 'd1d4f9', 'ffd5dc', 'ffdfbf'],
     });
 
-    // Handle the async toDataUri method
-    createAvatarSvg
-      .toDataUri()
-      .then(setAvatarSrc)
-      .catch(() => {
-        // Fallback to empty string if avatar generation fails
-        setAvatarSrc('');
-      });
+    setAvatarSrc(createAvatarSvg.toDataUri());
   }, [name]);
 
   return (

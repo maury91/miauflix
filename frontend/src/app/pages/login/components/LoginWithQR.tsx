@@ -1,6 +1,6 @@
-import { QRCodeSVG } from 'qrcode.react';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
+import QRCode from 'react-qr-code';
 import styled from 'styled-components';
 
 import { Spinner } from '@/components/Spinner';
@@ -119,7 +119,7 @@ export const LoginWithQR: FC = () => {
         ) : deviceCodeData ? (
           <>
             <QRCodeContainer>
-              <QRCodeSVG
+              <QRCode
                 value={deviceCodeData.codeUrl}
                 size={140}
                 level="M"
