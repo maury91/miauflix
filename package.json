@@ -44,7 +44,7 @@
     "test": "npm run test:backend"
   },
   "dependencies": {
-    "concurrently": "latest"
+    "concurrently": "9.2.0"
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "1.48.4",
@@ -60,7 +60,11 @@
     "jest": "30.0.5",
     "lint-staged": "16.1.5",
     "prettier": "3.6.2",
+    "ts-node": "10.9.2",
+    "tsconfig-paths": "4.2.0",
+    "ts-jest": "29.4.1",
     "tsc-alias": "1.8.16",
+    "tsx": "4.20.4",
     "typescript": "5.9.2"
   },
   "type": "module",
@@ -73,9 +77,9 @@
     ]
   },
   "overrides": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "sass": "^1.90.0"
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "sass": "1.90.0"
   },
   "workspaces": [
     "frontend",
