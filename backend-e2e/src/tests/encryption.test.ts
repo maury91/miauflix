@@ -89,7 +89,7 @@ describe('Database Encryption E2E Tests', () => {
       }
 
       // First, get a movie with sources to ensure we have data to test
-      const movieResponse = await client.get(['movies', ':id'], {
+      const movieResponse = await client.get(['api', 'movies', ':id'], {
         param: { id: '550' },
         query: { includeSources: 'true' },
       });

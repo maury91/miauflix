@@ -24,7 +24,7 @@ const isProd = getEnvVar('NODE_ENV', 'development') === 'production';
 // Default API URL based on environment
 const getDefaultApiUrl = (): string => {
   if (isProd) {
-    return '/api'; // Production: assume same origin
+    return '/'; // Production: assume same origin
   }
   // Development: try to detect backend port or fallback
   return 'http://localhost:3001'; // Default backend port

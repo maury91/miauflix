@@ -24,12 +24,23 @@ const playerLogo = {
   opacity: 0,
 };
 
+const loginLogo = (windowWidth: number) => ({
+  top: windowWidth > 720 ? 'calc(50% - 380px)' : '50px',
+  left: '50%',
+  transform: 'translate(-50%, 0%)',
+  fontSize: windowWidth > 720 ? '65px' : '35px',
+  height: '2em',
+  zIndex: 1001,
+});
+
 const LogoContainer = styled(motion.div)`
   position: fixed;
   z-index: 100;
 `;
 
-const getLogoStyle = (currentPage: Page, margin: number) => {
+const useGetLogoStyle = (currentPage: Page) => {
+  const { margin, windowWidth } = useMediaBoxSizes();
+
   switch (currentPage) {
     case 'profile-selection':
       return profileSelectionLogo;
@@ -38,14 +49,15 @@ const getLogoStyle = (currentPage: Page, margin: number) => {
       return homeLogo(margin);
     case 'player':
       return playerLogo;
+    case 'login':
+    default:
+      return loginLogo(windowWidth);
   }
-  return {};
 };
 
 export const Logo = () => {
-  const { margin } = useMediaBoxSizes();
   const currentPage = useAppSelector(state => state.app.currentPage);
-  const logoStyle = getLogoStyle(currentPage, margin);
+  const logoStyle = useGetLogoStyle(currentPage);
 
   // Check if we're in SSR using the flag set in ssr-mocks.ts
   const isSSR = typeof window !== 'undefined' && window.__SSR__;

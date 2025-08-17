@@ -15,7 +15,7 @@ export const progressApi = createApi({
     trackMediaProgress: builder.mutation<boolean, ProgressRequest>({
       async queryFn(progressData) {
         try {
-          const res = await client.progress.$post({
+          const res = await client.api.progress.$post({
             json: progressData,
           });
           if (res.status === 204) {

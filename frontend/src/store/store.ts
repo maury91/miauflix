@@ -3,6 +3,7 @@ import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { authApi } from './api/auth';
+import { healthApi } from './api/health';
 import { listsApi } from './api/lists';
 import { mediasApi } from './api/medias';
 import { moviesApi } from './api/movies';
@@ -29,6 +30,7 @@ export const store = configureStore({
     [showsApi.reducerPath]: showsApi.reducer,
     [mediasApi.reducerPath]: mediasApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
+    [healthApi.reducerPath]: healthApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(
@@ -37,7 +39,8 @@ export const store = configureStore({
       progressApi.middleware,
       showsApi.middleware,
       mediasApi.middleware,
-      authApi.middleware
+      authApi.middleware,
+      healthApi.middleware
     ),
 });
 
