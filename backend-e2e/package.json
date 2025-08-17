@@ -25,7 +25,7 @@
     "@miauflix/backend-client": "file:../packages/backend-client",
     "@miauflix/therarbg-sanitizer": "file:../packages/therarbg-sanitizer",
     "hono": "4.9.2",
-    "sqlite3": "5.0.11"
+    "sqlite3": "5.1.7"
   },
   "jest": {
     "preset": "ts-jest",
