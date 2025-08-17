@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
@@ -64,7 +65,7 @@ const ContinueButton = styled.button`
   }
 `;
 
-export const LoginWithEmail: React.FC<{ showTitle: boolean }> = ({ showTitle }) => {
+export const LoginWithEmail: FC<{ showTitle: boolean }> = ({ showTitle }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, { isLoading: isEmailLoading, error: emailError }] = useLoginMutation();
