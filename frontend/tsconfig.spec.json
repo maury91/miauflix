@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": ["jest", "node", "unplugin-icons/types/react"]
+    "types": ["jest", "node", "unplugin-icons/types/react", "@playwright/test"]
   },
   "include": [
     "jest.config.ts",
@@ -15,6 +15,9 @@
     "src/**/*.spec.js",
     "src/**/*.test.jsx",
     "src/**/*.spec.jsx",
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "e2e/**/*.ts",
+    "**/*.e2e.spec.ts",
+    "e2e/global.d.ts"
   ]
 }

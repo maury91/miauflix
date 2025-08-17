@@ -17,6 +17,7 @@ export const useMediaBoxSizes = () => {
       gap,
       margin,
       width: totalMediaWidth,
+      windowWidth: width,
     };
   }, [width, height]);
 };

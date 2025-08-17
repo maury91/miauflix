@@ -1,22 +1,25 @@
 import { compare, hash } from 'bcrypt';
+import { randomBytes } from 'crypto';
+import type { Context } from 'hono';
 import type { JWTPayload } from 'jose';
 import { jwtVerify, SignJWT } from 'jose';
 import { hostname } from 'os';
-import { v4 as uuidv4 } from 'uuid';
 
 import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
+import type { RefreshToken } from '@entities/refresh-token.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
-import type { AuthTokens, StreamingToken } from '@services/auth/auth.types';
+import type { StreamingToken } from '@services/auth/auth.types';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { InMemoryCache } from '@utils/in-memory-cache';
 import { generateSecurePassword } from '@utils/password.util';
+import { getRealClientIp } from '@utils/proxy.util';
 import { traced } from '@utils/tracing.util';
 
 import {
@@ -27,17 +30,35 @@ import {
   validateTokenPayload,
 } from './auth.util';
 
+interface AuthResult {
+  accessToken: string;
+  refreshToken: string;
+  session: string;
+  user: {
+    id: string;
+    email: string;
+    role: UserRole;
+  };
+}
+
 export class AuthService {
   private readonly userRepository: UserRepository;
   private readonly refreshTokenRepository: RefreshTokenRepository;
   private readonly streamingKeyRepository: StreamingKeyRepository;
   private readonly secretKey: Uint8Array;
-  private readonly refreshSecretKey: Uint8Array;
   private readonly issuer = 'miauflix-api';
   private readonly audience = 'miauflix-client';
   private readonly streamingKeyTTL: number;
   private readonly streamingKeySalt: string;
   private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
+
+  // Configuration
+  private readonly refreshTokenTTL: number;
+  private readonly refreshTokenMaxRefreshDays: number;
+  private readonly maxDeviceSlotsPerUser: number;
+  private readonly cookieName: string;
+  private readonly cookieDomain?: string;
+  private readonly cookieSecure: boolean;
 
   constructor(
     db: Database,
@@ -49,9 +70,16 @@ export class AuthService {
 
     // Convert the secret to a Uint8Array for jose
     this.secretKey = new TextEncoder().encode(ENV('JWT_SECRET'));
-    this.refreshSecretKey = new TextEncoder().encode(ENV('REFRESH_TOKEN_SECRET'));
+
+    // Configuration
     this.streamingKeyTTL = ENV('STREAM_TOKEN_EXPIRATION');
     this.streamingKeySalt = ENV('STREAM_KEY_SALT');
+    this.refreshTokenTTL = ENV('REFRESH_TOKEN_EXPIRATION');
+    this.refreshTokenMaxRefreshDays = ENV('REFRESH_TOKEN_MAX_REFRESH_DAYS');
+    this.maxDeviceSlotsPerUser = ENV('MAX_DEVICE_SLOTS_PER_USER');
+    this.cookieName = ENV('REFRESH_TOKEN_COOKIE_NAME');
+    this.cookieDomain = ENV('COOKIE_DOMAIN') || undefined;
+    this.cookieSecure = ENV('COOKIE_SECURE');
   }
 
   /**
@@ -119,13 +147,36 @@ export class AuthService {
   }
 
   @traced('AuthService')
-  async generateTokens(user: User): Promise<AuthTokens> {
+  private async generateSession(): Promise<string> {
+    // Always generate cryptographically secure random session ID
+    return randomBytes(16).toString('base64url'); // Length is 22 characters (16 bytes * 4/3)
+  }
+
+  @traced('AuthService')
+  async generateTokens(user: User, context: Context, userAgent?: string): Promise<AuthResult> {
+    const ipAddress = getRealClientIp(context) || 'unknown';
+
+    // Always generate fresh session for security (prevents enumeration attacks)
+    const session = await this.generateSession();
+
+    // Generate tokens
     const accessToken = await this.generateAccessToken(user);
-    const refreshToken = await this.generateRefreshToken(user);
+    const opaqueRefreshToken = await this.generateOpaqueRefreshToken(
+      user,
+      session,
+      ipAddress,
+      userAgent
+    );
 
     return {
       accessToken,
-      refreshToken,
+      refreshToken: opaqueRefreshToken,
+      session,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
     };
   }
 
@@ -147,27 +198,39 @@ export class AuthService {
   }
 
   @traced('AuthService')
-  private async generateRefreshToken(user: User): Promise<string> {
-    const now = new Date();
-    const token = uuidv4();
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days from now
+  private async generateOpaqueRefreshToken(
+    user: User,
+    session: string,
+    ipAddress: string,
+    userAgent?: string
+  ): Promise<string> {
+    // Generate a cryptographically secure random token
+    const opaqueToken = randomBytes(32).toString('base64url');
 
+    const expiresAt = new Date();
+    expiresAt.setTime(expiresAt.getTime() + this.refreshTokenTTL);
+
+    // Check if user has reached max token limit
+    const userTokenCount = await this.refreshTokenRepository.countByUser(user.id);
+    if (userTokenCount >= this.maxDeviceSlotsPerUser) {
+      // Remove oldest token to make room
+      await this.refreshTokenRepository.deleteOldestByUser(user.id);
+    }
+
+    // Create new refresh token (starts new chain)
     await this.refreshTokenRepository.create({
-      token,
+      token: opaqueToken,
       userId: user.id,
+      session,
+      userAgent,
+      lastIpAddress: ipAddress,
+      lastAccessedAt: new Date(),
+      accessCount: 1,
       expiresAt,
+      issueIpAddress: ipAddress,
     });
 
-    return new SignJWT({
-      token,
-    })
-      .setProtectedHeader({ alg: 'HS256' })
-      .setIssuedAt(now)
-      .setIssuer(this.issuer)
-      .setAudience(this.audience)
-      .setExpirationTime('7d')
-      .sign(this.refreshSecretKey);
+    return opaqueToken;
   }
 
   @traced('AuthService')
@@ -195,65 +258,140 @@ export class AuthService {
   }
 
   @traced('AuthService')
-  async verifyRefreshToken(refreshToken: string) {
+  async verifyOpaqueRefreshToken(opaqueToken: string, session: string): Promise<RefreshToken> {
+    const refreshToken = await this.refreshTokenRepository.findByToken(opaqueToken, session);
+
+    if (!refreshToken) {
+      throw new InvalidTokenError();
+    }
+
+    // Check if token has expired
+    if (refreshToken.expiresAt < new Date()) {
+      // Clean up expired token
+      await this.refreshTokenRepository.delete(refreshToken.id);
+      throw new InvalidTokenError();
+    }
+
+    // Check if chain has exceeded maximum refresh lifetime
+    if (
+      await this.refreshTokenRepository.isChainExpired(
+        refreshToken.userId,
+        refreshToken.session,
+        this.refreshTokenMaxRefreshDays
+      )
+    ) {
+      // Clean up expired token
+      await this.refreshTokenRepository.deleteByUserAndSession(
+        refreshToken.userId,
+        refreshToken.session
+      );
+      throw new InvalidTokenError();
+    }
+
+    return refreshToken;
+  }
+
+  @traced('AuthService')
+  async validateRefreshToken(opaqueToken: string, session: string): Promise<boolean> {
     try {
-      const { payload } = await jwtVerify<JWTPayload & { token: string }>(
-        refreshToken,
-        this.refreshSecretKey,
-        {
-          issuer: this.issuer,
-          audience: this.audience,
-        }
+      // Use the same validation logic as refresh, but don't rotate
+      await this.verifyOpaqueRefreshToken(opaqueToken, session);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  @traced('AuthService')
+  async refreshTokens(
+    opaqueToken: string,
+    session: string,
+    context: Context,
+    userAgent?: string
+  ): Promise<AuthResult | null> {
+    try {
+      const ipAddress = getRealClientIp(context) || 'unknown';
+
+      // Verify the refresh token
+      const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
+
+      // Generate new access token
+      const newAccessToken = await this.generateAccessToken(refreshToken.user);
+
+      // Generate new refresh token
+      const newOpaqueToken = randomBytes(32).toString('base64url');
+      const expiresAt = new Date();
+      expiresAt.setTime(expiresAt.getTime() + this.refreshTokenTTL);
+
+      // Atomically update the refresh token (race condition detection)
+      const updateSuccessful = await this.refreshTokenRepository.updateToken(
+        opaqueToken,
+        newOpaqueToken,
+        refreshToken.userId,
+        session,
+        expiresAt,
+        ipAddress,
+        userAgent
       );
 
-      if (!payload.token) {
+      if (!updateSuccessful) {
+        // Token was already used (race condition or reuse)
+        await this.auditLogService.logSecurityEvent({
+          eventType: AuditEventType.SUSPICIOUS_ACTIVITY,
+          severity: AuditEventSeverity.CRITICAL,
+          description: 'Refresh token reuse detected - token already updated',
+          userEmail: refreshToken.user.email,
+          metadata: {
+            originalIssueIp: refreshToken.issueIpAddress,
+            reuseIp: ipAddress,
+            userAgent,
+          },
+        });
         throw new InvalidTokenError();
       }
 
-      return payload;
+      return {
+        accessToken: newAccessToken,
+        refreshToken: newOpaqueToken,
+        session,
+        user: {
+          id: refreshToken.user.id,
+          email: refreshToken.user.email,
+          role: refreshToken.user.role,
+        },
+      };
     } catch {
-      throw new InvalidTokenError();
-    }
-  }
-
-  @traced('AuthService')
-  async refreshAccessToken(refreshToken: string): Promise<{
-    tokens: AuthTokens;
-    email: string;
-  } | null> {
-    const refreshTokenPayload = await this.verifyRefreshToken(refreshToken);
-
-    const tokenEntity = await this.refreshTokenRepository.findByToken(refreshTokenPayload.token);
-
-    if (!tokenEntity || tokenEntity.expiresAt < new Date()) {
       return null;
     }
-
-    // Generate new tokens
-    const newTokens = await this.generateTokens(tokenEntity.user);
-
-    // Delete the old refresh token
-    await this.refreshTokenRepository.delete(tokenEntity.id);
-
-    return {
-      tokens: {
-        accessToken: newTokens.accessToken,
-        refreshToken: newTokens.refreshToken,
-      },
-      email: tokenEntity.user.email,
-    };
   }
 
   @traced('AuthService')
-  async logout(refreshToken: string): Promise<User | null> {
-    const tokenEntity = await this.refreshTokenRepository.findByToken(refreshToken);
+  async logout(opaqueToken: string, session: string): Promise<User | null> {
+    // Verify the refresh token before deleting it
+    const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
 
-    if (tokenEntity) {
-      await this.refreshTokenRepository.delete(tokenEntity.id);
-      return tokenEntity.user;
-    }
+    // Revoke the refresh token
+    await this.refreshTokenRepository.deleteByUserAndSession(
+      refreshToken.userId,
+      refreshToken.session
+    );
 
-    return null;
+    return refreshToken.user;
+  }
+
+  /**
+   * Get cookie configuration for refresh tokens
+   */
+  getCookieConfig(session: string) {
+    return {
+      name: `${this.cookieName}_${session}`,
+      domain: this.cookieDomain,
+      secure: this.cookieSecure,
+      httpOnly: true,
+      sameSite: 'strict' as const,
+      maxAge: Math.floor(this.refreshTokenTTL / 1000), // seconds
+      path: `/api/auth/`, // Scope cookie to auth endpoints (allows both refresh and logout)
+    };
   }
 
   /**

@@ -5,8 +5,17 @@
 // Set test timeout to 30 seconds for integration tests
 jest.setTimeout(30000);
 
+const ensureSlash = (url: string) => {
+  if (!url.endsWith('/')) {
+    return url + '/';
+  }
+  return url;
+};
+
 // Global test configuration
-const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}/`;
+const BACKEND_URL = ensureSlash(
+  process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 3000}`
+);
 
 // Make backend URL available globally
 global.BACKEND_URL = BACKEND_URL;
