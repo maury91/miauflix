@@ -1,3 +1,4 @@
+import type { FC } from 'react';
 import styled from 'styled-components';
 
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop';
@@ -29,7 +30,7 @@ interface SpinnerProps {
   size?: number;
 }
 
-export const Spinner: React.FC<SpinnerProps> = ({ text, size = 20 }) => {
+export const Spinner: FC<SpinnerProps> = ({ text, size = 20 }) => {
   return (
     <SpinnerContainer>
       <SpinnerIcon width={size} height={size} />
@@ -37,5 +38,3 @@ export const Spinner: React.FC<SpinnerProps> = ({ text, size = 20 }) => {
     </SpinnerContainer>
   );
 };
-
-export default Spinner;
