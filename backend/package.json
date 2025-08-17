@@ -63,7 +63,6 @@
     "@types/random-access-file": "4.0.0",
     "@types/streamx": "2.9.5",
     "@types/thunky": "1.1.2",
-    "@types/uuid": "10.0.0",
     "dts-bundle-generator": "9.5.1",
     "nodemon": "3.1.10",
     "typed-emitter": "2.1.0"
