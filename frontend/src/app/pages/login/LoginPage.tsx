@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useWindowSize } from '@/app/hooks/useWindowSize';
@@ -63,7 +64,7 @@ const RemoteIcon = styled.div`
   }
 `;
 
-const LoginPage: React.FC = () => {
+const LoginPage: FC = () => {
   // Email login state
   const [showQR, setShowQR] = useState(false);
   const { width: windowWidth } = useWindowSize();

@@ -46,3 +46,17 @@ h6 {
   font-weight: 300;
   font-style: normal;
 }
+
+/* This helps with the monospace font stack for cross-platform rendering. It's not perfect but it's currently working in CI/CD and local development. */
+code,
+.code,
+.monospace {
+  font-family: 'DejaVu Sans Mono';
+  font-variant-ligatures: none;
+  font-feature-settings:
+    'liga' 0,
+    'calt' 0;
+  /* Font smoothing (non-standard, use supported values for better consistency) */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

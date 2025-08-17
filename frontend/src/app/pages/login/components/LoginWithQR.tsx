@@ -1,9 +1,9 @@
 import { QRCodeSVG } from 'qrcode.react';
+import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { MonospaceText } from '@/components/MonospaceText';
-import Spinner from '@/components/Spinner';
+import { Spinner } from '@/components/Spinner';
 import { useCheckDeviceLoginStatusMutation, useDeviceLoginMutation } from '@/store/api/auth';
 
 import { formatCode } from '../utils/formatCode';
@@ -60,7 +60,7 @@ const ExpiryText = styled.div`
   text-align: center;
 `;
 
-export const LoginWithQR: React.FC = () => {
+export const LoginWithQR: FC = () => {
   const [getDeviceCode, { data: deviceCodeData, isLoading: isDeviceCodeLoading }] =
     useDeviceLoginMutation();
   const [checkAuthStatus] = useCheckDeviceLoginStatusMutation();
@@ -119,7 +119,12 @@ export const LoginWithQR: React.FC = () => {
         ) : deviceCodeData ? (
           <>
             <QRCodeContainer>
-              <QRCodeSVG value={deviceCodeData.codeUrl} size={140} level="M" />
+              <QRCodeSVG
+                value={deviceCodeData.codeUrl}
+                size={140}
+                level="M"
+                aria-label="Login QR code"
+              />
             </QRCodeContainer>
             <QRInstructions>Scan with phone to sign in</QRInstructions>
             <UserCode>
@@ -127,7 +132,7 @@ export const LoginWithQR: React.FC = () => {
               <ExpiryText>
                 {timeRemaining > 0 ? (
                   <>
-                    Expires in <MonospaceText>{formatTimeRemaining(timeRemaining)}</MonospaceText>
+                    Expires in <code>{formatTimeRemaining(timeRemaining)}</code>
                   </>
                 ) : (
                   'Code expired'
