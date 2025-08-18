@@ -53,8 +53,10 @@
 │  ├─ pages/            → Full screens (home, player, login)
 │  │  ├─ home/          → Movie browsing and discovery
 │  │  ├─ player/        → Video playback interface
+│  │  ├─ login/         → Authentication (email/password, QR code)
+│  │  │  └─ components/ → LoginWithEmail, LoginWithQR, ErrorMessage
 │  │  └─ welcome/       → Initial app setup
-│  ├─ hooks/            → Custom React hooks
+│  ├─ hooks/            → Custom React hooks (useWindowSize, etc.)
 │  └─ contexts/         → React context providers
 │
 ├─ 🏪 store/            Redux state management
@@ -66,9 +68,12 @@
 │  └─ svgs/             → Icons and graphics
 │
 ├─ 🎨 styles/           → Styles
-│  └─ global.css       → Main styles
+│  └─ global.css       → Main styles (includes monospace fonts)
 │
-└─ 📝 types/            TypeScript definitions
+├─ 📝 types/            TypeScript definitions
+│
+└─ 🧩 components/       Legacy components
+   └─ Spinner.tsx       → Loading spinner
 ```
 
 ### 📚 Quick Examples
