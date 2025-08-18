@@ -27,7 +27,7 @@
     "lint": "npm -w backend run lint",
     "prepare": "node -e \"if (process.env.NODE_ENV !== 'production' && !process.env.CI){ process.exit(1)} \" || (command -v husky >/dev/null 2>&1 && husky || true)",
     "start:backend:e2e": "backend-e2e/scripts/env.sh dev",
-    "start:backend:docker:prod": "docker compose build --no-cache miauflix && docker-compose up",
+    "start:backend:docker:prod": "docker compose up -d --build miauflix",
     "start:backend:prod": "npm -w backend run start:prod",
     "start:backend": "npm -w backend start",
     "start:frontend": "npm -w frontend run dev",
