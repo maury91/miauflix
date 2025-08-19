@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Miauflix is a self-hosted streaming platform that enables users to discover and stream content from various sources. The backend is production-ready and fully functional, including complete streaming capabilities. The frontend builds successfully but needs JWT authentication integration. The project uses a monorepo structure with npm workspaces.
+Miauflix is a self-hosted streaming platform that enables users to discover and stream content from various sources. The backend is production-ready and fully functional, including complete streaming capabilities. The frontend is fully integrated with session-based authentication using HttpOnly cookies. The project uses a monorepo structure with npm workspaces.
 
 ## Key Commands
 
@@ -29,6 +29,7 @@ npm run check:ts                     # TypeScript type checking
 # Start development environment
 npm run dev                          # Starts backend and frontend concurrently
 npm run start:backend               # Backend only
+npm run start:backend:docker:prod   # Start backend in production using Docker Compose
 
 # Frontend development
 npm run start:frontend              # Frontend with hot reload (recommended for development)
@@ -159,23 +160,26 @@ miauflix/
 ### ✅ Frontend Status
 
 - **Build System**: Frontend builds successfully without TypeScript errors
-- **Basic Structure**: React application with Vite, Redux Toolkit setup
-- **Components**: Existing UI components and pages structure
+- **Architecture**: React application with Vite, Redux Toolkit setup
+- **Authentication**: Complete session-based auth with HttpOnly cookies
+- **Components**: Full login system with email/password and QR code flows
+- **Integration**: Backend serves frontend with API mounted under `/api`
 
-### 🔄 Integration Needed
+### ✅ Integration Complete
 
-The primary remaining work is **JWT authentication integration**:
+The frontend-backend integration is now **fully implemented**:
 
-- Frontend needs to connect to existing backend auth endpoints
-- User authentication flow implementation
-- Protected route management
-- API request authentication
+- ✅ Session-based authentication with secure HttpOnly cookies
+- ✅ User authentication flow with email and QR code login
+- ✅ Protected route management
+- ✅ Backend serves frontend static assets and handles client-side routing
+- ✅ API requests properly authenticated via session cookies
 
 ### Current Status
 
 - **Backend**: 100% complete and production-ready with full streaming capabilities
-- **Frontend**: Builds successfully, needs JWT authentication integration with backend
-- **Timeline**: 1 week for complete JWT authentication integration
+- **Frontend**: 100% complete with full authentication integration
+- **Status**: Production-ready streaming platform
 
 ## Streaming Implementation (Completed)
 
@@ -278,40 +282,40 @@ afterEach(() => {
 - Database uses `synchronize: true` - entity changes immediately affect schema
 - Test in isolation to avoid race conditions
 
-## Priority Development Tasks
+## Development Focus Areas
 
-### 1. Implement Frontend JWT Authentication
+### 1. ✅ Authentication System Complete
 
-The main remaining task is connecting the frontend to the existing backend authentication system:
+The frontend authentication system is fully implemented:
 
-**Missing implementations:**
+**Completed implementations:**
 
-- User login/logout flow
-- JWT token management (storage, refresh)
-- Protected route components
-- API request authentication interceptors
-- User session management
+- ✅ User login/logout flow with email and QR code options
+- ✅ Session-based authentication with HttpOnly cookies
+- ✅ Protected route components
+- ✅ API request authentication via session cookies
+- ✅ User session management
 
-**Existing backend endpoints to integrate:**
+**Available backend endpoints:**
 
-- `POST /auth/login` - User authentication
-- `POST /auth/refresh` - Token refresh
-- `POST /auth/logout` - User logout
-- All protected endpoints require JWT authentication
+- `POST /api/auth/login` - User authentication
+- `POST /api/auth/refresh` - Token refresh
+- `POST /api/auth/logout` - User logout
+- All protected endpoints accessible via session cookies
 
-### 2. Connect Frontend to Backend APIs
+### 2. ✅ Frontend-Backend Integration Complete
 
-- Movie listing and search endpoints
-- Stream key generation for video playback
-- User progress tracking
-- List management (Trakt integration)
-- All backend endpoints are implemented and ready for frontend consumption
+- ✅ Movie listing and search endpoints connected
+- ✅ Stream key generation for video playback
+- ✅ User progress tracking
+- ✅ List management (Trakt integration)
+- ✅ Backend serves frontend and handles all API requests
 
-### 3. Video Player Integration
+### 3. ✅ Video Player Integration Ready
 
-- Integrate with `/stream/:token` endpoint for video playback
-- Handle streaming key generation and management
-- Implement video player controls and seeking
+- ✅ Integrated with `/api/stream/:token` endpoint for video playback
+- ✅ Streaming key generation and management
+- ✅ Video player controls and seeking capabilities
 
 ## Configuration System
 
@@ -336,25 +340,26 @@ Required environment variables:
 - **Don't make real API calls in tests** - Use HTTP-VCR fixtures only
 - **Don't put jest.mock() in describe blocks** - Must be at file top
 - **Don't assume streaming needs implementation** - It's already complete and working
-- **Don't assume frontend has build issues** - It builds successfully, focus on JWT integration
+- **Don't assume frontend needs auth work** - It's fully integrated with session-based auth
 
 ## Key File References
 
 ### Critical Backend Files (Production-Ready)
 
-- `backend/src/app.ts` - Main application entry point
+- `backend/src/app.ts` - Main application entry point, serves frontend
 - `backend/src/routes/stream.routes.ts` - Streaming endpoint (complete)
 - `backend/src/services/stream/stream.service.ts` - Stream service (complete)
 - `backend/src/services/download/download.service.ts` - WebTorrent client (complete)
 - `backend/src/services/auth/auth.service.ts` - Authentication (complete)
-- `backend/src/routes/index.ts` - Route registration
+- `backend/src/routes/index.ts` - Route registration under `/api`
 
-### Frontend Files for JWT Integration
+### Frontend Files (Complete Integration)
 
-- `frontend/src/store/` - Redux store setup (existing)
-- `frontend/src/store/api/` - API integration layer (needs auth endpoints)
-- `frontend/src/store/slices/` - State management (needs auth slice)
-- `frontend/src/app/pages/` - Page components (needs login page)
+- `frontend/src/store/` - Redux store setup (complete)
+- `frontend/src/store/api/` - API integration layer (complete with auth)
+- `frontend/src/store/slices/` - State management (complete auth slice)
+- `frontend/src/app/pages/login/` - Login page components (complete)
+- `frontend/src/app/pages/login/components/` - LoginWithEmail, LoginWithQR components
 
 ## Documentation Resources
 
@@ -382,6 +387,6 @@ This is a **sophisticated, production-ready streaming platform** with:
 - ✅ VPN integration and security features
 - ✅ Frontend builds successfully without errors
 
-**The only remaining work is JWT authentication integration** - connecting the React application's authentication flow to the existing, fully-functional backend authentication endpoints. The infrastructure is complete; focus development efforts on user authentication, token management, and protected routes in the frontend.
+**The platform is production-ready** - Both backend infrastructure and frontend integration are complete. The system features session-based authentication with HttpOnly cookies, full streaming capabilities, and a responsive React frontend. Development efforts can now focus on new features, performance optimizations, and user experience enhancements.
 
 - always run npm commands from the workspace root, never from subfolders
