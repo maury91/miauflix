@@ -1,5 +1,6 @@
 import { test } from './fixtures';
 import { createCompositeScreenshot } from './utils/composite-grid';
+import { buildStorybookUrl } from './utils/storybook-url';
 
 const PROGRESS_BAR_STYLES = `
 .progress {
@@ -102,15 +103,26 @@ test.describe('Logo Animation - Storybook Visual Tests', () => {
         screenshotName: `logo-animation-composite-4x4${lowResourceAnimation ? '-low-resource' : ''}.png`,
         styles: PROGRESS_BAR_STYLES,
         async prepare() {
-          await page.goto(
-            `${STORYBOOK_BASE_URL}?id=animations-intro-animation--interactive-controls&args=seekPosition%3A${testPoints[0]}%3BshowInfo%3Afalse%3BbackgroundImage%3Atrue%3BlowResourceAnimation%3A${lowResourceAnimation ? 'true' : 'false'}&viewMode=story`
+          const args = {
+            seekPosition: testPoints[0],
+            showInfo: false,
+            backgroundImage: true,
+            lowResourceAnimation: lowResourceAnimation,
+          };
+
+          const url = buildStorybookUrl(
+            STORYBOOK_BASE_URL,
+            'animations-intro-animation--interactive-controls',
+            args
           );
+
+          await page.goto(url);
           await page.waitForLoadState('networkidle');
         },
         async render(point) {
           const percentage = Math.round(point * 100);
 
-          page.evaluate((seekTo: number) => {
+          await page.evaluate((seekTo: number) => {
             // @ts-expect-error - this is a custom property for testing
             window.seek(seekTo);
           }, point);

@@ -3,7 +3,7 @@
 | **Layer**         | **Library / Runtime**              | **Purpose**                     | **Key Areas**                                 |
 | ----------------- | ---------------------------------- | ------------------------------- | --------------------------------------------- |
 | **HTTP API**      | **Node 22 ESM + Hono**             | Routing & middleware + Frontend | `src/app.ts`, `src/routes/*`                  |
-| **Auth**          | **jose** (JWT) + bcrypt + Sessions | Login, HttpOnly cookies         | `src/services/auth/*`, `src/middleware/*`     |
+| **Auth**          | **bcrypt + Sessions**              | Login, HttpOnly cookies         | `src/services/auth/*`, `src/middleware/*`     |
 | **Frontend**      | **React + Vite + Redux Toolkit**   | SPA served by backend           | Frontend static assets served at `/`          |
 | **Database**      | **TypeORM + SQLite**               | Persistence (auto-sync)         | `src/database/*`, `src/entities/*`            |
 | **External APIs** | **TMDB**, **Trakt**, **NordVPN**   | Metadata, list-sync, VPN status | `src/services/tmdb/*`, `src/services/trakt/*` |
