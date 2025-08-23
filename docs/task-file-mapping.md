@@ -5,6 +5,7 @@
 | Roadmap Tag          | Status          | Main Files                                                                                                                               |
 | -------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `backend#auth`       | ✅ **Complete** | `auth.service.ts`, `auth.routes.ts`, `user.entity.ts`, `refresh-token.entity.ts`, `auth.middleware.ts`                                   |
+| `frontend#auth`      | ✅ **Complete** | `LoginPage.tsx`, `LoginWithEmail.tsx`, `LoginWithQR.tsx`, `QRDisplay.tsx`, `authApi.ts`, `authSlice.ts`                                  |
 | `backend#sources`    | ✅ **Complete** | `source.service.ts`, `content-directories/yts/`, `content-directories/therarbg/`, `movie-source.entity.ts`, `movie-source.repository.ts` |
 | `backend#stream`     | ✅ **Complete** | `routes/stream.routes.ts`, `stream.service.ts`                                                                                           |
 | `backend#stream-e2e` | ❌ **Missing**  | E2E testing infrastructure - requires `backend-e2e/` expansion, torrent testing containers                                               |
@@ -17,7 +18,8 @@
 
 ### ✅ Completed Tasks (Not in Original Todos)
 
-- **Authentication System**: Full JWT implementation with refresh tokens, role-based access, audit logging
+- **Backend Authentication System**: Full JWT implementation with refresh tokens, role-based access, audit logging
+- **Frontend Authentication System**: Complete session-based authentication with HttpOnly cookies, email + QR code login
 - **Source Aggregation**: Multi-provider system (YTS + THERARBG) with background processing, VPN awareness
 - **WebTorrent Infrastructure**: Complete `download.service.ts` with tracker management, stats scraping
 - **Database Layer**: Complete entity model with 13+ entities, repository pattern, encryption
