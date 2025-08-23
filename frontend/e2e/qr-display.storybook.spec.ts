@@ -1,6 +1,7 @@
 import { test } from '@playwright/test';
 
 import { createCompositeScreenshot } from './utils/composite-grid';
+import { buildStorybookUrl } from './utils/storybook-url';
 
 test.describe('QRDisplay - Visual Tests', () => {
   const STORYBOOK_BASE_URL = 'http://localhost:6006/iframe.html';
@@ -55,17 +56,21 @@ test.describe('QRDisplay - Visual Tests', () => {
       async render(state) {
         const qrSize = state.qrSize || 140;
 
-        let argsParam = `qrSize%3A${qrSize}`;
+        const args: Record<string, unknown> = {
+          qrSize,
+          isLoading: !!state.isLoading,
+        };
 
-        if (state.isLoading) {
-          argsParam += `%3BisLoading%3Atrue`;
-        } else {
-          argsParam += `%3BisLoading%3Afalse%3BtimeRemaining%3A${state.timeRemaining}%3BuserCode%3A${state.userCode}%3BcodeUrl%3Ahttps%253A%252F%252Fmiauflix.local%252Fauth%252Fdevice%253Fcode%253D${state.userCode}`;
+        if (!state.isLoading) {
+          const codeUrl = `https://miauflix.local/auth/device?code=${state.userCode}`;
+          args.timeRemaining = state.timeRemaining;
+          args.userCode = state.userCode;
+          args.codeUrl = codeUrl;
         }
 
-        await page.goto(
-          `${STORYBOOK_BASE_URL}?id=login-qrdisplay--interactive&args=${argsParam}&viewMode=story`
-        );
+        const url = buildStorybookUrl(STORYBOOK_BASE_URL, 'login-qrdisplay--interactive', args);
+
+        await page.goto(url);
         await page.waitForLoadState('networkidle');
 
         if (state.isLoading) {
