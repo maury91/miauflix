@@ -98,7 +98,11 @@ export async function createCompositeScreenshot<T>(
           padding: 0; 
           background: ${backgroundColor};
           color: white;
-          font-family: 'DejaVu Sans', monospace;
+          font-family: 'DejaVu Sans Mono';
+          font-variant-ligatures: none;
+          font-feature-settings: 'liga' 0, 'calt' 0;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
         .grid { 
           display: grid; 
