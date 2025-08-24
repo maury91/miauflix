@@ -367,12 +367,13 @@ npm run docker:cleanup
 
 ### Authentication Security Review
 
-1. **JWT Implementation Audit**
+1. **Session-based Authentication Implementation Audit**
 
    ```bash
-   # Review JWT middleware
+   # Review session-based authentication middleware
    # Check: backend/src/middleware/auth.middleware.ts
    # Verify: Token expiration, secret strength, refresh rotation
+   # Verify: Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
    ```
 
 2. **Refresh Token Security**
@@ -648,7 +649,7 @@ npm run config        # Configure and start server
 The configuration system will guide you through setting up:
 
 - TMDB API access token
-- JWT secrets for authentication
+- Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - Optional Trakt integration
 - Optional NordVPN configuration
 - Reverse proxy settings

@@ -57,12 +57,29 @@ export async function createCompositeScreenshot<T>(
         *, *::before, *::after {
           animation-duration: 0s !important;
           animation-delay: 0s !important;
+          animation-iteration-count: 1 !important;
           transition-duration: 0s !important;
           transition-delay: 0s !important;
+          transform-origin: center !important;
+          scroll-behavior: auto !important;
+        }
+        
+        /* Disable CSS animations */
+        @keyframes * {
+          0%, 100% { animation-play-state: paused !important; }
+        }
+        
+        /* Force static states */
+        [data-testid*="spinner"], .spinner, .loading {
+          animation: none !important;
+          transform: none !important;
         }
       `;
       document.head.appendChild(style);
     });
+
+    // Force reduced motion at browser level
+    await page.emulateMedia({ reducedMotion: 'reduce' });
   }
 
   if (prepare) {
@@ -73,10 +90,28 @@ export async function createCompositeScreenshot<T>(
     // Render the frame using custom render function
     const footerHtml = await render(frame);
 
+    // Force animations to stop before screenshot
+    if (disableAnimations) {
+      await page.evaluate(() => {
+        // Pause all CSS animations and transitions
+        const animatedElements = document.querySelectorAll('*');
+        animatedElements.forEach(el => {
+          const computed = getComputedStyle(el);
+          if (computed.animationName && computed.animationName !== 'none') {
+            (el as HTMLElement).style.animationPlayState = 'paused';
+            (el as HTMLElement).style.animationDelay = '0s';
+            (el as HTMLElement).style.animationDuration = '0s';
+          }
+        });
+      });
+      await page.waitForTimeout(100);
+    }
+
     // Take screenshot
     const frameBuffer = await page.screenshot({
       type: 'png',
       fullPage: true,
+      animations: 'disabled',
     });
     const dataUrl = `data:image/png;base64,${frameBuffer.toString('base64')}`;
 
@@ -98,11 +133,13 @@ export async function createCompositeScreenshot<T>(
           padding: 0; 
           background: ${backgroundColor};
           color: white;
-          font-family: 'DejaVu Sans Mono';
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
           font-variant-ligatures: none;
           font-feature-settings: 'liga' 0, 'calt' 0;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+          font-size: 14px;
+          line-height: 1.2;
         }
         .grid { 
           display: grid; 
