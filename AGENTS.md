@@ -50,7 +50,7 @@ const setupTest = () => {
 
 ### **Key Services (All Complete - DON'T REBUILD)**
 
-- `AuthService` - JWT authentication with refresh tokens
+- `AuthService` - Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - `SourceService` - Multi-provider torrent source aggregation
 - `DownloadService` - WebTorrent client management
 - `MediaService` - TMDB integration and episode sync management
@@ -100,28 +100,29 @@ npm install --workspace backend package-name
 
 ### **Current Status: Fully Functional Backend**
 
-- ✅ **Authentication**: Full JWT system with refresh tokens
+- ✅ **Authentication**: Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - ✅ **Source Discovery**: Multi-provider aggregation (YTS + THERARBG)
 - ✅ **Media Streaming**: WebTorrent infrastructure with stream endpoint
 - ✅ **Database Layer**: 13 entities with encryption
 - ✅ **Background Tasks**: 7 scheduled tasks operational
 
-### **Frontend Status: Authentication Implemented**
+### **Frontend Status: Authentication Complete**
 
-- ✅ **JWT Authentication**: Complete auth API with login, device auth, and token management
-- ✅ **Login Components**: LoginPage, LoginForm, DeviceLogin components exist
-- ✅ **Auth Store**: Redux store with auth API and slices
-- ✅ **Frontend Build**: No TypeScript errors
+- ✅ **Session-Based Authentication**: Complete auth with HttpOnly cookies for security
+- ✅ **Login Components**: LoginPage, LoginWithEmail, LoginWithQR, QRDisplay components implemented
+- ✅ **Auth Store**: Redux store with auth API and slices fully functional
+- ✅ **Frontend Build**: No TypeScript errors, builds successfully
+- ✅ **Component Library**: Comprehensive Storybook documentation and visual testing
 
-### **What's Actually Missing**
+### **Current Status: Production-Ready Platform**
 
-Based on current verification, the project appears to be **fully functional** with both backend and frontend authentication implemented. The main areas for improvement would be:
+The project is **100% functional** with both backend and frontend authentication fully implemented. Main areas for future enhancement:
 
-1. **Frontend Re-implementation**: Frontend builds but it's not up-to-date with the backend, functionality needs to be restored
-2. **Frontend Polish**: UI/UX improvements and bug fixes
-3. **Performance Optimization**: Caching, lazy loading, etc.
-4. **Feature Enhancements**: Additional streaming features, better error handling
-5. **Documentation**: Keeping docs synchronized with implementation
+1. **Feature Expansion**: Additional streaming sources, TV show episodes, anime support
+2. **UI/UX Polish**: Enhanced user experience and accessibility features
+3. **Performance Optimization**: Caching, lazy loading, viewport preload
+4. **Mobile Apps**: Native iOS and Android clients
+5. **Advanced Features**: Quality selection UI, continue watching, Trakt integration
 
 ## 🧪 **Testing Commands**
 
@@ -238,7 +239,7 @@ For comprehensive information on specific topics:
 - **Frontend**: React + Redux Toolkit + Vite + TypeScript
 - **Streaming**: WebTorrent for peer-to-peer content delivery
 - **Deployment**: Docker + nginx + Let's Encrypt SSL
-- **Authentication**: JWT with refresh tokens using JOSE library
+- **Authentication**: Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - **Database**: SQLite with field-level AES-256-GCM encryption
 
 ## 🚨 Critical Context for Agents
@@ -260,7 +261,7 @@ For comprehensive information on specific topics:
 
 ### **What's Actually Missing (Verified Against Code)**
 
-❌ **Frontend JWT Integration**: Token management and authentication flow (ONLY missing component)
+❌ **Viewport Preload**: `/api/ui/viewport` endpoint for preload queue optimization (minor performance enhancement)
 
 ### **Current Issues**
 
@@ -294,42 +295,39 @@ For comprehensive information on specific topics:
 
 ## 🔄 Development Workflows
 
-### **Priority #1: Frontend JWT Integration**
+### **Current Status: All Core Functionality Complete**
 
-**Status**: ✅ Stream endpoint EXISTS and is fully implemented  
-**Issue**: Frontend needs JWT token management and authentication flow
+**Status**: ✅ Complete streaming platform with full authentication integration  
+**Implementation**: Session-based authentication with HttpOnly cookies implemented
 
-The backend has complete streaming infrastructure:
+The platform features complete infrastructure:
 
-- Stream routes with quality selection and auth verification
-- DownloadService.streamFile() method (lines 531-585)
-- Range request support for video seeking
-- JWT authentication system complete (325 lines, ~15 methods)
+- ✅ Stream routes with quality selection and auth verification
+- ✅ DownloadService.streamFile() method (lines 531-585)
+- ✅ Range request support for video seeking
+- ✅ Authentication system complete (Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens)
+- ✅ Frontend builds successfully with full auth integration
 
-### **Priority #2: Verify Frontend-Backend Integration**
+### **Future Enhancement Opportunities**
 
-**Status**: ✅ Frontend builds successfully (no TypeScript errors)  
-**Issue**: Need to verify frontend properly connects to existing backend endpoints
+**Priority #1: Viewport Preload Optimization**
 
 ```bash
-# 1. Frontend already builds successfully
-cd frontend && npm run build  # ✅ Works
-
-# 2. Need to verify:
-# - Frontend auth API connects to backend JWT endpoints
-# - Stream player connects to backend stream endpoint
-# - Token management and persistence work correctly
+# Minor performance enhancement - viewport-based preloading
+# Implementation: /api/ui/viewport endpoint for smart content preloading
 ```
 
-### **Priority #3: Complete Frontend Authentication Flow**
+**Priority #2: Feature Expansion**
 
-**Verify/implement missing pieces**:
+**Potential new features**:
 
-- `frontend/src/store/slices/auth.ts` - Auth state management (may exist)
-- `frontend/src/app/pages/login/` - Login UI components (may exist)
-- Token persistence and auth interceptors
+- TV show episode navigation and streaming
+- Additional content sources (1337x, Nyan, etc.)
+- Anime-specific metadata and fansub integration
+- Quality selection UI improvements
+- Continue watching functionality
 
-**Note**: Backend JWT system is complete - just need frontend integration
+**Note**: Core platform is production-ready - focus on feature expansion
 
 ### **Adding New Features**
 
@@ -590,11 +588,11 @@ npm run build -w frontend
 
 ## 🎉 Final Notes
 
-**Remember**: Miauflix is a sophisticated, nearly-complete streaming platform that needs surgical fixes, not ground-up rebuilding. The backend infrastructure is enterprise-grade and production-ready. Focus on the missing piece (frontend JWT integration) to unlock the full functionality.
+**Remember**: Miauflix is a sophisticated, production-ready streaming platform with complete authentication and streaming functionality. The backend infrastructure is enterprise-grade and the frontend is fully integrated. Focus on feature expansion and user experience enhancements.
 
 **When in doubt**: Check the actual implementation in `backend/src/services/` - most things are already built and working. Trust the codebase over outdated documentation.
 
-**Success means**: Complete frontend JWT integration enables full authentication flow and video streaming functionality.
+**Success means**: Platform is production-ready with complete streaming and authentication functionality. Focus on feature expansion and enhancements.
 
 ---
 

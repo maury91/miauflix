@@ -11,7 +11,7 @@
 │  └─ trakt.routes.ts   → Sync watchlists, mark as watched
 │
 ├─ ⚙️ services/        Business logic (the "brain" of each feature)
-│  ├─ auth/            → JWT creation, password hashing
+│  ├─ auth/            → Session creation, JWT creation, password hashing
 │  ├─ source/          → Find torrents, rank quality
 │  ├─ media/           → TMDB data sync, metadata
 │  └─ download/        → WebTorrent streaming
@@ -53,8 +53,10 @@
 │  ├─ pages/            → Full screens (home, player, login)
 │  │  ├─ home/          → Movie browsing and discovery
 │  │  ├─ player/        → Video playback interface
+│  │  ├─ login/         → Authentication (email/password, QR code)
+│  │  │  └─ components/ → LoginWithEmail, LoginWithQR, ErrorMessage
 │  │  └─ welcome/       → Initial app setup
-│  ├─ hooks/            → Custom React hooks
+│  ├─ hooks/            → Custom React hooks (useWindowSize, etc.)
 │  └─ contexts/         → React context providers
 │
 ├─ 🏪 store/            Redux state management
@@ -63,10 +65,15 @@
 │
 ├─ 🎨 assets/           Static files
 │  ├─ Poppins/          → Font files
-│  ├─ svgs/             → Icons and graphics
-│  └─ app.scss          → Main styles
+│  └─ svgs/             → Icons and graphics
 │
-└─ 📝 types/            TypeScript definitions
+├─ 🎨 styles/           → Styles
+│  └─ global.css       → Main styles (includes monospace fonts)
+│
+├─ 📝 types/            TypeScript definitions
+│
+└─ 🧩 components/       Legacy components
+   └─ Spinner.tsx       → Loading spinner
 ```
 
 ### 📚 Quick Examples

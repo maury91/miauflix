@@ -22,7 +22,7 @@ const DeviceLoginLink = styled.a`
   color: ${PALETTE.background.primary};
   font-size: 3.5vh;
 `;
-const DeviceLoginQRCode = styled(QRCode as unknown as FC<QRCodeProps>)`
+const DeviceLoginQRCode = styled(QRCode)`
   position: fixed;
   right: 10vw;
   top: 25vh;

@@ -7,7 +7,8 @@
 If the feature will be exercised through HTTP or the torrent layer, you need the live watch server. It may already be running from a previous session—**reuse it if so**. Otherwise start it **detached** so Copilot isn’t blocked:
 
 ```bash
-npm run start:backend:e2e &   # dockerised backend + mocked data (hot‑reload)
+npm run start:backend:e2e &         # dockerised backend + mocked data (hot‑reload)
+npm run start:backend:docker:prod   # production backend using Docker Compose
 ```
 
 _(Pure library/service work can skip the sandbox entirely.)_
@@ -71,5 +72,17 @@ Decide which docs need updating:
 ### 4. Log the Change
 
 Add a concise entry to **CHANGELOG.md** summarising the feature, tests added, and docs touched. Commit & push will be handled by the human operator.
+
+---
+
+### 5. Production Deployment
+
+For production testing or deployment, use the Docker Compose setup:
+
+```bash
+npm run start:backend:docker:prod   # Build and start production environment
+```
+
+This command rebuilds the Docker image and starts the full production stack including VPN, nginx, and SSL support.
 
 > **Cycle:** _Code → Test (unit/e2e) → Docs → Changelog_ — choose the lightest path that proves correctness without over‑testing.
