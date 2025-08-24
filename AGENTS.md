@@ -50,7 +50,7 @@ const setupTest = () => {
 
 ### **Key Services (All Complete - DON'T REBUILD)**
 
-- `AuthService` - JWT authentication with refresh tokens
+- `AuthService` - Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - `SourceService` - Multi-provider torrent source aggregation
 - `DownloadService` - WebTorrent client management
 - `MediaService` - TMDB integration and episode sync management
@@ -100,7 +100,7 @@ npm install --workspace backend package-name
 
 ### **Current Status: Fully Functional Backend**
 
-- ✅ **Authentication**: Full JWT system with refresh tokens
+- ✅ **Authentication**: Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - ✅ **Source Discovery**: Multi-provider aggregation (YTS + THERARBG)
 - ✅ **Media Streaming**: WebTorrent infrastructure with stream endpoint
 - ✅ **Database Layer**: 13 entities with encryption
@@ -239,7 +239,7 @@ For comprehensive information on specific topics:
 - **Frontend**: React + Redux Toolkit + Vite + TypeScript
 - **Streaming**: WebTorrent for peer-to-peer content delivery
 - **Deployment**: Docker + nginx + Let's Encrypt SSL
-- **Authentication**: JWT with refresh tokens using JOSE library
+- **Authentication**: Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - **Database**: SQLite with field-level AES-256-GCM encryption
 
 ## 🚨 Critical Context for Agents
@@ -305,7 +305,7 @@ The platform features complete infrastructure:
 - ✅ Stream routes with quality selection and auth verification
 - ✅ DownloadService.streamFile() method (lines 531-585)
 - ✅ Range request support for video seeking
-- ✅ Authentication system complete (JWT backend + session frontend)
+- ✅ Authentication system complete (Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens)
 - ✅ Frontend builds successfully with full auth integration
 
 ### **Future Enhancement Opportunities**
