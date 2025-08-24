@@ -67,7 +67,7 @@ Complete authentication system with session-based auth using HttpOnly cookies in
 
 ### Completed Implementation
 
-```
+```text
 frontend/src/
 ├─ app/pages/login/               # Complete login system
 │  ├─ LoginPage.tsx              ✅ Main login page with email/QR options

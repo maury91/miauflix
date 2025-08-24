@@ -11,7 +11,7 @@
 │  └─ trakt.routes.ts   → Sync watchlists, mark as watched
 │
 ├─ ⚙️ services/        Business logic (the "brain" of each feature)
-│  ├─ auth/            → JWT creation, password hashing
+│  ├─ auth/            → Session creation, JWT creation, password hashing
 │  ├─ source/          → Find torrents, rank quality
 │  ├─ media/           → TMDB data sync, metadata
 │  └─ download/        → WebTorrent streaming

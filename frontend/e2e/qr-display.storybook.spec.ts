@@ -10,19 +10,36 @@ test.describe('QRDisplay - Visual Tests', () => {
     // Set consistent viewport for screenshot comparisons
     await page.setViewportSize({ width: 1200, height: 800 });
 
-    // Disable animations for consistent snapshots
+    // Disable all animations, transitions, and smooth behaviors
     await page.addInitScript(() => {
       const style = document.createElement('style');
       style.textContent = `
         *, *::before, *::after {
           animation-duration: 0s !important;
           animation-delay: 0s !important;
+          animation-iteration-count: 1 !important;
           transition-duration: 0s !important;
           transition-delay: 0s !important;
+          transform-origin: center !important;
+          scroll-behavior: auto !important;
+        }
+        
+        /* Disable CSS animations */
+        @keyframes * {
+          0%, 100% { animation-play-state: paused !important; }
+        }
+        
+        /* Force static states */
+        [data-testid*="spinner"], .spinner, .loading {
+          animation: none !important;
+          transform: none !important;
         }
       `;
       document.head.appendChild(style);
     });
+
+    // Force reduced motion at browser level
+    await page.emulateMedia({ reducedMotion: 'reduce' });
   });
 
   test('QRDisplay - All states composite', async ({ page }) => {
@@ -74,13 +91,25 @@ test.describe('QRDisplay - Visual Tests', () => {
         await page.waitForLoadState('networkidle');
 
         if (state.isLoading) {
-          // Wait for spinner to render
+          // Wait for spinner to render and force it to static state
           await page.waitForSelector('svg', { timeout: 10000 });
-          await page.waitForTimeout(1000);
+          await page.evaluate(() => {
+            // Force all animations to end state
+            const animatedElements = document.querySelectorAll('*');
+            animatedElements.forEach(el => {
+              const computed = getComputedStyle(el);
+              if (computed.animationName && computed.animationName !== 'none') {
+                (el as HTMLElement).style.animationPlayState = 'paused';
+                (el as HTMLElement).style.animationDelay = '0s';
+                (el as HTMLElement).style.animationDuration = '0s';
+              }
+            });
+          });
+          await page.waitForTimeout(500);
         } else {
           // Wait for QR code to render
           await page.waitForSelector('[aria-label="Login QR code"]', { timeout: 10000 });
-          await page.waitForTimeout(1000);
+          await page.waitForTimeout(500);
         }
 
         return `<div class="label">${state.name}</div>`;

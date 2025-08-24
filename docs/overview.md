@@ -21,12 +21,12 @@ Start here and go deeper as needed:
 
 ### Core Systems
 
-| Document                                                       | Focus Area         | Key Topics                                                    | Status      |
-| -------------------------------------------------------------- | ------------------ | ------------------------------------------------------------- | ----------- |
-| [**Scheduler Service**](../backend/docs/scheduler-service.md)  | Background Tasks   | Job scheduling, task management, cron-like functionality      | ✅ Complete |
-| [**Chunk Stores System**](../backend/docs/chunk-stores.md)     | Torrent Management | Distributed chunk storage, retrieval, caching strategies      | ✅ Complete |
-| [**Authentication System**](../backend/docs/authentication.md) | Security           | JWT implementation, refresh tokens, role-based access         | ✅ Complete |
-| [**Configuration System**](../backend/docs/configuration.md)   | Setup & Config     | Interactive setup, environment management, auto-configuration | ✅ Complete |
+| Document                                                       | Focus Area         | Key Topics                                                                                          | Status      |
+| -------------------------------------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------- | ----------- |
+| [**Scheduler Service**](../backend/docs/scheduler-service.md)  | Background Tasks   | Job scheduling, task management, cron-like functionality                                            | ✅ Complete |
+| [**Chunk Stores System**](../backend/docs/chunk-stores.md)     | Torrent Management | Distributed chunk storage, retrieval, caching strategies                                            | ✅ Complete |
+| [**Authentication System**](../backend/docs/authentication.md) | Security           | Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens | ✅ Complete |
+| [**Configuration System**](../backend/docs/configuration.md)   | Setup & Config     | Interactive setup, environment management, auto-configuration                                       | ✅ Complete |
 
 ### Infrastructure & Operations
 
@@ -68,7 +68,7 @@ Start here and go deeper as needed:
 - **Source Aggregation**: Multi-provider system (YTS + THERARBG) with background processing
 - **WebTorrent Infrastructure**: Complete client with tracker management and stats scraping
 - **Streaming Infrastructure**: Complete `/stream/:token` endpoint with quality selection and range requests
-- **Authentication**: Full JWT system with refresh tokens and role-based access
+- **Authentication**: Session-based authentication with HttpOnly cookies as refresh tokens and JWT for short lived tokens
 - **Database Layer**: Complete entity model with encryption and repository pattern
 - **Background Tasks**: All 7 scheduled tasks operational
 
