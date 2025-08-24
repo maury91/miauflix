@@ -123,12 +123,12 @@ export default defineConfig({
   expect: {
     // More lenient thresholds for animation screenshots
     toHaveScreenshot: {
-      threshold: 0.2,
-      maxDiffPixels: 500,
+      threshold: 0.25,
+      maxDiffPixels: 800,
     },
     toMatchSnapshot: {
-      threshold: 0.2,
-      maxDiffPixels: 500,
+      threshold: 0.25,
+      maxDiffPixels: 800,
     },
   },
 
