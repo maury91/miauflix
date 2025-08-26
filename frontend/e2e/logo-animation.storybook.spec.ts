@@ -29,11 +29,6 @@ const PROGRESS_BAR_STYLES = `
 .progress-text {
   color: #999;
   font-size: 10px;
-  font-family: 'DejaVu Sans Mono';
-  font-variant-ligatures: none;
-  font-smooth: never;
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: auto;
   width: 30px;
   text-align: center;
   flex-shrink: 0;
@@ -126,9 +121,6 @@ test.describe('Logo Animation - Storybook Visual Tests', () => {
             // @ts-expect-error - this is a custom property for testing
             window.seek(seekTo);
           }, point);
-
-          // Wait for animation to be ready and stable
-          await page.waitForTimeout(200);
 
           return `
             <div class="progress">

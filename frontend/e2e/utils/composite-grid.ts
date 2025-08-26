@@ -107,6 +107,11 @@ export async function createCompositeScreenshot<T>(
       await page.waitForTimeout(100);
     }
 
+    // Ensure fonts are still loaded after animation changes
+    await page.evaluate(() => document.fonts.ready);
+    // Wait for animation to be ready and stable
+    await page.waitForTimeout(200);
+
     // Take screenshot
     const frameBuffer = await page.screenshot({
       type: 'png',
@@ -133,11 +138,13 @@ export async function createCompositeScreenshot<T>(
           padding: 0; 
           background: ${backgroundColor};
           color: white;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
           font-variant-ligatures: none;
           font-feature-settings: 'liga' 0, 'calt' 0;
+          font-smooth: never;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeSpeed;
           font-size: 14px;
           line-height: 1.2;
         }
@@ -195,6 +202,8 @@ export async function createCompositeScreenshot<T>(
   await page.setViewportSize({ width: compositeWidth, height: compositeHeight });
   await page.setContent(compositeHtml);
   await page.waitForLoadState('networkidle');
+  // Ensure all fonts are loaded before taking final screenshot
+  await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(500);
 
   // Take final screenshot
