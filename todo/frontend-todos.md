@@ -316,7 +316,7 @@ src/components/TraktProfile.tsx
 
 ### Dependencies
 
-- frontend#login-jwt
+- frontend#login-auth
 
 ### Acceptance
 
@@ -396,7 +396,7 @@ interface UIConfig {
 
 ### Dependencies
 
-- frontend#login-jwt (user-specific settings)
+- frontend#login-auth (user-specific settings)
 
 ### Acceptance Criteria
 
@@ -467,7 +467,7 @@ interface UserProfile {
 
 ### Dependencies
 
-- frontend#login-jwt (authentication)
+- frontend#login-auth (authentication)
 - backend#progress-tracking (profile-specific history)
 
 ### Acceptance Criteria
@@ -551,7 +551,7 @@ Administrative interface for configuring and managing Prowlarr/Jackett indexers.
 ```mermaid
 graph TD
     %% Priority 1
-    A[frontend#login-jwt] --> B[frontend#link-trakt]
+    A[frontend#login-auth] --> B[frontend#link-trakt]
     C[frontend#viewport-payload] --> D[backend#preload]
 
     %% Priority 2
