@@ -222,8 +222,7 @@ This wizard will:
 
 For detailed information, see:
 
-- [HTTPS Setup Guide](docs/HTTPS_SETUP.md)
-- [Let's Encrypt Setup Guide](docs/LETSENCRYPT_SETUP.md)
+- [SSL Certificates Guide](docs/setup/ssl-certificates.md)
 </details>
 
 #### 5. Start the Docker Compose environment
@@ -286,7 +285,16 @@ npm run start:backend:e2e
 
 ## 🔄 CI/CD
 
-This project uses GitHub Actions for continuous integration and testing. Tests run automatically in networkless mode using pre-recorded fixtures. For more details, see the [GitHub Actions Guide](docs/GITHUB_ACTIONS.md).
+This project uses GitHub Actions for continuous integration and testing. Tests run automatically in networkless mode using pre-recorded fixtures. For more details, see the [CI/CD Guide](docs/development/ci-cd-guide.md).
+
+## 📚 Documentation
+
+For comprehensive guides and development resources, see our [Documentation](docs/README.md):
+
+- **[Setup Guides](docs/setup/)** - Installation, Docker, and HTTPS setup
+- **[Development](docs/development/)** - Workflow, testing, and coding standards
+- **[Architecture](docs/architecture/)** - System overview and technical details
+- **[AI Assistance](docs/ai/)** - Guidelines for AI development tools
 
 ## 🤝 Contributing
 
@@ -294,9 +302,10 @@ Contributions are welcome and appreciated! Here's how you can contribute:
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+3. Follow the [Development Workflow](docs/development/workflow.md)
+4. Commit your changes: `git commit -m 'Add amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
 
 ## 📄 License
 

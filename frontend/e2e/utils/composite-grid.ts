@@ -210,7 +210,7 @@ export async function createCompositeScreenshot<T>(
   const defaultScreenshotOptions = {
     threshold: 0.1,
     maxDiffPixels: 200,
-    fullPage: true,
+    fullPage: false,
     animations: 'disabled' as const,
     ...screenshotOptions,
   };
