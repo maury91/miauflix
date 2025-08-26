@@ -367,10 +367,9 @@ Essential reading before making changes:
 
 - `docs/ai/context.md` - Current project status for AI assistants
 - `docs/ai/gotchas.md` - Critical constraints that will break things
-- `docs/ai/file-mapping.md` - Where to make different types of changes
-- `docs/ai/patterns.md` - Code conventions and patterns
-- `docs/overview.md` - Documentation roadmap
-- `docs/architecture.md` - System architecture overview
+- `docs/ai/development-guide.md` - Development patterns and workflows
+- `docs/architecture/system-overview.md` - Complete system architecture
+- `docs/development/workflow.md` - Development workflow and conventions
 - `backend/docs/streaming-services.md` - Streaming implementation details
 - `backend/docs/authentication.md` - Authentication system documentation
 

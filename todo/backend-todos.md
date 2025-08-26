@@ -64,7 +64,7 @@ Essential streaming functionality that enables basic movie playback with securit
 
 **Protected Routes:** `/lists`, `/list/:slug`, all `/trakt/*`, `/movies/*` routes require authentication.
 
-**Note:** Frontend integration missing - see `frontend#login-jwt` task.
+**Note:** Frontend integration missing - see `frontend#login-auth` task.
 
 ## Progress Dashboard
 
@@ -208,13 +208,11 @@ backend-e2e/
 **Container Specifications**
 
 1. **BitTorrent Tracker** (`quoorex/bittorrent-tracker`)
-
    - Protocols: HTTP, UDP, WebSocket
    - Health endpoint: `/stats`
    - Resource usage: <50MB RAM
 
 2. **Torrent Seeder** (Custom Node.js)
-
    - Base: `node:18-alpine`
    - WebTorrent client with predetermined test content
    - Health endpoint: `/health` with torrent inventory
@@ -502,25 +500,21 @@ Implement a multi-tiered storage management system with configurable policies fo
 **Tasks**
 
 1. **Storage Monitor Service**
-
    - Real-time disk space monitoring
    - Configurable thresholds for warnings and actions
    - Integration with existing logging system
 
 2. **Content Lifecycle Management**
-
    - Track content access patterns and popularity
    - Implement LRU (Least Recently Used) cleanup strategy
    - Priority-based retention (preserve high-quality, popular content)
 
 3. **Automatic Cleanup System**
-
    - Scheduled cleanup tasks based on disk usage
    - Safe removal of incomplete/corrupted downloads
    - Cleanup of old cache files and temporary data
 
 4. **Storage Configuration API**
-
    - RESTful endpoints for storage policy management
    - Runtime configuration updates without restarts
    - Storage statistics and reporting
@@ -625,27 +619,23 @@ WebSocket-based real-time notifications with optional email/push integrations an
 **Tasks**
 
 1. **WebSocket Notification Service**
-
    - Real-time notification delivery to connected clients
    - User-specific notification channels
    - Connection management and reconnection handling
 
 2. **Notification Types & Templates**
-
    - Download completion notifications
    - System maintenance alerts
    - Storage warnings and cleanup notifications
    - New content availability alerts
 
 3. **Delivery Channels**
-
    - WebSocket for real-time in-app notifications
    - Email notifications for important events
    - Optional push notification support
    - SMS integration for critical alerts
 
 4. **Notification Persistence**
-
    - Database storage for notification history
    - Read/unread status tracking
    - Notification preferences per user
@@ -805,35 +795,30 @@ Event-driven architecture with configurable automation rules, smart scheduling, 
 **Tasks**
 
 1. **Content Discovery Engine**
-
    - Monitor new releases from multiple sources
    - IMDB/TMDB watchlist integration
    - Seasonal anime tracking
    - Follow-up episode detection
 
 2. **Download Scheduler**
-
    - Priority-based queue management
    - Bandwidth-aware scheduling
    - Time-based download windows
    - Retry logic with exponential backoff
 
 3. **User Preference System**
-
    - Quality preferences (resolution, size limits)
    - Genre and content type filters
    - Automatic vs manual approval modes
    - Blacklist and whitelist management
 
 4. **Smart Automation Rules**
-
    - TV show season tracking
    - Movie sequel/franchise following
    - Director/actor following
    - Custom user-defined rules
 
 5. **Bandwidth Management**
-
    - Dynamic bandwidth allocation
    - QoS integration with streaming
    - Schedule-based bandwidth limits
