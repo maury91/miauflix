@@ -121,7 +121,6 @@ jobs:
         if: steps.verify-playwright.outcome == 'success'
         env:
           NODE_ENV: test
-          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
         timeout-minutes: 10
 
       - name: Upload E2E test artifacts
