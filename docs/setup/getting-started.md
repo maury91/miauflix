@@ -57,7 +57,7 @@ chmod +x setup-ssl.sh
 ./setup-ssl.sh -d yourdomain.com
 ```
 
-This will generate an SSL certificate and key, and configure nginx accordingly.
+This will generate an SSL certificate and key, and configure Nginx accordingly.
 
 More details on how to set up HTTPS can be found in the [SSL Certificates](ssl-certificates.md) guide.
 

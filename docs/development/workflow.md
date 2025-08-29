@@ -85,12 +85,12 @@ npm run test:backend:e2e
 npm run start:frontend
 
 # SSR testing (for production-like behavior)
-npm run dev:frontend:ssr
+npm run dev:ssr -w frontend
 
 # Frontend tests
 npm run test:frontend
-npm run test:e2e
-npm run test:visual
+npm run test:frontend:e2e
+npm run test:frontend:visual
 ```
 
 ### Full-stack Development
@@ -141,7 +141,20 @@ import { UserEntity } from '../../../entities/user.entity';
 
 ### Frontend Path Aliases
 
-- `@/*` - `./src/*` - Source root directory
+**Vite Config Aliases (for bundling):**
+
+- `@` - `./src` - Source root directory
+- `@components` - `./src/app/components` - React components
+- `@pages` - `./src/app/pages` - Page components
+- `@store` - `./src/store` - Redux store and slices
+- `@types` - `./src/types` - TypeScript type definitions
+- `@utils` - `./src/utils` - Utility functions
+- `@hooks` - `./src/app/hooks` - React hooks
+- `@consts` - `./src/consts` - Application constants
+
+**TypeScript Config Aliases (for type checking):**
+
+- `@/*` - `./src/*` - Source root directory (includes subdirectories)
 - `@components/*` - `./src/app/components/*` - React components
 - `@pages/*` - `./src/app/pages/*` - Page components
 - `@store/*` - `./src/store/*` - Redux store and slices
@@ -149,8 +162,9 @@ import { UserEntity } from '../../../entities/user.entity';
 - `@utils/*` - `./src/utils/*` - Utility functions
 - `@hooks/*` - `./src/app/hooks/*` - React hooks
 - `@consts/*` - `./src/consts/*` - Application constants
+- `@miauflix/types` - `./src/types/api` - API type definitions
 
-**Note**: Frontend Jest tests only map `@/*` to `./src/*` in `moduleNameMapping`. If tests require other aliases, extend the `moduleNameMapper` configuration in `frontend/jest.config.ts`.
+**Note**: Frontend Jest tests include `moduleNameMapper` for `^@/(.*)$` → `./src/$1` and `^~icons/(.*)$` → icon mocks. Add any other needed aliases to `frontend/jest.config.ts`.
 
 ### TypeScript Standards
 
