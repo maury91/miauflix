@@ -20,8 +20,14 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 
 #### Authentication Service
 
-- **JWT access tokens** for API authentication with short expiration (15 minutes)
-- **HttpOnly refresh tokens** in cookies for secure token renewal (7 days)
+**Three-Tier Authentication System:**
+
+1. **API Authentication**: JWT access tokens in `Authorization: Bearer` headers (15 minutes expiration)
+2. **Token Renewal**: HttpOnly refresh token cookies - used exclusively for `/api/auth/refresh/:session` endpoint (7 days expiration)
+3. **Streaming Authentication**: Non-JWT streaming keys for `/api/stream/:token` endpoint (very short-lived, stream-specific)
+
+**Additional Features:**
+
 - **Atomic token rotation** with race condition detection
 - **Multi-profile session support** with session-scoped cookies
 - **Role-based access control** (admin, user)
@@ -38,7 +44,7 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 #### Streaming Infrastructure
 
 - **WebTorrent Client** - Complete BitTorrent client implementation
-- **Source Aggregation** - YTS, THERARBG, and extensible provider system
+- **Source Aggregation** - YTS, RARBG, and an extensible provider system
 - **Quality Selection** - Automatic best quality selection with codec preferences
 - **Range Requests** - Full support for video seeking and partial content delivery
 - **On-Demand Search** - Real-time source discovery with timeout handling
@@ -138,6 +144,12 @@ sequenceDiagram
     D->>A: Confirm update
     A->>A: Generate new JWT + refresh token
     A->>C: New JWT + HttpOnly cookie (new refresh token)
+
+    Note over C,A: Streaming Authentication Flow
+    C->>A: Request stream key with JWT in Authorization header
+    A->>A: Verify JWT and generate non-JWT streaming token
+    A->>C: Short-lived streaming token (valid only for specific stream)
+    C->>+S: GET /api/stream/:token (uses streaming token, not JWT)
 ```
 
 ### Streaming Flow
