@@ -135,8 +135,8 @@ miauflix/
 
 ### Core Services (All Production-Ready)
 
-- **AuthService**: JWT authentication with refresh tokens, role-based access
-- **SourceService**: Multi-provider torrent source aggregation (YTS, RARBG)
+- **AuthService**: JWT access tokens with HttpOnly refresh cookies and role-based access
+- **SourceService**: Multi-provider torrent source aggregation (YTS, THERARBG)
 - **DownloadService**: WebTorrent client management for streaming
 - **StreamService**: Source selection and streaming optimization
 - **MediaService**: TMDB integration for movie/TV metadata
@@ -148,7 +148,7 @@ miauflix/
 
 ### ✅ Fully Functional Components
 
-- **Complete Streaming Infrastructure**: WebTorrent client with streaming endpoint `/stream/:token`
+- **Complete Streaming Infrastructure**: WebTorrent client with streaming endpoint `/api/stream/:token`
 - **Source Aggregation**: Multi-provider background processing (YTS + THERARBG)
 - **Authentication System**: Full JWT implementation with refresh tokens and role-based access
 - **Database Layer**: Complete entity model with AES-256-GCM encryption
@@ -185,7 +185,7 @@ The frontend-backend integration is now **fully implemented**:
 
 The streaming system is fully implemented and production-ready:
 
-### Stream Endpoint: `/stream/:token`
+### Stream Endpoint: `/api/stream/:token`
 
 - **Authentication**: Uses streaming keys with timing attack protection
 - **Quality Selection**: Supports quality preference and codec filtering (HEVC support)

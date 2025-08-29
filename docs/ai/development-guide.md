@@ -106,17 +106,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { UserEntity } from '../../../entities/user.entity';
 ```
 
-**Available aliases**:
-
-- `@entities/` - Database entities
-- `@services/` - Business logic services
-- `@repositories/` - Data access layer
-- `@routes/` - HTTP route handlers
-- `@middleware/` - HTTP middleware
-- `@utils/` - Utility functions
-- `@database/` - Database configuration
-- `@mytypes/` - TypeScript types
-- `@errors/` - Error classes
+See “Backend Path Aliases” and “Frontend Path Aliases” in [docs/development/workflow.md](../development/workflow.md) for the authoritative, toolchain-aligned lists (TS, Vite, Jest).
 
 ### Error Handling Pattern
 
@@ -189,13 +179,13 @@ backend/src/services/media/      # Metadata processing
 
 ```bash
 # Backend testing
-npm run test:backend                # Unit tests
+npm run test:backend               # Unit tests
 npm run test:backend:e2e           # E2E tests with Docker
 
 # Frontend testing
 npm run test:frontend              # Unit tests
-npm run test:e2e                   # E2E tests with backend integration
-npm run test:visual                # Visual regression tests
+npm run test:frontend:e2e          # E2E tests with backend integration
+npm run test:frontend:visual       # Visual regression tests
 
 # Full test suite
 npm test

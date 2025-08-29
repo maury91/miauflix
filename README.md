@@ -38,7 +38,10 @@ Miauflix is a self-hosted media streaming platform that enables users to discove
 
 ### 🚀 Currently Available
 
-- **🔐 User Authentication**: Session-based authentication with HttpOnly cookies and comprehensive login system
+- **🔐 User Authentication**: Multi-layered authentication system with comprehensive login flows
+  - **API Authentication**: JWT tokens in Authorization headers
+  - **Token Renewal**: HttpOnly refresh token cookies (used only for `/api/auth/refresh/:session`)
+  - **Streaming Access**: Separate short-lived non-JWT streaming keys for video endpoints
 - **🎬 Movie Database**: TMDB integration for posters, ratings, and metadata
 - **🔍 Source Discovery**: Automatic search across multiple content directories (YTS and THERARBG with more to come)
 - **📺 Video Streaming**: Complete peer-to-peer streaming with quality selection and range requests
@@ -63,7 +66,7 @@ The application is a self-contained Node.js application. Docker image and docker
 ### ✅ Backend Infrastructure (Complete)
 
 - **Authentication System**: JWT with refresh tokens, role-based access control
-- **Streaming Engine**: WebTorrent client with `/stream/:token` endpoint
+- **Streaming Engine**: WebTorrent client with `/api/stream/:token` endpoint
 - **Source Aggregation**: Multi-provider discovery (YTS + THERARBG)
 - **Database Layer**: SQLite + TypeORM with AES-256-GCM encryption
 - **Background Processing**: 7 scheduled tasks for continuous content discovery
@@ -81,7 +84,7 @@ The application is a self-contained Node.js application. Docker image and docker
 
 ## 🏗️ Project Architecture
 
-```
+```text
 miauflix/
 ├── backend/                  # Node.js TypeScript backend
 │   ├── src/                  # Source code
@@ -147,7 +150,7 @@ docker compose run --rm backend npm run start:backend
 ```
 
 <p align="center">
-  <img src="./docs/assets/miauflix env wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
+  <img src="./docs/assets/miauflix%20env%20wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
 </p>
 
 <details>
