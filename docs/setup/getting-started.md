@@ -3,12 +3,12 @@
 > **Quick Start**: Just want to try it? Run these commands and you're done in 5 minutes!
 
 ```bash
-git clone <repository-url> && cd miauflix
+git clone https://github.com/maury91/miauflix.git && cd miauflix
 docker compose run --rm backend npm run start:backend -- --only-config
 docker compose up -d
 ```
 
-The first command runs the configuration wizard, then starts the full stack. No local Node.js installation needed!
+The first command clones the repository, the second runs the configuration wizard, and the third starts the full stack. No local Node.js installation needed!
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ The first command runs the configuration wizard, then starts the full stack. No 
 #### 1. Clone and Configure
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/maury91/miauflix.git
 cd miauflix
 
 # Interactive configuration wizard
@@ -46,19 +46,18 @@ NORDVPN_PRIVATE_KEY=your-nordvpn-private-key
 
 A couple of notes about VPN:
 
-Miauflix can detect if you are connected to a VPN ( only NordVPN for now ) and if it detects it is not automatically disable some functionality.  
-You can disable this behavior by setting `DISABLE_VPN_CHECK=true` in `.env`. This is recommended only in the case you are keen to take the risk of not using a VPN or you are using a VPN and you are always 100% sure it is on ( for example through a docker service or piHole )
+Miauflix currently detects only NordVPN and will automatically disable some features when a VPN is not detected. You can override this behavior by setting `DISABLE_VPN_CHECK=true` in `.env`. This is recommended only if you're willing to accept the privacy risks of not using a VPN, or if you're using a VPN and are certain it's always active (for example, through a Docker service or Pi-hole).
 
 #### 3. [Optional] Set up HTTPS and domain name
 
-If you want to use HTTPS, you can set up a SSL certificate.
+If you want to use HTTPS, you can set up an SSL certificate.
 
 ```bash
 chmod +x setup-ssl.sh
 ./setup-ssl.sh -d yourdomain.com
 ```
 
-This will generate a SSL certificate and a key, and will set up the relevant nginx configuration.
+This will generate an SSL certificate and key, and configure nginx accordingly.
 
 More details on how to set up HTTPS can be found in the [SSL Certificates](ssl-certificates.md) guide.
 
@@ -126,8 +125,13 @@ For a complete reference of all available environment variables, see the [Enviro
 
 ## Initial User
 
-Miauflix will create an initial user with random credentials.
+Miauflix creates an initial user with random credentials on first run.
 
-The credentials are stored encrypted in the database, so that is not the right place to look for them.
+Credentials are stored encrypted in the database, so you won't find them there. They are printed to the logs during the first startup. Retrieve them and then redact/remove the logs:
 
-The credentials will be printed in the logs during the first run, be sure to check the logs and then clean them up.
+```bash
+# Example: show recent backend logs (adjust service name if different)
+docker compose logs backend --since=15m
+```
+
+Important: rotate the initial password after first login and avoid storing credentials in logs or tickets.
