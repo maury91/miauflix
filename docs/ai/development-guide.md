@@ -9,7 +9,7 @@ This guide consolidates patterns, workflows, and best practices for AI assistant
 The Miauflix platform is **100% complete and production-ready**:
 
 - ✅ **Backend**: All services implemented and functional
-- ✅ **Frontend**: Complete with JWT authentication and HttpOnly refresh tokens
+- ✅ **Frontend**: Complete with three-tier authentication (JWT for APIs, HttpOnly cookies for refresh, streaming keys for video)
 - ✅ **Streaming**: WebTorrent infrastructure fully operational
 - ✅ **Integration**: Frontend-backend integration complete
 
@@ -237,7 +237,7 @@ npm run build:all
 ### Production Constraints
 
 - **All services are production-ready** - Don't rebuild existing infrastructure
-- **Authentication uses JWT tokens** - JWT for API access + HttpOnly refresh token cookies
+- **Authentication uses three systems** - JWT for API access, HttpOnly cookies for refresh only, streaming keys for video
 - **Streaming endpoint is functional** - `/api/stream/:token` is complete
 - **Database has field-level encryption** - Sensitive data is protected
 
@@ -371,7 +371,14 @@ curl -X POST http://localhost:3001/api/auth/login \
 
 ### Authentication Security
 
-- Use HttpOnly cookies for session management
+**Three-Tier Authentication System:**
+
+- **Primary API Auth**: JWT tokens in Authorization headers (15min expiration)
+- **Token Refresh Only**: HttpOnly cookies exclusively for `/api/auth/refresh/:session`
+- **Streaming Access**: Non-JWT streaming keys for `/api/stream/:token`
+
+**Security Measures:**
+
 - Implement proper CSRF protection
 - Validate all user inputs
 - Use secure password hashing

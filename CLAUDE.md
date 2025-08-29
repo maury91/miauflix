@@ -109,7 +109,7 @@ npm run format:check                # Check formatting without changes
 - **Backend Framework**: Hono (Express-like but faster)
 - **Frontend**: React with Vite, Redux Toolkit, styled-components
 - **Database**: TypeORM with SQLite
-- **Authentication**: JWT with refresh tokens (jose library)
+- **Authentication**: Three-tier system: (1) JWT tokens for API authentication, (2) HttpOnly refresh token cookies for token renewal only, (3) Non-JWT streaming keys for video access (jose library)
 - **Streaming**: WebTorrent for peer-to-peer content delivery
 - **External APIs**: TMDB (metadata), Trakt.tv (lists), NordVPN (status)
 
@@ -126,7 +126,7 @@ miauflix/
 │   │   ├── middleware/         # HTTP middleware (auth, rate limiting)
 │   │   └── utils/              # Utility functions
 │   └── docs/                   # API and system documentation
-├── frontend/                   # React application (builds successfully, needs JWT auth)
+├── frontend/                   # React application (served by backend; auth fully integrated)
 ├── packages/                   # Shared libraries
 │   ├── backend-client/         # Generated API client
 │   └── source-metadata-extractor/ # Content metadata processing
@@ -136,7 +136,7 @@ miauflix/
 ### Core Services (All Production-Ready)
 
 - **AuthService**: JWT authentication with refresh tokens, role-based access
-- **SourceService**: Multi-provider torrent source aggregation (YTS, THERARBG)
+- **SourceService**: Multi-provider torrent source aggregation (YTS, RARBG)
 - **DownloadService**: WebTorrent client management for streaming
 - **StreamService**: Source selection and streaming optimization
 - **MediaService**: TMDB integration for movie/TV metadata

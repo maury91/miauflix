@@ -25,15 +25,15 @@
 
 ## Priority Overview
 
-| Priority       | Focus Area            | Tasks          | Status |
-| -------------- | --------------------- | -------------- | ------ |
-| **Priority 1** | **AUTHENTICATION**    | **1 complete** | ✅     |
-| **Priority 2** | Viewport Optimization | 1 task         | ⬜     |
-| **Priority 3** | TV Show Episodes      | 1 planned      | ⬜     |
-| **Priority 4** | Nice-to-Have Features | 7 planned      | ⬜     |
-| **Priority 5** | Anime Support         | 1 planned      | ⬜     |
-| **Priority 6** | More Trackers         | 0 tasks        | -      |
-| **Priority 7** | Prowlarr/Jackett      | 1 planned      | ⬜     |
+| Priority       | Focus Area              | Tasks                | Status |
+| -------------- | ----------------------- | -------------------- | ------ |
+| **Priority 1** | **Core Movie Playback** | 2 tasks (1 complete) | ✅/⬜  |
+| **Priority 2** | TV Show Episodes        | 1 planned            | ⬜     |
+| **Priority 3** | Nice-to-Have Features   | 7 planned            | ⬜     |
+| **Priority 4** | Anime Support           | 1 planned            | ⬜     |
+| **Priority 5** | Profile/Settings (UI)   | 2 planned            | ⬜     |
+| **Priority 6** | Prowlarr/Jackett        | 1 planned            | ⬜     |
+| **Priority 7** | More Trackers           | 0 tasks              | -      |
 
 ## Environment Variables Reference
 
@@ -100,7 +100,7 @@ frontend/src/
 ### Technical Implementation
 
 - **Backend Integration**: Complete integration with existing AuthService
-- **Security**: HttpOnly cookies prevent XSS attacks (better than localStorage JWT)
+- **Security**: Use HttpOnly cookies to reduce token exfiltration (does not prevent XSS); implement CSRF protections (SameSite, CSRF tokens) and follow secure cookie practices
 - **User Experience**: Dual login options with loading states and error handling
 - **Testing**: Unit tests, visual tests, and Storybook documentation
 - **TypeScript**: Full type safety with discriminated unions and proper interfaces

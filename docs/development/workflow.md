@@ -6,7 +6,7 @@ This guide covers the development workflow, coding conventions, and best practic
 
 Miauflix uses an npm workspace monorepo structure:
 
-```
+```text
 miauflix/
 ├── backend/                     # Node.js TypeScript backend
 │   ├── src/
@@ -93,7 +93,7 @@ npm run test:e2e
 npm run test:visual
 ```
 
-### Full Stack Development
+### Full-stack Development
 
 ```bash
 # Start both backend and frontend
@@ -121,17 +121,36 @@ import { AuthService } from '@services/auth/auth.service';
 import { UserEntity } from '../../../entities/user.entity';
 ```
 
-Available aliases:
+### Backend Path Aliases
 
-- `@entities/` - Database entities
-- `@services/` - Business logic services
-- `@repositories/` - Data access layer
-- `@routes/` - HTTP route handlers
-- `@middleware/` - HTTP middleware
-- `@utils/` - Utility functions
-- `@database/` - Database configuration
-- `@mytypes/` - TypeScript type definitions
-- `@errors/` - Error classes
+- `@entities/*` - `src/entities/*` - Database entities
+- `@services/*` - `src/services/*` - Business logic services
+- `@repositories/*` - `src/repositories/*` - Data access layer
+- `@routes/*` - `src/routes/*` - HTTP route handlers
+- `@middleware/*` - `src/middleware/*` - HTTP middleware
+- `@utils/*` - `src/utils/*` - Utility functions
+- `@database` - `src/database` - Database configuration
+- `@database/*` - `src/database/*` - Database configuration
+- `@mytypes/*` - `src/types/*` - TypeScript type definitions
+- `@errors/*` - `src/errors/*` - Error classes
+- `@dto/*` - `src/dto/*` - Data transfer objects
+- `@content-directories/*` - `src/content-directories/*` - Content directory handling
+- `@logger` - `src/logger` - Logger configuration
+- `@constants` - `src/constants` - Application constants
+- `@__test-utils__/*` - `src/__test-utils__/*` - Test utility functions
+
+### Frontend Path Aliases
+
+- `@/*` - `./src/*` - Source root directory
+- `@components/*` - `./src/app/components/*` - React components
+- `@pages/*` - `./src/app/pages/*` - Page components
+- `@store/*` - `./src/store/*` - Redux store and slices
+- `@types/*` - `./src/types/*` - TypeScript type definitions
+- `@utils/*` - `./src/utils/*` - Utility functions
+- `@hooks/*` - `./src/app/hooks/*` - React hooks
+- `@consts/*` - `./src/consts/*` - Application constants
+
+**Note**: Frontend Jest tests only map `@/*` to `./src/*` in `moduleNameMapping`. If tests require other aliases, extend the `moduleNameMapper` configuration in `frontend/jest.config.ts`.
 
 ### TypeScript Standards
 
@@ -322,7 +341,14 @@ npm run check:ts
 
 ### Authentication
 
-- Use JWT access tokens for API authentication with HttpOnly refresh token cookies
+**Three-Tier Authentication System:**
+
+- **API Endpoints**: Use JWT tokens in `Authorization: Bearer` headers (most endpoints)
+- **Token Refresh**: HttpOnly cookies used only for `/api/auth/refresh/:session` endpoint
+- **Streaming Access**: Non-JWT streaming keys for `/api/stream/:token` endpoint
+
+**Security Measures:**
+
 - Implement proper CSRF protection
 - Validate all user inputs
 - Use secure password hashing (bcrypt)

@@ -7,8 +7,8 @@
 **DO NOT rebuild these systems:**
 
 - **Authentication**: Full JWT system with refresh tokens (AuthService: 325 lines, ~15 methods)
-- **Source Discovery**: Multi-provider content aggregation (YTS + THERARBG) with background processing
-- **Media Streaming Infrastructure**: Complete client with peer-to-peer networking (DownloadService: 587 lines)
+- **Source Discovery**: Multi-provider content aggregation (YTS + RARBG) with background processing
+- **Media Streaming Infrastructure**: Complete client with peer-to-peer networking (DownloadService)
 - **Database Layer**: 13 entities with AES-256-GCM encryption, complete repository pattern
 - **Background Tasks**: 7 scheduled tasks running continuously (0.1s - 5s intervals)
 - **API Infrastructure**: All routes implemented, including streaming endpoint
@@ -30,7 +30,7 @@
 
 ### **DON'T DO THIS** ❌
 
-- Rebuild authentication (it's complete with JWT + refresh token system)
+- Rebuild authentication (it's complete with three-tier system: JWT API auth, HttpOnly refresh cookies, streaming keys)
 - Rebuild frontend integration (it's complete)
 - Rebuild source aggregation (it's complete)
 - Rebuild WebTorrent infrastructure (it's complete)
@@ -107,9 +107,9 @@ export EPISODE_SYNC_MODE=GREEDY     # Sync all episodes
 1. **Previous Documentation Was Wrong**: Massive 95%+ implementation was documented as "incomplete"
 2. **Platform is Complete**: All core functionality implemented and integrated
 3. **Background Tasks Active**: 7 tasks running every 0.1-5 seconds, system is live
-4. **Frontend Fully Integrated**: Complete auth flow with JWT + HttpOnly refresh tokens
-5. **Stream Endpoint Implemented**: Streaming available at `/api/stream/:token`
-6. **Architecture**: Backend serves frontend, API under `/api`, JWT-based auth
+4. **Frontend Fully Integrated**: Complete three-tier auth flow (JWT APIs, HttpOnly refresh, streaming keys)
+5. **Stream Endpoint Implemented**: Streaming available at `/api/stream/:token` with separate auth system
+6. **Architecture**: Backend serves frontend, API under `/api`, JWT for API auth, cookies for refresh only
 
 ---
 

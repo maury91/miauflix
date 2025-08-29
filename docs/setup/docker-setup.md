@@ -36,9 +36,10 @@ This will run the configuration wizard, then start the complete Miauflix stack w
 backend:
   build: .
   ports:
-    - '3001:3001'
+    - '${PORT:-3000}:${PORT:-3000}' # Backend API server port
   environment:
     - NODE_ENV=production
+    - PORT=${PORT:-3000} # Server listening port
   volumes:
     - .:/app
     - /app/node_modules
@@ -137,7 +138,7 @@ The script will guide you through the process and verify that your domain is pro
 
 For custom certificates, place them in:
 
-```
+```plaintext
 nginx/ssl/
 ├── cert.pem
 ├── privkey.pem
@@ -216,7 +217,7 @@ docker compose exec nordvpn curl ifconfig.me
 **Backend health**:
 
 ```bash
-curl http://localhost:3001/health
+curl http://localhost:${PORT:-3000}/health
 ```
 
 **Frontend access**:
