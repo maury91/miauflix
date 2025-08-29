@@ -53,7 +53,7 @@ docker-compose up
 - **Background Processing**: 7 scheduled tasks running continuously
 - **Database**: SQLite + TypeORM with encryption
 - **Security**: VPN detection, audit logging, rate limiting
-- **Streaming Infrastructure**: Complete `/stream/:token` endpoint with quality selection
+- **Streaming Infrastructure**: Complete `/api/stream/:token` endpoint with quality selection
 - **API Infrastructure**: All backend routes implemented and functional
 
 ### ⚠️ Integration Needed
