@@ -117,24 +117,24 @@ This will:
 
 ### Common Issues
 
-**Domain validation failure**
+### Domain validation failure
 
 - Verify DNS: Your domain must point to your server's IP address
 - Check firewall: Ensure ports 80 and 443 are accessible from the internet
 - Review logs: `docker logs miauflix-certbot` for specific error details
 
-**Rate limiting**
+### Rate limiting
 
 - **Testing**: Use `-s` flag for Let's Encrypt staging environment (no rate limits)
 - **Production**: Let's Encrypt allows 5 certificates per domain per week
 
-**Nginx configuration errors**
+### Nginx configuration errors
 
-- Test configuration: `docker exec miauflix-nginx nginx -t`
-- Check nginx logs: `docker logs miauflix-nginx`
+- Test configuration: `docker compose exec nginx nginx -t`
+- Check nginx logs: `docker compose logs nginx`
 - Reload after changes: `docker compose exec nginx nginx -s reload`
 
-**Certificate not trusted**
+### Certificate not trusted
 
 - **Staging certificates**: Will show browser warnings (expected for testing)
 - **Self-signed certificates**: Will show browser warnings (expected for development)
@@ -155,7 +155,7 @@ docker compose restart nginx
 
 Let's Encrypt certificates are stored in:
 
-```
+```plaintext
 nginx/certbot/conf/live/yourdomain.com/
 ├── fullchain.pem  # Server + intermediate certificates
 ├── privkey.pem    # Private key
