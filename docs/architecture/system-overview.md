@@ -44,7 +44,7 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 #### Streaming Infrastructure
 
 - **WebTorrent Client** - Complete BitTorrent client implementation
-- **Source Aggregation** - YTS, RARBG, and an extensible provider system
+- **Source Aggregation** - YTS, THERARBG, and an extensible provider system
 - **Quality Selection** - Automatic best quality selection with codec preferences
 - **Range Requests** - Full support for video seeking and partial content delivery
 - **On-Demand Search** - Real-time source discovery with timeout handling
@@ -70,11 +70,13 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 #### Caching Strategy
 
 - **Multi-layer Caching** - In-memory and persistent cache layers
-- **Redis-compatible** - Uses cache-manager with keyv backend
+- **Pluggable stores** - cache-manager with Keyv (in-memory/disk) by default; Redis store optional via configuration
 - **Smart Cache Invalidation** - Automatic cache updates on data changes
 - **API Response Caching** - Reduces external API calls
 
 ### Security Architecture
+
+> Note: Use source discovery and streaming features in accordance with local laws and content licenses. Disable or remove providers where required.
 
 #### Data Protection
 

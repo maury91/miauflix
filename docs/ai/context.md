@@ -7,7 +7,7 @@
 **DO NOT rebuild these systems:**
 
 - **Authentication**: Full JWT system with refresh tokens (AuthService: 325 lines, ~15 methods)
-- **Source Discovery**: Multi-provider content aggregation (YTS + RARBG) with background processing
+- **Source Discovery**: Multi-provider content aggregation (YTS + THERARBG) with background processing
 - **Media Streaming Infrastructure**: Complete client with peer-to-peer networking (DownloadService)
 - **Database Layer**: 13 entities with AES-256-GCM encryption, complete repository pattern
 - **Background Tasks**: 7 scheduled tasks running continuously (0.1s - 5s intervals)
@@ -30,7 +30,7 @@
 
 ### **DON'T DO THIS** ❌
 
-- Rebuild authentication (it's complete with three-tier system: JWT API auth, HttpOnly refresh cookies, streaming keys)
+- Rebuild authentication (already complete: JWT API auth + HttpOnly refresh cookies + streaming keys)
 - Rebuild frontend integration (it's complete)
 - Rebuild source aggregation (it's complete)
 - Rebuild WebTorrent infrastructure (it's complete)
