@@ -29,7 +29,9 @@ npm run check:ts                     # TypeScript type checking
 # Start development environment
 npm run dev                          # Starts backend and frontend concurrently
 npm run start:backend               # Backend only
-npm run start:backend:docker:prod   # Start backend in production using Docker Compose
+
+# Production deployment
+npm run start:backend:docker:prod   # Start backend in production using Docker Compose (builds automatically)
 
 # Frontend development
 npm run start:frontend              # Frontend with hot reload (recommended for development)
@@ -299,7 +301,7 @@ The frontend authentication system is fully implemented:
 **Available backend endpoints:**
 
 - `POST /api/auth/login` - User authentication
-- `POST /api/auth/refresh` - Token refresh
+- `POST /api/auth/refresh/:session` - Token refresh
 - `POST /api/auth/logout` - User logout
 - All protected endpoints accessible via session cookies
 

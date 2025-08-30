@@ -19,6 +19,17 @@ docker compose up -d
 
 This will run the configuration wizard, then start the complete Miauflix stack with all required services.
 
+### Alternative: Backend-Only Production Deployment
+
+For backend-only deployment with Docker:
+
+```bash
+# Start backend in production mode (builds automatically)
+npm run start:backend:docker:prod
+```
+
+This command starts only the backend service using Docker Compose in production mode with automatic building. Use this when you only need the API server without nginx, VPN, or other services.
+
 ## Docker Services
 
 ### Main Services
