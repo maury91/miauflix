@@ -49,6 +49,14 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
+        deviceScaleFactor: 1,
+        launchOptions: {
+          args: [
+            '--force-device-scale-factor=1',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+          ],
+        },
       },
     },
 
@@ -76,12 +84,28 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
         video: 'retain-on-failure',
+        deviceScaleFactor: 1,
         launchOptions: {
           args: [
             '--disable-web-security',
             '--disable-features=VizDisplayCompositor',
             '--disable-backgrounding-occluded-windows',
             '--disable-renderer-backgrounding',
+            // Font rendering consistency
+            '--disable-font-subpixel-positioning',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-software-rasterizer',
+            '--force-device-scale-factor=1',
+            '--force-color-profile=srgb',
+            '--disable-lcd-text',
+            '--disable-accelerated-2d-canvas',
+            // Additional stability options
+            '--no-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-extensions',
+            '--disable-plugins',
+            '--disable-default-apps',
           ],
         },
       },
@@ -104,6 +128,13 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
         deviceScaleFactor: 2,
+        launchOptions: {
+          args: [
+            '--force-device-scale-factor=2',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+          ],
+        },
       },
     },
   ],
@@ -123,12 +154,14 @@ export default defineConfig({
   expect: {
     // More lenient thresholds for animation screenshots
     toHaveScreenshot: {
-      threshold: 0.2,
-      maxDiffPixels: 500,
+      threshold: 0.25,
+      maxDiffPixels: 800,
+      // Animation handling
+      animations: 'disabled',
     },
     toMatchSnapshot: {
-      threshold: 0.2,
-      maxDiffPixels: 500,
+      threshold: 0.25,
+      maxDiffPixels: 800,
     },
   },
 

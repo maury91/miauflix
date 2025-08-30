@@ -38,7 +38,10 @@ Miauflix is a self-hosted media streaming platform that enables users to discove
 
 ### 🚀 Currently Available
 
-- **🔐 User Authentication**: JWT login system with refresh tokens and role-based access
+- **🔐 User Authentication**: Multi-layered authentication system with comprehensive login flows
+  - **API Authentication**: JWT tokens in Authorization headers
+  - **Token Renewal**: HttpOnly refresh token cookies (used only for `/api/auth/refresh/:session`)
+  - **Streaming Access**: Separate short-lived non-JWT streaming keys for video endpoints
 - **🎬 Movie Database**: TMDB integration for posters, ratings, and metadata
 - **🔍 Source Discovery**: Automatic search across multiple content directories (YTS and THERARBG with more to come)
 - **📺 Video Streaming**: Complete peer-to-peer streaming with quality selection and range requests
@@ -47,10 +50,6 @@ Miauflix is a self-hosted media streaming platform that enables users to discove
 - **🔒 Content Encryption**: All source metadata encrypted at rest with AES-256-GCM
 - **🐳 Docker Support**: Ready-to-run containers with nginx and SSL
 
-### 🔄 Integration Needed
-
-- **📱 Frontend Authentication**: Connect React frontend to existing backend JWT system
-
 ### 🎯 Planned Features
 
 - **📺 TV Shows**: Episode navigation and season management
@@ -58,7 +57,7 @@ Miauflix is a self-hosted media streaming platform that enables users to discove
 - **🎯 More Sources**: Additional content directories and indexers ( 1337x, Nyan, Jackett & Prowlarr )
 - **📱 Mobile Apps**: Native iOS and Android clients
 
-> **Current Status**: Backend is 100% complete including full streaming capabilities. Frontend builds successfully and needs JWT authentication integration. About 1 week to complete integration.
+> **Current Status**: **Production-ready streaming platform!** Backend is 100% complete with full streaming capabilities. Frontend is 100% complete with session-based authentication, comprehensive login system (email + QR code), and complete API integration. The platform is ready for deployment and use.
 
 The application is a self-contained Node.js application. Docker image and docker-compose files are provided for easy server setup. Note: Docker and docker-compose are not mandatory but are recommended as they provide pre-configured VPN and reverse proxy setup.
 
@@ -67,28 +66,25 @@ The application is a self-contained Node.js application. Docker image and docker
 ### ✅ Backend Infrastructure (Complete)
 
 - **Authentication System**: JWT with refresh tokens, role-based access control
-- **Streaming Engine**: WebTorrent client with `/stream/:token` endpoint
+- **Streaming Engine**: WebTorrent client with `/api/stream/:token` endpoint
 - **Source Aggregation**: Multi-provider discovery (YTS + THERARBG)
 - **Database Layer**: SQLite + TypeORM with AES-256-GCM encryption
 - **Background Processing**: 7 scheduled tasks for continuous content discovery
 - **Security**: VPN detection, audit logging, rate limiting, timing attack protection
 - **API Routes**: All endpoints implemented and production-ready
 
-### ✅ Frontend Foundation (Complete)
+### ✅ Frontend Application (Complete)
 
-- **Build System**: React + Vite + TypeScript
-- **State Management**: Redux Toolkit with RTK Query setup
-- **UI Components**: Basic component structure and routing
-
-### 🔄 Integration Layer (In Progress)
-
-- **Authentication Flow**: Connect frontend to backend JWT system
-- **API Integration**: Wire frontend components to backend endpoints
-- **Protected Routes**: Implement authentication-based route protection
+- **Build System**: React + Vite + TypeScript with SSR support
+- **State Management**: Redux Toolkit with RTK Query for API integration
+- **Authentication**: Session-based auth with HttpOnly cookies, email + QR code login
+- **UI Components**: Comprehensive component library with Storybook documentation
+- **Testing**: Unit tests, visual regression testing, and E2E test infrastructure
+- **API Integration**: Complete frontend-backend integration with protected routes
 
 ## 🏗️ Project Architecture
 
-```
+```text
 miauflix/
 ├── backend/                  # Node.js TypeScript backend
 │   ├── src/                  # Source code
@@ -112,7 +108,7 @@ miauflix/
 
 ```bash
 git clone <repository-url> && cd miauflix
-docker compose run --rm backend npm run start:backend -- --only-config
+docker compose run --rm backend npm run config-only
 docker compose up
 ```
 
@@ -154,7 +150,7 @@ docker compose run --rm backend npm run start:backend
 ```
 
 <p align="center">
-  <img src="./docs/assets/miauflix env wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
+  <img src="./docs/assets/miauflix%20env%20wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
 </p>
 
 <details>
@@ -229,8 +225,7 @@ This wizard will:
 
 For detailed information, see:
 
-- [HTTPS Setup Guide](docs/HTTPS_SETUP.md)
-- [Let's Encrypt Setup Guide](docs/LETSENCRYPT_SETUP.md)
+- [SSL Certificates Guide](docs/setup/ssl-certificates.md)
 </details>
 
 #### 5. Start the Docker Compose environment
@@ -241,8 +236,9 @@ docker compose up -d
 
 #### 6. Access the application
 
-- 🌐 Backend API: `https://yourdomain.com/`
-- ✅ Health check: `https://yourdomain.com/health`
+- 🌐 App origin: `https://yourdomain.com/`
+- 🧭 API base: `https://yourdomain.com/api`
+- ✅ Health check: `https://yourdomain.com/api/health`
 
 ## 💻 Local Development
 
@@ -293,7 +289,16 @@ npm run start:backend:e2e
 
 ## 🔄 CI/CD
 
-This project uses GitHub Actions for continuous integration and testing. Tests run automatically in networkless mode using pre-recorded fixtures. For more details, see the [GitHub Actions Guide](docs/GITHUB_ACTIONS.md).
+This project uses GitHub Actions for continuous integration and testing. Tests run automatically in networkless mode using pre-recorded fixtures. For more details, see the [CI/CD Guide](docs/development/ci-cd-guide.md).
+
+## 📚 Documentation
+
+For comprehensive guides and development resources, see our [Documentation](docs/README.md):
+
+- **[Setup Guides](docs/setup/)** - Installation, Docker, and HTTPS setup
+- **[Development](docs/development/)** - Workflow, testing, and coding standards
+- **[Architecture](docs/architecture/)** - System overview and technical details
+- **[AI Assistance](docs/ai/)** - Guidelines for AI development tools
 
 ## 🤝 Contributing
 
@@ -301,9 +306,10 @@ Contributions are welcome and appreciated! Here's how you can contribute:
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+3. Follow the [Development Workflow](docs/development/workflow.md)
+4. Commit your changes: `git commit -m 'Add amazing feature'`
+5. Push to the branch: `git push origin feature/amazing-feature`
+6. Open a Pull Request
 
 ## 📄 License
 
