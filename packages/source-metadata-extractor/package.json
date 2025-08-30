@@ -34,9 +34,7 @@
     "url": "https://github.com/miauflix/miauflix.git",
     "directory": "packages/source-metadata-extractor"
   },
-  "devDependencies": {
-    "ts-jest": "^29.1.2"
-  },
+  "devDependencies": {},
   "engines": {
     "node": ">=18.0.0"
   },
@@ -44,6 +42,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@faker-js/faker": "^9.9.0"
+    "@faker-js/faker": "9.9.0"
   }
 }

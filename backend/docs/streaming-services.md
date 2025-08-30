@@ -36,13 +36,13 @@ The backend provides comprehensive torrent infrastructure with WebTorrent integr
 
 ### Stream Endpoint (Implemented)
 
-**Stream Endpoint**: The `/stream/:token` endpoint is fully implemented and production-ready. This enables complete video streaming functionality.
+**Stream Endpoint**: The `/api/stream/:token` endpoint is fully implemented and production-ready. This enables complete video streaming functionality.
 
 **Implementation:**
 
 ```typescript
 // Implemented: routes/stream.routes.ts
-app.get('/stream/:token', rateLimitGuard(60), async c => {
+app.get('/api/stream/:token', rateLimitGuard(60), async c => {
   // 1. Verify streaming key with timing attack protection
   // 2. Get best source based on quality and codec preferences
   // 3. Handle Range requests for video seeking
@@ -115,7 +115,7 @@ DISABLE_VPN_CHECK=false   # VPN required for source search
 
 ### ✅ Phase 2: Streaming Endpoint (Complete)
 
-- ✅ `/stream/:token` route implementation with streaming key authentication
+- ✅ `/api/stream/:token` route implementation with streaming key authentication
 - ✅ Range request handling for video streaming and seeking
 - ✅ Quality and codec preference selection (auto, specific quality, HEVC support)
 - ✅ Comprehensive error handling and rate limiting (60 req/min)

@@ -27,7 +27,6 @@ coverage/
 **/__mocks__/
 **/__test-utils__/
 **/jest.setup.js
-**/test-preload.js
 
 # Exclude documentation
 docs/
