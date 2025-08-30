@@ -1,6 +1,3 @@
-import '../src/assets/app.scss';
-import '../src/assets/logo.scss';
-
 import type { Preview } from '@storybook/react-vite';
 
 const preview: Preview = {
@@ -12,15 +9,11 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: 'dark',
+      value: 'dark',
       values: [
         {
           name: 'dark',
-          value: '#000000',
-        },
-        {
-          name: 'light',
-          value: '#ffffff',
+          value: '#0a0d0f',
         },
       ],
     },

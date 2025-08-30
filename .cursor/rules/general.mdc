@@ -41,7 +41,7 @@ alwaysApply: true
 
 - **Source Aggregation**: Multi-provider (YTS + THERARBG) with background processing
 - **WebTorrent Infrastructure**: Complete client with tracker management and stats scraping
-- **Streaming Infrastructure**: Complete `/stream/:token` endpoint with quality selection and range requests
+- **Streaming Infrastructure**: Complete `/api/stream/:token` endpoint with quality selection and range requests
 - **Authentication Backend**: Full JWT system with refresh tokens and role-based access
 - **Database Layer**: Complete entity model with AES-256-GCM encryption
 - **Background Tasks**: All 7 scheduled tasks operational
