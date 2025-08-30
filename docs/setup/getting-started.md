@@ -4,7 +4,7 @@
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-docker compose run --rm backend npm run start:backend -- --only-config
+docker compose run --rm backend npm run config-only
 docker compose up -d
 ```
 
@@ -30,7 +30,7 @@ git clone https://github.com/maury91/miauflix.git
 cd miauflix
 
 # Interactive configuration wizard
-docker compose run --rm backend npm run start:backend -- --only-config
+docker compose run --rm backend npm run config-only
 ```
 
 This will run the configuration wizard, which will ask you for the required environment variables, and guide you on how to obtain them.
@@ -64,10 +64,14 @@ More details on how to set up HTTPS can be found in the [SSL Certificates](ssl-c
 #### 4. Start Services
 
 ```bash
+# Option 1: Start all services
 docker compose up -d
+
+# Option 2: Start backend only in production mode
+npm run start:backend:docker:prod
 ```
 
-This will start the services in the background.
+The first option starts all services (backend, nginx, VPN, etc.) in the background. The second option starts only the backend service in production mode with automatic building.
 
 #### 5. Access Application
 
@@ -91,8 +95,8 @@ The development server provides instant hot reload and fast feedback for UI work
 #### SSR Testing
 
 ```bash
-# Test with Server-Side Rendering (run from frontend directory)
-cd frontend && npm run dev:ssr
+# Test with Server-Side Rendering
+npm run dev:frontend:ssr
 ```
 
 Use this only when testing SSR-specific functionality or debugging SSR issues.

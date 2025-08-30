@@ -108,7 +108,7 @@ miauflix/
 
 ```bash
 git clone <repository-url> && cd miauflix
-docker compose run --rm backend npm run start:backend -- --only-config
+docker compose run --rm backend npm run config-only
 docker compose up
 ```
 
@@ -236,8 +236,9 @@ docker compose up -d
 
 #### 6. Access the application
 
-- 🌐 Backend API: `https://yourdomain.com/`
-- ✅ Health check: `https://yourdomain.com/health`
+- 🌐 App origin: `https://yourdomain.com/`
+- 🧭 API base: `https://yourdomain.com/api`
+- ✅ Health check: `https://yourdomain.com/api/health`
 
 ## 💻 Local Development
 
