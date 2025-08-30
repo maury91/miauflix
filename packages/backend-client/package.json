@@ -8,11 +8,11 @@
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp ../../dist/backend-client/index.d.ts dist/ && tsc --project tsconfig.json"
   },
-  "dependencies": {
-    "hono": "^4.7.10"
+  "dependencies": {},
+  "devDependencies": {
+    "hono": "4.9.2"
   },
-  "devDependencies": {},
   "peerDependencies": {
-    "hono": "^4.7.10"
+    "hono": "^4.9.2"
   }
 }
