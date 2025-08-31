@@ -4,7 +4,7 @@
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 docker compose up -d
 ```
 
@@ -30,7 +30,7 @@ git clone https://github.com/maury91/miauflix.git
 cd miauflix
 
 # Interactive configuration wizard
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 ```
 
 This will run the configuration wizard, which will ask you for the required environment variables, and guide you on how to obtain them.

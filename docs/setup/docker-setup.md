@@ -11,7 +11,7 @@ The fastest way to get Miauflix running with Docker:
 git clone <repository-url> && cd miauflix
 
 # 2. Interactive configuration wizard
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 
 # 3. Start all services in background
 docker compose up -d
@@ -163,7 +163,7 @@ Docker deployments use the same environment variables as other installation meth
 **Recommended Setup**: Use the interactive configuration wizard to set up all required variables:
 
 ```bash
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 ```
 
 This will guide you through configuring:
