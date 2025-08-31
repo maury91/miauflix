@@ -60,7 +60,7 @@ Others can be added so Miauflix can still work even if those sources are not ava
 
 Miauflix is designed so you can run it in a possibly hostile environment, like a VPS that is partially monitored by the provider.
 
-### First part: obfuscation
+#### First part: obfuscation
 
 Miauflix encrypts sensitive data at rest. The application must access the decryption key at runtime; accordingly, a host with root access could also access it.
 
@@ -69,7 +69,7 @@ For stronger protection, store encryption keys in an external secrets manager (e
 
 ![encryption-flow](./assets/encryption-flow.png)
 
-### Second part: authentication
+#### Second part: authentication
 
 Miauflix in order to be able to run outside of your local network, needs to support user authentication.
 
@@ -77,7 +77,7 @@ Miauflix provides a closed authentication system, it provides you with an admin 
 
 The purpose is to let you deploy your instance of Miauflix in a server exposed to the internet, while ensuring only authorized users can access it.
 
-## Speed
+### Speed
 
 Miauflix is designed for fast start times. The tenet is: "When a user clicks Watch Now, streaming should start in under 2 seconds."
 
