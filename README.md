@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Miauflix Logo](./logo.png)
+![Miauflix Logo](./assets/logo.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Powered%20by-Node.js-green)](https://nodejs.org/)
@@ -34,17 +34,70 @@
 
 Miauflix is a self-hosted media streaming platform that enables users to discover and stream content from various sources. It provides a modern web interface for accessing media content through peer-to-peer streaming technology. Built with Node.js and designed for personal server deployment, Miauflix offers a customizable streaming solution for your media library.
 
+## Philosphy
+
+Miauflix is based on these principles:
+
+### Simplicity
+
+Starting Miauflix in your machine or VPS must be as easy as possible.  
+The setup is meant to accommodate both beginners and advanced users.
+
+If you are a beginner using Miauflix in your local machine, you can just run the wizard and start one single docker image, you don't even need to download this repository.
+
+If you are an advanced user, everything is readu for you to setup a full website with SSL, custom domain, VPN and everything you might need.
+
+### Resilience
+
+Miauflix is designed to be able to work with multiple different sources, many are simply integrated with the codebase so you can use them without the need of installing anything else ( simplicity principle ).  
+Others can be added so Miauflix can still work even if those sources are not available anymore.
+
+> Note: This pricinple is not fully implemented yet, and integration with Prowlarr and Jackett is planned.
+
+### Running everywhere
+
+Miauflix is designed so you can run it in a possibly hostile environment, like a VPS that is partially monitored by the provider.
+
+### First part: obfuscation
+
+Miauflix will by default encrypt all sensitive data at rest, however, Miauflix will still need to have access to the decryption key, that means that if Miauflix can access it also the provider of the VPN can access it. This is only meant to obfuscate the data, scanning tools will most likely not be able to detect this data ( majority of them will search for specific hashes, keywords, patterns, etc; with obfuscation they will simply see it as garbage ), however, if a human decides to look into the system and starts reading the code, they will be able to decrypt the data.
+
+Miauflix doesn't encrypt any data in transit, this is the job of the VPN.
+
+![encryption-flow](./assets/encryption-flow.png)
+
+### Second part: authentication
+
+Miauflix in order to be able to run outside of your local network, needs to support user authentication.
+
+Miauflix provides a closed authentication system, it provides you with an admin user that can create other users, it does not provide a self signup system.
+
+The purpose is to let you deploy your instance of Miauflix in a server exposed to the internet, while ensuring only authorized users can access it.
+
+## Speed
+
+Miauflix is designed to allow you to stream content as fast as possible. The tenant is simply "when a user clicks on Watch Now, streaming should start in less than 2 seconds".
+
+To allow this Miauflix uses a combination of background processing, preloading and priority queue.
+
+When Miauflix is idle, it will constantly search for new content and preload the necessary data for streaming.
+
+- Periodic synchronization of TMDB and Trakt.tv lists
+- Periodic source discovery of recently acquired content, and re-discovery of old content
+- Pre-download of content that the user marked as "continue watching" ( example: new episode of a TV show )
+
+Miauflix will give high priority to the content the user shows intention to watch ( example: when a user clicks on the details of a movie ), if not present the data will be obtained on the fly with absolute priority over the rest, it will also start downloading the content so when the user clicks on Watch Now, a part of the content is already downloaded.
+
+Miauflix supports streaming while downloading.
+
 ## ✨ Features
 
 ### 🚀 Currently Available
 
 - **🔐 User Authentication**: Multi-layered authentication system with comprehensive login flows
-  - **API Authentication**: JWT tokens in Authorization headers
-  - **Token Renewal**: HttpOnly refresh token cookies (used only for `/api/auth/refresh/:session`)
-  - **Streaming Access**: Separate short-lived non-JWT streaming keys for video endpoints
 - **🎬 Movie Database**: TMDB integration for posters, ratings, and metadata
 - **🔍 Source Discovery**: Automatic search across multiple content directories (YTS and THERARBG with more to come)
-- **📺 Video Streaming**: Complete peer-to-peer streaming with quality selection and range requests
+- **📺 Video Streaming**: Complete peer-to-peer streaming with quality selection
 - **🛡️ VPN Integration**: Built-in VPN detection and enforcement (optional)
 - **📊 Background Processing**: Continuous source discovery and quality scoring
 - **🔒 Content Encryption**: All source metadata encrypted at rest with AES-256-GCM
@@ -57,49 +110,31 @@ Miauflix is a self-hosted media streaming platform that enables users to discove
 - **🎯 More Sources**: Additional content directories and indexers ( 1337x, Nyan, Jackett & Prowlarr )
 - **📱 Mobile Apps**: Native iOS and Android clients
 
-> **Current Status**: **Production-ready streaming platform!** Backend is 100% complete with full streaming capabilities. Frontend is 100% complete with session-based authentication, comprehensive login system (email + QR code), and complete API integration. The platform is ready for deployment and use.
-
-The application is a self-contained Node.js application. Docker image and docker-compose files are provided for easy server setup. Note: Docker and docker-compose are not mandatory but are recommended as they provide pre-configured VPN and reverse proxy setup.
-
-## 📊 Implementation Status
-
-### ✅ Backend Infrastructure (Complete)
-
-- **Authentication System**: JWT with refresh tokens, role-based access control
-- **Streaming Engine**: WebTorrent client with `/api/stream/:token` endpoint
-- **Source Aggregation**: Multi-provider discovery (YTS + THERARBG)
-- **Database Layer**: SQLite + TypeORM with AES-256-GCM encryption
-- **Background Processing**: 7 scheduled tasks for continuous content discovery
-- **Security**: VPN detection, audit logging, rate limiting, timing attack protection
-- **API Routes**: All endpoints implemented and production-ready
-
-### ✅ Frontend Application (Complete)
-
-- **Build System**: React + Vite + TypeScript with SSR support
-- **State Management**: Redux Toolkit with RTK Query for API integration
-- **Authentication**: Session-based auth with HttpOnly cookies, email + QR code login
-- **UI Components**: Comprehensive component library with Storybook documentation
-- **Testing**: Unit tests, visual regression testing, and E2E test infrastructure
-- **API Integration**: Complete frontend-backend integration with protected routes
-
 ## 🏗️ Project Architecture
 
 ```text
 miauflix/
-├── backend/                  # Node.js TypeScript backend
-│   ├── src/                  # Source code
-│   └── docs/                 # API documentation
-├── frontend/                 # Client application
-├── nginx/                    # Nginx configuration
-│   ├── conf.d/               # Server blocks
-│   │   ├── default.conf      # Active configuration (auto-generated)
-│   │   └── default.conf.template # Configuration template
-│   ├── certbot/              # Let's Encrypt certificates
-│   └── ssl/                  # SSL certificates (auto-generated)
-├── scripts/                  # Support scripts
-├── setup-git.sh              # Git setup script
-├── setup-ssl.sh              # SSL setup wizard
-├── docker-compose.yml        # Container orchestration
+├── backend/                        # Node.js TypeScript backend
+│   ├── src/                        # Source code
+│   └── docs/                       # API documentation
+├── frontend/                       # Client application
+│   ├── e2e/                        # End to end tests ( for frontend )
+│   ├── storybook/                  # Storybook documentation
+│   └── src/                        # Source code
+|── packages/                       # Shared libraries
+│   ├── backend-client/             # Generated API client
+│   ├── *-sanitizer/                # Source metadata sanitizer ( used for testing )
+│   └── source-metadata-extractor/  # Content metadata processing
+|── docs/                           # Project documentation
+├── nginx/                          # Nginx configuration
+│   ├── conf.d/                     # Server blocks
+│   │   ├── default.conf            # Active configuration (auto-generated)
+│   │   └── default.conf.template   # Configuration template
+│   ├── certbot/                    # Let's Encrypt certificates
+│   └── ssl/                        # SSL certificates (auto-generated)
+├── backend-e2e/                    # End to end tests ( for backend )
+├── scripts/                        # Support scripts
+├── docker-compose.yml              # Container orchestration
 ```
 
 ## ⚡ Quick Setup (5 minutes)
@@ -107,7 +142,7 @@ miauflix/
 > Just want to try it? Here's the fastest path:
 
 ```bash
-git clone <repository-url> && cd miauflix
+git clone https://github.com/maury91/miauflix.git && cd miauflix
 docker compose run --rm backend npm run config-only
 docker compose up
 ```
@@ -129,7 +164,7 @@ First command runs the configuration wizard (TMDB API key, etc.), then start the
 #### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/maury91/miauflix.git
 cd miauflix
 ```
 
