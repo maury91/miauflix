@@ -34,25 +34,25 @@
 
 Miauflix is a self-hosted media streaming platform that enables users to discover and stream content from various sources. It provides a modern web interface for accessing media content through peer-to-peer streaming technology. Built with Node.js and designed for personal server deployment, Miauflix offers a customizable streaming solution for your media library.
 
-## Philosphy
+## Philosophy
 
 Miauflix is based on these principles:
 
 ### Simplicity
 
-Starting Miauflix in your machine or VPS must be as easy as possible.  
-The setup is meant to accommodate both beginners and advanced users.
+Starting Miauflix on your machine or VPS must be as easy as possible.
+The setup accommodates both beginners and advanced users.
 
-If you are a beginner using Miauflix in your local machine, you can just run the wizard and start one single docker image, you don't even need to download this repository.
+If you’re a beginner running Miauflix locally, run the wizard and start a single Docker container—you don’t even need to clone this repository.
 
-If you are an advanced user, everything is readu for you to setup a full website with SSL, custom domain, VPN and everything you might need.
+If you’re an advanced user, everything is ready for you to set up a full website with SSL, custom domain, VPN, and anything else you might need.
 
 ### Resilience
 
-Miauflix is designed to be able to work with multiple different sources, many are simply integrated with the codebase so you can use them without the need of installing anything else ( simplicity principle ).  
+Miauflix is designed to work with multiple sources. Many are integrated into the codebase so you can use them without installing anything else (simplicity principle).  
 Others can be added so Miauflix can still work even if those sources are not available anymore.
 
-> Note: This pricinple is not fully implemented yet, and integration with Prowlarr and Jackett is planned.
+> Note: This principle is not fully implemented yet; integration with Prowlarr and Jackett is planned.
 
 ### Running everywhere
 
@@ -60,9 +60,9 @@ Miauflix is designed so you can run it in a possibly hostile environment, like a
 
 ### First part: obfuscation
 
-Miauflix will by default encrypt all sensitive data at rest, however, Miauflix will still need to have access to the decryption key, that means that if Miauflix can access it also the provider of the VPN can access it. This is only meant to obfuscate the data, scanning tools will most likely not be able to detect this data ( majority of them will search for specific hashes, keywords, patterns, etc; with obfuscation they will simply see it as garbage ), however, if a human decides to look into the system and starts reading the code, they will be able to decrypt the data.
+Miauflix encrypts sensitive data at rest. The application must access the decryption key at runtime; accordingly, a host with root access could also access it.
 
-Miauflix doesn't encrypt any data in transit, this is the job of the VPN.
+When SSL is configured, data in transit is protected via HTTPS (TLS). A VPN is recommended for upstream privacy and ISP/provider exposure reduction, but it is not a substitute for HTTPS.
 
 ![encryption-flow](./assets/encryption-flow.png)
 
@@ -76,17 +76,17 @@ The purpose is to let you deploy your instance of Miauflix in a server exposed t
 
 ## Speed
 
-Miauflix is designed to allow you to stream content as fast as possible. The tenant is simply "when a user clicks on Watch Now, streaming should start in less than 2 seconds".
+Miauflix is designed for fast start times. The tenet is: "When a user clicks Watch Now, streaming should start in under 2 seconds."
 
-To allow this Miauflix uses a combination of background processing, preloading and priority queue.
+To achieve this, Miauflix uses background processing, preloading, and priority queues.
 
-When Miauflix is idle, it will constantly search for new content and preload the necessary data for streaming.
+When idle, Miauflix searches for new content and preloads data needed for streaming.
 
 - Periodic synchronization of TMDB and Trakt.tv lists
-- Periodic source discovery of recently acquired content, and re-discovery of old content
-- Pre-download of content that the user marked as "continue watching" ( example: new episode of a TV show )
+- Periodic source discovery of recently acquired content and re-discovery of older content
+- Pre-download of content marked as "continue watching" (e.g., new episode of a TV show)
 
-Miauflix will give high priority to the content the user shows intention to watch ( example: when a user clicks on the details of a movie ), if not present the data will be obtained on the fly with absolute priority over the rest, it will also start downloading the content so when the user clicks on Watch Now, a part of the content is already downloaded.
+Miauflix prioritizes content the user shows intent to watch (e.g., opening a movie detail). If data isn't present, it's fetched with priority and downloading begins so some content is ready when the user clicks Watch Now.
 
 Miauflix supports streaming while downloading.
 
