@@ -16,17 +16,19 @@
 ## 📋 Table of Contents
 
 - [Overview](#overview)
+- [Philosophy](#philosophy)
 - [Features](#features)
   - [Currently Available](#currently-available)
   - [In Development](#in-development)
   - [Planned Features](#planned-features)
-- [Implementation Status](#implementation-status)
 - [Project Architecture](#project-architecture)
+- [Quick Setup](#quick-setup)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
+- [Local Development](#local-development)
+- [Documentation](#documentation)
 - [CI/CD](#cicd)
-  - [GitHub Actions](#github-actions)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -62,7 +64,8 @@ Miauflix is designed so you can run it in a possibly hostile environment, like a
 
 Miauflix encrypts sensitive data at rest. The application must access the decryption key at runtime; accordingly, a host with root access could also access it.
 
-When SSL is configured, data in transit is protected via HTTPS (TLS). A VPN is recommended for upstream privacy and ISP/provider exposure reduction, but it is not a substitute for HTTPS.
+When SSL is configured, data in transit is protected via HTTPS (TLS). A VPN is recommended for upstream privacy and ISP/provider exposure reduction, but it is not a substitute for HTTPS.  
+For stronger protection, store encryption keys in an external secrets manager (e.g., HashiCorp Vault, AWS KMS) and inject short‑lived keys at runtime.
 
 ![encryption-flow](./assets/encryption-flow.png)
 
@@ -137,13 +140,13 @@ miauflix/
 ├── docker-compose.yml              # Container orchestration
 ```
 
-## ⚡ Quick Setup (5 minutes)
+## ⚡ Quick Setup
 
 > Just want to try it? Here's the fastest path:
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 docker compose up
 ```
 
@@ -181,7 +184,7 @@ npm run start:backend
 Or run it in Docker's interactive mode:
 
 ```bash
-docker compose run --rm backend npm run start:backend
+docker compose run --rm miauflix npm run start:backend
 ```
 
 <p align="center">
