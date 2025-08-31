@@ -71,9 +71,9 @@ For stronger protection, store encryption keys in an external secrets manager (e
 
 #### Second part: authentication
 
-Miauflix in order to be able to run outside of your local network, needs to support user authentication.
+To run outside your local network, Miauflix must support user authentication.
 
-Miauflix provides a closed authentication system, it provides you with an admin user that can create other users, it does not provide a self signup system.
+Miauflix provides a closed authentication system: an admin can create users; self‑signup is not available.
 
 The purpose is to let you deploy your instance of Miauflix in a server exposed to the internet, while ensuring only authorized users can access it.
 
@@ -124,11 +124,11 @@ miauflix/
 │   ├── e2e/                        # End to end tests ( for frontend )
 │   ├── storybook/                  # Storybook documentation
 │   └── src/                        # Source code
-|── packages/                       # Shared libraries
+├── packages/                       # Shared libraries
 │   ├── backend-client/             # Generated API client
 │   ├── *-sanitizer/                # Source metadata sanitizer ( used for testing )
 │   └── source-metadata-extractor/  # Content metadata processing
-|── docs/                           # Project documentation
+├── docs/                           # Project documentation
 ├── nginx/                          # Nginx configuration
 │   ├── conf.d/                     # Server blocks
 │   │   ├── default.conf            # Active configuration (auto-generated)
