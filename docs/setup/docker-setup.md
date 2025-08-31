@@ -34,7 +34,7 @@ This command starts only the backend service using Docker Compose in production 
 
 ### Main Services
 
-- **backend**: Node.js API server and frontend host
+- **miauflix**: Node.js API server and frontend host
 - **nginx**: Reverse proxy with SSL termination and static file serving
 - **nordvpn**: VPN container (optional, for privacy protection)
 - **certbot**: Automatic SSL certificate management via Let's Encrypt
@@ -44,7 +44,7 @@ This command starts only the backend service using Docker Compose in production 
 #### Backend Service
 
 ```yaml
-backend:
+miauflix:
   build: .
   ports:
     - '${PORT:-3000}:${PORT:-3000}' # Backend API server port
@@ -79,20 +79,20 @@ nginx:
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 # Backend with hot reload
-docker compose exec backend npm run dev
+docker compose exec miauflix npm run dev
 
 # Frontend development (separate terminal)
-docker compose exec backend npm run start:frontend
+docker compose exec miauflix npm run start:frontend
 ```
 
 ### Testing Environment
 
 ```bash
 # E2E testing environment
-docker compose -f docker-compose.test.yml up
+npm run start:backend:e2e
 
 # Run specific tests
-docker compose exec backend npm run test:e2e
+npm run test:backend:e2e:dev
 ```
 
 ## VPN Configuration (Optional)
@@ -200,10 +200,10 @@ tar -xzf miauflix-backup.tar.gz
 
 ```bash
 # Check logs
-docker compose logs backend
+docker compose logs miauflix
 
 # Restart specific service
-docker compose restart backend
+docker compose restart miauflix
 ```
 
 **Permission issues**:
@@ -217,7 +217,7 @@ sudo chown -R $USER:$USER .
 
 ```bash
 # Check container networking
-docker compose exec backend ping google.com
+docker compose exec miauflix ping google.com
 
 # Check VPN status (if using VPN)
 docker compose exec nordvpn curl ifconfig.me
@@ -228,7 +228,7 @@ docker compose exec nordvpn curl ifconfig.me
 **Backend health**:
 
 ```bash
-curl http://localhost:${PORT:-3000}/health
+curl http://localhost:${PORT:-3000}/api/health
 ```
 
 **Frontend access**:
@@ -249,7 +249,7 @@ docker compose exec certbot certbot certificates
 
 ```yaml
 services:
-  backend:
+  miauflix:
     deploy:
       resources:
         limits:
@@ -287,7 +287,7 @@ logging:
 docker stats
 
 # Specific service stats
-docker compose exec backend top
+docker compose exec miauflix top
 ```
 
 ## Updates and Maintenance
