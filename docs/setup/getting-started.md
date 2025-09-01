@@ -4,7 +4,7 @@
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 docker compose up -d
 ```
 
@@ -30,7 +30,7 @@ git clone https://github.com/maury91/miauflix.git
 cd miauflix
 
 # Interactive configuration wizard
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 ```
 
 This will run the configuration wizard, which will ask you for the required environment variables, and guide you on how to obtain them.
@@ -96,7 +96,7 @@ The development server provides instant hot reload and fast feedback for UI work
 
 ```bash
 # Test with Server-Side Rendering
-npm run dev:frontend:ssr
+npm run start:frontend:ssr
 ```
 
 Use this only when testing SSR-specific functionality or debugging SSR issues.
