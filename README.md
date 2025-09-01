@@ -67,7 +67,7 @@ Miauflix encrypts sensitive data at rest. The application must access the decryp
 When SSL is configured, data in transit is protected via HTTPS (TLS). A VPN is recommended for upstream privacy and ISP/provider exposure reduction, but it is not a substitute for HTTPS.  
 For stronger protection, store encryption keys in an external secrets manager (e.g., HashiCorp Vault, AWS KMS) and inject short‑lived keys at runtime.
 
-![encryption-flow](./assets/encryption-flow.png)
+![Encryption flow diagram for at-rest key handling and HTTPS in transit](./assets/encryption-flow.png)
 
 #### Second part: authentication
 
@@ -106,11 +106,15 @@ Miauflix supports streaming while downloading.
 - **🔒 Content Encryption**: All source metadata encrypted at rest with AES-256-GCM
 - **🐳 Docker Support**: Ready-to-run containers with nginx and SSL
 
+### 🔧 In Development
+
+- **🔄 Frontend Migration**: Updating the frontend to work with the new backend architecture
+
 ### 🎯 Planned Features
 
 - **📺 TV Shows**: Episode navigation and season management
 - **⛩️ Anime**: Anime support
-- **🎯 More Sources**: Additional content directories and indexers ( 1337x, Nyan, Jackett & Prowlarr )
+- **🎯 More Sources**: Additional content directories and indexers (1337x, Nyaa, Jackett & Prowlarr)
 - **📱 Mobile Apps**: Native iOS and Android clients
 
 ## 🏗️ Project Architecture
@@ -121,7 +125,7 @@ miauflix/
 │   ├── src/                        # Source code
 │   └── docs/                       # API documentation
 ├── frontend/                       # Client application
-│   ├── e2e/                        # End to end tests ( for frontend )
+│   ├── e2e/                        # End‑to‑end tests (for frontend)
 │   ├── storybook/                  # Storybook documentation
 │   └── src/                        # Source code
 ├── packages/                       # Shared libraries
@@ -135,7 +139,7 @@ miauflix/
 │   │   └── default.conf.template   # Configuration template
 │   ├── certbot/                    # Let's Encrypt certificates
 │   └── ssl/                        # SSL certificates (auto-generated)
-├── backend-e2e/                    # End to end tests ( for backend )
+├── backend-e2e/                    # End‑to‑end tests (for backend)
 ├── scripts/                        # Support scripts
 ├── docker-compose.yml              # Container orchestration
 ```
