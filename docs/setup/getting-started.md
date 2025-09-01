@@ -96,7 +96,7 @@ The development server provides instant hot reload and fast feedback for UI work
 
 ```bash
 # Test with Server-Side Rendering
-npm run dev:frontend:ssr
+npm run start:frontend:ssr
 ```
 
 Use this only when testing SSR-specific functionality or debugging SSR issues.

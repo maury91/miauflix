@@ -35,8 +35,7 @@ npm run start:backend:docker:prod   # Start backend in production using Docker C
 
 # Frontend development
 npm run start:frontend              # Frontend with hot reload (recommended for development)
-npm run dev:frontend                # Same as start:frontend
-npm run dev:frontend:ssr            # Frontend with SSR build + preview (for testing SSR)
+npm run start:frontend:ssr            # Frontend with SSR build + preview (for testing SSR)
 
 # Backend configuration
 npm run config                      # Interactive configuration wizard
@@ -51,8 +50,6 @@ For frontend development, there are two main approaches:
 
    ```bash
    npm run start:frontend
-   # or
-   npm run dev:frontend
    ```
 
    - Uses Vite dev server with instant hot reload
@@ -63,7 +60,7 @@ For frontend development, there are two main approaches:
 2. **SSR Testing Mode**:
 
    ```bash
-   npm run dev:frontend:ssr
+   npm run start:frontend:ssr
    ```
 
    - Builds the application with SSR and serves it via preview
@@ -74,7 +71,7 @@ For frontend development, there are two main approaches:
 **When to use each:**
 
 - **Use `npm run start:frontend`** for day-to-day development, component styling, and UI work
-- **Use `npm run dev:frontend:ssr`** only when you need to test SSR-specific functionality or debug SSR issues
+- **Use `npm run start:frontend:ssr`** only when you need to test SSR-specific functionality or debug SSR issues
 
 ### Testing Commands
 
