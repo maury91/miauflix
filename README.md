@@ -294,8 +294,6 @@ npm install
 
 # Start frontend with hot reload (recommended for development)
 npm run start:frontend
-# or
-npm run dev:frontend
 ```
 
 The frontend development server provides:
@@ -308,7 +306,7 @@ The frontend development server provides:
 
 ```bash
 # Test with Server-Side Rendering (for production-like behavior)
-npm run dev:frontend:ssr
+npm run start:frontend:ssr
 ```
 
 Use SSR mode when:
