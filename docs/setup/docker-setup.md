@@ -11,7 +11,7 @@ The fastest way to get Miauflix running with Docker:
 git clone <repository-url> && cd miauflix
 
 # 2. Interactive configuration wizard
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 
 # 3. Start all services in background
 docker compose up -d
@@ -34,7 +34,7 @@ This command starts only the backend service using Docker Compose in production 
 
 ### Main Services
 
-- **backend**: Node.js API server and frontend host
+- **miauflix**: Node.js API server and static-asset frontend host
 - **nginx**: Reverse proxy with SSL termination and static file serving
 - **nordvpn**: VPN container (optional, for privacy protection)
 - **certbot**: Automatic SSL certificate management via Let's Encrypt
@@ -44,13 +44,19 @@ This command starts only the backend service using Docker Compose in production 
 #### Backend Service
 
 ```yaml
-backend:
+miauflix:
   build: .
   ports:
-    - '${PORT:-3000}:${PORT:-3000}' # Backend API server port
+    - '${PORT:-3000}:${PORT:-3000}' # App port (API under /api and static frontend)
   environment:
     - NODE_ENV=production
     - PORT=${PORT:-3000} # Server listening port
+  restart: unless-stopped
+  healthcheck:
+    test: ['CMD-SHELL', 'curl -fsS http://localhost:${PORT:-3000}/api/health || exit 1']
+    interval: 10s
+    timeout: 3s
+    retries: 5
   volumes:
     - .:/app
     - /app/node_modules
@@ -79,20 +85,20 @@ nginx:
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 # Backend with hot reload
-docker compose exec backend npm run dev
+docker compose exec miauflix npm run dev
 
 # Frontend development (separate terminal)
-docker compose exec backend npm run start:frontend
+docker compose exec miauflix npm run start:frontend
 ```
 
 ### Testing Environment
 
 ```bash
 # E2E testing environment
-docker compose -f docker-compose.test.yml up
+npm run start:backend:e2e
 
 # Run specific tests
-docker compose exec backend npm run test:e2e
+npm run test:backend:e2e:dev
 ```
 
 ## VPN Configuration (Optional)
@@ -163,7 +169,7 @@ Docker deployments use the same environment variables as other installation meth
 **Recommended Setup**: Use the interactive configuration wizard to set up all required variables:
 
 ```bash
-docker compose run --rm backend npm run config-only
+docker compose run --rm miauflix npm run config-only
 ```
 
 This will guide you through configuring:
@@ -200,10 +206,10 @@ tar -xzf miauflix-backup.tar.gz
 
 ```bash
 # Check logs
-docker compose logs backend
+docker compose logs miauflix
 
 # Restart specific service
-docker compose restart backend
+docker compose restart miauflix
 ```
 
 **Permission issues**:
@@ -217,7 +223,7 @@ sudo chown -R $USER:$USER .
 
 ```bash
 # Check container networking
-docker compose exec backend ping google.com
+docker compose exec miauflix curl -I https://www.google.com
 
 # Check VPN status (if using VPN)
 docker compose exec nordvpn curl ifconfig.me
@@ -228,7 +234,7 @@ docker compose exec nordvpn curl ifconfig.me
 **Backend health**:
 
 ```bash
-curl http://localhost:${PORT:-3000}/health
+curl http://localhost:${PORT:-3000}/api/health
 ```
 
 **Frontend access**:
@@ -249,15 +255,9 @@ docker compose exec certbot certbot certificates
 
 ```yaml
 services:
-  backend:
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: '0.5'
-        reservations:
-          memory: 512M
-          cpus: '0.25'
+  miauflix:
+    mem_limit: 1g
+    cpus: '0.50'
 ```
 
 ### Caching Configuration
@@ -287,7 +287,7 @@ logging:
 docker stats
 
 # Specific service stats
-docker compose exec backend top
+docker compose top miauflix
 ```
 
 ## Updates and Maintenance

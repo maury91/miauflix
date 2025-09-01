@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Miauflix Logo](./logo.png)
+![Miauflix Logo](./assets/logo.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Powered%20by-Node.js-green)](https://nodejs.org/)
@@ -16,17 +16,19 @@
 ## 📋 Table of Contents
 
 - [Overview](#overview)
+- [Philosophy](#philosophy)
 - [Features](#features)
   - [Currently Available](#currently-available)
   - [In Development](#in-development)
   - [Planned Features](#planned-features)
-- [Implementation Status](#implementation-status)
 - [Project Architecture](#project-architecture)
+- [Quick Setup](#quick-setup)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
+- [Local Development](#local-development)
+- [Documentation](#documentation)
 - [CI/CD](#cicd)
-  - [GitHub Actions](#github-actions)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -34,81 +36,121 @@
 
 Miauflix is a self-hosted media streaming platform that enables users to discover and stream content from various sources. It provides a modern web interface for accessing media content through peer-to-peer streaming technology. Built with Node.js and designed for personal server deployment, Miauflix offers a customizable streaming solution for your media library.
 
+## Philosophy
+
+Miauflix is based on these principles:
+
+### Simplicity
+
+Starting Miauflix on your machine or VPS must be as easy as possible.
+The setup accommodates both beginners and advanced users.
+
+If you’re a beginner running Miauflix locally, run the wizard and start a single Docker container—you don’t even need to clone this repository.
+
+If you’re an advanced user, everything is ready for you to set up a full website with SSL, custom domain, VPN, and anything else you might need.
+
+### Resilience
+
+Miauflix is designed to work with multiple sources. Many are integrated into the codebase so you can use them without installing anything else (simplicity principle).  
+Others can be added so Miauflix can still work even if those sources are not available anymore.
+
+> Note: This principle is not fully implemented yet; integration with Prowlarr and Jackett is planned.
+
+### Running everywhere
+
+Miauflix is designed so you can run it in a possibly hostile environment, like a VPS that is partially monitored by the provider.
+
+#### First part: obfuscation
+
+Miauflix encrypts sensitive data at rest. The application must access the decryption key at runtime; accordingly, a host with root access could also access it.
+
+When SSL is configured, data in transit is protected via HTTPS (TLS). A VPN is recommended for upstream privacy and ISP/provider exposure reduction, but it is not a substitute for HTTPS.  
+For stronger protection, store encryption keys in an external secrets manager (e.g., HashiCorp Vault, AWS KMS) and inject short‑lived keys at runtime.
+
+![Encryption flow diagram for at-rest key handling and HTTPS in transit](./assets/encryption-flow.png)
+
+#### Second part: authentication
+
+To run outside your local network, Miauflix must support user authentication.
+
+Miauflix provides a closed authentication system: an admin can create users; self‑signup is not available.
+
+The purpose is to let you deploy your instance of Miauflix in a server exposed to the internet, while ensuring only authorized users can access it.
+
+### Speed
+
+Miauflix is designed for fast start times. The tenet is: "When a user clicks Watch Now, streaming should start in under 2 seconds."
+
+To achieve this, Miauflix uses background processing, preloading, and priority queues.
+
+When idle, Miauflix searches for new content and preloads data needed for streaming.
+
+- Periodic synchronization of TMDB and Trakt.tv lists
+- Periodic source discovery of recently acquired content and re-discovery of older content
+- Pre-download of content marked as "continue watching" (e.g., new episode of a TV show)
+
+Miauflix prioritizes content the user shows intent to watch (e.g., opening a movie detail). If data isn't present, it's fetched with priority and downloading begins so some content is ready when the user clicks Watch Now.
+
+Miauflix supports streaming while downloading.
+
 ## ✨ Features
 
 ### 🚀 Currently Available
 
 - **🔐 User Authentication**: Multi-layered authentication system with comprehensive login flows
-  - **API Authentication**: JWT tokens in Authorization headers
-  - **Token Renewal**: HttpOnly refresh token cookies (used only for `/api/auth/refresh/:session`)
-  - **Streaming Access**: Separate short-lived non-JWT streaming keys for video endpoints
 - **🎬 Movie Database**: TMDB integration for posters, ratings, and metadata
 - **🔍 Source Discovery**: Automatic search across multiple content directories (YTS and THERARBG with more to come)
-- **📺 Video Streaming**: Complete peer-to-peer streaming with quality selection and range requests
+- **📺 Video Streaming**: Complete peer-to-peer streaming with quality selection
 - **🛡️ VPN Integration**: Built-in VPN detection and enforcement (optional)
 - **📊 Background Processing**: Continuous source discovery and quality scoring
 - **🔒 Content Encryption**: All source metadata encrypted at rest with AES-256-GCM
 - **🐳 Docker Support**: Ready-to-run containers with nginx and SSL
 
+### 🔧 In Development
+
+- **🔄 Frontend Migration**: Updating the frontend to work with the new backend architecture
+
 ### 🎯 Planned Features
 
 - **📺 TV Shows**: Episode navigation and season management
 - **⛩️ Anime**: Anime support
-- **🎯 More Sources**: Additional content directories and indexers ( 1337x, Nyan, Jackett & Prowlarr )
+- **🎯 More Sources**: Additional content directories and indexers (1337x, Nyaa, Jackett & Prowlarr)
 - **📱 Mobile Apps**: Native iOS and Android clients
-
-> **Current Status**: **Production-ready streaming platform!** Backend is 100% complete with full streaming capabilities. Frontend is 100% complete with session-based authentication, comprehensive login system (email + QR code), and complete API integration. The platform is ready for deployment and use.
-
-The application is a self-contained Node.js application. Docker image and docker-compose files are provided for easy server setup. Note: Docker and docker-compose are not mandatory but are recommended as they provide pre-configured VPN and reverse proxy setup.
-
-## 📊 Implementation Status
-
-### ✅ Backend Infrastructure (Complete)
-
-- **Authentication System**: JWT with refresh tokens, role-based access control
-- **Streaming Engine**: WebTorrent client with `/api/stream/:token` endpoint
-- **Source Aggregation**: Multi-provider discovery (YTS + THERARBG)
-- **Database Layer**: SQLite + TypeORM with AES-256-GCM encryption
-- **Background Processing**: 7 scheduled tasks for continuous content discovery
-- **Security**: VPN detection, audit logging, rate limiting, timing attack protection
-- **API Routes**: All endpoints implemented and production-ready
-
-### ✅ Frontend Application (Complete)
-
-- **Build System**: React + Vite + TypeScript with SSR support
-- **State Management**: Redux Toolkit with RTK Query for API integration
-- **Authentication**: Session-based auth with HttpOnly cookies, email + QR code login
-- **UI Components**: Comprehensive component library with Storybook documentation
-- **Testing**: Unit tests, visual regression testing, and E2E test infrastructure
-- **API Integration**: Complete frontend-backend integration with protected routes
 
 ## 🏗️ Project Architecture
 
 ```text
 miauflix/
-├── backend/                  # Node.js TypeScript backend
-│   ├── src/                  # Source code
-│   └── docs/                 # API documentation
-├── frontend/                 # Client application
-├── nginx/                    # Nginx configuration
-│   ├── conf.d/               # Server blocks
-│   │   ├── default.conf      # Active configuration (auto-generated)
-│   │   └── default.conf.template # Configuration template
-│   ├── certbot/              # Let's Encrypt certificates
-│   └── ssl/                  # SSL certificates (auto-generated)
-├── scripts/                  # Support scripts
-├── setup-git.sh              # Git setup script
-├── setup-ssl.sh              # SSL setup wizard
-├── docker-compose.yml        # Container orchestration
+├── backend/                        # Node.js TypeScript backend
+│   ├── src/                        # Source code
+│   └── docs/                       # API documentation
+├── frontend/                       # Client application
+│   ├── e2e/                        # End‑to‑end tests (for frontend)
+│   ├── storybook/                  # Storybook documentation
+│   └── src/                        # Source code
+├── packages/                       # Shared libraries
+│   ├── backend-client/             # Generated API client
+│   ├── *-sanitizer/                # Source metadata sanitizer ( used for testing )
+│   └── source-metadata-extractor/  # Content metadata processing
+├── docs/                           # Project documentation
+├── nginx/                          # Nginx configuration
+│   ├── conf.d/                     # Server blocks
+│   │   ├── default.conf            # Active configuration (auto-generated)
+│   │   └── default.conf.template   # Configuration template
+│   ├── certbot/                    # Let's Encrypt certificates
+│   └── ssl/                        # SSL certificates (auto-generated)
+├── backend-e2e/                    # End‑to‑end tests (for backend)
+├── scripts/                        # Support scripts
+├── docker-compose.yml              # Container orchestration
 ```
 
-## ⚡ Quick Setup (5 minutes)
+## ⚡ Quick Setup
 
 > Just want to try it? Here's the fastest path:
 
 ```bash
-git clone <repository-url> && cd miauflix
-docker compose run --rm backend npm run config-only
+git clone https://github.com/maury91/miauflix.git && cd miauflix
+docker compose run --rm miauflix npm run config-only
 docker compose up
 ```
 
@@ -129,7 +171,7 @@ First command runs the configuration wizard (TMDB API key, etc.), then start the
 #### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/maury91/miauflix.git
 cd miauflix
 ```
 
@@ -146,7 +188,7 @@ npm run start:backend
 Or run it in Docker's interactive mode:
 
 ```bash
-docker compose run --rm backend npm run start:backend
+docker compose run --rm miauflix npm run start:backend
 ```
 
 <p align="center">
@@ -252,8 +294,6 @@ npm install
 
 # Start frontend with hot reload (recommended for development)
 npm run start:frontend
-# or
-npm run dev:frontend
 ```
 
 The frontend development server provides:
@@ -266,7 +306,7 @@ The frontend development server provides:
 
 ```bash
 # Test with Server-Side Rendering (for production-like behavior)
-npm run dev:frontend:ssr
+npm run start:frontend:ssr
 ```
 
 Use SSR mode when:
