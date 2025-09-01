@@ -18,6 +18,7 @@
     "config-only": "npm run start:backend -- --only-config",
     "config": "npm run start:backend -- --config",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" --names \"backend,frontend\" --prefix-colors \"blue,green\"",
+    "start:frontend:ssr": "npm -w frontend run dev:ssr",
     "docker:build": "./scripts/docker-publish.sh latest build",
     "docker:cleanup": "./scripts/docker-publish.sh cleanup",
     "docker:deploy": "./scripts/docker-publish.sh latest deploy",

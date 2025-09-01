@@ -34,7 +34,7 @@ This command starts only the backend service using Docker Compose in production 
 
 ### Main Services
 
-- **miauflix**: Node.js API server and frontend host
+- **miauflix**: Node.js API server and static-asset frontend host
 - **nginx**: Reverse proxy with SSL termination and static file serving
 - **nordvpn**: VPN container (optional, for privacy protection)
 - **certbot**: Automatic SSL certificate management via Let's Encrypt
@@ -47,10 +47,16 @@ This command starts only the backend service using Docker Compose in production 
 miauflix:
   build: .
   ports:
-    - '${PORT:-3000}:${PORT:-3000}' # Backend API server port
+    - '${PORT:-3000}:${PORT:-3000}' # App port (API under /api and static frontend)
   environment:
     - NODE_ENV=production
     - PORT=${PORT:-3000} # Server listening port
+  restart: unless-stopped
+  healthcheck:
+    test: ['CMD-SHELL', 'curl -fsS http://localhost:${PORT:-3000}/api/health || exit 1']
+    interval: 10s
+    timeout: 3s
+    retries: 5
   volumes:
     - .:/app
     - /app/node_modules
@@ -217,7 +223,7 @@ sudo chown -R $USER:$USER .
 
 ```bash
 # Check container networking
-docker compose exec miauflix ping google.com
+docker compose exec miauflix curl -I https://www.google.com
 
 # Check VPN status (if using VPN)
 docker compose exec nordvpn curl ifconfig.me
@@ -250,14 +256,8 @@ docker compose exec certbot certbot certificates
 ```yaml
 services:
   miauflix:
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-          cpus: '0.5'
-        reservations:
-          memory: 512M
-          cpus: '0.25'
+    mem_limit: 1g
+    cpus: '0.50'
 ```
 
 ### Caching Configuration
@@ -287,7 +287,7 @@ logging:
 docker stats
 
 # Specific service stats
-docker compose exec miauflix top
+docker compose top miauflix
 ```
 
 ## Updates and Maintenance
