@@ -4,7 +4,30 @@ import { z } from 'zod';
 
 // Environment variable schema
 const envSchema = z.object({
-  API_URL: z.string().url().default('http://localhost:3001'),
+  API_URL: z
+    .string()
+    .refine(
+      val => {
+        // Allow relative paths starting with /
+        if (val.startsWith('/')) {
+          return true;
+        }
+        // For URLs starting with http, validate as proper URL
+        if (val.startsWith('http')) {
+          try {
+            new URL(val);
+            return true;
+          } catch {
+            return false;
+          }
+        }
+        return false;
+      },
+      {
+        message: "API_URL must be a valid URL (http/https) or relative path starting with '/'",
+      }
+    )
+    .default('http://localhost:3000'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   TIZEN: z
     .string()
@@ -33,10 +56,11 @@ function getEnvVars(): Record<string, string> {
 // Parse and validate environment variables
 function parseEnv(): EnvConfig {
   const rawEnv = getEnvVars();
+  const defaultApiUrl = rawEnv['NODE_ENV'] === 'production' ? '/' : 'http://localhost:3001';
 
   // Map Vite env vars to our schema
   const envData = {
-    API_URL: rawEnv['VITE_API_URL'] || rawEnv['API_URL'],
+    API_URL: rawEnv['VITE_API_URL'] || rawEnv['API_URL'] || defaultApiUrl,
     NODE_ENV: rawEnv['NODE_ENV'],
     TIZEN: rawEnv['VITE_TIZEN'] || rawEnv['TIZEN'],
   };
@@ -49,7 +73,7 @@ function parseEnv(): EnvConfig {
 
     // Return safe defaults in case of validation failure
     return {
-      API_URL: 'http://localhost:3001',
+      API_URL: defaultApiUrl,
       NODE_ENV: 'development',
       TIZEN: false,
     };
