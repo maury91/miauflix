@@ -21,5 +21,11 @@ const config: StorybookConfig = {
     name: getAbsolutePath('@storybook/react-vite'),
     options: {},
   },
+  staticDirs: [
+    {
+      from: '../../test-assets',
+      to: '/test-assets',
+    },
+  ],
 };
 export default config;
