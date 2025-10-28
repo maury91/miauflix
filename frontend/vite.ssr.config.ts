@@ -22,17 +22,28 @@ export default defineConfig(async env => {
         replacement: replacement as string,
       }));
 
+  const ssrMocks = path.resolve(dirname, 'src/app/bootstrap/ssr-mocks.ts');
+
   return mergeConfig(baseConfig, {
     resolve: {
       alias: [
         ...baseAliases,
         // Replace problematic imports with SSR-safe mocks
-        { find: /^gsap$/, replacement: path.resolve(dirname, 'src/ssr-mocks.ts') },
-        { find: /^gsap\/.*$/, replacement: path.resolve(dirname, 'src/ssr-mocks.ts') },
-        { find: 'framer-motion', replacement: path.resolve(dirname, 'src/ssr-mocks.ts') },
+        {
+          find: /^gsap$/,
+          replacement: ssrMocks,
+        },
+        {
+          find: /^gsap\/.*/,
+          replacement: ssrMocks,
+        },
+        {
+          find: 'framer-motion',
+          replacement: ssrMocks,
+        },
         {
           find: '@noriginmedia/norigin-spatial-navigation',
-          replacement: path.resolve(dirname, 'src/ssr-mocks.ts'),
+          replacement: ssrMocks,
         },
       ],
     },

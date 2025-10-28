@@ -18,6 +18,6 @@
     "src/**/*.d.ts",
     "e2e/**/*.ts",
     "**/*.e2e.spec.ts",
-    "e2e/global.d.ts"
+    "global.d.ts"
   ]
 }
