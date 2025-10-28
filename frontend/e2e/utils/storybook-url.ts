@@ -4,7 +4,7 @@
 export function buildStorybookUrl(
   baseUrl: string,
   storyId: string,
-  args: Record<string, any>,
+  args: Record<string, unknown>,
   options: { viewMode?: 'story' | 'docs' } = {}
 ): string {
   const { viewMode = 'story' } = options;

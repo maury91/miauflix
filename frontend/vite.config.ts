@@ -193,17 +193,31 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/app/components'),
-      '@pages': path.resolve(__dirname, './src/app/pages'),
+      '@app': path.resolve(__dirname, './src/app'),
+      '@features': path.resolve(__dirname, './src/features'),
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@shared': path.resolve(__dirname, './src/shared'),
       '@store': path.resolve(__dirname, './src/store'),
       '@types': path.resolve(__dirname, './src/types'),
       '@utils': path.resolve(__dirname, './src/utils'),
-      '@hooks': path.resolve(__dirname, './src/app/hooks'),
-      '@consts': path.resolve(__dirname, './src/consts'),
+      '@/__test-utils__': path.resolve(__dirname, './src/__test-utils__'),
     },
   },
   test: {
     projects: [
+      // Unit testing project
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          environment: 'jsdom',
+          setupFiles: ['./src/setupTests.ts'],
+          globals: true,
+          include: ['src/**/*.{test,spec}.{ts,tsx}'],
+          exclude: ['src/**/*.stories.{ts,tsx}', 'e2e/**'],
+        },
+      },
+      // Storybook testing project
       {
         extends: true,
         plugins: [

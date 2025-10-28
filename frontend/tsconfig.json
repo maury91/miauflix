@@ -38,20 +38,30 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@components/*": ["./src/app/components/*"],
-      "@pages/*": ["./src/app/pages/*"],
+      "@app": ["./src/app"],
+      "@app/*": ["./src/app/*"],
+      "@features": ["./src/features"],
+      "@features/*": ["./src/features/*"],
+      "@pages": ["./src/pages"],
+      "@pages/*": ["./src/pages/*"],
+      "@shared": ["./src/shared"],
+      "@shared/*": ["./src/shared/*"],
+      "@store": ["./src/store"],
       "@store/*": ["./src/store/*"],
+      "@types": ["./src/types"],
       "@types/*": ["./src/types/*"],
+      "@utils": ["./src/utils"],
       "@utils/*": ["./src/utils/*"],
-      "@hooks/*": ["./src/app/hooks/*"],
-      "@consts/*": ["./src/consts/*"],
+      "@/__test-utils__": ["./src/__test-utils__"],
+      "@/__test-utils__/*": ["./src/__test-utils__/*"],
       "@miauflix/types": ["./src/types/api"]
     }
   },
   "include": [
     "vitest.shims.d.ts",
     "src/**/*",
-    "src/global.d.ts",
+    "e2e/**/*.ts",
+    "global.d.ts",
     ".storybook/**/*.ts",
     "build-ssr.ts"
   ],

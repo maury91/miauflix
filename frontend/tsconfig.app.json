@@ -3,19 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": ["node", "unplugin-icons/types/react", "vite/client"],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/app/components/*"],
-      "@pages/*": ["./src/app/pages/*"],
-      "@store/*": ["./src/store/*"],
-      "@types/*": ["./src/types/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@hooks/*": ["./src/app/hooks/*"],
-      "@consts/*": ["./src/consts/*"],
-      "@consts": ["./src/consts.ts"],
-      "@miauflix/types": ["./src/types/api"]
-    }
+    "baseUrl": "."
   },
   "exclude": [
     "src/**/*.spec.ts",
@@ -27,5 +15,5 @@
     "src/**/*.spec.jsx",
     "src/**/*.test.jsx"
   ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx", "global.d.ts"]
 }

@@ -1,51 +1,12 @@
+import { authApi } from '@features/auth/api/auth.api';
 import { configureStore } from '@reduxjs/toolkit';
-import type { TypedUseSelectorHook } from 'react-redux';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { authApi } from './api/auth';
-import { healthApi } from './api/health';
-import { listsApi } from './api/lists';
-import { mediasApi } from './api/medias';
-import { moviesApi } from './api/movies';
-import { progressApi } from './api/progress';
-import { showsApi } from './api/shows';
-import app from './slices/app';
-import home from './slices/home';
-import profileSelection from './slices/profileSelection';
-import resume from './slices/resume';
-import stream from './slices/stream';
-import ui from './slices/ui';
 
 export const store = configureStore({
   reducer: {
-    app,
-    home,
-    profileSelection,
-    resume,
-    stream,
-    ui,
-    [listsApi.reducerPath]: listsApi.reducer,
-    [moviesApi.reducerPath]: moviesApi.reducer,
-    [progressApi.reducerPath]: progressApi.reducer,
-    [showsApi.reducerPath]: showsApi.reducer,
-    [mediasApi.reducerPath]: mediasApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
-    [healthApi.reducerPath]: healthApi.reducer,
   },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(
-      listsApi.middleware,
-      moviesApi.middleware,
-      progressApi.middleware,
-      showsApi.middleware,
-      mediasApi.middleware,
-      authApi.middleware,
-      healthApi.middleware
-    ),
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(authApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-export const useAppDispatch = () => useDispatch<AppDispatch>();
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
