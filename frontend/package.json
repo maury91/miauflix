@@ -13,8 +13,9 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "start": "npm run dev",
     "preview": "dotenvx run --env-file=../.env -- vite preview",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "vitest run --project=unit",
+    "test:watch": "vitest --project=unit",
+    "test:coverage": "vitest run --project=unit --coverage",
     "test:visual": "docker run --rm --ipc=host --network=host -v $PWD/..:/workspace -w /workspace/frontend -e CI=$CI mcr.microsoft.com/playwright:v1.54.2-jammy npx playwright test --project=storybook-chromium $([ \"$CI\" = \"true\" ] && echo \"--reporter=list\" || echo \"\")",
     "test:visual:update": "npm run test:visual -- --update-snapshots",
     "test:visual:ui": "playwright test --project=storybook-chromium --ui",
@@ -46,7 +47,8 @@
     "react-qr-code": "2.0.18",
     "react-redux": "9.2.0",
     "styled-components": "6.1.19",
-    "video.js": "8.23.4"
+    "video.js": "8.23.4",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "4.1.0",

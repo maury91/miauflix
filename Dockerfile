@@ -25,18 +25,21 @@ RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json |
 # Install dependencies (this layer will be cached unless dependencies change)
 RUN npm ci
 
-# NOW copy the full source code (including original package.json files)
+# Copy shared packages first so library builds cache independently
 COPY packages/ ./packages/
-COPY backend/ ./backend/
-COPY frontend/ ./frontend/
 
-# Build shared libs first (required for backend build)
+# Build shared libs before introducing service code
 RUN npm run build:libs
 
-# Build backend
+# Copy backend sources and build the API
+COPY backend/ ./backend/
 RUN npm run build --workspace=backend
 
-# Build frontend
+# Generate the typed backend client consumed by the frontend
+RUN npm run build:backend-client
+
+# Copy frontend sources and build the client bundle
+COPY frontend/ ./frontend/
 RUN VITE_API_URL=/ npm run build:frontend
 
 # Create empty .env file for runtime stage

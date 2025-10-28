@@ -26,12 +26,14 @@ FRONTEND_ONLY=false
 BACKEND_ONLY=false
 DETACHED_FLAG=false
 DETACHED_MODE=false
+UPDATE_SNAPSHOTS=false
 VERBOSE=0
 filtered_args=()
 for arg in "$@"; do
   case "$arg" in
     --frontend-only) FRONTEND_ONLY=true ;;
     --backend-only)  BACKEND_ONLY=true ;;
+    --update) UPDATE_SNAPSHOTS=true ;;
     -d) DETACHED_FLAG=true ;;
     -v) VERBOSE=1 ;;
     *) filtered_args+=("$arg") ;;
@@ -59,6 +61,7 @@ if [[ "$MODE" != "dev" && "$MODE" != "test" ]]; then
     echo "  $0 test                                   # Run all tests"
     echo "  $0 test --backend-only                    # Run only backend tests"
     echo "  $0 test --frontend-only                   # Run only frontend tests"
+    echo "  $0 test --update                          # Run tests and update frontend snapshots"
     echo "  $0 test movie.test.ts                     # Run specific test"
     echo "  $0 test --testNamePattern=\"Movie\"       # Run matching tests"
     echo ""
@@ -318,8 +321,13 @@ else
 
     # Run frontend tests if not backend-only
     if [[ "$BACKEND_ONLY" != "true" ]]; then
-        echo "🧪 Running frontend integration tests..."
-        npm run test:e2e -w frontend || FRONTEND_TEST_PASSED=false
+        if [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
+            echo "🧪 Running frontend integration tests with snapshot updates..."
+            npm run test:e2e:update -w frontend || FRONTEND_TEST_PASSED=false
+        else
+            echo "🧪 Running frontend integration tests..."
+            npm run test:e2e -w frontend || FRONTEND_TEST_PASSED=false
+        fi
     else
         echo "⏭️  Skipping frontend tests (--backend-only flag)"
     fi
