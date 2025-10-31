@@ -1,42 +1,122 @@
-# Exclude directories that may have permission issues
-nginx/
-frontend/node_modules/
-backend/node_modules/
-backend-e2e/node_modules/
-
-# Exclude development files
+# -----------------------------------------------------------------------------
+# Core VCS / tooling noise
+# -----------------------------------------------------------------------------
 .git/
 .gitignore
-*.log
-*.tmp
-.DS_Store
+.gitattributes
+.github/
+.husky/
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -----------------------------------------------------------------------------
+# Dependency directories (always restored inside the container)
+# -----------------------------------------------------------------------------
+node_modules/
+**/node_modules/
+
+# -----------------------------------------------------------------------------
+# Package manager artefacts we do not want copied twice
+# -----------------------------------------------------------------------------
+yarn.lock
+pnpm-lock.yaml
+
+# -----------------------------------------------------------------------------
+# Build outputs & caches
+# -----------------------------------------------------------------------------
+dist/
+**/dist/
+.tmp/
+tmp/
+temp/
+**/.tmp/
+**/.cache/
+**/.vite/
+**/.turbo/
+**/.storybook-cache/
+**/.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# -----------------------------------------------------------------------------
+# Frontend generated artefacts (Playwright, Storybook, Vitest, etc.)
+# -----------------------------------------------------------------------------
+frontend/.storybook/storybook-static/
+frontend/.storybook/out/
+frontend/playwright-report/
+frontend/test-results/
+frontend/test-results-e2e/
+frontend/e2e/*-snapshots/
+frontend/e2e/*/*.spec.ts-snapshots/
+frontend/e2e/**/*.spec.ts-snapshots/
+frontend/e2e/**/*.log
+frontend/e2e/**/*.trace.zip
+frontend/e2e/**/*.mp4
+
+# -----------------------------------------------------------------------------
+# Backend integration harness outputs
+# -----------------------------------------------------------------------------
+backend-e2e/docker/dist/
+backend-e2e/logs/
+backend-e2e/tmp/
+backend-e2e/**/*.log
+backend-e2e/**/*.trace.zip
+backend-e2e/**/*.sqlite
+backend-e2e/**/*.sqlite-journal
+
+# -----------------------------------------------------------------------------
+# Global logs, reports, downloads, generated content
+# -----------------------------------------------------------------------------
+logs/
+traces/
+**/*.log
+**/*.tmp
+**/*.pid
+coverage/
+**/coverage/
+playwright-report/
+reports/
+reports-*/
+
+# -----------------------------------------------------------------------------
+# Large / generated datasets that never belong in the image
+# -----------------------------------------------------------------------------
+cache.sqlite
+database.sqlite
+*.sqlite
+*.sqlite-journal
+downloads/
+test-assets/
+assets/tmp/
+
+# -----------------------------------------------------------------------------
+# Local environment overrides & secrets (validated configs live elsewhere)
+# -----------------------------------------------------------------------------
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-**/eslint.config.js
-**/jest.config.js
-**/*.test.ts
-**/*.spec.ts
+*.env.example
 
-# Exclude test
-backend-e2e/test-fixtures/
-coverage/
-*.test.js
-*.spec.js
-**/__mocks__/
-**/__test-utils__/
-**/jest.setup.js
+# -----------------------------------------------------------------------------
+# Legacy or experimental frontends not needed for backend-e2e image
+# -----------------------------------------------------------------------------
+frontend-legacy/
+frontend-lit/
+nginx/
 
-# Exclude documentation
+# -----------------------------------------------------------------------------
+# Documentation & misc project planning artefacts
+# -----------------------------------------------------------------------------
+AGENTS.md
+CLAUDE.md
+FRONTEND_IMPROVEMENTS.md
 docs/
 **/docs/
 README.md
 *.md
 
-# Exclude data files
-*.sqlite
-*.sqlite-journal
-**/*.sqlite
-cache.sqlite
-data/
+todo/

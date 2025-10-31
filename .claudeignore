@@ -1,0 +1,3 @@
+# Prevent Claude agents from accessing environment secrets
+.env
+.env.*
