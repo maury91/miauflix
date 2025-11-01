@@ -297,8 +297,13 @@ export type TraktListItem =
 
 export interface DeviceAuthCheckSuccess {
   success: true;
-  accessToken: string;
-  refreshToken: string;
+  session: string;
+  user: {
+    id: string;
+    email: string;
+    displayName: string | null;
+    role: string;
+  };
 }
 
 export interface DeviceAuthCheckPending {

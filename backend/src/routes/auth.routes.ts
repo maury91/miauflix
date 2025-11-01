@@ -1,4 +1,5 @@
 import { zValidator } from '@hono/zod-validator';
+import type { Context } from 'hono';
 import { Hono } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
 import { z } from 'zod';
@@ -7,6 +8,7 @@ import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import type { CookieConfig } from '@services/auth/auth.service';
 
 import type {
   CreateUserResponse,
@@ -16,6 +18,24 @@ import type {
 } from './auth.types';
 import type { Deps, ErrorResponse } from './common.types';
 import type { DeviceAuthResponse } from './trakt.types';
+
+/**
+ * Helper function to set cookies from a cookie configuration array
+ */
+function setCookies(context: Context, cookies: CookieConfig[]): void {
+  for (const cookie of cookies) {
+    const { name, value, ...opts } = cookie;
+    setCookie(context, name, value, opts);
+  }
+}
+
+function enumValues<T extends Record<string, string>>(enumObj: T): [T[keyof T], ...T[keyof T][]] {
+  const values = Object.values(enumObj) as T[keyof T][];
+  if (values.length === 0) {
+    throw new Error('Enum must have at least one value');
+  }
+  return values as [T[keyof T], ...T[keyof T][]];
+}
 
 export const createAuthRoutes = ({ authService, auditLogService, traktService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
@@ -44,15 +64,11 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
           return context.json({ error: 'Invalid credentials' } satisfies ErrorResponse, 401);
         }
 
-        // Extract user agent for audit logging
-        const userAgent = context.req.header('user-agent');
-
         // Generate tokens
-        const authResult = await authService.generateTokens(user, context, userAgent);
+        const authResult = await authService.generateTokens(user, context);
 
-        // Set refresh token as session-scoped HttpOnly cookie
-        const { name: cookieName, ...cookieOpts } = authService.getCookieConfig(authResult.session);
-        setCookie(context, cookieName, authResult.refreshToken, cookieOpts);
+        // Set authentication cookies
+        setCookies(context, authService.getCookies(authResult));
 
         await auditLogService.logLoginAttempt({
           success: true,
@@ -60,9 +76,8 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
           context,
         });
 
-        // Return access token, session, and user info (refresh token is in cookie)
+        // Return session and user info (tokens are in cookies)
         return context.json({
-          accessToken: authResult.accessToken,
           session: authResult.session,
           user: authResult.user,
         } satisfies LoginResponse);
@@ -71,60 +86,37 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
     .post(
       '/refresh/:session',
       rateLimitGuard(0.2), // 1 attempt every 5 seconds
-      zValidator('query', z.object({ dry_run: z.string().optional() })),
       async context => {
         const { session } = context.req.param();
         // Get refresh token from session-scoped HttpOnly cookie
-        const { name: cookieName, ...cookieOpts } = authService.getCookieConfig(session);
+        const { name: cookieName } = authService.getCookieConfig(session);
         const refreshToken = getCookie(context, cookieName);
 
         if (!refreshToken) {
           throw new InvalidTokenError();
         }
 
-        // Check for dry-run mode
-        const isDryRun = context.req.valid('query').dry_run === 'true';
-
-        if (isDryRun) {
-          // Dry-run mode: validate token without rotation
-          const isValid = await authService.validateRefreshToken(refreshToken, session);
-
-          if (!isValid) {
-            throw new InvalidTokenError();
-          }
-
-          // Return success without rotating token
-          return context.json({ valid: true });
-        }
-
-        // Extract user agent for audit logging
-        const userAgent = context.req.header('user-agent');
-
         // Refresh tokens with rotation
-        const authResult = await authService.refreshTokens(
-          refreshToken,
-          session,
-          context,
-          userAgent
-        );
+        const authResult = await authService.refreshTokens(refreshToken, session, context);
 
         if (!authResult) {
-          // Clear invalid cookie
+          // Clear invalid cookies
           deleteCookie(context, cookieName);
+          const { name: accessCookieName } = authService.getAccessTokenCookieConfig(session);
+          deleteCookie(context, accessCookieName);
           throw new InvalidTokenError();
         }
 
-        // Set new refresh token as session-scoped HttpOnly cookie
-        setCookie(context, cookieName, authResult.refreshToken, cookieOpts);
+        // Set authentication cookies
+        setCookies(context, authService.getCookies(authResult));
 
         await auditLogService.logTokenRefresh({
           userEmail: authResult.user.email,
           context,
         });
 
-        // Return only access token (new refresh token is in cookie)
+        // Return user info (tokens are in cookies)
         return context.json({
-          accessToken: authResult.accessToken,
           user: authResult.user,
         } satisfies RefreshResponse);
       }
@@ -150,8 +142,10 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
           }
         }
 
-        // Always clear the session-scoped cookie, even if token was invalid
+        // Clear cookies for this specific session only
         deleteCookie(context, cookieName);
+        const { name: accessCookieName } = authService.getAccessTokenCookieConfig(session);
+        deleteCookie(context, accessCookieName);
 
         return context.json({ message: 'Logged out successfully' } satisfies LogoutResponse);
       }
@@ -165,17 +159,18 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
         z.object({
           email: z.string().email(),
           password: z.string().min(1),
-          role: z.nativeEnum(UserRole),
+          role: z.enum(enumValues(UserRole)),
         })
       ),
       async context => {
         const { email, password, role } = context.req.valid('json');
 
-        const newUser = await authService.createUser(email, password, role as UserRole);
+        const newUser = await authService.createUser(email, password, role);
         return context.json(
           {
             id: newUser.id,
             email: newUser.email,
+            displayName: newUser.displayName,
             role: newUser.role,
           } satisfies CreateUserResponse,
           201
@@ -218,20 +213,13 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
             );
           }
 
-          // Extract user agent for audit logging
-          const userAgent = context.req.header('user-agent');
-
           // Generate tokens
-          const authResult = await authService.generateTokens(user, context, userAgent);
+          const authResult = await authService.generateTokens(user, context);
 
-          // Set refresh token as session-scoped HttpOnly cookie
-          const { name: cookieName, ...cookieOpts } = authService.getCookieConfig(
-            authResult.session
-          );
-          setCookie(context, cookieName, authResult.refreshToken, cookieOpts);
+          // Set authentication cookies
+          setCookies(context, authService.getCookies(authResult));
 
           return context.json({
-            accessToken: authResult.accessToken,
             session: authResult.session,
             user: authResult.user,
           } satisfies LoginResponse);
@@ -243,5 +231,37 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
           );
         }
       }
-    );
+    )
+    .get(
+      '/sessions',
+      rateLimitGuard(0.5), // 1 request every 2 seconds (sensitive endpoint)
+      async context => {
+        const sessions = await authService.getSessionsFromCookies(context);
+        return context.json(sessions);
+      }
+    )
+    .get('/session', authGuard(), async context => {
+      // Get the session ID from X-Session-Id header
+      const sessionId = context.req.header('X-Session-Id');
+
+      if (!sessionId) {
+        throw new InvalidTokenError();
+      }
+
+      // Get access token cookie for this session
+      const { name: accessCookieName } = authService.getAccessTokenCookieConfig(sessionId);
+      const accessToken = getCookie(context, accessCookieName);
+
+      if (!accessToken) {
+        throw new InvalidTokenError();
+      }
+
+      // Get session info from service
+      try {
+        const sessionInfo = await authService.getSessionInfo(sessionId, accessToken);
+        return context.json(sessionInfo);
+      } catch {
+        throw new InvalidTokenError();
+      }
+    });
 };

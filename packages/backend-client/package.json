@@ -10,9 +10,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "hono": "4.9.2"
+    "hono": "4.10.4"
   },
   "peerDependencies": {
-    "hono": "^4.9.2"
+    "hono": "4.10.4"
   }
 }

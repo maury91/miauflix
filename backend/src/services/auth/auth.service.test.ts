@@ -117,9 +117,11 @@ describe('AuthService', () => {
       const config = {
         JWT_SECRET: jwtSecret,
         REFRESH_TOKEN_EXPIRATION: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
+        ACCESS_TOKEN_EXPIRATION: 15 * 60 * 1000, // 15 minutes in ms
         REFRESH_TOKEN_MAX_REFRESH_DAYS: 30,
         MAX_DEVICE_SLOTS_PER_USER: 5,
         REFRESH_TOKEN_COOKIE_NAME: '__test_rt',
+        ACCESS_TOKEN_COOKIE_NAME: '__test_at',
         COOKIE_SECURE: true,
         STREAM_TOKEN_EXPIRATION: 21600000, // 6 hours in ms
         STREAM_KEY_SALT: 'test-salt',
@@ -201,12 +203,20 @@ describe('AuthService', () => {
       mockRefreshTokenRepository.countByUser.mockResolvedValue(0);
       mockRefreshTokenRepository.create.mockResolvedValue({} as RefreshToken);
 
-      const result = await authService.generateTokens(mockUser, mockContext, userAgent);
+      // Mock user-agent header before calling generateTokens
+      (mockContext.req.header as jest.Mock).mockImplementation((name: string) => {
+        if (name === 'user-agent') {
+          return userAgent;
+        }
+        return undefined;
+      });
+
+      const result = await authService.generateTokens(mockUser, mockContext);
 
       expect(result.accessToken).toBeDefined();
       expect(result.refreshToken).toBeDefined();
       expect(result.session).toBeDefined();
-      expect(result.user).toEqual({
+      expect(result.user).toMatchObject({
         id: mockUser.id,
         email: mockUser.email,
         role: mockUser.role,
@@ -337,18 +347,19 @@ describe('AuthService', () => {
         updatedAt: new Date(),
       } as RefreshToken;
 
-      const userAgent = 'Mozilla/5.0...';
-
       mockRefreshTokenRepository.findByToken.mockResolvedValue(mockRefreshToken);
       mockRefreshTokenRepository.isChainExpired.mockResolvedValue(false);
       mockRefreshTokenRepository.updateToken.mockResolvedValue(true); // Success
 
-      const result = await authService.refreshTokens(
-        'old-token',
-        'session_test123',
-        mockContext,
-        userAgent
-      );
+      // Mock user-agent header
+      (mockContext.req.header as jest.Mock).mockImplementation((name: string) => {
+        if (name === 'user-agent') {
+          return 'Mozilla/5.0...';
+        }
+        return undefined;
+      });
+
+      const result = await authService.refreshTokens('old-token', 'session_test123', mockContext);
 
       expect(result).toBeTruthy();
       expect(result?.accessToken).toBeDefined();
@@ -391,18 +402,19 @@ describe('AuthService', () => {
         updatedAt: new Date(),
       } as RefreshToken;
 
-      const userAgent = 'Mozilla/5.0...';
-
       mockRefreshTokenRepository.findByToken.mockResolvedValue(mockRefreshToken);
       mockRefreshTokenRepository.isChainExpired.mockResolvedValue(false);
       mockRefreshTokenRepository.updateToken.mockResolvedValue(false); // Race condition
 
-      const result = await authService.refreshTokens(
-        'old-token',
-        'session_test456',
-        mockContext,
-        userAgent
-      );
+      // Mock user-agent header for this test
+      (mockContext.req.header as jest.Mock).mockImplementation((name: string) => {
+        if (name === 'user-agent') {
+          return 'Mozilla/5.0...';
+        }
+        return undefined;
+      });
+
+      const result = await authService.refreshTokens('old-token', 'session_test456', mockContext);
 
       expect(result).toBeNull();
       expect(mockAuditLogService.logSecurityEvent).toHaveBeenCalledWith({

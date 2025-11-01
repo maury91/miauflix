@@ -1,5 +1,6 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
+import { setCookie } from 'hono/cookie';
 import { z } from 'zod';
 
 import { AuditEventType } from '@entities/audit-log.entity';
@@ -78,15 +79,23 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
                 },
               });
 
-              // Extract user agent for audit logging
-              const userAgent = context.req.header('user-agent');
-              const authResult = await authService.generateTokens(result.user, context, userAgent);
-              const { accessToken } = authResult;
+              const authResult = await authService.generateTokens(result.user, context);
+
+              // Set access token cookie (available on all paths)
+              const { name: accessCookieName, ...accessCookieOpts } =
+                authService.getAccessTokenCookieConfig(authResult.session);
+              setCookie(context, accessCookieName, authResult.accessToken, accessCookieOpts);
+
+              // Set refresh token as session-scoped HttpOnly cookie
+              const { name: cookieName, ...cookieOpts } = authService.getCookieConfig(
+                authResult.session
+              );
+              setCookie(context, cookieName, authResult.refreshToken, cookieOpts);
 
               return context.json({
                 success: true,
-                accessToken,
-                refreshToken: authResult.refreshToken,
+                session: authResult.session,
+                user: authResult.user,
               } satisfies DeviceAuthCheckResponse);
             }
 

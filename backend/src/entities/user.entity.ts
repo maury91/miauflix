@@ -37,6 +37,9 @@ export class User {
   @Column({ default: false })
   isEmailVerified: boolean;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  displayName: string | null;
+
   @OneToMany(() => RefreshToken, refreshToken => refreshToken.user)
   refreshTokens: Relation<RefreshToken>[];
 

@@ -1,5 +1,7 @@
+import { getCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
 
+import { ENV } from '@constants';
 import type { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
 import type { AuthService } from '@services/auth/auth.service';
@@ -18,27 +20,32 @@ declare module 'hono' {
 }
 
 export const createAuthMiddleware = (authService: AuthService) => {
+  const accessTokenCookieName = ENV('ACCESS_TOKEN_COOKIE_NAME');
+
   return createMiddleware<{
     Variables: {
       user?: AuthUser;
     };
   }>(async (c, next) => {
     return withSpan('AuthMiddleware.verifyToken', async () => {
-      const authorization = c.req.header('authorization');
+      const sessionId = c.req.header('X-Session-Id');
 
-      if (authorization?.startsWith('Bearer ')) {
-        const token = authorization.substring('Bearer '.length);
+      if (sessionId) {
+        const cookieName = `${accessTokenCookieName}_${sessionId}`;
+        const token = getCookie(c, cookieName);
 
-        try {
-          const payload = await authService.verifyAccessToken(token);
+        if (token) {
+          try {
+            const payload = await authService.verifyAccessToken(token);
 
-          c.set('user', {
-            id: payload.userId,
-            email: payload.email,
-            role: payload.role as UserRole,
-          } satisfies AuthUser);
-        } catch {
-          // Invalid token, but continue to next middleware
+            c.set('user', {
+              id: payload.userId,
+              email: payload.email,
+              role: payload.role as UserRole,
+            } satisfies AuthUser);
+          } catch {
+            // Invalid token, but continue to next middleware
+          }
         }
       }
 
