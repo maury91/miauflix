@@ -411,7 +411,7 @@ npm run stop:backend:e2e             # Clean up when done
 
 ### Project Structure
 
-```
+```text
 miauflix/
 ├── backend/                        # Node.js TypeScript backend
 │   ├── src/

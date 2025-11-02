@@ -1,22 +1,15 @@
 import { authApi } from '@features/auth/api/auth.api';
+import type { UserDto } from '@miauflix/backend-client';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export interface SessionInfo {
   session: string;
-  user: UserInfo;
+  user: UserDto;
 }
-
-export interface UserInfo {
-  id: string;
-  email: string;
-  displayName: string | null;
-  role: string;
-}
-
 interface AuthState {
   currentSessionId: string | null;
   availableSessions: SessionInfo[];
-  currentUser: UserInfo | null;
+  currentUser: UserDto | null;
 }
 
 const initialState: AuthState = {
@@ -35,7 +28,7 @@ export const authSlice = createSlice({
     setSessions: (state, action: PayloadAction<SessionInfo[]>) => {
       state.availableSessions = action.payload;
     },
-    setCurrentUser: (state, action: PayloadAction<UserInfo>) => {
+    setCurrentUser: (state, action: PayloadAction<UserDto>) => {
       state.currentUser = action.payload;
     },
     clearAuth: state => {
@@ -85,6 +78,13 @@ export const authSlice = createSlice({
     builder.addMatcher(authApi.endpoints.listSessions.matchFulfilled, (state, action) => {
       const sessions = action.payload;
       state.availableSessions = sessions;
+
+      if (state.currentSessionId) {
+        if (!sessions.some(session => session.session === state.currentSessionId)) {
+          state.currentSessionId = null;
+          state.currentUser = null;
+        }
+      }
 
       // Auto-select if only one session and no session is currently selected
       if (sessions.length === 1 && !state.currentSessionId) {

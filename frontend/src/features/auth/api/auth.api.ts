@@ -3,6 +3,7 @@ import type {
   LoginRequest,
   LoginResponse,
   RefreshResponse,
+  UserDto,
 } from '@miauflix/backend-client';
 import { hcWithType } from '@miauflix/backend-client';
 import { createApi } from '@reduxjs/toolkit/query/react';
@@ -175,7 +176,7 @@ export const authApi = createApi({
       | {
           success: true;
           session: string;
-          user: { id: string; email: string; displayName: string | null; role: string };
+          user: UserDto;
         }
       | { success: false; pending: true },
       { deviceCode: string }
