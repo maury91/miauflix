@@ -469,18 +469,22 @@ export class AuthService {
     const verifiedSessions = await Promise.all(
       // Limit to maximum 5 cookies to prevent DoS attacks
       refreshTokenCookies.slice(0, 5).map(async ({ session, token }) => {
-        const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
-        const user = await this.userRepository.findById(refreshToken.userId);
-        if (user) {
-          return {
-            session,
-            user: {
-              id: user.id,
-              email: user.email,
-              displayName: user.displayName,
-              role: user.role,
-            },
-          };
+        try {
+          const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
+          const user = await this.userRepository.findById(refreshToken.userId);
+          if (user) {
+            return {
+              session,
+              user: {
+                id: user.id,
+                email: user.email,
+                displayName: user.displayName,
+                role: user.role,
+              },
+            };
+          }
+        } catch {
+          return null;
         }
         return null;
       })
