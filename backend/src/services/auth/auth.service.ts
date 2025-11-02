@@ -442,32 +442,6 @@ export class AuthService {
   }
 
   /**
-   * Get all active sessions for a user
-   */
-  @traced('AuthService')
-  async getActiveSessions(userId: string) {
-    const user = await this.userRepository.findById(userId);
-    if (!user) {
-      return [];
-    }
-
-    const refreshTokens = await this.refreshTokenRepository.findByUser(user);
-    const now = new Date();
-
-    return refreshTokens
-      .filter(token => token.expiresAt > now)
-      .map(token => ({
-        session: token.session,
-        user: {
-          id: user.id,
-          email: user.email,
-          displayName: user.displayName,
-          role: user.role,
-        },
-      }));
-  }
-
-  /**
    * Discover and validate sessions from refresh token cookies in the request
    * Returns valid sessions found in the request cookies
    */

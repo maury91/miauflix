@@ -34,3 +34,8 @@ export interface UserDto {
 }
 
 export type CreateUserResponse = UserDto;
+
+export interface SessionResponse {
+  id: string;
+  user: UserDto;
+}

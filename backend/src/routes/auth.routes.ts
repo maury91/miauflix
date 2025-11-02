@@ -15,6 +15,7 @@ import type {
   LoginResponse,
   LogoutResponse,
   RefreshResponse,
+  SessionResponse,
 } from './auth.types';
 import type { Deps, ErrorResponse } from './common.types';
 import type { DeviceAuthResponse } from './trakt.types';
@@ -241,27 +242,20 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
       }
     )
     .get('/session', authGuard(), async context => {
-      // Get the session ID from X-Session-Id header
-      const sessionId = context.req.header('X-Session-Id');
-
-      if (!sessionId) {
+      const sessionInfo = context.get('sessionInfo');
+      const user = await authService.getUserById(sessionInfo.user.id);
+      if (!user) {
         throw new InvalidTokenError();
       }
 
-      // Get access token cookie for this session
-      const { name: accessCookieName } = authService.getAccessTokenCookieConfig(sessionId);
-      const accessToken = getCookie(context, accessCookieName);
-
-      if (!accessToken) {
-        throw new InvalidTokenError();
-      }
-
-      // Get session info from service
-      try {
-        const sessionInfo = await authService.getSessionInfo(sessionId, accessToken);
-        return context.json(sessionInfo);
-      } catch {
-        throw new InvalidTokenError();
-      }
+      return context.json({
+        id: sessionInfo.sessionId,
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          role: user.role,
+        },
+      } satisfies SessionResponse);
     });
 };

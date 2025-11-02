@@ -133,7 +133,7 @@ describe('Profile Switching with Multiple Users', () => {
         const sessionInfoResponse = await client.get(['api', 'auth', 'session']);
 
         expect(sessionInfoResponse).toBeHttpStatus(200);
-        expect(sessionInfoResponse.data).toHaveProperty('session', sessionId);
+        expect(sessionInfoResponse.data).toHaveProperty('id', sessionId);
         expect(sessionInfoResponse.data).toHaveProperty('user');
         expect(sessionInfoResponse.data.user).toHaveProperty('email', user.email);
         expect(sessionInfoResponse.data.user).toHaveProperty('id');

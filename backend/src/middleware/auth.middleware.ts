@@ -4,18 +4,18 @@ import { createMiddleware } from 'hono/factory';
 import { ENV } from '@constants';
 import type { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
+import type { UserDto } from '@routes/auth.types';
 import type { AuthService } from '@services/auth/auth.service';
 import { withSpan } from '@utils/tracing.util';
 
-export interface AuthUser {
-  id: string;
-  email: string;
-  role: UserRole;
+export interface SessionInfo {
+  user: Pick<UserDto, 'email' | 'id' | 'role'>;
+  sessionId: string;
 }
 
 declare module 'hono' {
   interface ContextVariableMap {
-    user?: AuthUser;
+    sessionInfo?: SessionInfo;
   }
 }
 
@@ -24,7 +24,7 @@ export const createAuthMiddleware = (authService: AuthService) => {
 
   return createMiddleware<{
     Variables: {
-      user?: AuthUser;
+      sessionInfo?: SessionInfo;
     };
   }>(async (c, next) => {
     return withSpan('AuthMiddleware.verifyToken', async () => {
@@ -38,11 +38,14 @@ export const createAuthMiddleware = (authService: AuthService) => {
           try {
             const payload = await authService.verifyAccessToken(token);
 
-            c.set('user', {
-              id: payload.userId,
-              email: payload.email,
-              role: payload.role as UserRole,
-            } satisfies AuthUser);
+            c.set('sessionInfo', {
+              sessionId,
+              user: {
+                id: payload.userId,
+                email: payload.email,
+                role: payload.role as UserRole,
+              },
+            });
           } catch {
             // Invalid token, but continue to next middleware
           }
@@ -57,16 +60,16 @@ export const createAuthMiddleware = (authService: AuthService) => {
 export const authGuard = (role?: UserRole) => {
   return createMiddleware<{
     Variables: {
-      user: AuthUser;
+      sessionInfo: SessionInfo;
     };
   }>(async (c, next) => {
-    const user = c.get('user');
-    if (!user) {
+    const sessionInfo = c.get('sessionInfo');
+    if (!sessionInfo) {
       throw new AuthError();
     }
 
-    if (role && user.role !== role) {
-      throw new RoleError(role, user.email);
+    if (role && sessionInfo.user.role !== role) {
+      throw new RoleError(role, sessionInfo.user.email);
     }
 
     await next();

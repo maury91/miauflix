@@ -62,16 +62,16 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
         ),
         async context => {
           const { deviceCode } = context.req.valid('json');
-          const authUser = context.get('user')!;
+          const { user } = context.get('sessionInfo');
 
           try {
-            const result = await traktService.checkDeviceAuth(deviceCode, authUser.id);
+            const result = await traktService.checkDeviceAuth(deviceCode, user.id);
 
             if (result) {
               await auditLogService.logSecurityEvent({
                 eventType: AuditEventType.API_ACCESS,
                 description: `User linked Trakt account: ${result.profile.username}`,
-                userEmail: authUser.email,
+                userEmail: user.email,
                 context,
                 metadata: {
                   traktSlug: result.profile.ids.slug,
@@ -121,10 +121,10 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
         rateLimitGuard(5), // 5 attempts per second
         authGuard(),
         async context => {
-          const authUser = context.get('user')!;
+          const { user } = context.get('sessionInfo');
 
           try {
-            const association = await traktService.getUserTraktAssociation(authUser.id);
+            const association = await traktService.getUserTraktAssociation(user.id);
 
             const response: TraktAssociationResponse = {
               associated: !!association,
@@ -155,7 +155,7 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
         ),
         async context => {
           const { traktSlug, userEmail } = context.req.valid('json');
-          const adminUser = context.get('user')!;
+          const { user } = context.get('sessionInfo');
 
           try {
             const association = await traktService.associateTraktUser(traktSlug, userEmail);
@@ -163,7 +163,7 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
             await auditLogService.logSecurityEvent({
               eventType: AuditEventType.USER_UPDATE,
               description: `Admin associated Trakt account ${traktSlug} with user ${userEmail}`,
-              userEmail: adminUser.email,
+              userEmail: user.email,
               context,
               metadata: {
                 traktSlug,
