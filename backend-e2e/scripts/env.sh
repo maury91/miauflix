@@ -332,6 +332,15 @@ else
         echo "⏭️  Skipping frontend tests (--backend-only flag)"
     fi
 
+    # Display trace logs for failed requests (backend tests only)
+    if [[ "$FRONTEND_ONLY" != "true" ]]; then
+        cd "$backend_e2e_dir"
+        echo ""
+        echo "📋 Displaying trace logs for failed requests..."
+        node "$backend_e2e_dir/scripts/display-failed-logs.js" || true  # Don't fail if script has issues
+        cd "$root_dir"
+    fi
+
     if [[ "$BACKEND_TEST_PASSED" == "false" || "$FRONTEND_TEST_PASSED" == "false" ]]; then
         if [[ "$BACKEND_TEST_PASSED" == "false" ]]; then
             echo "❌ Backend tests failed"
