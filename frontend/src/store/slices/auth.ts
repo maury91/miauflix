@@ -52,13 +52,7 @@ export const authSlice = createSlice({
 
     // Refresh successful - update user info
     builder.addMatcher(authApi.endpoints.refresh.matchFulfilled, (state, action) => {
-      const { user } = action.payload;
-      state.currentUser = {
-        id: user.id,
-        email: user.email,
-        displayName: user.displayName,
-        role: user.role,
-      };
+      state.currentUser = action.payload.user;
     });
 
     // Logout - clear auth (on both success and failure)
@@ -90,12 +84,7 @@ export const authSlice = createSlice({
       if (sessions.length === 1 && !state.currentSessionId) {
         const session = sessions[0];
         state.currentSessionId = session.session;
-        state.currentUser = {
-          id: session.user.id,
-          email: session.user.email,
-          displayName: session.user.displayName,
-          role: session.user.role,
-        };
+        state.currentUser = session.user;
       }
       // If multiple sessions or no sessions, state remains as is (user will select or login)
     });
@@ -104,12 +93,7 @@ export const authSlice = createSlice({
     builder.addMatcher(authApi.endpoints.checkDeviceLoginStatus.matchFulfilled, (state, action) => {
       if (action.payload.success === true) {
         state.currentSessionId = action.payload.session;
-        state.currentUser = {
-          id: action.payload.user.id,
-          email: action.payload.user.email,
-          displayName: action.payload.user.displayName,
-          role: action.payload.user.role,
-        };
+        state.currentUser = action.payload.user;
       }
     });
   },

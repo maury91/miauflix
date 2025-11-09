@@ -1,3 +1,5 @@
+import type { UserDto } from '@routes/auth.types';
+
 export interface DeviceCodeResponse {
   device_code: string;
   user_code: string;
@@ -298,12 +300,7 @@ export type TraktListItem =
 export interface DeviceAuthCheckSuccess {
   success: true;
   session: string;
-  user: {
-    id: string;
-    email: string;
-    displayName: string | null;
-    role: string;
-  };
+  user: UserDto;
 }
 
 export interface DeviceAuthCheckPending {
