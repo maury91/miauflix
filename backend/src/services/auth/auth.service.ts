@@ -50,7 +50,7 @@ export interface CookieConfig {
   path: string;
 }
 
-export interface SessionInfo {
+export interface UserSession {
   session: string;
   user: UserDto;
 }
@@ -446,7 +446,7 @@ export class AuthService {
    * Returns valid sessions found in the request cookies
    */
   @traced('AuthService')
-  async getSessionsFromCookies(context: Context): Promise<SessionInfo[]> {
+  async getSessionsFromCookies(context: Context): Promise<UserSession[]> {
     const cookieHeader = context.req.raw.headers.get('cookie');
     if (!cookieHeader) {
       return [];
@@ -490,7 +490,7 @@ export class AuthService {
       })
     );
 
-    return verifiedSessions.filter((session): session is SessionInfo => session !== null);
+    return verifiedSessions.filter((session): session is UserSession => session !== null);
   }
 
   /**
