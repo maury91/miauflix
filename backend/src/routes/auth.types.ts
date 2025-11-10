@@ -6,13 +6,11 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  accessToken: string;
   session: string;
   user: UserDto;
 }
 
 export interface RefreshResponse {
-  accessToken: string;
   user: UserDto;
 }
 
@@ -21,6 +19,7 @@ export interface LogoutResponse {
 }
 
 import type { UserRole } from '@entities/user.entity';
+export type { UserRole };
 export interface CreateUserRequest {
   email: string;
   password: string;
@@ -30,7 +29,13 @@ export interface CreateUserRequest {
 export interface UserDto {
   id: string;
   email: string;
+  displayName: string | null;
   role: UserRole;
 }
 
 export type CreateUserResponse = UserDto;
+
+export interface SessionResponse {
+  id: string;
+  user: UserDto;
+}

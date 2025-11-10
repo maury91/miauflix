@@ -57,7 +57,7 @@ export default defineConfig(async env => {
       },
     },
     ssr: {
-      noExternal: ['styled-components'],
+      noExternal: ['styled-components', 'zod'],
     },
   });
 });

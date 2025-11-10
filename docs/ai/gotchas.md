@@ -197,6 +197,12 @@ npm run build -w frontend  # Verify build status
 - Follow existing configuration.ts pattern
 - Never commit .env files
 
+### ❌ **DON'T read or share `.env` contents**
+
+- Treat `.env` files as off-limits for AI agents
+- Never open, copy, or log sensitive configuration values
+- Use the `ENV()` helper for any required configuration access
+
 ### ⚠️ **VPN detection is active**
 
 - Backend detects if VPN is running

@@ -42,6 +42,13 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       required: false,
       skipUserInteraction: true,
     }),
+    ACCESS_TOKEN_COOKIE_NAME: variable({
+      description: 'Name for the access token HttpOnly cookie',
+      example: '__access_token',
+      defaultValue: '__miauflix_at',
+      required: false,
+      skipUserInteraction: true,
+    }),
     COOKIE_DOMAIN: variable({
       description: 'Domain for refresh token cookies (leave empty for same-origin)',
       example: 'example.com',
@@ -58,9 +65,16 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       transform: transforms.boolean(),
     }),
     REFRESH_TOKEN_EXPIRATION: variable({
-      description: 'Number of days before refresh tokens expire',
+      description: 'Expiration time for refresh tokens (format: number + unit, e.g., 7d, 15m, 1h)',
       example: '7d',
       defaultValue: '7d',
+      required: false,
+      transform: transforms.time(['s', 'm', 'h', 'd']),
+    }),
+    ACCESS_TOKEN_EXPIRATION: variable({
+      description: 'Expiration time for access tokens (format: number + unit, e.g., 15m, 1h)',
+      example: '15m',
+      defaultValue: '15m',
       required: false,
       transform: transforms.time(['s', 'm', 'h', 'd']),
     }),

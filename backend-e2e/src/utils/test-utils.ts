@@ -28,9 +28,8 @@ const removeTrailingSlash = (url: string) => {
  */
 export class TestClient {
   public client: Client;
-  private authToken: string | null = null;
-  private cookieJar: Map<string, string> = new Map();
   private currentSession: string | null = null;
+  private cookieJar: Map<string, string> = new Map();
 
   constructor(baseURL: string = global.BACKEND_URL) {
     // Remove trailing slash from baseURL for Origin header
@@ -48,17 +47,16 @@ export class TestClient {
   }
 
   /**
-   * Set authorization header for authenticated requests
+   * Set current session ID (used for X-Session-Id header)
    */
-  setAuthToken(token: string): void {
-    this.authToken = `Bearer ${token}`;
+  setSession(sessionId: string): void {
+    this.currentSession = sessionId;
   }
 
   /**
-   * Clear authorization header and session data
+   * Clear session data and cookies
    */
   clearAuth(): void {
-    this.authToken = null;
     this.cookieJar.clear();
     this.currentSession = null;
   }
@@ -150,15 +148,12 @@ export class TestClient {
     const data = await this.parseResponse(response);
 
     if (response.status >= 200 && response.status < 300) {
-      // Store access token
-      this.setAuthToken(data.accessToken);
-
-      // Store session ID
+      // Store session ID (access token is in HttpOnly cookie)
       if (data.session) {
         this.setCurrentSession(data.session);
       }
 
-      // Parse and store cookies (refresh token should be in HttpOnly cookie)
+      // Parse and store cookies (access and refresh tokens are in HttpOnly cookies)
       this.storeCookies(response.headers);
 
       return this.formatResponse(response.status, data, response.headers);
@@ -221,8 +216,7 @@ export class TestClient {
    * Refresh tokens using session-based authentication
    */
   async refreshToken(
-    sessionId?: string,
-    dryRun: boolean = false
+    sessionId?: string
   ): Promise<
     TestResponse<ExtractResponseType<Client['api']['auth']['refresh'][':session']['$post']>>
   > {
@@ -241,12 +235,6 @@ export class TestClient {
       headers['Cookie'] = cookieHeader;
     }
 
-    // Prepare query parameters
-    const query: Record<string, string> = {};
-    if (dryRun) {
-      query.dry_run = 'true';
-    }
-
     // Create a client with cookies in init headers (Hono client header merging issue workaround)
     const clientWithCookies = hcWithType(global.BACKEND_URL, {
       init: {
@@ -261,18 +249,12 @@ export class TestClient {
 
     const response = await clientWithCookies.api.auth.refresh[':session'].$post({
       param: { session: sessionParam },
-      query,
     });
 
     const data = await this.parseResponse(response);
 
     if (response.status === 200) {
-      // Update access token if provided (not in dry-run mode)
-      if (data.accessToken) {
-        this.setAuthToken(data.accessToken);
-      }
-
-      // Parse and store any new cookies (new refresh token)
+      // Parse and store any new cookies (new access and refresh tokens)
       this.storeCookies(response.headers);
     }
 
@@ -418,9 +400,14 @@ export class TestClient {
       Referer: removeTrailingSlash(global.BACKEND_URL),
     };
 
-    // Add authorization header if available
-    if (this.authToken) {
-      headers['Authorization'] = this.authToken;
+    // Add Content-Type header if JSON body is present
+    if (args?.json) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    // Add X-Session-Id header if available
+    if (this.currentSession) {
+      headers['X-Session-Id'] = this.currentSession;
     }
 
     // Add cookie header if available
@@ -453,6 +440,9 @@ export class TestClient {
       }
     }
 
+    // console.log('targetClient', targetClient.$post.toString());
+    // console.log('args', args);
+    // console.log('options', options);
     const response = await targetClient.$post(args);
 
     // Store any cookies from the response
@@ -550,9 +540,9 @@ export class TestClient {
       ...(options?.headers || {}),
     };
 
-    // Add authorization header if available
-    if (this.authToken) {
-      headers['Authorization'] = this.authToken;
+    // Add X-Session-Id header if available
+    if (this.currentSession) {
+      headers['X-Session-Id'] = this.currentSession;
     }
 
     // Add cookie header if available

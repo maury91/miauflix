@@ -1,5 +1,5 @@
 import { serveStatic } from '@hono/node-server/serve-static';
-import { otel } from '@hono/otel';
+import { httpInstrumentationMiddleware } from '@hono/otel';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
@@ -22,11 +22,7 @@ function createApiRoutes(deps: Deps) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(deps.auditLogService);
 
   return new Hono()
-    .use(
-      otel({
-        augmentSpan: true,
-      })
-    )
+    .use(httpInstrumentationMiddleware({}))
     .use(traceContextMiddleware)
     .use(createAuthMiddleware(deps.authService))
     .use(createAuditLogMiddleware(deps.auditLogService))
