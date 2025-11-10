@@ -1,12 +1,12 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
-import { setCookie } from 'hono/cookie';
 import { z } from 'zod';
 
 import { AuditEventType } from '@entities/audit-log.entity';
 import { UserRole } from '@entities/user.entity';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { setCookies } from '@utils/setCookies.util';
 
 import type { Deps, ErrorResponse } from './common.types';
 import type {
@@ -81,16 +81,7 @@ export const createTraktRoutes = ({ traktService, auditLogService, authService }
 
               const authResult = await authService.generateTokens(result.user, context);
 
-              // Set access token cookie (available on all paths)
-              const { name: accessCookieName, ...accessCookieOpts } =
-                authService.getAccessTokenCookieConfig(authResult.session);
-              setCookie(context, accessCookieName, authResult.accessToken, accessCookieOpts);
-
-              // Set refresh token as session-scoped HttpOnly cookie
-              const { name: cookieName, ...cookieOpts } = authService.getCookieConfig(
-                authResult.session
-              );
-              setCookie(context, cookieName, authResult.refreshToken, cookieOpts);
+              setCookies(context, authService.getCookies(authResult));
 
               return context.json({
                 success: true,

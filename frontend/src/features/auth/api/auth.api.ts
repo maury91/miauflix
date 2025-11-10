@@ -23,7 +23,7 @@ async function handleAuthRequest<T>(
 ): Promise<{ data: T } | { error: { status: number; data: string } }> {
   try {
     const res = await requestFn();
-    if (res.status === 200) {
+    if (res.status >= 200 && res.status < 300) {
       const data: T = await res.json();
       return { data };
     }

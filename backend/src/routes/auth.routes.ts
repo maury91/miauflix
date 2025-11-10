@@ -1,14 +1,13 @@
 import { zValidator } from '@hono/zod-validator';
-import type { Context } from 'hono';
 import { Hono } from 'hono';
-import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
+import { deleteCookie, getCookie } from 'hono/cookie';
 import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { CookieConfig } from '@services/auth/auth.service';
+import { setCookies } from '@utils/setCookies.util';
 
 import type {
   CreateUserResponse,
@@ -19,24 +18,6 @@ import type {
 } from './auth.types';
 import type { Deps, ErrorResponse } from './common.types';
 import type { DeviceAuthResponse } from './trakt.types';
-
-/**
- * Helper function to set cookies from a cookie configuration array
- */
-function setCookies(context: Context, cookies: CookieConfig[]): void {
-  for (const cookie of cookies) {
-    const { name, value, ...opts } = cookie;
-    setCookie(context, name, value, opts);
-  }
-}
-
-function enumValues<T extends Record<string, string>>(enumObj: T): [T[keyof T], ...T[keyof T][]] {
-  const values = Object.values(enumObj) as T[keyof T][];
-  if (values.length === 0) {
-    throw new Error('Enum must have at least one value');
-  }
-  return values as [T[keyof T], ...T[keyof T][]];
-}
 
 export const createAuthRoutes = ({ authService, auditLogService, traktService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
@@ -158,9 +139,9 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
       zValidator(
         'json',
         z.object({
-          email: z.string().email(),
+          email: z.email(),
           password: z.string().min(1),
-          role: z.enum(enumValues(UserRole)),
+          role: z.enum(UserRole),
         })
       ),
       async context => {
