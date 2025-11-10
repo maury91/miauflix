@@ -1,6 +1,7 @@
 import { compare, hash } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import type { Context } from 'hono';
+import { parse } from 'hono/utils/cookie';
 import type { JWTPayload } from 'jose';
 import { jwtVerify, SignJWT } from 'jose';
 import { hostname } from 'os';
@@ -15,6 +16,7 @@ import { InvalidTokenError } from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
+import type { UserDto } from '@routes/auth.types';
 import type { StreamingToken } from '@services/auth/auth.types';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { InMemoryCache } from '@utils/in-memory-cache';
@@ -30,15 +32,27 @@ import {
   validateTokenPayload,
 } from './auth.util';
 
-interface AuthResult {
+export interface AuthResult {
   accessToken: string;
   refreshToken: string;
   session: string;
-  user: {
-    id: string;
-    email: string;
-    role: UserRole;
-  };
+  user: UserDto;
+}
+
+export interface CookieConfig {
+  name: string;
+  value: string;
+  domain?: string;
+  secure: boolean;
+  httpOnly: boolean;
+  sameSite: 'strict';
+  maxAge: number;
+  path: string;
+}
+
+export interface UserSession {
+  session: string;
+  user: UserDto;
 }
 
 export class AuthService {
@@ -54,9 +68,11 @@ export class AuthService {
 
   // Configuration
   private readonly refreshTokenTTL: number;
+  private readonly accessTokenTTL: number;
   private readonly refreshTokenMaxRefreshDays: number;
   private readonly maxDeviceSlotsPerUser: number;
   private readonly cookieName: string;
+  private readonly accessTokenCookieName: string;
   private readonly cookieDomain?: string;
   private readonly cookieSecure: boolean;
 
@@ -75,9 +91,11 @@ export class AuthService {
     this.streamingKeyTTL = ENV('STREAM_TOKEN_EXPIRATION');
     this.streamingKeySalt = ENV('STREAM_KEY_SALT');
     this.refreshTokenTTL = ENV('REFRESH_TOKEN_EXPIRATION');
+    this.accessTokenTTL = ENV('ACCESS_TOKEN_EXPIRATION');
     this.refreshTokenMaxRefreshDays = ENV('REFRESH_TOKEN_MAX_REFRESH_DAYS');
     this.maxDeviceSlotsPerUser = ENV('MAX_DEVICE_SLOTS_PER_USER');
     this.cookieName = ENV('REFRESH_TOKEN_COOKIE_NAME');
+    this.accessTokenCookieName = ENV('ACCESS_TOKEN_COOKIE_NAME');
     this.cookieDomain = ENV('COOKIE_DOMAIN') || undefined;
     this.cookieSecure = ENV('COOKIE_SECURE');
   }
@@ -153,8 +171,9 @@ export class AuthService {
   }
 
   @traced('AuthService')
-  async generateTokens(user: User, context: Context, userAgent?: string): Promise<AuthResult> {
+  async generateTokens(user: User, context: Context): Promise<AuthResult> {
     const ipAddress = getRealClientIp(context) || 'unknown';
+    const userAgent = context.req.header('user-agent');
 
     // Always generate fresh session for security (prevents enumeration attacks)
     const session = await this.generateSession();
@@ -175,6 +194,7 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
+        displayName: user.displayName,
         role: user.role,
       },
     };
@@ -183,6 +203,8 @@ export class AuthService {
   @traced('AuthService')
   private async generateAccessToken(user: User): Promise<string> {
     const now = Math.floor(Date.now() / 1000);
+    // Calculate expiration time in seconds (accessTokenTTL is in milliseconds)
+    const expirationTime = now + Math.floor(this.accessTokenTTL / 1000);
 
     return new SignJWT({
       userId: user.id,
@@ -193,7 +215,7 @@ export class AuthService {
       .setIssuedAt(now)
       .setIssuer(this.issuer)
       .setAudience(this.audience)
-      .setExpirationTime('15m')
+      .setExpirationTime(expirationTime)
       .sign(this.secretKey);
   }
 
@@ -292,25 +314,14 @@ export class AuthService {
   }
 
   @traced('AuthService')
-  async validateRefreshToken(opaqueToken: string, session: string): Promise<boolean> {
-    try {
-      // Use the same validation logic as refresh, but don't rotate
-      await this.verifyOpaqueRefreshToken(opaqueToken, session);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  @traced('AuthService')
   async refreshTokens(
     opaqueToken: string,
     session: string,
-    context: Context,
-    userAgent?: string
+    context: Context
   ): Promise<AuthResult | null> {
     try {
       const ipAddress = getRealClientIp(context) || 'unknown';
+      const userAgent = context.req.header('user-agent');
 
       // Verify the refresh token
       const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
@@ -357,6 +368,7 @@ export class AuthService {
         user: {
           id: refreshToken.user.id,
           email: refreshToken.user.email,
+          displayName: refreshToken.user.displayName,
           role: refreshToken.user.role,
         },
       };
@@ -366,17 +378,119 @@ export class AuthService {
   }
 
   @traced('AuthService')
+  async getUserFromRefreshToken(opaqueToken: string, session: string): Promise<User | null> {
+    try {
+      const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
+      return refreshToken.user;
+    } catch {
+      return null;
+    }
+  }
+
+  @traced('AuthService')
   async logout(opaqueToken: string, session: string): Promise<User | null> {
     // Verify the refresh token before deleting it
     const refreshToken = await this.verifyOpaqueRefreshToken(opaqueToken, session);
+    const user = refreshToken.user;
 
-    // Revoke the refresh token
-    await this.refreshTokenRepository.deleteByUserAndSession(
-      refreshToken.userId,
-      refreshToken.session
+    // Revoke only the refresh token for this specific session
+    await this.refreshTokenRepository.deleteByUserAndSession(refreshToken.userId, session);
+
+    return user;
+  }
+
+  /**
+   * Get user by ID
+   */
+  @traced('AuthService')
+  async getUserById(userId: string): Promise<User | null> {
+    return this.userRepository.findById(userId);
+  }
+
+  /**
+   * Get session info from access token
+   * Verifies the access token and returns session and user information
+   */
+  @traced('AuthService')
+  async getSessionInfo(
+    sessionId: string,
+    accessToken: string
+  ): Promise<{
+    session: string;
+    user: UserDto;
+  }> {
+    // Verify the access token
+    const payload = await this.verifyAccessToken(accessToken);
+
+    // Get full user info to include displayName
+    const user = await this.userRepository.findById(payload.userId);
+
+    if (!user) {
+      throw new InvalidTokenError();
+    }
+
+    // Return session info
+    return {
+      session: sessionId,
+      user: {
+        id: user.id,
+        email: user.email,
+        displayName: user.displayName,
+        role: user.role,
+      },
+    };
+  }
+
+  /**
+   * Discover and validate sessions from refresh token cookies in the request
+   * Returns valid sessions found in the request cookies
+   */
+  @traced('AuthService')
+  async getSessionsFromCookies(context: Context): Promise<UserSession[]> {
+    const cookieHeader = context.req.raw.headers.get('cookie');
+    if (!cookieHeader) {
+      return [];
+    }
+
+    // Parse all cookies using Hono's parse function
+    const cookies = parse(cookieHeader);
+
+    // Filter cookies that start with refresh token prefix and extract sessions
+    const refreshTokenPrefix = `${this.cookieName}_`;
+    const refreshTokenCookies = Object.entries(cookies)
+      .filter(([name]) => name.startsWith(refreshTokenPrefix))
+      .map(([name, value]) => ({
+        session: name.substring(refreshTokenPrefix.length),
+        token: value,
+      }))
+      .filter(({ session, token }) => session && token);
+
+    // Validate each refresh token and collect valid sessions
+    const verifiedSessions = await Promise.all(
+      // Limit to maximum 5 cookies to prevent DoS attacks
+      refreshTokenCookies.slice(0, 5).map(async ({ session, token }) => {
+        try {
+          const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
+          const user = await this.userRepository.findById(refreshToken.userId);
+          if (user) {
+            return {
+              session,
+              user: {
+                id: user.id,
+                email: user.email,
+                displayName: user.displayName,
+                role: user.role,
+              },
+            };
+          }
+        } catch {
+          return null;
+        }
+        return null;
+      })
     );
 
-    return refreshToken.user;
+    return verifiedSessions.filter((session): session is UserSession => session !== null);
   }
 
   /**
@@ -392,6 +506,41 @@ export class AuthService {
       maxAge: Math.floor(this.refreshTokenTTL / 1000), // seconds
       path: `/api/auth/`, // Scope cookie to auth endpoints (allows both refresh and logout)
     };
+  }
+
+  /**
+   * Get cookie configuration for access tokens
+   */
+  getAccessTokenCookieConfig(session: string) {
+    return {
+      name: `${this.accessTokenCookieName}_${session}`,
+      domain: this.cookieDomain,
+      secure: this.cookieSecure,
+      httpOnly: true,
+      sameSite: 'strict' as const,
+      maxAge: Math.floor(this.accessTokenTTL / 1000), // Convert milliseconds to seconds
+      path: `/`, // Available on all paths
+    };
+  }
+
+  /**
+   * Get both authentication cookies (access token and refresh token) with their values
+   * Returns an array of cookie configs with values, ready to be set
+   */
+  getCookies(authResult: AuthResult): CookieConfig[] {
+    const accessCookieConfig = this.getAccessTokenCookieConfig(authResult.session);
+    const refreshCookieConfig = this.getCookieConfig(authResult.session);
+
+    return [
+      {
+        ...accessCookieConfig,
+        value: authResult.accessToken,
+      },
+      {
+        ...refreshCookieConfig,
+        value: authResult.refreshToken,
+      },
+    ];
   }
 
   /**

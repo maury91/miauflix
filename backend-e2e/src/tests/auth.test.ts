@@ -54,7 +54,6 @@ describe('Authentication Endpoints', () => {
       const response = await client.login(userCredentials);
 
       expect(response).toBeHttpStatus(200);
-      expect(response.data).toHaveProperty('accessToken');
       expect(response.data).toHaveProperty('session');
       expect(response.data).toHaveProperty('user');
 
@@ -65,11 +64,12 @@ describe('Authentication Endpoints', () => {
       // Verify session ID is stored in client
       expect(client.getCurrentSession()).toBe(response.data.session);
 
-      // Verify cookies are set (refresh token should be in HttpOnly cookie)
+      // Verify cookies are set (access and refresh tokens are in HttpOnly cookies)
       const cookies = client.getCookies();
       expect(cookies.size).toBeGreaterThan(0);
 
-      // Should NOT have refreshToken in response body (it's in HttpOnly cookie)
+      // Should NOT have accessToken or refreshToken in response body (they're in HttpOnly cookies)
+      expect(response.data).not.toHaveProperty('accessToken');
       expect(response.data).not.toHaveProperty('refreshToken');
     });
 
@@ -108,44 +108,15 @@ describe('Authentication Endpoints', () => {
 
       const sessionId = loginResponse.data.session;
 
-      // Clear access token to test refresh
-      client.setAuthToken('');
-
       // Use session-based refresh (should use cookies for refresh token)
       const refreshResponse = await client.refreshToken(sessionId);
 
       expect(refreshResponse).toBeHttpStatus(200);
-      expect(refreshResponse.data).toHaveProperty('accessToken');
       expect(refreshResponse.data).toHaveProperty('user');
 
-      // Should NOT have refreshToken in response body (new one is in HttpOnly cookie)
-      expect(refreshResponse.data).not.toHaveProperty('refreshToken');
-    });
-
-    it('should support dry-run refresh mode', async () => {
-      if (!userCredentials) {
-        throw new Error(
-          'No user credentials available for testing - ensure backend is running and generating admin user'
-        );
-      }
-
-      // Login first
-      const loginResponse = await client.login(userCredentials);
-
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // Use dry-run refresh (should validate without rotating tokens)
-      const refreshResponse = await client.refreshToken(sessionId, true);
-
-      expect(refreshResponse).toBeHttpStatus(200);
-      expect(refreshResponse.data).toHaveProperty('valid', true);
-
-      // Should NOT have accessToken in dry-run response
+      // Should NOT have accessToken or refreshToken in response body (they're in HttpOnly cookies)
       expect(refreshResponse.data).not.toHaveProperty('accessToken');
+      expect(refreshResponse.data).not.toHaveProperty('refreshToken');
     });
 
     it('should fail refresh with invalid session', async () => {
@@ -345,7 +316,6 @@ describe('Authentication Endpoints', () => {
             ['api', 'auth', 'refresh', ':session'],
             {
               param: { session: sessionId },
-              query: {},
             },
             {
               headers: {

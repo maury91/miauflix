@@ -4,6 +4,7 @@
  */
 
 import type { TestResponse } from './test-utils';
+import { recordFailedRequest } from './failed-requests-collector';
 
 declare global {
   namespace jest {
@@ -35,6 +36,23 @@ export const toBeHttpStatus = (received: TestResponse | number, expectedStatus: 
       typeof received === 'object' && 'requestId' in received && received.requestId
         ? `\n🔍 Request ID: ${received.requestId} (use this to trace in logs/traces)`
         : '\n⚠️  No request ID found in response headers';
+
+    // Collect failed request ID for trace log display
+    if (typeof received === 'object' && 'requestId' in received && received.requestId) {
+      try {
+        const state = expect.getState();
+        const testPath = state.testPath || '';
+        const testName = state.currentTestName || 'unknown';
+
+        // Format: "filename.test.ts - test description"
+        const fileName = testPath.split(/[/\\]/).pop() || 'unknown';
+        const formattedTestName = `${fileName} - ${testName}`;
+
+        recordFailedRequest(formattedTestName, received.requestId);
+      } catch (error) {
+        // Silently fail - don't break tests if collection fails
+      }
+    }
 
     return {
       message: () => `Expected status ${expectedStatus} but got ${actualStatus}${requestIdInfo}`,

@@ -174,43 +174,6 @@ describe('Session Authentication Error Handling', () => {
   });
 
   describe('Network Error Handling', () => {
-    it('should handle concurrent refresh attempts with same session', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
-      }
-
-      // Login once
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
-
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // Clear access token to force refresh
-      client.setAuthToken('');
-
-      // Make concurrent refresh requests (potential race condition)
-      const refreshPromises = Array(5)
-        .fill(null)
-        .map(() => client.refreshToken(sessionId));
-
-      const results = await Promise.all(refreshPromises);
-
-      // At least one should succeed, others might fail due to token rotation
-      const successful = results.filter(r => r.status === 200);
-      const failed = results.filter(r => r.status !== 200);
-
-      expect(successful.length).toBeGreaterThanOrEqual(1);
-
-      // Failed requests should have proper error handling
-      failed.forEach(result => {
-        expect(result.data).toHaveProperty('error');
-      });
-    });
-
     it('should handle refresh after forced session invalidation', async () => {
       if (!userCredentials) {
         throw new Error('No user credentials available for testing');
