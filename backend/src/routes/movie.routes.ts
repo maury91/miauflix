@@ -148,7 +148,7 @@ export const createMovieRoutes = ({
       ),
       async context => {
         try {
-          const user = context.get('user');
+          const { user } = context.get('sessionInfo');
           const { tmdbId, quality } = context.req.valid('param');
           const movieId = parseInt(tmdbId, 10);
 

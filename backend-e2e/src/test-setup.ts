@@ -22,11 +22,17 @@ global.BACKEND_URL = BACKEND_URL;
 
 // Import custom matchers
 import { toBeHttpStatus, toHaveRequestId } from './utils/request-id-matcher';
+import { clearFailedRequests } from './utils/failed-requests-collector';
 
 // Add custom matchers
 expect.extend({
   toBeHttpStatus,
   toHaveRequestId,
+});
+
+// Clear failed requests at the start of each test run
+beforeAll(() => {
+  clearFailedRequests();
 });
 
 declare global {
