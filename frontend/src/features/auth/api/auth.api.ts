@@ -1,250 +1,121 @@
-import type { DeviceAuthResponse, LoginRequest, LoginResponse } from '@miauflix/backend-client';
+import type {
+  DeviceAuthCheckPending,
+  DeviceAuthCheckSuccess,
+  DeviceAuthResponse,
+  LoginRequest,
+  LoginResponse,
+  RefreshResponse,
+} from '@miauflix/backend-client';
 import { hcWithType } from '@miauflix/backend-client';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '@shared/config/constants';
-import { accessTokenStorage, getStorageMode } from '@utils/accessTokenStorage';
-import { secureStorage } from '@utils/storage';
+import type { SessionInfo } from '@store/slices/auth';
 
-import type { ProfileToken } from '@/types/auth';
-
-// Access token storage utility functions
-const getAccessToken = (sessionId?: string): string | null => {
-  if (!sessionId) return null;
-  const tokenData = accessTokenStorage.retrieve(sessionId);
-  return tokenData?.accessToken || null;
-};
-
-const getCurrentUser = (sessionId?: string): { id: string; email: string; role: string } | null => {
-  if (!sessionId) return null;
-  const tokenData = accessTokenStorage.retrieve(sessionId);
-  return tokenData?.user || null;
-};
-
-const getTokenDataBySession = (sessionId: string) => {
-  return accessTokenStorage.retrieve(sessionId);
-};
-
-const storeTokenData = (
-  accessToken: string,
-  user: { id: string; email: string; role: string },
-  session: string
-): void => {
-  accessTokenStorage.store({ accessToken, user, session, timestamp: Date.now() });
-};
-
-const clearTokenData = (sessionId?: string): void => {
-  if (sessionId) {
-    accessTokenStorage.remove(sessionId);
-  } else {
-    accessTokenStorage.clear();
-  }
-};
-
-const getAllStoredSessions = (): string[] => {
-  return accessTokenStorage.getAllSessions();
-};
-
-// Log storage mode for debugging
-if (process.env['NODE_ENV'] === 'development') {
-  console.log(`\ud83d\udd12 Access token storage mode: ${getStorageMode()}`);
-}
-
-// Create client with credentials for cookie handling
 const client = hcWithType(API_URL, {
   init: {
     credentials: 'include',
   },
 });
 
+async function handleAuthRequest<T>(
+  requestFn: () => Promise<Response>,
+  errorContext: string
+): Promise<{ data: T } | { error: { status: number; data: string } }> {
+  try {
+    const res = await requestFn();
+    if (res.status >= 200 && res.status < 300) {
+      const data: T = await res.json();
+      return { data };
+    }
+
+    const responseData = await res.json();
+    const errorMessage =
+      'error' in responseData && typeof responseData.error === 'string'
+        ? responseData.error
+        : errorContext;
+    return {
+      error: {
+        status: res.status,
+        data: errorMessage,
+      },
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStatus = (error as { status?: number })?.status || 500;
+    return {
+      error: { status: errorStatus, data: errorMessage },
+    };
+  }
+}
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
   endpoints: builder => ({
-    login: builder.mutation<LoginResponse, LoginRequest & { profileName?: string }>({
-      async queryFn({ profileName, ...credentials }) {
-        try {
-          const res = await client.api.auth.login.$post({ json: credentials });
-          if (res.status === 200) {
-            const loginData: LoginResponse = await res.json();
+    login: builder.mutation<LoginResponse, LoginRequest>({
+      async queryFn(credentials) {
+        return handleAuthRequest<LoginResponse>(
+          () => client.api.auth.login.$post({ json: credentials }),
+          'Login failed'
+        );
+      },
+    }),
 
-            // Store access token, user, and session
-            storeTokenData(loginData.accessToken, loginData.user, loginData.session);
+    refresh: builder.mutation<RefreshResponse, { session: string }>({
+      async queryFn({ session }) {
+        return handleAuthRequest<RefreshResponse>(
+          () => client.api.auth.refresh[':session'].$post({ param: { session } }),
+          'Refresh failed'
+        );
+      },
+    }),
 
-            // Create profile entry (for user management, not token storage)
-            const profileToken: ProfileToken = {
-              profileId: loginData.session,
-              profileName: profileName || loginData.user.email,
-              expiresAt: Date.now() + 24 * 60 * 60 * 1000,
-            };
+    logout: builder.mutation<{ message: string }, { session: string }>({
+      async queryFn({ session }) {
+        return handleAuthRequest<{ message: string }>(
+          () => client.api.auth.logout[':session'].$post({ param: { session } }),
+          'Logout failed'
+        );
+      },
+    }),
 
-            // Store the profile metadata securely (no tokens)
-            await secureStorage.addProfile(profileToken);
-
-            return { data: loginData };
-          }
-
-          const data = await res.json();
-          return {
-            error: {
-              status: res.status,
-              data: 'error' in data ? data.error : 'Login failed',
-            },
-          };
-        } catch (error: unknown) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          const errorStatus = (error as { status?: number })?.status || 500;
-          return {
-            error: { status: errorStatus, data: errorMessage },
-          };
-        }
+    listSessions: builder.query<SessionInfo[], void>({
+      async queryFn() {
+        return handleAuthRequest<SessionInfo[]>(
+          () => client.api.auth.sessions.$get(),
+          'List sessions failed'
+        );
       },
     }),
 
     deviceLogin: builder.mutation<DeviceAuthResponse, void>({
       async queryFn() {
-        try {
-          const res = await client.api.auth.device.trakt.$post();
-          const data = await res.json();
-
-          if ('error' in data) {
-            return {
-              error: { status: 400, data: data.error },
-            };
-          }
-
-          return {
-            data,
-          };
-        } catch (error: unknown) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          const errorStatus = (error as { status?: number })?.status || 500;
-          return {
-            error: { status: errorStatus, data: errorMessage },
-          };
-        }
+        return handleAuthRequest<DeviceAuthResponse>(
+          () => client.api.auth.device.trakt.$post(),
+          'Device login failed'
+        );
       },
     }),
 
     checkDeviceLoginStatus: builder.mutation<
-      { accessToken: string; refreshToken: string; success: true } | { success: false },
+      DeviceAuthCheckPending | DeviceAuthCheckSuccess,
       { deviceCode: string }
     >({
       async queryFn({ deviceCode }) {
-        try {
-          const res = await client.api.trakt.auth.device.check.$post({ json: { deviceCode } });
-          const data = await res.json();
-
-          if ('error' in data) {
-            return {
-              error: { status: res.status, data: data.error },
-            };
-          }
-
-          if ('accessToken' in data && 'refreshToken' in data) {
-            return { data };
-          }
-
-          return { data };
-        } catch (error: unknown) {
-          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-          const errorStatus = (error as { status?: number })?.status || 500;
-          return {
-            error: { status: errorStatus, data: errorMessage },
-          };
-        }
+        return handleAuthRequest<DeviceAuthCheckPending | DeviceAuthCheckSuccess>(
+          () => client.api.trakt.auth.device.check.$post({ json: { deviceCode } }),
+          'Device login check failed'
+        );
       },
     }),
   }),
 });
 
-export const { useLoginMutation, useDeviceLoginMutation, useCheckDeviceLoginStatusMutation } =
-  authApi;
-
-// Utility functions for token management
-export const authUtils = {
-  async getStoredProfiles() {
-    return await secureStorage.getProfiles();
-  },
-
-  async getProfileCount() {
-    return await secureStorage.getProfileCount();
-  },
-
-  // Get current access token from storage
-  getCurrentAccessToken(sessionId?: string): string | null {
-    return getAccessToken(sessionId);
-  },
-
-  // Get current user from storage
-  getCurrentUser(sessionId?: string): { id: string; email: string; role: string } | null {
-    return getCurrentUser(sessionId);
-  },
-
-  // Get token data for a specific session
-  getTokenDataBySession(sessionId: string) {
-    return getTokenDataBySession(sessionId);
-  },
-
-  // Get all stored sessions
-  getAllStoredSessions(): string[] {
-    return getAllStoredSessions();
-  },
-
-  // Check if user is currently authenticated
-  isAuthenticated(sessionId?: string): boolean {
-    if (sessionId) {
-      return getAccessToken(sessionId) !== null;
-    }
-    const sessions = getAllStoredSessions();
-    return sessions.some(session => getAccessToken(session) !== null);
-  },
-
-  async getCurrentProfile(profileId?: string): Promise<ProfileToken | null> {
-    if (!profileId) return null;
-
-    const profiles = await secureStorage.getProfiles();
-    return profiles.find(p => p.profileId === profileId) || null;
-  },
-
-  async clearAllProfiles() {
-    clearTokenData();
-    await secureStorage.clearAll();
-  },
-
-  hasStoredData(): boolean {
-    return secureStorage.hasStoredData();
-  },
-
-  async ensureValidToken(sessionId: string): Promise<boolean> {
-    if (!getAccessToken(sessionId)) {
-      try {
-        const res = await client.api.auth.refresh[':session'].$post({
-          param: { session: sessionId },
-          query: {},
-        });
-        if (res.status === 200) {
-          const refreshData = await res.json();
-          if ('accessToken' in refreshData) {
-            storeTokenData(refreshData.accessToken, refreshData.user, sessionId);
-            return true;
-          }
-        }
-      } catch {
-        // Refresh failed
-      }
-      return false;
-    }
-    return true;
-  },
-
-  clearTokens(sessionId?: string) {
-    clearTokenData(sessionId);
-  },
-
-  getActiveSessions(): string[] {
-    return getAllStoredSessions().filter(sessionId => {
-      const tokenData = getTokenDataBySession(sessionId);
-      return tokenData && tokenData.accessToken;
-    });
-  },
-};
+export const {
+  useLoginMutation,
+  useRefreshMutation,
+  useLogoutMutation,
+  useListSessionsQuery,
+  useDeviceLoginMutation,
+  useCheckDeviceLoginStatusMutation,
+} = authApi;

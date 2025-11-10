@@ -263,7 +263,7 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
 
     # Extract admin credentials using separate script
     echo "🔍 Extracting admin credentials..."
-    if ! ./scripts/extract-credentials.sh 15 "$PROJECT_NAME" "$DOCKER_COMPOSE_FILE"; then
+    if ! ./scripts/extract-credentials.sh 60 "$PROJECT_NAME" "$DOCKER_COMPOSE_FILE"; then
         echo "⚠️  Continuing without credentials - some tests may be skipped"
     fi
 else
@@ -330,6 +330,15 @@ else
         fi
     else
         echo "⏭️  Skipping frontend tests (--backend-only flag)"
+    fi
+
+    # Display trace logs for failed requests (backend tests only)
+    if [[ "$FRONTEND_ONLY" != "true" ]]; then
+        cd "$backend_e2e_dir"
+        echo ""
+        echo "📋 Displaying trace logs for failed requests..."
+        node "$backend_e2e_dir/scripts/display-failed-logs.js" || true  # Don't fail if script has issues
+        cd "$root_dir"
     fi
 
     if [[ "$BACKEND_TEST_PASSED" == "false" || "$FRONTEND_TEST_PASSED" == "false" ]]; then

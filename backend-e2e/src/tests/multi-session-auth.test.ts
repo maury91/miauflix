@@ -86,10 +86,6 @@ describe('Multi-Session Authentication Support', () => {
       const session1 = client1.getCurrentSession()!;
       const session2 = client2.getCurrentSession()!;
 
-      // Clear access tokens to force refresh
-      client1.setAuthToken('');
-      client2.setAuthToken('');
-
       // Refresh tokens independently
       const [refresh1, refresh2] = await Promise.all([
         client1.refreshToken(session1),
@@ -264,9 +260,6 @@ describe('Multi-Session Authentication Support', () => {
       const clients = Array.from({ length: 3 }, () => new TestClient());
       await Promise.all(clients.map(client => client.login(userCredentials!)));
 
-      // Clear access tokens
-      clients.forEach(client => client.setAuthToken(''));
-
       // Perform concurrent refreshes
       const refreshPromises = clients.map(client =>
         client.refreshToken(client.getCurrentSession()!)
@@ -277,7 +270,7 @@ describe('Multi-Session Authentication Support', () => {
       // All refreshes should succeed
       refreshResponses.forEach(response => {
         expect(response).toBeHttpStatus(200);
-        expect(response.data).toHaveProperty('accessToken');
+        expect(response.data).toHaveProperty('user');
       });
 
       // All sessions should still be functional
