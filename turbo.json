@@ -1,0 +1,99 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["tsconfig.json"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.css",
+        "src/**/*.scss",
+        "index.html",
+        "vite.config.ts",
+        "tsconfig*.json",
+        "package.json",
+        "!src/**/*.test.ts",
+        "!src/**/*.test.tsx",
+        "!src/**/*.spec.ts",
+        "!src/**/*.spec.tsx",
+        "!src/__test-utils__/**",
+        "!src/__mocks__/**"
+      ],
+      "outputs": ["dist/**", "../dist/**", ".next/**", "!.next/cache/**"],
+      "env": ["NODE_ENV", "VITE_API_URL"]
+    },
+    "build:client": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/client.ts",
+        "src/routes/**/*.ts",
+        "src/entities/**/*.ts",
+        "src/dto/**/*.ts",
+        "src/services/**/*.types.ts",
+        "src/services/**/*.service.ts",
+        "src/services/**/*.api.ts",
+        "src/types/**/*.ts",
+        "tsconfig*.json",
+        "package.json",
+        "!src/**/*.test.ts",
+        "!src/**/*.spec.ts",
+        "!src/__test-utils__/**",
+        "!src/__mocks__/**"
+      ],
+      "outputs": ["../dist/backend-client/**"]
+    },
+    "build:backend-client": {
+      "dependsOn": ["build"],
+      "inputs": [
+        "src/**/*.ts",
+        "../../dist/backend-client/index.d.ts",
+        "tsconfig*.json",
+        "package.json"
+      ],
+      "outputs": ["../dist/backend-client/**", "dist/**"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx",
+        "jest.config.*",
+        "vitest.config.*",
+        "tsconfig*.json",
+        "package.json"
+      ],
+      "outputs": ["coverage/**"],
+      "cache": true
+    },
+    "lint": {
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        ".eslintrc.*",
+        "eslint.config.*",
+        "tsconfig*.json",
+        "package.json"
+      ],
+      "outputs": [],
+      "cache": true
+    },
+    "check:ts": {
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig*.json", "package.json"],
+      "outputs": [],
+      "cache": true
+    },
+    "format": {
+      "outputs": [],
+      "cache": false
+    },
+    "format:check": {
+      "outputs": [],
+      "cache": false
+    }
+  }
+}

@@ -313,9 +313,16 @@ describe('Sanitizer Functions', () => {
       result.files?.forEach((file, index) => {
         const originalFile = mockPost.files?.[index];
 
+        // Type guard: sanitizer always returns files with full_location
+        if (!('full_location' in file)) {
+          throw new Error('Expected file to have full_location property');
+        }
+
         // File names should be sanitized
         expect(file.name).not.toBe(originalFile?.name);
-        expect(file.full_location).not.toBe(originalFile?.full_location);
+        if (originalFile && 'full_location' in originalFile) {
+          expect(file.full_location).not.toBe(originalFile.full_location);
+        }
 
         // Should preserve file extensions and technical metadata
         expect(file.name).toMatch(/\.(mkv|mp4|avi)$/);
