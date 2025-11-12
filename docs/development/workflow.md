@@ -103,7 +103,7 @@ npm run dev
 npm test
 
 # Build everything
-npm run build:all
+npm run build
 ```
 
 ## Coding Conventions
@@ -322,7 +322,7 @@ Always ensure builds pass before committing:
 
 ```bash
 # Build everything
-npm run build:all
+npm run build
 
 # Check TypeScript types
 npm run check:ts
@@ -426,7 +426,7 @@ docker compose ps
 2. Create a feature branch from `main`
 3. Make your changes following the conventions above
 4. Ensure all tests pass: `npm test`
-5. Ensure builds pass: `npm run build:all`
+5. Ensure builds pass: `npm run build`
 6. Create a pull request with a clear description
 
 ### Pull Request Guidelines

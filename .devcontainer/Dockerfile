@@ -7,6 +7,17 @@ RUN ln -s /usr/local/bin/bun /usr/local/bin/node
 # Update packages
 RUN if [ "debian" == "alpine" ] ; then apk update ; else apt-get update ; fi
 
+# Install Node.js and npm for packageManager field support (npm@10.8.1)
+# Note: package.json specifies packageManager: "npm@10.8.1" which requires Corepack
+RUN if [ "debian" == "alpine" ] ; then \
+      apk add --no-cache nodejs npm corepack ; \
+    else \
+      curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+      apt-get install -y nodejs && \
+      npm install -g corepack@latest && \
+      corepack enable ; \
+    fi
+
 # Install Git
 RUN if [ "debian" == "alpine" ] ; then apk add git ; else apt-get install -y git ; fi
 

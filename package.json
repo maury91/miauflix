@@ -4,7 +4,6 @@
   "packageManager": "npm@10.8.1",
   "scripts": {
     "build:all:backend": "turbo run build --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer' --filter='./backend' && npm run build:backend-client",
-    "build:all": "turbo run build && npm run build:backend-client",
     "build:backend-client": "npm -w backend run build:client && npm -w packages/backend-client run build",
     "build:backend": "turbo run build --filter='./backend'",
     "build:frontend": "turbo run build --filter='./frontend'",
@@ -12,7 +11,7 @@
     "build:source-metadata-extractor": "turbo run build --filter='./packages/source-metadata-extractor'",
     "build:therarbg-sanitizer": "turbo run build --filter='./packages/therarbg-sanitizer'",
     "build:yts-sanitizer": "turbo run build --filter='./packages/yts-sanitizer'",
-    "build": "turbo run build --filter='./backend' --filter='./frontend'",
+    "build": "turbo run build",
     "check:ts:backend": "turbo run check:ts --filter='./backend'",
     "check:ts:frontend": "turbo run check:ts --filter='./frontend'",
     "check:ts": "turbo run check:ts",

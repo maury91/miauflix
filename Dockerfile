@@ -31,16 +31,16 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY packages/ ./packages/
 
 # Build shared libs with Turborepo cache mount
-RUN --mount=type=cache,target=/usr/src/app/node_modules/.turbo \
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
     npm run build:libs
 
 # Copy backend sources and build the API with Turborepo cache mount
 COPY backend/ ./backend/
-RUN --mount=type=cache,target=/usr/src/app/node_modules/.turbo \
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
     npm run build --workspace=backend
 
 # Generate the typed backend client with Turborepo cache mount
-RUN --mount=type=cache,target=/usr/src/app/node_modules/.turbo \
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
     npm run build:backend-client
 
 # Copy frontend sources and build the client bundle with Vite cache mount

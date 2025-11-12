@@ -205,7 +205,7 @@ npm run lint:fix
 npm run check:ts
 
 # Build verification
-npm run build:all
+npm run build
 ```
 
 ## Critical Constraints
