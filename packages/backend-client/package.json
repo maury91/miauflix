@@ -6,11 +6,11 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "scripts": {
-    "build": "npm run build:backend-client",
-    "build:backend-client": "rm -rf dist && mkdir -p dist && cp ../../dist/backend-client/index.d.ts dist/ && tsc --project tsconfig.json"
+    "build": "rm -rf dist && mkdir -p dist && cp ../../dist/backend-client/index.d.ts dist/ && tsc --project tsconfig.json"
   },
   "dependencies": {},
   "devDependencies": {
+    "@miauflix/backend": "*",
     "hono": "4.10.4"
   },
   "peerDependencies": {

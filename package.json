@@ -3,17 +3,12 @@
   "version": "1.0.0",
   "packageManager": "npm@10.8.1",
   "scripts": {
-    "build:all:backend": "turbo run build --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer' --filter='./backend' && npm run build:backend-client",
+    "build:all:backend": "turbo run build --filter='./packages/*' --filter='./backend' && npm run build:backend-client",
     "build:backend-client": "npm -w backend run build:client && npm -w packages/backend-client run build",
     "build:backend": "turbo run build --filter='./backend'",
     "build:frontend": "turbo run build --filter='./frontend'",
-    "build:libs": "turbo run build --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer'",
-    "build:source-metadata-extractor": "turbo run build --filter='./packages/source-metadata-extractor'",
-    "build:therarbg-sanitizer": "turbo run build --filter='./packages/therarbg-sanitizer'",
-    "build:yts-sanitizer": "turbo run build --filter='./packages/yts-sanitizer'",
+    "build:libs": "turbo run build --filter='./packages/*'",
     "build": "turbo run build",
-    "check:ts:backend": "turbo run check:ts --filter='./backend'",
-    "check:ts:frontend": "turbo run check:ts --filter='./frontend'",
     "check:ts": "turbo run check:ts",
     "config-only": "npm run start:backend -- --only-config",
     "config": "npm run start:backend -- --config",
@@ -38,14 +33,12 @@
     "stop:backend:e2e": "backend-e2e/scripts/stop.sh",
     "test:backend:e2e:dev": "backend-e2e/scripts/test-only.sh",
     "test:backend:e2e": "backend-e2e/scripts/env.sh test --backend-only",
-    "test:backend": "turbo run test --filter='./backend'",
     "test:e2e": "backend-e2e/scripts/env.sh test",
     "test:frontend:e2e:dev": "npm -w frontend run test:e2e",
     "test:frontend:e2e": "backend-e2e/scripts/env.sh test --frontend-only",
     "test:frontend:visual:update": "npm -w frontend run test:visual:update",
     "test:frontend:visual": "npm -w frontend run test:visual",
-    "test:frontend": "turbo run test --filter='./frontend'",
-    "test": "turbo run test"
+    "test": "turbo run test --filter='./backend' --filter='./frontend' --filter='./packages/*'"
   },
   "dependencies": {
     "concurrently": "9.2.0"
@@ -89,6 +82,7 @@
   "workspaces": [
     "frontend",
     "backend",
+    "backend-e2e",
     "packages/*"
   ]
 }

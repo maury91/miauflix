@@ -2,29 +2,22 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["tsconfig.json"],
   "tasks": {
-    "build": {
+    "@miauflix/backend#build": {
       "dependsOn": ["^build"],
       "inputs": [
         "src/**/*.ts",
         "src/**/*.tsx",
-        "src/**/*.css",
-        "src/**/*.scss",
-        "index.html",
-        "vite.config.ts",
         "tsconfig*.json",
+        "loader.js",
+        "babel.config.js",
         "package.json",
-        "!src/**/*.test.ts",
-        "!src/**/*.test.tsx",
-        "!src/**/*.spec.ts",
-        "!src/**/*.spec.tsx",
-        "!src/__test-utils__/**",
-        "!src/__mocks__/**"
+        "!src/**/*.{test,spec}.{ts,tsx}",
+        "!src/{__test-utils__,__mocks__}/**"
       ],
-      "outputs": ["dist/**", "../dist/**", ".next/**", "!.next/cache/**"],
-      "env": ["NODE_ENV", "VITE_API_URL"]
+      "outputs": ["dist/**"]
     },
-    "build:client": {
-      "dependsOn": ["^build"],
+    "@miauflix/backend#build:client": {
+      "dependsOn": ["@miauflix/backend#build", "^build"],
       "inputs": [
         "src/client.ts",
         "src/routes/**/*.ts",
@@ -36,22 +29,47 @@
         "src/types/**/*.ts",
         "tsconfig*.json",
         "package.json",
-        "!src/**/*.test.ts",
-        "!src/**/*.spec.ts",
-        "!src/__test-utils__/**",
-        "!src/__mocks__/**"
+        "!src/**/*.{test,spec}.{ts,tsx}",
+        "!src/{__test-utils__,__mocks__}/**"
       ],
       "outputs": ["../dist/backend-client/**"]
     },
-    "build:backend-client": {
-      "dependsOn": ["^build", "miauflix-backend#build:client"],
+    "@miauflix/backend-client#build": {
+      "dependsOn": ["@miauflix/backend#build:client"],
+      "inputs": ["tsconfig.json", "package.json"],
+      "outputs": ["dist/**"]
+    },
+    "@miauflix/frontend#build": {
+      "dependsOn": ["@miauflix/backend-client#build", "^build"],
       "inputs": [
         "src/**/*.ts",
-        "../../dist/backend-client/index.d.ts",
+        "src/**/*.tsx",
+        "src/**/*.css",
+        "src/**/*.scss",
+        "index.html",
+        "global.d.ts",
+        "vite.config.ts",
+        "vite.ssr.config.ts",
+        "build-ssr.ts",
         "tsconfig*.json",
-        "package.json"
+        "package.json",
+        "!src/**/*.{test,spec}.{ts,tsx}",
+        "!src/{__test-utils__,__mocks__}/**"
       ],
-      "outputs": ["../dist/backend-client/**", "dist/**"]
+      "outputs": ["../dist/frontend/**", "../dist/frontend-ssr/**"],
+      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "tsconfig*.json",
+        "package.json",
+        "!src/**/*.{test,spec}.{ts,tsx}",
+        "!src/{__test-utils__,__mocks__}/**"
+      ],
+      "outputs": ["dist/**"]
     },
     "test": {
       "dependsOn": ["^build"],
@@ -63,9 +81,15 @@
         "src/**/*.spec.ts",
         "src/**/*.spec.tsx",
         "jest.config.*",
+        "jest.setup.ts",
         "vitest.config.*",
+        "setupTests.ts",
+        "babel.config.js",
         "tsconfig*.json",
-        "package.json"
+        "package.json",
+        "!e2e/**",
+        "!**/*.e2e.spec.ts",
+        "!**/*.e2e.test.ts"
       ],
       "outputs": ["coverage/**"],
       "cache": true
@@ -76,6 +100,7 @@
         "src/**/*.tsx",
         ".eslintrc.*",
         "eslint.config.*",
+        "babel.config.js",
         "tsconfig*.json",
         "package.json"
       ],

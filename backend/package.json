@@ -1,5 +1,5 @@
 {
-  "name": "miauflix-backend",
+  "name": "@miauflix/backend",
   "version": "1.0.0",
   "main": "src/app.ts",
   "scripts": {
@@ -13,6 +13,12 @@
     "check:ts": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "jest"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/client.ts",
+      "default": "../dist/backend-client/index.js"
+    }
   },
   "dependencies": {
     "@hono/node-server": "1.19.6",
