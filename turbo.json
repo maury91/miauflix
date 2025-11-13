@@ -44,7 +44,7 @@
       "outputs": ["../dist/backend-client/**"]
     },
     "build:backend-client": {
-      "dependsOn": ["miauflix-backend#build:client"],
+      "dependsOn": ["^build", "miauflix-backend#build:client"],
       "inputs": [
         "src/**/*.ts",
         "../../dist/backend-client/index.d.ts",
