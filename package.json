@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "packageManager": "npm@10.8.1",
   "scripts": {
-    "build:all:backend": "turbo run build --filter='./packages/*' --filter='./backend' && npm run build:backend-client",
+    "build:all:backend": "turbo run build --filter=@miauflix/backend-client...",
     "build:backend-client": "npm -w backend run build:client && npm -w packages/backend-client run build",
     "build:backend": "turbo run build --filter='./backend'",
     "build:frontend": "turbo run build --filter='./frontend'",
