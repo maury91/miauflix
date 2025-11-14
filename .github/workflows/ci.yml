@@ -53,9 +53,7 @@ jobs:
           name: build-artifacts
           path: |
             packages/*/dist/
-            backend/dist/
-            dist/frontend/
-            dist/frontend-ssr/
+            dist/
           retention-days: 1
           compression-level: 6
 
