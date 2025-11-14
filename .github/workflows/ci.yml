@@ -54,8 +54,8 @@ jobs:
           path: |
             packages/*/dist/
             backend/dist/
-            frontend/dist/
-            frontend/.next/
+            dist/frontend/
+            dist/frontend-ssr/
           retention-days: 1
           compression-level: 6
 
@@ -119,7 +119,7 @@ jobs:
         timeout-minutes: 10
 
       - name: Run visual tests
-        run: touch ../.env && npm run test:frontend:visual
+        run: npm run test:frontend:visual
         if: steps.verify-playwright.outcome == 'success'
         env:
           NODE_ENV: test
