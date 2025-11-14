@@ -14,7 +14,8 @@
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "cache": true
     },
     "@miauflix/backend#build:client": {
       "dependsOn": ["@miauflix/backend#build", "^build"],
@@ -32,12 +33,14 @@
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
-      "outputs": ["../dist/backend-client/**"]
+      "outputs": ["../dist/backend-client/**"],
+      "cache": true
     },
     "@miauflix/backend-client#build": {
       "dependsOn": ["@miauflix/backend#build:client"],
       "inputs": ["tsconfig.json", "package.json"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "cache": true
     },
     "@miauflix/frontend#build": {
       "dependsOn": ["@miauflix/backend-client#build", "^build"],
@@ -57,7 +60,8 @@
         "!src/{__test-utils__,__mocks__}/**"
       ],
       "outputs": ["../dist/frontend/**", "../dist/frontend-ssr/**"],
-      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"]
+      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
+      "cache": true
     },
     "build": {
       "dependsOn": ["^build"],
@@ -69,7 +73,8 @@
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "cache": true
     },
     "test": {
       "dependsOn": ["^build"],

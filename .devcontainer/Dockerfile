@@ -10,7 +10,8 @@ RUN if [ "debian" == "alpine" ] ; then apk update ; else apt-get update ; fi
 # Install Node.js and npm for packageManager field support (npm@10.8.1)
 # Note: package.json specifies packageManager: "npm@10.8.1" which requires Corepack
 RUN if [ "debian" == "alpine" ] ; then \
-      apk add --no-cache nodejs npm corepack ; \
+      apk add --no-cache nodejs npm corepack && \
+      corepack enable ; \
     else \
       curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
       apt-get install -y nodejs && \
