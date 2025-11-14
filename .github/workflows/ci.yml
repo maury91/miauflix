@@ -67,11 +67,13 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        run: npm ci --include=dev
-
-      - name: Install E2E test dependencies
         run: npm ci
-        working-directory: backend-e2e
+
+      - name: Verify turbo installation
+        run: npx turbo --version
+
+      - name: Create .env.test file for Docker
+        run: echo "NODE_ENV=test" > backend-e2e/.env.test
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
