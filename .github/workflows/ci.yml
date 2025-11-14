@@ -62,7 +62,6 @@ jobs:
         run: npm run test:e2e
         env:
           NODE_ENV: test
-          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
         timeout-minutes: 10
 
       - name: Upload E2E test artifacts
@@ -88,13 +87,6 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-      - name: Save Playwright browsers cache
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: .cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
-
       - name: Save Turbo cache
         uses: actions/cache/save@v4
         with:
@@ -118,7 +110,6 @@ jobs:
         run: npm run test:frontend:visual
         env:
           NODE_ENV: test
-          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
         timeout-minutes: 10
 
       - name: Upload visual test screenshots
@@ -129,13 +120,6 @@ jobs:
           path: frontend/test-results/
           if-no-files-found: ignore
           retention-days: 7
-
-      - name: Save Playwright browsers cache
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: .cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
 
       - name: Save Turbo cache
         uses: actions/cache/save@v4
