@@ -111,6 +111,7 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Cache Playwright browsers
+        id: playwright-cache
         uses: actions/cache@v4
         with:
           path: .cache/ms-playwright
@@ -123,15 +124,8 @@ jobs:
         env:
           PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
 
-      - name: Verify Playwright installation
-        id: verify-playwright
-        run: npx -w frontend playwright --version
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
-
       - name: Run E2E tests
         run: npm run test:e2e
-        if: steps.verify-playwright.outcome == 'success'
         env:
           NODE_ENV: test
           PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
@@ -159,6 +153,13 @@ jobs:
             frontend/test-results/
           if-no-files-found: ignore
           retention-days: 7
+
+      - name: Save Playwright browsers cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
 
       - name: Save Turbo cache
         uses: actions/cache/save@v4
@@ -203,6 +204,7 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Cache Playwright browsers
+        id: playwright-cache
         uses: actions/cache@v4
         with:
           path: .cache/ms-playwright
@@ -215,15 +217,8 @@ jobs:
         env:
           PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
 
-      - name: Verify Playwright installation
-        id: verify-playwright
-        run: npx -w frontend playwright --version
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
-
       - name: Run visual tests
         run: npm run test:frontend:visual
-        if: steps.verify-playwright.outcome == 'success'
         env:
           NODE_ENV: test
         timeout-minutes: 10
