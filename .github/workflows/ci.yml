@@ -47,8 +47,22 @@ jobs:
           # Mock API keys - not real credentials needed
           TMDB_API_KEY: mock-api-key
 
+      - name: Upload node_modules and build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-modules-and-build
+          path: |
+            node_modules/
+            packages/*/dist/
+            backend/dist/
+            frontend/dist/
+            frontend/.next/
+          retention-days: 1
+          compression-level: 6
+
   e2e-tests:
     runs-on: ubuntu-latest
+    needs: test
 
     steps:
       - name: Checkout code
@@ -66,14 +80,17 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Download node_modules and build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules-and-build
+          path: .
+
+      - name: Verify installation
+        run: npm list --depth=0 || npm ci
 
       - name: Verify turbo installation
         run: npx turbo --version
-
-      - name: Create .env.test file for Docker
-        run: echo "NODE_ENV=test" > backend-e2e/.env.test
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
@@ -101,10 +118,6 @@ jobs:
           NODE_ENV: test
           PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
         timeout-minutes: 10
-
-      - name: Build frontend
-        run: npm run build:frontend
-        if: steps.verify-playwright.outcome == 'success'
 
       - name: Run visual tests
         run: touch ../.env && npm run test:frontend:visual
