@@ -14,27 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.x'
-          cache: 'npm'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Restore Turbo cache
-        id: turbo-cache
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-${{ github.ref_name }}-
-            ${{ runner.os }}-turbo-
-
-      - name: Install dependencies
-        run: npm ci
+      - name: Setup test environment
+        id: setup
+        uses: ./.github/actions/setup-test-environment
 
       - name: Build packages
         run: npm run build
@@ -57,18 +39,7 @@ jobs:
           # Mock API keys - not real credentials needed
           TMDB_API_KEY: mock-api-key
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: |
-            packages/*/dist/
-            dist/
-          retention-days: 1
-          compression-level: 6
-
       - name: Save Turbo cache
-        if: steps.turbo-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: .turbo
@@ -82,47 +53,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup test environment
+        uses: ./.github/actions/setup-test-environment
         with:
-          node-version: '22.x'
-          cache: 'npm'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: .
-
-      - name: Restore Turbo cache
-        id: turbo-cache
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-${{ github.ref_name }}-
-            ${{ runner.os }}-turbo-
-
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: .cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install Playwright browsers
-        run: npx -w frontend playwright install --with-deps chromium
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
+          install-playwright: 'true'
 
       - name: Run E2E tests
         run: npm run test:e2e
@@ -175,52 +109,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup test environment
+        uses: ./.github/actions/setup-test-environment
         with:
-          node-version: '22.x'
-          cache: 'npm'
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: .
-
-      - name: Restore Turbo cache
-        id: turbo-cache
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-${{ github.ref_name }}-
-            ${{ runner.os }}-turbo-
-
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: .cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-
-
-      - name: Install Playwright browsers
-        run: npx -w frontend playwright install --with-deps chromium
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
+          install-playwright: 'true'
 
       - name: Run visual tests
         run: npm run test:frontend:visual
         env:
           NODE_ENV: test
+          PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
         timeout-minutes: 10
 
       - name: Upload visual test screenshots
@@ -231,6 +129,13 @@ jobs:
           path: frontend/test-results/
           if-no-files-found: ignore
           retention-days: 7
+
+      - name: Save Playwright browsers cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('frontend/package-lock.json') }}
 
       - name: Save Turbo cache
         uses: actions/cache/save@v4
