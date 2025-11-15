@@ -11,7 +11,8 @@ COPY mock/tsconfig.json ./
 
 # Copy the yts-sanitizer package to the expected relative path
 COPY dist/yts-sanitizer/ ./yts-sanitizer
-RUN bun install
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install
 
 # Copy source code
 COPY mock/ ./

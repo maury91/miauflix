@@ -10,6 +10,7 @@ RUN apt-get update && \
 # Copy root manifests first
 COPY package.json package-lock.json ./
 COPY tsconfig.json ./
+COPY turbo.json ./
 
 # Create package directories and copy ONLY their package.json files for dependency resolution
 RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer backend frontend
@@ -22,25 +23,30 @@ COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
 # Temporarily remove problematic prepare scripts that require source code
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 
-# Install dependencies (this layer will be cached unless dependencies change)
-RUN npm ci
+# Install dependencies with npm cache mount for faster installs
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 # Copy shared packages first so library builds cache independently
 COPY packages/ ./packages/
 
-# Build shared libs before introducing service code
-RUN npm run build:libs
+# Build shared libs with Turborepo cache mount
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
+    npm run build:libs
 
-# Copy backend sources and build the API
+# Copy backend sources and build the API with Turborepo cache mount
 COPY backend/ ./backend/
-RUN npm run build --workspace=backend
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
+    npm run build --workspace=backend
 
-# Generate the typed backend client consumed by the frontend
-RUN npm run build:backend-client
+# Generate the typed backend client with Turborepo cache mount
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
+    npm run build:backend-client
 
-# Copy frontend sources and build the client bundle
+# Copy frontend sources and build the client bundle with Vite cache mount
 COPY frontend/ ./frontend/
-RUN VITE_API_URL=/ npm run build:frontend
+RUN --mount=type=cache,target=/usr/src/app/node_modules/.vite \
+    VITE_API_URL=/ npm run build:frontend
 
 # Create empty .env file for runtime stage
 RUN touch .env
