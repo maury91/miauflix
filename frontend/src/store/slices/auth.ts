@@ -1,5 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { UserDto } from '@miauflix/backend-client';
+import type { UserDto } from '@miauflix/backend';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export interface SessionInfo {

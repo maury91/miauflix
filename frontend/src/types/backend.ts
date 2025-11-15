@@ -28,9 +28,9 @@ export type {
   TraktAssociationResponse,
   TVShowDto,
   UserDto,
-} from '@miauflix/backend-client';
+} from '@miauflix/backend';
 
 // Legacy type aliases for backward compatibility
-import type { DeviceAuthResponse, ListDto } from '@miauflix/backend-client';
+import type { DeviceAuthResponse, ListDto } from '@miauflix/backend';
 export type CategoryDto = ListDto;
 export type DeviceLoginDto = DeviceAuthResponse;

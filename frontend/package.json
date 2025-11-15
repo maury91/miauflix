@@ -36,7 +36,8 @@
   "dependencies": {
     "@dicebear/collection": "9.2.4",
     "@dicebear/core": "9.2.4",
-    "@miauflix/backend-client": "*",
+    "@miauflix/backend": "*",
+    "hono": "4.10.4",
     "@noriginmedia/norigin-spatial-navigation": "2.3.0",
     "@reduxjs/toolkit": "2.8.2",
     "framer-motion": "12.18.0",

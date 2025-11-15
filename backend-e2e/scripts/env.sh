@@ -198,7 +198,7 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Build libraries only when starting fresh - ensure we're in root directory
     cd "$root_dir"
     # We don't need to build the frontend, it will be built inside Docker, we need this for the backend client used outside of Docker
-    npm run build:all:backend
+    npm run build:backend
 
     # Build frontend only in dev so static assets are available/mounted
     if [[ "$MODE" == "dev" ]]; then
