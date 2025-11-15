@@ -4,7 +4,7 @@
   "packageManager": "npm@10.8.1",
   "cache": true,
   "scripts": {
-    "build:backend": "turbo run build --filter=@miauflix/backend...",
+    "build:backend": "turbo run build build:client --filter=@miauflix/backend...",
     "build:frontend": "turbo run build --filter='./frontend'",
     "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer'",
     "build": "turbo run build",

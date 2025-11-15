@@ -12,7 +12,7 @@ Miauflix is a self-hosted streaming platform that enables users to discover and 
 
 ```bash
 # Build everything (recommended for development)
-npm run build                        # Builds evenything
+npm run build                        # Builds everything
 npm run build:backend                # Build backends dependencies and then backend
 npm run build:frontend               # Build frontend dependencies and frontend only
 npm run build:libs                   # All library packages

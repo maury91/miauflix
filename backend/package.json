@@ -10,7 +10,7 @@
     "config": "npm start -- --config",
     "config-only": "npm start -- --only-config",
     "build": "tsc --project tsconfig.app.json && tsc-alias -p tsconfig.app.json --resolve-full-paths",
-    "build:client": "mkdir -p dist/client && dts-bundle-generator ./src/client.ts -o dist/client/index.d.ts --external-imports hono --no-check && tsc --project tsconfig.client.json && (test -f dist/client/client.js && mv dist/client/client.js dist/client/index.js || true)",
+    "build:client": "mkdir -p dist/client && dts-bundle-generator ./src/client.ts -o dist/client/index.d.ts --external-imports hono --no-check && tsc --project tsconfig.client.json && mv dist/client/client.js dist/client/index.js && test -f dist/client/index.js",
     "check:ts": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "jest"
