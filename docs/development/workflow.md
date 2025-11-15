@@ -19,7 +19,6 @@ miauflix/
 │   └── docs/                   # Backend-specific documentation
 ├── frontend/                   # React application
 ├── packages/                   # Shared libraries
-│   ├── backend-client/         # Generated API client
 │   └── source-metadata-extractor/ # Content metadata processing
 └── docs/                       # Project documentation
 ```

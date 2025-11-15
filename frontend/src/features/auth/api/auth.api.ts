@@ -5,8 +5,8 @@ import type {
   LoginRequest,
   LoginResponse,
   RefreshResponse,
-} from '@miauflix/backend-client';
-import { hcWithType } from '@miauflix/backend-client';
+} from '@miauflix/backend';
+import { hcWithType } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { API_URL } from '@shared/config/constants';
 import type { SessionInfo } from '@store/slices/auth';

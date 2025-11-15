@@ -129,7 +129,6 @@ miauflix/
 │   ├── storybook/                  # Storybook documentation
 │   └── src/                        # Source code
 ├── packages/                       # Shared libraries
-│   ├── backend-client/             # Generated API client
 │   ├── *-sanitizer/                # Source metadata sanitizer ( used for testing )
 │   └── source-metadata-extractor/  # Content metadata processing
 ├── docs/                           # Project documentation

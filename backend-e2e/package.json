@@ -22,14 +22,42 @@
   },
   "dependencies": {
     "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
-    "@miauflix/backend-client": "file:../packages/backend-client",
+    "@miauflix/backend": "file:../backend",
     "@miauflix/therarbg-sanitizer": "file:../packages/therarbg-sanitizer",
     "hono": "4.10.4",
     "sqlite3": "5.1.7"
   },
+  "type": "module",
   "jest": {
-    "preset": "ts-jest",
+    "preset": "ts-jest/presets/default-esm",
     "testEnvironment": "node",
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ],
+      "^.+\\.js$": [
+        "babel-jest",
+        {
+          "presets": [
+            [
+              "@babel/preset-env",
+              {
+                "targets": {
+                  "node": "current"
+                },
+                "modules": "auto"
+              }
+            ]
+          ]
+        }
+      ]
+    },
     "testMatch": [
       "**/tests/**/*.test.ts",
       "**/src/**/*.test.ts"
@@ -44,10 +72,11 @@
     ],
     "testTimeout": 30000,
     "transformIgnorePatterns": [
-      "node_modules/(?!(@miauflix/backend-client|hono)/)"
+      "node_modules/(?!(@miauflix/backend|hono)/)",
+      "<rootDir>/../backend/dist/client/(?!index\\.js$)"
     ],
     "moduleNameMapper": {
-      "^@miauflix/backend-client$": "<rootDir>/../packages/backend-client/src/index.ts"
+      "^@miauflix/backend$": "<rootDir>/../backend/dist/client/index.js"
     }
   }
 }

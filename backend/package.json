@@ -2,6 +2,7 @@
   "name": "@miauflix/backend",
   "version": "1.0.0",
   "main": "src/app.ts",
+  "types": "./dist/client/index.d.ts",
   "scripts": {
     "start": "node --env-file ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
     "start:prod": "node --env-file ../.env dist/app.js",
@@ -9,16 +10,19 @@
     "config": "npm start -- --config",
     "config-only": "npm start -- --only-config",
     "build": "tsc --project tsconfig.app.json && tsc-alias -p tsconfig.app.json --resolve-full-paths",
-    "build:client": "dts-bundle-generator ./src/client.ts -o ../dist/backend-client/index.d.ts --external-imports hono --no-check",
+    "build:client": "mkdir -p dist/client && dts-bundle-generator ./src/client.ts -o dist/client/index.d.ts --external-imports hono --no-check && tsc --project tsconfig.client.json && mv dist/client/client.js dist/client/index.js && test -f dist/client/index.js",
     "check:ts": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "jest"
   },
   "exports": {
     ".": {
-      "types": "./src/client.ts",
-      "default": "../dist/backend-client/index.js"
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
     }
+  },
+  "peerDependencies": {
+    "hono": "4.10.4"
   },
   "dependencies": {
     "@hono/node-server": "1.19.6",
@@ -43,7 +47,6 @@
     "debug": "4.4.1",
     "dotenv": "17.2.1",
     "filename-reserved-regex": "3.0.0",
-    "hono": "4.10.4",
     "jose": "6.0.12",
     "keyv": "5.5.0",
     "load-ip-set": "3.0.1",
