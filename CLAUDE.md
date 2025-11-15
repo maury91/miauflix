@@ -12,10 +12,9 @@ Miauflix is a self-hosted streaming platform that enables users to discover and 
 
 ```bash
 # Build everything (recommended for development)
-npm run build                        # Builds libs, backend, backend-client, and frontend
-npm run build:all:backend            # Builds libs, backend, and backend-client
-npm run build:backend                # Backend only
-npm run build:frontend               # Frontend only
+npm run build                        # Builds everything
+npm run build:backend                # Build backend's dependencies and then backend
+npm run build:frontend               # Build frontend dependencies and frontend only
 npm run build:libs                   # All library packages
 
 # Type checking
@@ -115,7 +114,7 @@ npm run format:check                # Check formatting without changes
 
 ```
 miauflix/
-├── backend/                     # Node.js TypeScript backend (production-ready)
+├── backend/                     # Node.js TypeScript backend
 │   ├── src/
 │   │   ├── services/           # Business logic services
 │   │   ├── routes/             # HTTP route handlers
@@ -126,7 +125,6 @@ miauflix/
 │   └── docs/                   # API and system documentation
 ├── frontend/                   # React application (served by backend; auth fully integrated)
 ├── packages/                   # Shared libraries
-│   ├── backend-client/         # Generated API client
 │   └── source-metadata-extractor/ # Content metadata processing
 └── docs/                       # Project documentation
 ```

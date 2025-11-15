@@ -5,10 +5,12 @@
  * Usage: node display-failed-logs.js
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const scriptDir = __dirname;
+const __filename = fileURLToPath(import.meta.url);
+const scriptDir = path.dirname(__filename);
 const backendE2eDir = path.dirname(scriptDir);
 const failedRequestsFile = path.join(backendE2eDir, 'failed-requests.json');
 const tracesDir = path.join(backendE2eDir, 'logs', 'traces');

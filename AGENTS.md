@@ -332,7 +332,7 @@ npm run check:ts:backend
 npm run check:ts:frontend
 
 # Build verification
-npm run build           # Builds libs, backend,     backend-client, and frontend
+npm run build           # Builds everything
 npm run build:backend
 npm run build:frontend
 ```
@@ -429,7 +429,6 @@ miauflix/
 │   │   ├── shared/                 # Cross-feature utilities
 │   │   └── store/                  # Redux store
 ├── packages/                       # Shared libraries
-│   ├── backend-client/             # Generated API client
 │   └── source-metadata-extractor/  # Content metadata processing
 ├── backend-e2e/                   # End-to-end tests (for backend)
 └── docs/                           # Project documentation

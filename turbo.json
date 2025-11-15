@@ -33,17 +33,11 @@
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
-      "outputs": ["../dist/backend-client/**"],
-      "cache": true
-    },
-    "@miauflix/backend-client#build": {
-      "dependsOn": ["@miauflix/backend#build:client"],
-      "inputs": ["tsconfig.json", "package.json"],
-      "outputs": ["dist/**"],
+      "outputs": ["dist/client/**"],
       "cache": true
     },
     "@miauflix/frontend#build": {
-      "dependsOn": ["@miauflix/backend-client#build", "^build"],
+      "dependsOn": ["@miauflix/backend#build:client", "^build"],
       "inputs": [
         "src/**/*.ts",
         "src/**/*.tsx",
