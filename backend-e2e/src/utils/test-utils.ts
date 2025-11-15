@@ -103,9 +103,14 @@ export class TestClient {
     const cookieStrings = this.extractSetCookieHeaders(headers);
     for (const cookie of cookieStrings) {
       const [nameValue] = cookie.split(';');
-      const [name, value] = nameValue.split('=');
+      const equalsIndex = nameValue.indexOf('=');
+      if (equalsIndex === -1) {
+        continue;
+      }
+      const name = nameValue.substring(0, equalsIndex).trim();
+      const value = nameValue.substring(equalsIndex + 1).trim();
       if (name && value) {
-        this.cookieJar.set(name.trim(), value.trim());
+        this.cookieJar.set(name, value);
       }
     }
   }
