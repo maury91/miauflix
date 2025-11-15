@@ -1,4 +1,4 @@
-import { UserRole } from '@miauflix/backend-client';
+import { UserRole } from '@miauflix/backend';
 import {
   TestClient,
   waitForService,

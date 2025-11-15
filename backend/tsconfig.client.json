@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist/client",
+    "rootDir": "./src",
+    "module": "ES2022",
+    "target": "ES2022",
+    "composite": false,
+    "declaration": false
+  },
+  "include": ["src/client.ts"],
+  "exclude": ["node_modules", "dist"]
+}
