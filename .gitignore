@@ -8,6 +8,10 @@ node_modules
 dist
 .serena
 
+# Turborepo cache
+.turbo
+**/.turbo
+
 # Data files
 /data
 

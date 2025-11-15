@@ -332,10 +332,9 @@ npm run check:ts:backend
 npm run check:ts:frontend
 
 # Build verification
-npm run build
+npm run build           # Builds libs, backend,     backend-client, and frontend
 npm run build:backend
 npm run build:frontend
-npm run build:all                    # Builds libs, backend, backend-client, and frontend
 ```
 
 ### Development Environment Commands

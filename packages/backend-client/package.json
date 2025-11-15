@@ -10,6 +10,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@miauflix/backend": "*",
     "hono": "4.10.4"
   },
   "peerDependencies": {

@@ -1,0 +1,45 @@
+name: 'Setup Test Environment'
+description: 'Common setup steps for test jobs: Corepack, dependencies, and Turbo cache. Optionally sets up Playwright browsers.'
+
+inputs:
+  install-playwright:
+    description: 'Whether to install Playwright browsers'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+
+    - name: Enable Corepack
+      shell: bash
+      run: corepack enable
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+
+    - name: Restore Turbo cache
+      id: turbo-cache
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-${{ github.ref_name }}-
+          ${{ runner.os }}-turbo-
+
+    - name: Install Playwright browsers
+      if: inputs.install-playwright == 'true'
+      shell: bash
+      run: npx -w frontend playwright install --with-deps chromium
+
+outputs:
+  turbo-cache-hit:
+    description: 'Whether Turbo cache was restored'
+    value: ${{ steps.turbo-cache.outputs.cache-hit }}

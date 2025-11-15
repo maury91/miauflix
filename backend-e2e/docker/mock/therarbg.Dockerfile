@@ -12,7 +12,8 @@ COPY mock/tsconfig.json ./
 # Copy the therarbg-sanitizer package to the expected relative path
 COPY dist/therarbg-sanitizer/ ./therarbg-sanitizer
 COPY dist/source-metadata-extractor/ ./source-metadata-extractor
-RUN bun install
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install
 
 # Copy source code
 COPY mock/ ./

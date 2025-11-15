@@ -11,7 +11,7 @@ import {
  * Tracing utility for creating and managing spans throughout the application
  */
 export class TracingUtil {
-  private static readonly tracer = trace.getTracer('miauflix-backend');
+  private static readonly tracer = trace.getTracer('@miauflix/backend');
 
   /**
    * Create a span for a service method
@@ -365,7 +365,7 @@ export function createSpan(name: string, attributes: Attributes = {}): Span {
     return trace.getTracer('dummy').startSpan('dummy') as Span;
   }
 
-  return trace.getTracer('miauflix-backend').startSpan(name, { attributes });
+  return trace.getTracer('@miauflix/backend').startSpan(name, { attributes });
 }
 
 /**
