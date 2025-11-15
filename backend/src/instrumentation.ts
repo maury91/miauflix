@@ -34,7 +34,7 @@ if (!tracingEnabled) {
   // Create the SDK with file-based tracing
   sdk = new NodeSDK({
     resource: resourceFromAttributes({
-      [ATTR_SERVICE_NAME]: 'miauflix-backend',
+      [ATTR_SERVICE_NAME]: '@miauflix/backend',
       [ATTR_SERVICE_VERSION]: '1.0.0',
       [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV || 'development',
     }),

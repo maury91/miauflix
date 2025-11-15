@@ -17,14 +17,16 @@ COPY frontend/package.json ./frontend/
 # Copy the packages that backend depends on
 COPY packages/ ./packages/
 
-# Install dependencies
-RUN npm install
+# Install dependencies with npm cache mount
+RUN --mount=type=cache,target=/root/.npm \
+    npm install
 
 # Copy backend source (will be overridden by volume mount)
 COPY backend/ ./backend/
 
-# Install nodemon globally for hot reloading
-RUN npm install -g nodemon tsx
+# Install nodemon globally for hot reloading with npm cache mount
+RUN --mount=type=cache,target=/root/.npm \
+    npm install -g nodemon tsx
 
 COPY .env ./backend
 

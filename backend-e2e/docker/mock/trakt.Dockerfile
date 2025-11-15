@@ -8,7 +8,8 @@ WORKDIR /app
 # Copy package.json and install dependencies
 COPY package.json ./
 COPY tsconfig.json ./
-RUN bun install
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+    bun install
 
 # Copy source code
 COPY . ./

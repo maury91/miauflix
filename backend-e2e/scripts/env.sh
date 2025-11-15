@@ -226,7 +226,8 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
 
     # Start all services
     echo "🚀 Starting the $MODE environment with Docker Compose..."    
-    COMPOSE_BAKE=true docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
+    export DOCKER_BUILDKIT=1
+    docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
 
     docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" logs --since 1m  --follow &> "$log_file" &
     logged_pid=$!

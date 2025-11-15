@@ -42,7 +42,7 @@ check_login() {
 build_images() {
     print_status "Building MiauFlix Docker image..."
     
-    # Build backend image
+    export DOCKER_BUILDKIT=1
     print_status "Building and compiling backend image..."
     docker build -t "${REGISTRY}/${REPOSITORY}:${VERSION}" \
                  -t "${REGISTRY}/${REPOSITORY}:latest" \
