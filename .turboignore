@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output/
+*.log
+
+# Build outputs (handled by turbo outputs config)
+dist/
+.next/
+out/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Cache directories
+.cache/
+.vite/
+.parcel-cache/
+.eslintcache
+
+# Docker
+docker-compose.override.yml
+
+# E2E test artifacts
+backend-e2e/docker/
+backend-e2e/traces/
+
+# Visual test outputs
+visual-test-output.log
+
+# Traces
+traces/
+
+# Data directories
+data/
+
