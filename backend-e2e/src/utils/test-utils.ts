@@ -100,18 +100,30 @@ export class TestClient {
    * Parse and store cookies from response headers
    */
   private storeCookies(headers: Headers): void {
-    const setCookieHeaders = headers.get('set-cookie');
-    if (setCookieHeaders) {
-      // Handle multiple Set-Cookie headers
-      const cookies = setCookieHeaders.split(', ');
-      for (const cookie of cookies) {
-        const [nameValue] = cookie.split(';');
-        const [name, value] = nameValue.split('=');
-        if (name && value) {
-          this.cookieJar.set(name.trim(), value.trim());
-        }
+    const cookieStrings = this.extractSetCookieHeaders(headers);
+    for (const cookie of cookieStrings) {
+      const [nameValue] = cookie.split(';');
+      const [name, value] = nameValue.split('=');
+      if (name && value) {
+        this.cookieJar.set(name.trim(), value.trim());
       }
     }
+  }
+
+  /**
+   * Extract raw Set-Cookie header values, handling multi-header behavior in undici/Node
+   */
+  private extractSetCookieHeaders(headers: Headers & { getSetCookie?: () => string[] }): string[] {
+    if (typeof headers.getSetCookie === 'function') {
+      return headers.getSetCookie.call(headers);
+    }
+
+    const combinedHeader = headers.get('set-cookie');
+    if (!combinedHeader) {
+      return [];
+    }
+
+    return splitCombinedSetCookieHeader(combinedHeader);
   }
 
   /**
@@ -566,6 +578,42 @@ export class TestClient {
       response.headers
     );
   }
+}
+
+/**
+ * Splits a combined Set-Cookie header string into individual cookie strings.
+ * Adapted to handle commas inside Expires attributes without adding extra dependencies.
+ */
+function splitCombinedSetCookieHeader(header: string): string[] {
+  const cookies: string[] = [];
+  let current = '';
+  let i = 0;
+
+  while (i < header.length) {
+    const char = header[i];
+    current += char;
+
+    if (char === ',') {
+      // Look ahead to decide if this comma separates cookies or is part of Expires, e.g. "Wed, 15..."
+      const remaining = header.slice(i + 1);
+      const nextEquals = remaining.indexOf('=');
+      const nextSemicolon = remaining.indexOf(';');
+
+      if (nextEquals !== -1 && (nextSemicolon === -1 || nextEquals < nextSemicolon)) {
+        // Likely start of a new cookie (" name=value"), so finalize the current chunk
+        cookies.push(current.slice(0, -1).trim());
+        current = '';
+      }
+    }
+
+    i += 1;
+  }
+
+  if (current.trim()) {
+    cookies.push(current.trim());
+  }
+
+  return cookies.filter(Boolean);
 }
 
 /**
