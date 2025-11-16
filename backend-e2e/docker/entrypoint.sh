@@ -52,6 +52,24 @@ echo "Setting ownership of /tmp to $PUID:$PGID"
 chown -R $PUID:$PGID /tmp
 chmod 755 /tmp
 
+# Sync frontend files from image to volume on container start
+if [ -d "/usr/src/app/public" ] && [ -d "/usr/src/app/public_volume" ]; then
+    echo "-------------------------------------"
+    echo "Syncing frontend files from image to volume..."
+    echo "-------------------------------------"
+    # Use rsync if available, otherwise use cp
+    if command -v rsync > /dev/null 2>&1; then
+        rsync -av --delete /usr/src/app/public/ /usr/src/app/public_volume/
+    else
+        rm -rf /usr/src/app/public_volume/*
+        cp -r /usr/src/app/public/* /usr/src/app/public_volume/
+    fi
+    # Ensure proper ownership of synced files
+    chown -R $PUID:$PGID /usr/src/app/public_volume
+    echo "Frontend files synced successfully"
+    echo "-------------------------------------"
+fi
+
 echo "-------------------------------------"
 echo "Starting application as UID: $PUID, GID: $PGID"
 echo "-------------------------------------"

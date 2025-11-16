@@ -46,7 +46,7 @@ services:
       - ./data:/usr/data/
       - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
       - miauflix_node_modules:/usr/src/app/node_modules
-      - frontend_static:/usr/src/app/public
+      - frontend_static:/usr/src/app/public_volume
     network_mode: service:vpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service
     restart: unless-stopped
