@@ -52,6 +52,67 @@ echo "Setting ownership of /tmp to $PUID:$PGID"
 chown -R $PUID:$PGID /tmp
 chmod 755 /tmp
 
+# Sync frontend files from image to volume on container start
+if [ -d "/usr/src/app/public" ] && [ -d "/usr/src/app/public_volume" ]; then
+    # Check if volume is empty or if image files are newer
+    NEED_SYNC=false
+    
+    if [ -z "$(ls -A /usr/src/app/public_volume 2>/dev/null)" ]; then
+        # Volume is empty, need to sync
+        NEED_SYNC=true
+        echo "-------------------------------------"
+        echo "Volume is empty, syncing frontend files from image..."
+        echo "-------------------------------------"
+    else
+        # Compare newest file modification times
+        if command -v find > /dev/null 2>&1 && command -v stat > /dev/null 2>&1; then
+            # Get newest file mtime in image (in seconds since epoch)
+            IMAGE_NEWEST=$(find /usr/src/app/public -type f -exec stat -c %Y {} \; 2>/dev/null | sort -n | tail -1)
+            # Get newest file mtime in volume
+            VOLUME_NEWEST=$(find /usr/src/app/public_volume -type f -exec stat -c %Y {} \; 2>/dev/null | sort -n | tail -1)
+            
+            if [ -n "$IMAGE_NEWEST" ] && [ -n "$VOLUME_NEWEST" ]; then
+                if [ "$IMAGE_NEWEST" -gt "$VOLUME_NEWEST" ]; then
+                    NEED_SYNC=true
+                    echo "-------------------------------------"
+                    echo "Image files are newer, syncing frontend files from image to volume..."
+                    echo "-------------------------------------"
+                else
+                    echo "-------------------------------------"
+                    echo "Volume files are up-to-date or newer, skipping sync"
+                    echo "-------------------------------------"
+                fi
+            else
+                # Fallback: if we can't determine, sync to be safe
+                NEED_SYNC=true
+                echo "-------------------------------------"
+                echo "Unable to compare timestamps, syncing frontend files from image to volume..."
+                echo "-------------------------------------"
+            fi
+        else
+            # Fallback: if find/stat not available, sync to be safe
+            NEED_SYNC=true
+            echo "-------------------------------------"
+            echo "Syncing frontend files from image to volume..."
+            echo "-------------------------------------"
+        fi
+    fi
+    
+    if [ "$NEED_SYNC" = true ]; then
+        # Use rsync if available, otherwise use cp
+        if command -v rsync > /dev/null 2>&1; then
+            rsync -av --delete /usr/src/app/public/ /usr/src/app/public_volume/
+        else
+            rm -rf /usr/src/app/public_volume/*
+            cp -r /usr/src/app/public/* /usr/src/app/public_volume/
+        fi
+        # Ensure proper ownership of synced files
+        chown -R $PUID:$PGID /usr/src/app/public_volume
+        echo "Frontend files synced successfully"
+        echo "-------------------------------------"
+    fi
+fi
+
 echo "-------------------------------------"
 echo "Starting application as UID: $PUID, GID: $PGID"
 echo "-------------------------------------"
