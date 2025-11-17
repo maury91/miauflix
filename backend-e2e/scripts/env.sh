@@ -197,7 +197,7 @@ trap cleanup EXIT INT TERM
 if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Build libraries only when starting fresh - ensure we're in root directory
     cd "$root_dir"
-    # We don't need to build the frontend, it will be built inside Docker, we need this for the backend client used outside of Docker
+    # Build backend package and dependencies for use outside Docker; frontend is built inside Docker
     npm run build:backend
 
     # Build frontend only in dev so static assets are available/mounted
