@@ -22,7 +22,7 @@
     }
   },
   "peerDependencies": {
-    "hono": "4.10.4"
+    "hono": "4.10.6"
   },
   "dependencies": {
     "@hono/node-server": "1.19.6",
@@ -47,7 +47,7 @@
     "debug": "4.4.1",
     "dotenv": "17.2.1",
     "filename-reserved-regex": "3.0.0",
-    "jose": "6.0.12",
+    "jose": "6.1.2",
     "keyv": "5.5.0",
     "load-ip-set": "3.0.1",
     "node-fetch": "3.3.2",
@@ -55,7 +55,7 @@
     "sqlite3": "5.1.7",
     "streamx": "2.22.1",
     "thunky": "1.1.0",
-    "typeorm": "0.3.25",
+    "typeorm": "0.3.27",
     "uuid": "11.1.0",
     "webtorrent": "2.8.4",
     "whatwg-url": "14.2.0",

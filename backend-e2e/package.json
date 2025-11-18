@@ -24,7 +24,7 @@
     "@miauflix/yts-sanitizer": "file:../packages/yts-sanitizer",
     "@miauflix/backend": "file:../backend",
     "@miauflix/therarbg-sanitizer": "file:../packages/therarbg-sanitizer",
-    "hono": "4.10.4",
+    "hono": "4.10.6",
     "sqlite3": "5.1.7"
   },
   "type": "module",
