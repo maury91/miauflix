@@ -8,13 +8,21 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default [
   {
+    ignores: [
+      'storybook-static/**',
+      '**/storybook-static/**',
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+    ],
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     ignores: [
       'jest.config.ts',
       'playwright.config*.ts',
       'vite.config.ts',
       'vite.ssr.config.ts',
-      'storybook-static/**/*',
       '**/*.d.ts',
     ],
     languageOptions: {
