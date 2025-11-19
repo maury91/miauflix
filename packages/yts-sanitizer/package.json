@@ -19,13 +19,13 @@
     "miauflix"
   ],
   "dependencies": {
-    "@faker-js/faker": "^9.9.0",
-    "seedrandom": "^3.0.5",
-    "unique-names-generator": "^4.7.1"
+    "@faker-js/faker": "10.1.0",
+    "seedrandom": "3.0.5",
+    "unique-names-generator": "4.7.1"
   },
   "devDependencies": {
-    "@types/seedrandom": "^3.0.8",
-    "ts-jest": "^29.3.4"
+    "@types/seedrandom": "3.0.8",
+    "ts-jest": "29.4.5"
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
