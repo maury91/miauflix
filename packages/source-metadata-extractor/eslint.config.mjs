@@ -4,7 +4,7 @@ import globals from 'globals';
 
 export default [
   {
-    ignores: ['dist/**/*', 'coverage/**/*', 'eslint.config.js'],
+    ignores: ['dist/**/*', 'coverage/**/*', 'eslint.config.mjs'],
   },
   {
     files: ['**/*.ts'],
@@ -26,7 +26,6 @@ export default [
     },
     rules: {
       ...tseslint.configs.recommended.rules,
-      '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -36,3 +35,4 @@ export default [
     },
   },
 ];
+
