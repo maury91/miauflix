@@ -35,8 +35,7 @@
     "directory": "packages/source-metadata-extractor"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "8.47.0",
-    "@typescript-eslint/parser": "8.47.0"
+    "typescript-eslint": "8.47.0"
   },
   "engines": {
     "node": ">=18.0.0"
