@@ -1,6 +1,6 @@
-import { test } from './fixtures';
 import { createCompositeScreenshot } from './utils/composite-grid';
 import { buildStorybookUrl } from './utils/storybook-url';
+import { test } from './fixtures';
 
 const PROGRESS_BAR_STYLES = `
 .progress {

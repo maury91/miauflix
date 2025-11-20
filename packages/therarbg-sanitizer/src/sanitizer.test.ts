@@ -1,6 +1,6 @@
-import { sanitize, sanitizeImdbData, sanitizePost, sanitizeImdbDetail } from './sanitizer';
-import { shouldUseLegalHash, getLegalHashMetadata } from './utils';
-import type { TheRARBGImdbData, TheRARBGPost, SanitizationOptions } from './types';
+import { sanitize, sanitizeImdbData, sanitizeImdbDetail, sanitizePost } from './sanitizer';
+import type { SanitizationOptions, TheRARBGImdbData, TheRARBGPost } from './types';
+import { getLegalHashMetadata, shouldUseLegalHash } from './utils';
 
 describe('Sanitizer Functions', () => {
   // Mock data for testing

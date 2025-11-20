@@ -1,12 +1,13 @@
 import { extractSourceMetadata } from '@miauflix/source-metadata-extractor';
-import type { TitleMapping, LegalHash, SanitizationOptions, ContentType } from './types';
+
 import {
   generateFakeMovieTitle,
-  generateFakeTVTitle,
   generateFakePersonName as generateFakePersonNameFromConstants,
+  generateFakeTVTitle,
   LEGAL_HASHES,
   SAFE_HASH_CHARS,
 } from './constants';
+import type { ContentType, LegalHash, SanitizationOptions, TitleMapping } from './types';
 
 /**
  * Simple hash function for deterministic generation

@@ -2,8 +2,9 @@
  * Confidence scoring logic for metadata extraction
  */
 
-import { ConfidenceScore } from '@/types';
 import { ExtractionDetails } from './extractors';
+
+import { ConfidenceScore } from '@/types';
 
 /**
  * Calculate complexity score for a title

@@ -1,5 +1,10 @@
-import { TestClient, waitForService, extractUserCredentialsFromLogs } from '../utils/test-utils';
+import { execSync } from 'child_process';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import sqlite3 from 'sqlite3';
+
+import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
 
 const DATABASE_FILE = '/usr/src/app/data/database.sqlite';
 
@@ -8,9 +13,6 @@ describe('Database Encryption E2E Tests', () => {
   let userCredentials: { email: string; password: string } | null = null;
 
   // Temp folder for copied DB files
-  const os = require('os');
-  const fs = require('fs');
-  const path = require('path');
   const tmpDbDir = path.join(os.tmpdir(), 'miauflix-e2e-db');
   if (!fs.existsSync(tmpDbDir)) {
     fs.mkdirSync(tmpDbDir, { recursive: true });
@@ -18,10 +20,6 @@ describe('Database Encryption E2E Tests', () => {
 
   const getDatabase = () => {
     // Copy the database file out of the running backend container
-    const path = require('path');
-    const fs = require('fs');
-    const { execSync } = require('child_process');
-
     // Find the running backend container name (docker-compose test env)
     let containerName = '';
     try {

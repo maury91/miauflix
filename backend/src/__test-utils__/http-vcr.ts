@@ -54,7 +54,8 @@ const fetchMock = jest.fn(async function (
     try {
       const cachedData = await readFile(filepath, 'utf8');
       const responseData = JSON.parse(cachedData) as StoredResponse;
-      let { status, statusText, headers, body, bodyIsJson, isTransformed } = responseData;
+      const { status, statusText, bodyIsJson } = responseData;
+      let { headers, body, isTransformed } = responseData;
       let needsUpdate = false;
 
       // Check if this fixture contains any blacklisted headers that should be removed

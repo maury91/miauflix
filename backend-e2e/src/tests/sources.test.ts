@@ -1,5 +1,6 @@
 import { Source } from '@miauflix/source-metadata-extractor';
-import { TestClient, waitForService, extractUserCredentialsFromLogs } from '../utils/test-utils';
+
+import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
 
 describe('Sources E2E Tests', () => {
   let client: TestClient;
