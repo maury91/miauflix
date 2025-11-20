@@ -21,8 +21,8 @@ const BACKEND_URL = ensureSlash(
 global.BACKEND_URL = BACKEND_URL;
 
 // Import custom matchers
-import { toBeHttpStatus, toHaveRequestId } from './utils/request-id-matcher';
 import { clearFailedRequests } from './utils/failed-requests-collector';
+import { toBeHttpStatus, toHaveRequestId } from './utils/request-id-matcher';
 
 // Add custom matchers
 expect.extend({

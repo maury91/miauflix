@@ -3,7 +3,7 @@
  * Using constants for better performance instead of function wrappers
  */
 
-import { Quality, VideoCodec, AudioCodec, Source, Language } from '@/types';
+import { AudioCodec, Language, Quality, Source, VideoCodec } from '@/types';
 
 export interface PatternConfig<T> {
   regex: RegExp;

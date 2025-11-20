@@ -69,7 +69,7 @@ export class MovieRepository {
 
   async checkForChangesAndUpdate(
     movie: Movie,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     { genres: _, ...updatedMovie }: Partial<Movie>
   ): Promise<void> {
     const hasChanges = objectKeys(updatedMovie).some(key => {

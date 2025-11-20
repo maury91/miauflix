@@ -334,7 +334,7 @@ export class MediaService {
     movieSyncStartDate.setSeconds(0);
 
     const chunks: Date[] = [];
-    let chunk = new Date(movieSyncStartDate.getTime());
+    const chunk = new Date(movieSyncStartDate.getTime());
     while (chunk.getTime() < now.getTime()) {
       chunks.push(new Date(chunk));
       chunk.setDate(chunk.getDate() + 1);
@@ -631,7 +631,7 @@ export class MediaService {
     tvShowSyncStartDate.setSeconds(0);
 
     const chunks: Date[] = [];
-    let chunk = new Date(tvShowSyncStartDate.getTime());
+    const chunk = new Date(tvShowSyncStartDate.getTime());
     while (chunk.getTime() < now.getTime()) {
       chunks.push(new Date(chunk));
       chunk.setDate(chunk.getDate() + 1);

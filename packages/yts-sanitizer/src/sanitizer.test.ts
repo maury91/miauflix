@@ -3,8 +3,8 @@
  */
 
 import { sanitize, sanitizeMovie, sanitizeSourceMetadata } from './sanitizer';
+import type { YTSMovie, YTSMovieListResponse, YTSSourceMetadata } from './types';
 import { clearCache } from './utils';
-import type { YTSMovie, YTSSourceMetadata, YTSMovieListResponse } from './types';
 
 describe('YTS Sanitizer', () => {
   beforeEach(() => {

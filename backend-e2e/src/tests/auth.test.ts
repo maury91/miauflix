@@ -1,4 +1,4 @@
-import { TestClient, waitForService, extractUserCredentialsFromLogs } from '../utils/test-utils';
+import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
 
 describe('Authentication Endpoints', () => {
   let client: TestClient;
@@ -188,7 +188,7 @@ describe('Authentication Endpoints', () => {
       const invalidSessionId = 'invalid-session-id';
 
       // Try to logout with invalid session (should still clear local state)
-      const logoutResponse = await client.logout(invalidSessionId);
+      await client.logout(invalidSessionId);
 
       // Backend should handle gracefully, local state should be cleared
       expect(client.getCurrentSession()).toBeNull();

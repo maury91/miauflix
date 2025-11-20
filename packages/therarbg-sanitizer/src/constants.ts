@@ -3,8 +3,9 @@
  */
 
 import { faker } from '@faker-js/faker';
-import type { LegalHash } from './types.js';
+
 import { SanitizationOptions } from './types';
+import type { LegalHash } from './types.js';
 
 /**
  * Public-domain / CC-licensed torrents we trust to be permanent.

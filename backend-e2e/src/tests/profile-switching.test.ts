@@ -1,9 +1,10 @@
 import { UserRole } from '@miauflix/backend';
+
 import {
-  TestClient,
-  waitForService,
   extractUserCredentialsFromLogs,
+  TestClient,
   testUtils,
+  waitForService,
 } from '../utils/test-utils';
 
 describe('Profile Switching with Multiple Users', () => {

@@ -1,12 +1,13 @@
+import { findMatches, removeMatches } from './pattern-matcher';
+import { MatchResult } from './segment-manager';
+import { WorkingText } from './title-extractor';
+
 import {
   PatternConfig,
+  TV_EPISODE_ONLY_PATTERN,
   TV_SEASON_EPISODE_PATTERN,
   TV_X_FORMAT_PATTERN,
-  TV_EPISODE_ONLY_PATTERN,
 } from '@/patterns';
-import { MatchResult } from './segment-manager';
-import { findMatches, removeMatches } from './pattern-matcher';
-import { WorkingText } from './title-extractor';
 import { combineVideoCodecs, isVideoCodecExtraction } from '@/utils/video-codec';
 
 export interface SingleValueExtractionDetails {

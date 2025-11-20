@@ -1,4 +1,4 @@
-import { TestClient, waitForService, extractUserCredentialsFromLogs } from '../utils/test-utils';
+import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
 
 describe('Session Authentication Error Handling', () => {
   let client: TestClient;
