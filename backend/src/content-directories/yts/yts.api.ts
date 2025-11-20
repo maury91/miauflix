@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import { Cache } from 'cache-manager';
+import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
 import { Api } from '@utils/api.util';

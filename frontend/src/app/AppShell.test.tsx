@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { render, screen, waitFor } from '@/__test-utils__';
-
 import { AppShell } from './AppShell';
+
+import { render, screen, waitFor } from '@/__test-utils__';
 
 // Mock the IntroAnimation component
 vi.mock('@app/shell/IntroAnimation', () => ({

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { render, screen } from '@/__test-utils__';
-
 import { Spinner } from './Spinner';
+
+import { render, screen } from '@/__test-utils__';
 
 describe('Spinner', () => {
   it('should render with default props', () => {

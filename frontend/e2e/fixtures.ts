@@ -2,7 +2,7 @@ import { test as base } from '@playwright/test';
 
 // Extend the base test to include custom fixtures
 export const test = base.extend({
-  page: async ({ page }, use) => {
+  page: async ({ page }, testUse) => {
     // Inject test utilities into every test page
     await page.addInitScript(() => {
       // Performance monitoring utilities
@@ -29,7 +29,7 @@ export const test = base.extend({
     });
 
     // Use the page fixture
-    await use(page);
+    await testUse(page);
   },
 });
 
