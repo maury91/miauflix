@@ -1,29 +1,29 @@
+import { calculateComplexity, calculateDynamicConfidence } from './confidence-calculator';
+import { estimateQuality } from './estimate-quality';
+import { ExtractionDetails, extractTvData, extractValue } from './extractors';
+import { applyCleanupPatterns } from './pattern-matcher';
+// Import our modular components
+import { extractCleanTitleFromSegments, WorkingText } from './title-extractor';
+
 import {
-  SourceMetadataInput,
-  ExtractedSourceMetadata,
+  AUDIO_CODEC_PATTERNS,
+  FALLBACK_QUALITY_PATTERNS,
+  LANGUAGE_PATTERNS,
+  QUALITY_PATTERNS,
+  SOURCE_PATTERNS,
+  TECHNICAL_CLEANUP_PATTERNS,
+  VIDEO_CODEC_PATTERNS,
+  YEAR_PATTERNS,
+} from '@/patterns';
+import {
   AudioCodec,
-  VideoCodec,
+  ExtractedSourceMetadata,
+  Language,
   Quality,
   Source,
-  Language,
+  SourceMetadataInput,
+  VideoCodec,
 } from '@/types';
-import {
-  QUALITY_PATTERNS,
-  FALLBACK_QUALITY_PATTERNS,
-  VIDEO_CODEC_PATTERNS,
-  AUDIO_CODEC_PATTERNS,
-  SOURCE_PATTERNS,
-  LANGUAGE_PATTERNS,
-  YEAR_PATTERNS,
-  TECHNICAL_CLEANUP_PATTERNS,
-} from '@/patterns';
-
-// Import our modular components
-import { WorkingText, extractCleanTitleFromSegments } from './title-extractor';
-import { ExtractionDetails, extractValue, extractTvData } from './extractors';
-import { estimateQuality } from './estimate-quality';
-import { calculateComplexity, calculateDynamicConfidence } from './confidence-calculator';
-import { applyCleanupPatterns } from './pattern-matcher';
 
 /**
  * Extract metadata from source information

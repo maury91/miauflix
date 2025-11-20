@@ -3,8 +3,8 @@
  * This helps correlate test failures with backend traces
  */
 
-import type { TestResponse } from './test-utils';
 import { recordFailedRequest } from './failed-requests-collector';
+import type { TestResponse } from './test-utils';
 
 declare global {
   namespace jest {
@@ -49,7 +49,7 @@ export const toBeHttpStatus = (received: TestResponse | number, expectedStatus: 
         const formattedTestName = `${fileName} - ${testName}`;
 
         recordFailedRequest(formattedTestName, received.requestId);
-      } catch (error) {
+      } catch {
         // Silently fail - don't break tests if collection fails
       }
     }

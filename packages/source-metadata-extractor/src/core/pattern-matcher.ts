@@ -1,6 +1,7 @@
-import { PatternConfig } from '@/patterns';
-import { MatchResult, removeMatch, recalculateSegments } from './segment-manager';
+import { MatchResult, recalculateSegments, removeMatch } from './segment-manager';
 import { WorkingText } from './title-extractor';
+
+import { PatternConfig } from '@/patterns';
 
 /**
  * Find all matches for a pattern

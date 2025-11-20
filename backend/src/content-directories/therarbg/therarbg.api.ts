@@ -7,7 +7,7 @@ import { Cacheable } from '@utils/cacheable.util';
 import { enhancedFetch } from '@utils/fetch.util';
 import { TrackStatus } from '@utils/trackStatus.util';
 
-import { GetPostsResponse, ImdbDetailResponse } from './therarbg.types';
+import type { GetPostsResponse, ImdbDetailResponse } from './therarbg.types';
 import { validateImdbId } from './therarbg.utils';
 
 const mirrors = ['https://therarbg.to', 'https://therar.site'];

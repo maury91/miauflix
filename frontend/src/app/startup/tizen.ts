@@ -1,9 +1,9 @@
 import './utils/polyfillQMicroTask';
 
-import type { TVInputDeviceKeyName } from '@/types/tizen';
-
 import { loadReactScripts } from './utils/loadReactScripts';
 import { querySubNet } from './utils/querySubNet';
+
+import type { TVInputDeviceKeyName } from '@/types/tizen';
 
 const appSupportedKeys: TVInputDeviceKeyName[] = [
   'MediaPlay',

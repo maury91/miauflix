@@ -14,7 +14,6 @@ interface RenderResult {
 }
 
 // Server-side rendering function for the main index.html
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function render(_clientAssets: string[] = []): RenderResult {
   // Create a styled-components server style sheet
   const sheet = new ServerStyleSheet();

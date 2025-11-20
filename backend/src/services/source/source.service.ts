@@ -3,8 +3,8 @@ import { logger } from '@logger';
 import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { MovieSource } from '@entities/movie-source.entity';
-import { MovieRepository } from '@repositories/movie.repository';
-import {
+import type { MovieRepository } from '@repositories/movie.repository';
+import type {
   MovieSourceRepository,
   SourceProcessingResult,
 } from '@repositories/movie-source.repository';

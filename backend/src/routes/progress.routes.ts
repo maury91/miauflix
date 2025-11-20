@@ -15,7 +15,6 @@ const progressSchema = z.object({
   episode: z.number().optional(),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createProgressRoutes = (_deps?: Deps) => {
   return new Hono()
     .post('/', zValidator('json', progressSchema), async c => {

@@ -293,7 +293,7 @@ export class DynamicRateLimit {
         if (!resetHeader) continue;
 
         // Some APIs use epoch time, others use seconds from now
-        let resetValue = parseInt(resetHeader, 10);
+        const resetValue = parseInt(resetHeader, 10);
         if (isNaN(resetValue)) continue;
 
         // If reset value is small (< 1 hour), it's probably seconds from now

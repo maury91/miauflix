@@ -1,13 +1,13 @@
-import {
-  shouldUseLegalHash,
-  selectLegalHash,
-  getLegalHashMetadata,
-  getAvailableLegalHashes,
-  validateLegalHashAvailability,
-  generateSafeInfoHash,
-} from './utils';
 import { LEGAL_HASHES } from './constants';
 import type { SanitizationOptions } from './types';
+import {
+  generateSafeInfoHash,
+  getAvailableLegalHashes,
+  getLegalHashMetadata,
+  selectLegalHash,
+  shouldUseLegalHash,
+  validateLegalHashAvailability,
+} from './utils';
 
 describe('Legal Hash Functionality', () => {
   describe('shouldUseLegalHash', () => {

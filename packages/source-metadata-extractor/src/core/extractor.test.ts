@@ -1,3 +1,5 @@
+import { extractSourceMetadata } from './extractor';
+
 import {
   AudioCodec,
   ExtractedSourceMetadata,
@@ -6,7 +8,6 @@ import {
   Source,
   VideoCodec,
 } from '@/types';
-import { extractSourceMetadata } from './extractor';
 
 describe('extractSourceMetadata', () => {
   describe('Movie Sources', () => {

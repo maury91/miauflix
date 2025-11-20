@@ -1,22 +1,24 @@
+import { faker } from '@faker-js/faker';
+import { extractSourceMetadata } from '@miauflix/source-metadata-extractor';
+
+import { DEFAULT_OPTIONS } from './constants';
 import type {
+  GetPosts,
+  GetPostsResponse,
+  SanitizationOptions,
+  SourceFile,
   TheRARBGImdbData,
   TheRARBGPost,
-  SanitizationOptions,
-  GetPostsResponse,
-  GetPosts,
-  SourceFile,
 } from './types';
-import { DEFAULT_OPTIONS } from './constants';
 import {
-  generateFakeTitle,
   generateFakeImdbId,
   generateFakePersonName,
+  generateFakePlot,
+  generateFakeTitle,
+  generateFakeUrl,
   generateSafeInfoHash,
   sanitizeName,
-  generateFakePlot,
-  generateFakeUrl,
 } from './utils';
-import { extractSourceMetadata } from '@miauflix/source-metadata-extractor';
 
 /**
  * Sanitize IMDB data
@@ -322,9 +324,6 @@ function sanitizeGetPostsItem(item: GetPosts, options: SanitizationOptions = {})
  * Generate fake app/game names for non-movie content
  */
 function generateFakeAppName(originalName: string, seed: string): string {
-  // Use existing faker integration with seeding
-  const { faker } = require('@faker-js/faker');
-
   // Create a deterministic seed from the input
   const seedValue = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   faker.seed(seedValue);

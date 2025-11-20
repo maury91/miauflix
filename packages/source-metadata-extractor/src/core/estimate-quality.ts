@@ -1,4 +1,4 @@
-import { VideoCodec, Quality } from '@/types';
+import { Quality, VideoCodec } from '@/types';
 
 /**
  * Estimate quality based on file size, runtime, and video codec

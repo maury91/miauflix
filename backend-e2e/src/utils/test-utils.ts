@@ -2,6 +2,8 @@
  * Test utilities for backend E2E tests
  */
 import { Client, hcWithType } from '@miauflix/backend';
+import fs from 'fs';
+import path from 'path';
 
 export interface TestResponse<T = any> {
   status: number;
@@ -690,9 +692,6 @@ export async function extractUserCredentialsFromLogs(): Promise<{
   password: string;
 } | null> {
   try {
-    const fs = require('fs');
-    const path = require('path');
-
     const credentialsPath = path.join(__dirname, '../..', 'admin-credentials.json');
 
     // Check if credentials file exists

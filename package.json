@@ -20,7 +20,7 @@
     "docker:push": "./scripts/docker-publish.sh latest push",
     "format:check": "prettier --check \"{backend,backend-e2e,packages,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "format": "prettier --write \"{backend,backend-e2e,packages,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
-    "lint:fix": "npm -w backend run lint -- --fix",
+    "lint:fix": "turbo run lint -- --fix",
     "lint": "turbo run lint",
     "prepare": "node -e \"if (process.env.NODE_ENV !== 'production' && !process.env.CI){ process.exit(1)} \" || (command -v husky >/dev/null 2>&1 && husky || true)",
     "start:backend:docker:prod": "docker compose up -d --build miauflix",
@@ -42,29 +42,29 @@
     "test": "turbo run test --filter='./backend' --filter='./frontend' --filter='./packages/*'"
   },
   "dependencies": {
-    "concurrently": "9.2.0"
+    "concurrently": "9.2.1"
   },
   "devDependencies": {
-    "@dotenvx/dotenvx": "1.48.4",
+    "@dotenvx/dotenvx": "1.51.1",
     "@types/jest": "30.0.0",
-    "@typescript-eslint/eslint-plugin": "8.39.1",
-    "@typescript-eslint/parser": "8.39.1",
-    "eslint": "8.57.1",
+    "eslint": "9.39.1",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-react-hooks": "4.6.2",
-    "eslint-plugin-react-refresh": "0.4.20",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-refresh": "0.4.24",
     "eslint-plugin-simple-import-sort": "12.1.1",
+    "eslint-plugin-storybook": "10.0.8",
     "husky": "9.1.7",
-    "jest": "30.0.5",
-    "lint-staged": "16.1.5",
+    "jest": "30.2.0",
+    "lint-staged": "16.2.6",
     "prettier": "3.6.2",
-    "ts-jest": "29.4.1",
+    "typescript-eslint": "8.47.0",
+    "ts-jest": "29.4.5",
     "ts-node": "10.9.2",
     "tsc-alias": "1.8.16",
     "tsconfig-paths": "4.2.0",
-    "tsx": "4.20.4",
+    "tsx": "4.20.6",
     "turbo": "2.6.1",
-    "typescript": "5.9.2"
+    "typescript": "5.9.3"
   },
   "type": "module",
   "lint-staged": {
@@ -76,8 +76,8 @@
     ]
   },
   "overrides": {
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "sass": "1.90.0"
   },
   "workspaces": [

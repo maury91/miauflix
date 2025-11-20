@@ -2,25 +2,25 @@
  * Main YTS sanitization functions
  */
 
-import type {
-  YTSMovie,
-  YTSSourceMetadata,
-  YTSCastMember,
-  YTSApiResponse,
-  SanitizationOptions,
-  YTSMovieDetails,
-} from './types';
 import { DEFAULT_OPTIONS } from './constants';
+import type {
+  SanitizationOptions,
+  YTSApiResponse,
+  YTSCastMember,
+  YTSMovie,
+  YTSMovieDetails,
+  YTSSourceMetadata,
+} from './types';
 import {
-  generateTitle,
-  generatePersonName,
   generateDescription,
-  generateUrl,
-  generateTrailerCode,
   generateImdbCode,
-  replacementHash,
+  generatePersonName,
+  generateTitle,
+  generateTrailerCode,
+  generateUrl,
   getCached,
   initFaker,
+  replacementHash,
 } from './utils';
 
 /**
