@@ -99,6 +99,8 @@
         "src/**/*.tsx",
         ".eslintrc.*",
         "eslint.config.*",
+        "../eslint.config.*",
+        "../../eslint.config.*",
         "babel.config.js",
         "tsconfig*.json",
         "package.json"

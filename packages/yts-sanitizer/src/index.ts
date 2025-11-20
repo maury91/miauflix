@@ -8,34 +8,34 @@
 // Main sanitization functions
 export {
   sanitize,
+  sanitizeCastMember,
   sanitizeMovie,
   sanitizeSourceMetadata,
-  sanitizeCastMember,
 } from './sanitizer.js';
 
 // Utility functions that might be useful externally
 export {
-  generateTitle,
-  generatePersonName,
-  generateDescription,
-  generateUrl,
-  generateTrailerCode,
-  generateImdbCode,
   clearCache,
+  generateDescription,
+  generateImdbCode,
+  generatePersonName,
+  generateTitle,
+  generateTrailerCode,
+  generateUrl,
 } from './utils.js';
 
 // Types
 export type {
-  YTSMovie,
-  YTSSourceMetadata,
-  YTSCastMember,
-  YTSMovieListResponse,
-  YTSMovieDetailsResponse,
-  YTSWrappedResponse,
-  YTSApiResponse,
   LegalHash,
   SanitizationOptions,
+  YTSApiResponse,
+  YTSCastMember,
+  YTSMovie,
+  YTSMovieDetailsResponse,
+  YTSMovieListResponse,
+  YTSSourceMetadata,
+  YTSWrappedResponse,
 } from './types.js';
 
 // Constants
-export { LEGAL_HASHES, LEGAL_HASH_LIST, DEFAULT_OPTIONS } from './constants.js';
+export { DEFAULT_OPTIONS, LEGAL_HASH_LIST, LEGAL_HASHES } from './constants.js';

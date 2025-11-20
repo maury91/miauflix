@@ -1,5 +1,6 @@
-import { cleanupString } from '@/utils/helpers';
 import { Segment } from './segment-manager';
+
+import { cleanupString } from '@/utils/helpers';
 
 export interface WorkingText {
   title: string;

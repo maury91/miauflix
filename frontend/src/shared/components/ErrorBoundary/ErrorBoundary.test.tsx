@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { render, screen } from '@/__test-utils__';
-
 import { ErrorBoundary } from './ErrorBoundary';
+
+import { render, screen } from '@/__test-utils__';
 
 // Component that throws an error
 class ThrowError extends Component<{ shouldThrow: boolean }> {

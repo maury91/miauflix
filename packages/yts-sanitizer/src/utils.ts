@@ -3,8 +3,9 @@
  */
 
 import { faker } from '@faker-js/faker';
-import { uniqueNamesGenerator, adjectives, animals } from 'unique-names-generator';
 import seedrandom from 'seedrandom';
+import { adjectives, animals, uniqueNamesGenerator } from 'unique-names-generator';
+
 import { LEGAL_HASH_LIST } from './constants';
 
 // Cache for consistent data across calls

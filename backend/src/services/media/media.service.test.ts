@@ -10,7 +10,6 @@ import { MediaService } from './media.service';
 const mockCache = new MockCache();
 
 const mockMovieRepo = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   findByTMDBId: jest.fn((_tmdbId: number | string): Promise<Movie | null> => Promise.resolve(null)),
   create: jest.fn(details =>
     Promise.resolve({

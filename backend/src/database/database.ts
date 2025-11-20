@@ -41,7 +41,7 @@ class DatabaseLogger extends AbstractLogger {
       highlightSql: true,
     });
 
-    for (let message of messages) {
+    for (const message of messages) {
       switch (message.type ?? level) {
         case 'log':
         case 'schema-build':

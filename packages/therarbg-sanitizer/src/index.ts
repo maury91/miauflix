@@ -7,45 +7,45 @@
  */
 
 // Main sanitization functions
-export { sanitize, sanitizeImdbData, sanitizePost, sanitizeImdbDetail } from './sanitizer';
+export { sanitize, sanitizeImdbData, sanitizeImdbDetail, sanitizePost } from './sanitizer';
 
 // Utility functions
 export {
-  simpleHash,
-  generateFakeTitle,
   generateFakeImdbId,
   generateFakePersonName,
-  generateSafeInfoHash,
-  sanitizeName,
   generateFakePlot,
+  generateFakeTitle,
   generateFakeUrl,
-  shouldUseLegalHash,
-  selectLegalHash,
-  getLegalHashMetadata,
+  generateSafeInfoHash,
   getAvailableLegalHashes,
+  getLegalHashMetadata,
+  sanitizeName,
+  selectLegalHash,
+  shouldUseLegalHash,
+  simpleHash,
   validateLegalHashAvailability,
 } from './utils';
 
 // Types
 export type {
+  LegalHash,
+  SanitizationOptions,
   TheRARBGApiResponse,
   TheRARBGImdbData,
   TheRARBGPost,
-  SanitizationOptions,
   TitleMapping,
-  LegalHash,
 } from './types';
 
 // Constants and Faker-based generators
 export {
+  DEFAULT_OPTIONS,
   generateFakeMovieTitle,
   generateFakeTVTitle,
-  LEGAL_HASHES,
   LEGAL_HASH_LIST,
-  DEFAULT_OPTIONS,
+  LEGAL_HASHES,
   QUALITY_PATTERNS,
   RELEASE_GROUP_PATTERNS,
-  YEAR_PATTERN,
   SEPARATORS,
   TECHNICAL_KEYWORDS,
+  YEAR_PATTERN,
 } from './constants';

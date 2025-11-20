@@ -1,5 +1,5 @@
-import { expect, test } from './fixtures';
 import { navigateToLogin } from './utils/login';
+import { expect, test } from './fixtures';
 
 const LOGIN_API_TIMEOUT = 10000;
 
