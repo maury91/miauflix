@@ -292,15 +292,15 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       if (audioRef.current) {
         audioRef.current
           .play()
-          .catch(() => {
-            setTimeout(() => {
-              introAnimation.play();
-            }, 200);
-          })
           .then(() => {
             setTimeout(() => {
               introAnimation.play();
             }, 620);
+          })
+          .catch(() => {
+            setTimeout(() => {
+              introAnimation.play();
+            }, 200);
           });
       }
     }, [introAnimation]);
