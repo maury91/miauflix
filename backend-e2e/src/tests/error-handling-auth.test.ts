@@ -1,15 +1,24 @@
 import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
+import { type UserCredentials, UserPool } from '../utils/user-pool';
 
 describe('Session Authentication Error Handling', () => {
   let client: TestClient;
-  let userCredentials: { email: string; password: string } | null = null;
+  let userPool: UserPool;
+  let adminCredentials: UserCredentials | null = null;
 
   beforeAll(async () => {
     client = new TestClient();
 
     try {
       await waitForService(client);
-      userCredentials = await extractUserCredentialsFromLogs();
+      adminCredentials = await extractUserCredentialsFromLogs();
+      if (!adminCredentials) {
+        throw new Error('No admin credentials available');
+      }
+
+      // Initialize user pool
+      userPool = new UserPool();
+      await userPool.initialize(adminCredentials, 10);
     } catch (error) {
       console.log('❌ Backend service is not available. Ensure the Docker environment is running.');
       throw error;
@@ -70,239 +79,255 @@ describe('Session Authentication Error Handling', () => {
     });
 
     it('should handle expired session ID scenarios', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // Login and get a valid session
+        const loginResponse = await client.login(testUser);
+        expect(loginResponse).toBeHttpStatus(200);
+        const sessionId = (loginResponse.data as any).session;
+
+        // Logout to invalidate the session
+        await client.logout(sessionId);
+
+        // Try to use the now-invalid session
+        const refreshResponse = await client.refreshToken(sessionId);
+        expect(refreshResponse).toBeHttpStatus(401);
+
+        const apiResponse = await client.get(['api', 'lists']);
+        expect(apiResponse).toBeHttpStatus(401);
+      } finally {
+        userPool.release(testUser);
       }
-
-      // Login and get a valid session
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
-      const sessionId = (loginResponse.data as any).session;
-
-      // Logout to invalidate the session
-      await client.logout(sessionId);
-
-      // Try to use the now-invalid session
-      const refreshResponse = await client.refreshToken(sessionId);
-      expect(refreshResponse).toBeHttpStatus(401);
-
-      const apiResponse = await client.get(['api', 'lists']);
-      expect(apiResponse).toBeHttpStatus(401);
     });
   });
 
   describe('Missing Cookie Scenarios', () => {
     it('should handle refresh without required cookies', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // Login to get a session
+        const loginResponse = await client.login(testUser);
+        expect(loginResponse).toBeHttpStatus(200);
+
+        if ('error' in loginResponse.data) {
+          throw new Error(loginResponse.data.error);
+        }
+
+        const sessionId = loginResponse.data.session;
+
+        // Clear cookies manually (simulating cookie deletion/expiry)
+        client.clearCookies();
+
+        // Try to refresh without cookies
+        const refreshResponse = await client.refreshToken(sessionId);
+        expect(refreshResponse).toBeHttpStatus(401);
+        expect(refreshResponse.data).toHaveProperty('error');
+      } finally {
+        userPool.release(testUser);
       }
-
-      // Login to get a session
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
-
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // Clear cookies manually (simulating cookie deletion/expiry)
-      client.clearCookies();
-
-      // Try to refresh without cookies
-      const refreshResponse = await client.refreshToken(sessionId);
-      expect(refreshResponse).toBeHttpStatus(401);
-      expect(refreshResponse.data).toHaveProperty('error');
     });
 
     it('should handle partial cookie corruption', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
-      }
+      const testUser = userPool.acquire();
 
-      // Login to get valid cookies
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
+      try {
+        // Login to get valid cookies
+        const loginResponse = await client.login(testUser);
+        expect(loginResponse).toBeHttpStatus(200);
 
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // Corrupt the refresh token cookie
-      client.getCookies().forEach((value, name) => {
-        if (name.includes('__miauflix_rt_')) {
-          client.setCookie(name, 'corrupted-cookie-value');
+        if ('error' in loginResponse.data) {
+          throw new Error(loginResponse.data.error);
         }
-      });
 
-      // Try to refresh with corrupted cookie
-      const refreshResponse = await client.refreshToken(sessionId);
-      expect(refreshResponse).toBeHttpStatus(401);
+        const sessionId = loginResponse.data.session;
+
+        // Corrupt the refresh token cookie
+        client.getCookies().forEach((value, name) => {
+          if (name.includes('__miauflix_rt_')) {
+            client.setCookie(name, 'corrupted-cookie-value');
+          }
+        });
+
+        // Try to refresh with corrupted cookie
+        const refreshResponse = await client.refreshToken(sessionId);
+        expect(refreshResponse).toBeHttpStatus(401);
+      } finally {
+        userPool.release(testUser);
+      }
     });
 
     it('should handle cookie-session mismatch', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        const client1 = new TestClient();
+        const client2 = new TestClient();
+
+        // Create two separate sessions
+        await Promise.all([client1.login(testUser), client2.login(testUser)]);
+
+        const session1 = client1.getCurrentSession()!;
+        const session2 = client2.getCurrentSession()!;
+
+        // Use session1 ID with session2 cookies
+        const cookies2 = client2.getCookies();
+        client1.clearCookies();
+        cookies2.forEach((value, name) => {
+          client1.setCookie(name, value);
+        });
+
+        // This should fail due to cookie-session mismatch
+        const refreshResponse = await client1.refreshToken(session1);
+        expect(refreshResponse).toBeHttpStatus(401);
+
+        // Cleanup
+        await Promise.all([client1.logout().catch(() => {}), client2.logout().catch(() => {})]);
+      } finally {
+        userPool.release(testUser);
       }
-
-      const client1 = new TestClient();
-      const client2 = new TestClient();
-
-      // Create two separate sessions
-      await Promise.all([client1.login(userCredentials), client2.login(userCredentials)]);
-
-      const session1 = client1.getCurrentSession()!;
-      const session2 = client2.getCurrentSession()!;
-
-      // Use session1 ID with session2 cookies
-      const cookies2 = client2.getCookies();
-      client1.clearCookies();
-      cookies2.forEach((value, name) => {
-        client1.setCookie(name, value);
-      });
-
-      // This should fail due to cookie-session mismatch
-      const refreshResponse = await client1.refreshToken(session1);
-      expect(refreshResponse).toBeHttpStatus(401);
-
-      // Cleanup
-      await Promise.all([client1.logout().catch(() => {}), client2.logout().catch(() => {})]);
     });
   });
 
   describe('Network Error Handling', () => {
     it('should handle refresh after forced session invalidation', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        const client1 = new TestClient();
+        const client2 = new TestClient();
+
+        // Login with same credentials on both clients
+        await Promise.all([client1.login(testUser), client2.login(testUser)]);
+
+        const session1 = client1.getCurrentSession()!;
+        const session2 = client2.getCurrentSession()!;
+
+        // Force logout session1 while client2 is still active
+        await client1.logout(session1);
+
+        // Try to use session1 after logout (should fail)
+        const invalidRefresh = await client1.refreshToken(session1);
+        expect(invalidRefresh).toBeHttpStatus(401);
+
+        // Session2 should still work
+        const validRefresh = await client2.refreshToken(session2);
+        expect(validRefresh).toBeHttpStatus(200);
+
+        // Cleanup
+        await client2.logout().catch(() => {});
+      } finally {
+        userPool.release(testUser);
       }
-
-      const client1 = new TestClient();
-      const client2 = new TestClient();
-
-      // Login with same credentials on both clients
-      await Promise.all([client1.login(userCredentials), client2.login(userCredentials)]);
-
-      const session1 = client1.getCurrentSession()!;
-      const session2 = client2.getCurrentSession()!;
-
-      // Force logout session1 while client2 is still active
-      await client1.logout(session1);
-
-      // Try to use session1 after logout (should fail)
-      const invalidRefresh = await client1.refreshToken(session1);
-      expect(invalidRefresh).toBeHttpStatus(401);
-
-      // Session2 should still work
-      const validRefresh = await client2.refreshToken(session2);
-      expect(validRefresh).toBeHttpStatus(200);
-
-      // Cleanup
-      await client2.logout().catch(() => {});
     });
   });
 
   describe('Authentication State Edge Cases', () => {
     it('should handle login attempts while already logged in', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // First login
+        const loginResponse1 = await client.login(testUser);
+        expect(loginResponse1).toBeHttpStatus(200);
+
+        if ('error' in loginResponse1.data) {
+          throw new Error(loginResponse1.data.error);
+        }
+
+        const session1 = loginResponse1.data.session;
+
+        // Second login with same client (should create new session)
+        const loginResponse2 = await client.login(testUser);
+        expect(loginResponse2).toBeHttpStatus(200);
+
+        if ('error' in loginResponse2.data) {
+          throw new Error(loginResponse2.data.error);
+        }
+
+        const session2 = loginResponse2.data.session;
+
+        // Sessions should be different
+        expect(session1).not.toBe(session2);
+
+        // Both sessions should be valid initially
+        const api1 = await client.get(['api', 'lists']);
+        expect(api1).toBeHttpStatus(200);
+
+        // Current session should be session2
+        expect(client.getCurrentSession()).toBe(session2);
+      } finally {
+        userPool.release(testUser);
       }
-
-      // First login
-      const loginResponse1 = await client.login(userCredentials);
-      expect(loginResponse1).toBeHttpStatus(200);
-
-      if ('error' in loginResponse1.data) {
-        throw new Error(loginResponse1.data.error);
-      }
-
-      const session1 = loginResponse1.data.session;
-
-      // Second login with same client (should create new session)
-      const loginResponse2 = await client.login(userCredentials);
-      expect(loginResponse2).toBeHttpStatus(200);
-
-      if ('error' in loginResponse2.data) {
-        throw new Error(loginResponse2.data.error);
-      }
-
-      const session2 = loginResponse2.data.session;
-
-      // Sessions should be different
-      expect(session1).not.toBe(session2);
-
-      // Both sessions should be valid initially
-      const api1 = await client.get(['api', 'lists']);
-      expect(api1).toBeHttpStatus(200);
-
-      // Current session should be session2
-      expect(client.getCurrentSession()).toBe(session2);
     });
 
     it('should handle logout of non-current session', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // Login twice to create two sessions
+        const loginResponse1 = await client.login(testUser);
+        expect(loginResponse1).toBeHttpStatus(200);
+
+        if ('error' in loginResponse1.data) {
+          throw new Error(loginResponse1.data.error);
+        }
+
+        const session1 = loginResponse1.data.session;
+
+        const loginResponse2 = await client.login(testUser);
+        expect(loginResponse2).toBeHttpStatus(200);
+
+        if ('error' in loginResponse2.data) {
+          throw new Error(loginResponse2.data.error);
+        }
+
+        const session2 = loginResponse2.data.session;
+
+        // Current session should be session2
+        expect(client.getCurrentSession()).toBe(session2);
+
+        // Logout session1 (not current session)
+        const logoutResponse = await client.logout(session1);
+
+        // Logout should succeed (backend handles it)
+        // Current session should remain session2
+        expect(client.getCurrentSession()).toBe(session2);
+
+        // Current session should still work
+        const apiResponse = await client.get(['api', 'lists']);
+        expect(apiResponse).toBeHttpStatus(200);
+      } finally {
+        userPool.release(testUser);
       }
-
-      // Login twice to create two sessions
-      const loginResponse1 = await client.login(userCredentials);
-      expect(loginResponse1).toBeHttpStatus(200);
-
-      if ('error' in loginResponse1.data) {
-        throw new Error(loginResponse1.data.error);
-      }
-
-      const session1 = loginResponse1.data.session;
-
-      const loginResponse2 = await client.login(userCredentials);
-      expect(loginResponse2).toBeHttpStatus(200);
-
-      if ('error' in loginResponse2.data) {
-        throw new Error(loginResponse2.data.error);
-      }
-
-      const session2 = loginResponse2.data.session;
-
-      // Current session should be session2
-      expect(client.getCurrentSession()).toBe(session2);
-
-      // Logout session1 (not current session)
-      const logoutResponse = await client.logout(session1);
-
-      // Logout should succeed (backend handles it)
-      // Current session should remain session2
-      expect(client.getCurrentSession()).toBe(session2);
-
-      // Current session should still work
-      const apiResponse = await client.get(['api', 'lists']);
-      expect(apiResponse).toBeHttpStatus(200);
     });
 
     it('should handle multiple logout attempts on same session', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // Login
+        const loginResponse = await client.login(testUser);
+        expect(loginResponse).toBeHttpStatus(200);
+
+        if ('error' in loginResponse.data) {
+          throw new Error(loginResponse.data.error);
+        }
+
+        const sessionId = loginResponse.data.session;
+
+        // First logout
+        const logout1 = await client.logout(sessionId);
+        expect(logout1).toBeHttpStatus(200);
+
+        // Second logout on same session (should be handled gracefully)
+        const logout2 = await client.logout(sessionId);
+        // Should either succeed silently or return appropriate error
+        expect([200, 401, 404]).toContain(logout2.status);
+      } finally {
+        userPool.release(testUser);
       }
-
-      // Login
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
-
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // First logout
-      const logout1 = await client.logout(sessionId);
-      expect(logout1).toBeHttpStatus(200);
-
-      // Second logout on same session (should be handled gracefully)
-      const logout2 = await client.logout(sessionId);
-      // Should either succeed silently or return appropriate error
-      expect([200, 401, 404]).toContain(logout2.status);
     });
   });
 
@@ -333,56 +358,60 @@ describe('Session Authentication Error Handling', () => {
     });
 
     it('should handle cookie injection attempts', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // Login to get a valid session
+        const loginResponse = await client.login(testUser);
+        expect(loginResponse).toBeHttpStatus(200);
+
+        if ('error' in loginResponse.data) {
+          throw new Error(loginResponse.data.error);
+        }
+
+        const sessionId = loginResponse.data.session;
+
+        // Inject malicious cookies
+        client.setCookie('admin', 'true');
+        client.setCookie('role', 'administrator');
+        client.setCookie('bypass_auth', '1');
+        client.setCookie('refresh_token_admin', 'fake-admin-token');
+
+        // Try to refresh - should only use legitimate refresh token
+        const refreshResponse = await client.refreshToken(sessionId);
+        expect(refreshResponse).toBeHttpStatus(200);
+
+        // Response should not be affected by injected cookies
+        expect((refreshResponse.data as any).user.role).toBe('user'); // Legitimate role from DB
+      } finally {
+        userPool.release(testUser);
       }
-
-      // Login to get a valid session
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
-
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // Inject malicious cookies
-      client.setCookie('admin', 'true');
-      client.setCookie('role', 'administrator');
-      client.setCookie('bypass_auth', '1');
-      client.setCookie('refresh_token_admin', 'fake-admin-token');
-
-      // Try to refresh - should only use legitimate refresh token
-      const refreshResponse = await client.refreshToken(sessionId);
-      expect(refreshResponse).toBeHttpStatus(200);
-
-      // Response should not be affected by injected cookies
-      expect((refreshResponse.data as any).user.role).toBe('admin'); // Legitimate role from DB
     });
 
     it('should handle oversized cookie values', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // Login to get valid session
+        const loginResponse = await client.login(testUser);
+        expect(loginResponse).toBeHttpStatus(200);
+
+        if ('error' in loginResponse.data) {
+          throw new Error(loginResponse.data.error);
+        }
+
+        const sessionId = loginResponse.data.session;
+
+        // Set oversized cookie value (simulate cookie bomb)
+        const largeValue = 'x'.repeat(10000);
+        client.setCookie(`__miauflix_rt_${sessionId}`, largeValue);
+
+        // Should handle gracefully
+        const refreshResponse = await client.refreshToken(sessionId);
+        expect(refreshResponse).toBeHttpStatus(401);
+      } finally {
+        userPool.release(testUser);
       }
-
-      // Login to get valid session
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
-
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // Set oversized cookie value (simulate cookie bomb)
-      const largeValue = 'x'.repeat(10000);
-      client.setCookie(`__miauflix_rt_${sessionId}`, largeValue);
-
-      // Should handle gracefully
-      const refreshResponse = await client.refreshToken(sessionId);
-      expect(refreshResponse).toBeHttpStatus(401);
     });
   });
 
@@ -409,11 +438,7 @@ describe('Session Authentication Error Handling', () => {
     });
 
     it('should not leak sensitive information in error messages', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
-      }
-
-      // Test various error scenarios
+      // Test various error scenarios (no user needed for these)
       const scenarios = [
         () => client.refreshToken('invalid-session-id'),
         () => client.login({ email: 'nonexistent@example.com', password: 'wrong' }, false),
@@ -475,68 +500,70 @@ describe('Session Authentication Error Handling', () => {
     });
 
     it('should handle rate limiting on refresh endpoints', async () => {
-      if (!userCredentials) {
-        throw new Error('No user credentials available for testing');
+      const testUser = userPool.acquire();
+
+      try {
+        // Login to get valid session
+        const loginResponse = await client.login(testUser);
+        expect(loginResponse).toBeHttpStatus(200);
+
+        if ('error' in loginResponse.data) {
+          throw new Error(loginResponse.data.error);
+        }
+
+        const sessionId = loginResponse.data.session;
+
+        // Make rapid refresh attempts to trigger rate limiting
+        const attempts = [];
+        for (let i = 0; i < 15; i++) {
+          // Use direct fetch with rate limiting header
+          const baseURL = global.BACKEND_URL.replace(/\/$/, '');
+          const cookieHeader = Array.from(client.getCookies().entries())
+            .map(([name, value]) => `${name}=${value}`)
+            .join('; ');
+
+          attempts.push(
+            fetch(`${baseURL}/api/auth/refresh/${sessionId}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Origin: baseURL,
+                Cookie: cookieHeader,
+                'X-Force-RateLimit': 'true',
+              },
+              credentials: 'include',
+            }).then(async response => {
+              const text = await response.text();
+              let data;
+              try {
+                data = JSON.parse(text);
+              } catch {
+                data = { message: text };
+              }
+              return {
+                status: response.status,
+                data,
+                headers: Object.fromEntries(response.headers.entries()),
+              };
+            })
+          );
+        }
+
+        const responses = await Promise.all(attempts);
+
+        // Should have some rate limited responses
+        const rateLimited = responses.filter(r => r.status === 429);
+        expect(rateLimited.length).toBeGreaterThan(0);
+
+        // Rate limited responses should have appropriate message
+        rateLimited.forEach(response => {
+          // Rate limit responses come as plain text, parsed into { message: "..." }
+          expect(response.data).toHaveProperty('message');
+          expect((response.data as any).message).toMatch(/too many requests/i);
+        });
+      } finally {
+        userPool.release(testUser);
       }
-
-      // Login to get valid session
-      const loginResponse = await client.login(userCredentials);
-      expect(loginResponse).toBeHttpStatus(200);
-
-      if ('error' in loginResponse.data) {
-        throw new Error(loginResponse.data.error);
-      }
-
-      const sessionId = loginResponse.data.session;
-
-      // Make rapid refresh attempts to trigger rate limiting
-      const attempts = [];
-      for (let i = 0; i < 15; i++) {
-        // Use direct fetch with rate limiting header
-        const baseURL = global.BACKEND_URL.replace(/\/$/, '');
-        const cookieHeader = Array.from(client.getCookies().entries())
-          .map(([name, value]) => `${name}=${value}`)
-          .join('; ');
-
-        attempts.push(
-          fetch(`${baseURL}/api/auth/refresh/${sessionId}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Origin: baseURL,
-              Cookie: cookieHeader,
-              'X-Force-RateLimit': 'true',
-            },
-            credentials: 'include',
-          }).then(async response => {
-            const text = await response.text();
-            let data;
-            try {
-              data = JSON.parse(text);
-            } catch {
-              data = { message: text };
-            }
-            return {
-              status: response.status,
-              data,
-              headers: Object.fromEntries(response.headers.entries()),
-            };
-          })
-        );
-      }
-
-      const responses = await Promise.all(attempts);
-
-      // Should have some rate limited responses
-      const rateLimited = responses.filter(r => r.status === 429);
-      expect(rateLimited.length).toBeGreaterThan(0);
-
-      // Rate limited responses should have appropriate message
-      rateLimited.forEach(response => {
-        // Rate limit responses come as plain text, parsed into { message: "..." }
-        expect(response.data).toHaveProperty('message');
-        expect((response.data as any).message).toMatch(/too many requests/i);
-      });
     });
   });
 });

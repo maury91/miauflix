@@ -85,6 +85,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     const containerRef = useRef<HTMLDivElement>(null);
     const logoRef = useRef<LogoHandle | null>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const [constants, setConstants] = useState<Record<
       string,
       { box: DOMRect; multiplier: number }
@@ -119,6 +120,19 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     useEffect(() => {
       computeConstants();
     }, [computeConstants]);
+
+    useEffect(() => {
+      if (typeof window === 'undefined') return;
+      const audio = new Audio('/assets/pam-pam-meow.mp3');
+      audioRef.current = audio;
+      audio.preload = 'auto';
+      audio.addEventListener('error', event => {
+        console.warn('Failed to load intro animation audio', event, audio);
+      });
+      return () => {
+        audioRef.current = null;
+      };
+    }, []);
 
     const introAnimation = useMemo(() => {
       const letters = logoRef.current;
@@ -274,18 +288,44 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     const start = useCallback(() => {
       if (!introAnimation) return;
 
-      introAnimation.play();
+      // Play audio when animation starts
+      if (audioRef.current) {
+        audioRef.current
+          .play()
+          .catch(() => {
+            setTimeout(() => {
+              introAnimation.play();
+            }, 200);
+          })
+          .then(() => {
+            setTimeout(() => {
+              introAnimation.play();
+            }, 620);
+          });
+      }
     }, [introAnimation]);
 
     const pause = useCallback(() => {
       if (introAnimation && !introAnimation.paused()) {
         introAnimation.pause();
       }
+
+      // Pause audio when animation is paused
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+      }
     }, [introAnimation]);
 
     const resume = useCallback(() => {
       if (introAnimation && introAnimation.paused()) {
         introAnimation.resume();
+      }
+
+      // Resume audio when animation is resumed
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().catch(error => {
+          console.warn('Audio resume failed:', error);
+        });
       }
     }, [introAnimation]);
 
@@ -339,6 +379,12 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       // Kill timeline cleanly
       if (introAnimation) {
         introAnimation.kill();
+      }
+
+      // Reset audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
 
       // Reset all letters to initial state
@@ -398,9 +444,11 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     }, [autoStart, introAnimation]);
 
     return (
-      <AnimationContainer ref={containerRef} className={className} style={style}>
-        <LogoGlyphs ref={logoRef} />
-      </AnimationContainer>
+      <>
+        <AnimationContainer ref={containerRef} className={className} style={style}>
+          <LogoGlyphs ref={logoRef} />
+        </AnimationContainer>
+      </>
     );
   }
 );

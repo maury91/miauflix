@@ -1,0 +1,8 @@
+# Miauflix robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap (update when generated)
+# Sitemap: https://example.com/sitemap.xml
+
+

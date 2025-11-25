@@ -11,7 +11,7 @@ export const store = configureStore({
 });
 
 // Auto-load sessions on store initialization
-// store.dispatch(authApi.endpoints.listSessions.initiate(undefined));
+store.dispatch(authApi.endpoints.listSessions.initiate(undefined));
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
