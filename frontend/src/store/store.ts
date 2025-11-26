@@ -10,8 +10,10 @@ export const store = configureStore({
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(authApi.middleware),
 });
 
-// Auto-load sessions on store initialization
-store.dispatch(authApi.endpoints.listSessions.initiate(undefined));
+// Auto-load sessions on store initialization (client-side only to avoid SSR side effects)
+if (typeof window !== 'undefined') {
+  store.dispatch(authApi.endpoints.listSessions.initiate(undefined));
+}
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

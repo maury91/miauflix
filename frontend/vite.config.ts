@@ -119,6 +119,9 @@ export default defineConfig({
               const { render } = serverModule;
 
               // Extract asset paths from the Vite-processed HTML
+              // NOTE: Using regex for HTML parsing is fragile and may break with complex HTML
+              // (e.g., attributes with escaped quotes, multi-line tags). Consider using a proper
+              // HTML parser like 'node-html-parser' or 'cheerio' if this becomes problematic.
               const scriptMatches = html.match(/<script[^>]+src="([^"]+)"[^>]*><\/script>/g) || [];
               const linkMatches = html.match(/<link[^>]+href="([^"]+\.css)"[^>]*>/g) || [];
 

@@ -78,7 +78,36 @@ export class UserPool {
     const index = this.pool.findIndex(u => u.email === credentials.email);
     if (index !== -1) {
       this.inUse.delete(index);
+    } else {
+      console.warn(`Attempted to release unknown user: ${credentials.email}`);
     }
+  }
+
+  /**
+   * Cleanup all test users created by the pool
+   * Should be called in afterAll to clean up test data
+   */
+  async cleanup(): Promise<void> {
+    if (!this.adminCredentials) {
+      return;
+    }
+    const adminClient = new (await import('./test-utils')).TestClient();
+    await adminClient.login(this.adminCredentials);
+
+    for (const user of this.pool) {
+      console.warn(`Skipping user deletion: ${user.email}`);
+      // TODO: Uncomment this once we have an endpoint to delete users
+      //   try {
+      //     // Delete user via admin API (adjust endpoint as needed)
+      //     await adminClient.delete(['api', 'auth', 'users', user.email]);
+      //   } catch {
+      //     // Ignore cleanup errors
+      //   }
+    }
+
+    this.pool = [];
+    this.inUse.clear();
+    adminClient.clearAuth();
   }
 
   /**

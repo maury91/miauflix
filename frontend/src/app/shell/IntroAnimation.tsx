@@ -444,11 +444,9 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     }, [autoStart, introAnimation]);
 
     return (
-      <>
-        <AnimationContainer ref={containerRef} className={className} style={style}>
-          <LogoGlyphs ref={logoRef} />
-        </AnimationContainer>
-      </>
+      <AnimationContainer ref={containerRef} className={className} style={style}>
+        <LogoGlyphs ref={logoRef} />
+      </AnimationContainer>
     );
   }
 );

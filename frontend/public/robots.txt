@@ -2,7 +2,7 @@
 User-agent: *
 Allow: /
 
-# Sitemap (update when generated)
+# TODO: Update sitemap URL with actual production domain when sitemap is generated
 # Sitemap: https://example.com/sitemap.xml
 
 

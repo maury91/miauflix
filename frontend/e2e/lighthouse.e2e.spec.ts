@@ -1,6 +1,6 @@
 import lighthouse from 'lighthouse';
 
-import { test } from './fixtures';
+import { expect, test } from './fixtures';
 
 /**
  * Lighthouse performance audit for the intro animation route.
@@ -25,6 +25,7 @@ test.describe('Lighthouse Audit', () => {
     await page.goto('/');
 
     // Determine CDP port based on project name from Playwright configuration
+    // NOTE: These ports must match the launchOptions in playwright.config.e2e.ts
     // - chromium-desktop: 9222
     // - Mobile Chrome: 9223
     // - high-dpi: 9224
@@ -70,6 +71,12 @@ test.describe('Lighthouse Audit', () => {
     console.log(`SEO: ${scores.seo}/100`);
     console.log('========================\n');
 
+    // Assert baseline scores to catch regressions
+    expect(scores.performance).toBeGreaterThanOrEqual(50); // Minimum 50% performance
+    expect(scores.accessibility).toBeGreaterThanOrEqual(80); // Minimum 80% accessibility
+    expect(scores['best-practices']).toBeGreaterThanOrEqual(70); // Minimum 70% best practices
+    expect(scores.seo).toBeGreaterThanOrEqual(80); // Minimum 80% SEO
+
     // Log detailed performance metrics
     const metrics = lhr.audits;
     console.log('=== Performance Metrics ===');
@@ -111,8 +118,8 @@ test.describe('Lighthouse Audit', () => {
           console.log(`  ${audit.description}`);
           if (audit.metricSavings) {
             Object.entries(audit.metricSavings).forEach(([metric, value]) => {
-              if (value != null && value > 0) {
-                console.log(`  ${metric} savings: ${Math.round(value as number)}ms`);
+              if (typeof value === 'number' && value > 0) {
+                console.log(`  ${metric} savings: ${Math.round(value)}ms`);
               }
             });
           }

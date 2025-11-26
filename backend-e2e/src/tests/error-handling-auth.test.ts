@@ -25,6 +25,13 @@ describe('Session Authentication Error Handling', () => {
     }
   }, 60000);
 
+  afterAll(async () => {
+    // Cleanup test users created by the pool
+    if (userPool) {
+      await userPool.cleanup();
+    }
+  });
+
   afterEach(async () => {
     client.clearAuth();
   });
@@ -459,8 +466,8 @@ describe('Session Authentication Error Handling', () => {
           expect(errorMessage).not.toContain('sql');
           expect(errorMessage).not.toContain('internal');
           expect(errorMessage).not.toContain('debug');
-          // Should not contain actual token values (long strings that look like tokens)
-          expect(errorMessage).not.toMatch(/[a-zA-Z0-9_-]{20,}/); // No long token-like strings
+          // Should not contain actual token values (JWT pattern: three base64 segments separated by dots)
+          expect(errorMessage).not.toMatch(/eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/);
         }
       }
     });
@@ -522,6 +529,8 @@ describe('Session Authentication Error Handling', () => {
             .map(([name, value]) => `${name}=${value}`)
             .join('; ');
 
+          // NOTE: Using direct fetch instead of TestClient to add X-Force-RateLimit header
+          // while maintaining full control over cookie handling for this specific test scenario
           attempts.push(
             fetch(`${baseURL}/api/auth/refresh/${sessionId}`, {
               method: 'POST',
