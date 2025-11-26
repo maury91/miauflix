@@ -23,7 +23,7 @@ test.describe('Login flow', () => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
 
     // Wait a bit more for any animations to settle
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(300);
 
     await expect(page).toHaveScreenshot('login-page-complete.png', {
       fullPage: true,
