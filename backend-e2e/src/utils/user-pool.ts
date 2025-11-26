@@ -28,6 +28,7 @@ export class UserPool {
         json: {
           email,
           password,
+          // Note: UserRole is undefined at runtime, we need to use a string
           role: 'user' as UserRole.USER,
         },
       });
