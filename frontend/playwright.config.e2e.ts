@@ -58,8 +58,18 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
+        deviceScaleFactor: 1,
         launchOptions: {
-          args: ['--remote-debugging-port=9222'],
+          args: [
+            '--remote-debugging-port=9222',
+            '--force-device-scale-factor=1',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-accelerated-2d-canvas',
+          ],
         },
       },
     },
@@ -86,7 +96,15 @@ export default defineConfig({
       use: {
         ...devices['Pixel 5'],
         launchOptions: {
-          args: ['--remote-debugging-port=9223'],
+          args: [
+            '--remote-debugging-port=9223',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-accelerated-2d-canvas',
+          ],
         },
       },
     },
@@ -103,7 +121,16 @@ export default defineConfig({
         viewport: { width: 1920, height: 1080 },
         deviceScaleFactor: 2,
         launchOptions: {
-          args: ['--remote-debugging-port=9224'],
+          args: [
+            '--remote-debugging-port=9224',
+            '--force-device-scale-factor=2',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-accelerated-2d-canvas',
+          ],
         },
       },
     },
