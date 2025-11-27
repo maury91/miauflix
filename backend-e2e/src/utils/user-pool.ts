@@ -92,7 +92,7 @@ export class UserPool {
     if (!this.adminCredentials) {
       return;
     }
-    const adminClient = new (await import('./test-utils')).TestClient();
+    const adminClient = new TestClient();
     await adminClient.login(this.adminCredentials);
 
     for (const user of this.pool) {

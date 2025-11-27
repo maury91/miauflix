@@ -50,7 +50,10 @@ test.describe('Lighthouse Audit', () => {
     });
 
     if (!runnerResult) {
-      throw new Error('Lighthouse audit failed');
+      throw new Error(
+        `Lighthouse audit failed for ${url} on port ${port}. ` +
+          `Ensure the browser is running with remote debugging enabled.`
+      );
     }
 
     const { lhr } = runnerResult;
