@@ -66,6 +66,29 @@ const AnimationContainer = styled.div`
   background-color: black;
 `;
 
+const useIntroAnimationAudio = () => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const audio = new Audio('/assets/pam-pam-meow.mp3');
+    audioRef.current = audio;
+    audio.preload = 'auto';
+    const handleError = (event: Event) => {
+      console.warn('Failed to load intro animation audio', event, audio);
+    };
+    audio.addEventListener('error', handleError);
+    return () => {
+      audioRef.current = null;
+      audio.removeEventListener('error', handleError);
+      audio.pause();
+      audio.src = '';
+    };
+  }, []);
+
+  return audioRef;
+};
+
 export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>(
   (
     {
@@ -85,7 +108,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     const containerRef = useRef<HTMLDivElement>(null);
     const logoRef = useRef<LogoHandle | null>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioRef = useIntroAnimationAudio();
     const [constants, setConstants] = useState<Record<
       string,
       { box: DOMRect; multiplier: number }
@@ -120,19 +143,6 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     useEffect(() => {
       computeConstants();
     }, [computeConstants]);
-
-    useEffect(() => {
-      if (typeof window === 'undefined') return;
-      const audio = new Audio('/assets/pam-pam-meow.mp3');
-      audioRef.current = audio;
-      audio.preload = 'auto';
-      audio.addEventListener('error', event => {
-        console.warn('Failed to load intro animation audio', event, audio);
-      });
-      return () => {
-        audioRef.current = null;
-      };
-    }, []);
 
     const introAnimation = useMemo(() => {
       const letters = logoRef.current;
@@ -285,25 +295,20 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       }
     }, [introAnimation, onComplete, onProgress]);
 
-    const start = useCallback(() => {
+    const start = useCallback(async () => {
       if (!introAnimation) return;
 
-      // Play audio when animation starts
-      if (audioRef.current) {
-        audioRef.current
-          .play()
-          .then(() => {
-            setTimeout(() => {
-              introAnimation.play();
-            }, 620);
-          })
-          .catch(() => {
-            setTimeout(() => {
-              introAnimation.play();
-            }, 200);
-          });
-      }
-    }, [introAnimation]);
+      const delay = !audioRef.current
+        ? 0
+        : await audioRef.current
+            .play()
+            .then(() => 620)
+            .catch(() => 200);
+
+      setTimeout(() => {
+        introAnimation.play();
+      }, delay);
+    }, [introAnimation, audioRef]);
 
     const pause = useCallback(() => {
       if (introAnimation && !introAnimation.paused()) {
@@ -314,7 +319,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       if (audioRef.current && !audioRef.current.paused) {
         audioRef.current.pause();
       }
-    }, [introAnimation]);
+    }, [introAnimation, audioRef]);
 
     const resume = useCallback(() => {
       if (introAnimation && introAnimation.paused()) {
@@ -327,7 +332,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           console.warn('Audio resume failed:', error);
         });
       }
-    }, [introAnimation]);
+    }, [introAnimation, audioRef]);
 
     const seek = useCallback(
       (progress: number) => {
@@ -412,7 +417,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           introAnimation?.pause();
         }, 200);
       }
-    }, [introAnimation, computeConstants]);
+    }, [introAnimation, computeConstants, audioRef]);
 
     const getProgress = useCallback(() => introAnimation?.progress() ?? 0, [introAnimation]);
     const isAnimating = useCallback(() => introAnimation?.isActive() ?? false, [introAnimation]);
