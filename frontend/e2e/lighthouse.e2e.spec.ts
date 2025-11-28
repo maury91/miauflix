@@ -1,6 +1,7 @@
 import lighthouse from 'lighthouse';
 
 import { expect, test } from './fixtures';
+import { CDP_PORT_MAP, DEFAULT_CDP_PORT } from './test-constants';
 
 /**
  * Lighthouse performance audit for the intro animation route.
@@ -25,18 +26,15 @@ test.describe('Lighthouse Audit', () => {
     await page.goto('/');
 
     // Determine CDP port based on project name from Playwright configuration
-    // NOTE: These ports must match the launchOptions in playwright.config.e2e.ts
-    // - chromium-desktop: 9222
-    // - Mobile Chrome: 9223
-    // - high-dpi: 9224
     const projectName = testInfo.project.name;
-    const portMap: Record<string, number> = {
-      'chromium-desktop': 9222,
-      'Mobile Chrome': 9223,
-      'high-dpi': 9224,
-    };
+    let port = CDP_PORT_MAP[projectName];
 
-    const port = portMap[projectName] || 9222; // Default to 9222 if project name not found
+    if (!port) {
+      console.warn(
+        `Unknown project "${projectName}", falling back to default port ${DEFAULT_CDP_PORT}`
+      );
+      port = DEFAULT_CDP_PORT;
+    }
 
     // Get the page URL for Lighthouse
     const url = page.url();
@@ -140,19 +138,17 @@ test.describe('Lighthouse Audit', () => {
           audit.details?.type === 'table' ||
           audit.details?.type === 'filmstrip') &&
         audit.score !== null &&
-        audit.score < 1
+        audit.score < 0.9
     );
 
     if (diagnostics.length > 0) {
       diagnostics.forEach(audit => {
-        if (audit.score !== null && audit.score < 0.9) {
-          console.log(`\n• ${audit.title}`);
-          if (audit.displayValue) {
-            console.log(`  Value: ${audit.displayValue}`);
-          }
-          if (audit.description) {
-            console.log(`  ${audit.description}`);
-          }
+        console.log(`\n• ${audit.title}`);
+        if (audit.displayValue) {
+          console.log(`  Value: ${audit.displayValue}`);
+        }
+        if (audit.description) {
+          console.log(`  ${audit.description}`);
         }
       });
     } else {

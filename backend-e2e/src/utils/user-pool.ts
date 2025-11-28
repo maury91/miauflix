@@ -15,6 +15,11 @@ export class UserPool {
   private adminCredentials: UserCredentials | null = null;
 
   async initialize(adminCredentials: UserCredentials, poolSize: number = 10): Promise<void> {
+    if (this.pool.length > 0) {
+      console.warn('User pool already initialized, skipping initialization');
+      return;
+    }
+
     this.adminCredentials = adminCredentials;
     const adminClient = new TestClient();
     await adminClient.login(adminCredentials);
