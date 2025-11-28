@@ -20,7 +20,10 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env['CI'] ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html'], ['json', { outputFile: 'test-results-e2e/results.json' }]],
+  reporter: [
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
+    ['json', { outputFile: 'test-results-e2e/results.json' }],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL - use backend-e2e environment or fallback to default port */
@@ -55,6 +58,19 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
+        deviceScaleFactor: 1,
+        launchOptions: {
+          args: [
+            '--remote-debugging-port=9222',
+            '--force-device-scale-factor=1',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-accelerated-2d-canvas',
+          ],
+        },
       },
     },
 
@@ -77,7 +93,20 @@ export default defineConfig({
     /* Test against mobile viewports. */
     {
       name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
+      use: {
+        ...devices['Pixel 5'],
+        launchOptions: {
+          args: [
+            '--remote-debugging-port=9223',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-accelerated-2d-canvas',
+          ],
+        },
+      },
     },
     // {
     //   name: 'Mobile Safari',
@@ -91,6 +120,18 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         viewport: { width: 1920, height: 1080 },
         deviceScaleFactor: 2,
+        launchOptions: {
+          args: [
+            '--remote-debugging-port=9224',
+            '--force-device-scale-factor=2',
+            '--force-color-profile=srgb',
+            '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-accelerated-2d-canvas',
+          ],
+        },
       },
     },
   ],

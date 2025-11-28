@@ -1,10 +1,6 @@
 /// <reference types="vitest/config" />
 /// <reference types='vitest' />
-// import webfontDownload from 'vite-plugin-webfont-dl';
 // import { AssetGlob } from '@nx/js/src/utils/assets/assets';
-import { fileURLToPath } from 'node:url';
-
-import storybookTest from '@storybook/addon-vitest/vitest-plugin';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -15,9 +11,7 @@ import path from 'path';
 // import { injectScripts, publicTypescript } from 'vite-plugin-public-typescript';
 import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vite';
-
-const dirname =
-  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
+import webfontDownload from 'vite-plugin-webfont-dl';
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 
@@ -125,6 +119,9 @@ export default defineConfig({
               const { render } = serverModule;
 
               // Extract asset paths from the Vite-processed HTML
+              // NOTE: Using regex for HTML parsing is fragile and may break with complex HTML
+              // (e.g., attributes with escaped quotes, multi-line tags). Consider using a proper
+              // HTML parser like 'node-html-parser' or 'cheerio' if this becomes problematic.
               const scriptMatches = html.match(/<script[^>]+src="([^"]+)"[^>]*><\/script>/g) || [];
               const linkMatches = html.match(/<link[^>]+href="([^"]+\.css)"[^>]*>/g) || [];
 
@@ -163,7 +160,7 @@ export default defineConfig({
       },
     },
     // TODO: Re-enable in future phases
-    // webfontDownload(),
+    webfontDownload(),
     // nxViteTsPaths(),
     // nxCopyAssetsPlugin(assets),
     // ...(tizenBuild ? tizenPlugins : []),
@@ -202,46 +199,5 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
       '@/__test-utils__': path.resolve(__dirname, './src/__test-utils__'),
     },
-  },
-  test: {
-    projects: [
-      // Unit testing project
-      {
-        extends: true,
-        test: {
-          name: 'unit',
-          environment: 'jsdom',
-          setupFiles: ['./src/setupTests.ts'],
-          globals: true,
-          include: ['src/**/*.{test,spec}.{ts,tsx}'],
-          exclude: ['src/**/*.stories.{ts,tsx}', 'e2e/**'],
-        },
-      },
-      // Storybook testing project
-      {
-        extends: true,
-        plugins: [
-          // The plugin will run tests for the stories defined in your Storybook config
-          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
-          storybookTest({
-            configDir: path.join(dirname, '.storybook'),
-          }),
-        ],
-        test: {
-          name: 'storybook',
-          browser: {
-            enabled: true,
-            headless: true,
-            provider: 'playwright',
-            instances: [
-              {
-                browser: 'chromium',
-              },
-            ],
-          },
-          setupFiles: ['.storybook/vitest.setup.ts'],
-        },
-      },
-    ],
   },
 });
