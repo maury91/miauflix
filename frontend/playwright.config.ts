@@ -55,6 +55,10 @@ export default defineConfig({
             '--force-device-scale-factor=1',
             '--force-color-profile=srgb',
             '--disable-font-subpixel-positioning',
+            '--disable-lcd-text',
+            '--disable-gpu-rasterization',
+            '--disable-gpu-compositing',
+            '--disable-accelerated-2d-canvas',
           ],
         },
       },
@@ -156,6 +160,7 @@ export default defineConfig({
     toHaveScreenshot: {
       threshold: 0.25,
       maxDiffPixels: 800,
+      // maxDiffPixelRatio: 0.02,
       // Animation handling
       animations: 'disabled',
     },
