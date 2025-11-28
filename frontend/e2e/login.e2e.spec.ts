@@ -21,9 +21,7 @@ test.describe('Login flow', () => {
 
   test('should display complete login page and take screenshot', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-
-    // Wait a bit more for any animations to settle
-    await page.waitForTimeout(100);
+    await page.waitForLoadState('networkidle');
 
     await expect(page).toHaveScreenshot('login-page-complete.png', {
       fullPage: true,

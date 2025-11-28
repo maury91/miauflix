@@ -36,6 +36,8 @@
     "test:backend": "turbo run test --filter='./backend'",
     "test:e2e": "backend-e2e/scripts/env.sh test",
     "test:frontend:e2e:dev": "npm -w frontend run test:e2e",
+    "test:frontend:e2e:docker": "npm -w frontend run test:e2e:docker",
+    "test:frontend:e2e:docker:update": "npm -w frontend run test:e2e:docker:update",
     "test:frontend:e2e": "backend-e2e/scripts/env.sh test --frontend-only",
     "test:frontend:visual:update": "npm -w frontend run test:visual:update",
     "test:frontend:visual": "npm -w frontend run test:visual",
