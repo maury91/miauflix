@@ -4,11 +4,24 @@ import { expect, test } from './fixtures';
 import { CDP_PORT_MAP, DEFAULT_CDP_PORT } from './test-constants';
 
 /**
+ * Minimum Lighthouse score thresholds to catch performance/quality regressions.
+ * Adjust these values as the application improves over time.
+ */
+const LIGHTHOUSE_THRESHOLDS = {
+  performance: 50,
+  accessibility: 80,
+  bestPractices: 70,
+  seo: 80,
+} as const;
+
+/**
  * Lighthouse performance audit for the intro animation route.
- * This test measures current Lighthouse scores without enforcing thresholds.
- * Scores are output to the console for monitoring purposes.
+ * This test measures Lighthouse scores and enforces minimum thresholds to catch regressions.
+ * See LIGHTHOUSE_THRESHOLDS constant for current baseline values.
  *
- * Note: This test only runs on chromium-desktop project which has remote debugging enabled.
+ * Detailed scores, metrics, opportunities, and diagnostics are logged to the console.
+ *
+ * Note: This test runs on any Chromium-based browser project with a configured CDP port.
  * To run only this test: npx playwright test --config=playwright.config.e2e.ts --project=chromium-desktop lighthouse
  */
 test.describe('Lighthouse Audit', () => {
@@ -73,10 +86,10 @@ test.describe('Lighthouse Audit', () => {
     console.log('========================\n');
 
     // Assert baseline scores to catch regressions
-    expect(scores.performance).toBeGreaterThanOrEqual(50); // Minimum 50% performance
-    expect(scores.accessibility).toBeGreaterThanOrEqual(80); // Minimum 80% accessibility
-    expect(scores['best-practices']).toBeGreaterThanOrEqual(70); // Minimum 70% best practices
-    expect(scores.seo).toBeGreaterThanOrEqual(80); // Minimum 80% SEO
+    expect(scores.performance).toBeGreaterThanOrEqual(LIGHTHOUSE_THRESHOLDS.performance);
+    expect(scores.accessibility).toBeGreaterThanOrEqual(LIGHTHOUSE_THRESHOLDS.accessibility);
+    expect(scores['best-practices']).toBeGreaterThanOrEqual(LIGHTHOUSE_THRESHOLDS.bestPractices);
+    expect(scores.seo).toBeGreaterThanOrEqual(LIGHTHOUSE_THRESHOLDS.seo);
 
     // Log detailed performance metrics
     const metrics = lhr.audits;
