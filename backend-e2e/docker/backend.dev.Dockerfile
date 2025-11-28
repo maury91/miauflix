@@ -9,9 +9,9 @@ RUN apt-get update && \
     apt-get install -y curl python3 make g++ gosu && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy package files
-COPY package.json package-lock.json ./
-COPY backend/package.json ./backend/
+# Copy package files and build config
+COPY package.json package-lock.json turbo.json tsconfig.json ./
+COPY backend/package.json backend/tsconfig.json ./backend/
 COPY frontend/package.json ./frontend/
 
 # Copy the packages that backend depends on
@@ -20,6 +20,9 @@ COPY packages/ ./packages/
 # Install dependencies with npm cache mount
 RUN --mount=type=cache,target=/root/.npm \
     npm install
+
+# Build workspace packages that backend depends on
+RUN npm run build:libs
 
 # Copy backend source (will be overridden by volume mount)
 COPY backend/ ./backend/

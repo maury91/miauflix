@@ -1,6 +1,3 @@
-// Re-export the ProfileToken type from secureStorage for consistency
-export type { ProfileToken, StoredProfiles } from '@utils/storage';
-
 export interface InitializationState {
   isComplete: boolean;
   serverAvailable: boolean;
