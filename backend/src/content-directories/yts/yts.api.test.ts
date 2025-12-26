@@ -1,17 +1,22 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { RequestService } from '@services/request/request.service';
+
 import { YTSApi } from './yts.api';
 
 const imdbId = 'tt29623480';
 
 describe('YTSApi', () => {
   let api: YTSApi;
+  let requestService: RequestService;
 
   beforeEach(() => {
     // Create a minimal mock cache with just the required methods
     const mockCache = new MockCache();
 
-    api = new YTSApi(mockCache);
+    requestService = new RequestService();
+
+    api = new YTSApi(mockCache, requestService);
   });
 
   describe('test', () => {

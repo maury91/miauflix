@@ -3,6 +3,7 @@ import parseTorrent from 'parse-torrent';
 import path from 'path';
 
 import { ENV } from '@constants';
+import type { RequestService } from '@services/request/request.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
 import type { DownloadService } from '../download/download.service';
@@ -38,7 +39,10 @@ export class SourceMetadataFileService {
   }> = [];
   private activeWorkers = 0;
 
-  constructor(private readonly downloadService: DownloadService) {
+  constructor(
+    private readonly downloadService: DownloadService,
+    private readonly requestService: RequestService
+  ) {
     this.createService('webTorrent', {
       maxConcurrentRequests: 50,
       shouldVerify: false,
@@ -59,11 +63,17 @@ export class SourceMetadataFileService {
         hash: string,
         rateLimiter?: DynamicRateLimit
       ): Promise<Buffer> => {
-        const response = await getSourceMetadataFileFromITorrents(hash, 5000);
+        const response = await getSourceMetadataFileFromITorrents(hash, 5000, this.requestService);
         if (response) {
           rateLimiter?.reportResponse(response);
           if (response.ok) {
-            return Buffer.from(await response.arrayBuffer());
+            if (response.body instanceof ArrayBuffer) {
+              return Buffer.from(response.body);
+            }
+            if (typeof response.body === 'string') {
+              return Buffer.from(response.body, 'binary');
+            }
+            throw new Error('Invalid response body');
           }
         }
         logger.warn(
@@ -89,11 +99,14 @@ export class SourceMetadataFileService {
         hash: string,
         rateLimiter?: DynamicRateLimit
       ): Promise<Buffer> => {
-        const response = await getSourceMetadataFileFromTorrage(hash, 5000);
+        const response = await getSourceMetadataFileFromTorrage(hash, 5000, this.requestService);
         if (response) {
           rateLimiter?.reportResponse(response);
           if (response.ok) {
-            return Buffer.from(await response.arrayBuffer());
+            if (typeof response.body === 'string') {
+              return Buffer.from(response.body, 'binary');
+            }
+            throw new Error('Invalid response body');
           }
         }
         logger.warn(

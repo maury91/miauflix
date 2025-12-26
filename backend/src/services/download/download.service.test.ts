@@ -9,24 +9,25 @@ import loadIPSet from 'load-ip-set';
 
 import { ENV } from '@constants';
 import type { Database } from '@database/database';
+import type { RequestServiceResponse } from '@services/request/request.service';
+import { RequestService } from '@services/request/request.service';
 import { StorageService } from '@services/storage/storage.service';
-import { enhancedFetch } from '@utils/fetch.util';
 
 import { mockedTorrentInstance } from '../../__mocks__/webtorrent';
 import { DownloadService } from './download.service';
 
 // Mock all external dependencies
 jest.mock('@constants');
-jest.mock('@utils/fetch.util');
 jest.mock('bittorrent-tracker');
 jest.mock('load-ip-set');
 jest.mock('@logger');
 jest.mock('@services/storage/storage.service');
+jest.mock('@services/request/request.service');
 
 describe('DownloadService', () => {
   let service: DownloadService;
   let mockBTClient: jest.Mocked<BTClient>;
-  let mockEnhancedFetch: jest.MockedFunction<typeof enhancedFetch>;
+  let mockRequestService: jest.Mocked<RequestService>;
   let mockLoadIPSet: jest.MockedFunction<typeof loadIPSet>;
   let mockStorageService: jest.Mocked<StorageService>;
 
@@ -56,8 +57,8 @@ describe('DownloadService', () => {
 
     (BTClient as jest.MockedClass<typeof BTClient>).mockImplementation(() => mockBTClient);
 
-    // Mock enhanced fetch
-    mockEnhancedFetch = enhancedFetch as jest.MockedFunction<typeof enhancedFetch>;
+    // Mock RequestService
+    mockRequestService = new RequestService() as unknown as jest.Mocked<RequestService>;
 
     // Mock loadIPSet
     mockLoadIPSet = loadIPSet as jest.MockedFunction<typeof loadIPSet>;
@@ -69,23 +70,24 @@ describe('DownloadService', () => {
   describe('tracker loading', () => {
     beforeEach(() => {
       // Mock successful tracker fetch
-      mockEnhancedFetch.mockResolvedValue(
-        new Response(
-          'udp://tracker1.example.com:1337\nudp://tracker2.example.com:1337\n# comment\n',
-          {
-            status: 200,
-          }
-        )
-      );
+      mockRequestService.request.mockResolvedValue({
+        body: 'udp://tracker1.example.com:1337\nudp://tracker2.example.com:1337\n# comment\n',
+        headers: { 'content-type': 'text/plain' },
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+      } satisfies RequestServiceResponse<string>);
     });
 
     it('should load trackers and IP sets on initialization', async () => {
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(mockEnhancedFetch).toHaveBeenCalledWith('https://example.com/trackers_best.txt');
+      expect(mockRequestService.request).toHaveBeenCalledWith(
+        'https://example.com/trackers_best.txt'
+      );
       expect(mockLoadIPSet).toHaveBeenCalledWith(
         'https://example.com/blacklist.txt',
         expect.any(Object),
@@ -94,9 +96,9 @@ describe('DownloadService', () => {
     });
 
     it('should handle tracker fetch errors gracefully', async () => {
-      mockEnhancedFetch.mockRejectedValue(new Error('Network error'));
+      mockRequestService.request.mockRejectedValue(new Error('Network error'));
 
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -116,7 +118,7 @@ describe('DownloadService', () => {
         }
       );
 
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -131,11 +133,13 @@ describe('DownloadService', () => {
 
   describe('generateLink', () => {
     beforeEach(() => {
-      mockEnhancedFetch.mockResolvedValue(
-        new Response('udp://tracker2.example.com:1337\nudp://tracker3.example.com:1337', {
-          status: 200,
-        })
-      );
+      mockRequestService.request.mockResolvedValue({
+        body: 'udp://tracker2.example.com:1337\nudp://tracker3.example.com:1337',
+        headers: { 'content-type': 'text/plain' },
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+      } satisfies RequestServiceResponse<string>);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (mockLoadIPSet as any).mockImplementation(
@@ -144,7 +148,7 @@ describe('DownloadService', () => {
         }
       );
 
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
     });
 
     it('should generate a valid magnet link', () => {
@@ -211,7 +215,7 @@ describe('DownloadService', () => {
 
   //   describe('getSourceMetadataFile', () => {
   //     beforeEach(() => {
-  //       mockEnhancedFetch.mockResolvedValue(
+  //       mockRequestService.request.mockResolvedValue(
   //         new Response('udp://tracker1.example.com:1337', {
   //           status: 200,
   //         })
@@ -480,7 +484,7 @@ describe('DownloadService', () => {
 
   describe('storage delete event handling', () => {
     it('should remove torrent when storage is deleted with valid hash', async () => {
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
 
       // Mock a torrent in the client
       const mockTorrent = {
@@ -516,7 +520,7 @@ describe('DownloadService', () => {
     });
 
     it('should handle storage deletion without hash gracefully', () => {
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
 
       // Get the delete event handler that was registered
       const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
@@ -542,7 +546,7 @@ describe('DownloadService', () => {
     });
 
     it('should handle storage deletion with undefined hash gracefully', () => {
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
 
       // Get the delete event handler that was registered
       const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
@@ -570,7 +574,7 @@ describe('DownloadService', () => {
 
   describe('error handling', () => {
     it('should log WebTorrent client errors', () => {
-      service = new DownloadService(mockStorageService);
+      service = new DownloadService(mockStorageService, mockRequestService);
 
       // Get the error handler that was registered
       const errorHandler = mockedTorrentInstance.on.mock.calls.find(call => call[0] === 'error')[1];

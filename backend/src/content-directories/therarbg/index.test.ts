@@ -3,6 +3,7 @@ import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor
 
 import type { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
+import { RequestService } from '@services/request/request.service';
 import { StorageService } from '@services/storage/storage.service';
 
 import { TherarbgContentDirectory } from './index';
@@ -10,24 +11,35 @@ import type { ImdbDetailPost, ImdbMetadata } from './therarbg.types';
 
 jest.mock('@services/download/download.service');
 jest.mock('@services/storage/storage.service');
+jest.mock('@services/request/request.service');
 
 describe('TherarbgContentDirectory', () => {
   let contentDirectory: TherarbgContentDirectory;
   let mockCache: MockCache;
   let mockDownloadService: jest.Mocked<DownloadService>;
+  let mockRequestService: jest.Mocked<RequestService>;
 
   beforeEach(() => {
     mockCache = new MockCache();
     const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
 
-    mockDownloadService = new DownloadService(mockStorageService) as jest.Mocked<DownloadService>;
+    mockRequestService = new RequestService() as unknown as jest.Mocked<RequestService>;
+
+    mockDownloadService = new DownloadService(
+      mockStorageService,
+      mockRequestService
+    ) as jest.Mocked<DownloadService>;
 
     // Mock the generateLink method to return proper magnet links
     mockDownloadService.generateLink.mockImplementation((hash: string, trackers: string[]) => {
       return `magnet:?xt=urn:btih:${hash}&tr=${trackers.join('&tr=')}`;
     });
 
-    contentDirectory = new TherarbgContentDirectory(mockCache, mockDownloadService);
+    contentDirectory = new TherarbgContentDirectory(
+      mockCache,
+      mockDownloadService,
+      mockRequestService
+    );
   });
 
   afterEach(() => {
@@ -388,10 +400,27 @@ describe('TherarbgContentDirectory', () => {
 
   describe('real API (http-vcr)', () => {
     it('should fetch real data and match snapshot', async () => {
-      // Do NOT mock the API for this test
+      // Do NOT mock the API for this test - use real RequestService so HTTP-VCR can intercept
+      const { RequestService: RequestServiceImpl } = jest.requireActual(
+        '@services/request/request.service'
+      );
+      const realRequestService = new RequestServiceImpl();
+      const realDownloadService = new DownloadService(
+        new StorageService({} as Database) as jest.Mocked<StorageService>,
+        realRequestService
+      ) as jest.Mocked<DownloadService>;
+      realDownloadService.generateLink.mockImplementation((hash: string, trackers: string[]) => {
+        return `magnet:?xt=urn:btih:${hash}&tr=${trackers.join('&tr=')}`;
+      });
+      const realContentDirectory = new TherarbgContentDirectory(
+        mockCache,
+        realDownloadService,
+        realRequestService
+      );
+
       // Use a real, known IMDB ID
       const imdbId = 'tt0119698'; // Cosmic Princess
-      const result = await contentDirectory.getMovie(imdbId);
+      const result = await realContentDirectory.getMovie(imdbId);
       expect(result).toMatchInlineSnapshot(`
 {
   "sources": [

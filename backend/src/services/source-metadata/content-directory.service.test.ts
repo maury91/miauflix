@@ -1,5 +1,6 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { RequestService } from '@services/request/request.service';
 import type { StorageService } from '@services/storage/storage.service';
 
 jest.mock('@services/download/download.service');
@@ -13,6 +14,7 @@ const imdbId = 'tt29623480'; // Same IMDb ID from the YTSApi tests
 
 describe('ContentDirectoryService', () => {
   let service: ContentDirectoryService;
+  let requestService: RequestService;
 
   beforeEach(() => {
     // Create a minimal mock cache with just the required methods
@@ -27,13 +29,17 @@ describe('ContentDirectoryService', () => {
       removeStorage: jest.fn(),
     } as unknown as jest.Mocked<StorageService>;
 
+    // Use real RequestService - HTTP-VCR will intercept fetch calls
+    requestService = new RequestService();
+
     // Create a mock DownloadService
     const mockDownloadService = new DownloadService(
-      mockStorageService
+      mockStorageService,
+      requestService
     ) as jest.Mocked<DownloadService>;
     mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
 
-    service = new ContentDirectoryService(mockCache, mockDownloadService);
+    service = new ContentDirectoryService(mockCache, mockDownloadService, requestService);
   });
 
   describe('searchSourcesForMovie', () => {

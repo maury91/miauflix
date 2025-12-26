@@ -13,6 +13,7 @@ import { EncryptionService } from '@services/encryption/encryption.service';
 import { ListService } from '@services/media/list.service';
 import { ListSynchronizer } from '@services/media/list.syncronizer';
 import { MediaService } from '@services/media/media.service';
+import { RequestService } from '@services/request/request.service';
 import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
@@ -69,6 +70,7 @@ try {
   await db.initialize();
 
   const cacheService = new CacheService();
+  const requestService = new RequestService();
   const tmdbApi = new TMDBApi(cacheService.cache);
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
@@ -79,14 +81,19 @@ try {
   const listService = new ListService(db, tmdbApi, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
   const storageService = new StorageService(db);
-  const downloadService = new DownloadService(storageService);
-  const contentDirectoryService = new ContentDirectoryService(cacheService.cache, downloadService);
-  const magnetService = new SourceMetadataFileService(downloadService);
+  const downloadService = new DownloadService(storageService, requestService);
+  const contentDirectoryService = new ContentDirectoryService(
+    cacheService.cache,
+    downloadService,
+    requestService
+  );
+  const magnetService = new SourceMetadataFileService(downloadService, requestService);
   const sourceService = new SourceService(
     db,
     vpnDetectionService,
     contentDirectoryService,
-    magnetService
+    magnetService,
+    requestService
   );
   const streamService = new StreamService(db, sourceService, downloadService, mediaService);
 
@@ -190,6 +197,7 @@ try {
     traktService,
     downloadService,
     streamService,
+    requestService,
   });
 
   // Error handling middleware - must be added first
