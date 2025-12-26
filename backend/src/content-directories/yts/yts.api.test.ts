@@ -8,20 +8,19 @@ import { YTSApi } from './yts.api';
 const imdbId = 'tt29623480';
 
 describe('YTSApi', () => {
-  let api: YTSApi;
-  let requestService: RequestService;
-
-  beforeEach(() => {
+  const setupTest = () => {
     // Create a minimal mock cache with just the required methods
     const mockCache = new MockCache();
+    const requestService = new RequestService(new StatsService());
 
-    requestService = new RequestService(new StatsService());
+    const api = new YTSApi(mockCache, requestService);
 
-    api = new YTSApi(mockCache, requestService);
-  });
+    return { api, requestService, mockCache };
+  };
 
   describe('test', () => {
     it('should return true when the API is available', async () => {
+      const { api } = setupTest();
       const result = await api.test();
       expect(result).toBe(true);
     });
@@ -29,6 +28,7 @@ describe('YTSApi', () => {
 
   describe('searchMovies', () => {
     it('should search movies by IMDb ID', async () => {
+      const { api } = setupTest();
       const result = await api.searchMovies(imdbId);
       expect(result.status).toBe('ok');
       expect(result.data.movie_count).toBe(1);
@@ -43,6 +43,7 @@ describe('YTSApi', () => {
     });
 
     it('should handle invalid IMDb ID', async () => {
+      const { api } = setupTest();
       const result = await api.searchMovies('invalid-id');
       expect(result.status).toBe('ok');
       expect(result.data.movie_count).toBe(0);
@@ -53,6 +54,7 @@ describe('YTSApi', () => {
 
   describe('getMovieByImdbId', () => {
     it('should fetch movie details by IMDb ID', async () => {
+      const { api } = setupTest();
       const result = await api.getMovieByImdbId(imdbId);
       expect(result.status).toBe('ok');
       expect(result.data.movie.imdb_code).toBe('tt34802706'); // Sanitized IMDB code
@@ -63,6 +65,7 @@ describe('YTSApi', () => {
 
   describe('getLatestMovies', () => {
     it('should fetch latest movies', async () => {
+      const { api } = setupTest();
       const result = await api.getLatestMovies(1, 5);
       expect(result.status).toBe('ok');
       expect(result.data.movies.length).toBeLessThanOrEqual(5);
