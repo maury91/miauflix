@@ -412,12 +412,6 @@ export class RequestService {
             'FlareSolverr',
             `FlareSolverr retry successful for ${urlString} (status: ${flareResponse.status})`
           );
-          // Cookies and user agent are already stored in requestViaFlareSolverr from solution
-          // Also extract any Set-Cookie headers from response as fallback
-          const setCookieHeaders = flareResponse.headers['set-cookie'];
-          if (setCookieHeaders) {
-            this.cookieJar.setCookies(domain, setCookieHeaders);
-          }
           // Note: This is NOT a "solved" request - we had to call FlareSolverr again
           this.statsService.metricEnd(successMetricId);
           this.statsService.metricEnd(requestMetricId);
@@ -440,7 +434,7 @@ export class RequestService {
           return {
             body: await this.tryResponseJSONParse<T>(response),
             headers: Object.fromEntries(
-              Object.entries(response.headers).map(([key, value]) => [key.toLowerCase(), value])
+              [...response.headers.entries()].map(([key, value]) => [key.toLowerCase(), value])
             ),
             ok: response.ok,
             status: response.status,
@@ -454,7 +448,7 @@ export class RequestService {
       }
 
       // Obtain the cookies from the response
-      const setCookieHeaders = response.headers.get('set-cookie');
+      const setCookieHeaders = response.headers.getSetCookie();
       if (setCookieHeaders) {
         this.cookieJar.setCookies(domain, setCookieHeaders);
       }
@@ -470,7 +464,7 @@ export class RequestService {
           ? await response.arrayBuffer()
           : await this.tryResponseJSONParse<T>(response),
         headers: Object.fromEntries(
-          Object.entries(response.headers).map(([key, value]) => [key.toLowerCase(), value])
+          [...response.headers.entries()].map(([key, value]) => [key.toLowerCase(), value])
         ),
         ok: response.ok,
         status: response.status,
