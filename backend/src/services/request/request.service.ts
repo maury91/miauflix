@@ -11,6 +11,8 @@ import type {
 import { isHtmlWrappedJson, unwrapJsonFromHtml } from '@utils/html-unwrapper.util';
 import { extractDomain } from '@utils/url.util';
 
+import { CookieJar } from './cookie-jar';
+
 const USER_AGENTS = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
@@ -18,62 +20,6 @@ const USER_AGENTS = [
 ];
 
 const getRandomUserAgent = () => USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)];
-
-/**
- * Simple per-domain cookie jar for request management.
- */
-class CookieJar {
-  private jar: Map<string, Map<string, string>> = new Map();
-
-  /**
-   * Get serialized cookie header string for the given domain.
-   */
-  getCookieHeader(domain: string): string {
-    const domainCookies = this.jar.get(domain);
-    if (!domainCookies) return '';
-    return Array.from(domainCookies.entries())
-      .map(([name, value]) => `${name}=${value}`)
-      .join('; ');
-  }
-
-  /**
-   * Update the cookie jar for a domain from a Set-Cookie header(s).
-   */
-  setCookies(domain: string, setCookieHeaders: string[] | string) {
-    if (!setCookieHeaders) return;
-    const domainCookies =
-      this.jar.get(domain) ??
-      ((): Map<string, string> => {
-        const map = new Map<string, string>();
-        this.jar.set(domain, map);
-        return map;
-      })();
-
-    const headerArr = Array.isArray(setCookieHeaders) ? setCookieHeaders : [setCookieHeaders];
-
-    headerArr.forEach(cookieStr => {
-      const [cookiePair] = cookieStr.split(';');
-      const [name, ...valueParts] = cookiePair.split('=');
-      if (name && valueParts.length) {
-        domainCookies.set(name.trim(), valueParts.join('=').trim());
-      }
-    });
-  }
-
-  /**
-   * Delete all cookies for a domain.
-   */
-  clear(domain: string) {
-    this.jar.delete(domain);
-  }
-
-  /**
-   * Delete all cookies in the jar (all domains).
-   */
-  clearAll() {
-    this.jar.clear();
-  }
-}
 
 export interface RequestOptions<B = false> {
   queryString?: Record<string, boolean | number | string>;
@@ -337,17 +283,17 @@ export class RequestService {
       };
 
       if (asBuffer) {
-        result.body = await response.arrayBuffer();
+        result.body = new TextEncoder().encode(responseBody).buffer;
       } else {
         const parsedBody = this.tryJSONParse<T>(responseBody);
         if (parsedBody) {
           result.body = parsedBody;
           // Set content-type if not present
           if (!solution.headers['content-type']) {
-            solution.headers['content-type'] = 'text/html; charset=utf-8';
+            solution.headers['content-type'] = 'application/json';
           }
         } else if (!solution.headers['content-type']) {
-          solution.headers['content-type'] = 'text/html; charset=utf-8';
+          solution.headers['content-type'] = 'text/html';
         }
       }
 
@@ -395,7 +341,7 @@ export class RequestService {
     }
 
     const urlString = urlObj.toString();
-    const domain = urlObj.hostname;
+    const domain = extractDomain(urlObj);
 
     const controller = new AbortController();
     const timeoutId = timeout ? setTimeout(() => controller.abort(), timeout) : undefined;
@@ -431,16 +377,25 @@ export class RequestService {
         logger.warn('FlareSolverr', `Received 403 for ${urlString}, retrying through FlareSolverr`);
         try {
           // FlareSolverr will handle the request and return solved cookies/user agent
-          const flareResponse = await this.requestViaFlareSolverr<T>(
-            urlString,
-            {
-              ...fetchOptions,
-              signal: controller.signal,
-              headers: requestHeaders,
-            },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            options?.asBuffer as any
-          );
+          const flareResponse = options?.asBuffer
+            ? await this.requestViaFlareSolverr(
+                urlString,
+                {
+                  ...fetchOptions,
+                  signal: controller.signal,
+                  headers: requestHeaders,
+                },
+                true
+              )
+            : await this.requestViaFlareSolverr<T>(
+                urlString,
+                {
+                  ...fetchOptions,
+                  signal: controller.signal,
+                  headers: requestHeaders,
+                },
+                false
+              );
           logger.info(
             'FlareSolverr',
             `FlareSolverr retry successful for ${urlString} (status: ${flareResponse.status})`

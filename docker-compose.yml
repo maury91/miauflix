@@ -32,7 +32,7 @@ services:
       - TZ=${TZ:-UTC}
     network_mode: service:vpn # Route traffic through NordVPN
     volumes:
-      - /var/lib/flaresolver:/config
+      - flaresolver_config:/config
     restart: unless-stopped
 
   miauflix:
@@ -109,3 +109,5 @@ services:
 volumes:
   frontend_static:
     name: frontend_static
+  flaresolver_config:
+    name: flaresolver_config

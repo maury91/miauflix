@@ -70,9 +70,6 @@ export class SourceMetadataFileService {
             if (response.body instanceof ArrayBuffer) {
               return Buffer.from(response.body);
             }
-            if (typeof response.body === 'string') {
-              return Buffer.from(response.body, 'binary');
-            }
             throw new Error('Invalid response body');
           }
         }
