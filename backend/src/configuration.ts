@@ -13,6 +13,7 @@ import { mediaConfigurationDefinition } from '@services/media/media.configuratio
 import { RequestService } from '@services/request/request.service';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
+import { StatsService } from '@services/stats/stats.service';
 import { storageConfigurationDefinition } from '@services/storage/storage.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
@@ -378,7 +379,7 @@ export async function validateConfiguration(
   }
 
   // Create RequestService instance for services that need it
-  const requestService = new RequestService();
+  const requestService = new RequestService(new StatsService());
 
   if (servicesNeedingConfiguration.size === 0 && !forceReconfigure) {
     console.log(chalk.cyan('Self testing...'));

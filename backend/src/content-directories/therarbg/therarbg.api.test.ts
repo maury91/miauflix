@@ -1,6 +1,7 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 
 import { TheRARBGApi } from './therarbg.api';
 
@@ -11,7 +12,7 @@ describe('TheRARBGService', () => {
   beforeEach(() => {
     const mockCache = new MockCache();
     // Use real RequestService - HTTP-VCR will intercept fetch calls
-    requestService = new RequestService();
+    requestService = new RequestService(new StatsService());
     service = new TheRARBGApi(mockCache, requestService);
   });
 

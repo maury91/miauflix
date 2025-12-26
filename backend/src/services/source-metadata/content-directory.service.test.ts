@@ -1,6 +1,7 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 import type { StorageService } from '@services/storage/storage.service';
 
 jest.mock('@services/download/download.service');
@@ -30,7 +31,7 @@ describe('ContentDirectoryService', () => {
     } as unknown as jest.Mocked<StorageService>;
 
     // Use real RequestService - HTTP-VCR will intercept fetch calls
-    requestService = new RequestService();
+    requestService = new RequestService(new StatsService());
 
     // Create a mock DownloadService
     const mockDownloadService = new DownloadService(

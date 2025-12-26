@@ -8,6 +8,7 @@ import type {
   FlareSolverrRequest,
   FlareSolverrResponse,
 } from '@mytypes/flaresolverr.types';
+import type { StatsService } from '@services/stats/stats.service';
 import { isHtmlWrappedJson, unwrapJsonFromHtml } from '@utils/html-unwrapper.util';
 import { extractDomain } from '@utils/url.util';
 
@@ -50,7 +51,7 @@ export class RequestService {
   private readonly isFlareSolverrEnabled: boolean;
   private readonly flareSolverrUrl: string;
 
-  constructor() {
+  constructor(private readonly statsService: StatsService) {
     this.cookieJar = new CookieJar();
     this.userAgentByDomain = new Map<string, string>();
     this.isFlareSolverrEnabled = ENV('ENABLE_FLARESOLVERR') === true && !!ENV('FLARESOLVERR_URL');
@@ -330,6 +331,11 @@ export class RequestService {
     rawUrl: URL | string,
     options?: RequestOptions<boolean>
   ): Promise<RequestServiceResponse<ArrayBuffer | T>> {
+    // Start tracking metrics
+    const requestMetricId = this.statsService.metricStart('request');
+    const successMetricId = this.statsService.metricStart('request.success');
+    const errorMetricId = this.statsService.metricStart('request.error');
+
     const { headers = {}, queryString, timeout, ...fetchOptions } = options ?? {};
 
     // Build URL with query string
@@ -345,6 +351,10 @@ export class RequestService {
 
     const controller = new AbortController();
     const timeoutId = timeout ? setTimeout(() => controller.abort(), timeout) : undefined;
+
+    // Check if we have FlareSolverr cookies (for "solved" tracking)
+    const hasFlareSolverrCookies =
+      this.isFlareSolverrEnabled && this.cookieJar.getCookieHeader(domain) !== '';
 
     try {
       // Get stored cookies and userAgent for this domain
@@ -375,6 +385,8 @@ export class RequestService {
       // If we get a 403 and FlareSolverr is enabled, retry through FlareSolverr
       if (response.status === 403 && this.isFlareSolverrEnabled) {
         logger.warn('FlareSolverr', `Received 403 for ${urlString}, retrying through FlareSolverr`);
+        // Track FlareSolverr usage
+        this.statsService.event('request.flaresolverr');
         try {
           // FlareSolverr will handle the request and return solved cookies/user agent
           const flareResponse = options?.asBuffer
@@ -406,6 +418,10 @@ export class RequestService {
           if (setCookieHeaders) {
             this.cookieJar.setCookies(domain, setCookieHeaders);
           }
+          // Note: This is NOT a "solved" request - we had to call FlareSolverr again
+          this.statsService.metricEnd(successMetricId);
+          this.statsService.metricEnd(requestMetricId);
+          this.statsService.metricCancel(errorMetricId);
           return flareResponse;
         } catch (flareError) {
           const errorMessage =
@@ -416,6 +432,10 @@ export class RequestService {
             `FlareSolverr retry failed for ${urlString}: ${errorMessage}`,
             errorStack
           );
+          // FlareSolverr failed, so this is an error
+          this.statsService.metricEnd(errorMetricId);
+          this.statsService.metricEnd(requestMetricId);
+          this.statsService.metricCancel(successMetricId);
           // Return the original 403 response if FlareSolverr fails
           return {
             body: await this.tryResponseJSONParse<T>(response),
@@ -429,6 +449,10 @@ export class RequestService {
         }
       }
 
+      if (hasFlareSolverrCookies) {
+        this.statsService.event('request.solved');
+      }
+
       // Obtain the cookies from the response
       const setCookieHeaders = response.headers.get('set-cookie');
       if (setCookieHeaders) {
@@ -436,6 +460,10 @@ export class RequestService {
       }
       // Request was successful, store the user agent for this domain
       this.userAgentByDomain.set(domain, userAgent);
+
+      this.statsService.metricEnd(successMetricId);
+      this.statsService.metricEnd(requestMetricId);
+      this.statsService.metricCancel(errorMetricId);
 
       return {
         body: options?.asBuffer
@@ -450,6 +478,9 @@ export class RequestService {
       };
     } catch (error: unknown) {
       clearTimeout(timeoutId);
+      this.statsService.metricEnd(errorMetricId);
+      this.statsService.metricEnd(requestMetricId);
+      this.statsService.metricCancel(successMetricId);
       throw error;
     }
   }

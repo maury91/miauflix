@@ -1,4 +1,5 @@
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 
 import { getSourceMetadataFileFromTorrage } from './torrage';
 
@@ -13,7 +14,7 @@ describe('Torrage service', () => {
   });
 
   beforeEach(() => {
-    mockRequestService = new RequestService() as jest.Mocked<RequestService>;
+    mockRequestService = new RequestService(new StatsService()) as jest.Mocked<RequestService>;
   });
 
   it('should fetch a source metadata file from Torrage', async () => {

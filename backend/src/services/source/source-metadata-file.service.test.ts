@@ -5,6 +5,7 @@ import type { ParsedTorrent } from 'webtorrent';
 
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 
 import type { DownloadService } from '../download/download.service';
 // Import service modules to mock them
@@ -98,7 +99,9 @@ describe('SourceMetadataFileService', () => {
       getSourceMetadataFile: getSourceMetadataFileFromWebTorrentSpy,
     } as Partial<DownloadService> as DownloadService;
 
-    mockRequestService = new RequestService() as unknown as jest.Mocked<RequestService>;
+    mockRequestService = new RequestService(
+      new StatsService()
+    ) as unknown as jest.Mocked<RequestService>;
 
     // Set up service spies with default successful responses
     getSourceMetadataFileFromITorrentsSpy = jest

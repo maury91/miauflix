@@ -11,6 +11,7 @@ import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 
 import { mockedTorrentInstance } from '../../__mocks__/webtorrent';
@@ -58,7 +59,9 @@ describe('DownloadService', () => {
     (BTClient as jest.MockedClass<typeof BTClient>).mockImplementation(() => mockBTClient);
 
     // Mock RequestService
-    mockRequestService = new RequestService() as unknown as jest.Mocked<RequestService>;
+    mockRequestService = new RequestService(
+      new StatsService()
+    ) as unknown as jest.Mocked<RequestService>;
 
     // Mock loadIPSet
     mockLoadIPSet = loadIPSet as jest.MockedFunction<typeof loadIPSet>;

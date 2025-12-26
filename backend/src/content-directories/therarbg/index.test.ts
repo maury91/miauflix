@@ -4,6 +4,7 @@ import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor
 import type { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 
 import { TherarbgContentDirectory } from './index';
@@ -23,7 +24,9 @@ describe('TherarbgContentDirectory', () => {
     mockCache = new MockCache();
     const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
 
-    mockRequestService = new RequestService() as unknown as jest.Mocked<RequestService>;
+    mockRequestService = new RequestService(
+      new StatsService()
+    ) as unknown as jest.Mocked<RequestService>;
 
     mockDownloadService = new DownloadService(
       mockStorageService,
@@ -404,7 +407,7 @@ describe('TherarbgContentDirectory', () => {
       const { RequestService: RequestServiceImpl } = jest.requireActual(
         '@services/request/request.service'
       );
-      const realRequestService = new RequestServiceImpl();
+      const realRequestService = new RequestServiceImpl(new StatsService());
       const realDownloadService = new DownloadService(
         new StorageService({} as Database) as jest.Mocked<StorageService>,
         realRequestService

@@ -10,6 +10,7 @@ import type {
   SourceMetadataFileService,
   SourceService,
 } from '@services/source';
+import type { StatsService } from '@services/stats/stats.service';
 import type { StreamService } from '@services/stream/stream.service';
 import type { TMDBApi } from '@services/tmdb/tmdb.api';
 import type { TraktService } from '@services/trakt/trakt.service';
@@ -28,6 +29,7 @@ export interface Deps {
   downloadService: DownloadService;
   streamService: StreamService;
   requestService: RequestService;
+  statsService: StatsService;
 }
 
 export interface ErrorResponse {

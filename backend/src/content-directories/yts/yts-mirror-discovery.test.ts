@@ -2,6 +2,7 @@ import { MockCache } from '@__test-utils__/cache.mock';
 
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 
 import { discoverYTSMirrors } from './yts-mirror-discovery';
 
@@ -11,7 +12,9 @@ describe('YTS Mirror Discovery', () => {
   let mockRequestService: jest.Mocked<RequestService>;
 
   beforeEach(() => {
-    mockRequestService = new RequestService() as unknown as jest.Mocked<RequestService>;
+    mockRequestService = new RequestService(
+      new StatsService()
+    ) as unknown as jest.Mocked<RequestService>;
   });
 
   it('should discover operational YTS domains from yifystatus.com', async () => {

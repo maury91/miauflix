@@ -1,6 +1,7 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
 import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 
 import { YTSApi } from './yts.api';
 
@@ -14,7 +15,7 @@ describe('YTSApi', () => {
     // Create a minimal mock cache with just the required methods
     const mockCache = new MockCache();
 
-    requestService = new RequestService();
+    requestService = new RequestService(new StatsService());
 
     api = new YTSApi(mockCache, requestService);
   });
