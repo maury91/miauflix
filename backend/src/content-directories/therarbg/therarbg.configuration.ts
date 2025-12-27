@@ -1,5 +1,6 @@
 import { createCache } from 'cache-manager';
 
+import type { RequestService } from '@services/request/request.service';
 import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 import { TheRARBGApi } from './therarbg.api';
@@ -16,10 +17,10 @@ export const theRarbgConfigurationDefinition = serviceConfiguration({
       transform: transforms.url(),
     }),
   },
-  test: async () => {
+  test: async (requestService: RequestService) => {
     try {
       const cache = createCache();
-      const theRarbgApi = new TheRARBGApi(cache);
+      const theRarbgApi = new TheRARBGApi(cache, requestService);
 
       // Use test because it doesn't use cache
       const testResult = await theRarbgApi.test();

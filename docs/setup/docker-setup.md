@@ -37,6 +37,7 @@ This command starts only the backend service using Docker Compose in production 
 - **miauflix**: Node.js API server and static-asset frontend host
 - **nginx**: Reverse proxy with SSL termination and static file serving
 - **nordvpn**: VPN container (optional, for privacy protection)
+- **flaresolverr**: Cloudflare bypass proxy (optional, for accessing protected content sources)
 - **certbot**: Automatic SSL certificate management via Let's Encrypt
 
 ### Service Configuration
@@ -75,6 +76,45 @@ nginx:
     - ./nginx/certbot/conf:/etc/letsencrypt
     - ./nginx/certbot/www:/var/www/certbot
 ```
+
+#### FlareSolverr Service
+
+```yaml
+flaresolverr:
+  image: ghcr.io/flaresolverr/flaresolverr:latest
+  container_name: miauflix-flaresolverr
+  depends_on:
+    vpn:
+      condition: service_healthy
+  environment:
+    - LOG_LEVEL=info
+    - LOG_HTML=false
+    - CAPTCHA_SOLVER=none
+    - TZ=${TZ:-UTC}
+  network_mode: service:vpn # Route traffic through NordVPN
+  volumes:
+    - /var/lib/flaresolver:/config
+  restart: unless-stopped
+```
+
+**Key Features:**
+
+- **VPN Integration**: Traffic is routed through the NordVPN service for privacy (`network_mode: service:vpn`)
+- **Persistent Storage**: Configuration stored in `/var/lib/flaresolver` volume
+- **Auto-restart**: Automatically restarts if the container stops
+- **Cloudflare Bypass**: Automatically solves Cloudflare challenges for protected content sources
+
+**Configuration:**
+
+FlareSolverr is configured via environment variables in the `miauflix` service:
+
+```yaml
+environment:
+  - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://localhost:8191}
+  - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
+```
+
+For detailed FlareSolverr setup and troubleshooting, see the [FlareSolverr Configuration Guide](flaresolverr.md).
 
 ## Development with Docker
 

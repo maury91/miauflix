@@ -15,6 +15,24 @@ services:
       - net.ipv4.conf.all.src_valid_mark=1 # Maybe required
       - net.ipv4.conf.all.rp_filter=2 # Set reverse path filter to loose mode
       - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
+    ports:
+      - '5000:3000' # Expose backend API port (host:container)
+    restart: unless-stopped
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: miauflix-flaresolverr
+    depends_on:
+      vpn:
+        condition: service_healthy
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=${TZ:-UTC}
+    network_mode: service:vpn # Route traffic through NordVPN
+    volumes:
+      - flaresolver_config:/config
     restart: unless-stopped
 
   miauflix:
@@ -26,6 +44,8 @@ services:
     depends_on:
       vpn:
         condition: service_healthy
+      flaresolverr:
+        condition: service_started
     environment:
       - DATA_DIR=/usr/data
       - PUID=${USER_ID:-1000}
@@ -35,6 +55,8 @@ services:
       - COOKIE_SECURE=true
       - ENABLE_FRONTEND=false # Frontend is served by nginx
       - DEBUG=SourceService,DataResolver,DownloadService
+      - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://localhost:8191}
+      - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
       interval: 30s
@@ -45,7 +67,6 @@ services:
       - ./.env:/usr/src/app/.env
       - ./data:/usr/data/
       - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
-      - miauflix_node_modules:/usr/src/app/node_modules
       - frontend_static:/usr/src/app/public_volume
     network_mode: service:vpn # Route traffic through NordVPN
     # No ports section here as they're defined in the nordvpn service
@@ -86,7 +107,7 @@ services:
       - nginx
 
 volumes:
-  miauflix_node_modules:
-    name: miauflix_node_modules
   frontend_static:
     name: frontend_static
+  flaresolver_config:
+    name: flaresolver_config

@@ -15,6 +15,7 @@ import { createListRoutes } from './list.routes';
 import { createMovieRoutes } from './movie.routes';
 import { createProgressRoutes } from './progress.routes';
 import { createShowRoutes } from './show.routes';
+import { createStatsRoutes } from './stats.routes';
 import { createStreamRoutes } from './stream.routes';
 import { createTraktRoutes } from './trakt.routes';
 
@@ -43,6 +44,7 @@ function createApiRoutes(deps: Deps) {
     .route('/stream', createStreamRoutes(deps))
     .route('/trakt', createTraktRoutes(deps))
     .route('/progress', createProgressRoutes(deps))
+    .route('/stats', createStatsRoutes(deps))
     .route('/', createListRoutes(deps));
 }
 

@@ -3,6 +3,8 @@ import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor
 
 import type { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
+import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 
 import { TherarbgContentDirectory } from './index';
@@ -10,29 +12,45 @@ import type { ImdbDetailPost, ImdbMetadata } from './therarbg.types';
 
 jest.mock('@services/download/download.service');
 jest.mock('@services/storage/storage.service');
+jest.mock('@services/request/request.service');
 
 describe('TherarbgContentDirectory', () => {
-  let contentDirectory: TherarbgContentDirectory;
-  let mockCache: MockCache;
-  let mockDownloadService: jest.Mocked<DownloadService>;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  beforeEach(() => {
-    mockCache = new MockCache();
+  const setupTest = () => {
+    const mockCache = new MockCache();
     const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
 
-    mockDownloadService = new DownloadService(mockStorageService) as jest.Mocked<DownloadService>;
+    const mockRequestService = new RequestService(
+      new StatsService()
+    ) as unknown as jest.Mocked<RequestService>;
+
+    const mockDownloadService = new DownloadService(
+      mockStorageService,
+      mockRequestService
+    ) as jest.Mocked<DownloadService>;
 
     // Mock the generateLink method to return proper magnet links
     mockDownloadService.generateLink.mockImplementation((hash: string, trackers: string[]) => {
       return `magnet:?xt=urn:btih:${hash}&tr=${trackers.join('&tr=')}`;
     });
 
-    contentDirectory = new TherarbgContentDirectory(mockCache, mockDownloadService);
-  });
+    const contentDirectory = new TherarbgContentDirectory(
+      mockCache,
+      mockDownloadService,
+      mockRequestService
+    );
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+    return {
+      contentDirectory,
+      mockCache,
+      mockDownloadService,
+      mockRequestService,
+      mockStorageService,
+    };
+  };
 
   describe('getMovie', () => {
     const mockImdbId = 'tt0119698';
@@ -99,6 +117,8 @@ describe('TherarbgContentDirectory', () => {
     };
 
     it('should return normalized sources for valid movie', async () => {
+      const { contentDirectory, mockDownloadService } = setupTest();
+
       // Mock the API response
       jest.spyOn(contentDirectory['api'], 'searchByImdbId').mockResolvedValue(mockMovieResponse);
 
@@ -136,6 +156,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should return empty sources when no movie found', async () => {
+      const { contentDirectory } = setupTest();
       jest.spyOn(contentDirectory['api'], 'searchByImdbId').mockResolvedValue(null);
 
       const result = await contentDirectory.getMovie(mockImdbId);
@@ -147,6 +168,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should return empty sources when movie has no torrents', async () => {
+      const { contentDirectory } = setupTest();
       jest.spyOn(contentDirectory['api'], 'searchByImdbId').mockResolvedValue({
         ...mockMovieResponse,
         trb_posts: [],
@@ -161,6 +183,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should handle API errors gracefully', async () => {
+      const { contentDirectory } = setupTest();
       jest
         .spyOn(contentDirectory['api'], 'searchByImdbId')
         .mockRejectedValue(new Error('API Error'));
@@ -169,6 +192,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should pass highPriority flag to API', async () => {
+      const { contentDirectory } = setupTest();
       const searchSpy = jest
         .spyOn(contentDirectory['api'], 'searchByImdbId')
         .mockResolvedValue(mockMovieResponse);
@@ -179,6 +203,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should filter out trackers with scrape errors', async () => {
+      const { contentDirectory, mockDownloadService } = setupTest();
       const mockResponseWithBadTrackers = {
         ...mockMovieResponse,
         trb_posts: [
@@ -224,6 +249,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should handle sources with null seeders/leechers', async () => {
+      const { contentDirectory } = setupTest();
       const mockResponseWithNullValues = {
         ...mockMovieResponse,
         trb_posts: [
@@ -311,6 +337,7 @@ describe('TherarbgContentDirectory', () => {
     };
 
     it('should return normalized sources for valid TV show', async () => {
+      const { contentDirectory } = setupTest();
       jest.spyOn(contentDirectory['api'], 'searchByImdbId').mockResolvedValue(mockTVShowResponse);
 
       const result = await contentDirectory.getTVShow(mockImdbId);
@@ -343,6 +370,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should return empty sources when no TV show found', async () => {
+      const { contentDirectory } = setupTest();
       jest.spyOn(contentDirectory['api'], 'searchByImdbId').mockResolvedValue(null);
 
       const result = await contentDirectory.getTVShow(mockImdbId);
@@ -354,6 +382,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should return empty sources when TV show has no sources', async () => {
+      const { contentDirectory } = setupTest();
       jest.spyOn(contentDirectory['api'], 'searchByImdbId').mockResolvedValue({
         ...mockTVShowResponse,
         trb_posts: [],
@@ -368,6 +397,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should handle API errors gracefully', async () => {
+      const { contentDirectory } = setupTest();
       jest
         .spyOn(contentDirectory['api'], 'searchByImdbId')
         .mockRejectedValue(new Error('API Error'));
@@ -376,6 +406,7 @@ describe('TherarbgContentDirectory', () => {
     });
 
     it('should pass highPriority flag to API', async () => {
+      const { contentDirectory } = setupTest();
       const searchSpy = jest
         .spyOn(contentDirectory['api'], 'searchByImdbId')
         .mockResolvedValue(mockTVShowResponse);
@@ -388,10 +419,29 @@ describe('TherarbgContentDirectory', () => {
 
   describe('real API (http-vcr)', () => {
     it('should fetch real data and match snapshot', async () => {
-      // Do NOT mock the API for this test
+      const { mockCache } = setupTest();
+
+      // Do NOT mock the API for this test - use real RequestService so HTTP-VCR can intercept
+      const { RequestService: RequestServiceImpl } = jest.requireActual(
+        '@services/request/request.service'
+      );
+      const realRequestService = new RequestServiceImpl(new StatsService());
+      const realDownloadService = new DownloadService(
+        new StorageService({} as Database) as jest.Mocked<StorageService>,
+        realRequestService
+      ) as jest.Mocked<DownloadService>;
+      realDownloadService.generateLink.mockImplementation((hash: string, trackers: string[]) => {
+        return `magnet:?xt=urn:btih:${hash}&tr=${trackers.join('&tr=')}`;
+      });
+      const realContentDirectory = new TherarbgContentDirectory(
+        mockCache,
+        realDownloadService,
+        realRequestService
+      );
+
       // Use a real, known IMDB ID
       const imdbId = 'tt0119698'; // Cosmic Princess
-      const result = await contentDirectory.getMovie(imdbId);
+      const result = await realContentDirectory.getMovie(imdbId);
       expect(result).toMatchInlineSnapshot(`
 {
   "sources": [
@@ -774,6 +824,7 @@ describe('TherarbgContentDirectory', () => {
 
   describe('status', () => {
     it('should return API status', () => {
+      const { contentDirectory } = setupTest();
       const mockStatus = {
         name: 'TheRARBG',
         baseUrl: 'https://therarbg.to',
@@ -793,6 +844,8 @@ describe('TherarbgContentDirectory', () => {
 
   describe('integration with real API', () => {
     it('should work with real TheRARBG API for known movie', async () => {
+      const { contentDirectory } = setupTest();
+
       // This test uses the real API with a known movie (Cosmic Princess)
       // It's marked as integration test and may be skipped in CI
       const imdbId = 'tt0119698';

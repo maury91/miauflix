@@ -1,13 +1,19 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
+
 import { TheRARBGApi } from './therarbg.api';
 
 describe('TheRARBGService', () => {
   let service: TheRARBGApi;
+  let requestService: RequestService;
 
   beforeEach(() => {
     const mockCache = new MockCache();
-    service = new TheRARBGApi(mockCache);
+    // Use real RequestService - HTTP-VCR will intercept fetch calls
+    requestService = new RequestService(new StatsService());
+    service = new TheRARBGApi(mockCache, requestService);
   });
 
   describe('searchByImdbId', () => {
@@ -119,9 +125,9 @@ describe('TheRARBGService', () => {
   describe('error handling', () => {
     it('should handle network errors gracefully', async () => {
       // Create a service with invalid URL to test error handling
-      const invalidService = new TheRARBGApi(new MockCache());
+      const invalidService = new TheRARBGApi(new MockCache(), requestService);
 
-      // Mock the enhancedFetch to simulate a network error
+      // Mock fetch to simulate a network error
       const originalFetch = global.fetch;
       global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
 

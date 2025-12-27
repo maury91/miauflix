@@ -6,6 +6,7 @@ import type { Cache } from 'cache-manager';
 
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import { AbstractContentDirectory } from '@content-directories/content-directory.abstract';
+import type { RequestService } from '@services/request/request.service';
 
 import { YTSApi } from './yts.api';
 import type { YTSSourceMetadata } from './yts.types';
@@ -14,9 +15,9 @@ import { mapYTSQuality, mapYTSTypeToSource, mapYTSVideoCodec } from './yts.utils
 export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
   protected readonly api: YTSApi;
 
-  constructor(cache: Cache) {
+  constructor(cache: Cache, requestService: RequestService) {
     super();
-    this.api = new YTSApi(cache);
+    this.api = new YTSApi(cache, requestService);
   }
 
   name = 'YTS';

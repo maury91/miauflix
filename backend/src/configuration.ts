@@ -10,8 +10,10 @@ import { type ServiceConfiguration, type VariableInfo } from '@mytypes/configura
 import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
 import { downloadConfigurationDefinition } from '@services/download/download.configuration';
 import { mediaConfigurationDefinition } from '@services/media/media.configuration';
+import { RequestService } from '@services/request/request.service';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
+import { StatsService } from '@services/stats/stats.service';
 import { storageConfigurationDefinition } from '@services/storage/storage.configuration';
 import { tmdbConfigurationDefinition } from '@services/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/trakt/trakt.configuration';
@@ -84,6 +86,20 @@ const serverConfigurationDefinition = serviceConfiguration({
       example: 'true',
       transform: transforms.boolean(),
     }),
+    FLARESOLVERR_URL: variable({
+      description: 'URL for FlareSolverr instance to bypass Cloudflare protection',
+      required: false,
+      defaultValue: '',
+      example: 'http://localhost:8191',
+      transform: transforms.optional(transforms.url()),
+    }),
+    ENABLE_FLARESOLVERR: variable({
+      description: 'Enable FlareSolverr for bypassing Cloudflare protection on 403 responses',
+      required: false,
+      defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
   },
   test: async () => {
     // No test needed for CORS configuration
@@ -130,11 +146,12 @@ export const variablesDefaultValues = Object.values(services).reduce(
 type ServiceKey = keyof typeof services;
 
 const testService = async (
-  service: ServiceConfiguration<Record<string, VariableInfo>>
+  service: ServiceConfiguration<Record<string, VariableInfo>>,
+  requestService: RequestService
 ): Promise<{ success: boolean; message?: string }> => {
   console.error = () => {};
   try {
-    await service.test();
+    await service.test(requestService);
 
     console.error = err;
 
@@ -152,7 +169,8 @@ const testService = async (
  * Configure a service by prompting for variables and testing the configuration
  */
 async function configureService(
-  service: ServiceConfiguration<Record<string, VariableInfo>>
+  service: ServiceConfiguration<Record<string, VariableInfo>>,
+  requestService: RequestService
 ): Promise<void> {
   console.log();
   console.log(chalk.cyan.bold(`===== ${service.name} Configuration =====`));
@@ -186,7 +204,7 @@ async function configureService(
 
   // Test the configuration
   console.log(chalk.yellow(`\nTesting ${service.name} configuration...`));
-  const testResult = await testService(service);
+  const testResult = await testService(service, requestService);
 
   if (testResult.success) {
     console.log(chalk.green(`✅ ${service.name} configuration is valid!`));
@@ -201,7 +219,7 @@ async function configureService(
   });
 
   if (tryAgain) {
-    return configureService(service);
+    return configureService(service, requestService);
   }
 
   console.log(chalk.yellow(`Warning: Using potentially invalid configuration for ${service.name}`));
@@ -360,10 +378,13 @@ export async function validateConfiguration(
     }
   }
 
+  // Create RequestService instance for services that need it
+  const requestService = new RequestService(new StatsService());
+
   if (servicesNeedingConfiguration.size === 0 && !forceReconfigure) {
     console.log(chalk.cyan('Self testing...'));
 
-    const invalidServices = await validateExistingConfiguration();
+    const invalidServices = await validateExistingConfiguration(requestService);
     if (invalidServices.length > 0) {
       console.log(
         chalk.red(
@@ -404,7 +425,7 @@ export async function validateConfiguration(
           },
           {} as Record<string, string | undefined>
         );
-      await configureService(service);
+      await configureService(service, requestService);
 
       for (const [varName] of Object.entries(service.variables)) {
         if (process.env[varName] !== envVariablesBefore[varName]) {
@@ -458,7 +479,9 @@ export async function validateConfiguration(
 /**
  * Validate existing configuration and reconfigure if needed
  */
-async function validateExistingConfiguration(): Promise<ServiceKey[]> {
+async function validateExistingConfiguration(
+  requestService: RequestService
+): Promise<ServiceKey[]> {
   const invalidServices = (
     await Promise.all(
       (
@@ -468,7 +491,7 @@ async function validateExistingConfiguration(): Promise<ServiceKey[]> {
         ][]
       ).map(async ([serviceKey, service]) => {
         // Execute test
-        const testResult = await testService(service);
+        const testResult = await testService(service, requestService);
         return [testResult.success, serviceKey] as const;
       })
     )

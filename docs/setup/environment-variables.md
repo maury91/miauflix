@@ -65,6 +65,20 @@ NORDVPN_PRIVATE_KEY=your-wireguard-private-key
 - **Get from**: [NordVPN WireGuard Setup](https://github.com/bubuntux/nordlynx#how-to-get-your-private_key)
 - **Required for**: Starting up the VPN docker container
 
+#### FlareSolverr (Optional)
+
+```bash
+# FlareSolverr integration - Optional for bypassing Cloudflare protection
+ENABLE_FLARESOLVERR=true
+FLARESOLVERR_URL=http://localhost:8191
+```
+
+- **ENABLE_FLARESOLVERR**: Enable or disable FlareSolverr integration (default: `true` when `FLARESOLVERR_URL` is set)
+- **FLARESOLVERR_URL**: Base URL of the FlareSolverr instance (default: `http://localhost:8191`)
+- **Description**: FlareSolverr is a proxy server that bypasses Cloudflare protection, allowing access to content sources protected by Cloudflare's anti-bot measures
+- **Required for**: Accessing Cloudflare-protected content sources
+- **See also**: [FlareSolverr Configuration Guide](flaresolverr.md) for detailed setup instructions
+
 ### Authentication & Security
 
 #### JWT Authentication (Auto-configured)
@@ -209,6 +223,7 @@ WWW_DOMAIN=www.yourdomain.com
 
 1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET** - User lists and tracking
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
+3. **ENABLE_FLARESOLVERR + FLARESOLVERR_URL** - Cloudflare bypass for protected content sources
 
 ### Advanced Configuration (Auto-configured)
 

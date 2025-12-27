@@ -98,6 +98,14 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 - **Automatic Failover** - Service pause/resume on VPN status changes
 - **Privacy Protection** - IP masking for content discovery
 
+#### Request Handling & Cloudflare Bypass
+
+- **FlareSolverr Integration** - Automatic Cloudflare challenge solving for protected content sources
+- **Automatic 403 Retry** - Requests that receive 403 responses are automatically retried through FlareSolverr
+- **Cookie & User Agent Management** - Cookies and user agents from FlareSolverr solutions are cached per-domain for reuse
+- **Transparent Integration** - Works automatically when enabled, no code changes required
+- **See also**: [FlareSolverr Configuration Guide](../setup/flaresolverr.md) for detailed documentation
+
 ## Data Flow Architecture
 
 ### Request Lifecycle

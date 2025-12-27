@@ -9,6 +9,7 @@ Welcome to the Miauflix documentation! This guide helps you find the right infor
 - **New to Miauflix?** Start with [Getting Started](setup/getting-started.md)
 - **Docker deployment?** See [Docker Setup](setup/docker-setup.md)
 - **HTTPS configuration?** Check [SSL Certificates](setup/ssl-certificates.md)
+- **Cloudflare bypass?** See [FlareSolverr Configuration](setup/flaresolverr.md)
 
 ### 💻 Development
 
@@ -37,7 +38,8 @@ docs/
 │   ├── getting-started.md       # Main setup guide
 │   ├── environment-variables.md # Complete environment variables reference
 │   ├── docker-setup.md          # Docker deployment
-│   └── ssl-certificates.md      # HTTPS setup
+│   ├── ssl-certificates.md      # HTTPS setup
+│   └── flaresolverr.md          # FlareSolverr Cloudflare bypass
 ├── development/        # Development resources
 │   ├── workflow.md           # Development workflow
 │   ├── testing-guide.md      # Testing practices
@@ -61,6 +63,7 @@ docs/
 - **Configure AI assistance** → [AI Context](ai/context.md) + [CLAUDE.md](../CLAUDE.md)
 - **Run tests** → [Testing Guide](development/testing-guide.md)
 - **Set up HTTPS** → [SSL Certificates](setup/ssl-certificates.md)
+- **Configure Cloudflare bypass** → [FlareSolverr Configuration](setup/flaresolverr.md)
 - **Troubleshoot Docker** → [Docker Setup](setup/docker-setup.md)
 - **Follow code standards** → [Coding Conventions](development/coding-conventions.md)
 
