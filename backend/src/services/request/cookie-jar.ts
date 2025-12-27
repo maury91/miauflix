@@ -1,3 +1,5 @@
+import type { CookiePair } from '@mytypes/flaresolverr.types';
+
 /**
  * Simple per-domain cookie jar for request management.
  */
@@ -13,6 +15,27 @@ export class CookieJar {
     return Array.from(domainCookies.entries())
       .map(([name, value]) => `${name}=${value}`)
       .join('; ');
+  }
+
+  /**
+   * Get cookies for a domain as CookiePair array.
+   */
+  getCookiePairs(domain: string): CookiePair[] {
+    const domainCookies = this.jar.get(domain);
+    if (!domainCookies) return [];
+    return Array.from(domainCookies.entries()).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  }
+
+  /**
+   * Check if a cookie exists for a domain.
+   */
+  hasCookie(domain: string, cookieName: string): boolean {
+    const domainCookies = this.jar.get(domain);
+    if (!domainCookies) return false;
+    return domainCookies.has(cookieName);
   }
 
   /**

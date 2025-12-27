@@ -10,7 +10,9 @@ import type {
 } from '@mytypes/flaresolverr.types';
 import type { StatsService } from '@services/stats/stats.service';
 import { isHtmlWrappedJson, unwrapJsonFromHtml } from '@utils/html-unwrapper.util';
-import { extractDomain } from '@utils/url.util';
+import { bodyInitToString, normalizeHeaders, parseResponseBody } from '@utils/http.util';
+import { tryParseJSON } from '@utils/json.util';
+import { buildUrlWithQuery, extractDomain } from '@utils/url.util';
 
 import { CookieJar } from './cookie-jar';
 
@@ -59,57 +61,6 @@ export class RequestService {
   }
 
   /**
-   * Calculate POST data from request body
-   */
-  private calculatePostData(body: BodyInit | null | undefined): string {
-    if (!body) {
-      return '';
-    }
-
-    if (typeof body === 'string') {
-      return body;
-    }
-
-    if (body instanceof URLSearchParams) {
-      return body.toString();
-    }
-
-    if (body instanceof FormData) {
-      // Convert FormData to URL-encoded string
-      const formDataEntries: string[] = [];
-      for (const [key, value] of body.entries()) {
-        formDataEntries.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
-      }
-      return formDataEntries.join('&');
-    }
-
-    return '';
-  }
-
-  /**
-   * Parse cookie header string into CookiePair array
-   */
-  private parseCookies(cookieHeader: string): CookiePair[] {
-    if (!cookieHeader) {
-      return [];
-    }
-
-    return cookieHeader
-      .split(';')
-      .map<CookiePair | undefined>(cookieStr => {
-        const [name, ...valueParts] = cookieStr.trim().split('=');
-        if (name && valueParts.length) {
-          return {
-            name: name.trim(),
-            value: valueParts.join('=').trim(),
-          };
-        }
-        return undefined;
-      })
-      .filter((cookie): cookie is CookiePair => cookie !== undefined);
-  }
-
-  /**
    * Build FlareSolverr GET request payload
    */
   private buildFlareSolverrGetRequest(url: string, cookies: CookiePair[]): FlareSolverrGetRequest {
@@ -146,27 +97,6 @@ export class RequestService {
     return payload;
   }
 
-  private tryJSONParse<T>(body: string): T | undefined {
-    try {
-      return JSON.parse(body) as T;
-    } catch {
-      return undefined;
-    }
-  }
-
-  private async tryResponseJSONParse<T>(response: Response): Promise<T | string> {
-    const contentType = response.headers.get('content-type');
-    try {
-      if (!contentType || contentType.toLowerCase().includes('application/json')) {
-        return await response.json();
-      } else {
-        return await response.text();
-      }
-    } catch {
-      return await response.text();
-    }
-  }
-
   /**
    * Make a request through FlareSolverr
    */
@@ -196,13 +126,12 @@ export class RequestService {
     const method = options.method?.toUpperCase() || 'GET';
 
     // Get current cookies to pass to FlareSolverr
-    const cookieHeader = this.cookieJar.getCookieHeader(domain);
-    const cookies = this.parseCookies(cookieHeader);
+    const cookies = this.cookieJar.getCookiePairs(domain);
 
     // Build request payload
     const payload: FlareSolverrRequest =
       method === 'POST'
-        ? this.buildFlareSolverrPostRequest(url, this.calculatePostData(options.body), cookies)
+        ? this.buildFlareSolverrPostRequest(url, bodyInitToString(options.body), cookies)
         : this.buildFlareSolverrGetRequest(url, cookies);
 
     try {
@@ -271,9 +200,7 @@ export class RequestService {
         responseBody = unwrapJsonFromHtml(responseBody);
       }
 
-      solution.headers = Object.fromEntries(
-        Object.entries(solution.headers).map(([key, value]) => [key.toLowerCase(), value])
-      );
+      solution.headers = normalizeHeaders(solution.headers);
 
       const result: RequestServiceResponse<ArrayBuffer | T> = {
         body: responseBody,
@@ -286,7 +213,7 @@ export class RequestService {
       if (asBuffer) {
         result.body = new TextEncoder().encode(responseBody).buffer;
       } else {
-        const parsedBody = this.tryJSONParse<T>(responseBody);
+        const parsedBody = tryParseJSON<T>(responseBody);
         if (parsedBody) {
           result.body = parsedBody;
           // Set content-type if not present
@@ -339,22 +266,16 @@ export class RequestService {
     const { headers = {}, queryString, timeout, ...fetchOptions } = options ?? {};
 
     // Build URL with query string
-    const urlObj = typeof rawUrl === 'string' ? new URL(rawUrl) : rawUrl;
-    if (queryString) {
-      Object.entries(queryString).forEach(([key, value]) => {
-        urlObj.searchParams.set(key, String(value));
-      });
-    }
-
+    const urlObj = buildUrlWithQuery(rawUrl, queryString);
     const urlString = urlObj.toString();
     const domain = extractDomain(urlObj);
 
     const controller = new AbortController();
     const timeoutId = timeout ? setTimeout(() => controller.abort(), timeout) : undefined;
 
-    // Check if we have FlareSolverr cookies (for "solved" tracking)
+    // Check if we have FlareSolverr solution cookie for this domain
     const hasFlareSolverrCookies =
-      this.isFlareSolverrEnabled && this.cookieJar.getCookieHeader(domain) !== '';
+      this.isFlareSolverrEnabled && this.cookieJar.hasCookie(domain, 'cf_clearance');
 
     try {
       // Get stored cookies and userAgent for this domain
@@ -432,10 +353,8 @@ export class RequestService {
           this.statsService.metricCancel(successMetricId);
           // Return the original 403 response if FlareSolverr fails
           return {
-            body: await this.tryResponseJSONParse<T>(response),
-            headers: Object.fromEntries(
-              [...response.headers.entries()].map(([key, value]) => [key.toLowerCase(), value])
-            ),
+            body: await parseResponseBody<T>(response),
+            headers: normalizeHeaders(response.headers),
             ok: response.ok,
             status: response.status,
             statusText: response.statusText,
@@ -462,10 +381,8 @@ export class RequestService {
       return {
         body: options?.asBuffer
           ? await response.arrayBuffer()
-          : await this.tryResponseJSONParse<T>(response),
-        headers: Object.fromEntries(
-          [...response.headers.entries()].map(([key, value]) => [key.toLowerCase(), value])
-        ),
+          : await parseResponseBody<T>(response),
+        headers: normalizeHeaders(response.headers),
         ok: response.ok,
         status: response.status,
         statusText: response.statusText,
