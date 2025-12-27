@@ -17,9 +17,13 @@ export function bodyInitToString(body: BodyInit | null | undefined): string {
   }
 
   if (body instanceof FormData) {
-    // Convert FormData to URL-encoded string
+    // Convert FormData to URL-encoded string, skipping file entries
     const formDataEntries: string[] = [];
     for (const [key, value] of body.entries()) {
+      // Skip File entries (FormDataEntryValue is string | File)
+      if (value instanceof File) {
+        continue;
+      }
       formDataEntries.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
     }
     return formDataEntries.join('&');

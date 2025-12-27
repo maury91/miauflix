@@ -270,8 +270,21 @@ export class RequestService {
     const urlString = urlObj.toString();
     const domain = extractDomain(urlObj);
 
-    const controller = new AbortController();
-    const timeoutId = timeout ? setTimeout(() => controller.abort(), timeout) : undefined;
+    // Merge user signal with timeout if both provided
+    let timeoutId: NodeJS.Timeout | undefined;
+    let signal: AbortSignal | undefined = fetchOptions.signal;
+
+    if (timeout) {
+      const timeoutController = new AbortController();
+      timeoutId = setTimeout(() => timeoutController.abort(), timeout);
+      if (signal) {
+        signal = AbortSignal.any
+          ? AbortSignal.any([signal, timeoutController.signal])
+          : timeoutController.signal;
+      } else {
+        signal = timeoutController.signal;
+      }
+    }
 
     // Check if we have FlareSolverr solution cookie for this domain
     const hasFlareSolverrCookies =
@@ -297,7 +310,7 @@ export class RequestService {
       // First do the normal request
       const response = await fetch(urlString, {
         ...fetchOptions,
-        signal: controller.signal,
+        signal,
         headers: requestHeaders,
       });
 
@@ -315,7 +328,7 @@ export class RequestService {
                 urlString,
                 {
                   ...fetchOptions,
-                  signal: controller.signal,
+                  signal,
                   headers: requestHeaders,
                 },
                 true
@@ -324,7 +337,7 @@ export class RequestService {
                 urlString,
                 {
                   ...fetchOptions,
-                  signal: controller.signal,
+                  signal,
                   headers: requestHeaders,
                 },
                 false

@@ -51,14 +51,26 @@ describe('bodyInitToString', () => {
     expect(result).toContain(encodeURIComponent('a&b=c'));
   });
 
-  it('should return empty string for files', () => {
+  it('should exclude files from FormData', () => {
     const formData = new FormData();
     const blob = new Blob(['test'], { type: 'text/plain' });
     formData.append('file', blob, 'test.txt');
     const result = bodyInitToString(formData);
-    // FormData with files should still return URL-encoded string, but file content won't be included
-    // The actual behavior depends on FormData implementation
-    expect(typeof result).toBe('string');
+    // Files should be completely excluded, not encoded
+    expect(result).toBe('');
+  });
+
+  it('should include regular fields but exclude files in mixed FormData', () => {
+    const formData = new FormData();
+    formData.append('name', 'John');
+    formData.append('email', 'john@example.com');
+    const blob = new Blob(['test'], { type: 'text/plain' });
+    formData.append('file', blob, 'test.txt');
+    const result = bodyInitToString(formData);
+    // Should only contain the regular fields, not the file
+    expect(result).toContain('name=John');
+    expect(result).toContain('email=john%40example.com');
+    expect(result).not.toContain('file');
   });
 
   it('should return empty string for unsupported types', () => {
