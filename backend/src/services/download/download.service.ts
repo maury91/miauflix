@@ -10,6 +10,7 @@ import WebTorrent from 'webtorrent';
 import { ENV } from '@constants';
 import type { MovieSource } from '@entities/movie-source.entity';
 import type { Storage } from '@entities/storage.entity';
+import type { RequestService } from '@services/request/request.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import type { StorageService } from '@services/storage/storage.service';
 import { traced } from '@utils/tracing.util';
@@ -54,7 +55,10 @@ export class DownloadService {
   private readonly blacklistedTrackersDownloadUrl: string;
   private readonly scrapeTrackers: string[];
 
-  constructor(private readonly storageService: StorageService) {
+  constructor(
+    private readonly storageService: StorageService,
+    private readonly requestService: RequestService
+  ) {
     this.staticTrackers = ENV('STATIC_TRACKERS');
     this.scrapeTrackers = ENV('SCRAPE_TRACKERS');
     this.bestTrackers = [...new Set([...this.staticTrackers])];
@@ -97,7 +101,7 @@ export class DownloadService {
 
   private async loadTrackers() {
     const [bestTrackers, blacklistedTrackers] = await Promise.all([
-      getTrackers(this.bestTrackersDownloadUrl),
+      getTrackers(this.bestTrackersDownloadUrl, this.requestService),
       getIpSet(this.blacklistedTrackersDownloadUrl),
     ]);
 

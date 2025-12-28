@@ -8,10 +8,10 @@ import type {
   MovieSourceRepository,
   SourceProcessingResult,
 } from '@repositories/movie-source.repository';
+import type { RequestService } from '@services/request/request.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { adaptiveLog } from '@utils/adaptive-logging.util';
-import { enhancedFetch } from '@utils/fetch.util';
 import { RateLimiter } from '@utils/rateLimiter';
 import { scheduleNextCheck } from '@utils/scheduling.util';
 import { SingleFlight } from '@utils/singleflight.util';
@@ -38,7 +38,8 @@ export class SourceService {
     db: Database,
     vpnService: VpnDetectionService,
     private readonly contentDirectoryService: ContentDirectoryService,
-    private readonly magnetService: SourceMetadataFileService
+    private readonly magnetService: SourceMetadataFileService,
+    private readonly requestService: RequestService
   ) {
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
@@ -452,7 +453,9 @@ export class SourceService {
       const rateLimiter = this.getSourceRateLimiter(source);
       await rateLimiter.throttle();
 
-      const response = await enhancedFetch(url);
+      const response = await this.requestService.request(url, {
+        asBuffer: true,
+      });
 
       const validation = validateContentFileResponse(response);
       if (!validation.isValid) {
@@ -460,8 +463,14 @@ export class SourceService {
         return null;
       }
 
-      const arrayBuffer = await response.arrayBuffer();
-      return Buffer.from(arrayBuffer);
+      // Convert response body to Buffer
+      if (response.body instanceof ArrayBuffer) {
+        return Buffer.from(response.body);
+      }
+      if (typeof response.body === 'string') {
+        return Buffer.from(response.body, 'binary');
+      }
+      throw new Error('Invalid response body');
     } catch (error) {
       logger.error('SourceService', `Error downloading from URL: ${url}`, error);
       return null;

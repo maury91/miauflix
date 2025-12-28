@@ -9,27 +9,23 @@ import loadIPSet from 'load-ip-set';
 
 import { ENV } from '@constants';
 import type { Database } from '@database/database';
+import type { RequestServiceResponse } from '@services/request/request.service';
+import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
-import { enhancedFetch } from '@utils/fetch.util';
 
 import { mockedTorrentInstance } from '../../__mocks__/webtorrent';
 import { DownloadService } from './download.service';
 
 // Mock all external dependencies
 jest.mock('@constants');
-jest.mock('@utils/fetch.util');
 jest.mock('bittorrent-tracker');
 jest.mock('load-ip-set');
 jest.mock('@logger');
 jest.mock('@services/storage/storage.service');
+jest.mock('@services/request/request.service');
 
 describe('DownloadService', () => {
-  let service: DownloadService;
-  let mockBTClient: jest.Mocked<BTClient>;
-  let mockEnhancedFetch: jest.MockedFunction<typeof enhancedFetch>;
-  let mockLoadIPSet: jest.MockedFunction<typeof loadIPSet>;
-  let mockStorageService: jest.Mocked<StorageService>;
-
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -46,9 +42,14 @@ describe('DownloadService', () => {
       };
       return envMock[key];
     });
+  });
 
+  const setupTest = (mockConfig?: {
+    requestServiceMock?: (mock: jest.Mocked<RequestService>) => void;
+    loadIPSetMock?: (mock: jest.MockedFunction<typeof loadIPSet>) => void;
+  }) => {
     // Mock BT Client
-    mockBTClient = {
+    const mockBTClient = {
       once: jest.fn(),
       scrape: jest.fn(),
       destroy: jest.fn(),
@@ -56,36 +57,56 @@ describe('DownloadService', () => {
 
     (BTClient as jest.MockedClass<typeof BTClient>).mockImplementation(() => mockBTClient);
 
-    // Mock enhanced fetch
-    mockEnhancedFetch = enhancedFetch as jest.MockedFunction<typeof enhancedFetch>;
+    // Mock RequestService
+    const mockRequestService = new RequestService(
+      new StatsService()
+    ) as unknown as jest.Mocked<RequestService>;
 
     // Mock loadIPSet
-    mockLoadIPSet = loadIPSet as jest.MockedFunction<typeof loadIPSet>;
+    const mockLoadIPSet = loadIPSet as jest.MockedFunction<typeof loadIPSet>;
+
+    // Apply mock configurations before creating service
+    if (mockConfig?.requestServiceMock) {
+      mockConfig.requestServiceMock(mockRequestService);
+    }
+    if (mockConfig?.loadIPSetMock) {
+      mockConfig.loadIPSetMock(mockLoadIPSet);
+    }
 
     // Mock StorageService as EventEmitter
-    mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
-  });
+    const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
+
+    const service = new DownloadService(mockStorageService, mockRequestService);
+
+    return {
+      service,
+      mockBTClient,
+      mockRequestService,
+      mockLoadIPSet,
+      mockStorageService,
+    };
+  };
 
   describe('tracker loading', () => {
-    beforeEach(() => {
-      // Mock successful tracker fetch
-      mockEnhancedFetch.mockResolvedValue(
-        new Response(
-          'udp://tracker1.example.com:1337\nudp://tracker2.example.com:1337\n# comment\n',
-          {
-            status: 200,
-          }
-        )
-      );
-    });
-
     it('should load trackers and IP sets on initialization', async () => {
-      service = new DownloadService(mockStorageService);
+      const { mockRequestService, mockLoadIPSet } = setupTest({
+        requestServiceMock: mock => {
+          mock.request.mockResolvedValue({
+            body: 'udp://tracker1.example.com:1337\nudp://tracker2.example.com:1337\n# comment\n',
+            headers: { 'content-type': 'text/plain' },
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+          } satisfies RequestServiceResponse<string>);
+        },
+      });
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
 
-      expect(mockEnhancedFetch).toHaveBeenCalledWith('https://example.com/trackers_best.txt');
+      expect(mockRequestService.request).toHaveBeenCalledWith(
+        'https://example.com/trackers_best.txt'
+      );
       expect(mockLoadIPSet).toHaveBeenCalledWith(
         'https://example.com/blacklist.txt',
         expect.any(Object),
@@ -94,9 +115,11 @@ describe('DownloadService', () => {
     });
 
     it('should handle tracker fetch errors gracefully', async () => {
-      mockEnhancedFetch.mockRejectedValue(new Error('Network error'));
-
-      service = new DownloadService(mockStorageService);
+      setupTest({
+        requestServiceMock: mock => {
+          mock.request.mockRejectedValue(new Error('Network error'));
+        },
+      });
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -109,14 +132,20 @@ describe('DownloadService', () => {
     });
 
     it('should handle IP set loading errors gracefully', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (mockLoadIPSet as any).mockImplementation(
-        (url: string, options: unknown, callback: (err: Error | null, ipSet: unknown) => void) => {
-          callback(new Error('IP set error'), null);
-        }
-      );
-
-      service = new DownloadService(mockStorageService);
+      setupTest({
+        loadIPSetMock: mock => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (mock as any).mockImplementation(
+            (
+              url: string,
+              options: unknown,
+              callback: (err: Error | null, ipSet: unknown) => void
+            ) => {
+              callback(new Error('IP set error'), null);
+            }
+          );
+        },
+      });
 
       // Wait for async initialization
       await new Promise(resolve => setTimeout(resolve, 0));
@@ -130,24 +159,34 @@ describe('DownloadService', () => {
   });
 
   describe('generateLink', () => {
-    beforeEach(() => {
-      mockEnhancedFetch.mockResolvedValue(
-        new Response('udp://tracker2.example.com:1337\nudp://tracker3.example.com:1337', {
-          status: 200,
-        })
-      );
+    it('should generate a valid magnet link', async () => {
+      const { service } = setupTest({
+        requestServiceMock: mock => {
+          mock.request.mockResolvedValue({
+            body: 'udp://tracker2.example.com:1337\nudp://tracker3.example.com:1337',
+            headers: { 'content-type': 'text/plain' },
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+          } satisfies RequestServiceResponse<string>);
+        },
+        loadIPSetMock: mock => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (mock as any).mockImplementation(
+            (
+              url: string,
+              options: unknown,
+              callback: (err: Error | null, ipSet: unknown) => void
+            ) => {
+              callback(null, { contains: jest.fn() });
+            }
+          );
+        },
+      });
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (mockLoadIPSet as any).mockImplementation(
-        (url: string, options: unknown, callback: (err: Error | null, ipSet: unknown) => void) => {
-          callback(null, { contains: jest.fn() });
-        }
-      );
+      // Wait for async initialization
+      await new Promise(resolve => setTimeout(resolve, 0));
 
-      service = new DownloadService(mockStorageService);
-    });
-
-    it('should generate a valid magnet link', () => {
       const hash = 'abcdef1234567890abcdef1234567890abcdef12';
       const trackers = ['udp://tracker5.example.com:1337'];
       const name = 'Test Movie';
@@ -169,7 +208,34 @@ describe('DownloadService', () => {
       expect(result).not.toContain('tr=udp%3A%2F%2Ftracker5.example.com%3A1337%2C');
     });
 
-    it('should handle empty trackers array', () => {
+    it('should handle empty trackers array', async () => {
+      const { service } = setupTest({
+        requestServiceMock: mock => {
+          mock.request.mockResolvedValue({
+            body: 'udp://tracker2.example.com:1337\nudp://tracker3.example.com:1337',
+            headers: { 'content-type': 'text/plain' },
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+          } satisfies RequestServiceResponse<string>);
+        },
+        loadIPSetMock: mock => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (mock as any).mockImplementation(
+            (
+              url: string,
+              options: unknown,
+              callback: (err: Error | null, ipSet: unknown) => void
+            ) => {
+              callback(null, { contains: jest.fn() });
+            }
+          );
+        },
+      });
+
+      // Wait for async initialization
+      await new Promise(resolve => setTimeout(resolve, 0));
+
       const hash = 'abcdef1234567890abcdef1234567890abcdef12';
       const trackers: string[] = [];
 
@@ -188,7 +254,34 @@ describe('DownloadService', () => {
       expect(result).not.toContain('tr=udp%3A%2F%2Ftracker2.example.com%3A1337%2C');
     });
 
-    it('should deduplicate trackers', () => {
+    it('should deduplicate trackers', async () => {
+      const { service } = setupTest({
+        requestServiceMock: mock => {
+          mock.request.mockResolvedValue({
+            body: 'udp://tracker2.example.com:1337\nudp://tracker3.example.com:1337',
+            headers: { 'content-type': 'text/plain' },
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+          } satisfies RequestServiceResponse<string>);
+        },
+        loadIPSetMock: mock => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (mock as any).mockImplementation(
+            (
+              url: string,
+              options: unknown,
+              callback: (err: Error | null, ipSet: unknown) => void
+            ) => {
+              callback(null, { contains: jest.fn() });
+            }
+          );
+        },
+      });
+
+      // Wait for async initialization
+      await new Promise(resolve => setTimeout(resolve, 0));
+
       const hash = 'abcdef1234567890abcdef1234567890abcdef12';
       const trackers = ['udp://tracker4.example.com:1337', 'udp://tracker4.example.com:1337'];
 
@@ -211,7 +304,7 @@ describe('DownloadService', () => {
 
   //   describe('getSourceMetadataFile', () => {
   //     beforeEach(() => {
-  //       mockEnhancedFetch.mockResolvedValue(
+  //       mockRequestService.request.mockResolvedValue(
   //         new Response('udp://tracker1.example.com:1337', {
   //           status: 200,
   //         })
@@ -480,7 +573,7 @@ describe('DownloadService', () => {
 
   describe('storage delete event handling', () => {
     it('should remove torrent when storage is deleted with valid hash', async () => {
-      service = new DownloadService(mockStorageService);
+      const { service, mockStorageService } = setupTest();
 
       // Mock a torrent in the client
       const mockTorrent = {
@@ -516,7 +609,7 @@ describe('DownloadService', () => {
     });
 
     it('should handle storage deletion without hash gracefully', () => {
-      service = new DownloadService(mockStorageService);
+      const { mockStorageService } = setupTest();
 
       // Get the delete event handler that was registered
       const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
@@ -542,7 +635,7 @@ describe('DownloadService', () => {
     });
 
     it('should handle storage deletion with undefined hash gracefully', () => {
-      service = new DownloadService(mockStorageService);
+      const { mockStorageService } = setupTest();
 
       // Get the delete event handler that was registered
       const deleteCall = mockStorageService.on.mock.calls.find(call => call[0] === 'delete');
@@ -570,7 +663,7 @@ describe('DownloadService', () => {
 
   describe('error handling', () => {
     it('should log WebTorrent client errors', () => {
-      service = new DownloadService(mockStorageService);
+      setupTest();
 
       // Get the error handler that was registered
       const errorHandler = mockedTorrentInstance.on.mock.calls.find(call => call[0] === 'error')[1];

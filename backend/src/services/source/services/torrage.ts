@@ -1,4 +1,4 @@
-import { enhancedFetch } from '@utils/fetch.util';
+import type { RequestService, RequestServiceResponse } from '@services/request/request.service';
 
 export const caesarShift = (str: string, shift: number): string => {
   return str
@@ -20,17 +20,21 @@ export const reverse = (str: string): string => {
 
 export const getSourceMetadataFileFromTorrage = async (
   hash: string,
-  timeout: number
-): Promise<Response> => {
-  const encryptedTTLRaw = await fetch(
+  timeout: number,
+  requestService: RequestService
+): Promise<RequestServiceResponse<string>> => {
+  const encryptedTTLRaw = await requestService.request<string>(
     `https://torrage.info/torrent.php?h=${hash}&ttl=${Math.floor(Date.now() / 1000)}`
   );
-  const encryptedTTL = (await encryptedTTLRaw.clone().text()).match(/getTTL\("([^"]+)"/)?.[1];
+  const encryptedTTL = encryptedTTLRaw.body.match(/getTTL\("([^"]+)"/)?.[1];
   if (encryptedTTL) {
     const decryptedTTL = reverse(caesarShift(encryptedTTL, -12));
-    return await enhancedFetch(`https://torrage.info/download.php?h=${hash}&ttl=${decryptedTTL}`, {
-      timeout,
-    });
+    return await requestService.request<string>(
+      `https://torrage.info/download.php?h=${hash}&ttl=${decryptedTTL}`,
+      {
+        timeout,
+      }
+    );
   }
   return encryptedTTLRaw;
 };

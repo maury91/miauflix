@@ -4,6 +4,7 @@ import type { AbstractContentDirectory } from '@content-directories/content-dire
 import { TherarbgContentDirectory } from '@content-directories/therarbg';
 import { YTSContentDirectory } from '@content-directories/yts';
 import type { DownloadService } from '@services/download/download.service';
+import type { RequestService } from '@services/request/request.service';
 import { traced } from '@utils/tracing.util';
 
 /**
@@ -12,10 +13,10 @@ import { traced } from '@utils/tracing.util';
 export class ContentDirectoryService {
   private readonly movieDirectories: AbstractContentDirectory[];
 
-  constructor(cache: Cache, downloadService: DownloadService) {
+  constructor(cache: Cache, downloadService: DownloadService, requestService: RequestService) {
     this.movieDirectories = [
-      new YTSContentDirectory(cache),
-      new TherarbgContentDirectory(cache, downloadService),
+      new YTSContentDirectory(cache, requestService),
+      new TherarbgContentDirectory(cache, downloadService, requestService),
     ];
   }
 

@@ -1,3 +1,5 @@
+import type { RequestService } from '@services/request/request.service';
+
 export type BaseVariableInfo = {
   description: string;
   example?: string;
@@ -47,7 +49,7 @@ export type ServiceConfiguration<T extends Record<string, VariableInfo>> = {
   name: string;
   description: string;
   variables: ServiceVariables<T>;
-  test: () => Promise<void>;
+  test: (requestService: RequestService) => Promise<void>;
 };
 
 export type ValidationTransformResult<T> = {
