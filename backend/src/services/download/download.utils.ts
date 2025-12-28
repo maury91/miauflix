@@ -3,7 +3,7 @@ import type IPSet from 'ip-set';
 import loadIPSet from 'load-ip-set';
 import type { Torrent, TorrentFile } from 'webtorrent';
 
-import { enhancedFetch } from '@utils/fetch.util';
+import type { RequestService } from '@services/request/request.service';
 
 export const isVideoFile = (filename: string) => {
   return (
@@ -50,12 +50,12 @@ export const getIpSet = async (url: string): Promise<IPSet | null> => {
   });
 };
 
-export const getTrackers = async (url: string) => {
+export const getTrackers = async (url: string, requestService: RequestService) => {
   try {
-    const response = await enhancedFetch(url);
+    const response = await requestService.request<string>(url);
 
     if (response.status >= 200 && response.status < 300) {
-      const data = await response.text();
+      const data = response.body;
       if (data) {
         const trackers: string[] = data
           .split('\n')

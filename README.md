@@ -105,6 +105,7 @@ Miauflix supports streaming while downloading.
 - **📊 Background Processing**: Continuous source discovery and quality scoring
 - **🔒 Content Encryption**: All source metadata encrypted at rest with AES-256-GCM
 - **🐳 Docker Support**: Ready-to-run containers with nginx and SSL
+- **🛡️ Cloudflare Bypass**: Automatic Cloudflare protection bypass using FlareSolverr
 
 ### 🔧 In Development
 

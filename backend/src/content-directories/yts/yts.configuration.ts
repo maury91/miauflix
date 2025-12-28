@@ -1,5 +1,6 @@
 import { createCache } from 'cache-manager';
 
+import type { RequestService } from '@services/request/request.service';
 import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 import { YTSApi } from './yts.api';
@@ -16,10 +17,10 @@ export const ytsConfigurationDefinition = serviceConfiguration({
       transform: transforms.url(),
     }),
   },
-  test: async () => {
+  test: async (requestService: RequestService) => {
     try {
       const cache = createCache();
-      const ytsApi = new YTSApi(cache);
+      const ytsApi = new YTSApi(cache, requestService);
 
       // Use test because it doesn't use cache
       const testResult = await ytsApi.test();
