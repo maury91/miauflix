@@ -51,6 +51,7 @@
     "keyv": "5.5.4",
     "load-ip-set": "3.0.1",
     "node-fetch": "3.3.2",
+    "node-html-parser": "^7.0.1",
     "parse-torrent": "11.0.18",
     "reflect-metadata": "0.2.2",
     "sqlite3": "5.1.7",

@@ -2,9 +2,9 @@ import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
+import type { RequestService } from '@services/request/request.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
-import { enhancedFetch } from '@utils/fetch.util';
 import { TrackStatus } from '@utils/trackStatus.util';
 
 import type {
@@ -13,9 +13,9 @@ import type {
   MovieParentalGuidesResponse,
   MovieSuggestionResponse,
 } from './yts.types';
+import { discoverYTSMirrors } from './yts-mirror-discovery';
 
-// A list of YTS domain mirrors to try if the primary domain is unreachable
-const domainMirrors = ['yts.mx', 'yts.rs', 'yts.hn', 'yts.lt', 'yts.am'];
+const fallbackDomainMirrors = ['yts.lt', 'yts.gg', 'yts.am', 'yts.ag'];
 
 /**
  * YTS API Service
@@ -24,16 +24,44 @@ const domainMirrors = ['yts.mx', 'yts.rs', 'yts.hn', 'yts.lt', 'yts.am'];
  */
 export class YTSApi extends Api {
   private currentDomainIndex = 0;
+  private domainMirrors: string[] = fallbackDomainMirrors;
+  private domainMirrorsPromise: Promise<string[]> | null = null;
 
-  constructor(cache: Cache) {
+  constructor(
+    cache: Cache,
+    private readonly requestService: RequestService
+  ) {
     super(
       cache,
-      ENV('YTS_API_URL') || `https://${domainMirrors[0]}`,
+      ENV('YTS_API_URL') || `https://${fallbackDomainMirrors[0]}`,
       // YTS doesn't document rate limits specifically, but we'll implement
       // a conservative rate limiter (20 requests per minute) to be safe
-      20 / 60, // Default RateLimiter: 20 requests per minute
+      20 / 60, // Default RateLimiter: 20 requests per minute ( 1 request every 3 seconds )
       2 // High priority RateLimiter: 2 request per second
     );
+
+    // Start discovering domains asynchronously
+    this.initializeDomainMirrors();
+  }
+
+  /**
+   * Initialize the domain mirrors
+   */
+  private async initializeDomainMirrors(): Promise<void> {
+    if (this.domainMirrorsPromise) {
+      await this.domainMirrorsPromise;
+      return;
+    }
+
+    this.domainMirrorsPromise = discoverYTSMirrors(this.cache, this.requestService)
+      .catch(() => fallbackDomainMirrors)
+      .then(domains => {
+        this.domainMirrors = domains;
+        if (!ENV('YTS_API_URL') && domains.length > 0) {
+          this.apiUrl = `https://${domains[0]}`;
+        }
+        return domains;
+      });
   }
 
   /**
@@ -45,13 +73,16 @@ export class YTSApi extends Api {
     params: Record<string, boolean | number | string> = {},
     highPriority = false
   ): Promise<T> {
+    // Wait for the domain mirrors to be initialized
+    await this.initializeDomainMirrors();
+
     // Apply rate limiting before making the request
     await this.throttle(highPriority);
 
     const url = `${this.apiUrl}/${endpoint}`;
 
     try {
-      const response = await enhancedFetch(url, {
+      const response = await this.requestService.request<T>(url, {
         queryString: params,
       });
 
@@ -60,10 +91,15 @@ export class YTSApi extends Api {
         throw new Error(`YTS API error: (${response.status}) ${response.statusText}`);
       }
 
-      if (response.headers.get('content-type')?.includes('application/octet-stream')) {
-        return response.arrayBuffer() as unknown as T; // Handle non-JSON responses (e.g., file downloads)
+      const contentType = response.headers['content-type'] || '';
+      if (contentType.includes('application/octet-stream')) {
+        // Handle non-JSON responses (e.g., file downloads)
+        if (typeof response.body === 'string') {
+          return Buffer.from(response.body, 'binary').buffer as unknown as T;
+        }
+        return response.body as unknown as T;
       }
-      if (response.headers.get('content-type')?.includes('text/html')) {
+      if (contentType.includes('text/html')) {
         // This is most likely the 404 page or an error page
         logger.error(
           'YTS',
@@ -71,18 +107,19 @@ export class YTSApi extends Api {
         );
         throw new Error(`YTS API returned HTML response for ${url}`);
       }
-      const data = (await response.json()) as T;
-      return data;
+      if (typeof response.body === 'string') {
+        throw new Error(`YTS API returned non-JSON response for ${url}`);
+      }
+      return response.body;
     } catch (error) {
       logger.error('YTS', `API request failed for ${url}:`, error);
 
       // Try with a different domain mirror if available
-      if (this.currentDomainIndex < domainMirrors.length - 1) {
+      if (this.currentDomainIndex < this.domainMirrors.length - 1) {
         this.currentDomainIndex++;
-        const newDomain = domainMirrors[this.currentDomainIndex];
-        console.log(`Trying alternative YTS domain: ${newDomain}`);
-        this.apiUrl = `https://${newDomain}`;
-        return this.request<T>(endpoint, params);
+        this.apiUrl = `https://${this.domainMirrors[this.currentDomainIndex]}`;
+        logger.info('YTS', `Trying alternative YTS domain: ${this.apiUrl}`);
+        return this.request<T>(endpoint, params, highPriority);
       }
 
       throw error;

@@ -1,11 +1,12 @@
-import { enhancedFetch } from '@utils/fetch.util';
+import type { RequestService, RequestServiceResponse } from '@services/request/request.service';
 
-export const getSourceMetadataFileFromITorrents = async (
+export const getSourceMetadataFileFromITorrents = (
   hash: string,
-  timeout: number
-): Promise<Response> => {
-  const response = await enhancedFetch(`https://itorrents.org/torrent/${hash}.torrent`, {
+  timeout: number,
+  requestService: RequestService
+): Promise<RequestServiceResponse<ArrayBuffer>> => {
+  return requestService.request(`https://itorrents.org/torrent/${hash}.torrent`, {
+    asBuffer: true,
     timeout,
   });
-  return response;
 };

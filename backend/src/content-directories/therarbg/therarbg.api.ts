@@ -2,9 +2,9 @@ import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
+import type { RequestService } from '@services/request/request.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
-import { enhancedFetch } from '@utils/fetch.util';
 import { TrackStatus } from '@utils/trackStatus.util';
 
 import type { GetPostsResponse, ImdbDetailResponse } from './therarbg.types';
@@ -38,7 +38,10 @@ class TheRARBGError extends Error {
 export class TheRARBGApi extends Api {
   private currentMirrorIndex = 0;
 
-  constructor(cache: Cache) {
+  constructor(
+    cache: Cache,
+    private readonly requestService: RequestService
+  ) {
     super(cache, ENV('THE_RARBG_API_URL') || mirrors[0], 2, 4);
   }
 
@@ -62,7 +65,7 @@ export class TheRARBGApi extends Api {
     };
 
     try {
-      const response = await enhancedFetch(url, {
+      const response = await this.requestService.request<T>(url, {
         queryString: queryParams,
         timeout: 15000,
         redirect: 'manual',
@@ -74,14 +77,15 @@ export class TheRARBGApi extends Api {
       }
 
       if (response.status === 302) {
-        if (response.headers.get('location') === '/') {
+        const location = response.headers['location'] || '';
+        if (location === '/') {
           // This is essentially a 404, it means they have nothing about this movie
           throw new TheRARBGError('Redirect to homepage', 404);
         }
-        logger.error('TheRARBG', `Redirected to ${response.headers.get('location')}`);
+        logger.error('TheRARBG', `Redirected to ${location}`);
       }
 
-      if (response.headers.get('content-type')?.includes('text/html')) {
+      if (response.headers['content-type']?.includes('text/html')) {
         // This is most likely the 404 page or an error page
         logger.error(
           'TheRARBG',
@@ -92,8 +96,10 @@ export class TheRARBGApi extends Api {
         );
       }
 
-      const data = (await response.json()) as T;
-      return data;
+      if (typeof response.body === 'string') {
+        throw new Error(`TheRARBG API returned non-JSON response for ${url}`);
+      }
+      return response.body;
     } catch (error) {
       logger.error('TheRARBG', `Request failed for ${url}:`, error);
 

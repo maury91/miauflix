@@ -23,6 +23,7 @@ import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { DownloadService } from '@services/download/download.service';
 import type { EncryptionService } from '@services/encryption/encryption.service';
+import type { RequestService } from '@services/request/request.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceService } from '@services/source/source.service';
 import { SourceMetadataFileService } from '@services/source/source-metadata-file.service';
@@ -37,6 +38,7 @@ describe('SourceService', () => {
       mockDatabase,
       mockContentDirectoryService,
       mockSourceMetadataFileService,
+      mockRequestService,
       ...rest
     } = setupTest();
     jest.clearAllMocks();
@@ -47,11 +49,13 @@ describe('SourceService', () => {
       mockDatabase,
       mockContentDirectoryService,
       mockSourceMetadataFileService,
+      mockRequestService,
       service: new SourceService(
         mockDatabase,
         mockVpnService,
         mockContentDirectoryService,
-        mockSourceMetadataFileService
+        mockSourceMetadataFileService,
+        mockRequestService
       ),
     };
   };
@@ -100,15 +104,22 @@ describe('SourceService', () => {
     // Mock services
     const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
 
+    const mockRequestService = {
+      request: jest.fn(),
+    } as unknown as jest.Mocked<RequestService>;
+
     const mockDownloadService = new DownloadService(
-      mockStorageService
+      mockStorageService,
+      mockRequestService
     ) as jest.Mocked<DownloadService>;
     const mockContentDirectoryService = new ContentDirectoryService(
       {} as never,
-      mockDownloadService
+      mockDownloadService,
+      mockRequestService
     ) as jest.Mocked<ContentDirectoryService>;
     const mockSourceMetadataFileService = new SourceMetadataFileService(
-      mockDownloadService
+      mockDownloadService,
+      mockRequestService
     ) as jest.Mocked<SourceMetadataFileService>;
     const mockVpnService = new VpnDetectionService() as jest.Mocked<VpnDetectionService>;
 
@@ -165,7 +176,8 @@ describe('SourceService', () => {
       mockDatabase,
       mockVpnService,
       mockContentDirectoryService,
-      mockSourceMetadataFileService
+      mockSourceMetadataFileService,
+      mockRequestService
     );
 
     return {
@@ -176,6 +188,7 @@ describe('SourceService', () => {
       mockSource2,
       mockMovie,
       mockVpnService,
+      mockRequestService,
       mockDatabase,
       mockMovieRepository,
       mockMovieSourceRepository,

@@ -17,6 +17,7 @@ export const HTTP_VCR_CONFIG: HttpVcrConfig = {
     { pattern: 'yts.hn', name: 'yts' },
     { pattern: 'yts.lt', name: 'yts' },
     { pattern: 'yts.am', name: 'yts' },
+    { pattern: 'yifystatus.com', name: 'yifystatus' },
     { pattern: 'torrage.info', name: 'torrage' },
     { pattern: 'itorrents.org', name: 'itorrents' },
     { pattern: 'therarbg.to', name: 'therarbg' },
