@@ -55,7 +55,7 @@ export default defineConfig({
     host: 'localhost',
     proxy: {
       '/api': {
-        target: process.env.BACKEND_URL || 'http://localhost:3000',
+        target: process.env.BACKEND_URL || 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       },
@@ -68,7 +68,7 @@ export default defineConfig({
       process.env.DISABLE_API_PROXY !== 'true'
         ? {
             '/api': {
-              target: process.env.API_URL || 'http://localhost:3000',
+              target: process.env.API_URL || 'http://localhost:5000',
               changeOrigin: true,
               secure: false,
             },

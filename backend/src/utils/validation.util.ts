@@ -1,3 +1,5 @@
+import type { RequestServiceResponse } from '@services/request/request.service';
+
 /**
  * Utility functions for HTTP response validation
  */
@@ -10,7 +12,9 @@ export interface ValidationResult {
 /**
  * Validate HTTP response for content file downloads
  */
-export const validateContentFileResponse = (response: Response): ValidationResult => {
+export const validateContentFileResponse = (
+  response: RequestServiceResponse<unknown>
+): ValidationResult => {
   if (!response.ok) {
     return {
       isValid: false,
@@ -18,8 +22,8 @@ export const validateContentFileResponse = (response: Response): ValidationResul
     };
   }
 
-  const contentType = response.headers.get('content-type');
-  if (!contentType?.includes('application/')) {
+  const contentType = response.headers['content-type'] || '';
+  if (!contentType.includes('application/')) {
     return {
       isValid: false,
       error: `Invalid content type: ${contentType}`,

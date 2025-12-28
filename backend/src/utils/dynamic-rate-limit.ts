@@ -2,6 +2,8 @@ import { logger } from '@logger';
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname } from 'path';
 
+import type { RequestServiceResponse } from '@services/request/request.service';
+
 /**
  * Response statistics for tracking API rate limit behavior
  */
@@ -145,25 +147,19 @@ export class DynamicRateLimit {
    * @param response The HTTP response from the API
    * @returns Whether the response indicated rate limiting
    */
-  public reportResponse(response: Response): boolean {
+  public reportResponse(response: RequestServiceResponse<unknown>): boolean {
     const now = Date.now();
     this.totalRequests++;
 
     // Detect if the response indicates rate limiting
     const wasRateLimited = this.isRateLimited(response);
 
-    // Extract headers to a record
-    const headers: Record<string, string> = {};
-    response.headers.forEach((value, key) => {
-      headers[key] = value;
-    });
-
     // Track the response
     this.responseHistory.unshift({
       timestamp: now,
       wasRateLimited,
       statusCode: response.status,
-      headers,
+      headers: response.headers,
     });
 
     // Trim history if it gets too long
@@ -172,7 +168,7 @@ export class DynamicRateLimit {
     }
 
     // Try to extract rate limit information from headers using our record
-    this.extractRateLimitInfoFromHeaders(headers);
+    this.extractRateLimitInfoFromHeaders(response.headers);
 
     // Update tracking counters
     if (wasRateLimited) {
@@ -362,7 +358,7 @@ export class DynamicRateLimit {
   /**
    * Helper method to determine if a response indicates rate limiting
    */
-  private isRateLimited(response: Response): boolean {
+  private isRateLimited(response: RequestServiceResponse<unknown>): boolean {
     // Check HTTP status code (common rate limit status codes)
     if (response.status === 429) {
       // Too Many Requests - primary rate limit indicator
@@ -372,7 +368,7 @@ export class DynamicRateLimit {
     // Sometimes rate limits appear as other status codes
     if (response.status === 403 || response.status === 503 || response.status === 400) {
       // Look for rate limit keywords in the response body or headers
-      const contentType = response.headers.get('content-type') || '';
+      const contentType = response.headers['content-type'] || '';
       if (contentType.includes('json') || contentType.includes('text')) {
         // We'd check the body here, but since Response body can only be consumed once,
         // we'll rely on status codes and headers instead for now
@@ -381,25 +377,19 @@ export class DynamicRateLimit {
       return true;
     }
 
-    // Extract headers to check them
-    const headers: Record<string, string> = {};
-    response.headers.forEach((value, key) => {
-      headers[key] = value;
-    });
-
     // Check for rate limit headers - different APIs use different headers
     const rateLimitHeaders = [
       // Check if we're explicitly at zero remaining requests
-      headers['x-ratelimit-remaining'] === '0',
-      headers['ratelimit-remaining'] === '0',
-      headers['x-rate-limit-remaining'] === '0',
+      response.headers['x-ratelimit-remaining'] === '0',
+      response.headers['ratelimit-remaining'] === '0',
+      response.headers['x-rate-limit-remaining'] === '0',
 
       // Check if retry-after header exists
-      headers['retry-after'] !== undefined,
-      headers['ratelimit-reset'] !== undefined,
+      response.headers['retry-after'] !== undefined,
+      response.headers['ratelimit-reset'] !== undefined,
 
       // Check for custom rate limit headers
-      headers['x-ratelimit-reset-after'] !== undefined,
+      response.headers['x-ratelimit-reset-after'] !== undefined,
     ];
 
     if (rateLimitHeaders.some(Boolean)) {

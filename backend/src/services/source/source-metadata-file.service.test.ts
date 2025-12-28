@@ -3,6 +3,10 @@ import { logger } from '@logger';
 import parseTorrent from 'parse-torrent';
 import type { ParsedTorrent } from 'webtorrent';
 
+import type { RequestServiceResponse } from '@services/request/request.service';
+import { RequestService } from '@services/request/request.service';
+import { StatsService } from '@services/stats/stats.service';
+
 import type { DownloadService } from '../download/download.service';
 // Import service modules to mock them
 import * as itorrentsModule from './services/itorrents';
@@ -30,12 +34,27 @@ jest.mock('@utils/dynamic-rate-limit', () => ({
 describe('SourceMetadataFileService', () => {
   const hash = 'abcd'.repeat(10);
   const magnetLink = `magnet:?xt=urn:btih:${hash}`;
-  const failedResponse = { ok: false } as Response;
+  const failedITorrentsResponse: RequestServiceResponse<ArrayBuffer> = {
+    body: new ArrayBuffer(0),
+    headers: {},
+    ok: false,
+    status: 404,
+    statusText: 'Not Found',
+  };
+  const failedTorrageResponse: RequestServiceResponse<string> = {
+    body: '',
+    headers: {},
+    ok: false,
+    status: 404,
+    statusText: 'Not Found',
+  };
 
   let sourceMetadataFileService: SourceMetadataFileService;
   let mockDownloadService: DownloadService;
+  let mockRequestService: jest.Mocked<RequestService>;
   let mockFileBuffer: Buffer;
-  let mockResponse: Response;
+  let mockITorrentsResponse: RequestServiceResponse<ArrayBuffer>;
+  let mockTorrageResponse: RequestServiceResponse<string>;
 
   // Spies for service functions
   let getSourceMetadataFileFromITorrentsSpy: jest.SpiedFunction<
@@ -56,28 +75,41 @@ describe('SourceMetadataFileService', () => {
     // Create mock data
     mockFileBuffer = Buffer.from('mock source metadata file data');
 
-    // Create mock response with simpler typing
-    mockResponse = {
+    mockITorrentsResponse = {
+      body: mockFileBuffer.buffer.slice(
+        mockFileBuffer.byteOffset,
+        mockFileBuffer.byteOffset + mockFileBuffer.byteLength
+      ) as ArrayBuffer,
+      headers: { 'content-type': 'application/x-bittorrent' },
       ok: true,
-      arrayBuffer: async () =>
-        mockFileBuffer.buffer.slice(
-          mockFileBuffer.byteOffset,
-          mockFileBuffer.byteOffset + mockFileBuffer.byteLength
-        ),
-    } as Partial<Response> as Response;
+      status: 200,
+      statusText: 'OK',
+    } satisfies RequestServiceResponse<ArrayBuffer>;
+
+    mockTorrageResponse = {
+      body: 'mock torrent data',
+      headers: { 'content-type': 'application/x-bittorrent' },
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+    } satisfies RequestServiceResponse<string>;
 
     getSourceMetadataFileFromWebTorrentSpy = jest.fn();
     mockDownloadService = {
       getSourceMetadataFile: getSourceMetadataFileFromWebTorrentSpy,
     } as Partial<DownloadService> as DownloadService;
 
+    mockRequestService = new RequestService(
+      new StatsService()
+    ) as unknown as jest.Mocked<RequestService>;
+
     // Set up service spies with default successful responses
     getSourceMetadataFileFromITorrentsSpy = jest
       .spyOn(itorrentsModule, 'getSourceMetadataFileFromITorrents')
-      .mockResolvedValue(mockResponse);
+      .mockResolvedValue(mockITorrentsResponse);
     getSourceMetadataFileFromTorrageSpy = jest
       .spyOn(torrageModule, 'getSourceMetadataFileFromTorrage')
-      .mockResolvedValue(mockResponse);
+      .mockResolvedValue(mockTorrageResponse);
 
     // Mock parse-torrent with valid response
     const mockParsedTorrent: ParsedTorrent = {
@@ -87,7 +119,10 @@ describe('SourceMetadataFileService', () => {
     };
     mockParseTorrent.mockResolvedValue(mockParsedTorrent);
 
-    sourceMetadataFileService = new SourceMetadataFileService(mockDownloadService);
+    sourceMetadataFileService = new SourceMetadataFileService(
+      mockDownloadService,
+      mockRequestService
+    );
   });
 
   afterEach(() => {
@@ -132,7 +167,7 @@ describe('SourceMetadataFileService', () => {
     it('should try all services before giving up', async () => {
       // Mock first two services to fail
       getSourceMetadataFileFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
-      getSourceMetadataFileFromITorrentsSpy.mockResolvedValue(failedResponse);
+      getSourceMetadataFileFromITorrentsSpy.mockResolvedValue(failedITorrentsResponse);
 
       const result = await sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
 
@@ -145,8 +180,8 @@ describe('SourceMetadataFileService', () => {
     it('should return null when all services fail', async () => {
       getSourceMetadataFileFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
 
-      getSourceMetadataFileFromITorrentsSpy.mockResolvedValue(failedResponse);
-      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedResponse);
+      getSourceMetadataFileFromITorrentsSpy.mockResolvedValue(failedITorrentsResponse);
+      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedTorrageResponse);
 
       const result = await sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
 
@@ -169,13 +204,16 @@ describe('SourceMetadataFileService', () => {
     it('should validate torrent buffers for services with shouldVerify=true', async () => {
       // Force selection of iTorrents which has shouldVerify=true
       getSourceMetadataFileFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
-      const failedResponse = { ok: false } as Response;
-      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedResponse);
-      getSourceMetadataFileFromITorrentsSpy.mockResolvedValue(mockResponse);
+      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedTorrageResponse);
+      getSourceMetadataFileFromITorrentsSpy.mockResolvedValue(mockITorrentsResponse);
 
       const result = await sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
 
-      expect(getSourceMetadataFileFromITorrentsSpy).toHaveBeenCalledWith(hash, expect.any(Number));
+      expect(getSourceMetadataFileFromITorrentsSpy).toHaveBeenCalledWith(
+        hash,
+        expect.any(Number),
+        mockRequestService
+      );
       expect(result).toBeInstanceOf(Buffer);
       expect(mockParseTorrent).toHaveBeenCalledWith(mockFileBuffer);
     });
@@ -190,8 +228,7 @@ describe('SourceMetadataFileService', () => {
 
       // Force iTorrents service
       getSourceMetadataFileFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
-      const failedResponse = { ok: false } as Response;
-      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedResponse);
+      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedTorrageResponse);
 
       const result = await sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
 
@@ -244,12 +281,18 @@ describe('SourceMetadataFileService', () => {
     it('should report responses to rate limiter', async () => {
       // Force iTorrents usage by making others fail
       getSourceMetadataFileFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
-      const failedResponse = { ok: false } as Response;
-      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedResponse);
+      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedTorrageResponse);
 
       await sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
 
-      expect(mockReportResponse).toHaveBeenCalledWith(mockResponse);
+      // reportResponse receives a Response-like object converted from RequestServiceResponse
+      expect(mockReportResponse).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ok: true,
+          status: 200,
+          statusText: 'OK',
+        })
+      );
     });
   });
 
@@ -259,8 +302,7 @@ describe('SourceMetadataFileService', () => {
 
       // Force iTorrents (has validation)
       getSourceMetadataFileFromWebTorrentSpy.mockRejectedValue(new Error('WebTorrent failed'));
-      const failedResponse = { ok: false } as Response;
-      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedResponse);
+      getSourceMetadataFileFromTorrageSpy.mockResolvedValue(failedTorrageResponse);
 
       const result = await sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
 
