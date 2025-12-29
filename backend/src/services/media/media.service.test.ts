@@ -3,6 +3,7 @@ import { logger as mockLogger } from '@logger';
 
 import type { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
+import { StatsService } from '@services/stats/stats.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { MediaService } from './media.service';
@@ -70,7 +71,8 @@ describe('MediaService', () => {
     process.env.TMDB_API_ACCESS_TOKEN = 'test-token';
 
     // Create the MediaService with the mock DB and a new TMDBApi instance
-    const tmdbApi = new TMDBApi(mockCache);
+    const statsService = new StatsService();
+    const tmdbApi = new TMDBApi(mockCache, statsService);
     mediaService = new MediaService(mockDb, tmdbApi);
 
     await Promise.resolve();

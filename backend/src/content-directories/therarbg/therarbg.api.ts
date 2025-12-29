@@ -3,6 +3,7 @@ import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
 import type { RequestService } from '@services/request/request.service';
+import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
 import { TrackStatus } from '@utils/trackStatus.util';
@@ -40,9 +41,10 @@ export class TheRARBGApi extends Api {
 
   constructor(
     cache: Cache,
+    statsService: StatsService,
     private readonly requestService: RequestService
   ) {
-    super(cache, ENV('THE_RARBG_API_URL') || mirrors[0], 2, 4);
+    super(cache, statsService, ENV('THE_RARBG_API_URL') || mirrors[0], 2, 4);
   }
 
   /**

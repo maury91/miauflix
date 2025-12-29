@@ -2,6 +2,7 @@ import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
+import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
 import { tracedApi } from '@utils/tracing.util';
@@ -56,10 +57,12 @@ export class TMDBApi extends Api {
 
   constructor(
     cache: Cache,
+    statsService: StatsService,
     private readonly language = 'en'
   ) {
     super(
       cache,
+      statsService,
       ENV('TMDB_API_URL'),
       50 // 50 requests per second, TMDB's documented rate limit
     );

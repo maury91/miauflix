@@ -31,7 +31,8 @@ describe('ContentDirectoryService', () => {
     } as unknown as jest.Mocked<StorageService>;
 
     // Use real RequestService - HTTP-VCR will intercept fetch calls
-    requestService = new RequestService(new StatsService());
+    const statsService = new StatsService();
+    requestService = new RequestService(statsService);
 
     // Create a mock DownloadService
     const mockDownloadService = new DownloadService(
@@ -40,7 +41,12 @@ describe('ContentDirectoryService', () => {
     ) as jest.Mocked<DownloadService>;
     mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
 
-    service = new ContentDirectoryService(mockCache, mockDownloadService, requestService);
+    service = new ContentDirectoryService(
+      mockCache,
+      mockDownloadService,
+      requestService,
+      statsService
+    );
   });
 
   describe('searchSourcesForMovie', () => {

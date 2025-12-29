@@ -1,6 +1,7 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 import type { Cache } from 'cache-manager';
 
+import { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 
 const { Cacheable } = jest.requireActual('./cacheable.util');
@@ -9,8 +10,8 @@ const { Cacheable } = jest.requireActual('./cacheable.util');
 class TestApi extends Api {
   count = 0;
 
-  constructor(cache: Cache) {
-    super(cache, 'https://test-api.com', 10);
+  constructor(cache: Cache, statsService: StatsService) {
+    super(cache, statsService, 'https://test-api.com', 10);
   }
 
   @Cacheable(1000)
@@ -33,9 +34,10 @@ describe('Cacheable', () => {
   beforeEach(() => {
     // Setup our mock cache and API instance
     mockCache = new MockCache();
+    const statsService = new StatsService();
     // Cast to any to bypass TypeScript's strict type checking
     // In a real scenario, we'd implement the full Cache interface
-    testApi = new TestApi(mockCache);
+    testApi = new TestApi(mockCache, statsService);
   });
 
   afterEach(() => {

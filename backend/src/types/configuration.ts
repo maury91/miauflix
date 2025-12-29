@@ -1,4 +1,5 @@
 import type { RequestService } from '@services/request/request.service';
+import type { StatsService } from '@services/stats/stats.service';
 
 export type BaseVariableInfo = {
   description: string;
@@ -49,7 +50,7 @@ export type ServiceConfiguration<T extends Record<string, VariableInfo>> = {
   name: string;
   description: string;
   variables: ServiceVariables<T>;
-  test: (requestService: RequestService) => Promise<void>;
+  test: (requestService: RequestService, statsService: StatsService) => Promise<void>;
 };
 
 export type ValidationTransformResult<T> = {

@@ -5,6 +5,7 @@ import { TherarbgContentDirectory } from '@content-directories/therarbg';
 import { YTSContentDirectory } from '@content-directories/yts';
 import type { DownloadService } from '@services/download/download.service';
 import type { RequestService } from '@services/request/request.service';
+import type { StatsService } from '@services/stats/stats.service';
 import { traced } from '@utils/tracing.util';
 
 /**
@@ -13,20 +14,16 @@ import { traced } from '@utils/tracing.util';
 export class ContentDirectoryService {
   private readonly movieDirectories: AbstractContentDirectory[];
 
-  constructor(cache: Cache, downloadService: DownloadService, requestService: RequestService) {
+  constructor(
+    cache: Cache,
+    downloadService: DownloadService,
+    requestService: RequestService,
+    statsService: StatsService
+  ) {
     this.movieDirectories = [
-      new YTSContentDirectory(cache, requestService),
-      new TherarbgContentDirectory(cache, downloadService, requestService),
+      new YTSContentDirectory(cache, requestService, statsService),
+      new TherarbgContentDirectory(cache, downloadService, requestService, statsService),
     ];
-  }
-
-  /**
-   * Get the status of the content directory services
-   * @returns Status of the content directory services
-   */
-  @traced('ContentDirectoryService')
-  public async status() {
-    return this.movieDirectories.map(contentDirectory => contentDirectory.status());
   }
 
   /**

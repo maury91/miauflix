@@ -12,8 +12,9 @@ describe('TheRARBGService', () => {
   beforeEach(() => {
     const mockCache = new MockCache();
     // Use real RequestService - HTTP-VCR will intercept fetch calls
-    requestService = new RequestService(new StatsService());
-    service = new TheRARBGApi(mockCache, requestService);
+    const statsService = new StatsService();
+    requestService = new RequestService(statsService);
+    service = new TheRARBGApi(mockCache, statsService, requestService);
   });
 
   describe('searchByImdbId', () => {
@@ -125,7 +126,8 @@ describe('TheRARBGService', () => {
   describe('error handling', () => {
     it('should handle network errors gracefully', async () => {
       // Create a service with invalid URL to test error handling
-      const invalidService = new TheRARBGApi(new MockCache(), requestService);
+      const statsService = new StatsService();
+      const invalidService = new TheRARBGApi(new MockCache(), statsService, requestService);
 
       // Mock fetch to simulate a network error
       const originalFetch = global.fetch;
