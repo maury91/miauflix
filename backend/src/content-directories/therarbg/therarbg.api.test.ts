@@ -6,19 +6,19 @@ import { StatsService } from '@services/stats/stats.service';
 import { TheRARBGApi } from './therarbg.api';
 
 describe('TheRARBGService', () => {
-  let service: TheRARBGApi;
-  let requestService: RequestService;
-
-  beforeEach(() => {
+  const setupTest = () => {
     const mockCache = new MockCache();
-    // Use real RequestService - HTTP-VCR will intercept fetch calls
+    // Use real RequestService - HTTP-VCR will intercept fetch call ( already )
     const statsService = new StatsService();
-    requestService = new RequestService(statsService);
-    service = new TheRARBGApi(mockCache, statsService, requestService);
-  });
+    const requestService = new RequestService(statsService);
+    const service = new TheRARBGApi(mockCache, statsService, requestService);
+
+    return { service, requestService, statsService, mockCache };
+  };
 
   describe('searchByImdbId', () => {
     it('should successfully fetch movie details for valid IMDB ID', async () => {
+      const { service } = setupTest();
       // Using a valid IMDB ID that exists on TheRARBG - Cosmic Princess
       const imdbId = 'tt0119698';
 
@@ -46,6 +46,7 @@ describe('TheRARBGService', () => {
     });
 
     it('should handle IMDB ID without tt prefix', async () => {
+      const { service } = setupTest();
       // Test with IMDB ID without 'tt' prefix - should normalize to tt0119698
       const result = await service.searchByImdbId('0119698');
 
@@ -60,10 +61,12 @@ describe('TheRARBGService', () => {
     });
 
     it('should handle invalid IMDB ID format', async () => {
+      const { service } = setupTest();
       await expect(service.searchByImdbId('invalid-id')).rejects.toThrow();
     });
 
     it('should throw error for non-existent IMDB ID', async () => {
+      const { service } = setupTest();
       // Using a non-existent but valid format IMDB ID
       await expect(service.searchByImdbId('tt9999999')).rejects.toThrow();
     });
@@ -71,6 +74,7 @@ describe('TheRARBGService', () => {
 
   describe('searchPosts', () => {
     it('should work with search posts endpoint (which does return results)', async () => {
+      const { service } = setupTest();
       // The search posts endpoint might work differently than IMDB detail
       try {
         const result = await service.searchPosts('tt0119698');
@@ -98,6 +102,7 @@ describe('TheRARBGService', () => {
     });
 
     it('should handle search with filtering options', async () => {
+      const { service } = setupTest();
       try {
         const result = await service.searchPosts('tt0119698', {
           filter: { type: 'days', value: 30 },
@@ -117,6 +122,7 @@ describe('TheRARBGService', () => {
 
   describe('test', () => {
     it('should return true when API is accessible and returns JSON', async () => {
+      const { service } = setupTest();
       const isHealthy = await service.test();
       // The API should work and return JSON, so health check should pass
       expect(isHealthy).toBe(true);
@@ -125,6 +131,7 @@ describe('TheRARBGService', () => {
 
   describe('error handling', () => {
     it('should handle network errors gracefully', async () => {
+      const { requestService } = setupTest();
       // Create a service with invalid URL to test error handling
       const statsService = new StatsService();
       const invalidService = new TheRARBGApi(new MockCache(), statsService, requestService);

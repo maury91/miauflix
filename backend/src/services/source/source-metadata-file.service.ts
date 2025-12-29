@@ -355,6 +355,41 @@ export class SourceMetadataFileService {
   }
 
   /**
+   * Extract and aggregate metrics from StatsService report for a given service
+   * @param statsReport The StatsService report
+   * @param serviceName The name of the service
+   * @returns Aggregated metrics including totals and request metric data
+   */
+  private extractServiceMetrics(
+    statsReport: ReturnType<StatsService['report']>,
+    serviceName: string
+  ): {
+    requestMetric: Array<{ count: number; avg: number }> | undefined;
+    totalSuccesses: number;
+    totalFailures: number;
+    totalCalls: number;
+  } {
+    // Get metrics from StatsService
+    const requestMetric = statsReport[`magnet.${serviceName}.request`] as
+      | Array<{ count: number; avg: number }>
+      | undefined;
+    const successEvents = statsReport[`magnet.${serviceName}.success`] as number[] | undefined;
+    const failureEvents = statsReport[`magnet.${serviceName}.failure`] as number[] | undefined;
+
+    // Calculate totals from recent timeframes
+    const totalSuccesses = successEvents?.reduce((sum, count) => sum + count, 0) || 0;
+    const totalFailures = failureEvents?.reduce((sum, count) => sum + count, 0) || 0;
+    const totalCalls = totalSuccesses + totalFailures;
+
+    return {
+      requestMetric,
+      totalSuccesses,
+      totalFailures,
+      totalCalls,
+    };
+  }
+
+  /**
    * Get the optimized service order for source metadata file retrieval
    */
   private getOptimizedServiceOrder(): string[] {
@@ -375,24 +410,18 @@ export class SourceMetadataFileService {
       const service = this.services[serviceName];
       const recencyFactor = Math.min(0.1, (now - service.lastUsed) / (1000 * 60 * 60 * 24));
 
-      // Get metrics from StatsService
-      const requestMetric = statsReport[`magnet.${serviceName}.request`] as
-        | Array<{ count: number; avg: number }>
-        | undefined;
-      const successEvents = statsReport[`magnet.${serviceName}.success`] as number[] | undefined;
-      const failureEvents = statsReport[`magnet.${serviceName}.failure`] as number[] | undefined;
-
-      // Calculate totals from recent timeframes
-      const totalSuccesses = successEvents?.reduce((sum, count) => sum + count, 0) || 0;
-      const totalFailures = failureEvents?.reduce((sum, count) => sum + count, 0) || 0;
-      const totalCalls = totalSuccesses + totalFailures;
+      // Extract metrics from StatsService
+      const { requestMetric, totalSuccesses, totalCalls } = this.extractServiceMetrics(
+        statsReport,
+        serviceName
+      );
       const successRate = totalCalls > 0 ? totalSuccesses / totalCalls : 0.5; // Default to 50% if no data
 
       // Calculate average response time from recent timeframes
       const avgResponseTime =
         requestMetric && requestMetric.length > 0
           ? requestMetric.reduce((sum, stats) => sum + stats.avg, 0) / requestMetric.length
-          : 1000; // Default to 1 second if no data
+          : 1; // Default to 1 second if no data
 
       // Calculate score based on performance metrics
       return (
@@ -426,17 +455,9 @@ export class SourceMetadataFileService {
       const service = this.services[serviceName];
       const rateLimiter = service.rateLimiter;
 
-      // Get metrics from StatsService
-      const requestMetric = statsReport[`magnet.${serviceName}.request`] as
-        | Array<{ count: number; avg: number }>
-        | undefined;
-      const successEvents = statsReport[`magnet.${serviceName}.success`] as number[] | undefined;
-      const failureEvents = statsReport[`magnet.${serviceName}.failure`] as number[] | undefined;
-
-      // Calculate totals from recent timeframes
-      const totalSuccesses = successEvents?.reduce((sum, count) => sum + count, 0) || 0;
-      const totalFailures = failureEvents?.reduce((sum, count) => sum + count, 0) || 0;
-      const totalCalls = totalSuccesses + totalFailures;
+      // Extract metrics from StatsService
+      const { requestMetric, totalSuccesses, totalFailures, totalCalls } =
+        this.extractServiceMetrics(statsReport, serviceName);
       const successRate = totalCalls > 0 ? totalSuccesses / totalCalls : 0;
 
       // Calculate average response time from recent timeframes (convert from seconds to ms)

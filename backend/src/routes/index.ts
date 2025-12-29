@@ -29,9 +29,8 @@ function createApiRoutes(deps: Deps) {
     .get('/health', rateLimitGuard(10), c => {
       return c.json({ status: 'ok' });
     })
-    .get('/stats', rateLimitGuard(10), authGuard(), async c => {
-      const stats = deps.statsService.report();
-      return c.json(stats);
+    .get('/stats', rateLimitGuard(10), authGuard(), c => {
+      return c.json(deps.statsService.report());
     })
     .get('/status', rateLimitGuard(10), c => {
       return c.json({

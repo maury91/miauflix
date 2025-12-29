@@ -2,11 +2,12 @@ import { MockCache } from '@__test-utils__/cache.mock';
 
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
-import type { StorageService } from '@services/storage/storage.service';
+import { StorageService } from '@services/storage/storage.service';
 
 jest.mock('@services/download/download.service');
 jest.mock('@services/storage/storage.service');
 
+import type { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
 
 import { ContentDirectoryService } from './content-directory.service';
@@ -14,25 +15,15 @@ import { ContentDirectoryService } from './content-directory.service';
 const imdbId = 'tt29623480'; // Same IMDb ID from the YTSApi tests
 
 describe('ContentDirectoryService', () => {
-  let service: ContentDirectoryService;
-  let requestService: RequestService;
-
-  beforeEach(() => {
-    // Create a minimal mock cache with just the required methods
+  const setupTest = () => {
     const mockCache = new MockCache();
 
     // Create a mock StorageService
-    const mockStorageService = {
-      createStorage: jest.fn(),
-      updateDownloadProgress: jest.fn(),
-      markAsAccessed: jest.fn(),
-      getStorageByMovieSource: jest.fn(),
-      removeStorage: jest.fn(),
-    } as unknown as jest.Mocked<StorageService>;
+    const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
 
-    // Use real RequestService - HTTP-VCR will intercept fetch calls
     const statsService = new StatsService();
-    requestService = new RequestService(statsService);
+    // Use real RequestService - HTTP-VCR will intercept fetch calls ( already recorded calls will not go out to the real API )
+    const requestService = new RequestService(statsService);
 
     // Create a mock DownloadService
     const mockDownloadService = new DownloadService(
@@ -41,16 +32,26 @@ describe('ContentDirectoryService', () => {
     ) as jest.Mocked<DownloadService>;
     mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
 
-    service = new ContentDirectoryService(
+    const service = new ContentDirectoryService(
       mockCache,
       mockDownloadService,
       requestService,
       statsService
     );
-  });
+
+    return {
+      service,
+      requestService,
+      statsService,
+      mockCache,
+      mockStorageService,
+      mockDownloadService,
+    };
+  };
 
   describe('searchSourcesForMovie', () => {
     it('should return movie data with sources for valid IMDb ID', async () => {
+      const { service } = setupTest();
       const result = await service.searchSourcesForMovie(imdbId);
 
       expect(result).not.toBeNull();
@@ -73,6 +74,7 @@ describe('ContentDirectoryService', () => {
     });
 
     it('should return null for invalid IMDb ID', async () => {
+      const { service } = setupTest();
       const result = await service.searchSourcesForMovie('invalid-id');
       expect(result).toBeNull();
     });
