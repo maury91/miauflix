@@ -17,9 +17,6 @@ export abstract class Api {
     rateLimit: number,
     highPriorityRateLimit: number = rateLimit * 2 // Default to identical rate limit ( it's a secondary queue )
   ) {
-    if (!cache) {
-      throw new Error('Cache is required');
-    }
     this.rateLimiter = new RateLimiter(rateLimit, `${this.constructor.name}:default`);
     this.highPriorityRateLimiter = new RateLimiter(
       highPriorityRateLimit,
