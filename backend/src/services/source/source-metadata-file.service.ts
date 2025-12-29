@@ -4,19 +4,14 @@ import path from 'path';
 
 import { ENV } from '@constants';
 import type { RequestService } from '@services/request/request.service';
+import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
 import type { DownloadService } from '../download/download.service';
 import { ErrorWithStatus } from './services/error-with-status.util';
 import { getSourceMetadataFileFromITorrents } from './services/itorrents';
 import { getSourceMetadataFileFromTorrage } from './services/torrage';
-import type {
-  Service,
-  ServiceData,
-  ServicePerformance,
-  ServiceShortStats,
-  ServiceStats,
-} from './types';
+import type { Service, ServiceData, ServiceStats } from './types';
 
 /**
  * Generate a unique request ID
@@ -41,7 +36,8 @@ export class SourceMetadataFileService {
 
   constructor(
     private readonly downloadService: DownloadService,
-    private readonly requestService: RequestService
+    private readonly requestService: RequestService,
+    private readonly statsService: StatsService
   ) {
     this.createService('webTorrent', {
       maxConcurrentRequests: 50,
@@ -169,16 +165,7 @@ export class SourceMetadataFileService {
   private createService(name: string, service: Service) {
     this.services[name] = {
       activeRequests: new Set(),
-      performance: {
-        successRate: 0,
-        avgResponseTime: 0,
-        totalCalls: 0,
-        successfulCalls: 0,
-        failures: 0,
-        consecutiveFailures: 0,
-        lastUsed: 0,
-        errors: [],
-      },
+      lastUsed: 0,
       rateLimiter: service.rateLimit
         ? new DynamicRateLimit({
             ...service.rateLimit,
@@ -217,8 +204,15 @@ export class SourceMetadataFileService {
     }
 
     const requestId = generateRequestId();
-    const start = Date.now();
     service.activeRequests.add(requestId);
+    service.lastUsed = Date.now();
+
+    const metricName = `magnet.${serviceName}.request`;
+    const successEventName = `magnet.${serviceName}.success`;
+    const failureEventName = `magnet.${serviceName}.failure`;
+
+    const metricId = this.statsService.metricStart(metricName);
+
     let file: Buffer | null = null;
     let success = false;
 
@@ -239,14 +233,20 @@ export class SourceMetadataFileService {
         success = true;
       }
 
-      this.updateServiceMetrics(service.performance, success, start);
+      this.statsService.metricEnd(metricId);
+      if (success) {
+        this.statsService.event(successEventName);
+      } else {
+        this.statsService.event(failureEventName);
+      }
 
       return file;
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       logger.warn('DataResolver', `Error using ${serviceName}: ${errorMessage}`);
 
-      this.updateServiceMetrics(service.performance, false, start, error);
+      this.statsService.metricEnd(metricId);
+      this.statsService.event(failureEventName);
 
       return null;
     } finally {
@@ -364,24 +364,41 @@ export class SourceMetadataFileService {
     // Get current time for recency calculations
     const now = Date.now();
 
+    // Get StatsService report for recent metrics (last 12 timeframes = 1 hour)
+    const statsReport = this.statsService.report(12);
+
     // Calculate a weighted score for each service based on performance metrics
     // - Higher success rate is better
     // - Lower average response time is better
-    // - Lower consecutive failures is better
     // - Services used less recently get a small boost (load balancing)
-    // - Services with more total calls get a small penalty (avoid overuse)
-    const calculateScore = (service: string): number => {
-      const { performance } = this.services[service];
-      const recencyFactor = Math.min(0.1, (now - performance.lastUsed) / (1000 * 60 * 60 * 24));
-      const usagePenalty = Math.min(0.1, performance.totalCalls / 1000);
+    const calculateScore = (serviceName: string): number => {
+      const service = this.services[serviceName];
+      const recencyFactor = Math.min(0.1, (now - service.lastUsed) / (1000 * 60 * 60 * 24));
+
+      // Get metrics from StatsService
+      const requestMetric = statsReport[`magnet.${serviceName}.request`] as
+        | Array<{ count: number; avg: number }>
+        | undefined;
+      const successEvents = statsReport[`magnet.${serviceName}.success`] as number[] | undefined;
+      const failureEvents = statsReport[`magnet.${serviceName}.failure`] as number[] | undefined;
+
+      // Calculate totals from recent timeframes
+      const totalSuccesses = successEvents?.reduce((sum, count) => sum + count, 0) || 0;
+      const totalFailures = failureEvents?.reduce((sum, count) => sum + count, 0) || 0;
+      const totalCalls = totalSuccesses + totalFailures;
+      const successRate = totalCalls > 0 ? totalSuccesses / totalCalls : 0.5; // Default to 50% if no data
+
+      // Calculate average response time from recent timeframes
+      const avgResponseTime =
+        requestMetric && requestMetric.length > 0
+          ? requestMetric.reduce((sum, stats) => sum + stats.avg, 0) / requestMetric.length
+          : 1000; // Default to 1 second if no data
 
       // Calculate score based on performance metrics
       return (
-        performance.successRate * 0.5 +
-        (1 / (performance.avgResponseTime / 1000)) * 0.25 -
-        performance.consecutiveFailures * 0.15 +
-        recencyFactor * 0.05 -
-        usagePenalty * 0.05
+        successRate * 0.5 +
+        (1 / Math.max(avgResponseTime, 0.001)) * 0.25 + // Avoid division by zero
+        recencyFactor * 0.05
       );
     };
 
@@ -395,63 +412,13 @@ export class SourceMetadataFileService {
   }
 
   /**
-   * Update the performance metrics for a service
-   */
-  private updateServiceMetrics(
-    performance: ServicePerformance,
-    success: boolean,
-    start: number,
-    error?: ErrorWithStatus | unknown
-  ): void {
-    const end = Date.now();
-    performance.lastUsed = start;
-    performance.totalCalls++;
-
-    if (success) {
-      performance.successfulCalls++;
-      performance.consecutiveFailures = 0; // Reset consecutive failures on success
-
-      // Update success rate
-      performance.successRate = performance.successfulCalls / performance.totalCalls;
-
-      // Update average response time
-      const responseTime = end - start;
-      performance.avgResponseTime =
-        (performance.avgResponseTime * (performance.successfulCalls - 1) + responseTime) /
-        performance.successfulCalls;
-    } else {
-      performance.failures++;
-      performance.consecutiveFailures++;
-      performance.successRate = performance.successfulCalls / performance.totalCalls;
-      if (error instanceof ErrorWithStatus) {
-        performance.errors.push(error.status);
-      }
-    }
-  }
-
-  public status(): Record<string, ServiceShortStats> {
-    return Object.keys(this.services).reduce(
-      (status, serviceName) => {
-        const service = this.services[serviceName];
-        status[serviceName] = {
-          successRate: service.performance.successRate * 100,
-          queued: service.activeRequests.size,
-          avgResponseTime: service.performance.avgResponseTime,
-          totalCalls: service.performance.totalCalls,
-          successfulCalls: service.performance.successfulCalls,
-          failures: service.performance.failures,
-        };
-        return status;
-      },
-      {} as Record<string, ServiceShortStats>
-    );
-  }
-
-  /**
    * @returns Performance statistics for all services
    */
   public getServiceStatistics(): Record<string, ServiceStats> {
     const serviceOrder = this.getOptimizedServiceOrder();
+
+    // Get StatsService report for recent metrics (last 12 timeframes = 1 hour)
+    const statsReport = this.statsService.report(12);
 
     const stats: Record<string, ServiceStats> = {};
 
@@ -459,26 +426,36 @@ export class SourceMetadataFileService {
       const service = this.services[serviceName];
       const rateLimiter = service.rateLimiter;
 
+      // Get metrics from StatsService
+      const requestMetric = statsReport[`magnet.${serviceName}.request`] as
+        | Array<{ count: number; avg: number }>
+        | undefined;
+      const successEvents = statsReport[`magnet.${serviceName}.success`] as number[] | undefined;
+      const failureEvents = statsReport[`magnet.${serviceName}.failure`] as number[] | undefined;
+
+      // Calculate totals from recent timeframes
+      const totalSuccesses = successEvents?.reduce((sum, count) => sum + count, 0) || 0;
+      const totalFailures = failureEvents?.reduce((sum, count) => sum + count, 0) || 0;
+      const totalCalls = totalSuccesses + totalFailures;
+      const successRate = totalCalls > 0 ? totalSuccesses / totalCalls : 0;
+
+      // Calculate average response time from recent timeframes (convert from seconds to ms)
+      const avgResponseTime =
+        requestMetric && requestMetric.length > 0
+          ? (requestMetric.reduce((sum, stats) => sum + stats.avg, 0) / requestMetric.length) * 1000
+          : 0;
+
       stats[serviceName] = {
-        successRate: service.performance.successRate,
-        avgResponseTime: service.performance.avgResponseTime,
-        totalCalls: service.performance.totalCalls,
-        lastUsed: service.performance.lastUsed,
-        successfulCalls: service.performance.successfulCalls,
-        failures: service.performance.failures,
-        consecutiveFailures: service.performance.consecutiveFailures,
+        successRate,
+        avgResponseTime,
+        totalCalls,
+        lastUsed: service.lastUsed,
+        successfulCalls: totalSuccesses,
+        failures: totalFailures,
+        consecutiveFailures: 0, // Not tracked in StatsService, set to 0
         isRateLimited: rateLimiter ? rateLimiter.getThrottle() > 0 : false,
         activeRequests: service.activeRequests.size,
-        errors: service.performance.errors.reduce(
-          (groupedErrors, error) => {
-            if (!groupedErrors[error]) {
-              groupedErrors[error] = 0;
-            }
-            groupedErrors[error]++;
-            return groupedErrors;
-          },
-          {} as Record<string, number>
-        ),
+        errors: {}, // Not tracked in StatsService, set to empty
         rateLimitInfo: rateLimiter
           ? {
               windowSize: rateLimiter.getRateLimit().windowSize,

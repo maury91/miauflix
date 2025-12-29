@@ -28,6 +28,7 @@ import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceService } from '@services/source/source.service';
 import { SourceMetadataFileService } from '@services/source/source-metadata-file.service';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
+import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 
 describe('SourceService', () => {
@@ -112,14 +113,17 @@ describe('SourceService', () => {
       mockStorageService,
       mockRequestService
     ) as jest.Mocked<DownloadService>;
+    const statsService = new StatsService();
     const mockContentDirectoryService = new ContentDirectoryService(
       {} as never,
       mockDownloadService,
-      mockRequestService
+      mockRequestService,
+      statsService
     ) as jest.Mocked<ContentDirectoryService>;
     const mockSourceMetadataFileService = new SourceMetadataFileService(
       mockDownloadService,
-      mockRequestService
+      mockRequestService,
+      statsService
     ) as jest.Mocked<SourceMetadataFileService>;
     const mockVpnService = new VpnDetectionService() as jest.Mocked<VpnDetectionService>;
 
@@ -146,15 +150,6 @@ describe('SourceService', () => {
       trailerCode: 'abcd1234',
     });
 
-    mockContentDirectoryService.status.mockResolvedValue([
-      {
-        queue: 0,
-        successes: [],
-        failures: [],
-        lastRequest: null,
-      },
-    ]);
-
     mockVpnService.isVpnActive.mockResolvedValue(true);
     mockVpnService.on.mockReturnValue(jest.fn());
     mockVpnService.status.mockReturnValue({ isVpnActive: true, disabled: false });
@@ -166,7 +161,6 @@ describe('SourceService', () => {
     mockSourceMetadataFileService.getStats.mockResolvedValue({ broadcasters: 100, watchers: 10 });
     mockSourceMetadataFileService.getAvailableConcurrency.mockReturnValue(2);
     mockSourceMetadataFileService.isIdle.mockReturnValue(true);
-    mockSourceMetadataFileService.status.mockReturnValue({});
 
     mockDatabase.getMovieRepository.mockReturnValue(mockMovieRepository);
     mockDatabase.getMovieSourceRepository.mockReturnValue(mockMovieSourceRepository);

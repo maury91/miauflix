@@ -11,9 +11,10 @@ describe('YTSApi', () => {
   const setupTest = () => {
     // Create a minimal mock cache with just the required methods
     const mockCache = new MockCache();
-    const requestService = new RequestService(new StatsService());
+    const statsService = new StatsService();
+    const requestService = new RequestService(statsService);
 
-    const api = new YTSApi(mockCache, requestService);
+    const api = new YTSApi(mockCache, statsService, requestService);
 
     return { api, requestService, mockCache };
   };
