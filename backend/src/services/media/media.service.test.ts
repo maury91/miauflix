@@ -193,6 +193,7 @@ describe('MediaService', () => {
 
       afterEach(() => {
         getAllChangedMovieIdsSpy.mockClear();
+        jest.useRealTimers();
       });
 
       it('should skip sync if last sync was less than 1 hour ago', async () => {
@@ -313,8 +314,6 @@ describe('MediaService', () => {
         );
         expect(mockSyncStateRepo.setLastSync).toHaveBeenCalledTimes(2);
         expect(mockSyncStateRepo.setLastSync).toHaveBeenCalledWith(MOVIE_SYNC_NAME, now);
-
-        jest.useRealTimers();
       });
     });
   });
