@@ -99,9 +99,8 @@ describe('SourceMetadataFileService', () => {
       getSourceMetadataFile: getSourceMetadataFileFromWebTorrentSpy,
     } as Partial<DownloadService> as DownloadService;
 
-    mockRequestService = new RequestService(
-      new StatsService()
-    ) as unknown as jest.Mocked<RequestService>;
+    const statsService = new StatsService();
+    mockRequestService = new RequestService(statsService) as unknown as jest.Mocked<RequestService>;
 
     // Set up service spies with default successful responses
     getSourceMetadataFileFromITorrentsSpy = jest
@@ -121,7 +120,8 @@ describe('SourceMetadataFileService', () => {
 
     sourceMetadataFileService = new SourceMetadataFileService(
       mockDownloadService,
-      mockRequestService
+      mockRequestService,
+      statsService
     );
   });
 

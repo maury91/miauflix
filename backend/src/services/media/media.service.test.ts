@@ -3,11 +3,10 @@ import { logger as mockLogger } from '@logger';
 
 import type { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
+import { StatsService } from '@services/stats/stats.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { MediaService } from './media.service';
-
-const mockCache = new MockCache();
 
 const mockMovieRepo = {
   findByTMDBId: jest.fn((_tmdbId: number | string): Promise<Movie | null> => Promise.resolve(null)),
@@ -64,18 +63,20 @@ const mockDb = {
 const mockFetch = global.fetch as unknown as jest.Mock<typeof global.fetch>;
 
 describe('MediaService', () => {
-  let mediaService: MediaService;
-
-  beforeEach(async () => {
+  const setupTest = async () => {
     process.env.TMDB_API_ACCESS_TOKEN = 'test-token';
 
     // Create the MediaService with the mock DB and a new TMDBApi instance
-    const tmdbApi = new TMDBApi(mockCache);
-    mediaService = new MediaService(mockDb, tmdbApi);
+    const mockCache = new MockCache();
+    const statsService = new StatsService();
+    const tmdbApi = new TMDBApi(mockCache, statsService);
+    const mediaService = new MediaService(mockDb, tmdbApi);
 
+    // Wait a bit for any async initialization (like getConfiguration) to complete
     await Promise.resolve();
     jest.clearAllMocks();
-  });
+    return { mediaService, statsService, tmdbApi };
+  };
 
   afterEach(() => {
     delete process.env.TMDB_API_ACCESS_TOKEN;
@@ -85,6 +86,7 @@ describe('MediaService', () => {
   describe('getMovie', () => {
     it('should fetch a movie from TMDB API if not in database', async () => {
       // Arrange
+      const { mediaService } = await setupTest();
       mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null);
       // Act
       const movie = await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
@@ -108,6 +110,8 @@ describe('MediaService', () => {
 
     it('should return a movie from the database if it exists', async () => {
       // Arrange
+      const { mediaService } = await setupTest();
+
       const existingMovie = {
         id: 1,
         tmdbId: theWildRobotTMDBID,
@@ -129,6 +133,7 @@ describe('MediaService', () => {
 
     it('should fetch and update genres when adding a new movie', async () => {
       // Arrange
+      const { mediaService } = await setupTest();
       mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null); // Movie not in DB
 
       // Act
@@ -144,6 +149,7 @@ describe('MediaService', () => {
 
     it('should fetch and add translations when adding a new movie', async () => {
       // Arrange
+      const { mediaService } = await setupTest();
       mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null); // Movie not in DB
 
       // Act
@@ -185,10 +191,12 @@ describe('MediaService', () => {
 
       afterEach(() => {
         getAllChangedMovieIdsSpy.mockClear();
+        jest.useRealTimers();
       });
 
       it('should skip sync if last sync was less than 1 hour ago', async () => {
         // Arrange
+        const { mediaService } = await setupTest();
         // Mock getLastSync to return a very recent time (effectively < 1 hour ago)
         (mockSyncStateRepo.getLastSync as jest.Mock).mockResolvedValue(new Date());
 
@@ -206,6 +214,7 @@ describe('MediaService', () => {
       });
 
       it('should proceed with sync if no last sync state exists', async () => {
+        const { mediaService } = await setupTest();
         const now = new Date('2025-05-11T10:00:00Z');
         jest.useFakeTimers({ now });
         (mockSyncStateRepo.getLastSync as jest.Mock).mockResolvedValue(null); // No last sync

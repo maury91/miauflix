@@ -6,6 +6,7 @@ import type { SourceMetadata } from '@content-directories/content-directory.abst
 import { AbstractContentDirectory } from '@content-directories/content-directory.abstract';
 import type { DownloadService } from '@services/download/download.service';
 import type { RequestService } from '@services/request/request.service';
+import type { StatsService } from '@services/stats/stats.service';
 
 import { TheRARBGApi } from './therarbg.api';
 import type { ImdbDetailPost, ImdbMetadata } from './therarbg.types';
@@ -18,10 +19,11 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
   constructor(
     cache: Cache,
     private readonly downloadService: DownloadService,
-    requestService: RequestService
+    requestService: RequestService,
+    statsService: StatsService
   ) {
     super();
-    this.api = new TheRARBGApi(cache, requestService);
+    this.api = new TheRARBGApi(cache, statsService, requestService);
   }
 
   /**

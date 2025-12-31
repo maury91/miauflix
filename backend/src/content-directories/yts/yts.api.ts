@@ -3,6 +3,7 @@ import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
 import type { RequestService } from '@services/request/request.service';
+import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
 import { TrackStatus } from '@utils/trackStatus.util';
@@ -29,10 +30,12 @@ export class YTSApi extends Api {
 
   constructor(
     cache: Cache,
+    statsService: StatsService,
     private readonly requestService: RequestService
   ) {
     super(
       cache,
+      statsService,
       ENV('YTS_API_URL') || `https://${fallbackDomainMirrors[0]}`,
       // YTS doesn't document rate limits specifically, but we'll implement
       // a conservative rate limiter (20 requests per minute) to be safe
