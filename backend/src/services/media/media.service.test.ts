@@ -8,8 +8,6 @@ import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { MediaService } from './media.service';
 
-const mockCache = new MockCache();
-
 const mockMovieRepo = {
   findByTMDBId: jest.fn((_tmdbId: number | string): Promise<Movie | null> => Promise.resolve(null)),
   create: jest.fn(details =>
@@ -69,6 +67,7 @@ describe('MediaService', () => {
     process.env.TMDB_API_ACCESS_TOKEN = 'test-token';
 
     // Create the MediaService with the mock DB and a new TMDBApi instance
+    const mockCache = new MockCache();
     const statsService = new StatsService();
     const tmdbApi = new TMDBApi(mockCache, statsService);
     const mediaService = new MediaService(mockDb, tmdbApi);
@@ -76,7 +75,6 @@ describe('MediaService', () => {
     // Wait a bit for any async initialization (like getConfiguration) to complete
     await Promise.resolve();
     jest.clearAllMocks();
-    mockFetch.mockClear();
     return { mediaService, statsService, tmdbApi };
   };
 
