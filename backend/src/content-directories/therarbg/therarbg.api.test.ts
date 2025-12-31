@@ -8,7 +8,7 @@ import { TheRARBGApi } from './therarbg.api';
 describe('TheRARBGService', () => {
   const setupTest = () => {
     const mockCache = new MockCache();
-    // Use real RequestService - HTTP-VCR will intercept fetch call ( already )
+    // Use real RequestService - HTTP-VCR will intercept fetch call ( already recorded calls will not go out to the real API )
     const statsService = new StatsService();
     const requestService = new RequestService(statsService);
     const service = new TheRARBGApi(mockCache, statsService, requestService);
@@ -131,17 +131,14 @@ describe('TheRARBGService', () => {
 
   describe('error handling', () => {
     it('should handle network errors gracefully', async () => {
-      const { requestService } = setupTest();
-      // Create a service with invalid URL to test error handling
-      const statsService = new StatsService();
-      const invalidService = new TheRARBGApi(new MockCache(), statsService, requestService);
+      const { service } = setupTest();
 
       // Mock fetch to simulate a network error
       const originalFetch = global.fetch;
       global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
 
       try {
-        await expect(invalidService.searchByImdbId('tt0111161')).rejects.toThrow();
+        await expect(service.searchByImdbId('tt0111161')).rejects.toThrow();
       } finally {
         // Restore original fetch
         global.fetch = originalFetch;
