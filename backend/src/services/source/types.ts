@@ -1,16 +1,5 @@
 import type { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
-export interface ServicePerformance {
-  successRate: number;
-  avgResponseTime: number;
-  totalCalls: number;
-  successfulCalls: number;
-  failures: number;
-  consecutiveFailures: number;
-  lastUsed: number;
-  errors: string[];
-}
-
 export interface Service {
   maxConcurrentRequests: number;
   rateLimit?: {
@@ -28,7 +17,7 @@ export interface Service {
 export interface ServiceData {
   activeRequests: Set<string>;
   config: Service;
-  performance: ServicePerformance;
+  lastUsed: number;
   rateLimiter?: DynamicRateLimit;
 }
 
@@ -50,13 +39,4 @@ export interface ServiceStats {
   activeRequests: number;
   rank: number;
   errors: Record<string, number>;
-}
-
-export interface ServiceShortStats {
-  successRate: number;
-  queued: number;
-  avgResponseTime: number;
-  totalCalls: number;
-  successfulCalls: number;
-  failures: number;
 }

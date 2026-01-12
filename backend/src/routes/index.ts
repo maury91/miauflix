@@ -5,7 +5,7 @@ import { cors } from 'hono/cors';
 
 import { ENV } from '@constants';
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
-import { createAuthMiddleware } from '@middleware/auth.middleware';
+import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 
@@ -15,7 +15,6 @@ import { createListRoutes } from './list.routes';
 import { createMovieRoutes } from './movie.routes';
 import { createProgressRoutes } from './progress.routes';
 import { createShowRoutes } from './show.routes';
-import { createStatsRoutes } from './stats.routes';
 import { createStreamRoutes } from './stream.routes';
 import { createTraktRoutes } from './trakt.routes';
 
@@ -30,12 +29,12 @@ function createApiRoutes(deps: Deps) {
     .get('/health', rateLimitGuard(10), c => {
       return c.json({ status: 'ok' });
     })
+    .get('/stats', rateLimitGuard(10), authGuard(), c => {
+      return c.json(deps.statsService.report());
+    })
     .get('/status', rateLimitGuard(10), c => {
       return c.json({
-        tmdb: deps.tmdbApi.status(),
         vpn: deps.vpnDetectionService.status(),
-        contentDirectories: deps.contentDirectoryService.status(),
-        magnetResolvers: deps.magnetService.status(),
       });
     })
     .route('/auth', createAuthRoutes(deps))
@@ -44,7 +43,6 @@ function createApiRoutes(deps: Deps) {
     .route('/stream', createStreamRoutes(deps))
     .route('/trakt', createTraktRoutes(deps))
     .route('/progress', createProgressRoutes(deps))
-    .route('/stats', createStatsRoutes(deps))
     .route('/', createListRoutes(deps));
 }
 
