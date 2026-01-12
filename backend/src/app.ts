@@ -73,7 +73,7 @@ try {
   const cacheService = new CacheService();
   const statsService = new StatsService();
   const requestService = new RequestService(statsService);
-  const tmdbApi = new TMDBApi(cacheService.cache);
+  const tmdbApi = new TMDBApi(cacheService.cache, statsService);
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
   const authService = new AuthService(db, auditLogService);
@@ -87,9 +87,14 @@ try {
   const contentDirectoryService = new ContentDirectoryService(
     cacheService.cache,
     downloadService,
-    requestService
+    requestService,
+    statsService
   );
-  const magnetService = new SourceMetadataFileService(downloadService, requestService);
+  const magnetService = new SourceMetadataFileService(
+    downloadService,
+    requestService,
+    statsService
+  );
   const sourceService = new SourceService(
     db,
     vpnDetectionService,

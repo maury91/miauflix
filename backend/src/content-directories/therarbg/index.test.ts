@@ -23,8 +23,9 @@ describe('TherarbgContentDirectory', () => {
     const mockCache = new MockCache();
     const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
 
+    const statsService = new StatsService();
     const mockRequestService = new RequestService(
-      new StatsService()
+      statsService
     ) as unknown as jest.Mocked<RequestService>;
 
     const mockDownloadService = new DownloadService(
@@ -40,7 +41,8 @@ describe('TherarbgContentDirectory', () => {
     const contentDirectory = new TherarbgContentDirectory(
       mockCache,
       mockDownloadService,
-      mockRequestService
+      mockRequestService,
+      statsService
     );
 
     return {
@@ -425,7 +427,8 @@ describe('TherarbgContentDirectory', () => {
       const { RequestService: RequestServiceImpl } = jest.requireActual(
         '@services/request/request.service'
       );
-      const realRequestService = new RequestServiceImpl(new StatsService());
+      const statsService = new StatsService();
+      const realRequestService = new RequestServiceImpl(statsService);
       const realDownloadService = new DownloadService(
         new StorageService({} as Database) as jest.Mocked<StorageService>,
         realRequestService
@@ -436,7 +439,8 @@ describe('TherarbgContentDirectory', () => {
       const realContentDirectory = new TherarbgContentDirectory(
         mockCache,
         realDownloadService,
-        realRequestService
+        realRequestService,
+        statsService
       );
 
       // Use a real, known IMDB ID
@@ -819,26 +823,6 @@ describe('TherarbgContentDirectory', () => {
   "trailerCode": "",
 }
 `);
-    });
-  });
-
-  describe('status', () => {
-    it('should return API status', () => {
-      const { contentDirectory } = setupTest();
-      const mockStatus = {
-        name: 'TheRARBG',
-        baseUrl: 'https://therarbg.to',
-        queue: 0,
-        successes: [],
-        failures: [],
-        lastRequest: '2023-01-01T00:00:00Z',
-      };
-
-      jest.spyOn(contentDirectory['api'], 'status').mockReturnValue(mockStatus);
-
-      const result = contentDirectory.status();
-
-      expect(result).toEqual(mockStatus);
     });
   });
 
