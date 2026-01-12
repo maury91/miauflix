@@ -6,7 +6,7 @@ import type {
   VideoCodec,
 } from '@miauflix/source-metadata-extractor';
 
-import type { Api, ApiStatus } from '@utils/api.util';
+import type { Api } from '@utils/api.util';
 
 export interface SourceMetadata {
   audioCodec: AudioCodec[];
@@ -38,8 +38,4 @@ export abstract class AbstractContentDirectory<T extends Api = Api> {
     imdbId: string,
     highPriority?: boolean
   ): Promise<{ sources: SourceMetadata[]; trailerCode: string }>;
-
-  public status(): ApiStatus {
-    return this.api.status();
-  }
 }

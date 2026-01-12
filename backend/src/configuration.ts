@@ -147,11 +147,12 @@ type ServiceKey = keyof typeof services;
 
 const testService = async (
   service: ServiceConfiguration<Record<string, VariableInfo>>,
-  requestService: RequestService
+  requestService: RequestService,
+  statsService: StatsService
 ): Promise<{ success: boolean; message?: string }> => {
   console.error = () => {};
   try {
-    await service.test(requestService);
+    await service.test(requestService, statsService);
 
     console.error = err;
 
@@ -170,7 +171,8 @@ const testService = async (
  */
 async function configureService(
   service: ServiceConfiguration<Record<string, VariableInfo>>,
-  requestService: RequestService
+  requestService: RequestService,
+  statsService: StatsService
 ): Promise<void> {
   console.log();
   console.log(chalk.cyan.bold(`===== ${service.name} Configuration =====`));
@@ -204,7 +206,7 @@ async function configureService(
 
   // Test the configuration
   console.log(chalk.yellow(`\nTesting ${service.name} configuration...`));
-  const testResult = await testService(service, requestService);
+  const testResult = await testService(service, requestService, statsService);
 
   if (testResult.success) {
     console.log(chalk.green(`✅ ${service.name} configuration is valid!`));
@@ -219,7 +221,7 @@ async function configureService(
   });
 
   if (tryAgain) {
-    return configureService(service, requestService);
+    return configureService(service, requestService, statsService);
   }
 
   console.log(chalk.yellow(`Warning: Using potentially invalid configuration for ${service.name}`));
@@ -378,13 +380,14 @@ export async function validateConfiguration(
     }
   }
 
-  // Create RequestService instance for services that need it
-  const requestService = new RequestService(new StatsService());
+  // Create StatsService and RequestService instances for services that need it
+  const statsService = new StatsService();
+  const requestService = new RequestService(statsService);
 
   if (servicesNeedingConfiguration.size === 0 && !forceReconfigure) {
     console.log(chalk.cyan('Self testing...'));
 
-    const invalidServices = await validateExistingConfiguration(requestService);
+    const invalidServices = await validateExistingConfiguration(requestService, statsService);
     if (invalidServices.length > 0) {
       console.log(
         chalk.red(
@@ -425,7 +428,7 @@ export async function validateConfiguration(
           },
           {} as Record<string, string | undefined>
         );
-      await configureService(service, requestService);
+      await configureService(service, requestService, statsService);
 
       for (const [varName] of Object.entries(service.variables)) {
         if (process.env[varName] !== envVariablesBefore[varName]) {
@@ -480,7 +483,8 @@ export async function validateConfiguration(
  * Validate existing configuration and reconfigure if needed
  */
 async function validateExistingConfiguration(
-  requestService: RequestService
+  requestService: RequestService,
+  statsService: StatsService
 ): Promise<ServiceKey[]> {
   const invalidServices = (
     await Promise.all(
@@ -491,7 +495,7 @@ async function validateExistingConfiguration(
         ][]
       ).map(async ([serviceKey, service]) => {
         // Execute test
-        const testResult = await testService(service, requestService);
+        const testResult = await testService(service, requestService, statsService);
         return [testResult.success, serviceKey] as const;
       })
     )

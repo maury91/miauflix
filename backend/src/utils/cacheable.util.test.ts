@@ -1,6 +1,7 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 import type { Cache } from 'cache-manager';
 
+import { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 
 const { Cacheable } = jest.requireActual('./cacheable.util');
@@ -9,8 +10,8 @@ const { Cacheable } = jest.requireActual('./cacheable.util');
 class TestApi extends Api {
   count = 0;
 
-  constructor(cache: Cache) {
-    super(cache, 'https://test-api.com', 10);
+  constructor(cache: Cache, statsService: StatsService) {
+    super(cache, statsService, 'https://test-api.com', 10);
   }
 
   @Cacheable(1000)
@@ -27,22 +28,22 @@ class TestApi extends Api {
 }
 
 describe('Cacheable', () => {
-  let mockCache: MockCache;
-  let testApi: TestApi;
-
-  beforeEach(() => {
+  const setupTest = () => {
     // Setup our mock cache and API instance
-    mockCache = new MockCache();
-    // Cast to any to bypass TypeScript's strict type checking
-    // In a real scenario, we'd implement the full Cache interface
-    testApi = new TestApi(mockCache);
-  });
+    const mockCache = new MockCache();
+    const statsService = new StatsService();
+    const testApi = new TestApi(mockCache, statsService);
+
+    return { mockCache, testApi, statsService };
+  };
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   it('caches the result for the same arguments', async () => {
+    const { mockCache, testApi } = setupTest();
+
     // First call - should set cache
     const v1 = await testApi.getValue(2);
 
@@ -59,6 +60,8 @@ describe('Cacheable', () => {
   });
 
   it('does not cache for different arguments', async () => {
+    const { mockCache, testApi } = setupTest();
+
     // First call with arg=2
     await testApi.getValue(2);
 
@@ -70,6 +73,8 @@ describe('Cacheable', () => {
   });
 
   it('ignores cache when reset=true', async () => {
+    const { mockCache, testApi } = setupTest();
+
     // First call
     const v1 = await testApi.getValueReset(2);
 
