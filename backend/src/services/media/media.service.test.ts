@@ -1,70 +1,41 @@
+jest.mock('@database/database');
+
 import { MockCache } from '@__test-utils__/cache.mock';
 import { logger as mockLogger } from '@logger';
 
-import type { Database } from '@database/database';
+import { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
 import { StatsService } from '@services/stats/stats.service';
 import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { MediaService } from './media.service';
 
-const mockMovieRepo = {
-  findByTMDBId: jest.fn((_tmdbId: number | string): Promise<Movie | null> => Promise.resolve(null)),
-  create: jest.fn(details =>
-    Promise.resolve({
-      id: 1,
-      tmdbId: details.tmdbId,
-      title: details.title,
-      overview: details.overview,
-      tagline: details.tagline,
-      releaseDate: details.releaseDate,
-      poster: details.poster,
-      backdrop: details.backdrop,
-      logo: details.logo,
-      runtime: details.runtime,
-      popularity: details.popularity,
-      rating: details.rating,
-      genres: details.genres || [],
-      translations: [],
-    } as unknown as Movie)
-  ),
-  addTranslation: jest.fn(() => Promise.resolve({})),
-  checkForChangesAndUpdate: jest.fn(() => Promise.resolve({})),
-  updateGenres: jest.fn(() => Promise.resolve({})),
-};
-
-const mockGenreRepo = {
-  findAll: jest.fn(() =>
-    Promise.resolve([{ id: 1, name: 'Action', translations: [{ language: 'en' }] }])
-  ),
-  createOrGetGenre: jest.fn(id =>
-    Promise.resolve({ id, name: 'Mocked Genre', translations: [{ language: 'en' }] })
-  ),
-  createTranslation: jest.fn(() => Promise.resolve({})),
-};
-
-const mockSyncStateRepo = {
-  getLastSync: jest.fn((): Promise<Date | null> => Promise.resolve(null)),
-  setLastSync: jest.fn((): Promise<void> => Promise.resolve()),
-};
-
 const theWildRobotTMDBID = 1184918; // Movie: The Wild Robot
 const cosmicPrincessTMDBID = 346698; // Movie: Cosmic Princess
-
-const mockDb = {
-  getMovieRepository: () => mockMovieRepo,
-  getTVShowRepository: () => ({}),
-  getGenreRepository: () => mockGenreRepo,
-  getProgressRepository: () => ({}),
-  getSyncStateRepository: () => mockSyncStateRepo,
-  getSeasonRepository: () => ({}),
-} as unknown as Database;
 
 const mockFetch = global.fetch as unknown as jest.Mock<typeof global.fetch>;
 
 describe('MediaService', () => {
+  let mockDb: Database;
+  let mockMovieRepo: jest.Mocked<ReturnType<Database['getMovieRepository']>>;
+  let mockGenreRepo: jest.Mocked<ReturnType<Database['getGenreRepository']>>;
+  let mockSyncStateRepo: jest.Mocked<ReturnType<Database['getSyncStateRepository']>>;
+
   const setupTest = async () => {
     process.env.TMDB_API_ACCESS_TOKEN = 'test-token';
+
+    // Create a new Database instance (which will be the mock)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mockDb = new Database({} as any);
+    mockMovieRepo = mockDb.getMovieRepository() as jest.Mocked<
+      ReturnType<Database['getMovieRepository']>
+    >;
+    mockGenreRepo = mockDb.getGenreRepository() as jest.Mocked<
+      ReturnType<Database['getGenreRepository']>
+    >;
+    mockSyncStateRepo = mockDb.getSyncStateRepository() as jest.Mocked<
+      ReturnType<Database['getSyncStateRepository']>
+    >;
 
     // Create the MediaService with the mock DB and a new TMDBApi instance
     const mockCache = new MockCache();

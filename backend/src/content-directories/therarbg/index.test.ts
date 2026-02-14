@@ -1,7 +1,7 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
-import type { Database } from '@database/database';
+import { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
@@ -13,6 +13,7 @@ import type { ImdbDetailPost, ImdbMetadata } from './therarbg.types';
 jest.mock('@services/download/download.service');
 jest.mock('@services/storage/storage.service');
 jest.mock('@services/request/request.service');
+jest.mock('@database/database');
 
 describe('TherarbgContentDirectory', () => {
   afterEach(() => {
@@ -21,7 +22,9 @@ describe('TherarbgContentDirectory', () => {
 
   const setupTest = () => {
     const mockCache = new MockCache();
-    const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
+    const mockStorageService = new StorageService(
+      new Database({} as never)
+    ) as jest.Mocked<StorageService>;
 
     const statsService = new StatsService();
     const mockRequestService = new RequestService(
@@ -430,7 +433,7 @@ describe('TherarbgContentDirectory', () => {
       const statsService = new StatsService();
       const realRequestService = new RequestServiceImpl(statsService);
       const realDownloadService = new DownloadService(
-        new StorageService({} as Database) as jest.Mocked<StorageService>,
+        new StorageService(new Database({} as never)) as jest.Mocked<StorageService>,
         realRequestService
       ) as jest.Mocked<DownloadService>;
       realDownloadService.generateLink.mockImplementation((hash: string, trackers: string[]) => {
