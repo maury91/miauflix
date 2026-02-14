@@ -6,8 +6,9 @@ import { StorageService } from '@services/storage/storage.service';
 
 jest.mock('@services/download/download.service');
 jest.mock('@services/storage/storage.service');
+jest.mock('@database/database');
 
-import type { Database } from '@database/database';
+import { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
 
 import { ContentDirectoryService } from './content-directory.service';
@@ -19,7 +20,9 @@ describe('ContentDirectoryService', () => {
     const mockCache = new MockCache();
 
     // Create a mock StorageService
-    const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
+    const mockStorageService = new StorageService(
+      new Database({} as never)
+    ) as jest.Mocked<StorageService>;
 
     const statsService = new StatsService();
     // Use real RequestService - HTTP-VCR will intercept fetch calls ( already recorded calls will not go out to the real API )
