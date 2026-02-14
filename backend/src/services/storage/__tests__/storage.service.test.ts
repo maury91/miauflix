@@ -1,3 +1,5 @@
+jest.unmock('@database/database');
+
 import { createTestDatabase, type TestDatabaseHelper } from '@__test-utils__/database.helpers';
 import { TestDataFactory } from '@__test-utils__/test-data.factory';
 import fs from 'fs';
