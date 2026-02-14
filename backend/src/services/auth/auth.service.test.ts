@@ -1,13 +1,12 @@
 import type { Context } from 'hono';
 
-import type { Database } from '@database/database';
+import { Database } from '@database/database';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { RefreshToken } from '@entities/refresh-token.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
-import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import type { AuditLogService } from '@services/security/audit-log.service';
 
@@ -15,6 +14,7 @@ import { AuthService } from './auth.service';
 
 // Mock the ENV function - must be hoisted
 jest.mock('@constants');
+jest.mock('@database/database');
 
 // Mock the tracing decorator
 jest.mock('@utils/tracing.util', () => ({
@@ -57,7 +57,6 @@ describe('AuthService', () => {
   let mockDatabase: jest.Mocked<Database>;
   let mockUserRepository: jest.Mocked<UserRepository>;
   let mockRefreshTokenRepository: jest.Mocked<RefreshTokenRepository>;
-  let mockStreamingKeyRepository: jest.Mocked<StreamingKeyRepository>;
   let mockAuditLogService: jest.Mocked<AuditLogService>;
   let mockContext: Context;
 
@@ -65,31 +64,10 @@ describe('AuthService', () => {
   const { ENV } = jest.requireMock('@constants');
 
   const setupTest = () => {
-    // Create mock repositories
-    mockUserRepository = {
-      findByEmail: jest.fn(),
-      findByRole: jest.fn(),
-      create: jest.fn(),
-    } as unknown as jest.Mocked<UserRepository>;
-
-    mockRefreshTokenRepository = {
-      findByToken: jest.fn(),
-      create: jest.fn(),
-      updateToken: jest.fn(),
-      isChainExpired: jest.fn(),
-      delete: jest.fn(),
-      countByUser: jest.fn(),
-      deleteOldestByUser: jest.fn(),
-      deleteByUserAndSession: jest.fn(),
-    } as unknown as jest.Mocked<RefreshTokenRepository>;
-
-    mockStreamingKeyRepository = {} as unknown as jest.Mocked<StreamingKeyRepository>;
-
-    mockDatabase = {
-      getUserRepository: jest.fn(() => mockUserRepository),
-      getRefreshTokenRepository: jest.fn(() => mockRefreshTokenRepository),
-      getStreamingKeyRepository: jest.fn(() => mockStreamingKeyRepository),
-    } as unknown as jest.Mocked<Database>;
+    mockDatabase = new Database({} as never) as jest.Mocked<Database>;
+    mockUserRepository = mockDatabase.getUserRepository() as jest.Mocked<UserRepository>;
+    mockRefreshTokenRepository =
+      mockDatabase.getRefreshTokenRepository() as jest.Mocked<RefreshTokenRepository>;
 
     mockAuditLogService = {
       logSecurityEvent: jest.fn(),

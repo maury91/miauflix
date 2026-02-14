@@ -8,7 +8,7 @@ import { Client as BTClient } from 'bittorrent-tracker';
 import loadIPSet from 'load-ip-set';
 
 import { ENV } from '@constants';
-import type { Database } from '@database/database';
+import { Database } from '@database/database';
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
@@ -24,6 +24,7 @@ jest.mock('load-ip-set');
 jest.mock('@logger');
 jest.mock('@services/storage/storage.service');
 jest.mock('@services/request/request.service');
+jest.mock('@database/database');
 
 describe('DownloadService', () => {
   beforeEach(() => {
@@ -74,7 +75,9 @@ describe('DownloadService', () => {
     }
 
     // Mock StorageService as EventEmitter
-    const mockStorageService = new StorageService({} as Database) as jest.Mocked<StorageService>;
+    const mockStorageService = new StorageService(
+      new Database({} as never)
+    ) as jest.Mocked<StorageService>;
 
     const service = new DownloadService(mockStorageService, mockRequestService);
 
