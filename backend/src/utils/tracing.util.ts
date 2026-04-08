@@ -354,7 +354,15 @@ export function tracedDb<
       const span = TracingUtil.createDatabaseSpan(
         propertyName,
         entity,
-        { 'method.args': JSON.stringify(args) },
+        {
+          'method.args': (() => {
+            try {
+              return JSON.stringify(args);
+            } catch {
+              return '[Serialization Error]';
+            }
+          })(),
+        },
         peerService
       );
 
@@ -388,7 +396,13 @@ export function tracedApi<
         service,
         propertyName,
         {
-          'method.args': JSON.stringify(args),
+          'method.args': (() => {
+            try {
+              return JSON.stringify(args);
+            } catch {
+              return '[Serialization Error]';
+            }
+          })(),
         },
         peerService
       );

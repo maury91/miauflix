@@ -50,32 +50,25 @@ if (tizenBuild) {
 
 /**
  * Rewrite Set-Cookie header for dev proxy so cookies work when backend is proxied.
- * Sets Domain=localhost and strips Secure when target is HTTP.
+ * Sets Domain=localhost.
  */
-function rewriteSetCookieForDev(cookie: string, targetUrl: string): string {
-  let out = cookie.replace(/\bDomain=[^;]*/gi, 'Domain=localhost');
-  if (targetUrl.startsWith('http://')) {
-    out = out.replace(/;\s*Secure\b/gi, '');
-  }
-  return out;
+function rewriteSetCookieForDev(cookie: string): string {
+  return cookie.replace(/\bDomain=[^;]*/gi, 'Domain=localhost');
 }
 
 function proxyCookieRewriteConfigure(
-  proxy: Parameters<NonNullable<ProxyOptions['configure']>>[0],
-  targetUrl: string
+  proxy: Parameters<NonNullable<ProxyOptions['configure']>>[0]
 ): void {
   proxy.on('proxyRes', proxyRes => {
     const setCookie = proxyRes.headers['set-cookie'];
     if (!setCookie) return;
     const list = Array.isArray(setCookie) ? setCookie : [setCookie];
-    proxyRes.headers['set-cookie'] = list.map((cookie: string) =>
-      rewriteSetCookieForDev(cookie, targetUrl)
-    );
+    proxyRes.headers['set-cookie'] = list.map((cookie: string) => rewriteSetCookieForDev(cookie));
   });
 }
 
 const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
-const previewBackendUrl = process.env.API_URL || 'http://localhost:5000';
+const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 
 export default defineConfig({
   root: __dirname,
@@ -88,7 +81,7 @@ export default defineConfig({
         target: devBackendUrl,
         changeOrigin: true,
         secure: false,
-        configure: proxy => proxyCookieRewriteConfigure(proxy, devBackendUrl),
+        configure: proxyCookieRewriteConfigure,
       },
     },
   },
@@ -102,7 +95,7 @@ export default defineConfig({
               target: previewBackendUrl,
               changeOrigin: true,
               secure: false,
-              configure: proxy => proxyCookieRewriteConfigure(proxy, previewBackendUrl),
+              configure: proxyCookieRewriteConfigure,
             },
           }
         : undefined,
