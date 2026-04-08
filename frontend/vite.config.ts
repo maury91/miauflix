@@ -10,6 +10,7 @@ import path from 'path';
 // import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 // import { injectScripts, publicTypescript } from 'vite-plugin-public-typescript';
 import Icons from 'unplugin-icons/vite';
+import type { ProxyOptions } from 'vite';
 import { defineConfig } from 'vite';
 import webfontDownload from 'vite-plugin-webfont-dl';
 
@@ -47,6 +48,35 @@ if (tizenBuild) {
 //   ]),
 // ];
 
+/**
+ * Rewrite Set-Cookie header for dev proxy so cookies work when backend is proxied.
+ * Sets Domain=localhost and strips Secure when target is HTTP.
+ */
+function rewriteSetCookieForDev(cookie: string, targetUrl: string): string {
+  let out = cookie.replace(/\bDomain=[^;]*/gi, 'Domain=localhost');
+  if (targetUrl.startsWith('http://')) {
+    out = out.replace(/;\s*Secure\b/gi, '');
+  }
+  return out;
+}
+
+function proxyCookieRewriteConfigure(
+  proxy: Parameters<NonNullable<ProxyOptions['configure']>>[0],
+  targetUrl: string
+): void {
+  proxy.on('proxyRes', proxyRes => {
+    const setCookie = proxyRes.headers['set-cookie'];
+    if (!setCookie) return;
+    const list = Array.isArray(setCookie) ? setCookie : [setCookie];
+    proxyRes.headers['set-cookie'] = list.map((cookie: string) =>
+      rewriteSetCookieForDev(cookie, targetUrl)
+    );
+  });
+}
+
+const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+const previewBackendUrl = process.env.API_URL || 'http://localhost:5000';
+
 export default defineConfig({
   root: __dirname,
   cacheDir: '../node_modules/.vite/frontend',
@@ -55,9 +85,10 @@ export default defineConfig({
     host: 'localhost',
     proxy: {
       '/api': {
-        target: process.env.BACKEND_URL || 'http://localhost:5000',
+        target: devBackendUrl,
         changeOrigin: true,
         secure: false,
+        configure: proxy => proxyCookieRewriteConfigure(proxy, devBackendUrl),
       },
     },
   },
@@ -68,9 +99,10 @@ export default defineConfig({
       process.env.DISABLE_API_PROXY !== 'true'
         ? {
             '/api': {
-              target: process.env.API_URL || 'http://localhost:5000',
+              target: previewBackendUrl,
               changeOrigin: true,
               secure: false,
+              configure: proxy => proxyCookieRewriteConfigure(proxy, previewBackendUrl),
             },
           }
         : undefined,

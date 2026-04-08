@@ -16,8 +16,8 @@ services:
       - net.ipv4.conf.all.rp_filter=2 # Set reverse path filter to loose mode
       - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
     ports:
-      - '5000:3000' # Expose backend API port (host:container)
-      - '16686:16686' # Expose Jaeger UI port (host:container)
+      - '127.0.0.1:5000:3000' # Expose backend API port locally only
+      - '127.0.0.1:16686:16686' # Expose Jaeger UI port locally only
     restart: unless-stopped
 
   jaeger:

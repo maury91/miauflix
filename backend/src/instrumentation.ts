@@ -22,6 +22,8 @@ import {
   SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
 } from '@opentelemetry/semantic-conventions';
 
+import { ENV } from '@constants';
+
 import { FileSpanExporter } from './instrumentation/file-exporter';
 
 const SYNTHETIC_SCOPE = { name: '@miauflix/backend', version: '1.0.0' };
@@ -138,7 +140,7 @@ function wrapWithPeerServiceEnrichment(real: SpanExporter): SpanExporter {
 
 /** Wraps OTLP exporter and logs success/failure when DEBUG=Jaeger */
 function wrapOtlpExporterWithDebugLogging(real: SpanExporter): SpanExporter {
-  const debugEnabled = process.env.DEBUG?.includes('Jaeger') ?? false;
+  const debugEnabled = ENV('DEBUG')?.includes('Jaeger') ?? false;
   return {
     export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void): void {
       real.export(spans, result => {
@@ -164,12 +166,11 @@ function wrapOtlpExporterWithDebugLogging(real: SpanExporter): SpanExporter {
 }
 
 // Check if tracing is enabled via environment variable
-const tracingEnabled = process.env.ENABLE_TRACING === 'true';
+const tracingEnabled = ENV('ENABLE_TRACING');
 
 // OTLP (e.g. Jaeger) is optional: only enable when endpoint is set; failures must not break the app or pollute logs
 const otlpEndpoint =
-  process.env.OTEL_EXPORTER_OTLP_ENDPOINT ||
-  (process.env.ENABLE_OTLP === 'true' ? 'http://localhost:4318' : undefined);
+  ENV('OTEL_EXPORTER_OTLP_ENDPOINT') || (ENV('ENABLE_OTLP') ? 'http://localhost:4318' : undefined);
 
 let sdk: NodeSDK | { start: () => void; shutdown: () => Promise<void> };
 
@@ -184,8 +185,9 @@ if (!tracingEnabled) {
   console.log('🔍 Tracing enabled - initializing OpenTelemetry...');
 
   // Configure the trace file location - use /tmp for Docker containers
-  const traceFile = process.env.TRACE_FILE || '/tmp';
-  const maxTraces = Math.max(0, parseInt(process.env.TRACE_MAX_TRACES ?? '1000', 10) || 1000);
+  const traceFile = ENV('TRACE_FILE');
+  const parsedMaxTraces = Number.parseInt(ENV('TRACE_MAX_TRACES') ?? '1000', 10);
+  const maxTraces = Number.isNaN(parsedMaxTraces) ? 1000 : Math.max(0, parsedMaxTraces);
 
   // File exporter always used when tracing is on (primary sink; no external dependency)
   const fileExporter = new FileSpanExporter(traceFile, undefined, maxTraces);
@@ -205,7 +207,7 @@ if (!tracingEnabled) {
     resource: resourceFromAttributes({
       [ATTR_SERVICE_NAME]: '@miauflix/backend',
       [ATTR_SERVICE_VERSION]: '1.0.0',
-      [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: process.env.NODE_ENV || 'development',
+      [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: ENV('NODE_ENV'),
     }),
     spanProcessors,
     instrumentations: [

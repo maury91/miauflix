@@ -179,12 +179,11 @@ export class FileSpanExporter implements SpanExporter {
   export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void): void {
     try {
       const traceId = spans[0].spanContext().traceId;
-      const root = this.getRootSpan(spans);
-      if (this.isRootLikeSpan(root)) {
+      const stream = this.getLogStream(traceId);
+      const root = spans.find(span => !span.parentSpanContext && this.isRootLikeSpan(span));
+      if (root) {
         this.appendIndexLine(this.getIndexEntry(traceId, root));
       }
-
-      const stream = this.getLogStream(traceId);
 
       for (const span of spans) {
         const traceData = {

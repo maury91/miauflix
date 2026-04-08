@@ -84,6 +84,52 @@ const serverConfigurationDefinition = serviceConfiguration({
       example: 'true',
       transform: transforms.boolean(),
     }),
+    NODE_ENV: variable({
+      description: 'Node.js environment mode',
+      required: false,
+      defaultValue: 'development',
+      example: 'production',
+    }),
+    DEBUG: variable({
+      description:
+        'Enable debug output for specific modules (e.g. "Jaeger" for OTLP tracing debug logs)',
+      required: false,
+      defaultValue: '',
+      example: 'Jaeger',
+    }),
+    ENABLE_TRACING: variable({
+      description: 'Enable OpenTelemetry distributed tracing',
+      required: false,
+      defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
+    OTEL_EXPORTER_OTLP_ENDPOINT: variable({
+      description: 'OTLP endpoint URL for exporting traces (e.g. Jaeger)',
+      required: false,
+      defaultValue: '',
+      example: 'http://localhost:4318',
+    }),
+    ENABLE_OTLP: variable({
+      description:
+        'Enable OTLP trace export to localhost:4318 when no OTEL_EXPORTER_OTLP_ENDPOINT is set',
+      required: false,
+      defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
+    TRACE_FILE: variable({
+      description: 'Directory for writing trace span files',
+      required: false,
+      defaultValue: '/tmp',
+      example: '/data/traces',
+    }),
+    TRACE_MAX_TRACES: variable({
+      description: 'Maximum number of traces to retain in the trace file',
+      required: false,
+      defaultValue: '1000',
+      example: '500',
+    }),
     FRONTEND_DIR: variable({
       description: 'If set, the backend will serve static frontend files from this directory',
       required: false,

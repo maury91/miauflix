@@ -2,6 +2,7 @@ import { logger } from '@logger';
 import { context, trace } from '@opentelemetry/api';
 import { clearInterval, setTimeout } from 'timers';
 
+import { ENV } from '@constants';
 import type { ScheduleTask } from '@mytypes/scheduler.types';
 import { TracingUtil } from '@utils/tracing.util';
 
@@ -29,7 +30,7 @@ export class Scheduler {
 
         if (taskSpan) {
           const traceId = taskSpan.spanContext().traceId;
-          const traceDir = process.env.TRACE_FILE || '/tmp';
+          const traceDir = ENV('TRACE_FILE') || '/tmp';
           logger.debug(
             'Scheduler',
             `Trace ID for task '${taskName}': ${traceId} (trace file: ${traceDir}/${traceId}.log)`
