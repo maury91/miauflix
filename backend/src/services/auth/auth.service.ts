@@ -136,17 +136,30 @@ export class AuthService {
    * Creates the first admin user via the setup endpoint.
    * Returns null when the feature flag is disabled (caller should return 404).
    * Throws when an admin already exists (caller should return 409).
+   * The check and insert are atomic (single transaction) to prevent race conditions.
    */
   @traced('AuthService')
   async setupAdmin(email: string, password: string): Promise<User | null> {
     if (!this.allowCreateAdminOnFirstRun) {
       return null;
     }
-    const adminUsers = await this.userRepository.findByRole(UserRole.ADMIN);
-    if (adminUsers.length > 0) {
+    const passwordHash = await hash(password, 10);
+    const newUser = await this.userRepository.createAdminIfNone({
+      email,
+      passwordHash,
+      role: UserRole.ADMIN,
+    });
+    if (!newUser) {
       throw new Error('Admin user already exists');
     }
-    return this.createUser(email, password, UserRole.ADMIN);
+    await this.auditLogService.logSecurityEvent({
+      eventType: AuditEventType.USER_CREATION,
+      severity: AuditEventSeverity.INFO,
+      description: `User created with role: ${UserRole.ADMIN}`,
+      userEmail: email,
+      metadata: { role: UserRole.ADMIN, isEmailVerified: false },
+    });
+    return newUser;
   }
 
   @traced('AuthService')

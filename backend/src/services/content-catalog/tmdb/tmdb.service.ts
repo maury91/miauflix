@@ -774,17 +774,16 @@ export class TmdbService {
           const seasonChanges = tvShowChanges.changes.filter(change => change.key === 'season');
 
           if (seasonChanges.length > 0) {
+            const createdSeasonNumbers = new Set<number>();
             for (const seasonChange of seasonChanges) {
               for (const item of seasonChange.items) {
                 if (item.value && typeof item.value.season_number === 'number') {
-                  const season = tvShow.seasons?.find(
-                    s => s.seasonNumber === item.value!.season_number
-                  );
+                  const seasonNumber = item.value.season_number;
+                  const season = tvShow.seasons?.find(s => s.seasonNumber === seasonNumber);
 
                   if (season) {
                     await this.tvShowRepository.updateSeasonSyncStatus(season, false);
-                  } else {
-                    const seasonNumber = item.value.season_number;
+                  } else if (!createdSeasonNumbers.has(seasonNumber)) {
                     const seasonDetails = await this.tmdbApi.getSeason(tvShow.tmdbId, seasonNumber);
                     await this.tvShowRepository.createSeason(tvShow, {
                       tmdbId: seasonDetails.id,
@@ -794,6 +793,7 @@ export class TmdbService {
                       posterPath: seasonDetails.poster_path,
                       seasonNumber: seasonNumber,
                     });
+                    createdSeasonNumbers.add(seasonNumber);
                   }
                 }
               }

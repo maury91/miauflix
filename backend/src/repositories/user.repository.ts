@@ -1,4 +1,4 @@
-import type { DataSource, Repository } from 'typeorm';
+import type { DataSource, EntityManager, Repository } from 'typeorm';
 
 import type { UserRole } from '@entities/user.entity';
 import { User } from '@entities/user.entity';
@@ -45,5 +45,22 @@ export class UserRepository {
 
   async saveUser(user: User): Promise<User> {
     return this.repository.save(user);
+  }
+
+  /**
+   * Creates the given user as admin only when no admin exists yet.
+   * The check and insert run in the same transaction, preventing a race where
+   * two concurrent requests both pass the "no admin" check and both insert.
+   * Returns the new User, or null if an admin already existed.
+   */
+  async createAdminIfNone(user: Partial<User>): Promise<User | null> {
+    return this.repository.manager.transaction(async (em: EntityManager) => {
+      const existing = await em.findOne(User, { where: { role: user.role } });
+      if (existing) {
+        return null;
+      }
+      const newUser = em.create(User, user);
+      return em.save(User, newUser);
+    });
   }
 }
