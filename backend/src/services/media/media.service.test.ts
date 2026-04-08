@@ -5,8 +5,9 @@ import { logger as mockLogger } from '@logger';
 
 import { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
+import { TMDBApi } from '@services/content-catalog/tmdb/tmdb.api';
+import { TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
 import { StatsService } from '@services/stats/stats.service';
-import { TMDBApi } from '@services/tmdb/tmdb.api';
 
 import { MediaService } from './media.service';
 
@@ -37,16 +38,17 @@ describe('MediaService', () => {
       ReturnType<Database['getSyncStateRepository']>
     >;
 
-    // Create the MediaService with the mock DB and a new TMDBApi instance
+    // Create TmdbService (with TMDBApi) and MediaService with mock DB
     const mockCache = new MockCache();
     const statsService = new StatsService();
     const tmdbApi = new TMDBApi(mockCache, statsService);
-    const mediaService = new MediaService(mockDb, tmdbApi);
+    const tmdbService = new TmdbService(mockDb, tmdbApi);
+    const mediaService = new MediaService(mockDb, tmdbService);
 
     // Wait a bit for any async initialization (like getConfiguration) to complete
     await Promise.resolve();
     jest.clearAllMocks();
-    return { mediaService, statsService, tmdbApi };
+    return { mediaService, statsService, tmdbApi, tmdbService };
   };
 
   afterEach(() => {
@@ -126,34 +128,21 @@ describe('MediaService', () => {
       // Act
       await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
 
-      // Assert
-      expect(mockMovieRepo.create).toHaveBeenCalled();
-      // The modified fixture has 2 translations
-      expect(mockMovieRepo.addTranslation).toHaveBeenCalledTimes(2);
-
-      // Check that addTranslation was called with the expected data from the fixture
-      const expectedMovieArg = expect.objectContaining({ id: 1, tmdbId: theWildRobotTMDBID });
-      const expectedEnTranslationPayload = {
+      const expectedTranslation = expect.objectContaining({
         title: 'The Wild Robot',
         overview: 'Overview here.',
-        tagline: '', // As per the modified fixture
+        tagline: '',
         language: 'en',
-      };
-
-      // Verify details for the first call (corresponds to the first translation in the fixture)
-      expect(mockMovieRepo.addTranslation).toHaveBeenNthCalledWith(
-        1,
-        expectedMovieArg,
-        expect.objectContaining(expectedEnTranslationPayload)
+      });
+      expect(mockMovieRepo.create).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          translations: expect.arrayContaining([expectedTranslation]),
+        })
       );
-
-      // Verify details for the second call (corresponds to the second translation in the fixture)
-      // In this specific fixture, the payload is identical to the first.
-      expect(mockMovieRepo.addTranslation).toHaveBeenNthCalledWith(
-        2,
-        expectedMovieArg,
-        expect.objectContaining(expectedEnTranslationPayload)
-      );
+      // The modified fixture has 2 translations
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect((mockMovieRepo.create.mock.calls[0][1] as any).translations).toHaveLength(2);
     }); // End of getMovie describe block
 
     describe('syncMovies', () => {
@@ -166,26 +155,25 @@ describe('MediaService', () => {
       });
 
       it('should skip sync if last sync was less than 1 hour ago', async () => {
-        // Arrange
-        const { mediaService } = await setupTest();
-        // Mock getLastSync to return a very recent time (effectively < 1 hour ago)
+        // Arrange - syncMovies now lives on TmdbService
+        const { tmdbService } = await setupTest();
         (mockSyncStateRepo.getLastSync as jest.Mock).mockResolvedValue(new Date());
 
         // Act
-        await mediaService.syncMovies();
+        await tmdbService.syncMovies();
 
         // Assert
         expect(mockSyncStateRepo.getLastSync).toHaveBeenCalledWith(MOVIE_SYNC_NAME);
         expect(mockLogger.debug).toHaveBeenCalledWith(
-          'MovieSync',
-          'Last sync was less than 1 hour ago. Skipping sync.'
+          'TmdbService',
+          'Last movie sync was less than 1 hour ago. Skipping.'
         );
         expect(getAllChangedMovieIdsSpy).not.toHaveBeenCalled();
         expect(mockSyncStateRepo.setLastSync).not.toHaveBeenCalled();
       });
 
       it('should proceed with sync if no last sync state exists', async () => {
-        const { mediaService } = await setupTest();
+        const { tmdbService } = await setupTest();
         const now = new Date('2025-05-11T10:00:00Z');
         jest.useFakeTimers({ now });
         (mockSyncStateRepo.getLastSync as jest.Mock).mockResolvedValue(null); // No last sync
@@ -231,23 +219,17 @@ describe('MediaService', () => {
         });
 
         // Act
-        await mediaService.syncMovies();
+        await tmdbService.syncMovies();
 
-        // Assert
-        // Movie changes mock has 199 changes ( 2 pages ) on day 1
-        // 100 changes ( 1 page ) on day 2
+        // Assert - TmdbService uses 'TmdbService' as logger prefix
         expect(mockSyncStateRepo.getLastSync).toHaveBeenCalledWith(MOVIE_SYNC_NAME);
         expect(mockLogger.debug).toHaveBeenCalledWith(
-          'MovieSync',
-          expect.stringContaining('Chunk 1/2 - Processing page 1/2')
+          'TmdbService',
+          expect.stringContaining('chunk 1/2')
         );
         expect(mockLogger.debug).toHaveBeenCalledWith(
-          'MovieSync',
-          expect.stringContaining('Chunk 1/2 - Processing page 2/2')
-        );
-        expect(mockLogger.debug).toHaveBeenCalledWith(
-          'MovieSync',
-          expect.stringContaining('Chunk 2/2 - Processing page 1/1')
+          'TmdbService',
+          expect.stringContaining('chunk 2/2')
         );
 
         expect(getAllChangedMovieIdsSpy).toHaveBeenCalledTimes(2); // 2 pages

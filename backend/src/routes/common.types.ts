@@ -1,4 +1,6 @@
 import type { AuthService } from '@services/auth/auth.service';
+import type { ContentCatalogService } from '@services/content-catalog/content-catalog.service';
+import type { TraktService } from '@services/content-catalog/trakt/trakt.service';
 import type { DownloadService } from '@services/download/download.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
@@ -12,24 +14,22 @@ import type {
 } from '@services/source';
 import type { StatsService } from '@services/stats/stats.service';
 import type { StreamService } from '@services/stream/stream.service';
-import type { TMDBApi } from '@services/tmdb/tmdb.api';
-import type { TraktService } from '@services/trakt/trakt.service';
 
 export interface Deps {
-  authService: AuthService;
   auditLogService: AuditLogService;
-  mediaService: MediaService;
-  sourceService: SourceService;
-  listService: ListService;
-  tmdbApi: TMDBApi;
-  vpnDetectionService: VpnDetectionService;
+  authService: AuthService;
+  catalogService: ContentCatalogService;
   contentDirectoryService: ContentDirectoryService;
-  magnetService: SourceMetadataFileService;
-  traktService: TraktService;
   downloadService: DownloadService;
-  streamService: StreamService;
+  listService: ListService;
+  magnetService: SourceMetadataFileService;
+  mediaService: MediaService;
   requestService: RequestService;
+  sourceService: SourceService;
   statsService: StatsService;
+  streamService: StreamService;
+  traktService: TraktService;
+  vpnDetectionService: VpnDetectionService;
 }
 
 export interface ErrorResponse {

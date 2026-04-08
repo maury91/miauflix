@@ -28,6 +28,7 @@
     "start:backend:prod": "npm -w backend run start:prod",
     "start:backend": "npm -w backend start",
     "start:frontend:ssr": "npm -w frontend run dev:ssr",
+    "start:frontend:proxy-prod": "BACKEND_URL=http://localhost:5000 npm -w frontend run dev",
     "start:frontend": "npm -w frontend run dev",
     "start": "npm run start:backend",
     "stop:backend:e2e": "backend-e2e/scripts/stop.sh",

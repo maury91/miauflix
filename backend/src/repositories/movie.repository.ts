@@ -28,7 +28,14 @@ export class MovieRepository {
     return this.movieRepository.findOneBy({ tmdbId });
   }
 
-  async create(movie: Partial<Movie>): Promise<Movie> {
+  async create(
+    movie: Partial<Movie>,
+    {
+      translations = [],
+    }: {
+      translations?: Pick<MovieTranslation, 'language' | 'overview' | 'tagline' | 'title'>[];
+    } = {}
+  ): Promise<Movie> {
     const newMovie = this.movieRepository.create(movie);
     const result = await this.movieRepository.upsert(newMovie, ['imdbId']);
     if (!result.identifiers.length) {
@@ -53,10 +60,18 @@ export class MovieRepository {
       );
       throw new Error('Failed to retrieve created movie');
     }
+    if (translations.length) {
+      updatedMovie.translations = await Promise.all(
+        translations.map(translation => this.addTranslation(updatedMovie, translation))
+      );
+    }
     return updatedMovie;
   }
 
-  async addTranslation(movie: Movie, translation: Partial<MovieTranslation>) {
+  async addTranslation(
+    movie: Movie,
+    translation: Partial<MovieTranslation>
+  ): Promise<MovieTranslation> {
     if (!movie.id) {
       throw new Error('Movie ID is required to add a translation');
     }
@@ -65,11 +80,11 @@ export class MovieRepository {
       movie,
     });
     await this.movieTranslationRepository.upsert(newTranslation, ['movieId', 'language']);
+    return newTranslation;
   }
 
   async checkForChangesAndUpdate(
     movie: Movie,
-
     { genres: _, ...updatedMovie }: Partial<Movie>
   ): Promise<void> {
     const hasChanges = objectKeys(updatedMovie).some(key => {
@@ -77,6 +92,15 @@ export class MovieRepository {
     });
     if (hasChanges) {
       await this.movieRepository.update(movie.id, updatedMovie);
+    }
+  }
+
+  async checkForChangesAndUpdateGenres(movie: Movie, genres: Genre[]): Promise<void> {
+    const movieGenreIds = movie.genres?.map(genre => genre.id).sort() ?? [];
+    const sortedGenres = genres.map(genre => genre.id).sort();
+
+    if (movieGenreIds.toString() !== sortedGenres.toString()) {
+      await this.updateGenres(movie, genres);
     }
   }
 

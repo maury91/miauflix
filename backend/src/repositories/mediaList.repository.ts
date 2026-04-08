@@ -15,25 +15,20 @@ export class MediaListRepository {
   }
 
   async findBySlug(slug: string, preload: boolean): Promise<MediaList | null> {
-    return this.repository.findOne({
-      relations: {
-        movies: preload
-          ? {
-              genres: true,
-              translations: true,
-            }
-          : false,
-        tvShows: preload
-          ? {
-              genres: true,
-              translations: true,
-              seasons: true,
-            }
-          : false,
-        seasons: preload,
-      },
-      where: { slug },
-    });
+    const qb = this.repository.createQueryBuilder('list').where('list.slug = :slug', { slug });
+
+    if (preload) {
+      qb.leftJoinAndSelect('list.movies', 'movies')
+        .leftJoinAndSelect('movies.genres', 'movieGenres')
+        .leftJoinAndSelect('movies.translations', 'movieTranslations')
+        .leftJoinAndSelect('list.tvShows', 'tvShows')
+        .leftJoinAndSelect('tvShows.genres', 'tvShowGenres')
+        .leftJoinAndSelect('tvShows.translations', 'tvShowTranslations')
+        .leftJoinAndSelect('tvShows.seasons', 'seasons')
+        .leftJoinAndSelect('list.seasons', 'listSeasons');
+    }
+
+    return qb.getOne();
   }
 
   async saveMediaList(mediaList: MediaList): Promise<MediaList> {

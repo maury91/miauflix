@@ -1,6 +1,8 @@
 import { logger } from '@logger';
+import { context, trace } from '@opentelemetry/api';
 import { clearInterval, setTimeout } from 'timers';
 
+import type { ScheduleTask } from '@mytypes/scheduler.types';
 import { TracingUtil } from '@utils/tracing.util';
 
 export class Scheduler {
@@ -26,6 +28,12 @@ export class Scheduler {
         });
 
         if (taskSpan) {
+          const traceId = taskSpan.spanContext().traceId;
+          const traceDir = process.env.TRACE_FILE || '/tmp';
+          logger.debug(
+            'Scheduler',
+            `Trace ID for task '${taskName}': ${traceId} (trace file: ${traceDir}/${traceId}.log)`
+          );
           await TracingUtil.executeInSpan(taskSpan, () => task());
         } else {
           await task();
@@ -35,12 +43,21 @@ export class Scheduler {
       } catch (err) {
         logger.error('Scheduler', `Task ${taskName} failed with error:`, err);
       } finally {
-        const intervalId = setTimeout(executeTask, interval * 1000);
+        const emptyCtx = trace.deleteSpan(context.active());
+        const intervalId = setTimeout(() => {
+          context.with(emptyCtx, executeTask);
+        }, interval * 1000);
         this.tasks.set(taskName, intervalId);
       }
     };
 
-    executeTask();
+    context.with(trace.deleteSpan(context.active()), executeTask);
+  }
+
+  scheduleTasks(tasks: ScheduleTask[]) {
+    for (const task of tasks) {
+      this.scheduleTask(task.name, task.interval, task.task);
+    }
   }
 
   cancelTask(taskName: string): void {

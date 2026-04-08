@@ -5,50 +5,38 @@ import type { MediaList } from '@entities/list.entity';
 import { Movie } from '@entities/movie.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
-import type { TMDBApi } from '@services/tmdb/tmdb.api';
-import type { MediaSummaryList } from '@services/tmdb/tmdb.types';
+import type { TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
 import { traced } from '@utils/tracing.util';
 
 import type { MediaService } from './media.service';
 import type { TranslatedMedia } from './media.types';
 
+const LISTS: Record<string, { name: string; slug: string; description: string }> = {
+  '@@tmdb_movies_popular': {
+    name: 'Popular Movies',
+    slug: '@@tmdb_movies_popular',
+    description: 'List of popular movies from TMDB',
+  },
+  '@@tmdb_movies_top-rated': {
+    name: 'Top Rated Movies',
+    slug: '@@tmdb_movies_top-rated',
+    description: 'List of top rated movies from TMDB',
+  },
+  '@@tmdb_shows_popular': {
+    name: 'Popular TV Shows',
+    slug: '@@tmdb_shows_popular',
+    description: 'List of popular TV shows from TMDB',
+  },
+};
+
 export class ListService {
-  private readonly lists: Record<
-    string,
-    {
-      name: string;
-      source: (page?: number) => Promise<MediaSummaryList>;
-      slug: string;
-      description: string;
-    }
-  >;
   private readonly mediaListRepository: MediaListRepository;
 
   constructor(
     private readonly db: Database,
-    private readonly tmdbApi: TMDBApi,
+    private readonly tmdbService: TmdbService,
     private readonly mediaService: MediaService
   ) {
-    this.lists = {
-      '@@tmdb_movies_popular': {
-        name: 'Popular Movies',
-        source: this.tmdbApi.getPopularMovies.bind(this.tmdbApi),
-        slug: '@@tmdb_movies_popular',
-        description: 'List of popular movies from TMDB',
-      },
-      '@@tmdb_movies_top-rated': {
-        name: 'Top Rated Movies',
-        source: this.tmdbApi.getTopRatedMovies.bind(this.tmdbApi),
-        slug: '@@tmdb_movies_top-rated',
-        description: 'List of top rated movies from TMDB',
-      },
-      '@@tmdb_shows_popular': {
-        name: 'Popular TV Shows',
-        source: this.tmdbApi.getPopularShows.bind(this.tmdbApi),
-        slug: '@@tmdb_shows_popular',
-        description: 'List of popular TV shows from TMDB',
-      },
-    };
     this.mediaListRepository = db.getMediaListRepository();
   }
 
@@ -57,11 +45,14 @@ export class ListService {
     slug: string,
     page: number
   ): Promise<{ medias: (Movie | TVShow)[]; pages: number; total: number }> {
-    if (!this.lists[slug]) {
+    if (!LISTS[slug]) {
       throw new Error(`List with slug ${slug} not found`);
     }
-    const list = this.lists[slug];
-    const { totalPages, totalItems, items: medias } = await list.source(page);
+    const {
+      totalPages,
+      totalItems,
+      items: medias,
+    } = await this.tmdbService.getListSource(slug, page);
 
     logger.debug(
       'ListService',
@@ -87,8 +78,8 @@ export class ListService {
   private async getOrCreateList(slug: string, preload: boolean): Promise<MediaList> {
     let mediaList = await this.mediaListRepository.findBySlug(slug, preload);
     if (!mediaList) {
-      if (this.lists[slug]) {
-        const list = this.lists[slug];
+      const list = LISTS[slug];
+      if (list) {
         mediaList = await this.mediaListRepository.createMediaList(
           list.name,
           list.description,
@@ -134,6 +125,11 @@ export class ListService {
   @traced('ListService')
   async getListContent(slug: string, language = 'en'): Promise<TranslatedMedia[]> {
     const mediaList = await this.getListBySlug(slug);
+    if (mediaList.slug !== slug) {
+      throw new Error(
+        `List slug mismatch: requested ${slug}, got list with slug ${mediaList.slug}`
+      );
+    }
     if (!mediaList.movies) {
       console.log(mediaList);
     }
@@ -148,7 +144,7 @@ export class ListService {
 
   @traced('ListService')
   async getLists() {
-    return Object.entries(this.lists).map(([slug, list]) => ({
+    return Object.entries(LISTS).map(([slug, list]) => ({
       slug,
       name: list.name,
       description: list.description,

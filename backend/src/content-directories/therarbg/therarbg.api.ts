@@ -6,6 +6,7 @@ import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
+import { tracedApi } from '@utils/tracing.util';
 import { TrackStatus } from '@utils/trackStatus.util';
 
 import type { GetPostsResponse, ImdbDetailResponse } from './therarbg.types';
@@ -129,6 +130,7 @@ export class TheRARBGApi extends Api {
    * Search for movie by IMDB ID
    */
   @Cacheable(36e5 /* 1 hour */)
+  @tracedApi('TheRARBGApi', 'therarbg')
   async searchByImdbId(imdbId: string, highPriority = false): Promise<ImdbDetailResponse | null> {
     // Validate IMDB ID
     const validation = validateImdbId(imdbId);
@@ -162,6 +164,7 @@ export class TheRARBGApi extends Api {
    * Get recent posts with caching
    */
   @Cacheable(36e5 /* 1 hour */)
+  @tracedApi('TheRARBGApi', 'therarbg')
   async searchPosts(
     keywords: string,
     options: SearchPostsOptions = {},
@@ -202,6 +205,7 @@ export class TheRARBGApi extends Api {
   /**
    * Self test to check if API is responsive
    */
+  @tracedApi('TheRARBGApi', 'therarbg')
   async test(): Promise<boolean> {
     try {
       // Try to get a small amount of recent posts to check if API is responsive

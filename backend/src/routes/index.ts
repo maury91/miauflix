@@ -55,7 +55,7 @@ export function createRoutes(deps: Deps) {
     .use(
       cors({
         origin: origins,
-        allowHeaders: ['Content-Type', 'Authorization'],
+        allowHeaders: ['Content-Type', 'Authorization', 'X-Session-Id'],
         allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: origins.length !== 1 || origins[0] !== '*',
       })

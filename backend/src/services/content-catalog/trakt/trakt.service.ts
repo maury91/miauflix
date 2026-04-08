@@ -3,7 +3,7 @@ import type { User } from '@entities/user.entity';
 import type { TraktUserRepository } from '@repositories/trakt-user.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import type { AuthService } from '@services/auth/auth.service';
-import type { UserProfileResponse } from '@services/trakt/trakt.types';
+import type { UserProfileResponse } from '@services/content-catalog/trakt/trakt.types';
 
 import { TraktApi } from './trakt.api';
 

@@ -24,6 +24,41 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
 
   return new Hono()
     .post(
+      '/setup',
+      rateLimitGuard(0.2), // 1 request per 5 seconds
+      zValidator(
+        'json',
+        z.object({
+          email: z.string().email(),
+          password: z.string().min(8),
+        })
+      ),
+      async context => {
+        const { email, password } = context.req.valid('json');
+        try {
+          const user = await authService.setupAdmin(email, password);
+          if (!user) {
+            return context.json({ error: 'Not found' } satisfies ErrorResponse, 404);
+          }
+          return context.json(
+            {
+              id: user.id,
+              email: user.email,
+              displayName: user.displayName,
+              role: user.role,
+            } satisfies CreateUserResponse,
+            201
+          );
+        } catch (error: unknown) {
+          if (error instanceof Error && error.message === 'Admin user already exists') {
+            // We do not want to leak that the service was initialized with the allowCreateAdminOnFirstRun enabled
+            return context.json({ error: 'Not found' } satisfies ErrorResponse, 404);
+          }
+          return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);
+        }
+      }
+    )
+    .post(
       '/login',
       rateLimitGuard(1), // 1 attempt per second
       zValidator(

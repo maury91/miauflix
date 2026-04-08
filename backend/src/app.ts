@@ -8,6 +8,10 @@ import { Database } from '@database/database';
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import { AuthService } from '@services/auth/auth.service';
 import { CacheService } from '@services/cache/cache.service';
+import { ContentCatalogService } from '@services/content-catalog/content-catalog.service';
+import { TMDBApi } from '@services/content-catalog/tmdb/tmdb.api';
+import { TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
+import { TraktService } from '@services/content-catalog/trakt/trakt.service';
 import { DownloadService } from '@services/download/download.service';
 import { EncryptionService } from '@services/encryption/encryption.service';
 import { ListService } from '@services/media/list.service';
@@ -22,8 +26,6 @@ import { ContentDirectoryService } from '@services/source-metadata/content-direc
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 import { StreamService } from '@services/stream/stream.service';
-import { TMDBApi } from '@services/tmdb/tmdb.api';
-import { TraktService } from '@services/trakt/trakt.service';
 
 import { validateConfiguration } from './configuration';
 import { ENV } from './constants';
@@ -74,13 +76,15 @@ try {
   const statsService = new StatsService();
   const requestService = new RequestService(statsService);
   const tmdbApi = new TMDBApi(cacheService.cache, statsService);
+  const tmdbService = new TmdbService(db, tmdbApi);
   const vpnDetectionService = new VpnDetectionService();
   const auditLogService = new AuditLogService(db);
   const authService = new AuthService(db, auditLogService);
   const traktService = new TraktService(db, authService);
-  const mediaService = new MediaService(db, tmdbApi);
+  const catalogService = new ContentCatalogService(tmdbService, traktService);
+  const mediaService = new MediaService(db, tmdbService);
   const scheduler = new Scheduler();
-  const listService = new ListService(db, tmdbApi, mediaService);
+  const listService = new ListService(db, tmdbService, mediaService);
   const listSynchronizer = new ListSynchronizer(listService);
   const storageService = new StorageService(db);
   const downloadService = new DownloadService(storageService, requestService);
@@ -127,17 +131,7 @@ try {
       bind(listSynchronizer, 'synchronize')
     );
 
-    scheduler.scheduleTask(
-      'syncMovies',
-      1.5 * 60 * 60, // 1.5 hour
-      bind(mediaService, 'syncMovies')
-    );
-
-    scheduler.scheduleTask(
-      'syncIncompleteSeasons',
-      1, // 1 second
-      bind(mediaService, 'syncIncompleteSeasons')
-    );
+    scheduler.scheduleTasks(catalogService.getSyncTasks());
 
     scheduler.scheduleTask(
       'movieSourceSearch',
@@ -194,10 +188,10 @@ try {
   const app = createRoutes({
     authService,
     auditLogService,
+    catalogService,
     mediaService,
     sourceService,
     listService,
-    tmdbApi,
     vpnDetectionService,
     contentDirectoryService,
     magnetService,

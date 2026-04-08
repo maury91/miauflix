@@ -64,7 +64,7 @@ export class TMDBApi extends Api {
       cache,
       statsService,
       ENV('TMDB_API_URL'),
-      50 // 50 requests per second, TMDB's documented rate limit
+      40 // 40 requests per second, TMDB's documented upper limit
     );
     this.language = language;
     this.configuration = this.getConfiguration();
@@ -125,7 +125,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getSeasonRaw(showId: number, season: number) {
     return this.get<ShowSeason>(
       `${this.apiUrl}/tv/${showId}/season/${season}?language=${this.language}`
@@ -133,7 +133,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(6e5 /* 10 minutes */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getSeason(showId: number, season: number): Promise<ShowSeason> {
     const data = await this.getSeasonRaw(showId, season);
     return {
@@ -154,7 +154,7 @@ export class TMDBApi extends Api {
    * @returns MovieDetails object with full movie information
    */
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getMovieDetails(movieId: number | string) {
     const url = `${this.apiUrl}/movie/${movieId}?append_to_response=translations,images&language=${this.language}`;
     const movieData = await this.get<MovieDetails & WithMovieImages & WithMovieTranslations>(url);
@@ -184,7 +184,7 @@ export class TMDBApi extends Api {
    * @returns TVShowDetails object with full TV show information
    */
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getTVShowDetails(showId: number | string) {
     const url = `${this.apiUrl}/tv/${showId}?append_to_response=external_ids,translations&language=${this.language}`;
     const showData = await this.get<TVShowDetails & WithExternalIds & WithTVShowTranslations>(url);
@@ -244,7 +244,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getPopularMovies(page = 1): Promise<MediaSummaryList> {
     return this.getList<MovieListResponse>(
       `${this.apiUrl}/discover/movie?include_adult=false&include_video=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
@@ -252,7 +252,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getTopRatedMovies(page = 1): Promise<MediaSummaryList> {
     return this.getList<MovieListResponse>(
       `${this.apiUrl}/movie/top_rated?language=${this.language}&page=${page}`
@@ -260,7 +260,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getTrending(timeWindow: 'day' | 'week' = 'week'): Promise<MediaSummaryList> {
     return this.getList<MediaListResponse>(
       `${this.apiUrl}/trending/all/${timeWindow}?language=${this.language}`
@@ -268,7 +268,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getTrendingMovies(timeWindow: 'day' | 'week' = 'week'): Promise<MediaSummaryList> {
     return this.getList<MovieListResponse>(
       `${this.apiUrl}/trending/movie/${timeWindow}?language=${this.language}`
@@ -276,7 +276,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getTrendingShows(timeWindow: 'day' | 'week' = 'week'): Promise<MediaSummaryList> {
     return this.getList<TVShowListResponse>(
       `${this.apiUrl}/trending/tv/${timeWindow}?language=${this.language}`
@@ -284,7 +284,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getPopularShows(page = 1): Promise<MediaSummaryList> {
     return this.getList<TVShowListResponse>(
       `${this.apiUrl}/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
@@ -292,10 +292,10 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(36e5 /* 1 hour */)
-  @tracedApi('TMDBApi')
-  public async getTopRatedShows(): Promise<MediaSummaryList> {
+  @tracedApi('TMDBApi', 'tmdb')
+  public async getTopRatedShows(page = 1): Promise<MediaSummaryList> {
     return this.getList<TVShowListResponse>(
-      `${this.apiUrl}/tv/top_rated?language=${this.language}`
+      `${this.apiUrl}/tv/top_rated?language=${this.language}&page=${page}`
     );
   }
 
@@ -316,7 +316,7 @@ export class TMDBApi extends Api {
    * @returns Changes result with movie IDs and pagination info
    */
   @Cacheable(3600) // Cache for 1 hour
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getChangedMovieIds(
     startDate: Date,
     endDate: Date = new Date(),
@@ -339,7 +339,7 @@ export class TMDBApi extends Api {
    * @returns Changes result with TV show IDs and pagination info
    */
   @Cacheable(3600) // Cache for 1 hour
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getChangedTVShowIds(
     startDate: Date,
     endDate: Date = new Date(),
@@ -383,7 +383,7 @@ export class TMDBApi extends Api {
    * @param endDate Optional end date for the changes (defaults to current date)
    * @returns Array of all changed TV show items
    */
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getAllChangedTVShowIds(
     startDate: Date,
     endDate: Date = new Date()
@@ -406,7 +406,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(172800000 /* 2 days */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getMovieGenres(language: string = this.language): Promise<{
     genres: Genre[];
   }> {
@@ -415,7 +415,7 @@ export class TMDBApi extends Api {
   }
 
   @Cacheable(172800000 /* 2 days */)
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getTVShowGenres(language: string = this.language): Promise<{
     genres: Genre[];
   }> {
@@ -429,7 +429,7 @@ export class TMDBApi extends Api {
    * @returns TV show changes
    */
   @Cacheable(3600) // Cache for 1 hour
-  @tracedApi('TMDBApi')
+  @tracedApi('TMDBApi', 'tmdb')
   public async getTVShowChanges(tvShowId: number | string): Promise<{
     changes: {
       key: string;

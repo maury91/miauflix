@@ -67,6 +67,7 @@ export class AuthService {
   private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
 
   // Configuration
+  private readonly allowCreateAdminOnFirstRun: boolean;
   private readonly refreshTokenTTL: number;
   private readonly accessTokenTTL: number;
   private readonly refreshTokenMaxRefreshDays: number;
@@ -88,6 +89,7 @@ export class AuthService {
     this.secretKey = new TextEncoder().encode(ENV('JWT_SECRET'));
 
     // Configuration
+    this.allowCreateAdminOnFirstRun = ENV('ALLOW_CREATE_ADMIN_ON_FIRST_RUN');
     this.streamingKeyTTL = ENV('STREAM_TOKEN_EXPIRATION');
     this.streamingKeySalt = ENV('STREAM_KEY_SALT');
     this.refreshTokenTTL = ENV('REFRESH_TOKEN_EXPIRATION');
@@ -101,10 +103,15 @@ export class AuthService {
   }
 
   /**
-   * Configures initial admin user if none exists
+   * Configures initial admin user if none exists.
+   * Skipped when ALLOW_CREATE_ADMIN_ON_FIRST_RUN is enabled — admin is created via POST /auth/setup.
    */
   @traced('AuthService')
   async configureUsers(): Promise<void> {
+    if (this.allowCreateAdminOnFirstRun) {
+      return;
+    }
+
     // Check if any admin user exists
     const adminUsers = await this.userRepository.findByRole(UserRole.ADMIN);
 
@@ -123,6 +130,23 @@ export class AuthService {
       `Created initial admin user with email: ${adminEmail} and password: ${adminPassword}`
     );
     console.log('Please change these credentials after first login.');
+  }
+
+  /**
+   * Creates the first admin user via the setup endpoint.
+   * Returns null when the feature flag is disabled (caller should return 404).
+   * Throws when an admin already exists (caller should return 409).
+   */
+  @traced('AuthService')
+  async setupAdmin(email: string, password: string): Promise<User | null> {
+    if (!this.allowCreateAdminOnFirstRun) {
+      return null;
+    }
+    const adminUsers = await this.userRepository.findByRole(UserRole.ADMIN);
+    if (adminUsers.length > 0) {
+      throw new Error('Admin user already exists');
+    }
+    return this.createUser(email, password, UserRole.ADMIN);
   }
 
   @traced('AuthService')

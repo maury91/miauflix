@@ -81,9 +81,34 @@ export class TVShowRepository {
     );
   }
 
-  async create(tvShow: Partial<TVShow>): Promise<TVShow> {
+  async create(
+    tvShow: Partial<TVShow>,
+    {
+      translations = [],
+      seasons = [],
+    }: {
+      translations?: Pick<TVShowTranslation, 'language' | 'name' | 'overview' | 'tagline'>[];
+      seasons?: Pick<
+        Season,
+        'airDate' | 'name' | 'overview' | 'posterPath' | 'seasonNumber' | 'tmdbId'
+      >[];
+    } = {}
+  ): Promise<TVShow> {
     const newTVShow = this.tvShowRepository.create(tvShow);
-    return this.tvShowRepository.save(newTVShow);
+    const savedShow = await this.tvShowRepository.save(newTVShow);
+
+    if (translations.length) {
+      savedShow.translations = await Promise.all(
+        translations.map(translation => this.addTranslation(savedShow, translation))
+      );
+    }
+
+    if (seasons.length) {
+      savedShow.seasons = await Promise.all(
+        seasons.map(season => this.createSeason(savedShow, season))
+      );
+    }
+    return savedShow;
   }
 
   async addTranslation(
@@ -112,7 +137,17 @@ export class TVShowRepository {
     return this.tvShowRepository.save(tvShow);
   }
 
-  async createSeason(tvShow: TVShow, seasonData: Partial<Season>): Promise<Season> {
+  /**
+   * Creates a season for a TV show.
+   * @param tvShow - The TV show to create the season for
+   * @param seasonData - The season data to create the season with
+   * @returns The created season
+   */
+  async createSeason(
+    tvShow: TVShow,
+    seasonData: Partial<Season>,
+    { episodes = [] }: { episodes?: Partial<Episode>[] } = {}
+  ): Promise<Season> {
     const existingSeason = await this.seasonRepository.findOne({
       where: {
         tvShowId: tvShow.id,
@@ -130,7 +165,15 @@ export class TVShowRepository {
       synced: false,
     });
 
-    return await this.seasonRepository.save(newSeason);
+    const savedSeason = await this.seasonRepository.save(newSeason);
+
+    if (episodes.length) {
+      savedSeason.episodes = await Promise.all(
+        episodes.map(episode => this.createEpisode(savedSeason, episode))
+      );
+    }
+
+    return savedSeason;
   }
 
   async createEpisode(season: Season, episodeData: Partial<Episode>): Promise<Episode> {
@@ -151,6 +194,19 @@ export class TVShowRepository {
     });
 
     return await this.episodeRepository.save(newEpisode);
+  }
+
+  async checkForChangesAndUpdateGenres(show: TVShow, genres: Genre[]): Promise<void> {
+    const showGenreIds = show.genres?.map(genre => genre.id).sort() ?? [];
+    if (
+      showGenreIds.toString() !==
+      genres
+        .map(g => g.id)
+        .sort()
+        .toString()
+    ) {
+      await this.updateGenres(show, genres);
+    }
   }
 
   async updateGenres(show: TVShow, genres: Genre[]): Promise<void> {
