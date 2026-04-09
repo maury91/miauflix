@@ -143,7 +143,7 @@ export class AuthService {
    * The check and insert are atomic (single transaction) to prevent race conditions.
    */
   @traced('AuthService')
-  async setupAdmin(email: string, password: string): Promise<User | null> {
+  async setupAdmin(email: string, password: string, context: Context): Promise<User | null> {
     if (!this.allowCreateAdminOnFirstRun) {
       return null;
     }
@@ -161,6 +161,7 @@ export class AuthService {
       severity: AuditEventSeverity.INFO,
       description: `User created with role: ${UserRole.ADMIN}`,
       userEmail: email,
+      context,
       metadata: { role: UserRole.ADMIN, isEmailVerified: false },
     });
     return newUser;

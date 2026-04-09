@@ -1,4 +1,4 @@
-import { confirm, input, password } from '@inquirer/prompts';
+import { confirm, input, password, select } from '@inquirer/prompts';
 import chalk from 'chalk';
 import { readFileSync, writeFileSync } from 'fs';
 import path from 'path';
@@ -313,6 +313,13 @@ async function promptForVariable(
     console.log(`You can get this from: ${varInfo.link}`);
   }
 
+  if ('options' in varInfo && varInfo.options) {
+    const optionDescriptions = Object.entries(varInfo.options)
+      .map(([value, description]) => `${value}: ${description}`)
+      .join(' | ');
+    console.log(chalk.dim(`Options: ${optionDescriptions}`));
+  }
+
   // Enhanced validation function
   const validateInput = async (input: string): Promise<string | true> => {
     // Basic required validation
@@ -348,6 +355,24 @@ async function promptForVariable(
     });
 
     return passwordValue || defaultValue || '';
+  }
+
+  if ('options' in varInfo && varInfo.options) {
+    const optionEntries = Object.entries(varInfo.options);
+    const optionValues = optionEntries.map(([value]) => value);
+    const fallbackValue =
+      currentValue && optionValues.includes(currentValue) ? currentValue : undefined;
+
+    const selectedValue = await select({
+      message: `Select ${chalk.cyan(varName)}:`,
+      choices: optionEntries.map(([value, description]) => ({
+        name: `${value} - ${description}`,
+        value,
+      })),
+      default: fallbackValue,
+    });
+
+    return selectedValue || defaultValue || '';
   }
 
   const value = await input({

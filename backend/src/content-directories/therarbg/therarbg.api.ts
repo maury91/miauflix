@@ -97,7 +97,7 @@ export class TheRARBGApi extends Api {
         );
       }
 
-      if (typeof response.body === 'string') {
+      if (response.body == null || typeof response.body !== 'object') {
         throw new ApiError(
           `TheRARBG API returned non-JSON response for ${url}`,
           'invalid_response',
@@ -121,7 +121,11 @@ export class TheRARBGApi extends Api {
         throw new ApiError('Request timeout', 'timeout', 'therarbg');
       }
 
-      throw error;
+      if (error instanceof Error) {
+        throw new ApiError(error.message, 'response_error', 'therarbg');
+      }
+
+      throw new ApiError('Unknown request failure', 'response_error', 'therarbg');
     }
   }
 

@@ -36,7 +36,7 @@ export const createAuthRoutes = ({ authService, auditLogService, traktService }:
       async context => {
         const { email, password } = context.req.valid('json');
         try {
-          const user = await authService.setupAdmin(email, password);
+          const user = await authService.setupAdmin(email, password, context);
           if (!user) {
             return context.json({ error: 'Not found' } satisfies ErrorResponse, 404);
           }

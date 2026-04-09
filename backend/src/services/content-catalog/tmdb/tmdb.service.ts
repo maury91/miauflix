@@ -668,8 +668,10 @@ export class TmdbService {
 
     const incompleteSeasons =
       episodeSyncMode === 'GREEDY'
-        ? await this.tvShowRepository.findIncompleteSeasons()
-        : await this.tvShowRepository.findIncompleteSeasonsByShowIds(
+        ? // Greedy mode: sync all incomplete seasons ( one episode at a time with a delay of 1 second between syncs )
+          await this.tvShowRepository.findIncompleteSeasons()
+        : // On-demand mode: sync only the incomplete seasons of the shows that are marked as watching ( also one episode at a time... )
+          await this.tvShowRepository.findIncompleteSeasonsByShowIds(
             await this.getWatchingTVShowIds()
           );
 
