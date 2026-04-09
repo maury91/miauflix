@@ -139,7 +139,7 @@ export class AuthService {
   /**
    * Creates the first admin user via the setup endpoint.
    * Returns null when the feature flag is disabled (caller should return 404).
-   * Throws when an admin already exists (caller should return 409).
+   * Throws when an admin already exists (caller should return 404).
    * The check and insert are atomic (single transaction) to prevent race conditions.
    */
   @traced('AuthService')

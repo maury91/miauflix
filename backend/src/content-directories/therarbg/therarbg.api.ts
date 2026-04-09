@@ -65,6 +65,15 @@ export class TheRARBGApi extends Api {
         redirect: 'manual',
       });
 
+      if (response.status === 302) {
+        const location = response.headers['location'] || '';
+        if (location === '/') {
+          // This is essentially a 404, it means they have nothing about this movie
+          throw new ApiError('Redirect to homepage', 'http_error', 'therarbg', 404);
+        }
+        logger.error('TheRARBG', `Redirected to ${location}`);
+      }
+
       if (!response.ok) {
         logger.error('TheRARBG', `API error for ${url}:`, response.status, response.statusText);
         throw new ApiError(
@@ -73,15 +82,6 @@ export class TheRARBGApi extends Api {
           'therarbg',
           response.status
         );
-      }
-
-      if (response.status === 302) {
-        const location = response.headers['location'] || '';
-        if (location === '/') {
-          // This is essentially a 404, it means they have nothing about this movie
-          throw new ApiError('Redirect to homepage', 'http_error', 'therarbg', 404);
-        }
-        logger.error('TheRARBG', `Redirected to ${location}`);
       }
 
       if (response.headers['content-type']?.includes('text/html')) {
@@ -108,20 +108,17 @@ export class TheRARBGApi extends Api {
     } catch (error) {
       logger.error('TheRARBG', `Request failed for ${url}:`, error);
 
-      if (error instanceof Error) {
-        if (error.name === 'TimeoutError') {
-          throw new ApiError('Request timeout', 'timeout', 'therarbg');
-        }
-        throw error;
-      }
-
-      // Try with a different domain mirror if available
-      if (this.currentMirrorIndex < mirrors.length - 1) {
+      // ApiErrors come from valid (but bad) server responses — no point switching mirrors
+      if (!(error instanceof ApiError) && this.currentMirrorIndex < mirrors.length - 1) {
         this.currentMirrorIndex++;
         const newMirror = mirrors[this.currentMirrorIndex];
-        console.log(`Trying alternative TheRARBG mirror: ${newMirror}`);
+        logger.debug('TheRARBG', `Switching to mirror: ${newMirror}`);
         this.apiUrl = newMirror;
-        return this.request<T>(endpoint, params);
+        return this.request<T>(endpoint, params, highPriority);
+      }
+
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        throw new ApiError('Request timeout', 'timeout', 'therarbg');
       }
 
       throw error;

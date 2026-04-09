@@ -267,10 +267,29 @@ export class TmdbService {
       return null;
     }
     const existingSeason = show.seasons?.find(s => s.seasonNumber === seasonNumber);
-    if (existingSeason) {
+    if (existingSeason?.synced) {
       return existingSeason;
     }
     const seasonDetails = await this.tmdbApi.getSeason(tvShowTmdbId, seasonNumber);
+    if (existingSeason) {
+      // Season exists but is unsynced — hydrate with episode data
+      await Promise.all(
+        seasonDetails.episodes.map(episode =>
+          this.tvShowRepository.createEpisode(existingSeason, {
+            tmdbId: episode.id,
+            name: episode.name,
+            overview: episode.overview,
+            episodeNumber: episode.episode_number,
+            airDate: episode.air_date,
+            stillPath: episode.still_path,
+            seasonId: existingSeason.id,
+            imdbId: '',
+          })
+        )
+      );
+      await this.tvShowRepository.markSeasonAsSynced(existingSeason);
+      return existingSeason;
+    }
     const createdSeason = await this.tvShowRepository.createSeason(
       show,
       {
@@ -497,8 +516,9 @@ export class TmdbService {
   }
 
   private async updateMovie(movie: Movie): Promise<void> {
-    const { translations, ...movieDetails } = await this.getMovieDetails(movie.tmdbId);
+    const { translations, genres, ...movieDetails } = await this.getMovieDetails(movie.tmdbId);
     await this.movieRepository.checkForChangesAndUpdate(movie, movieDetails);
+    await this.movieRepository.checkForChangesAndUpdateGenres(movie, genres);
     await Promise.all(
       translations.map(translation => {
         return this.movieRepository.addTranslation(movie, {
@@ -657,6 +677,7 @@ export class TmdbService {
       return;
     }
 
+    // We want to sync only the first incomplete season to avoid overwhelming the API
     const incompleteSeason = incompleteSeasons[0];
     const seasonDetails = await this.tmdbApi.getSeason(
       incompleteSeason.tvShow.tmdbId,
@@ -782,7 +803,7 @@ export class TmdbService {
       const chunkEnd = chunkIndex < chunks.length ? new Date(chunkStart) : now;
       if (chunkIndex < chunks.length) {
         chunkEnd.setUTCDate(chunkEnd.getUTCDate() + 1);
-        chunkEnd.setSeconds(-1);
+        chunkEnd.setUTCSeconds(-1);
       }
 
       const changedTVShowIds = await this.tmdbApi.getAllChangedTVShowIds(chunkStart, chunkEnd);
@@ -838,7 +859,7 @@ export class TmdbService {
       }
 
       if (chunkIndex < chunks.length) {
-        chunkEnd.setSeconds(60);
+        chunkEnd.setUTCSeconds(60);
       }
       await this.syncStateRepository.setLastSync(TV_SYNC_NAME, chunkEnd);
       chunkIndex++;

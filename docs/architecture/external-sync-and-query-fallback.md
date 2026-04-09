@@ -65,13 +65,14 @@ sequenceDiagram
 
 ## TmdbService Layering
 
-The **TmdbService** implements this pattern for TMDB: it sits in front of `TMDBApi`, exposes a single synchronization entry point, and exposes query methods that use the hybrid approach (DB first, fallback to TMDB API).
+Within the content-catalog module, the **ContentCatalogService** owns the TMDB-facing call chain used by higher-level services: it sits between `MediaService` / `ListService` and `TmdbService`, while `TmdbService` sits in front of `TMDBApi`. This keeps orchestration at the catalog boundary and preserves the hybrid query approach (DB first, fallback to TMDB API).
 
 ```mermaid
 flowchart TB
   Routes[Routes]
   MediaService[MediaService]
   ListService[ListService]
+  ContentCatalogService[ContentCatalogService]
   TmdbService[TmdbService]
   TMDBApi[TMDBApi]
   Repos[Repositories]
@@ -79,8 +80,9 @@ flowchart TB
 
   Routes --> MediaService
   Routes --> ListService
-  MediaService --> TmdbService
-  ListService --> TmdbService
+  MediaService --> ContentCatalogService
+  ListService --> ContentCatalogService
+  ContentCatalogService --> TmdbService
   TmdbService --> TMDBApi
   TmdbService --> Repos
   Repos --> DB
@@ -88,6 +90,7 @@ flowchart TB
 
 - **TMDBApi**: Low-level HTTP/rate-limited client. Domain services do not call it directly for reads or sync.
 - **TmdbService**: Owns sync state, repositories, and the “read from DB → on miss/stale call API → persist → return” logic for movies, TV shows, seasons, and list content.
-- **MediaService / ListService**: Use TmdbService for “get movie by TMDB id”, “get list by slug”, etc. They hold a `TmdbService` reference, not `TMDBApi`.
+- **ContentCatalogService**: Owns the orchestration boundary for content-catalog calls and forwards TMDB-specific operations from higher-level services to `TmdbService`.
+- **MediaService / ListService**: Enter the TMDB flow through `ContentCatalogService` rather than talking to `TMDBApi` directly.
 
-Implementation: `backend/src/services/tmdb/tmdb.service.ts`.
+Implementation: `backend/src/services/content-catalog/tmdb/tmdb.service.ts` (via `backend/src/services/content-catalog/content-catalog.service.ts`).

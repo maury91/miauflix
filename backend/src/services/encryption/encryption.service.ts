@@ -16,22 +16,14 @@ export class EncryptionService {
       throw new EncryptionError('Encryption key is required', 'key_required');
     }
 
-    // Convert base64 key to buffer
-    try {
-      this.keyBuffer = Buffer.from(key, 'base64');
-    } catch (error) {
-      throw new EncryptionError(
-        `Invalid encryption key format: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        'invalid_key_format'
-      );
-    }
-
-    if (this.keyBuffer.toString('base64') !== key.trim()) {
+    // Convert base64 key to buffer — Buffer.from is lenient and won't throw, so validate first
+    if (!/^[A-Za-z0-9+/]*={0,2}$/.test(key.trim())) {
       throw new EncryptionError(
         `Invalid encryption key encoding - expected base64`,
         'invalid_key_encoding'
       );
     }
+    this.keyBuffer = Buffer.from(key, 'base64');
     if (this.keyBuffer.length !== 32) {
       throw new EncryptionError(
         'Invalid key length - expected 32 bytes (256-bit) key',

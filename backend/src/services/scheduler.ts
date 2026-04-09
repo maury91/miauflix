@@ -1,14 +1,19 @@
 import { logger } from '@logger';
 import { context, trace } from '@opentelemetry/api';
-import { clearInterval, setTimeout } from 'timers';
+import { setTimeout } from 'timers';
 
 import { ENV } from '@constants';
 import { SchedulerError } from '@errors/scheduler.errors';
 import type { ScheduleTask } from '@mytypes/scheduler.types';
 import { TracingUtil } from '@utils/tracing.util';
 
+interface ScheduledTaskRecord {
+  timerId: NodeJS.Timeout | null;
+  cancelled: boolean;
+}
+
 export class Scheduler {
-  private tasks: Map<string, NodeJS.Timeout>;
+  private tasks: Map<string, ScheduledTaskRecord>;
 
   constructor() {
     this.tasks = new Map();
@@ -21,6 +26,10 @@ export class Scheduler {
         'already_scheduled'
       );
     }
+
+    // Register before first run so cancelTask works immediately
+    const record: ScheduledTaskRecord = { timerId: null, cancelled: false };
+    this.tasks.set(taskName, record);
 
     const executeTask = async () => {
       try {
@@ -48,11 +57,13 @@ export class Scheduler {
       } catch (err) {
         logger.error('Scheduler', `Task ${taskName} failed with error:`, err);
       } finally {
-        const emptyCtx = trace.deleteSpan(context.active());
-        const intervalId = setTimeout(() => {
-          context.with(emptyCtx, executeTask);
-        }, interval * 1000);
-        this.tasks.set(taskName, intervalId);
+        // Only reschedule if the task has not been cancelled
+        if (!record.cancelled) {
+          const emptyCtx = trace.deleteSpan(context.active());
+          record.timerId = setTimeout(() => {
+            context.with(emptyCtx, executeTask);
+          }, interval * 1000);
+        }
       }
     };
 
@@ -66,12 +77,16 @@ export class Scheduler {
   }
 
   cancelTask(taskName: string): void {
-    const intervalId = this.tasks.get(taskName);
-    if (!intervalId) {
+    const record = this.tasks.get(taskName);
+    if (!record) {
       throw new SchedulerError(`Task with name "${taskName}" is not scheduled.`, 'not_scheduled');
     }
 
-    clearInterval(intervalId);
+    record.cancelled = true;
+    if (record.timerId) {
+      clearTimeout(record.timerId);
+      record.timerId = null;
+    }
     this.tasks.delete(taskName);
   }
 
