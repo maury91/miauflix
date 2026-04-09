@@ -1,5 +1,6 @@
 import { createCache } from 'cache-manager';
 
+import { ApiError } from '@errors/api.errors';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { serviceConfiguration, transforms, variable } from '@utils/config';
@@ -39,9 +40,19 @@ export const tmdbConfigurationDefinition = serviceConfiguration({
       if (error) {
         if (typeof error === 'object' && error && 'status' in error) {
           if (error.status === 401) {
-            throw new Error(`Invalid Access Token`);
+            throw new ApiError(
+              'Invalid Access Token',
+              'not_configured',
+              'tmdb',
+              error.status as number
+            );
           }
-          throw new Error(`Connection error: ${error.status}`);
+          throw new ApiError(
+            `Connection error: ${error.status}`,
+            'connection_error',
+            'tmdb',
+            error.status as number
+          );
         }
         throw error;
       }

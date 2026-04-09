@@ -43,7 +43,9 @@ describe('EncryptionService', () => {
 
     it('should throw error with malformed base64 from ENV', () => {
       ENV.mockReturnValue('not-base64!');
-      expect(() => new EncryptionService()).toThrow('Invalid encryption key format');
+      expect(() => new EncryptionService()).toThrow(
+        'Invalid encryption key encoding - expected base64'
+      );
     });
   });
 

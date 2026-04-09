@@ -12,7 +12,11 @@ import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { RefreshToken } from '@entities/refresh-token.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
-import { InvalidTokenError } from '@errors/auth.errors';
+import {
+  AdminAlreadyExistsError,
+  InvalidTokenError,
+  UserAlreadyExistsError,
+} from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
@@ -150,7 +154,7 @@ export class AuthService {
       role: UserRole.ADMIN,
     });
     if (!newUser) {
-      throw new Error('Admin user already exists');
+      throw new AdminAlreadyExistsError();
     }
     await this.auditLogService.logSecurityEvent({
       eventType: AuditEventType.USER_CREATION,
@@ -166,7 +170,7 @@ export class AuthService {
   async createUser(email: string, password: string, role: UserRole = UserRole.USER): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new UserAlreadyExistsError();
     }
 
     const passwordHash = await hash(password, 10);

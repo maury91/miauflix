@@ -4,6 +4,7 @@ import type { Database } from '@database/database';
 import type { MediaList } from '@entities/list.entity';
 import { Movie } from '@entities/movie.entity';
 import { TVShow } from '@entities/tvshow.entity';
+import { MediaError } from '@errors/media.errors';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
 import { traced } from '@utils/tracing.util';
@@ -46,7 +47,7 @@ export class ListService {
     page: number
   ): Promise<{ medias: (Movie | TVShow)[]; pages: number; total: number }> {
     if (!LISTS[slug]) {
-      throw new Error(`List with slug ${slug} not found`);
+      throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
     }
     const {
       totalPages,
@@ -86,7 +87,7 @@ export class ListService {
           slug
         );
       } else {
-        throw new Error(`List with slug ${slug} not found`);
+        throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
       }
     }
     return mediaList;
@@ -126,8 +127,9 @@ export class ListService {
   async getListContent(slug: string, language = 'en'): Promise<TranslatedMedia[]> {
     const mediaList = await this.getListBySlug(slug);
     if (mediaList.slug !== slug) {
-      throw new Error(
-        `List slug mismatch: requested ${slug}, got list with slug ${mediaList.slug}`
+      throw new MediaError(
+        `List slug mismatch: requested ${slug}, got list with slug ${mediaList.slug}`,
+        'list_not_found'
       );
     }
     if (!mediaList.movies) {

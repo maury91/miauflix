@@ -2,6 +2,8 @@ import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
+import { ApiError } from '@errors/api.errors';
+import { AppError } from '@errors/base.error';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
@@ -27,12 +29,12 @@ interface SearchPostsOptions {
   };
 }
 
-class TheRARBGError extends Error {
+class TheRARBGError extends AppError {
   constructor(
     message: string,
     public readonly status: number
   ) {
-    super(message);
+    super(message, 'api', 'http_error');
     this.name = 'TheRARBGError';
   }
 }
@@ -76,7 +78,12 @@ export class TheRARBGApi extends Api {
 
       if (!response.ok) {
         logger.error('TheRARBG', `API error for ${url}:`, response.status, response.statusText);
-        throw new Error(`TheRARBG API error: (${response.status}) ${response.statusText}`);
+        throw new ApiError(
+          `TheRARBG API error: (${response.status}) ${response.statusText}`,
+          'http_error',
+          'therarbg',
+          response.status
+        );
       }
 
       if (response.status === 302) {
@@ -94,13 +101,19 @@ export class TheRARBGApi extends Api {
           'TheRARBG',
           `Received HTML response for ${url}. This may indicate an error or a 404 page.`
         );
-        throw new Error(
-          `TheRARBG API returned HTML response for ${url}?${JSON.stringify(queryParams)}`
+        throw new ApiError(
+          `TheRARBG API returned HTML response for ${url}?${JSON.stringify(queryParams)}`,
+          'invalid_response',
+          'therarbg'
         );
       }
 
       if (typeof response.body === 'string') {
-        throw new Error(`TheRARBG API returned non-JSON response for ${url}`);
+        throw new ApiError(
+          `TheRARBG API returned non-JSON response for ${url}`,
+          'invalid_response',
+          'therarbg'
+        );
       }
       return response.body;
     } catch (error) {
@@ -108,7 +121,7 @@ export class TheRARBGApi extends Api {
 
       if (error instanceof Error) {
         if (error.name === 'TimeoutError') {
-          throw new Error('Request timeout');
+          throw new ApiError('Request timeout', 'timeout', 'therarbg');
         }
         throw error;
       }
@@ -135,7 +148,7 @@ export class TheRARBGApi extends Api {
     // Validate IMDB ID
     const validation = validateImdbId(imdbId);
     if (!validation.isValid) {
-      throw new Error(validation.error);
+      throw new ApiError(validation.error!, 'validation_error', 'therarbg');
     }
 
     const normalizedImdbId = validation.normalizedId!;

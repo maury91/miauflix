@@ -5,6 +5,7 @@ import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
 import { Movie, MovieTranslation } from '@entities/movie.entity';
 import { type MovieSource } from '@entities/movie-source.entity';
+import { RepositoryError } from '@errors/repository.errors';
 import { objectKeys } from '@utils/object.util';
 
 export class MovieRepository {
@@ -39,7 +40,7 @@ export class MovieRepository {
     const newMovie = this.movieRepository.create(movie);
     const result = await this.movieRepository.upsert(newMovie, ['imdbId']);
     if (!result.identifiers.length) {
-      throw new Error('Failed to create movie');
+      throw new RepositoryError('Failed to create movie', 'create_failed');
     }
     const id = result.identifiers[0].id;
     const updatedMovie = await this.movieRepository.findOneBy(
@@ -58,7 +59,7 @@ export class MovieRepository {
         },
         result
       );
-      throw new Error('Failed to retrieve created movie');
+      throw new RepositoryError('Failed to retrieve created movie', 'retrieve_failed');
     }
     if (translations.length) {
       updatedMovie.translations = await Promise.all(
@@ -73,7 +74,7 @@ export class MovieRepository {
     translation: Partial<MovieTranslation>
   ): Promise<MovieTranslation> {
     if (!movie.id) {
-      throw new Error('Movie ID is required to add a translation');
+      throw new RepositoryError('Movie ID is required to add a translation', 'id_required');
     }
     const newTranslation = this.movieTranslationRepository.create({
       ...translation,
@@ -109,7 +110,7 @@ export class MovieRepository {
       id: movie.id,
     });
     if (!updatedMovie) {
-      throw new Error('Movie not found');
+      throw new RepositoryError('Movie not found', 'not_found');
     }
     updatedMovie.genres = genres;
     await this.movieRepository.save(updatedMovie);

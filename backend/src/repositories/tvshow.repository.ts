@@ -6,6 +6,7 @@ import type { Genre } from '@entities/genre.entity';
 import { Season } from '@entities/season.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { TVShowTranslation } from '@entities/tvshow.entity';
+import { RepositoryError } from '@errors/repository.errors';
 import { objectKeys } from '@utils/object.util';
 
 export class TVShowRepository {
@@ -214,7 +215,7 @@ export class TVShowRepository {
       id: show.id,
     });
     if (!updatedShow) {
-      throw new Error('TV Show not found');
+      throw new RepositoryError('TV Show not found', 'not_found');
     }
     updatedShow.genres = genres;
     await this.tvShowRepository.save(updatedShow);

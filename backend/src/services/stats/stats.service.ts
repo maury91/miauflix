@@ -47,7 +47,9 @@ export class StatsService {
    */
   private getStartOfDay(): number {
     const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfDay = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+    );
     return startOfDay.getTime();
   }
 

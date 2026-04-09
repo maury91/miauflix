@@ -3,6 +3,7 @@ import { context, trace } from '@opentelemetry/api';
 import { clearInterval, setTimeout } from 'timers';
 
 import { ENV } from '@constants';
+import { SchedulerError } from '@errors/scheduler.errors';
 import type { ScheduleTask } from '@mytypes/scheduler.types';
 import { TracingUtil } from '@utils/tracing.util';
 
@@ -15,7 +16,10 @@ export class Scheduler {
 
   scheduleTask(taskName: string, interval: number, task: () => Promise<void> | void): void {
     if (this.tasks.has(taskName)) {
-      throw new Error(`Task with name "${taskName}" is already scheduled.`);
+      throw new SchedulerError(
+        `Task with name "${taskName}" is already scheduled.`,
+        'already_scheduled'
+      );
     }
 
     const executeTask = async () => {
@@ -64,7 +68,7 @@ export class Scheduler {
   cancelTask(taskName: string): void {
     const intervalId = this.tasks.get(taskName);
     if (!intervalId) {
-      throw new Error(`Task with name "${taskName}" is not scheduled.`);
+      throw new SchedulerError(`Task with name "${taskName}" is not scheduled.`, 'not_scheduled');
     }
 
     clearInterval(intervalId);

@@ -1,4 +1,5 @@
 import { ENV } from '@constants';
+import { ApiError } from '@errors/api.errors';
 import { tracedApi } from '@utils/tracing.util';
 
 import type {
@@ -33,10 +34,10 @@ export class TraktApi {
 
   constructor() {
     if (!this.clientId) {
-      throw new Error('TRAKT_CLIENT_ID is not set');
+      throw new ApiError('TRAKT_CLIENT_ID is not set', 'not_configured', 'trakt');
     }
     if (!this.clientSecret) {
-      throw new Error('TRAKT_CLIENT_SECRET is not set');
+      throw new ApiError('TRAKT_CLIENT_SECRET is not set', 'not_configured', 'trakt');
     }
   }
 
@@ -140,7 +141,12 @@ export class TraktApi {
             ? 'Forbidden - invalid API key (trakt-api-key) or unapproved app. Check your Trakt OAuth application at https://trakt.tv/oauth/applications'
             : `HTTP ${response.status}`;
       }
-      throw new Error(`Trakt API error ${response.status}: ${detail}`);
+      throw new ApiError(
+        `Trakt API error ${response.status}: ${detail}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     const data = (await response.json()) as Promise<T[]>;
@@ -201,7 +207,12 @@ export class TraktApi {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     const data = (await response.json()) as DeviceCodeResponse;
@@ -233,9 +244,14 @@ export class TraktApi {
     if (!response.ok) {
       if (response.status === 400) {
         const error = await response.text();
-        throw new Error(error);
+        throw new ApiError(error, 'response_error', 'trakt', response.status);
       }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     return (await response.json()) as DeviceTokenResponse;
@@ -254,7 +270,12 @@ export class TraktApi {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     return (await response.json()) as UserProfileResponse;
@@ -277,7 +298,12 @@ export class TraktApi {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     return (await response.json()) as DeviceTokenResponse;

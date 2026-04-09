@@ -6,6 +6,7 @@ import type { Genre } from '@entities/genre.entity';
 import type { Movie } from '@entities/movie.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow } from '@entities/tvshow.entity';
+import { MediaError } from '@errors/media.errors';
 import type { ScheduleTask } from '@mytypes/scheduler.types';
 import type { GenreRepository } from '@repositories/genre.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
@@ -287,7 +288,7 @@ export class TmdbService {
       case '@@tmdb_shows_popular':
         return this.tmdbApi.getPopularShows(page);
       default:
-        throw new Error(`List with slug ${slug} not found`);
+        throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
     }
   }
 
@@ -302,7 +303,7 @@ export class TmdbService {
         error,
         error instanceof Error ? error.stack : undefined
       );
-      throw new Error('Failed to ensure genres');
+      throw new MediaError('Failed to ensure genres', 'genres_failed');
     }
 
     return ids.map(id => {
@@ -310,7 +311,7 @@ export class TmdbService {
       if (genre) {
         return genre;
       }
-      throw new Error(`Genre with id ${id} not found`);
+      throw new MediaError(`Genre with id ${id} not found`, 'genre_not_found');
     });
   }
 
@@ -666,23 +667,23 @@ export class TmdbService {
       movieSyncStartDate.setTime(fourteenDaysAgo.getTime());
     }
 
-    movieSyncStartDate.setHours(0);
-    movieSyncStartDate.setMinutes(0);
-    movieSyncStartDate.setSeconds(0);
+    movieSyncStartDate.setUTCHours(0);
+    movieSyncStartDate.setUTCMinutes(0);
+    movieSyncStartDate.setUTCSeconds(0);
 
     const chunks: Date[] = [];
     const chunk = new Date(movieSyncStartDate.getTime());
     while (chunk.getTime() < now.getTime()) {
       chunks.push(new Date(chunk));
-      chunk.setDate(chunk.getDate() + 1);
+      chunk.setUTCDate(chunk.getUTCDate() + 1);
     }
 
     let chunkIndex = 1;
     for (const chunkStart of chunks) {
       const chunkEnd = chunkIndex < chunks.length ? new Date(chunkStart) : now;
       if (chunkIndex < chunks.length) {
-        chunkEnd.setDate(chunkEnd.getDate() + 1);
-        chunkEnd.setSeconds(-1);
+        chunkEnd.setUTCDate(chunkEnd.getUTCDate() + 1);
+        chunkEnd.setUTCSeconds(-1);
       }
 
       const changedMovieIdsGenerator = this.tmdbApi.getAllChangedMovieIds(chunkStart, chunkEnd);

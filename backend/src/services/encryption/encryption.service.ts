@@ -2,6 +2,7 @@ import { logger } from '@logger';
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'crypto';
 
 import { ENV } from '@constants';
+import { EncryptionError } from '@errors/encryption.errors';
 
 export class EncryptionService {
   private readonly algorithm = 'aes-256-gcm';
@@ -12,18 +13,29 @@ export class EncryptionService {
   constructor() {
     const key = ENV('SOURCE_SECURITY_KEY');
     if (!key) {
-      throw new Error('Encryption key is required');
+      throw new EncryptionError('Encryption key is required', 'key_required');
     }
 
     // Convert base64 key to buffer
     try {
       this.keyBuffer = Buffer.from(key, 'base64');
-      if (this.keyBuffer.length !== 32) {
-        throw new Error('Invalid key length - expected 32 bytes (256-bit) key');
-      }
     } catch (error) {
-      throw new Error(
-        `Invalid encryption key format: ${error instanceof Error ? error.message : 'Unknown error'}`
+      throw new EncryptionError(
+        `Invalid encryption key format: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'invalid_key_format'
+      );
+    }
+
+    if (this.keyBuffer.toString('base64') !== key.trim()) {
+      throw new EncryptionError(
+        `Invalid encryption key encoding - expected base64`,
+        'invalid_key_encoding'
+      );
+    }
+    if (this.keyBuffer.length !== 32) {
+      throw new EncryptionError(
+        'Invalid key length - expected 32 bytes (256-bit) key',
+        'invalid_key_length'
       );
     }
   }
@@ -75,7 +87,7 @@ export class EncryptionService {
         'EncryptionService',
         `Buffer encryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
-      throw new Error('Buffer encryption failed');
+      throw new EncryptionError('Buffer encryption failed', 'encrypt_failed');
     }
   }
 
@@ -86,7 +98,7 @@ export class EncryptionService {
   decryptBuffer(encryptedData: Buffer): Buffer {
     try {
       if (encryptedData.length < this.IV_LENGTH + this.TAG_LENGTH) {
-        throw new Error('Invalid encrypted data length');
+        throw new EncryptionError('Invalid encrypted data length', 'invalid_data_length');
       }
 
       // Extract components from the concatenated buffer
@@ -105,7 +117,10 @@ export class EncryptionService {
         'EncryptionService',
         `Buffer decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
-      throw new Error('Buffer decryption failed - data may be corrupted or key may be incorrect');
+      throw new EncryptionError(
+        'Buffer decryption failed - data may be corrupted or key may be incorrect',
+        'decrypt_failed'
+      );
     }
   }
 }
