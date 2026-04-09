@@ -2,6 +2,7 @@ import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
+import { ApiError } from '@errors/api.errors';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
@@ -83,8 +84,13 @@ export class TMDBApi extends Api {
       },
     });
     if (!response.ok || response.status >= 400) {
-      logger.error('TMDB', url, response);
-      throw response;
+      logger.error('TMDB', url, response.status, response.statusText);
+      throw new ApiError(
+        `TMDB API error: (${response.status}) ${response.statusText}`,
+        'http_error',
+        'tmdb',
+        response.status
+      );
     }
     return response.json() as Promise<T>;
   }

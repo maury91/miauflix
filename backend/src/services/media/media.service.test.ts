@@ -114,9 +114,9 @@ describe('MediaService', () => {
 
       // Assert
       expect(mockMovieRepo.create).toHaveBeenCalled();
-      // Based on TMDB 'en' movie genres (19) + TV genres (16) = 35
+      // Based on TMDB 'en' movie genres (19) + TV genres (16) - duplicates = 27
       // The ensureGenres method will fetch all standard genres.
-      expect(mockGenreRepo.createOrGetGenre).toHaveBeenCalledTimes(35);
+      expect(mockGenreRepo.createOrGetGenre).toHaveBeenCalledTimes(27);
       expect(mockMovieRepo.updateGenres).not.toHaveBeenCalled();
     });
 

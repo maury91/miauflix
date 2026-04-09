@@ -1,4 +1,4 @@
-import type { DataSource, Repository } from 'typeorm';
+import type { DataSource, EntityManager, Repository } from 'typeorm';
 import { In } from 'typeorm';
 
 import { Episode } from '@entities/episode.entity';
@@ -15,11 +15,11 @@ export class TVShowRepository {
   private readonly episodeRepository: Repository<Episode>;
   private readonly tvShowTranslationRepository: Repository<TVShowTranslation>;
 
-  constructor(datasource: DataSource) {
-    this.tvShowRepository = datasource.getRepository(TVShow);
-    this.tvShowTranslationRepository = datasource.getRepository(TVShowTranslation);
-    this.seasonRepository = datasource.getRepository(Season);
-    this.episodeRepository = datasource.getRepository(Episode);
+  constructor(private readonly dataSource: DataSource) {
+    this.tvShowRepository = dataSource.getRepository(TVShow);
+    this.tvShowTranslationRepository = dataSource.getRepository(TVShowTranslation);
+    this.seasonRepository = dataSource.getRepository(Season);
+    this.episodeRepository = dataSource.getRepository(Episode);
   }
 
   async findByIds(ids: number[]): Promise<TVShow[]> {
@@ -82,6 +82,13 @@ export class TVShowRepository {
     );
   }
 
+  async findSeasonByIdWithEpisodes(id: number): Promise<Season | null> {
+    return this.seasonRepository.findOne({
+      where: { id },
+      relations: { episodes: true },
+    });
+  }
+
   async create(
     tvShow: Partial<TVShow>,
     {
@@ -95,32 +102,39 @@ export class TVShowRepository {
       >[];
     } = {}
   ): Promise<TVShow> {
-    const newTVShow = this.tvShowRepository.create(tvShow);
-    const savedShow = await this.tvShowRepository.save(newTVShow);
+    return this.dataSource.transaction(async manager => {
+      const tvShowRepo = manager.getRepository(TVShow);
+      const newTVShow = tvShowRepo.create(tvShow);
+      const savedShow = await tvShowRepo.save(newTVShow);
 
-    if (translations.length) {
-      savedShow.translations = await Promise.all(
-        translations.map(translation => this.addTranslation(savedShow, translation))
-      );
-    }
+      if (translations.length) {
+        savedShow.translations = await Promise.all(
+          translations.map(translation => this.addTranslation(savedShow, translation, manager))
+        );
+      }
 
-    if (seasons.length) {
-      savedShow.seasons = await Promise.all(
-        seasons.map(season => this.createSeason(savedShow, season))
-      );
-    }
-    return savedShow;
+      if (seasons.length) {
+        savedShow.seasons = await Promise.all(
+          seasons.map(season => this.createSeason(savedShow, season, { manager }))
+        );
+      }
+      return savedShow;
+    });
   }
 
   async addTranslation(
     tvShow: TVShow,
-    translation: Partial<TVShowTranslation>
+    translation: Partial<TVShowTranslation>,
+    manager?: EntityManager
   ): Promise<TVShowTranslation> {
-    const newTranslation = this.tvShowTranslationRepository.create({
+    const translationRepo = manager
+      ? manager.getRepository(TVShowTranslation)
+      : this.tvShowTranslationRepository;
+    const newTranslation = translationRepo.create({
       ...translation,
       tvShow,
     });
-    await this.tvShowTranslationRepository.upsert(newTranslation, ['tvShowId', 'language']);
+    await translationRepo.upsert(newTranslation, ['tvShowId', 'language']);
 
     return newTranslation;
   }
@@ -147,9 +161,10 @@ export class TVShowRepository {
   async createSeason(
     tvShow: TVShow,
     seasonData: Partial<Season>,
-    { episodes = [] }: { episodes?: Partial<Episode>[] } = {}
+    { episodes = [], manager }: { episodes?: Partial<Episode>[]; manager?: EntityManager } = {}
   ): Promise<Season> {
-    const existingSeason = await this.seasonRepository.findOne({
+    const seasonRepository = manager ? manager.getRepository(Season) : this.seasonRepository;
+    const existingSeason = await seasonRepository.findOne({
       where: {
         tvShowId: tvShow.id,
         seasonNumber: seasonData.seasonNumber,
@@ -160,25 +175,30 @@ export class TVShowRepository {
       return existingSeason;
     }
 
-    const newSeason = this.seasonRepository.create({
+    const newSeason = seasonRepository.create({
       ...seasonData,
       tvShowId: tvShow.id,
       synced: false,
     });
 
-    const savedSeason = await this.seasonRepository.save(newSeason);
+    const savedSeason = await seasonRepository.save(newSeason);
 
     if (episodes.length) {
       savedSeason.episodes = await Promise.all(
-        episodes.map(episode => this.createEpisode(savedSeason, episode))
+        episodes.map(episode => this.createEpisode(savedSeason, episode, manager))
       );
     }
 
     return savedSeason;
   }
 
-  async createEpisode(season: Season, episodeData: Partial<Episode>): Promise<Episode> {
-    const existingEpisode = await this.episodeRepository.findOne({
+  async createEpisode(
+    season: Season,
+    episodeData: Partial<Episode>,
+    manager?: EntityManager
+  ): Promise<Episode> {
+    const episodeRepository = manager ? manager.getRepository(Episode) : this.episodeRepository;
+    const existingEpisode = await episodeRepository.findOne({
       where: {
         seasonId: season.id,
         episodeNumber: episodeData.episodeNumber,
@@ -189,12 +209,12 @@ export class TVShowRepository {
       return existingEpisode;
     }
 
-    const newEpisode = this.episodeRepository.create({
+    const newEpisode = episodeRepository.create({
       ...episodeData,
       seasonId: season.id,
     });
 
-    return await this.episodeRepository.save(newEpisode);
+    return await episodeRepository.save(newEpisode);
   }
 
   async checkForChangesAndUpdateGenres(show: TVShow, genres: Genre[]): Promise<void> {

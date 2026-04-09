@@ -262,7 +262,7 @@ export class TmdbService {
    */
   @traced('TmdbService')
   public async getSeason(tvShowTmdbId: number, seasonNumber: number): Promise<Season | null> {
-    const show = await this.tvShowRepository.findByTMDBId(tvShowTmdbId);
+    const show = await this.getTVShowByTmdbId(tvShowTmdbId);
     if (!show) {
       return null;
     }
@@ -273,7 +273,7 @@ export class TmdbService {
     const seasonDetails = await this.tmdbApi.getSeason(tvShowTmdbId, seasonNumber);
     if (existingSeason) {
       // Season exists but is unsynced — hydrate with episode data
-      await Promise.all(
+      const episodes = await Promise.all(
         seasonDetails.episodes.map(episode =>
           this.tvShowRepository.createEpisode(existingSeason, {
             tmdbId: episode.id,
@@ -288,6 +288,12 @@ export class TmdbService {
         )
       );
       await this.tvShowRepository.markSeasonAsSynced(existingSeason);
+      const refreshed = await this.tvShowRepository.findSeasonByIdWithEpisodes(existingSeason.id);
+      if (refreshed) {
+        return refreshed;
+      }
+      existingSeason.episodes = episodes;
+      existingSeason.synced = true;
       return existingSeason;
     }
     const createdSeason = await this.tvShowRepository.createSeason(
@@ -533,7 +539,7 @@ export class TmdbService {
 
   private async ensureGenres(ids: number[], additionalLanguages: string[] = []): Promise<boolean> {
     logger.debug('TmdbService', `Ensuring genres for IDs: ${ids.join(', ')}`);
-    const languages = [...supportedLanguages, ...additionalLanguages];
+    const languages = [...new Set([...supportedLanguages, ...additionalLanguages])];
     const incompleteLanguagesBeforeCacheRefresh = languages.filter(language =>
       ids.some(id => !this.genreCache.get(id)?.languages.includes(language))
     );
@@ -559,7 +565,12 @@ export class TmdbService {
         this.tmdbApi.getMovieGenres(language),
         this.tmdbApi.getTVShowGenres(language),
       ]);
+      const seenGenreIds = new Set<number>();
       for (const apiGenre of [...movieGenres.genres, ...tvShowGenres.genres]) {
+        if (seenGenreIds.has(apiGenre.id)) {
+          continue;
+        }
+        seenGenreIds.add(apiGenre.id);
         if (apiGenre.name) {
           const genre = await this.genreRepository.createOrGetGenre(apiGenre.id);
           const cachedGenre = this.genreCache.get(genre.id) ?? {
@@ -567,7 +578,8 @@ export class TmdbService {
             translations: [],
             languages: [],
           };
-          const translations = cachedGenre.languages.includes(language)
+          const hasTranslation = cachedGenre.languages.includes(language);
+          const translations = hasTranslation
             ? cachedGenre.translations
             : [
                 ...cachedGenre.translations,
@@ -584,7 +596,9 @@ export class TmdbService {
             translations,
             languages: translations.map(translation => translation.language),
           });
-          await this.genreRepository.createTranslation(genre, apiGenre.name, language);
+          if (!hasTranslation) {
+            await this.genreRepository.createTranslation(genre, apiGenre.name, language);
+          }
         }
       }
     }

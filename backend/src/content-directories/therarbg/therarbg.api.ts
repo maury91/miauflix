@@ -117,6 +117,10 @@ export class TheRARBGApi extends Api {
         return this.request<T>(endpoint, params, highPriority);
       }
 
+      if (error instanceof ApiError) {
+        throw error;
+      }
+
       if (error instanceof Error && error.name === 'TimeoutError') {
         throw new ApiError('Request timeout', 'timeout', 'therarbg');
       }
