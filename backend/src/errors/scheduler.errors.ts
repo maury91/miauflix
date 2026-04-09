@@ -1,4 +1,4 @@
-import { AppError } from './base.error';
+import { AppError } from '@errors/base.error';
 
 type SchedulerErrorCode = 'already_scheduled' | 'not_scheduled';
 

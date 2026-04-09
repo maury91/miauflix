@@ -1,6 +1,10 @@
-import { AppError } from './base.error';
+import { AppError } from '@errors/base.error';
 
-type MediaErrorCode = 'genre_not_found' | 'genres_failed' | 'list_not_found';
+type MediaErrorCode =
+  | 'data_integrity_error'
+  | 'genre_not_found'
+  | 'genres_failed'
+  | 'list_not_found';
 
 export class MediaError extends AppError {
   constructor(message: string, code: MediaErrorCode) {

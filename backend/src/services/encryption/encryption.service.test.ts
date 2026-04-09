@@ -92,7 +92,7 @@ describe('EncryptionService', () => {
 
     it('should throw error with invalid base64', () => {
       expect(() => encryptionService.decryptString('invalid-base64!')).toThrow(
-        'Buffer decryption failed - data may be corrupted or key may be incorrect'
+        'Invalid encrypted data length'
       );
     });
 
@@ -111,7 +111,7 @@ describe('EncryptionService', () => {
     it('should throw error with too short data', () => {
       const tooShort = Buffer.alloc(10).toString('base64'); // Less than IV + TAG length
       expect(() => encryptionService.decryptString(tooShort)).toThrow(
-        'Buffer decryption failed - data may be corrupted or key may be incorrect'
+        'Invalid encrypted data length'
       );
     });
   });

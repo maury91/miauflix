@@ -6,6 +6,7 @@ import type { Genre } from '@entities/genre.entity';
 import type { Movie } from '@entities/movie.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow } from '@entities/tvshow.entity';
+import { ApiError } from '@errors/api.errors';
 import { MediaError } from '@errors/media.errors';
 import type { ScheduleTask } from '@mytypes/scheduler.types';
 import type { GenreRepository } from '@repositories/genre.repository';
@@ -29,6 +30,23 @@ const supportedLanguages = ['en'];
 const MOVIE_SYNC_NAME = 'TMDB_Movies';
 const TV_SYNC_NAME = 'TMDB_TVShows';
 const oneHourMs = 1 * 60 * 60 * 1000;
+export const TMDB_LISTS: Record<string, { name: string; slug: string; description: string }> = {
+  '@@tmdb_movies_popular': {
+    name: 'Popular Movies',
+    slug: '@@tmdb_movies_popular',
+    description: 'List of popular movies from TMDB',
+  },
+  '@@tmdb_movies_top-rated': {
+    name: 'Top Rated Movies',
+    slug: '@@tmdb_movies_top-rated',
+    description: 'List of top rated movies from TMDB',
+  },
+  '@@tmdb_shows_popular': {
+    name: 'Popular TV Shows',
+    slug: '@@tmdb_shows_popular',
+    description: 'List of popular TV shows from TMDB',
+  },
+};
 
 const buildLocalizedGenreNameMap = (
   genres: Genre[],
@@ -59,6 +77,13 @@ const buildLocalizedGenreNameMap = (
 };
 
 export class TmdbService {
+  private isNotFoundError(error: unknown): boolean {
+    if (error instanceof ApiError && error.status === 404) {
+      return true;
+    }
+    return false;
+  }
+
   private readonly movieRepository: MovieRepository;
   private readonly tvShowRepository: TVShowRepository;
   private readonly genreRepository: GenreRepository;
@@ -281,11 +306,11 @@ export class TmdbService {
   @traced('TmdbService')
   public async getListSource(slug: string, page: number): Promise<MediaSummaryList> {
     switch (slug) {
-      case '@@tmdb_movies_popular':
+      case TMDB_LISTS['@@tmdb_movies_popular'].slug:
         return this.tmdbApi.getPopularMovies(page);
-      case '@@tmdb_movies_top-rated':
+      case TMDB_LISTS['@@tmdb_movies_top-rated'].slug:
         return this.tmdbApi.getTopRatedMovies(page);
-      case '@@tmdb_shows_popular':
+      case TMDB_LISTS['@@tmdb_shows_popular'].slug:
         return this.tmdbApi.getPopularShows(page);
       default:
         throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
@@ -354,7 +379,10 @@ export class TmdbService {
         err,
         err instanceof Error ? err.stack : undefined
       );
-      return [null, false];
+      if (this.isNotFoundError(err)) {
+        return [null, false];
+      }
+      throw err;
     }
   }
 
@@ -398,7 +426,10 @@ export class TmdbService {
         err,
         err instanceof Error ? err.stack : undefined
       );
-      return [null, false];
+      if (this.isNotFoundError(err)) {
+        return [null, false];
+      }
+      throw err;
     }
   }
 
@@ -735,22 +766,22 @@ export class TmdbService {
       tvShowSyncStartDate.setTime(fourteenDaysAgo.getTime());
     }
 
-    tvShowSyncStartDate.setHours(0);
-    tvShowSyncStartDate.setMinutes(0);
-    tvShowSyncStartDate.setSeconds(0);
+    tvShowSyncStartDate.setUTCHours(0);
+    tvShowSyncStartDate.setUTCMinutes(0);
+    tvShowSyncStartDate.setUTCSeconds(0);
 
     const chunks: Date[] = [];
     const chunk = new Date(tvShowSyncStartDate.getTime());
     while (chunk.getTime() < now.getTime()) {
       chunks.push(new Date(chunk));
-      chunk.setDate(chunk.getDate() + 1);
+      chunk.setUTCDate(chunk.getUTCDate() + 1);
     }
 
     let chunkIndex = 1;
     for (const chunkStart of chunks) {
       const chunkEnd = chunkIndex < chunks.length ? new Date(chunkStart) : now;
       if (chunkIndex < chunks.length) {
-        chunkEnd.setDate(chunkEnd.getDate() + 1);
+        chunkEnd.setUTCDate(chunkEnd.getUTCDate() + 1);
         chunkEnd.setSeconds(-1);
       }
 

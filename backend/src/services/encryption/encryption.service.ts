@@ -113,9 +113,13 @@ export class EncryptionService {
 
       return decrypted;
     } catch (error) {
+      if (error instanceof EncryptionError) {
+        throw error;
+      }
       logger.error(
         'EncryptionService',
-        `Buffer decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Buffer decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        error
       );
       throw new EncryptionError(
         'Buffer decryption failed - data may be corrupted or key may be incorrect',

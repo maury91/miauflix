@@ -3,7 +3,6 @@ import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
 import { ApiError } from '@errors/api.errors';
-import { AppError } from '@errors/base.error';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
@@ -27,16 +26,6 @@ interface SearchPostsOptions {
     type: 'days' | 'hours';
     value: number; // N for last N days/hours
   };
-}
-
-class TheRARBGError extends AppError {
-  constructor(
-    message: string,
-    public readonly status: number
-  ) {
-    super(message, 'api', 'http_error');
-    this.name = 'TheRARBGError';
-  }
 }
 
 export class TheRARBGApi extends Api {
@@ -90,7 +79,7 @@ export class TheRARBGApi extends Api {
         const location = response.headers['location'] || '';
         if (location === '/') {
           // This is essentially a 404, it means they have nothing about this movie
-          throw new TheRARBGError('Redirect to homepage', 404);
+          throw new ApiError('Redirect to homepage', 'http_error', 'therarbg', 404);
         }
         logger.error('TheRARBG', `Redirected to ${location}`);
       }
@@ -166,7 +155,7 @@ export class TheRARBGApi extends Api {
       // Process and normalize the response
       return data;
     } catch (error) {
-      if (error instanceof TheRARBGError && error.status === 404) {
+      if (error instanceof ApiError && error.code === 'http_error' && error.status === 404) {
         return null;
       }
       throw error;

@@ -1,4 +1,4 @@
-import { AppError } from './base.error';
+import { AppError } from '@errors/base.error';
 
 type VpnErrorCode = 'all_providers_failed' | 'http_error' | 'invalid_ip';
 

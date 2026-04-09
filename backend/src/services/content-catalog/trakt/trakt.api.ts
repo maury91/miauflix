@@ -149,7 +149,7 @@ export class TraktApi {
       );
     }
 
-    const data = (await response.json()) as Promise<T[]>;
+    const data = (await response.json()) as T[];
     const page = Number(response.headers.get('x-pagination-page'));
     const limit = Number(response.headers.get('x-pagination-limit'));
     const total = Number(response.headers.get('x-pagination-item-count'));
@@ -158,7 +158,7 @@ export class TraktApi {
       page,
       limit,
       total,
-      items: await data,
+      items: data,
       has_next_page: total > page * limit,
     };
   }
