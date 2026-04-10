@@ -28,7 +28,6 @@ export interface SeasonResponse {
   airDate: string | null;
   poster: string | null;
   episodes: EpisodeResponse[];
-  number: number;
 }
 
 export interface EpisodeResponse {

@@ -1,7 +1,10 @@
 import { IntroAnimation, type LogoAnimationHandle } from '@app/shell/IntroAnimation';
+import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
 import { ErrorBoundary } from '@shared/components';
 import { Logo } from '@shared/ui/logo/Logo';
+import { useAppSelector } from '@store';
+import { selectIsAuthenticated } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -10,6 +13,7 @@ const INTRO_AUTO_START_DELAY = 0.1;
 export function AppShell() {
   const [introComplete, setIntroComplete] = useState(false);
   const logoRef = useRef<LogoAnimationHandle>(null);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   const handleIntroComplete = useCallback(() => {
     setIntroComplete(true);
@@ -39,7 +43,7 @@ export function AppShell() {
       <Logo />
       <MotionConfig transition={{ duration: 0.5 }}>
         <AnimatePresence initial={false} mode="wait">
-          <LoginPage />
+          {isAuthenticated ? <HomePage /> : <LoginPage />}
         </AnimatePresence>
       </MotionConfig>
 

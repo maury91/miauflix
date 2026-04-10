@@ -1,9 +1,10 @@
 import type { Database } from '@database/database';
 import type { User } from '@entities/user.entity';
+import { CatalogError } from '@errors/catalog.errors';
 import type { TraktUserRepository } from '@repositories/trakt-user.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import type { AuthService } from '@services/auth/auth.service';
-import type { UserProfileResponse } from '@services/trakt/trakt.types';
+import type { UserProfileResponse } from '@services/content-catalog/trakt/trakt.types';
 
 import { TraktApi } from './trakt.api';
 
@@ -79,7 +80,7 @@ export class TraktService {
       // Get the user first
       const user = await this.userRepository.findById(userId);
       if (!user) {
-        throw new Error('User not found');
+        throw new CatalogError('User not found', 'user_not_found');
       }
 
       const tokenResponse = await this.traktApi.checkDeviceCode(deviceCode);

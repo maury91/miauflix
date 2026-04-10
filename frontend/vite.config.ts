@@ -10,6 +10,7 @@ import path from 'path';
 // import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 // import { injectScripts, publicTypescript } from 'vite-plugin-public-typescript';
 import Icons from 'unplugin-icons/vite';
+import type { ProxyOptions } from 'vite';
 import { defineConfig } from 'vite';
 import webfontDownload from 'vite-plugin-webfont-dl';
 
@@ -47,6 +48,28 @@ if (tizenBuild) {
 //   ]),
 // ];
 
+/**
+ * Rewrite Set-Cookie header for dev proxy so cookies work when backend is proxied.
+ * Sets Domain=localhost.
+ */
+function rewriteSetCookieForDev(cookie: string): string {
+  return cookie.replace(/\bDomain=[^;]*/gi, 'Domain=localhost');
+}
+
+function proxyCookieRewriteConfigure(
+  proxy: Parameters<NonNullable<ProxyOptions['configure']>>[0]
+): void {
+  proxy.on('proxyRes', proxyRes => {
+    const setCookie = proxyRes.headers['set-cookie'];
+    if (!setCookie) return;
+    const list = Array.isArray(setCookie) ? setCookie : [setCookie];
+    proxyRes.headers['set-cookie'] = list.map((cookie: string) => rewriteSetCookieForDev(cookie));
+  });
+}
+
+const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+
 export default defineConfig({
   root: __dirname,
   cacheDir: '../node_modules/.vite/frontend',
@@ -55,9 +78,10 @@ export default defineConfig({
     host: 'localhost',
     proxy: {
       '/api': {
-        target: process.env.BACKEND_URL || 'http://localhost:5000',
+        target: devBackendUrl,
         changeOrigin: true,
         secure: false,
+        configure: proxyCookieRewriteConfigure,
       },
     },
   },
@@ -68,9 +92,10 @@ export default defineConfig({
       process.env.DISABLE_API_PROXY !== 'true'
         ? {
             '/api': {
-              target: process.env.API_URL || 'http://localhost:5000',
+              target: previewBackendUrl,
               changeOrigin: true,
               secure: false,
+              configure: proxyCookieRewriteConfigure,
             },
           }
         : undefined,

@@ -105,6 +105,28 @@ npm test
 npm run build
 ```
 
+### Using the frontend with the Docker backend (miauflix container)
+
+When the backend runs in Docker via the **miauflix** container (not miauflix-dev), it is exposed on **host port 5000** (the container listens on 3000; the vpn service in `docker-compose.yml` maps `5000:3000`). You can use the local frontend dev server against that backend:
+
+1. **Start the stack** so the backend is reachable on port 5000:
+
+   ```bash
+   npm run start:backend:docker:prod
+   ```
+
+   This brings up the vpn, flaresolverr, and miauflix services. The API is available at `http://localhost:5000`.
+
+2. **Start the frontend** dev server:
+
+   ```bash
+   npm run start:frontend
+   ```
+
+3. **Open** [http://localhost:4173](http://localhost:4173). The Vite dev server proxies `/api` to `http://localhost:5000` by default, so the app talks to the miauflix container.
+
+To use a different backend URL (e.g. another host or port), set `BACKEND_URL` in the workspace-root `.env` (the single source of truth for this repo), not in a frontend-local `.env`; frontend-local `.env` files are ignored by the rest of the stack and can cause confusion (see [Environment Variables](../setup/environment-variables.md)).
+
 ## Coding Conventions
 
 ### Import Style

@@ -12,7 +12,11 @@ import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { RefreshToken } from '@entities/refresh-token.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
-import { InvalidTokenError } from '@errors/auth.errors';
+import {
+  AdminAlreadyExistsError,
+  InvalidTokenError,
+  UserAlreadyExistsError,
+} from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
@@ -67,6 +71,7 @@ export class AuthService {
   private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
 
   // Configuration
+  private readonly allowCreateAdminOnFirstRun: boolean;
   private readonly refreshTokenTTL: number;
   private readonly accessTokenTTL: number;
   private readonly refreshTokenMaxRefreshDays: number;
@@ -88,6 +93,7 @@ export class AuthService {
     this.secretKey = new TextEncoder().encode(ENV('JWT_SECRET'));
 
     // Configuration
+    this.allowCreateAdminOnFirstRun = ENV('ALLOW_CREATE_ADMIN_ON_FIRST_RUN');
     this.streamingKeyTTL = ENV('STREAM_TOKEN_EXPIRATION');
     this.streamingKeySalt = ENV('STREAM_KEY_SALT');
     this.refreshTokenTTL = ENV('REFRESH_TOKEN_EXPIRATION');
@@ -101,10 +107,15 @@ export class AuthService {
   }
 
   /**
-   * Configures initial admin user if none exists
+   * Configures initial admin user if none exists.
+   * Skipped when ALLOW_CREATE_ADMIN_ON_FIRST_RUN is enabled — admin is created via POST /auth/setup.
    */
   @traced('AuthService')
   async configureUsers(): Promise<void> {
+    if (this.allowCreateAdminOnFirstRun) {
+      return;
+    }
+
     // Check if any admin user exists
     const adminUsers = await this.userRepository.findByRole(UserRole.ADMIN);
 
@@ -125,11 +136,42 @@ export class AuthService {
     console.log('Please change these credentials after first login.');
   }
 
+  /**
+   * Creates the first admin user via the setup endpoint.
+   * Returns null when the feature flag is disabled (caller should return 404).
+   * Throws when an admin already exists (caller should return 404).
+   * The check and insert are atomic (single transaction) to prevent race conditions.
+   */
+  @traced('AuthService')
+  async setupAdmin(email: string, password: string, context: Context): Promise<User | null> {
+    if (!this.allowCreateAdminOnFirstRun) {
+      return null;
+    }
+    const passwordHash = await hash(password, 10);
+    const newUser = await this.userRepository.createAdminIfNone({
+      email,
+      passwordHash,
+      role: UserRole.ADMIN,
+    });
+    if (!newUser) {
+      throw new AdminAlreadyExistsError();
+    }
+    await this.auditLogService.logSecurityEvent({
+      eventType: AuditEventType.USER_CREATION,
+      severity: AuditEventSeverity.INFO,
+      description: `User created with role: ${UserRole.ADMIN}`,
+      userEmail: email,
+      context,
+      metadata: { role: UserRole.ADMIN, isEmailVerified: false },
+    });
+    return newUser;
+  }
+
   @traced('AuthService')
   async createUser(email: string, password: string, role: UserRole = UserRole.USER): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new UserAlreadyExistsError();
     }
 
     const passwordHash = await hash(password, 10);

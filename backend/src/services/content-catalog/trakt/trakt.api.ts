@@ -1,4 +1,5 @@
 import { ENV } from '@constants';
+import { ApiError } from '@errors/api.errors';
 import { tracedApi } from '@utils/tracing.util';
 
 import type {
@@ -33,10 +34,10 @@ export class TraktApi {
 
   constructor() {
     if (!this.clientId) {
-      throw new Error('TRAKT_CLIENT_ID is not set');
+      throw new ApiError('TRAKT_CLIENT_ID is not set', 'not_configured', 'trakt');
     }
     if (!this.clientSecret) {
-      throw new Error('TRAKT_CLIENT_SECRET is not set');
+      throw new ApiError('TRAKT_CLIENT_SECRET is not set', 'not_configured', 'trakt');
     }
   }
 
@@ -93,6 +94,8 @@ export class TraktApi {
     return 0;
   }
 
+  private static readonly USER_AGENT = 'Miauflix/1.0 (https://github.com; Trakt API client)';
+
   private async request<T>(
     url: string,
     init: RequestInit,
@@ -107,9 +110,13 @@ export class TraktApi {
     const response = await fetch(url, {
       ...init,
       headers: {
+        ...(typeof init.headers === 'object' && !Array.isArray(init.headers)
+          ? (init.headers as Record<string, string>)
+          : {}),
         'trakt-api-version': '2',
         'trakt-api-key': this.clientId,
         'Content-Type': 'application/json',
+        'User-Agent': TraktApi.USER_AGENT,
       },
     });
 
@@ -120,10 +127,29 @@ export class TraktApi {
     this.increaseOngoing(limitName, -1);
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const body = await response.text();
+      let detail = body;
+      try {
+        const json = JSON.parse(body) as { message?: string; error?: string };
+        detail = json.message ?? json.error ?? body;
+      } catch {
+        // use raw body if not JSON
+      }
+      if (!detail.trim()) {
+        detail =
+          response.status === 403
+            ? 'Forbidden - invalid API key (trakt-api-key) or unapproved app. Check your Trakt OAuth application at https://trakt.tv/oauth/applications'
+            : `HTTP ${response.status}`;
+      }
+      throw new ApiError(
+        `Trakt API error ${response.status}: ${detail}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
-    const data = (await response.json()) as Promise<T[]>;
+    const data = (await response.json()) as T[];
     const page = Number(response.headers.get('x-pagination-page'));
     const limit = Number(response.headers.get('x-pagination-limit'));
     const total = Number(response.headers.get('x-pagination-item-count'));
@@ -132,7 +158,7 @@ export class TraktApi {
       page,
       limit,
       total,
-      items: await data,
+      items: data,
       has_next_page: total > page * limit,
     };
   }
@@ -146,33 +172,34 @@ export class TraktApi {
     return true;
   }
 
-  @tracedApi('TraktApi')
+  @tracedApi('TraktApi', 'trakt')
   public async getTrendingLists() {
     const url = `${this.apiUrl}/lists/trending?limit=50`;
     const response = await this.request<TraktList>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response.items.map(item => item.list);
   }
 
-  @tracedApi('TraktApi')
+  @tracedApi('TraktApi', 'trakt')
   public async getPopularLists() {
     const url = `${this.apiUrl}/lists/popular`;
     const response = await this.request<TraktList>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response.items.map(item => item.list);
   }
 
-  @tracedApi('TraktApi')
+  @tracedApi('TraktApi', 'trakt')
   public async getList(listId: string) {
     const url = `${this.apiUrl}/lists/${listId}/items`;
     const response = await this.request<TraktListItem>(url, {}, 'UNAUTHED_API_GET_LIMIT');
     return response;
   }
 
-  @tracedApi('TraktApi')
+  @tracedApi('TraktApi', 'trakt')
   public async getDeviceCode() {
     const response = await fetch(`${this.apiUrl}/oauth/device/code`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': TraktApi.USER_AGENT,
       },
       body: JSON.stringify({
         client_id: this.clientId,
@@ -180,7 +207,12 @@ export class TraktApi {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     const data = (await response.json()) as DeviceCodeResponse;
@@ -194,12 +226,13 @@ export class TraktApi {
     };
   }
 
-  @tracedApi('TraktApi')
+  @tracedApi('TraktApi', 'trakt')
   public async checkDeviceCode(deviceCode: string): Promise<DeviceTokenResponse> {
     const response = await fetch(`${this.apiUrl}/oauth/device/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': TraktApi.USER_AGENT,
       },
       body: JSON.stringify({
         code: deviceCode,
@@ -211,15 +244,20 @@ export class TraktApi {
     if (!response.ok) {
       if (response.status === 400) {
         const error = await response.text();
-        throw new Error(error);
+        throw new ApiError(error, 'response_error', 'trakt', response.status);
       }
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     return (await response.json()) as DeviceTokenResponse;
   }
 
-  @tracedApi('TraktApi')
+  @tracedApi('TraktApi', 'trakt')
   public async getProfile(accessToken: string, slug = 'me'): Promise<UserProfileResponse> {
     const response = await fetch(`${this.apiUrl}/users/${slug}`, {
       headers: {
@@ -227,22 +265,29 @@ export class TraktApi {
         'trakt-api-key': this.clientId,
         Authorization: `bearer ${accessToken}`,
         'Content-Type': 'application/json',
+        'User-Agent': TraktApi.USER_AGENT,
       },
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     return (await response.json()) as UserProfileResponse;
   }
 
-  @tracedApi('TraktApi')
+  @tracedApi('TraktApi', 'trakt')
   public async refreshToken(refreshTokenValue: string): Promise<DeviceTokenResponse> {
     const response = await fetch(`${this.apiUrl}/oauth/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'User-Agent': TraktApi.USER_AGENT,
       },
       body: JSON.stringify({
         refresh_token: refreshTokenValue,
@@ -253,7 +298,12 @@ export class TraktApi {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new ApiError(
+        `HTTP error! status: ${response.status}`,
+        'http_error',
+        'trakt',
+        response.status
+      );
     }
 
     return (await response.json()) as DeviceTokenResponse;

@@ -36,7 +36,7 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 
 #### Media Services
 
-- **TMDB Integration** - Movie/TV metadata, posters, ratings
+- **TMDB Integration** - Movie/TV metadata, posters, ratings (see [External Sync + Query with Fallback](external-sync-and-query-fallback.md) for sync/query architecture and TmdbService layering)
 - **Source Discovery** - Multi-provider content aggregation
 - **Quality Management** - Automatic quality detection and selection
 - **Progress Tracking** - User watch history and resume functionality

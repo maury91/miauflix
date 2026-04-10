@@ -82,6 +82,24 @@ describe('StatsService', () => {
       expect(() => new StatsService(3600)).not.toThrow(); // 1 hour
       expect(() => new StatsService(86400)).not.toThrow(); // 1 day
     });
+
+    it('should always compute start-of-day at UTC midnight', () => {
+      const service = new StatsService(300);
+
+      // 2024-01-01 23:30 in UTC-05:00 => 2024-01-02T04:30:00.000Z
+      jest.setSystemTime(new Date('2024-01-01T23:30:00-05:00'));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const startOfUtcDay = (service as any).getStartOfUtcDay() as number;
+      expect(new Date(startOfUtcDay).toISOString()).toBe('2024-01-02T00:00:00.000Z');
+
+      // 2024-01-01 01:15 in UTC+09:00 => 2023-12-31T16:15:00.000Z
+      jest.setSystemTime(new Date('2024-01-01T01:15:00+09:00'));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const startOfUtcDayFromPositiveOffset = (service as any).getStartOfUtcDay() as number;
+      expect(new Date(startOfUtcDayFromPositiveOffset).toISOString()).toBe(
+        '2023-12-31T00:00:00.000Z'
+      );
+    });
   });
 
   describe('metricStart', () => {

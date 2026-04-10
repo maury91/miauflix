@@ -1,3 +1,6 @@
+import type { Movie } from '@entities/movie.entity';
+import type { TVShow } from '@entities/tvshow.entity';
+
 export interface ConfigurationResponse {
   images: {
     base_url: string;
@@ -332,3 +335,11 @@ export type MediaListResponse = PagedResponse<MovieSummary | TVShowSummary>;
 export type MediaSummary = MovieMediaSummary | TVShowMediaSummary;
 
 export type MediaSummaryList = Paged<MediaSummary>;
+
+export interface TranslatedMovie extends Omit<Movie, 'genres' | 'translations'> {
+  genres: string[];
+}
+
+export interface TranslatedTVShow extends Omit<TVShow, 'genres' | 'translations'> {
+  genres: string[];
+}

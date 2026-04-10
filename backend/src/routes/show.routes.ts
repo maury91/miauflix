@@ -4,12 +4,11 @@ import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { TranslatedTVShow } from '@services/media/media.types';
 
 import type { Deps, ErrorResponse } from './common.types';
 import type { SeasonResponse, ShowResponse } from './show.types';
 
-export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
+export const createShowRoutes = ({ catalogService, mediaService, auditLogService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
 
   return new Hono()
@@ -23,9 +22,16 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
           id: z.string().regex(/^\d+$/, 'TMDB Show ID must be a number'),
         })
       ),
+      zValidator(
+        'query',
+        z.object({
+          lang: z.string().min(2).max(5).optional().default('en'),
+        })
+      ),
       async context => {
         try {
           const { id } = context.req.valid('param');
+          const { lang } = context.req.valid('query');
           const showId = parseInt(id, 10);
 
           // Validate show ID range
@@ -34,36 +40,39 @@ export const createShowRoutes = ({ mediaService, auditLogService }: Deps) => {
           }
 
           // Get the show from the database or fetch from TMDB if not available
-          const show = await mediaService.getTVShowByTmdbId(showId);
+          const show = await catalogService.getTVShowByTmdbId(showId, lang);
 
           if (!show) {
             return context.json({ error: 'Show not found' } satisfies ErrorResponse, 404);
           }
 
           // Get translated version of the show
-          const [translatedShow] = await mediaService.mediasWithLanguage([show], 'en');
-
-          // Cast to TranslatedTVShow since we know it's a TV show
-          const showData = translatedShow as TranslatedTVShow;
-
           // Build the response object matching ShowResponse DTO
           const response: ShowResponse = {
             type: 'show',
-            id: showData.id,
-            tmdbId: showData.tmdbId,
-            imdbId: showData.imdbId || null,
-            title: showData.name, // Map 'name' to 'title'
-            overview: showData.overview || null,
-            tagline: showData.tagline || null,
-            firstAirDate: showData.firstAirDate || null,
+            id: show.id,
+            tmdbId: show.tmdbId,
+            imdbId: show.imdbId || null,
+            title: show.name, // Map 'name' to 'title'
+            overview: show.overview || null,
+            tagline: show.tagline || null,
+            firstAirDate: show.firstAirDate || null,
             lastAirDate: null, // Not available in entity
-            poster: showData.poster || null,
-            backdrop: showData.backdrop || null,
+            poster: show.poster || null,
+            backdrop: show.backdrop || null,
             logo: null, // Not available in entity
-            genres: showData.genres,
-            popularity: showData.popularity || null,
-            rating: showData.rating || null,
-            seasons: [], // TODO: Implement seasons
+            genres: show.genres,
+            popularity: show.popularity || null,
+            rating: show.rating || null,
+            seasons: show.seasons.map(season => ({
+              id: season.id,
+              seasonNumber: season.seasonNumber,
+              name: season.name,
+              overview: season.overview,
+              airDate: season.airDate || null,
+              poster: season.posterPath || null,
+              episodes: [], // TODO: Implement episodes
+            })),
             sources: [], // TODO: Implement sources
           };
 

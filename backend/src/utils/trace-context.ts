@@ -1,11 +1,13 @@
 import { context, trace } from '@opentelemetry/api';
 
+import { ENV } from '@constants';
+
 /**
  * Get the current trace ID from the active span context
  * @returns The current trace ID or null if no active span
  */
 export function getCurrentTraceId(): string | null {
-  if (process.env.ENABLE_TRACING !== 'true') {
+  if (!ENV('ENABLE_TRACING')) {
     return null;
   }
 
@@ -21,7 +23,7 @@ export function getCurrentTraceId(): string | null {
  * @returns The current span ID or null if no active span
  */
 export function getCurrentSpanId(): string | null {
-  if (process.env.ENABLE_TRACING !== 'true') {
+  if (!ENV('ENABLE_TRACING')) {
     return null;
   }
 
@@ -37,7 +39,7 @@ export function getCurrentSpanId(): string | null {
  * @returns Object with traceId and spanId, or null if no active span
  */
 export function getCurrentTraceContext(): { traceId: string; spanId: string } | null {
-  if (process.env.ENABLE_TRACING !== 'true') {
+  if (!ENV('ENABLE_TRACING')) {
     return null;
   }
 
@@ -57,7 +59,7 @@ export function getCurrentTraceContext(): { traceId: string; spanId: string } | 
  * @returns A formatted trace context string or empty string if no active span
  */
 export function getTraceContextString(): string {
-  if (process.env.ENABLE_TRACING !== 'true') {
+  if (!ENV('ENABLE_TRACING')) {
     return '';
   }
 

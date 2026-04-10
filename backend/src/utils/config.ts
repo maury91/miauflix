@@ -36,6 +36,20 @@ type TimeUnit = keyof typeof timeMultipliers;
 
 // Combined validator-transforms
 export const transforms = {
+  enum:
+    <T extends string>(options: { values: readonly T[] }): ValidatorTransform<T> =>
+    (value: string) => {
+      if (!options.values.includes(value as T)) {
+        return {
+          isValid: false,
+          error: `Must be one of: ${options.values.join(', ')}`,
+          suggestions: [...options.values],
+        };
+      }
+
+      return { isValid: true, value: value as T };
+    },
+
   string: (options?: {
     minLength?: number;
     maxLength?: number;
@@ -225,17 +239,14 @@ export const transforms = {
 
 // Helper to create validated variable with automatic type inference
 export function variable<T>(
-  config: { transform: ValidatorTransform<T> } & (
-    | BaseVariableInfo
-    | DefaultVariableInfo
-    | SkipUserInteractionVariableInfo
-  )
+  config: {
+    transform: ValidatorTransform<T>;
+    options?: Record<Extract<T, string>, string>;
+  } & (BaseVariableInfo | DefaultVariableInfo | SkipUserInteractionVariableInfo)
 ): ValidatedVariableInfo<T>;
 export function variable(config: UnTypedVariableInfo): ValidatedVariableInfo<string>;
 export function variable<T>(
-  config:
-    | UnTypedVariableInfo
-    | (Omit<ValidatedVariableInfo<T>, 'transform'> & { transform: ValidatorTransform<T> })
+  config: UnTypedVariableInfo | ValidatedVariableInfo<T>
 ): ValidatedVariableInfo<T> {
   return config as ValidatedVariableInfo<T>;
 }

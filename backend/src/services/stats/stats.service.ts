@@ -16,7 +16,7 @@ export class StatsService {
   private readonly metricStarts: Map<number, MetricStart>;
   private readonly metricData: Map<string, Map<number, number[]>>;
   private readonly eventData: Map<string, Map<number, number>>;
-  private readonly oldestMidnightTimestamp = this.getStartOfDay();
+  private readonly oldestUtcMidnightTimestamp = this.getStartOfUtcDay();
   private nextMetricId = 1;
 
   constructor(timeframeSize: number = 300, maxTimeframes: number = 288) {
@@ -43,28 +43,30 @@ export class StatsService {
   }
 
   /**
-   * Calculate the start of the current day (midnight) in milliseconds
+   * Calculate the start of the current UTC day boundary (UTC midnight) in milliseconds.
    */
-  private getStartOfDay(): number {
+  private getStartOfUtcDay(): number {
     const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    return startOfDay.getTime();
+    const startOfUtcDay = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+    );
+    return startOfUtcDay.getTime();
   }
 
   /**
-   * Calculate the absolute timeframe index (aligned to midnight boundaries, never resets)
+   * Calculate the absolute timeframe index (aligned to UTC midnight boundaries, never resets)
    * This allows tracking data across multiple days
    */
   private getCurrentTimeframeIndex(): number {
     const now = Date.now();
-    const startOfDay = this.getStartOfDay();
-    const elapsedSeconds = Math.floor((now - startOfDay) / 1000);
+    const startOfUtcDay = this.getStartOfUtcDay();
+    const elapsedSeconds = Math.floor((now - startOfUtcDay) / 1000);
     const timeframeInDay = Math.floor(elapsedSeconds / this.timeframeSize);
 
-    // Calculate days since initialization (based on midnight boundaries)
+    // Calculate days since initialization (based on UTC midnight boundaries)
     const timeframesPerDay = SECONDS_PER_DAY / this.timeframeSize;
     const daysSinceInitialization = Math.floor(
-      (startOfDay - this.oldestMidnightTimestamp) / (1000 * SECONDS_PER_DAY)
+      (startOfUtcDay - this.oldestUtcMidnightTimestamp) / (1000 * SECONDS_PER_DAY)
     );
 
     // Absolute index = days since initialization * timeframes per day + timeframe within day

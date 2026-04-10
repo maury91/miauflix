@@ -3,6 +3,7 @@ import { logger } from '@logger';
 import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { MovieSource } from '@entities/movie-source.entity';
+import { SourceError } from '@errors/source.errors';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type {
   MovieSourceRepository,
@@ -470,7 +471,7 @@ export class SourceService {
       if (typeof response.body === 'string') {
         return Buffer.from(response.body, 'binary');
       }
-      throw new Error('Invalid response body');
+      throw new SourceError('Invalid response body', 'invalid_response_body');
     } catch (error) {
       logger.error('SourceService', `Error downloading from URL: ${url}`, error);
       return null;

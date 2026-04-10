@@ -1,6 +1,7 @@
 import { logger } from '@logger';
 
 import { ENV } from '@constants';
+import { RequestError } from '@errors/request.errors';
 import type {
   CookiePair,
   FlareSolverrGetRequest,
@@ -118,7 +119,7 @@ export class RequestService {
   ): Promise<RequestServiceResponse<ArrayBuffer | T>> {
     const flaresolverrUrl = this.flareSolverrUrl;
     if (!flaresolverrUrl) {
-      throw new Error('FlareSolverr URL is not configured');
+      throw new RequestError('FlareSolverr URL is not configured', 'not_configured');
     }
 
     const domain = extractDomain(url);
@@ -152,7 +153,10 @@ export class RequestService {
           'FlareSolverr',
           `API error response: ${response.status} ${response.statusText} - ${errorText}`
         );
-        throw new Error(`FlareSolverr API error: ${response.status} ${response.statusText}`);
+        throw new RequestError(
+          `FlareSolverr API error: ${response.status} ${response.statusText}`,
+          'api_error'
+        );
       }
 
       const data = (await response.json()) as FlareSolverrResponse;
@@ -167,12 +171,15 @@ export class RequestService {
           'FlareSolverr',
           `FlareSolverr returned error status: ${data.status}, message: ${data.message || 'Unknown error'}`
         );
-        throw new Error(`FlareSolverr error: ${data.message || 'Unknown error'}`);
+        throw new RequestError(
+          `FlareSolverr error: ${data.message || 'Unknown error'}`,
+          'solver_error'
+        );
       }
 
       if (!data.solution) {
         logger.error('FlareSolverr', 'FlareSolverr returned no solution in response');
-        throw new Error('FlareSolverr returned no solution');
+        throw new RequestError('FlareSolverr returned no solution', 'no_solution');
       }
 
       const solution = data.solution;
