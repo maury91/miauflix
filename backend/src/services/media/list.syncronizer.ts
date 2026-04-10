@@ -2,7 +2,7 @@ import { logger } from '@logger';
 
 import type { Movie } from '@entities/movie.entity';
 import type { TVShow } from '@entities/tvshow.entity';
-import { traced } from '@utils/tracing.util';
+import { traced, TracingUtil, withSpan } from '@utils/tracing.util';
 
 import type { ListService } from './list.service';
 
@@ -13,28 +13,35 @@ export class ListSynchronizer {
   async synchronize(): Promise<void> {
     const lists = await this.listService.getLists();
     for (const { slug } of lists) {
-      logger.debug('Synchronizer', `Synchronizing list: ${slug}`);
-      // This creates the list ( if it doesn't exist ) and also preloads the first page
-      await this.listService.getListBySlug(slug);
-      let pages = 1;
-      let currentPage = 1;
-      let allMedias: (Movie | TVShow)[] = [];
-      do {
-        const { pages: totalPages, medias } = await this.listService.getListContentFromApi(
-          slug,
-          currentPage
-        );
-        pages = totalPages;
-        currentPage++;
+      await withSpan(
+        'list.sync',
+        async () => {
+          logger.debug('Synchronizer', `Synchronizing list: ${slug}`);
+          // This creates the list ( if it doesn't exist ) and also preloads the first page
+          await this.listService.getListBySlug(slug);
+          let pages = 1;
+          let currentPage = 1;
+          let allMedias: (Movie | TVShow)[] = [];
+          do {
+            const { pages: totalPages, medias } = await this.listService.getListContentFromApi(
+              slug,
+              currentPage
+            );
+            pages = totalPages;
+            TracingUtil.addEvent('page_fetched', { page: currentPage, totalPages: pages });
+            currentPage++;
 
-        allMedias = allMedias
-          .concat(medias)
-          // Remove duplicates based on id
-          .filter(({ id }, index, arr) => arr.findIndex(media => media.id === id) === index);
-      } while (currentPage <= Math.min(pages, 6));
-      // Not liking the idea of incremental loading, it can lead to problems where the list gets periodically empty
-      await this.listService.updateListContent(slug, allMedias);
-      logger.debug('Synchronizer', `List ${slug} synchronized`);
+            allMedias = allMedias
+              .concat(medias)
+              // Remove duplicates based on id
+              .filter(({ id }, index, arr) => arr.findIndex(media => media.id === id) === index);
+          } while (currentPage <= Math.min(pages, 6));
+          // Not liking the idea of incremental loading, it can lead to problems where the list gets periodically empty
+          await this.listService.updateListContent(slug, allMedias);
+          logger.debug('Synchronizer', `List ${slug} synchronized`);
+        },
+        { 'list.slug': slug }
+      );
     }
     logger.debug('Synchronizer', `All lists synchronized`);
   }

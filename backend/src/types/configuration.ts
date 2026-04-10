@@ -8,6 +8,8 @@ export type BaseVariableInfo = {
   required: boolean;
 };
 
+type VariableOptions<T> = Record<Extract<T, string>, string>;
+
 type PasswordVariableInfo = BaseVariableInfo & {
   password: true;
   skipUserInteraction?: false;
@@ -20,6 +22,7 @@ export type DefaultVariableInfo = BaseVariableInfo & {
 };
 
 type DefaultVariableInfoWithTransform<T> = DefaultVariableInfo & {
+  options?: VariableOptions<T>;
   transform: ValidatorTransform<T>;
 };
 
@@ -30,6 +33,12 @@ export type SkipUserInteractionVariableInfo = BaseVariableInfo & {
 };
 
 type SkipUserInteractionVariableInfoWithTransform<T> = SkipUserInteractionVariableInfo & {
+  options?: VariableOptions<T>;
+  transform: ValidatorTransform<T>;
+};
+
+type BaseVariableInfoWithTransform<T> = BaseVariableInfo & {
+  options?: VariableOptions<T>;
   transform: ValidatorTransform<T>;
 };
 
@@ -40,6 +49,7 @@ export type UnTypedVariableInfo =
   | SkipUserInteractionVariableInfo;
 
 export type VariableInfo =
+  | BaseVariableInfoWithTransform<unknown>
   | DefaultVariableInfoWithTransform<unknown>
   | SkipUserInteractionVariableInfoWithTransform<unknown>
   | UnTypedVariableInfo;
@@ -62,7 +72,8 @@ export type ValidationTransformResult<T> = {
 
 export type ValidatorTransform<T> = (value: string) => ValidationTransformResult<T>;
 
-export type ValidatedVariableInfo<T = string> =
+export type ValidatedVariableInfo<T = unknown> =
+  | BaseVariableInfoWithTransform<T>
   | DefaultVariableInfoWithTransform<T>
   | SkipUserInteractionVariableInfoWithTransform<T>;
 

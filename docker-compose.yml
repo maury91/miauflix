@@ -16,7 +16,16 @@ services:
       - net.ipv4.conf.all.rp_filter=2 # Set reverse path filter to loose mode
       - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
     ports:
-      - '5000:3000' # Expose backend API port (host:container)
+      - '127.0.0.1:5000:3000' # Expose backend API port locally only
+      - '127.0.0.1:16686:16686' # Expose Jaeger UI port locally only
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: miauflix-jaeger
+    network_mode: service:vpn # Route traffic through NordVPN
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
     restart: unless-stopped
 
   flaresolverr:
@@ -46,6 +55,8 @@ services:
         condition: service_healthy
       flaresolverr:
         condition: service_started
+      jaeger:
+        condition: service_started
     environment:
       - DATA_DIR=/usr/data
       - PUID=${USER_ID:-1000}
@@ -53,6 +64,8 @@ services:
       - DISABLE_VPN_CHECK=true
       - COOKIE_DOMAIN=${DOMAIN}
       - COOKIE_SECURE=true
+      - ENABLE_TRACING=true
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
       - ENABLE_FRONTEND=false # Frontend is served by nginx
       - DEBUG=SourceService,DataResolver,DownloadService
       - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://localhost:8191}
@@ -66,6 +79,7 @@ services:
     volumes:
       - ./.env:/usr/src/app/.env
       - ./data:/usr/data/
+      - ./traces:/tmp:rw
       - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
       - frontend_static:/usr/src/app/public_volume
     network_mode: service:vpn # Route traffic through NordVPN

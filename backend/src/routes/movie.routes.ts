@@ -5,17 +5,16 @@ import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { TranslatedMovie } from '@services/media/media.types';
 
 import type { Deps, ErrorResponse } from './common.types';
 import type { MovieResponse, StreamingKeyResponse } from './movie.types';
 
 export const createMovieRoutes = ({
-  mediaService,
-  sourceService,
-  streamService,
   auditLogService,
   authService,
+  catalogService,
+  sourceService,
+  streamService,
 }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
   const supportedQualities: ['auto', ...Quality[]] = ['auto', ...Object.values(Quality)];
@@ -55,35 +54,29 @@ export const createMovieRoutes = ({
           }
 
           // Get the movie from the database or fetch from TMDB if not available
-          const movie = await mediaService.getMovieByTmdbId(movieId);
+          const movie = await catalogService.getMovieByTmdbId(movieId, lang);
 
           if (!movie) {
             return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           }
 
-          // Get translated version of the movie
-          const [translatedMovie] = await mediaService.mediasWithLanguage([movie], lang);
-
-          // Cast to TranslatedMovie since we know it's a movie
-          const movieData = translatedMovie as TranslatedMovie;
-
           // Build the response object
           const response: MovieResponse = {
             type: 'movie',
-            id: movieData.id,
-            tmdbId: movieData.tmdbId,
-            imdbId: movieData.imdbId,
-            title: movieData.title,
-            overview: movieData.overview,
-            tagline: movieData.tagline,
-            releaseDate: movieData.releaseDate,
-            runtime: movieData.runtime,
-            poster: movieData.poster,
-            backdrop: movieData.backdrop,
-            logo: movieData.logo,
-            genres: movieData.genres,
-            popularity: movieData.popularity,
-            rating: movieData.rating,
+            id: movie.id,
+            tmdbId: movie.tmdbId,
+            imdbId: movie.imdbId,
+            title: movie.title,
+            overview: movie.overview,
+            tagline: movie.tagline,
+            releaseDate: movie.releaseDate,
+            runtime: movie.runtime,
+            poster: movie.poster,
+            backdrop: movie.backdrop,
+            logo: movie.logo,
+            genres: movie.genres,
+            popularity: movie.popularity,
+            rating: movie.rating,
           };
 
           // Include sources if requested
@@ -146,10 +139,17 @@ export const createMovieRoutes = ({
           quality: z.enum(supportedQualities),
         })
       ),
+      zValidator(
+        'query',
+        z.object({
+          lang: z.string().min(2).max(5).optional().default('en'),
+        })
+      ),
       async context => {
         try {
           const { user } = context.get('sessionInfo');
           const { tmdbId, quality } = context.req.valid('param');
+          const { lang } = context.req.valid('query');
           const movieId = parseInt(tmdbId, 10);
 
           // Validate movie ID range
@@ -158,7 +158,7 @@ export const createMovieRoutes = ({
           }
 
           // Check if movie exists
-          const movie = await mediaService.getMovieByTmdbId(movieId);
+          const movie = await catalogService.getMovieByTmdbId(movieId, lang);
           if (!movie) {
             return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           }

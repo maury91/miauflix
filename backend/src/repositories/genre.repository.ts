@@ -1,6 +1,7 @@
 import type { DataSource, Repository } from 'typeorm';
 
 import { Genre, GenreTranslation } from '@entities/genre.entity';
+import { RepositoryError } from '@errors/repository.errors';
 
 export class GenreRepository {
   private readonly genreRepository: Repository<Genre>;
@@ -17,7 +18,10 @@ export class GenreRepository {
     if (genre) {
       return genre;
     }
-    throw new Error(`Genre with ID ${id} does not exist and could not be created`);
+    throw new RepositoryError(
+      `Genre with ID ${id} does not exist and could not be created`,
+      'create_failed'
+    );
   }
 
   async createTranslation(genre: Genre, name: string, language: string): Promise<void> {

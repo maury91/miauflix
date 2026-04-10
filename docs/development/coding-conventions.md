@@ -11,7 +11,15 @@
 
 ### Error Handling
 
-- Services throw domain errors → handled by `app.onError` → JSON response.
+All errors extend `AppError` (`@errors/base.error`) and carry a `type` (domain) and `code` (specific condition):
+
+```typescript
+import { RepositoryError } from '@errors/repository.errors';
+// throw new RepositoryError('Movie not found', 'not_found');
+// → error.type === 'repository', error.code === 'not_found'
+```
+
+Domain error files live in `backend/src/errors/`. **Never throw `new Error(...)` directly** in services or repositories — always use the appropriate typed class. See `backend/docs/errors.md` for the full error catalogue.
 
 ### Testing
 
