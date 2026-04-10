@@ -2,6 +2,7 @@ import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
+import { ApiError } from '@errors/api.errors';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
@@ -91,7 +92,12 @@ export class YTSApi extends Api {
 
       if (!response.ok) {
         logger.error('YTS', `API error for ${url}:`, response.status, response.statusText);
-        throw new Error(`YTS API error: (${response.status}) ${response.statusText}`);
+        throw new ApiError(
+          `YTS API error: (${response.status}) ${response.statusText}`,
+          'http_error',
+          'yts',
+          response.status
+        );
       }
 
       const contentType = response.headers['content-type'] || '';
@@ -108,10 +114,14 @@ export class YTSApi extends Api {
           'YTS',
           `Received HTML response for ${url}. This may indicate an error or a 404 page.`
         );
-        throw new Error(`YTS API returned HTML response for ${url}`);
+        throw new ApiError(`YTS API returned HTML response for ${url}`, 'invalid_response', 'yts');
       }
       if (typeof response.body === 'string') {
-        throw new Error(`YTS API returned non-JSON response for ${url}`);
+        throw new ApiError(
+          `YTS API returned non-JSON response for ${url}`,
+          'invalid_response',
+          'yts'
+        );
       }
       return response.body;
     } catch (error) {

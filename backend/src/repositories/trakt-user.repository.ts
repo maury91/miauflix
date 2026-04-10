@@ -2,6 +2,7 @@ import type { DataSource, Repository } from 'typeorm';
 
 import { TraktUser } from '@entities/trakt-user.entity';
 import type { User } from '@entities/user.entity';
+import { RepositoryError } from '@errors/repository.errors';
 
 export class TraktUserRepository {
   private readonly repository: Repository<TraktUser>;
@@ -54,7 +55,10 @@ export class TraktUserRepository {
       if (traktUser.userId === user.id) {
         return traktUser;
       }
-      throw new Error(`Trakt user with slug ${traktSlug} is already associated with another user.`);
+      throw new RepositoryError(
+        `Trakt user with slug ${traktSlug} is already associated with another user.`,
+        'duplicate'
+      );
     }
 
     // First check if this user is already associated with another Trakt account

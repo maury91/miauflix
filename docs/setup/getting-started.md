@@ -129,13 +129,29 @@ For a complete reference of all available environment variables, see the [Enviro
 
 ## Initial User
 
-Miauflix creates an initial user with random credentials on first run.
+There are two ways to create the first admin account.
 
-Credentials are stored encrypted in the database, so you won't find them there. They are printed to the logs during the first startup. Retrieve them and then redact/remove the logs:
+### Default: auto-generated credentials
+
+By default, Miauflix generates an admin account on first startup and prints the credentials to the logs:
 
 ```bash
-# Example: show recent backend logs (adjust service name if different)
+# Retrieve credentials from the startup logs
 docker compose logs backend --since=15m
 ```
 
-Important: rotate the initial password after first login and avoid storing credentials in logs or tickets.
+Change the password after first login. Avoid storing the printed credentials in tickets or log archives.
+
+### Alternative: setup endpoint
+
+Set `ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true` in `.env` to skip auto-generation. Instead, a one-time unauthenticated endpoint is exposed:
+
+```bash
+curl -X POST http://localhost:3000/api/auth/setup \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"yourpassword"}'
+```
+
+The endpoint returns `201` on success and becomes permanently unavailable once any admin account exists. Use this mode when you want to keep credentials out of the logs — for example in automated or shared deployments.
+
+For full details see [Environment Variables — Initial User](environment-variables.md#initial-user).

@@ -289,8 +289,14 @@ For local development without Docker:
 ### Frontend Development
 
 ```bash
+# Use correct version of node
+nvm use
+
 # Install dependencies
-npm install
+npm ci
+
+# Build projects
+npm run build
 
 # Start frontend with hot reload (recommended for development)
 npm run start:frontend

@@ -9,9 +9,12 @@ export const mediaConfigurationDefinition = serviceConfiguration({
       example: 'ON_DEMAND',
       defaultValue: 'ON_DEMAND',
       required: false,
-      // FixMe: Implement transforms.enum({ values: ['GREEDY', 'ON_DEMAND'] })
-      transform: transforms.string({
-        pattern: /^(GREEDY|ON_DEMAND)$/,
+      options: {
+        GREEDY: 'sync every tv show',
+        ON_DEMAND: 'sync only tv shows marked as watching',
+      },
+      transform: transforms.enum({
+        values: ['GREEDY', 'ON_DEMAND'] as const,
       }),
     }),
   },

@@ -6,16 +6,9 @@ import type {
   LoginResponse,
   RefreshResponse,
 } from '@miauflix/backend';
-import { hcWithType } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { API_URL } from '@shared/config/constants';
+import { backendClient } from '@shared/api/backend-client';
 import type { SessionInfo } from '@store/slices/auth';
-
-const client = hcWithType(API_URL, {
-  init: {
-    credentials: 'include',
-  },
-});
 
 async function handleAuthRequest<T>(
   requestFn: () => Promise<Response>,
@@ -55,7 +48,7 @@ export const authApi = createApi({
     login: builder.mutation<LoginResponse, LoginRequest>({
       async queryFn(credentials) {
         return handleAuthRequest<LoginResponse>(
-          () => client.api.auth.login.$post({ json: credentials }),
+          () => backendClient.api.auth.login.$post({ json: credentials }),
           'Login failed'
         );
       },
@@ -64,7 +57,7 @@ export const authApi = createApi({
     refresh: builder.mutation<RefreshResponse, { session: string }>({
       async queryFn({ session }) {
         return handleAuthRequest<RefreshResponse>(
-          () => client.api.auth.refresh[':session'].$post({ param: { session } }),
+          () => backendClient.api.auth.refresh[':session'].$post({ param: { session } }),
           'Refresh failed'
         );
       },
@@ -73,7 +66,7 @@ export const authApi = createApi({
     logout: builder.mutation<{ message: string }, { session: string }>({
       async queryFn({ session }) {
         return handleAuthRequest<{ message: string }>(
-          () => client.api.auth.logout[':session'].$post({ param: { session } }),
+          () => backendClient.api.auth.logout[':session'].$post({ param: { session } }),
           'Logout failed'
         );
       },
@@ -82,7 +75,7 @@ export const authApi = createApi({
     listSessions: builder.query<SessionInfo[], void>({
       async queryFn() {
         return handleAuthRequest<SessionInfo[]>(
-          () => client.api.auth.sessions.$get(),
+          () => backendClient.api.auth.sessions.$get(),
           'List sessions failed'
         );
       },
@@ -91,7 +84,7 @@ export const authApi = createApi({
     deviceLogin: builder.mutation<DeviceAuthResponse, void>({
       async queryFn() {
         return handleAuthRequest<DeviceAuthResponse>(
-          () => client.api.auth.device.trakt.$post(),
+          () => backendClient.api.auth.device.trakt.$post(),
           'Device login failed'
         );
       },
@@ -103,7 +96,7 @@ export const authApi = createApi({
     >({
       async queryFn({ deviceCode }) {
         return handleAuthRequest<DeviceAuthCheckPending | DeviceAuthCheckSuccess>(
-          () => client.api.trakt.auth.device.check.$post({ json: { deviceCode } }),
+          () => backendClient.api.trakt.auth.device.check.$post({ json: { deviceCode } }),
           'Device login check failed'
         );
       },

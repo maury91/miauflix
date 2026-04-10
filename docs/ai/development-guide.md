@@ -110,18 +110,47 @@ See “Backend Path Aliases” and “Frontend Path Aliases” in [docs/developm
 
 ### Error Handling Pattern
 
+All errors use the centralized `AppError` base class from `@errors/base.error`. Each domain has its own error class in `backend/src/errors/`. Errors carry a `type` (domain) and `code` (specific condition) for programmatic identification.
+
 ```typescript
-import { ValidationError, NotFoundError } from '@errors/index';
+// ✅ GOOD - Import the right domain error class
+import { RepositoryError } from '@errors/repository.errors';
+import { ApiError } from '@errors/api.errors';
+import { MediaError } from '@errors/media.errors';
 
-// ✅ GOOD - Specific error types
+// Repository not-found
 if (!movie) {
-  throw new NotFoundError('Movie not found');
+  throw new RepositoryError('Movie not found', 'not_found');
 }
 
-if (!isValidId(movieId)) {
-  throw new ValidationError('Invalid movie ID format');
+// External API failure
+if (!response.ok) {
+  throw new ApiError(`API error: ${response.status}`, 'http_error', 'myservice', response.status);
 }
+
+// Media domain
+if (!LISTS[slug]) {
+  throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
+}
+
+// ❌ BAD - Generic errors lose type information
+throw new Error('Something went wrong');
 ```
+
+**Available error domains** — see `backend/docs/errors.md` for the full reference:
+
+| Import                      | Domain       | Example codes                                |
+| --------------------------- | ------------ | -------------------------------------------- |
+| `@errors/auth.errors`       | `auth`       | `user_already_exists`, `invalid_token`       |
+| `@errors/repository.errors` | `repository` | `not_found`, `create_failed`, `duplicate`    |
+| `@errors/encryption.errors` | `encryption` | `key_required`, `decrypt_failed`             |
+| `@errors/api.errors`        | `api`        | `http_error`, `not_configured`, `timeout`    |
+| `@errors/media.errors`      | `media`      | `list_not_found`, `genre_not_found`          |
+| `@errors/vpn.errors`        | `vpn`        | `http_error`, `invalid_ip`                   |
+| `@errors/request.errors`    | `request`    | `not_configured`, `no_solution`              |
+| `@errors/source.errors`     | `source`     | `invalid_response_body`, `service_not_found` |
+| `@errors/scheduler.errors`  | `scheduler`  | `already_scheduled`, `not_scheduled`         |
+| `@errors/catalog.errors`    | `catalog`    | `user_not_found`                             |
 
 ## File Mapping for Common Tasks
 

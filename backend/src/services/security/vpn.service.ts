@@ -1,6 +1,7 @@
 import { logger } from '@logger';
 
 import { ENV } from '@constants';
+import { VpnError } from '@errors/vpn.errors';
 
 interface NordVpnIpInsightsResponse {
   ip: string;
@@ -107,20 +108,20 @@ export class VpnDetectionService {
         clearTimeout(timeoutId);
 
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          throw new VpnError(`HTTP ${response.status}: ${response.statusText}`, 'http_error');
         }
 
         const data = (await response.json()) as Record<string, unknown>;
         const ip = provider.extractIp(data);
 
         if (!ip || typeof ip !== 'string' || !this.isValidIp(ip)) {
-          throw new Error(`Invalid IP address received: ${ip}`);
+          throw new VpnError(`Invalid IP address received: ${ip}`, 'invalid_ip');
         }
 
         logger.debug('VPN', `Successfully got IP ${ip} from ${provider.name}`);
         return ip;
       } catch (error) {
-        lastError = error instanceof Error ? error : new Error(String(error));
+        lastError = error instanceof Error ? error : new VpnError(String(error), 'http_error');
         logger.warn('VPN', `Failed to get IP from ${provider.name}: ${lastError.message}`);
 
         // Move to next provider
@@ -128,8 +129,9 @@ export class VpnDetectionService {
       }
     }
 
-    throw new Error(
-      `All IP providers failed. Last error: ${lastError?.message || 'Unknown error'}`
+    throw new VpnError(
+      `All IP providers failed. Last error: ${lastError?.message || 'Unknown error'}`,
+      'all_providers_failed'
     );
   }
 

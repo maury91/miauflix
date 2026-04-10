@@ -144,6 +144,7 @@ DISABLE_VPN_CHECK=false
 - **MAXIMUM_CACHE_EMPTY_SPACE**: Maximum SQLite empty space before cleanup
 - **DISABLE_BACKGROUND_TASKS**: Disable background processing for testing
 - **DISABLE_VPN_CHECK**: Skip VPN detection checks
+- **ALLOW_CREATE_ADMIN_ON_FIRST_RUN**: When `true`, skips automatic admin creation at startup and exposes an unauthenticated `POST /api/auth/setup` endpoint to create the first admin user. The endpoint accepts `{ email, password }` and is permanently disabled once any admin account exists. See [Initial User](#initial-user) for details.
 
 ### Content & Streaming
 
@@ -190,11 +191,15 @@ TRAKT_API_URL=https://api.trakt.tv
 VITE_API_URL=/
 VITE_TIZEN=false
 NODE_ENV=development
+
+# Optional: backend URL for Vite dev server proxy (project root .env)
+BACKEND_URL=http://localhost:5000
 ```
 
 - **VITE_API_URL**: Backend API URL relative to frontend
 - **VITE_TIZEN**: Enable Samsung Tizen TV specific features
 - **NODE_ENV**: Environment mode (development/production)
+- **BACKEND_URL**: (Optional) Target for the Vite dev server `/api` proxy. Default is `http://localhost:5000`. Set this when using the frontend with the Docker backend (miauflix container) or a backend on another host/port. See [Development Workflow](../development/workflow.md#using-the-frontend-with-the-docker-backend-miauflix-container).
 
 ### Production Deployment
 
@@ -260,6 +265,40 @@ WWW_DOMAIN=www.yourdomain.com
 - Run the configuration wizard: `npm run config`
 - Check the [Configuration Guide](../../backend/docs/configuration.md)
 - Review [Getting Started](getting-started.md) for setup instructions
+
+## Initial User
+
+There are two modes for creating the first admin account.
+
+### Default mode (auto-creation)
+
+By default (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` unset or `false`), Miauflix generates an admin account on first startup if no admin exists:
+
+- Email: `admin@<hostname>.local`
+- Password: randomly generated, printed to the startup logs
+
+Retrieve the credentials from the logs, then change the password after first login.
+
+### Setup endpoint mode
+
+Set `ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true` to skip auto-creation and instead expose a one-time setup endpoint:
+
+```bash
+POST /api/auth/setup
+Content-Type: application/json
+
+{ "email": "admin@example.com", "password": "yourpassword" }
+```
+
+Responses:
+
+| Status          | Meaning                                         |
+| --------------- | ----------------------------------------------- |
+| `201 Created`   | Admin created successfully                      |
+| `404 Not Found` | Feature not enabled (or endpoint doesn't exist) |
+| `409 Conflict`  | An admin already exists                         |
+
+The endpoint is permanently disabled once any admin account exists. Use this mode when you want to avoid credentials appearing in logs — for example in automated deployments or environments where log access is restricted.
 
 ## Related Documentation
 

@@ -1,9 +1,11 @@
-export class ErrorWithStatus extends Error {
+import { AppError } from '@errors/base.error';
+
+export class ErrorWithStatus extends AppError {
   constructor(
     message: string,
     public status: string
   ) {
-    super(message);
+    super(message, 'source', status);
     this.name = 'ErrorWithStatus';
   }
 }
