@@ -2,10 +2,12 @@ import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
 import { ENV } from '@constants';
+import { ApiError } from '@errors/api.errors';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
+import { tracedApi } from '@utils/tracing.util';
 import { TrackStatus } from '@utils/trackStatus.util';
 
 import type { GetPostsResponse, ImdbDetailResponse } from './therarbg.types';
@@ -24,16 +26,6 @@ interface SearchPostsOptions {
     type: 'days' | 'hours';
     value: number; // N for last N days/hours
   };
-}
-
-class TheRARBGError extends Error {
-  constructor(
-    message: string,
-    public readonly status: number
-  ) {
-    super(message);
-    this.name = 'TheRARBGError';
-  }
 }
 
 export class TheRARBGApi extends Api {
@@ -73,18 +65,23 @@ export class TheRARBGApi extends Api {
         redirect: 'manual',
       });
 
-      if (!response.ok) {
-        logger.error('TheRARBG', `API error for ${url}:`, response.status, response.statusText);
-        throw new Error(`TheRARBG API error: (${response.status}) ${response.statusText}`);
-      }
-
       if (response.status === 302) {
         const location = response.headers['location'] || '';
         if (location === '/') {
           // This is essentially a 404, it means they have nothing about this movie
-          throw new TheRARBGError('Redirect to homepage', 404);
+          throw new ApiError('Redirect to homepage', 'http_error', 'therarbg', 404);
         }
         logger.error('TheRARBG', `Redirected to ${location}`);
+      }
+
+      if (!response.ok) {
+        logger.error('TheRARBG', `API error for ${url}:`, response.status, response.statusText);
+        throw new ApiError(
+          `TheRARBG API error: (${response.status}) ${response.statusText}`,
+          'http_error',
+          'therarbg',
+          response.status
+        );
       }
 
       if (response.headers['content-type']?.includes('text/html')) {
@@ -93,35 +90,46 @@ export class TheRARBGApi extends Api {
           'TheRARBG',
           `Received HTML response for ${url}. This may indicate an error or a 404 page.`
         );
-        throw new Error(
-          `TheRARBG API returned HTML response for ${url}?${JSON.stringify(queryParams)}`
+        throw new ApiError(
+          `TheRARBG API returned HTML response for ${url}?${JSON.stringify(queryParams)}`,
+          'invalid_response',
+          'therarbg'
         );
       }
 
-      if (typeof response.body === 'string') {
-        throw new Error(`TheRARBG API returned non-JSON response for ${url}`);
+      if (response.body == null || typeof response.body !== 'object') {
+        throw new ApiError(
+          `TheRARBG API returned non-JSON response for ${url}`,
+          'invalid_response',
+          'therarbg'
+        );
       }
       return response.body;
     } catch (error) {
       logger.error('TheRARBG', `Request failed for ${url}:`, error);
 
-      if (error instanceof Error) {
-        if (error.name === 'TimeoutError') {
-          throw new Error('Request timeout');
-        }
+      // ApiErrors come from valid (but bad) server responses — no point switching mirrors
+      if (!(error instanceof ApiError) && this.currentMirrorIndex < mirrors.length - 1) {
+        this.currentMirrorIndex++;
+        const newMirror = mirrors[this.currentMirrorIndex];
+        logger.debug('TheRARBG', `Switching to mirror: ${newMirror}`);
+        this.apiUrl = newMirror;
+        return this.request<T>(endpoint, params, highPriority);
+      }
+
+      if (error instanceof ApiError) {
         throw error;
       }
 
-      // Try with a different domain mirror if available
-      if (this.currentMirrorIndex < mirrors.length - 1) {
-        this.currentMirrorIndex++;
-        const newMirror = mirrors[this.currentMirrorIndex];
-        console.log(`Trying alternative TheRARBG mirror: ${newMirror}`);
-        this.apiUrl = newMirror;
-        return this.request<T>(endpoint, params);
+      if (error instanceof Error && error.name === 'TimeoutError') {
+        throw new ApiError('Request timeout', 'timeout', 'therarbg');
       }
 
-      throw error;
+      if (error instanceof Error) {
+        throw new ApiError(error.message, 'response_error', 'therarbg');
+      }
+
+      throw new ApiError('Unknown request failure', 'response_error', 'therarbg');
     }
   }
 
@@ -129,11 +137,12 @@ export class TheRARBGApi extends Api {
    * Search for movie by IMDB ID
    */
   @Cacheable(36e5 /* 1 hour */)
+  @tracedApi('TheRARBGApi', 'therarbg')
   async searchByImdbId(imdbId: string, highPriority = false): Promise<ImdbDetailResponse | null> {
     // Validate IMDB ID
     const validation = validateImdbId(imdbId);
     if (!validation.isValid) {
-      throw new Error(validation.error);
+      throw new ApiError(validation.error!, 'validation_error', 'therarbg');
     }
 
     const normalizedImdbId = validation.normalizedId!;
@@ -151,7 +160,7 @@ export class TheRARBGApi extends Api {
       // Process and normalize the response
       return data;
     } catch (error) {
-      if (error instanceof TheRARBGError && error.status === 404) {
+      if (error instanceof ApiError && error.code === 'http_error' && error.status === 404) {
         return null;
       }
       throw error;
@@ -162,6 +171,7 @@ export class TheRARBGApi extends Api {
    * Get recent posts with caching
    */
   @Cacheable(36e5 /* 1 hour */)
+  @tracedApi('TheRARBGApi', 'therarbg')
   async searchPosts(
     keywords: string,
     options: SearchPostsOptions = {},
@@ -202,6 +212,7 @@ export class TheRARBGApi extends Api {
   /**
    * Self test to check if API is responsive
    */
+  @tracedApi('TheRARBGApi', 'therarbg')
   async test(): Promise<boolean> {
     try {
       // Try to get a small amount of recent posts to check if API is responsive

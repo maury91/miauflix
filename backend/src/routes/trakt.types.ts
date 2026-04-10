@@ -15,7 +15,7 @@ export type {
   DeviceAuthCheckPending,
   DeviceAuthCheckResponse,
   DeviceAuthCheckSuccess,
-} from '@services/trakt/trakt.types';
+} from '@services/content-catalog/trakt/trakt.types';
 
 export interface TraktAssociationResponse {
   associated: boolean;

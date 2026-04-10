@@ -2,6 +2,7 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import z from 'zod';
 
+import type { MediaList } from '@entities/list.entity';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 
@@ -48,7 +49,8 @@ export const createListRoutes = ({ listService, auditLogService }: Deps) => {
         return c.json({
           results: list.map(serializeMedia),
           total: list.length,
-        } satisfies ListResponse);
+          list: await listService.getListBySlug(slug),
+        } satisfies ListResponse & { list: MediaList });
       }
     );
 };

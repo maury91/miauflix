@@ -1,6 +1,7 @@
 import { logger } from '@logger';
 
 import type { Api } from './api.util';
+import { withClientSpan } from './tracing.util';
 
 export function Cacheable<
   This extends Api,
@@ -10,17 +11,19 @@ export function Cacheable<
 >(ttlMs: number, reset = false) {
   return function (
     target: This,
-    _key: string | symbol,
+    key: string | symbol,
     descriptor: TypedPropertyDescriptor<(...args: Args) => Promise<Return>>
   ) {
     const originalMethod = descriptor.value;
 
     if (typeof originalMethod === 'function') {
       async function cacheMethod(this: This, ...args: Args): Promise<Return> {
-        const cacheKey = `cache.${target.constructor.name}.${
-          (originalMethod as typeof cacheMethod).name
-        }.${JSON.stringify(args)}`;
-        const cached = await this.cache.get<Return>(cacheKey).catch(() => null);
+        const cacheKey = `cache.${target.constructor.name}.${String(key)}.${JSON.stringify(args)}`;
+        const cached = await withClientSpan(
+          'cache.get',
+          () => this.cache.get<Return>(cacheKey).catch(() => null),
+          { 'peer.service': 'cache', 'cache.key': cacheKey }
+        );
         if (cached && !reset) {
           logger.debug('Cache', `Cache hit for ${cacheKey}`);
           return cached;
@@ -29,7 +32,10 @@ export function Cacheable<
         logger.debug('Cache', `Cache miss for ${cacheKey}`);
         const result = await (originalMethod as typeof cacheMethod).apply(this, args);
         logger.debug('Cache', `Setting cache for ${cacheKey}`);
-        await this.cache.set(cacheKey, result, ttlMs);
+        await withClientSpan('cache.set', () => this.cache.set(cacheKey, result, ttlMs), {
+          'peer.service': 'cache',
+          'cache.key': cacheKey,
+        });
 
         return result;
       }

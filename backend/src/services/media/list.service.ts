@@ -4,51 +4,22 @@ import type { Database } from '@database/database';
 import type { MediaList } from '@entities/list.entity';
 import { Movie } from '@entities/movie.entity';
 import { TVShow } from '@entities/tvshow.entity';
+import { MediaError } from '@errors/media.errors';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
-import type { TMDBApi } from '@services/tmdb/tmdb.api';
-import type { MediaSummaryList } from '@services/tmdb/tmdb.types';
+import { TMDB_LISTS, type TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
 import { traced } from '@utils/tracing.util';
 
 import type { MediaService } from './media.service';
 import type { TranslatedMedia } from './media.types';
 
 export class ListService {
-  private readonly lists: Record<
-    string,
-    {
-      name: string;
-      source: (page?: number) => Promise<MediaSummaryList>;
-      slug: string;
-      description: string;
-    }
-  >;
   private readonly mediaListRepository: MediaListRepository;
 
   constructor(
     private readonly db: Database,
-    private readonly tmdbApi: TMDBApi,
+    private readonly tmdbService: TmdbService,
     private readonly mediaService: MediaService
   ) {
-    this.lists = {
-      '@@tmdb_movies_popular': {
-        name: 'Popular Movies',
-        source: this.tmdbApi.getPopularMovies.bind(this.tmdbApi),
-        slug: '@@tmdb_movies_popular',
-        description: 'List of popular movies from TMDB',
-      },
-      '@@tmdb_movies_top-rated': {
-        name: 'Top Rated Movies',
-        source: this.tmdbApi.getTopRatedMovies.bind(this.tmdbApi),
-        slug: '@@tmdb_movies_top-rated',
-        description: 'List of top rated movies from TMDB',
-      },
-      '@@tmdb_shows_popular': {
-        name: 'Popular TV Shows',
-        source: this.tmdbApi.getPopularShows.bind(this.tmdbApi),
-        slug: '@@tmdb_shows_popular',
-        description: 'List of popular TV shows from TMDB',
-      },
-    };
     this.mediaListRepository = db.getMediaListRepository();
   }
 
@@ -57,11 +28,14 @@ export class ListService {
     slug: string,
     page: number
   ): Promise<{ medias: (Movie | TVShow)[]; pages: number; total: number }> {
-    if (!this.lists[slug]) {
-      throw new Error(`List with slug ${slug} not found`);
+    if (!TMDB_LISTS[slug]) {
+      throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
     }
-    const list = this.lists[slug];
-    const { totalPages, totalItems, items: medias } = await list.source(page);
+    const {
+      totalPages,
+      totalItems,
+      items: medias,
+    } = await this.tmdbService.getListSource(slug, page);
 
     logger.debug(
       'ListService',
@@ -87,15 +61,15 @@ export class ListService {
   private async getOrCreateList(slug: string, preload: boolean): Promise<MediaList> {
     let mediaList = await this.mediaListRepository.findBySlug(slug, preload);
     if (!mediaList) {
-      if (this.lists[slug]) {
-        const list = this.lists[slug];
+      const list = TMDB_LISTS[slug];
+      if (list) {
         mediaList = await this.mediaListRepository.createMediaList(
           list.name,
           list.description,
           slug
         );
       } else {
-        throw new Error(`List with slug ${slug} not found`);
+        throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
       }
     }
     return mediaList;
@@ -134,6 +108,12 @@ export class ListService {
   @traced('ListService')
   async getListContent(slug: string, language = 'en'): Promise<TranslatedMedia[]> {
     const mediaList = await this.getListBySlug(slug);
+    if (mediaList.slug !== slug) {
+      throw new MediaError(
+        `List data integrity error: requested ${slug}, got list with slug ${mediaList.slug}`,
+        'data_integrity_error'
+      );
+    }
     if (!mediaList.movies) {
       console.log(mediaList);
     }
@@ -148,7 +128,7 @@ export class ListService {
 
   @traced('ListService')
   async getLists() {
-    return Object.entries(this.lists).map(([slug, list]) => ({
+    return Object.entries(TMDB_LISTS).map(([slug, list]) => ({
       slug,
       name: list.name,
       description: list.description,

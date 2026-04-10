@@ -1,3 +1,4 @@
+import { logger } from '@logger';
 import type { Context } from 'hono';
 
 import type { Database } from '@database/database';
@@ -37,28 +38,32 @@ export class AuditLogService {
     userEmail?: string;
     metadata?: Record<string, unknown>;
   }): Promise<void> {
-    const { eventType, severity, description, context, userEmail, metadata } = params;
-    const ipAddress = getRealClientIp(context);
-    const userAgent = context?.req.header('user-agent') || undefined;
+    try {
+      const { eventType, severity, description, context, userEmail, metadata } = params;
+      const ipAddress = getRealClientIp(context);
+      const userAgent = context?.req.header('user-agent') || undefined;
 
-    const logData = {
-      eventType,
-      severity,
-      description,
-      userEmail,
-      metadata: {
-        ...(context && {
-          method: context.req.method,
-          query: Object.fromEntries(new URL(context.req.url).searchParams),
-          headers: this.filterSensitiveHeaders(context.req.raw.headers),
-        }),
-        ...metadata,
-      },
-      ipAddress,
-      userAgent,
-    };
+      const logData = {
+        eventType,
+        severity,
+        description,
+        userEmail,
+        metadata: {
+          ...(context && {
+            method: context.req.method,
+            query: Object.fromEntries(new URL(context.req.url).searchParams),
+            headers: this.filterSensitiveHeaders(context.req.raw.headers),
+          }),
+          ...metadata,
+        },
+        ipAddress,
+        userAgent,
+      };
 
-    await this.repository.create(logData);
+      await this.repository.create(logData);
+    } catch (error) {
+      logger.error('AuditLogService', 'Error logging security event', { error });
+    }
   }
 
   /**

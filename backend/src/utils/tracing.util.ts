@@ -1,11 +1,13 @@
 import type { Attributes } from '@opentelemetry/api';
-import { context, type Span, SpanStatusCode, trace } from '@opentelemetry/api';
+import { context, type Span, SpanKind, SpanStatusCode, trace } from '@opentelemetry/api';
 import {
   ATTR_DB_COLLECTION_NAME,
   ATTR_DB_OPERATION_NAME,
   ATTR_SERVICE_NAME,
   ATTR_URL_FULL,
 } from '@opentelemetry/semantic-conventions';
+
+import { ENV } from '@constants';
 
 /**
  * Tracing utility for creating and managing spans throughout the application
@@ -21,18 +23,22 @@ export class TracingUtil {
     methodName: string,
     attributes: Attributes = {}
   ): Span | null {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return null;
     }
 
-    const span = this.tracer.startSpan(`${serviceName}.${methodName}`, {
-      attributes: {
-        [ATTR_SERVICE_NAME]: serviceName,
-        'method.name': methodName,
-        component: 'service',
-        ...attributes,
+    const span = this.tracer.startSpan(
+      `${serviceName}.${methodName}`,
+      {
+        attributes: {
+          [ATTR_SERVICE_NAME]: serviceName,
+          'method.name': methodName,
+          component: 'service',
+          ...attributes,
+        },
       },
-    });
+      context.active()
+    );
 
     return span;
   }
@@ -43,20 +49,31 @@ export class TracingUtil {
   static createDatabaseSpan(
     operation: string,
     entity: string,
-    attributes: Attributes = {}
+    attributes: Attributes = {},
+    peerService?: string
   ): Span | null {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return null;
     }
 
-    const span = this.tracer.startSpan(`db.${operation}`, {
-      attributes: {
-        [ATTR_DB_OPERATION_NAME]: operation,
-        [ATTR_DB_COLLECTION_NAME]: entity,
-        component: 'database',
-        ...attributes,
+    const spanAttributes: Attributes = {
+      [ATTR_DB_OPERATION_NAME]: operation,
+      [ATTR_DB_COLLECTION_NAME]: entity,
+      component: 'database',
+      ...attributes,
+    };
+    if (peerService !== undefined) {
+      spanAttributes['peer.service'] = peerService;
+    }
+
+    const span = this.tracer.startSpan(
+      `db.${operation}`,
+      {
+        attributes: spanAttributes,
+        ...(peerService !== undefined && { kind: SpanKind.CLIENT }),
       },
-    });
+      context.active()
+    );
 
     return span;
   }
@@ -67,20 +84,31 @@ export class TracingUtil {
   static createApiSpan(
     service: string,
     endpoint: string,
-    attributes: Attributes = {}
+    attributes: Attributes = {},
+    peerService?: string
   ): Span | null {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return null;
     }
 
-    const span = this.tracer.startSpan(`api.${service}.${endpoint}`, {
-      attributes: {
-        'api.service': service,
-        [ATTR_URL_FULL]: endpoint,
-        component: 'external-api',
-        ...attributes,
+    const spanAttributes: Attributes = {
+      'api.service': service,
+      [ATTR_URL_FULL]: endpoint,
+      component: 'external-api',
+      ...attributes,
+    };
+    if (peerService !== undefined) {
+      spanAttributes['peer.service'] = peerService;
+    }
+
+    const span = this.tracer.startSpan(
+      `api.${service}.${endpoint}`,
+      {
+        attributes: spanAttributes,
+        ...(peerService !== undefined && { kind: SpanKind.CLIENT }),
       },
-    });
+      context.active()
+    );
 
     return span;
   }
@@ -93,37 +121,46 @@ export class TracingUtil {
     filePath: string,
     attributes: Attributes = {}
   ): Span | null {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return null;
     }
 
-    const span = this.tracer.startSpan(`file.${operation}`, {
-      attributes: {
-        'file.operation': operation,
-        'file.path': filePath,
-        component: 'file-system',
-        ...attributes,
+    const span = this.tracer.startSpan(
+      `file.${operation}`,
+      {
+        attributes: {
+          'file.operation': operation,
+          'file.path': filePath,
+          component: 'file-system',
+          ...attributes,
+        },
       },
-    });
+      context.active()
+    );
 
     return span;
   }
 
   /**
-   * Create a span for background tasks
+   * Create a span for background tasks (root span; no parent)
    */
   static createTaskSpan(taskName: string, attributes: Attributes = {}): Span | null {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return null;
     }
 
-    const span = this.tracer.startSpan(`task.${taskName}`, {
-      attributes: {
-        'task.name': taskName,
-        component: 'background-task',
-        ...attributes,
+    const rootCtx = trace.deleteSpan(context.active());
+    const span = this.tracer.startSpan(
+      `task.${taskName}`,
+      {
+        attributes: {
+          'task.name': taskName,
+          component: 'background-task',
+          ...attributes,
+        },
       },
-    });
+      rootCtx
+    );
 
     return span;
   }
@@ -136,7 +173,7 @@ export class TracingUtil {
     fn: () => Promise<T> | T,
     additionalAttributes: Attributes = {}
   ): Promise<T> {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return await fn();
     }
 
@@ -167,7 +204,7 @@ export class TracingUtil {
    * Execute a function within a span context (sync version)
    */
   static executeInSpanSync<T>(span: Span, fn: () => T, additionalAttributes: Attributes = {}): T {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return fn();
     }
 
@@ -198,7 +235,7 @@ export class TracingUtil {
    * Create a child span from the current active span
    */
   static createChildSpan(name: string, attributes: Attributes = {}): Span | null {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return null;
     }
 
@@ -218,7 +255,7 @@ export class TracingUtil {
    * Add an event to the current span
    */
   static addEvent(name: string, attributes: Attributes = {}): void {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return;
     }
 
@@ -232,7 +269,7 @@ export class TracingUtil {
    * Add attributes to the current span
    */
   static addAttributes(attributes: Attributes): void {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return;
     }
 
@@ -246,7 +283,7 @@ export class TracingUtil {
    * Record an error in the current span
    */
   static recordError(error: Error): void {
-    if (process.env.ENABLE_TRACING !== 'true') {
+    if (!ENV('ENABLE_TRACING')) {
       return;
     }
 
@@ -305,7 +342,7 @@ export function tracedDb<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Args extends any[],
   Return,
->(entity: string) {
+>(entity: string, peerService: string = 'sqlite') {
   return function (
     _target: This,
     propertyName: string,
@@ -314,9 +351,20 @@ export function tracedDb<
     const method = descriptor.value;
 
     descriptor.value = async function (this: This, ...args: Args): Promise<Return> {
-      const span = TracingUtil.createDatabaseSpan(propertyName, entity, {
-        'method.args': JSON.stringify(args),
-      });
+      const span = TracingUtil.createDatabaseSpan(
+        propertyName,
+        entity,
+        {
+          'method.args': (() => {
+            try {
+              return JSON.stringify(args);
+            } catch {
+              return '[Serialization Error]';
+            }
+          })(),
+        },
+        peerService
+      );
 
       if (span) {
         return TracingUtil.executeInSpan(span, () => method!.apply(this, args));
@@ -335,7 +383,7 @@ export function tracedApi<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Args extends any[],
   Return,
->(service: string) {
+>(service: string, peerService?: string) {
   return function (
     _target: This,
     propertyName: string,
@@ -344,9 +392,20 @@ export function tracedApi<
     const method = descriptor.value;
 
     descriptor.value = async function (this: This, ...args: Args): Promise<Return> {
-      const span = TracingUtil.createApiSpan(service, propertyName, {
-        'method.args': JSON.stringify(args),
-      });
+      const span = TracingUtil.createApiSpan(
+        service,
+        propertyName,
+        {
+          'method.args': (() => {
+            try {
+              return JSON.stringify(args);
+            } catch {
+              return '[Serialization Error]';
+            }
+          })(),
+        },
+        peerService
+      );
 
       if (span) {
         return TracingUtil.executeInSpan(span, () => method!.apply(this, args));
@@ -361,11 +420,11 @@ export function tracedApi<
  * Utility function to create a span for any operation
  */
 export function createSpan(name: string, attributes: Attributes = {}): Span {
-  if (process.env.ENABLE_TRACING !== 'true') {
+  if (!ENV('ENABLE_TRACING')) {
     return trace.getTracer('dummy').startSpan('dummy') as Span;
   }
 
-  return trace.getTracer('@miauflix/backend').startSpan(name, { attributes });
+  return trace.getTracer('@miauflix/backend').startSpan(name, { attributes }, context.active());
 }
 
 /**
@@ -377,6 +436,24 @@ export async function withSpan<T>(
   attributes: Attributes = {}
 ): Promise<T> {
   const span = createSpan(name, attributes);
+  return TracingUtil.executeInSpan(span, fn);
+}
+
+/**
+ * Execute code within a CLIENT span (for outbound calls). Use for peer services so Jaeger shows them in System Architecture.
+ */
+export async function withClientSpan<T>(
+  name: string,
+  fn: () => Promise<T> | T,
+  attributes: Attributes = {}
+): Promise<T> {
+  if (!ENV('ENABLE_TRACING')) {
+    const result = fn();
+    return result instanceof Promise ? result : Promise.resolve(result);
+  }
+  const span = trace
+    .getTracer('@miauflix/backend')
+    .startSpan(name, { attributes, kind: SpanKind.CLIENT }, context.active());
   return TracingUtil.executeInSpan(span, fn);
 }
 

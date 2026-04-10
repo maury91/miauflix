@@ -209,7 +209,7 @@ describe('Sources E2E Tests', () => {
         }
         expect(Array.isArray(response.data.sources)).toBe(true);
       } else {
-        expect(response.status).toBe(404);
+        expect(response).toBeHttpStatus(404);
       }
     });
   });

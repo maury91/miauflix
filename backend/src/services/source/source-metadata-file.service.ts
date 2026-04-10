@@ -3,6 +3,7 @@ import parseTorrent from 'parse-torrent';
 import path from 'path';
 
 import { ENV } from '@constants';
+import { SourceError } from '@errors/source.errors';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
@@ -66,7 +67,7 @@ export class SourceMetadataFileService {
             if (response.body instanceof ArrayBuffer) {
               return Buffer.from(response.body);
             }
-            throw new Error('Invalid response body');
+            throw new SourceError('Invalid response body', 'invalid_response_body');
           }
         }
         logger.warn(
@@ -99,7 +100,7 @@ export class SourceMetadataFileService {
             if (typeof response.body === 'string') {
               return Buffer.from(response.body, 'binary');
             }
-            throw new Error('Invalid response body');
+            throw new SourceError('Invalid response body', 'invalid_response_body');
           }
         }
         logger.warn(
@@ -183,7 +184,7 @@ export class SourceMetadataFileService {
   ): Promise<Buffer | false | null> {
     const service = this.services[serviceName];
     if (!service) {
-      throw new Error(`Service ${serviceName} not found`);
+      throw new SourceError(`Service ${serviceName} not found`, 'service_not_found');
     }
 
     if (service.activeRequests.size >= service.config.maxConcurrentRequests) {
@@ -257,7 +258,7 @@ export class SourceMetadataFileService {
   private isServiceIdle(serviceName: string): boolean {
     const serviceData = this.services[serviceName];
     if (!serviceData) {
-      throw new Error(`Service ${serviceName} not found`);
+      throw new SourceError(`Service ${serviceName} not found`, 'service_not_found');
     }
 
     return serviceData.activeRequests.size < serviceData.config.maxConcurrentRequests;
