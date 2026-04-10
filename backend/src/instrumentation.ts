@@ -186,12 +186,15 @@ if (!tracingEnabled) {
 
   // Configure the trace file location - use /tmp for Docker containers
   const traceFile = ENV('TRACE_FILE');
-  const parsedMaxTraces = Number.parseInt(ENV('TRACE_MAX_TRACES') ?? '1000', 10);
-  const maxTraces = Number.isNaN(parsedMaxTraces) ? 1000 : Math.max(0, parsedMaxTraces);
+  const maxTraces = ENV('TRACE_MAX_TRACES');
+  const spanProcessors: SpanProcessor[] = [];
 
-  // File exporter always used when tracing is on (primary sink; no external dependency)
-  const fileExporter = new FileSpanExporter(traceFile, undefined, maxTraces);
-  const spanProcessors: SpanProcessor[] = [new SimpleSpanProcessor(fileExporter)];
+  if (maxTraces > 0) {
+    const fileExporter = new FileSpanExporter(traceFile, undefined, maxTraces);
+    spanProcessors.push(new SimpleSpanProcessor(fileExporter));
+  } else {
+    console.log('🔕 Trace file export disabled (TRACE_MAX_TRACES=0)');
+  }
 
   // Optional OTLP exporter (e.g. Jaeger): only when endpoint set; BatchSpanProcessor so export is async and failures don't propagate
   if (otlpEndpoint) {

@@ -129,6 +129,7 @@ const serverConfigurationDefinition = serviceConfiguration({
       required: false,
       defaultValue: '1000',
       example: '500',
+      transform: transforms.number({ min: 0, integer: true }),
     }),
     FRONTEND_DIR: variable({
       description: 'If set, the backend will serve static frontend files from this directory',
