@@ -2,9 +2,9 @@ import { logger } from '@logger';
 import { EventEmitter } from 'events';
 import type TypedEmitter from 'typed-emitter';
 
-import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { Storage } from '@entities/storage.entity';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { StorageRepository } from '@repositories/storage.repository';
 import { humanReadableBytes } from '@utils/numbers';
 import { traced } from '@utils/tracing.util';
@@ -15,18 +15,23 @@ import { traced } from '@utils/tracing.util';
 export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   delete: (storage: Storage) => void;
 }>) {
+  getStatus(): ServiceInstanceStatus {
+    return { status: 'ready' };
+  }
   private readonly storageRepository: StorageRepository;
-  private readonly maxStorageBytes: bigint;
+  private maxStorageBytes: bigint;
+  private readonly config: ConfigService;
 
-  constructor(db: Database) {
+  constructor(db: Database, config: ConfigService) {
     super();
+    this.config = config;
     this.storageRepository = db.getStorageRepository();
-    this.maxStorageBytes = this.calculateMaxStorageBytes();
+    this.maxStorageBytes = config.getOrThrow('STORAGE_THRESHOLD');
+    config.registerService('STORAGE', this);
   }
 
-  private calculateMaxStorageBytes(): bigint {
-    // FixMe: Add support for percentage
-    return ENV('STORAGE_THRESHOLD');
+  async reload(): Promise<void> {
+    this.maxStorageBytes = this.config.getOrThrow('STORAGE_THRESHOLD');
   }
 
   /**

@@ -1,17 +1,27 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { TheRARBGApi } from './therarbg.api';
 
+jest.mock('@services/configuration/configuration.service');
+
 describe('TheRARBGService', () => {
   const setupTest = () => {
     const mockCache = new MockCache();
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockConfigService.get.mockReturnValue(undefined as never);
+    mockConfigService.getOrThrow.mockImplementation((key: string) => {
+      if (key === 'THE_RARBG_API_URL') return 'https://therarbg.to' as never;
+      throw new Error(`${key} is not set`);
+    });
     // Use real RequestService - HTTP-VCR will intercept fetch call ( already recorded calls will not go out to the real API )
     const statsService = new StatsService();
-    const requestService = new RequestService(statsService);
-    const service = new TheRARBGApi(mockCache, statsService, requestService);
+    const requestService = new RequestService(statsService, mockConfigService);
+    const service = new TheRARBGApi(mockCache, statsService, requestService, mockConfigService);
 
     return { service, requestService, statsService, mockCache };
   };

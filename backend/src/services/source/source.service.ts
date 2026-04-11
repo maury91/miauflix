@@ -1,9 +1,9 @@
 import { logger } from '@logger';
 
-import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { MovieSource } from '@entities/movie-source.entity';
 import { SourceError } from '@errors/source.errors';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type {
   MovieSourceRepository,
@@ -27,23 +27,31 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
  * Service for searching and managing sources
  */
 export class SourceService {
+  getStatus(): ServiceInstanceStatus {
+    return { status: 'ready' };
+  }
   private readonly movieRepository: MovieRepository;
   private readonly movieSourceRepository: MovieSourceRepository;
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
 
   private vpnConnected = false;
-  private readonly searchOnlyBehindVpn = !ENV('DISABLE_VPN_CHECK');
+  private searchOnlyBehindVpn: boolean;
   private readonly startPromise: Promise<void>;
+  private readonly config: ConfigService;
 
   constructor(
     db: Database,
     vpnService: VpnDetectionService,
     private readonly contentDirectoryService: ContentDirectoryService,
     private readonly magnetService: SourceMetadataFileService,
-    private readonly requestService: RequestService
+    private readonly requestService: RequestService,
+    config: ConfigService
   ) {
+    this.config = config;
+    this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
+    config.registerService('SOURCE', this);
     if (this.searchOnlyBehindVpn) {
       this.startPromise = vpnService.isVpnActive().then(connected => {
         this.vpnConnected = connected;
@@ -56,6 +64,13 @@ export class SourceService {
       });
     } else {
       this.vpnConnected = true; // If not searching only behind VPN, assume connected
+    }
+  }
+
+  async reload(): Promise<void> {
+    this.searchOnlyBehindVpn = !this.config.getOrThrow('DISABLE_VPN_CHECK');
+    if (!this.searchOnlyBehindVpn) {
+      this.vpnConnected = true;
     }
   }
 

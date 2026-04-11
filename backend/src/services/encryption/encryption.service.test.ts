@@ -2,48 +2,32 @@ import { randomBytes } from 'crypto';
 
 import { EncryptionService } from './encryption.service';
 
-// Mock the ENV function - must be hoisted
-jest.mock('@constants');
-
 const generateKey = () => randomBytes(32).toString('base64'); // Generate a valid 256-bit key
 
 describe('EncryptionService', () => {
   let encryptionService: EncryptionService;
   const testKey = generateKey();
 
-  // Get the mocked ENV function
-  const { ENV } = jest.requireMock('@constants');
-
   beforeEach(() => {
-    // Mock ENV to return our test key
-    ENV.mockReturnValue(testKey);
-    encryptionService = new EncryptionService();
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
+    encryptionService = new EncryptionService(testKey);
   });
 
   describe('constructor', () => {
-    it('should create instance with valid base64 key from ENV', () => {
-      ENV.mockReturnValue(testKey);
-      expect(() => new EncryptionService()).not.toThrow();
+    it('should create instance with valid base64 key', () => {
+      expect(() => new EncryptionService(testKey)).not.toThrow();
     });
 
-    it('should throw error with empty key from ENV', () => {
-      ENV.mockReturnValue('');
-      expect(() => new EncryptionService()).toThrow('Encryption key is required');
+    it('should throw error with empty key', () => {
+      expect(() => new EncryptionService('')).toThrow('Encryption key is required');
     });
 
-    it('should throw error with invalid key length from ENV', () => {
+    it('should throw error with invalid key length', () => {
       const shortKey = Buffer.from('short').toString('base64');
-      ENV.mockReturnValue(shortKey);
-      expect(() => new EncryptionService()).toThrow('Invalid key length');
+      expect(() => new EncryptionService(shortKey)).toThrow('Invalid key length');
     });
 
-    it('should throw error with malformed base64 from ENV', () => {
-      ENV.mockReturnValue('not-base64!');
-      expect(() => new EncryptionService()).toThrow(
+    it('should throw error with malformed base64', () => {
+      expect(() => new EncryptionService('not-base64!')).toThrow(
         'Invalid encryption key encoding - expected base64'
       );
     });

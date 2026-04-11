@@ -2,6 +2,7 @@ import { MockCache } from '@__test-utils__/cache.mock';
 import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import { Database } from '@database/database';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { DownloadService } from '@services/download/download.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
@@ -14,6 +15,15 @@ jest.mock('@services/download/download.service');
 jest.mock('@services/storage/storage.service');
 jest.mock('@services/request/request.service');
 jest.mock('@database/database');
+jest.mock('@services/configuration/configuration.service');
+
+const mockTherarbgConfigService = (mockConfigService: jest.Mocked<ConfigurationService>): void => {
+  mockConfigService.get.mockReturnValue(undefined as never);
+  mockConfigService.getOrThrow.mockImplementation((key: string) => {
+    if (key === 'THE_RARBG_API_URL') return 'https://therarbg.to' as never;
+    throw new Error(`${key} is not set`);
+  });
+};
 
 describe('TherarbgContentDirectory', () => {
   afterEach(() => {
@@ -22,18 +32,24 @@ describe('TherarbgContentDirectory', () => {
 
   const setupTest = () => {
     const mockCache = new MockCache();
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockTherarbgConfigService(mockConfigService);
     const mockStorageService = new StorageService(
-      new Database({} as never)
+      new Database({} as never),
+      mockConfigService
     ) as jest.Mocked<StorageService>;
 
     const statsService = new StatsService();
     const mockRequestService = new RequestService(
-      statsService
+      statsService,
+      mockConfigService
     ) as unknown as jest.Mocked<RequestService>;
 
     const mockDownloadService = new DownloadService(
       mockStorageService,
-      mockRequestService
+      mockRequestService,
+      mockConfigService
     ) as jest.Mocked<DownloadService>;
 
     // Mock the generateLink method to return proper magnet links
@@ -45,7 +61,8 @@ describe('TherarbgContentDirectory', () => {
       mockCache,
       mockDownloadService,
       mockRequestService,
-      statsService
+      statsService,
+      mockConfigService
     );
 
     return {
@@ -431,10 +448,17 @@ describe('TherarbgContentDirectory', () => {
         '@services/request/request.service'
       );
       const statsService = new StatsService();
-      const realRequestService = new RequestServiceImpl(statsService);
+      const mockConfigService =
+        new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+      mockTherarbgConfigService(mockConfigService);
+      const realRequestService = new RequestServiceImpl(statsService, mockConfigService);
       const realDownloadService = new DownloadService(
-        new StorageService(new Database({} as never)) as jest.Mocked<StorageService>,
-        realRequestService
+        new StorageService(
+          new Database({} as never),
+          mockConfigService
+        ) as jest.Mocked<StorageService>,
+        realRequestService,
+        mockConfigService
       ) as jest.Mocked<DownloadService>;
       realDownloadService.generateLink.mockImplementation((hash: string, trackers: string[]) => {
         return `magnet:?xt=urn:btih:${hash}&tr=${trackers.join('&tr=')}`;
@@ -443,7 +467,8 @@ describe('TherarbgContentDirectory', () => {
         mockCache,
         realDownloadService,
         realRequestService,
-        statsService
+        statsService,
+        mockConfigService
       );
 
       // Use a real, known IMDB ID

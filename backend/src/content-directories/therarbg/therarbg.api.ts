@@ -1,8 +1,8 @@
 import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
-import { ENV } from '@constants';
 import { ApiError } from '@errors/api.errors';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
@@ -30,13 +30,39 @@ interface SearchPostsOptions {
 
 export class TheRARBGApi extends Api {
   private currentMirrorIndex = 0;
+  private isReady = false; // kept for internal use if needed
+  private _initStatus: ServiceInstanceStatus = {
+    status: 'initializing',
+    details: 'Starting up',
+    startedAt: Date.now(),
+  };
 
   constructor(
     cache: Cache,
     statsService: StatsService,
-    private readonly requestService: RequestService
+    private readonly requestService: RequestService,
+    private readonly config: ConfigService
   ) {
-    super(cache, statsService, ENV('THE_RARBG_API_URL') || mirrors[0], 2, 4);
+    super(cache, statsService, config.getOrThrow('THE_RARBG_API_URL'), 2, 4);
+    void this.init();
+  }
+
+  getStatus(): ServiceInstanceStatus {
+    return this._initStatus;
+  }
+
+  private async init(): Promise<void> {
+    const startedAt = Date.now();
+    this._initStatus = { status: 'initializing', details: 'Testing API connectivity', startedAt };
+    this.isReady = await this.test();
+    this._initStatus = this.isReady
+      ? { status: 'ready' }
+      : { status: 'error', errorMessage: 'TheRARBG API connectivity test failed', error: null };
+  }
+
+  public async reload(): Promise<void> {
+    this.apiUrl = this.config.getOrThrow('THE_RARBG_API_URL');
+    await this.init();
   }
 
   /**

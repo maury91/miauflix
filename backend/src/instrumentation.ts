@@ -22,7 +22,8 @@ import {
   SEMRESATTRS_DEPLOYMENT_ENVIRONMENT,
 } from '@opentelemetry/semantic-conventions';
 
-import { ENV } from '@constants';
+import type { ConfigService } from '@mytypes/configuration';
+import { initTracing } from '@utils/tracing.util';
 
 import { FileSpanExporter } from './instrumentation/file-exporter';
 
@@ -139,8 +140,7 @@ function wrapWithPeerServiceEnrichment(real: SpanExporter): SpanExporter {
 }
 
 /** Wraps OTLP exporter and logs success/failure when DEBUG=Jaeger */
-function wrapOtlpExporterWithDebugLogging(real: SpanExporter): SpanExporter {
-  const debugEnabled = ENV('DEBUG')?.includes('Jaeger') ?? false;
+function wrapOtlpExporterWithDebugLogging(real: SpanExporter, debugEnabled: boolean): SpanExporter {
   return {
     export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void): void {
       real.export(spans, result => {
@@ -165,97 +165,99 @@ function wrapOtlpExporterWithDebugLogging(real: SpanExporter): SpanExporter {
   };
 }
 
-// Check if tracing is enabled via environment variable
-const tracingEnabled = ENV('ENABLE_TRACING');
+export function initializeInstrumentation(configService: ConfigService): void {
+  const tracingEnabled = configService.get('ENABLE_TRACING');
+  initTracing(tracingEnabled ?? false);
 
-// OTLP (e.g. Jaeger) is optional: only enable when endpoint is set; failures must not break the app or pollute logs
-const otlpEndpoint =
-  ENV('OTEL_EXPORTER_OTLP_ENDPOINT') || (ENV('ENABLE_OTLP') ? 'http://localhost:4318' : undefined);
+  // OTLP (e.g. Jaeger) is optional: only enable when endpoint is set; failures must not break the app or pollute logs
+  const otlpEndpoint =
+    configService.get('OTEL_EXPORTER_OTLP_ENDPOINT') ||
+    (configService.get('ENABLE_OTLP') ? 'http://localhost:4318' : undefined);
 
-let sdk: NodeSDK | { start: () => void; shutdown: () => Promise<void> };
+  let sdk: NodeSDK | { start: () => void; shutdown: () => Promise<void> };
 
-if (!tracingEnabled) {
-  console.log('🔕 Tracing disabled (set ENABLE_TRACING=true to enable)');
-  // Create a dummy SDK that does nothing
-  sdk = {
-    start: () => console.log('Tracing SDK not started (disabled)'),
-    shutdown: () => Promise.resolve(),
-  };
-} else {
-  console.log('🔍 Tracing enabled - initializing OpenTelemetry...');
-
-  // Configure the trace file location - use /tmp for Docker containers
-  const traceFile = ENV('TRACE_FILE');
-  const maxTraces = ENV('TRACE_MAX_TRACES');
-  const spanProcessors: SpanProcessor[] = [];
-
-  if (maxTraces > 0) {
-    const fileExporter = new FileSpanExporter(traceFile, undefined, maxTraces);
-    spanProcessors.push(new SimpleSpanProcessor(fileExporter));
+  if (!tracingEnabled) {
+    console.log('🔕 Tracing disabled (set ENABLE_TRACING=true to enable)');
+    // Create a dummy SDK that does nothing
+    sdk = {
+      start: () => console.log('Tracing SDK not started (disabled)'),
+      shutdown: () => Promise.resolve(),
+    };
   } else {
-    console.log('🔕 Trace file export disabled (TRACE_MAX_TRACES=0)');
-  }
+    console.log('🔍 Tracing enabled - initializing OpenTelemetry...');
 
-  // Optional OTLP exporter (e.g. Jaeger): only when endpoint set; BatchSpanProcessor so export is async and failures don't propagate
-  if (otlpEndpoint) {
-    const url = otlpEndpoint.replace(/\/$/, '') + '/v1/traces';
-    const otlpExporter = new OTLPTraceExporter({ url });
-    const withPeerService = wrapWithPeerServiceEnrichment(otlpExporter);
-    const wrappedExporter = wrapOtlpExporterWithDebugLogging(withPeerService);
-    spanProcessors.push(new BatchSpanProcessor(wrappedExporter));
-    console.log('🔍 OTLP trace export enabled:', url);
-  }
+    // Configure the trace file location - use /tmp for Docker containers
+    const traceFile = configService.get('TRACE_FILE');
+    const maxTraces = configService.get('TRACE_MAX_TRACES');
+    const spanProcessors: SpanProcessor[] = [];
 
-  sdk = new NodeSDK({
-    resource: resourceFromAttributes({
-      [ATTR_SERVICE_NAME]: '@miauflix/backend',
-      [ATTR_SERVICE_VERSION]: '1.0.0',
-      [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: ENV('NODE_ENV'),
-    }),
-    spanProcessors,
-    instrumentations: [
-      getNodeAutoInstrumentations({
-        // Disable file system instrumentation to reduce noise
-        '@opentelemetry/instrumentation-fs': {
-          enabled: false,
-        },
-        // Disable DNS instrumentation to reduce noise
-        '@opentelemetry/instrumentation-dns': {
-          enabled: false,
-        },
+    if (maxTraces !== undefined && maxTraces > 0) {
+      const fileExporter = new FileSpanExporter(traceFile, undefined, maxTraces);
+      spanProcessors.push(new SimpleSpanProcessor(fileExporter));
+    } else {
+      console.log('🔕 Trace file export disabled (TRACE_MAX_TRACES=0)');
+    }
+
+    // Optional OTLP exporter (e.g. Jaeger): only when endpoint set; BatchSpanProcessor so export is async and failures don't propagate
+    if (otlpEndpoint) {
+      const url = otlpEndpoint.replace(/\/$/, '') + '/v1/traces';
+      const otlpExporter = new OTLPTraceExporter({ url });
+      const withPeerService = wrapWithPeerServiceEnrichment(otlpExporter);
+      const debugEnabled = configService.get('DEBUG')?.includes('Jaeger') ?? false;
+      const wrappedExporter = wrapOtlpExporterWithDebugLogging(withPeerService, debugEnabled);
+      spanProcessors.push(new BatchSpanProcessor(wrappedExporter));
+      console.log('🔍 OTLP trace export enabled:', url);
+    }
+
+    sdk = new NodeSDK({
+      resource: resourceFromAttributes({
+        [ATTR_SERVICE_NAME]: '@miauflix/backend',
+        [ATTR_SERVICE_VERSION]: '1.0.0',
+        [SEMRESATTRS_DEPLOYMENT_ENVIRONMENT]: configService.get('NODE_ENV'),
       }),
-    ],
-  });
+      spanProcessors,
+      instrumentations: [
+        getNodeAutoInstrumentations({
+          // Disable file system instrumentation to reduce noise
+          '@opentelemetry/instrumentation-fs': {
+            enabled: false,
+          },
+          // Disable DNS instrumentation to reduce noise
+          '@opentelemetry/instrumentation-dns': {
+            enabled: false,
+          },
+        }),
+      ],
+    });
 
-  // Start the SDK
-  sdk.start();
+    // Start the SDK
+    sdk.start();
 
-  // Graceful shutdown
-  process.on('SIGTERM', () => {
-    sdk
-      .shutdown()
-      .then(() => {
-        console.log('OpenTelemetry SDK shut down successfully');
-        process.exit(0);
-      })
-      .catch(error => {
-        console.error('Error shutting down OpenTelemetry SDK:', error);
-        process.exit(1);
-      });
-  });
+    // Graceful shutdown
+    process.on('SIGTERM', () => {
+      sdk
+        .shutdown()
+        .then(() => {
+          console.log('OpenTelemetry SDK shut down successfully');
+          process.exit(0);
+        })
+        .catch(error => {
+          console.error('Error shutting down OpenTelemetry SDK:', error);
+          process.exit(1);
+        });
+    });
 
-  process.on('SIGINT', () => {
-    sdk
-      .shutdown()
-      .then(() => {
-        console.log('OpenTelemetry SDK shut down successfully');
-        process.exit(0);
-      })
-      .catch(error => {
-        console.error('Error shutting down OpenTelemetry SDK:', error);
-        process.exit(1);
-      });
-  });
+    process.on('SIGINT', () => {
+      sdk
+        .shutdown()
+        .then(() => {
+          console.log('OpenTelemetry SDK shut down successfully');
+          process.exit(0);
+        })
+        .catch(error => {
+          console.error('Error shutting down OpenTelemetry SDK:', error);
+          process.exit(1);
+        });
+    });
+  }
 }
-
-export { sdk };

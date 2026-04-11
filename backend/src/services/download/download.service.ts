@@ -3,13 +3,14 @@ import { createHash } from 'node:crypto';
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
+import { access, constants, mkdir } from 'fs/promises';
 import MemoryChunkStore from 'memory-chunk-store';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
-import { ENV } from '@constants';
 import type { MovieSource } from '@entities/movie-source.entity';
 import type { Storage } from '@entities/storage.entity';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { RequestService } from '@services/request/request.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import type { StorageService } from '@services/storage/storage.service';
@@ -48,8 +49,12 @@ export interface DownloadProgress {
 
 export class DownloadService {
   public readonly client: WebTorrent;
+  private _initStatus: ServiceInstanceStatus = {
+    status: 'initializing',
+    details: 'Starting up',
+    startedAt: Date.now(),
+  };
   private bestTrackers: string[] = [];
-  private readonly ready: Promise<void>;
   private readonly staticTrackers: string[];
   private readonly bestTrackersDownloadUrl: string;
   private readonly blacklistedTrackersDownloadUrl: string;
@@ -57,27 +62,29 @@ export class DownloadService {
 
   constructor(
     private readonly storageService: StorageService,
-    private readonly requestService: RequestService
+    private readonly requestService: RequestService,
+    private readonly config: ConfigService
   ) {
-    this.staticTrackers = ENV('STATIC_TRACKERS');
-    this.scrapeTrackers = ENV('SCRAPE_TRACKERS');
+    this.staticTrackers = config.getOrThrow('STATIC_TRACKERS');
+    this.scrapeTrackers = config.getOrThrow('SCRAPE_TRACKERS');
     this.bestTrackers = [...new Set([...this.staticTrackers])];
-    this.bestTrackersDownloadUrl = ENV('BEST_TRACKERS_DOWNLOAD_URL');
-    this.blacklistedTrackersDownloadUrl = ENV('BLACKLISTED_TRACKERS_DOWNLOAD_URL');
+    this.bestTrackersDownloadUrl = config.getOrThrow('BEST_TRACKERS_DOWNLOAD_URL');
+    this.blacklistedTrackersDownloadUrl = config.getOrThrow('BLACKLISTED_TRACKERS_DOWNLOAD_URL');
     const options: WebTorrentOptions = {
-      maxConns: ENV('CONTENT_CONNECTION_LIMIT'),
-      downloadLimit: Number(ENV('CONTENT_DOWNLOAD_LIMIT')),
-      uploadLimit: Number(ENV('CONTENT_UPLOAD_LIMIT')),
+      maxConns: config.getOrThrow('CONTENT_CONNECTION_LIMIT'),
+      downloadLimit: Number(config.getOrThrow('CONTENT_DOWNLOAD_LIMIT')),
+      uploadLimit: Number(config.getOrThrow('CONTENT_UPLOAD_LIMIT')),
       // blocklist: [this.blacklistedTrackersDownloadUrl],
     };
-    if (ENV('DISABLE_DISCOVERY')) {
+    if (config.getOrThrow('DISABLE_DISCOVERY')) {
       options.dht = false;
     }
     this.client = new WebTorrent(options);
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
     });
-    this.ready = this.loadTrackers();
+    config.registerService('DOWNLOAD', this);
+    void this.init();
 
     // Subscribe to storageService 'delete' events
     this.storageService.on('delete', async storage => {
@@ -97,6 +104,48 @@ export class DownloadService {
         logger.info('DownloadService', `Removed torrent for deleted storage: ${storage.location}`);
       }
     });
+  }
+
+  getStatus(): ServiceInstanceStatus {
+    if (this._initStatus.status === 'ready') return { status: 'ready' };
+    if (this._initStatus.status === 'error')
+      return {
+        status: 'error',
+        errorMessage: this._initStatus.errorMessage,
+        error: this._initStatus.error,
+      };
+    return {
+      status: 'initializing',
+      details: this._initStatus.details,
+      startedAt: this._initStatus.startedAt,
+    };
+  }
+
+  private async init(): Promise<void> {
+    const startedAt = Date.now();
+    this._initStatus = { status: 'initializing', details: 'Loading trackers', startedAt };
+    await this.loadTrackers();
+    this._initStatus = {
+      status: 'initializing',
+      details: 'Checking download directory',
+      startedAt,
+    };
+    try {
+      const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
+      await mkdir(downloadPath, { recursive: true });
+      await access(downloadPath, constants.W_OK);
+      this._initStatus = { status: 'ready' };
+    } catch (err) {
+      this._initStatus = {
+        status: 'error',
+        errorMessage: err instanceof Error ? err.message : 'Failed to access download directory',
+        error: err,
+      };
+    }
+  }
+
+  public async reload(): Promise<void> {
+    await this.init();
   }
 
   private async loadTrackers() {
@@ -207,7 +256,6 @@ export class DownloadService {
 
   @traced('DownloadService')
   async getStats(infoHash: string): Promise<{ broadcasters: number; watchers: number }> {
-    await this.ready;
     const result = await this.scrape(infoHash);
     return {
       broadcasters: result.complete || 0,
@@ -279,8 +327,8 @@ export class DownloadService {
    * Uses salted hash to prevent hash exposure in file paths
    */
   private generateStoragePath(hash: string): string {
-    const storageDir = ENV('DOWNLOAD_PATH');
-    const salt = ENV('DOWNLOAD_SALT');
+    const storageDir = this.config.getOrThrow('DOWNLOAD_PATH');
+    const salt = this.config.getOrThrow('DOWNLOAD_SALT');
 
     // Create a salted hash to prevent hash exposure
     const downloadDir = createHash('sha256')
@@ -307,7 +355,7 @@ export class DownloadService {
           store: EncryptedChunkStore,
           announce: this.bestTrackers,
           storeOpts: {
-            encryptionKey: ENV('SOURCE_SECURITY_KEY'),
+            encryptionKey: this.config.getOrThrow('SOURCE_SECURITY_KEY'),
             filenameSalt: `download-${hash}`,
           },
         };

@@ -8,8 +8,13 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import type { Deps, ErrorResponse } from './common.types';
 import type { SeasonResponse, ShowResponse } from './show.types';
 
-export const createShowRoutes = ({ catalogService, mediaService, auditLogService }: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
+export const createShowRoutes = ({
+  auditLogService,
+  catalogService,
+  configurationService,
+  mediaService,
+}: Deps) => {
+  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono()
     .get(

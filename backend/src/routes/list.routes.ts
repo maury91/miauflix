@@ -10,8 +10,8 @@ import type { Deps } from './common.types';
 import { serializeMedia } from './list.serializers';
 import type { ListDto, ListResponse, ListsResponse } from './list.types';
 
-export const createListRoutes = ({ listService, auditLogService }: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
+export const createListRoutes = ({ auditLogService, configurationService, listService }: Deps) => {
+  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
   return new Hono()
     .get('/lists', rateLimitGuard(5), authGuard(), async c => {
       const lists = await listService.getLists();

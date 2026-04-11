@@ -1,0 +1,101 @@
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: miauflix-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - '127.0.0.1:16686:16686'
+    restart: unless-stopped
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: miauflix-flaresolverr
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=${TZ:-UTC}
+    volumes:
+      - flaresolver_config:/config
+    restart: unless-stopped
+
+  miauflix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: miauflix
+    container_name: miauflix
+    depends_on:
+      flaresolverr:
+        condition: service_started
+      jaeger:
+        condition: service_started
+    environment:
+      - DATA_DIR=/usr/data
+      - PUID=${USER_ID:-1000}
+      - PGID=${GROUP_ID:-1000}
+      - DISABLE_VPN_CHECK=true
+      - COOKIE_DOMAIN=${DOMAIN}
+      - COOKIE_SECURE=true
+      - ENABLE_TRACING=true
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://miauflix-jaeger:4318
+      - ENABLE_FRONTEND=false # Frontend is served by nginx
+      - DEBUG=SourceService,DataResolver,DownloadService
+      - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://miauflix-flaresolverr:8191}
+      - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
+    healthcheck:
+      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
+      interval: 30s
+      timeout: 2s
+      retries: 3
+      start_period: 10s
+    ports:
+      - '127.0.0.1:5000:3000'
+    volumes:
+      - ./.env:/usr/src/app/.env
+      - ./data:/usr/data/
+      - ./traces:/tmp:rw
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
+      - frontend_static:/usr/src/app/public_volume
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: miauflix-nginx
+    ports:
+      - '80:80' # Expose HTTP port
+      - '443:443' # Expose HTTPS port
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+      - frontend_static:/usr/share/nginx/html:ro
+    env_file: .env
+    environment:
+      - REVERSE_PROXY_SECRET=${REVERSE_PROXY_SECRET}
+      - DOMAIN=${DOMAIN}
+      - WWW_DOMAIN=${WWW_DOMAIN}
+      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
+      - SSL_CERTIFICATE_KEY=${SSL_CERTIFICATE_KEY}
+      - SSL_DHPARAM=${SSL_DHPARAM}
+    depends_on:
+      - miauflix
+    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot
+    container_name: miauflix-certbot
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
+
+volumes:
+  frontend_static:
+    name: frontend_static
+  flaresolver_config:
+    name: flaresolver_config

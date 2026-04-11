@@ -1,8 +1,9 @@
 import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
-import { ENV } from '@constants';
 import { ApiError } from '@errors/api.errors';
+import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
 import { Cacheable } from '@utils/cacheable.util';
@@ -47,39 +48,103 @@ export const NO_IMAGES: MediaImages = {
 
 export class TMDBApi extends Api {
   /**
-   * Note about rate limiting, the API is limited to 50 requests per second
+   * Note about rate limiting, the API is limited to 40 requests per second
    * I highly doubt is possible to reach this limit in a home setting.
    * However, if this happens a 429 error will be returned and this class should
    * start rate limiting itself.
    */
 
-  private readonly apiKey = ENV('TMDB_API_ACCESS_TOKEN');
-  private readonly configuration: Promise<ConfigurationResponse>;
+  private _apiKey = '';
+  private _configuration: Promise<ConfigurationResponse>;
+
+  private isReady = false; // kept for internal request guard
+  private _initStatus: ServiceInstanceStatus = {
+    status: 'initializing',
+    details: 'Starting up',
+    startedAt: Date.now(),
+  };
 
   constructor(
     cache: Cache,
     statsService: StatsService,
+    private readonly config: ConfigService,
     private readonly language = 'en'
   ) {
     super(
       cache,
       statsService,
-      ENV('TMDB_API_URL'),
+      config.getOrThrow('TMDB_API_URL'),
       40 // 40 requests per second, TMDB's documented upper limit
     );
     this.language = language;
-    this.configuration = this.getConfiguration();
+    this._configuration = Promise.reject('TMDB is not configured correctly');
+    // Prevent unhandled rejection before init() resolves
+    void this._configuration.catch(() => {});
+    config.registerService('TMDB', this);
+    // Promise is purposely ignored
+    this.init();
+  }
+
+  getStatus(): ServiceInstanceStatus {
+    return this._initStatus;
+  }
+
+  private async init() {
+    const startedAt = Date.now();
+    this.isReady = false;
+    this._initStatus = { status: 'initializing', details: 'Loading API key', startedAt };
+    try {
+      this._apiKey = this.config.get('TMDB_API_ACCESS_TOKEN') ?? '';
+      if (!this._apiKey) {
+        this._initStatus = {
+          status: 'error',
+          errorMessage: 'TMDB API key not configured',
+          error: null,
+        };
+        return;
+      }
+      // Optimistically mark ready so test() can use request()
+      this.isReady = true;
+      this._initStatus = { status: 'initializing', details: 'Testing API connectivity', startedAt };
+      await this.test();
+      this._configuration = this.getConfiguration();
+      this._initStatus = { status: 'ready' };
+    } catch (err) {
+      this._apiKey = '';
+      this.isReady = false;
+      this._initStatus = {
+        status: 'error',
+        errorMessage: 'TMDB API connectivity test failed',
+        error: err,
+      };
+    }
+  }
+
+  public async reloadConfig(): Promise<boolean> {
+    try {
+      await this.init();
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  public async reload(): Promise<void> {
+    await this.reloadConfig();
   }
 
   @TrackStatus()
   private async request<T>(url: string, init: RequestInit): Promise<T> {
+    if (!this.isReady) {
+      throw new ServiceNotConfiguredError('TMDB');
+    }
     // Apply rate limiting before making the request
     await this.rateLimiter.throttle();
 
     const response = await fetch(url, {
       ...init,
       headers: {
-        Authorization: `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this._apiKey}`,
         'Content-Type': 'application/json',
       },
     });
@@ -107,7 +172,7 @@ export class TMDBApi extends Api {
   }
 
   private async completeImageUrl(image: string, size = 'original') {
-    const config = await this.configuration;
+    const config = await this._configuration;
     return `${config.images.secure_base_url}${size}${image}`;
   }
 
