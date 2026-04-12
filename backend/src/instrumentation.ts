@@ -179,14 +179,14 @@ export function initializeInstrumentation(configService: ConfigService): void {
   let sdk: NodeSDK | { start: () => void; shutdown: () => Promise<void> };
 
   if (!tracingEnabled) {
-    console.log('🔕 Tracing disabled (set ENABLE_TRACING=true to enable)');
+    logger.info('Instrumentation', 'Tracing disabled (set ENABLE_TRACING=true to enable)');
     // Create a dummy SDK that does nothing
     sdk = {
-      start: () => console.log('Tracing SDK not started (disabled)'),
+      start: () => logger.info('Instrumentation', 'Tracing SDK not started (disabled)'),
       shutdown: () => Promise.resolve(),
     };
   } else {
-    console.log('🔍 Tracing enabled - initializing OpenTelemetry...');
+    logger.info('Instrumentation', 'Tracing enabled - initializing OpenTelemetry...');
 
     // Configure the trace file location - use /tmp for Docker containers
     const traceFile = configService.get('TRACE_DIR');
@@ -197,7 +197,7 @@ export function initializeInstrumentation(configService: ConfigService): void {
       const fileExporter = new FileSpanExporter(traceFile, undefined, maxTraces);
       spanProcessors.push(new SimpleSpanProcessor(fileExporter));
     } else {
-      console.log('🔕 Trace file export disabled (TRACE_MAX_TRACES=0)');
+      logger.info('Instrumentation', 'Trace file export disabled (TRACE_MAX_TRACES=0)');
     }
 
     // Optional OTLP exporter (e.g. Jaeger): only when endpoint set; BatchSpanProcessor so export is async and failures don't propagate
@@ -208,7 +208,7 @@ export function initializeInstrumentation(configService: ConfigService): void {
       const debugEnabled = configService.get('DEBUG')?.includes('Jaeger') ?? false;
       const wrappedExporter = wrapOtlpExporterWithDebugLogging(withPeerService, debugEnabled);
       spanProcessors.push(new BatchSpanProcessor(wrappedExporter));
-      console.log('🔍 OTLP trace export enabled:', url);
+      logger.info('Instrumentation', `OTLP trace export enabled: ${url}`);
     }
 
     sdk = new NodeSDK({
@@ -242,11 +242,11 @@ export function initializeInstrumentation(configService: ConfigService): void {
         sdk
           .shutdown()
           .then(() => {
-            console.log('OpenTelemetry SDK shut down successfully');
+            logger.info('Instrumentation', 'OpenTelemetry SDK shut down successfully');
             process.exit(0);
           })
           .catch(error => {
-            console.error('Error shutting down OpenTelemetry SDK:', error);
+            logger.error('Instrumentation', 'Error shutting down OpenTelemetry SDK', error);
             process.exit(1);
           });
       });
@@ -255,11 +255,11 @@ export function initializeInstrumentation(configService: ConfigService): void {
         sdk
           .shutdown()
           .then(() => {
-            console.log('OpenTelemetry SDK shut down successfully');
+            logger.info('Instrumentation', 'OpenTelemetry SDK shut down successfully');
             process.exit(0);
           })
           .catch(error => {
-            console.error('Error shutting down OpenTelemetry SDK:', error);
+            logger.error('Instrumentation', 'Error shutting down OpenTelemetry SDK', error);
             process.exit(1);
           });
       });

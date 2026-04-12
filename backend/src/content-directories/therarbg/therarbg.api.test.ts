@@ -142,17 +142,9 @@ describe('TheRARBGService', () => {
   describe('error handling', () => {
     it('should handle network errors gracefully', async () => {
       const { service } = setupTest();
-
-      // Mock fetch to simulate a network error
-      const originalFetch = global.fetch;
-      global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
-
-      try {
-        await expect(service.searchByImdbId('tt0111161')).rejects.toThrow();
-      } finally {
-        // Restore original fetch
-        global.fetch = originalFetch;
-      }
+      // The fixture for tt0111161 returns a 503 Service Unavailable response,
+      // replayed by HTTP-VCR without making a real network call.
+      await expect(service.searchByImdbId('tt0111161')).rejects.toThrow();
     });
   });
 });

@@ -40,10 +40,16 @@ const createMockContext = (ip: string, headers: Record<string, string> = {}): Co
 };
 
 describe('getRealClientIp', () => {
-  const proxySecret = 'test-secret';
+  const setupTest = () => {
+    const proxySecret = 'test-secret';
+    const buildMockContext = (ip: string, headers: Record<string, string> = {}) =>
+      createMockContext(ip, headers);
+    return { proxySecret, buildMockContext };
+  };
 
   it('should return direct IP when no secret is configured', () => {
-    const mockContext = createMockContext('192.168.1.1', {
+    const { buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1', {
       'x-forwarded-for': '10.0.0.1',
     });
 
@@ -51,12 +57,14 @@ describe('getRealClientIp', () => {
   });
 
   it('should return direct IP when no proxy headers are present', () => {
-    const mockContext = createMockContext('192.168.1.1');
+    const { proxySecret, buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1');
     expect(getRealClientIp(mockContext, proxySecret)).toBe('192.168.1.1');
   });
 
   it('should return direct IP when proxy secret is not provided', () => {
-    const mockContext = createMockContext('192.168.1.1', {
+    const { proxySecret, buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1', {
       'x-forwarded-for': '10.0.0.1',
     });
 
@@ -64,7 +72,8 @@ describe('getRealClientIp', () => {
   });
 
   it('should return direct IP when proxy secret is wrong', () => {
-    const mockContext = createMockContext('192.168.1.1', {
+    const { proxySecret, buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1', {
       'x-reverse-proxy-secret': 'wrong-secret',
       'x-forwarded-for': '10.0.0.1',
     });
@@ -73,7 +82,8 @@ describe('getRealClientIp', () => {
   });
 
   it('should return client IP when proxy secret is correct', () => {
-    const mockContext = createMockContext('192.168.1.1', {
+    const { proxySecret, buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1', {
       'x-reverse-proxy-secret': proxySecret,
       'x-forwarded-for': '10.0.0.1',
     });
@@ -82,7 +92,8 @@ describe('getRealClientIp', () => {
   });
 
   it('should return first IP from X-Forwarded-For when there are multiple', () => {
-    const mockContext = createMockContext('192.168.1.1', {
+    const { proxySecret, buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1', {
       'x-reverse-proxy-secret': proxySecret,
       'x-forwarded-for': '10.0.0.1, 11.11.11.11, 22.22.22.22',
     });
@@ -91,7 +102,8 @@ describe('getRealClientIp', () => {
   });
 
   it('should handle spaces in X-Forwarded-For', () => {
-    const mockContext = createMockContext('192.168.1.1', {
+    const { proxySecret, buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1', {
       'x-reverse-proxy-secret': proxySecret,
       'x-forwarded-for': ' 10.0.0.1 , 11.11.11.11 ',
     });
@@ -104,7 +116,8 @@ describe('getRealClientIp', () => {
   });
 
   it('should return direct IP when X-Forwarded-For header is empty', () => {
-    const mockContext = createMockContext('192.168.1.1', {
+    const { proxySecret, buildMockContext } = setupTest();
+    const mockContext = buildMockContext('192.168.1.1', {
       'x-reverse-proxy-secret': proxySecret,
       'x-forwarded-for': '',
     });

@@ -4,16 +4,16 @@ import { EncryptionService } from './encryption.service';
 
 const generateKey = () => randomBytes(32).toString('base64'); // Generate a valid 256-bit key
 
-describe('EncryptionService', () => {
-  let encryptionService: EncryptionService;
+const setupTest = () => {
   const testKey = generateKey();
+  const encryptionService = new EncryptionService(testKey);
+  return { encryptionService, testKey };
+};
 
-  beforeEach(() => {
-    encryptionService = new EncryptionService(testKey);
-  });
-
+describe('EncryptionService', () => {
   describe('constructor', () => {
     it('should create instance with valid base64 key', () => {
+      const { testKey } = setupTest();
       expect(() => new EncryptionService(testKey)).not.toThrow();
     });
 
@@ -37,6 +37,7 @@ describe('EncryptionService', () => {
     const testData = 'magnet:?xt=urn:btih:test-hash&dn=test-movie';
 
     it('should encrypt and decrypt data correctly', () => {
+      const { encryptionService } = setupTest();
       const encrypted = encryptionService.encryptString(testData);
       const decrypted = encryptionService.decryptString(encrypted);
 
@@ -44,6 +45,7 @@ describe('EncryptionService', () => {
     });
 
     it('should produce different ciphertext for same plaintext', () => {
+      const { encryptionService } = setupTest();
       const encrypted1 = encryptionService.encryptString(testData);
       const encrypted2 = encryptionService.encryptString(testData);
 
@@ -51,6 +53,7 @@ describe('EncryptionService', () => {
     });
 
     it('should handle empty string', () => {
+      const { encryptionService } = setupTest();
       const encrypted = encryptionService.encryptString('');
       const decrypted = encryptionService.decryptString(encrypted);
 
@@ -58,6 +61,7 @@ describe('EncryptionService', () => {
     });
 
     it('should handle long strings', () => {
+      const { encryptionService } = setupTest();
       const longString = 'a'.repeat(10000);
       const encrypted = encryptionService.encryptString(longString);
       const decrypted = encryptionService.decryptString(encrypted);
@@ -66,6 +70,7 @@ describe('EncryptionService', () => {
     });
 
     it('should throw error with corrupted ciphertext', () => {
+      const { encryptionService } = setupTest();
       const encrypted = encryptionService.encryptString(testData);
       const corrupted = encrypted.slice(0, -10) + '0123456789'; // Corrupt last 10 chars
 
@@ -75,12 +80,14 @@ describe('EncryptionService', () => {
     });
 
     it('should throw error with invalid base64', () => {
+      const { encryptionService } = setupTest();
       expect(() => encryptionService.decryptString('invalid-base64!')).toThrow(
         'Invalid encrypted data length'
       );
     });
 
     it('should produce identical ciphertext when using deterministic encryption', () => {
+      const { encryptionService } = setupTest();
       const testData = 'test-deterministic-encryption';
       const encrypted1 = encryptionService.encryptString(testData, true);
       const encrypted2 = encryptionService.encryptString(testData, true);
@@ -93,6 +100,7 @@ describe('EncryptionService', () => {
     });
 
     it('should throw error with too short data', () => {
+      const { encryptionService } = setupTest();
       const tooShort = Buffer.alloc(10).toString('base64'); // Less than IV + TAG length
       expect(() => encryptionService.decryptString(tooShort)).toThrow(
         'Invalid encrypted data length'

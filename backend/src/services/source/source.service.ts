@@ -28,8 +28,27 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
  */
 export class SourceService {
   getStatus(): ServiceInstanceStatus {
+    if (!this.searchOnlyBehindVpn) {
+      return { status: 'ready' };
+    }
+    if (this.startError !== null) {
+      const msg =
+        this.startError instanceof Error ? this.startError.message : String(this.startError);
+      return { status: 'error', errorMessage: msg, error: this.startError };
+    }
+    if (!this.startResolved) {
+      return {
+        status: 'initializing',
+        details: 'Checking VPN connection',
+        startedAt: this.startStartedAt,
+      };
+    }
+    if (!this.vpnConnected) {
+      return { status: 'degraded', reason: 'vpn-disconnected' };
+    }
     return { status: 'ready' };
   }
+
   private readonly movieRepository: MovieRepository;
   private readonly movieSourceRepository: MovieSourceRepository;
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
@@ -37,6 +56,9 @@ export class SourceService {
   private vpnConnected = false;
   private searchOnlyBehindVpn: boolean;
   private startPromise: Promise<void>;
+  private startError: unknown = null;
+  private startResolved = false;
+  private startStartedAt = 0;
   private vpnProbeVersion = 0;
   private readonly config: ConfigService;
   private readonly vpnService: VpnDetectionService;
@@ -57,7 +79,7 @@ export class SourceService {
     this.movieSourceRepository = db.getMovieSourceRepository();
     config.registerService('SOURCE', this);
     if (this.searchOnlyBehindVpn) {
-      this.startPromise = this.refreshVpnState();
+      this.startPromise = this.trackStartPromise(this.refreshVpnState());
       this.vpnUnsubscribers = [
         vpnService.on('connect', () => {
           this.vpnConnected = true;
@@ -68,7 +90,23 @@ export class SourceService {
       ];
     } else {
       this.vpnConnected = true; // If not searching only behind VPN, assume connected
+      this.startResolved = true;
     }
+  }
+
+  private trackStartPromise(promise: Promise<void>): Promise<void> {
+    this.startResolved = false;
+    this.startError = null;
+    this.startStartedAt = Date.now();
+    promise.then(
+      () => {
+        this.startResolved = true;
+      },
+      (err: unknown) => {
+        this.startError = err;
+      }
+    );
+    return promise;
   }
 
   private refreshVpnState(): Promise<void> {
@@ -84,11 +122,13 @@ export class SourceService {
     this.searchOnlyBehindVpn = !this.config.getOrThrow('DISABLE_VPN_CHECK');
     if (!this.searchOnlyBehindVpn) {
       this.vpnConnected = true;
+      this.startResolved = true;
+      this.startError = null;
       for (const unsub of this.vpnUnsubscribers) unsub();
       this.vpnUnsubscribers = [];
     } else {
       for (const unsub of this.vpnUnsubscribers) unsub();
-      this.startPromise = this.refreshVpnState();
+      this.startPromise = this.trackStartPromise(this.refreshVpnState());
       this.vpnUnsubscribers = [
         this.vpnService.on('connect', () => {
           this.vpnConnected = true;

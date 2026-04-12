@@ -107,18 +107,7 @@ export class DownloadService {
   }
 
   getStatus(): ServiceInstanceStatus {
-    if (this._initStatus.status === 'ready') return { status: 'ready' };
-    if (this._initStatus.status === 'error')
-      return {
-        status: 'error',
-        errorMessage: this._initStatus.errorMessage,
-        error: this._initStatus.error,
-      };
-    return {
-      status: 'initializing',
-      details: this._initStatus.details,
-      startedAt: this._initStatus.startedAt,
-    };
+    return this._initStatus;
   }
 
   private async init(): Promise<void> {
