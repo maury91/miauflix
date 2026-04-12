@@ -30,7 +30,7 @@ function createApiRoutes(deps: Deps) {
     .use(
       createAuthMiddleware(
         deps.authService,
-        deps.configurationService.get('ACCESS_TOKEN_COOKIE_NAME') ?? '__at'
+        () => deps.configurationService.get('ACCESS_TOKEN_COOKIE_NAME') ?? '__at'
       )
     )
     .use(createAuditLogMiddleware(deps.auditLogService))

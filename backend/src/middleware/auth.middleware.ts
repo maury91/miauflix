@@ -18,7 +18,10 @@ declare module 'hono' {
   }
 }
 
-export const createAuthMiddleware = (authService: AuthService, accessTokenCookieName: string) => {
+export const createAuthMiddleware = (
+  authService: AuthService,
+  accessTokenCookieName: () => string
+) => {
   return createMiddleware<{
     Variables: {
       sessionInfo?: SessionInfo;
@@ -28,7 +31,7 @@ export const createAuthMiddleware = (authService: AuthService, accessTokenCookie
       const sessionId = c.req.header('X-Session-Id');
 
       if (sessionId) {
-        const cookieName = `${accessTokenCookieName}_${sessionId}`;
+        const cookieName = `${accessTokenCookieName()}_${sessionId}`;
         const token = getCookie(c, cookieName);
 
         if (token) {

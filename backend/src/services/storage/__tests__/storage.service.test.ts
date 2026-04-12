@@ -23,7 +23,9 @@ const DEFAULT_THRESHOLD = BigInt(50) * BigInt(1024 * 1024 * 1024); // 50GB
 
 const resolveStorageThreshold = (): bigint => {
   const raw = process.env.STORAGE_THRESHOLD;
-  return raw ? parseStorageThreshold(raw) : DEFAULT_THRESHOLD;
+  if (!raw) return DEFAULT_THRESHOLD;
+  const parsed = parseStorageThreshold(raw);
+  return parsed === 0n ? DEFAULT_THRESHOLD : parsed;
 };
 
 const mockConfig = {

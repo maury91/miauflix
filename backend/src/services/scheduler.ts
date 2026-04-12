@@ -18,7 +18,7 @@ export class Scheduler {
 
   constructor(config: ConfigService) {
     this.tasks = new Map();
-    this.traceDir = config.getOrThrow('TRACE_FILE');
+    this.traceDir = config.getOrThrow('TRACE_DIR');
   }
 
   scheduleTask(taskName: string, interval: number, task: () => Promise<void> | void): void {

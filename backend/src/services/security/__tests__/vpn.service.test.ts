@@ -1,8 +1,8 @@
+jest.mock('@services/configuration/configuration.service');
+
 import { ConfigurationService } from '@services/configuration/configuration.service';
 
 import { VpnDetectionService } from '../vpn.service';
-
-jest.mock('@services/configuration/configuration.service');
 
 // Mock the fetch function
 global.fetch = jest.fn();

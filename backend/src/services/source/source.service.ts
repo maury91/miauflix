@@ -36,8 +36,10 @@ export class SourceService {
 
   private vpnConnected = false;
   private searchOnlyBehindVpn: boolean;
-  private readonly startPromise: Promise<void>;
+  private startPromise: Promise<void>;
   private readonly config: ConfigService;
+  private readonly vpnService: VpnDetectionService;
+  private vpnUnsubscribers: Array<() => void> = [];
 
   constructor(
     db: Database,
@@ -48,6 +50,7 @@ export class SourceService {
     config: ConfigService
   ) {
     this.config = config;
+    this.vpnService = vpnService;
     this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
@@ -56,12 +59,14 @@ export class SourceService {
       this.startPromise = vpnService.isVpnActive().then(connected => {
         this.vpnConnected = connected;
       });
-      vpnService.on('connect', () => {
-        this.vpnConnected = true;
-      });
-      vpnService.on('disconnect', () => {
-        this.vpnConnected = false;
-      });
+      this.vpnUnsubscribers = [
+        vpnService.on('connect', () => {
+          this.vpnConnected = true;
+        }),
+        vpnService.on('disconnect', () => {
+          this.vpnConnected = false;
+        }),
+      ];
     } else {
       this.vpnConnected = true; // If not searching only behind VPN, assume connected
     }
@@ -71,6 +76,21 @@ export class SourceService {
     this.searchOnlyBehindVpn = !this.config.getOrThrow('DISABLE_VPN_CHECK');
     if (!this.searchOnlyBehindVpn) {
       this.vpnConnected = true;
+      for (const unsub of this.vpnUnsubscribers) unsub();
+      this.vpnUnsubscribers = [];
+    } else {
+      for (const unsub of this.vpnUnsubscribers) unsub();
+      this.startPromise = this.vpnService.isVpnActive().then(connected => {
+        this.vpnConnected = connected;
+      });
+      this.vpnUnsubscribers = [
+        this.vpnService.on('connect', () => {
+          this.vpnConnected = true;
+        }),
+        this.vpnService.on('disconnect', () => {
+          this.vpnConnected = false;
+        }),
+      ];
     }
   }
 

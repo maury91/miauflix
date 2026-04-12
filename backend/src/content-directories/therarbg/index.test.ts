@@ -854,12 +854,10 @@ describe('TherarbgContentDirectory', () => {
     });
   });
 
-  describe('integration with real API', () => {
-    it('should work with real TheRARBG API for known movie', async () => {
+  describe('getMovie', () => {
+    it('should return valid response structure for a known movie', async () => {
       const { contentDirectory } = setupTest();
 
-      // This test uses the real API with a known movie (Cosmic Princess)
-      // It's marked as integration test and may be skipped in CI
       const imdbId = 'tt0119698';
 
       try {

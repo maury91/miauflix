@@ -214,8 +214,12 @@ export class ConfigurationService {
           this._fileData[key] = raw; // keep on-disk form (enc:... for secrets, plain otherwise)
         }
       }
-    } catch {
-      // file doesn't exist yet — start empty
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+        // file doesn't exist yet — start empty
+        return;
+      }
+      throw err;
     }
   }
 
@@ -418,7 +422,7 @@ export class ConfigurationService {
     if (services[key].restartable === false) {
       throw new ConfigurationServiceError(
         `Service '${key}' requires a process restart to apply configuration changes`,
-        'service_not_registered'
+        'service_restart_required'
       );
     }
 
@@ -440,11 +444,12 @@ export class ConfigurationService {
         case 'ready':
           result[key] = { status: 'ready' };
           break;
-        case 'error':
+        case 'error': {
           const missingVars = this.getMissingVarsForGroup(key as keyof typeof services);
           result[key] =
             missingVars.length > 0 ? { status: 'needs_configuration', missingVars } : status;
           break;
+        }
         default:
           result[key] = status;
       }

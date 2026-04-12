@@ -3,6 +3,7 @@ import { logger } from '@logger';
 import parseTorrent from 'parse-torrent';
 import type { ParsedTorrent } from 'webtorrent';
 
+import { ConfigurationServiceError } from '@errors/configuration.errors';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
@@ -108,7 +109,7 @@ describe('SourceMetadataFileService', () => {
     mockConfigService.get.mockReturnValue(undefined as never);
     mockConfigService.getOrThrow.mockImplementation((key: string) => {
       if (key === 'DATA_DIR') return '/tmp/test' as never;
-      throw new Error(`${key} is not set`);
+      throw new ConfigurationServiceError(`${key} is not set`, 'missing_required_variable');
     });
     mockRequestService = new RequestService(
       statsService,

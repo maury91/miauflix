@@ -99,7 +99,7 @@ export class YTSApi extends Api {
       .catch(() => fallbackDomainMirrors)
       .then(domains => {
         this.domainMirrors = domains;
-        if (!this.config.getOrThrow('YTS_API_URL') && domains.length > 0) {
+        if (!this.config.get('YTS_API_URL') && domains.length > 0) {
           this.apiUrl = `https://${domains[0]}`;
         }
         logger.info('YTS', 'Discovered mirrors', domains);

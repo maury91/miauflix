@@ -15,5 +15,5 @@ export function objectKeys<O extends object>(object: O): Entries<O>[number][0][]
 }
 
 export function hasKey<O extends object>(object: O, key: PropertyKey): key is keyof O {
-  return key in object;
+  return Object.prototype.hasOwnProperty.call(object, key);
 }

@@ -124,23 +124,33 @@ export class DownloadService {
   private async init(): Promise<void> {
     const startedAt = Date.now();
     this._initStatus = { status: 'initializing', details: 'Loading trackers', startedAt };
-    await this.loadTrackers();
-    this._initStatus = {
-      status: 'initializing',
-      details: 'Checking download directory',
-      startedAt,
-    };
     try {
-      const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
-      await mkdir(downloadPath, { recursive: true });
-      await access(downloadPath, constants.W_OK);
-      this._initStatus = { status: 'ready' };
+      await this.loadTrackers();
+      this._initStatus = {
+        status: 'initializing',
+        details: 'Checking download directory',
+        startedAt,
+      };
     } catch (err) {
       this._initStatus = {
         status: 'error',
-        errorMessage: err instanceof Error ? err.message : 'Failed to access download directory',
+        errorMessage: err instanceof Error ? err.message : 'Failed to load trackers',
         error: err,
       };
+    }
+    if (this._initStatus.status !== 'error') {
+      try {
+        const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
+        await mkdir(downloadPath, { recursive: true });
+        await access(downloadPath, constants.W_OK);
+        this._initStatus = { status: 'ready' };
+      } catch (err) {
+        this._initStatus = {
+          status: 'error',
+          errorMessage: err instanceof Error ? err.message : 'Failed to access download directory',
+          error: err,
+        };
+      }
     }
   }
 

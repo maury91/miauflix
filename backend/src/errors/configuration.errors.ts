@@ -6,6 +6,7 @@ type ConfigurationErrorCode =
   | 'missing_required_variable'
   | 'service_not_found'
   | 'service_not_registered'
+  | 'service_restart_required'
   | 'unknown_config_key';
 
 export class ConfigurationServiceError extends AppError<ConfigurationErrorCode> {

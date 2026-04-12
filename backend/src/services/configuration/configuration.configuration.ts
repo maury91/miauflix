@@ -96,7 +96,7 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'true',
       transform: transforms.boolean(),
     }),
-    TRACE_FILE: variable({
+    TRACE_DIR: variable({
       description: 'Directory for writing trace span files',
       required: false,
       defaultValue: '/tmp',

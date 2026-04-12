@@ -29,6 +29,8 @@ import { FileSpanExporter } from './instrumentation/file-exporter';
 
 const SYNTHETIC_SCOPE = { name: '@miauflix/backend', version: '1.0.0' };
 
+let instrumentationInitialized = false;
+
 function randomSpanId(): string {
   return randomBytes(8).toString('hex');
 }
@@ -187,7 +189,7 @@ export function initializeInstrumentation(configService: ConfigService): void {
     console.log('🔍 Tracing enabled - initializing OpenTelemetry...');
 
     // Configure the trace file location - use /tmp for Docker containers
-    const traceFile = configService.get('TRACE_FILE');
+    const traceFile = configService.get('TRACE_DIR');
     const maxTraces = configService.get('TRACE_MAX_TRACES');
     const spanProcessors: SpanProcessor[] = [];
 
@@ -233,31 +235,34 @@ export function initializeInstrumentation(configService: ConfigService): void {
     // Start the SDK
     sdk.start();
 
-    // Graceful shutdown
-    process.on('SIGTERM', () => {
-      sdk
-        .shutdown()
-        .then(() => {
-          console.log('OpenTelemetry SDK shut down successfully');
-          process.exit(0);
-        })
-        .catch(error => {
-          console.error('Error shutting down OpenTelemetry SDK:', error);
-          process.exit(1);
-        });
-    });
+    if (!instrumentationInitialized) {
+      instrumentationInitialized = true;
+      // Graceful shutdown
+      process.on('SIGTERM', () => {
+        sdk
+          .shutdown()
+          .then(() => {
+            console.log('OpenTelemetry SDK shut down successfully');
+            process.exit(0);
+          })
+          .catch(error => {
+            console.error('Error shutting down OpenTelemetry SDK:', error);
+            process.exit(1);
+          });
+      });
 
-    process.on('SIGINT', () => {
-      sdk
-        .shutdown()
-        .then(() => {
-          console.log('OpenTelemetry SDK shut down successfully');
-          process.exit(0);
-        })
-        .catch(error => {
-          console.error('Error shutting down OpenTelemetry SDK:', error);
-          process.exit(1);
-        });
-    });
+      process.on('SIGINT', () => {
+        sdk
+          .shutdown()
+          .then(() => {
+            console.log('OpenTelemetry SDK shut down successfully');
+            process.exit(0);
+          })
+          .catch(error => {
+            console.error('Error shutting down OpenTelemetry SDK:', error);
+            process.exit(1);
+          });
+      });
+    }
   }
 }

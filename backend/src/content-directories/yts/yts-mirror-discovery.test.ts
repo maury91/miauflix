@@ -1,3 +1,6 @@
+jest.mock('@services/request/request.service');
+jest.mock('@services/configuration/configuration.service');
+
 import { MockCache } from '@__test-utils__/cache.mock';
 
 import { ConfigurationService } from '@services/configuration/configuration.service';
@@ -6,9 +9,6 @@ import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { discoverYTSMirrors } from './yts-mirror-discovery';
-
-jest.mock('@services/request/request.service');
-jest.mock('@services/configuration/configuration.service');
 
 describe('YTS Mirror Discovery', () => {
   let mockRequestService: jest.Mocked<RequestService>;

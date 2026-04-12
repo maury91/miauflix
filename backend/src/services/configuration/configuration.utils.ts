@@ -146,6 +146,7 @@ export async function configureService<
         handler: options.handler,
       });
     }
+    throw error;
   }
 
   // Test the configuration — always re-test after config change (skipIfAlive=false)
@@ -248,7 +249,7 @@ async function promptForVariable(
       validate: validateInput,
     });
 
-    return passwordValue || defaultValue || '';
+    return passwordValue || currentValue || defaultValue || '';
   }
 
   if ('options' in varInfo && varInfo.options) {

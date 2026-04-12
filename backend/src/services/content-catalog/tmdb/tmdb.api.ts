@@ -108,6 +108,7 @@ export class TMDBApi extends Api {
       this._initStatus = { status: 'initializing', details: 'Testing API connectivity', startedAt };
       await this.test();
       this._configuration = this.getConfiguration();
+      await this._configuration;
       this._initStatus = { status: 'ready' };
     } catch (err) {
       this._apiKey = '';
@@ -123,7 +124,7 @@ export class TMDBApi extends Api {
   public async reloadConfig(): Promise<boolean> {
     try {
       await this.init();
-      return true;
+      return this._initStatus.status === 'ready';
     } catch {
       return false;
     }

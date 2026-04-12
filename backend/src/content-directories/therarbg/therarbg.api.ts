@@ -62,6 +62,7 @@ export class TheRARBGApi extends Api {
 
   public async reload(): Promise<void> {
     this.apiUrl = this.config.getOrThrow('THE_RARBG_API_URL');
+    this.currentMirrorIndex = 0;
     await this.init();
   }
 
