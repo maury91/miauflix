@@ -91,6 +91,7 @@ export class SourceService {
     } else {
       this.vpnConnected = true; // If not searching only behind VPN, assume connected
       this.startResolved = true;
+      this.startPromise = Promise.resolve();
     }
   }
 
@@ -123,6 +124,7 @@ export class SourceService {
     if (!this.searchOnlyBehindVpn) {
       this.vpnConnected = true;
       this.startResolved = true;
+      this.startPromise = Promise.resolve();
       this.startError = null;
       for (const unsub of this.vpnUnsubscribers) unsub();
       this.vpnUnsubscribers = [];
