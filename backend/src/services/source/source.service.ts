@@ -37,6 +37,7 @@ export class SourceService {
   private vpnConnected = false;
   private searchOnlyBehindVpn: boolean;
   private startPromise: Promise<void>;
+  private vpnProbeVersion = 0;
   private readonly config: ConfigService;
   private readonly vpnService: VpnDetectionService;
   private vpnUnsubscribers: Array<() => void> = [];
@@ -56,9 +57,7 @@ export class SourceService {
     this.movieSourceRepository = db.getMovieSourceRepository();
     config.registerService('SOURCE', this);
     if (this.searchOnlyBehindVpn) {
-      this.startPromise = vpnService.isVpnActive().then(connected => {
-        this.vpnConnected = connected;
-      });
+      this.startPromise = this.refreshVpnState();
       this.vpnUnsubscribers = [
         vpnService.on('connect', () => {
           this.vpnConnected = true;
@@ -72,6 +71,15 @@ export class SourceService {
     }
   }
 
+  private refreshVpnState(): Promise<void> {
+    const version = ++this.vpnProbeVersion;
+    return this.vpnService.isVpnActive().then(connected => {
+      if (version === this.vpnProbeVersion && this.searchOnlyBehindVpn) {
+        this.vpnConnected = connected;
+      }
+    });
+  }
+
   async reload(): Promise<void> {
     this.searchOnlyBehindVpn = !this.config.getOrThrow('DISABLE_VPN_CHECK');
     if (!this.searchOnlyBehindVpn) {
@@ -80,9 +88,7 @@ export class SourceService {
       this.vpnUnsubscribers = [];
     } else {
       for (const unsub of this.vpnUnsubscribers) unsub();
-      this.startPromise = this.vpnService.isVpnActive().then(connected => {
-        this.vpnConnected = connected;
-      });
+      this.startPromise = this.refreshVpnState();
       this.vpnUnsubscribers = [
         this.vpnService.on('connect', () => {
           this.vpnConnected = true;

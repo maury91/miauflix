@@ -185,12 +185,6 @@ cleanup() {
         echo "⚠️  No logs were generated"
     fi
     
-    # Restore .env.test from backup if one was made
-    if [[ -f "$ENV_TEST_BACKUP" ]]; then
-        cp "$ENV_TEST_BACKUP" "$ENV_TEST_FILE"
-        rm -f "$ENV_TEST_BACKUP"
-    fi
-
     # Only cleanup Docker containers if not in detached mode
     if [[ "$DETACHED_MODE" == "false" ]]; then
         echo "🧹 Cleaning up $MODE environment..."
@@ -200,6 +194,13 @@ cleanup() {
         echo "🚀 Detached mode - leaving containers running"
         cleanupArtifacts
     fi
+    
+    # Restore .env.test from backup if one was made
+    if [[ -f "$ENV_TEST_BACKUP" ]]; then
+        cp "$ENV_TEST_BACKUP" "$ENV_TEST_FILE"
+        rm -f "$ENV_TEST_BACKUP"
+    fi
+
     exit $TERM_SIGNAL
 }
 
