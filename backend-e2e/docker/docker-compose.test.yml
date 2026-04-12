@@ -28,7 +28,7 @@ services:
     ports:
       - '${PORT}:3000'
     volumes:
-      - ../.env.test:/usr/src/app/.env:ro
+      - ../.env.test:/usr/src/app/.env
       - test_downloads:/usr/src/app/downloads
       - ../logs/traces:/tmp:rw
     healthcheck:
