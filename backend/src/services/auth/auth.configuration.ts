@@ -93,7 +93,4 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       transform: transforms.number({ min: 1, max: 20, integer: true }),
     }),
   },
-  test: async () => {
-    return;
-  },
 });

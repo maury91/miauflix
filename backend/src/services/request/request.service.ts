@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
-import { ENV } from '@constants';
 import { RequestError } from '@errors/request.errors';
+import type { ConfigService } from '@mytypes/configuration';
 import type {
   CookiePair,
   FlareSolverrGetRequest,
@@ -51,14 +51,23 @@ export interface RequestServiceResponse<T> {
 export class RequestService {
   private readonly cookieJar: CookieJar;
   private readonly userAgentByDomain: Map<string, string>;
-  private readonly isFlareSolverrEnabled: boolean;
-  private readonly flareSolverrUrl: string;
+  private readonly config: ConfigService;
 
-  constructor(private readonly statsService: StatsService) {
+  constructor(
+    private readonly statsService: StatsService,
+    config: ConfigService
+  ) {
     this.cookieJar = new CookieJar();
     this.userAgentByDomain = new Map<string, string>();
-    this.isFlareSolverrEnabled = ENV('ENABLE_FLARESOLVERR') === true && !!ENV('FLARESOLVERR_URL');
-    this.flareSolverrUrl = ENV('FLARESOLVERR_URL') || '';
+    this.config = config;
+  }
+
+  private get isFlareSolverrEnabled(): boolean {
+    return this.config.get('ENABLE_FLARESOLVERR') === true && !!this.config.get('FLARESOLVERR_URL');
+  }
+
+  private get flareSolverrUrl(): string {
+    return this.config.get('FLARESOLVERR_URL') ?? '';
   }
 
   /**

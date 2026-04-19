@@ -1,6 +1,7 @@
 import type { Database } from '@database/database';
 import type { User } from '@entities/user.entity';
 import { CatalogError } from '@errors/catalog.errors';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { TraktUserRepository } from '@repositories/trakt-user.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import type { AuthService } from '@services/auth/auth.service';
@@ -14,11 +15,28 @@ export class TraktService {
   private readonly userRepository: UserRepository;
   private readonly authService: AuthService;
 
-  constructor(db: Database, authService: AuthService) {
-    this.traktApi = new TraktApi();
+  constructor(db: Database, authService: AuthService, config: ConfigService) {
+    this.traktApi = new TraktApi(config);
     this.traktUserRepository = db.getTraktUserRepository();
     this.userRepository = db.getUserRepository();
     this.authService = authService;
+    config.registerService('TRAKT', this);
+  }
+
+  getStatus(): ServiceInstanceStatus {
+    return this.traktApi.getStatus();
+  }
+
+  public isConfigured(): boolean {
+    return this.traktApi.isConfigured();
+  }
+
+  public reloadConfig(): void {
+    this.traktApi.reloadConfig();
+  }
+
+  public async reload(): Promise<void> {
+    await this.traktApi.reload();
   }
 
   /**

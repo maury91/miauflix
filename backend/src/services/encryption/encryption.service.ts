@@ -1,7 +1,6 @@
 import { logger } from '@logger';
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'crypto';
 
-import { ENV } from '@constants';
 import { EncryptionError } from '@errors/encryption.errors';
 
 export class EncryptionService {
@@ -10,8 +9,7 @@ export class EncryptionService {
   private readonly IV_LENGTH = 12; // 96-bit IV for GCM (standard)
   private readonly TAG_LENGTH = 16; // 128-bit auth tag
 
-  constructor() {
-    const key = ENV('SOURCE_SECURITY_KEY');
+  constructor(key: string) {
     if (!key) {
       throw new EncryptionError('Encryption key is required', 'key_required');
     }

@@ -3,9 +3,13 @@ import { logger } from '@logger';
 import parseTorrent from 'parse-torrent';
 import type { ParsedTorrent } from 'webtorrent';
 
+import { ConfigurationServiceError } from '@errors/configuration.errors';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
+
+jest.mock('@services/configuration/configuration.service');
 
 import type { DownloadService } from '../download/download.service';
 // Import service modules to mock them
@@ -100,7 +104,17 @@ describe('SourceMetadataFileService', () => {
     } as Partial<DownloadService> as DownloadService;
 
     const statsService = new StatsService();
-    mockRequestService = new RequestService(statsService) as unknown as jest.Mocked<RequestService>;
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockConfigService.get.mockReturnValue(undefined as never);
+    mockConfigService.getOrThrow.mockImplementation((key: string) => {
+      if (key === 'DATA_DIR') return '/tmp/test' as never;
+      throw new ConfigurationServiceError(`${key} is not set`, 'missing_required_variable');
+    });
+    mockRequestService = new RequestService(
+      statsService,
+      mockConfigService
+    ) as unknown as jest.Mocked<RequestService>;
 
     // Set up service spies with default successful responses
     getSourceMetadataFileFromITorrentsSpy = jest
@@ -121,7 +135,8 @@ describe('SourceMetadataFileService', () => {
     sourceMetadataFileService = new SourceMetadataFileService(
       mockDownloadService,
       mockRequestService,
-      statsService
+      statsService,
+      mockConfigService
     );
   });
 

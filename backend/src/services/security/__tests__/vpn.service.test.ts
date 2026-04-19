@@ -1,7 +1,21 @@
+jest.mock('@services/configuration/configuration.service');
+
+import { ConfigurationService } from '@services/configuration/configuration.service';
+
 import { VpnDetectionService } from '../vpn.service';
 
 // Mock the fetch function
 global.fetch = jest.fn();
+
+const createMockConfig = (): ConfigurationService => {
+  const mockedConfigService =
+    new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+  mockedConfigService.get.mockImplementation((key: string) => {
+    if (key === 'DISABLE_VPN_CHECK') return false as never;
+    return undefined as never;
+  });
+  return mockedConfigService;
+};
 
 describe('VpnDetectionService', () => {
   let vpnService: VpnDetectionService;
@@ -9,7 +23,7 @@ describe('VpnDetectionService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    vpnService = new VpnDetectionService(1000); // Use 1 second interval for tests
+    vpnService = new VpnDetectionService(createMockConfig(), 1000);
   });
 
   afterEach(() => {

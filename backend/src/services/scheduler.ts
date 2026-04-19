@@ -2,8 +2,8 @@ import { logger } from '@logger';
 import { context, trace } from '@opentelemetry/api';
 import { setTimeout } from 'timers';
 
-import { ENV } from '@constants';
 import { SchedulerError } from '@errors/scheduler.errors';
+import type { ConfigService } from '@mytypes/configuration';
 import type { ScheduleTask } from '@mytypes/scheduler.types';
 import { TracingUtil } from '@utils/tracing.util';
 
@@ -14,9 +14,11 @@ interface ScheduledTaskRecord {
 
 export class Scheduler {
   private tasks: Map<string, ScheduledTaskRecord>;
+  private readonly traceDir: string;
 
-  constructor() {
+  constructor(config: ConfigService) {
     this.tasks = new Map();
+    this.traceDir = config.getOrThrow('TRACE_DIR');
   }
 
   scheduleTask(taskName: string, interval: number, task: () => Promise<void> | void): void {
@@ -43,10 +45,9 @@ export class Scheduler {
 
         if (taskSpan) {
           const traceId = taskSpan.spanContext().traceId;
-          const traceDir = ENV('TRACE_FILE') || '/tmp';
           logger.debug(
             'Scheduler',
-            `Trace ID for task '${taskName}': ${traceId} (trace file: ${traceDir}/${traceId}.log)`
+            `Trace ID for task '${taskName}': ${traceId} (trace file: ${this.traceDir}/${traceId}.log)`
           );
           await TracingUtil.executeInSpan(taskSpan, () => task());
         } else {

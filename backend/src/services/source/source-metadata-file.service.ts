@@ -2,8 +2,8 @@ import { logger } from '@logger';
 import parseTorrent from 'parse-torrent';
 import path from 'path';
 
-import { ENV } from '@constants';
 import { SourceError } from '@errors/source.errors';
+import type { ConfigService } from '@mytypes/configuration';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
@@ -38,7 +38,8 @@ export class SourceMetadataFileService {
   constructor(
     private readonly downloadService: DownloadService,
     private readonly requestService: RequestService,
-    private readonly statsService: StatsService
+    private readonly statsService: StatsService,
+    private readonly config: ConfigService
   ) {
     this.createService('webTorrent', {
       maxConcurrentRequests: 50,
@@ -170,7 +171,10 @@ export class SourceMetadataFileService {
       rateLimiter: service.rateLimit
         ? new DynamicRateLimit({
             ...service.rateLimit,
-            storageFile: path.resolve(ENV('DATA_DIR'), `./rate-limits/${name}.json`),
+            storageFile: path.resolve(
+              this.config.getOrThrow('DATA_DIR'),
+              `./rate-limits/${name}.json`
+            ),
           })
         : undefined,
       config: service,
