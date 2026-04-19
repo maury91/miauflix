@@ -1,5 +1,4 @@
-import type { RequestService } from '@services/request/request.service';
-import type { StatsService } from '@services/stats/stats.service';
+import type { EnvironmentVariableTypes } from '@services/configuration/configuration.types';
 
 export type BaseVariableInfo = {
   description: string;
@@ -56,11 +55,29 @@ export type VariableInfo =
 
 export type ServiceVariables<T extends Record<string, VariableInfo>> = T;
 
+export type ServiceInstanceStatus =
+  | { status: 'degraded'; reason: string }
+  | { status: 'error'; errorMessage: string; error: unknown }
+  | { status: 'initializing' | `initializing_${string}`; details: string; startedAt: number }
+  | { status: 'ready' };
+
+export type ConfigurableService = {
+  getStatus(): ServiceInstanceStatus;
+  reload(): Promise<void>;
+};
+
+export type ConfigService = {
+  get<K extends keyof EnvironmentVariableTypes>(key: K): EnvironmentVariableTypes[K] | undefined;
+  getOrThrow<K extends keyof EnvironmentVariableTypes>(key: K): EnvironmentVariableTypes[K];
+  registerService(key: string, instance: ConfigurableService): void;
+};
+
 export type ServiceConfiguration<T extends Record<string, VariableInfo>> = {
   name: string;
   description: string;
   variables: ServiceVariables<T>;
-  test: (requestService: RequestService, statsService: StatsService) => Promise<void>;
+  /** If false, config changes require a process restart — the service cannot reload at runtime */
+  restartable?: false;
 };
 
 export type ValidationTransformResult<T> = {

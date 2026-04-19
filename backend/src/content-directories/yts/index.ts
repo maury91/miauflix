@@ -6,6 +6,7 @@ import type { Cache } from 'cache-manager';
 
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import { AbstractContentDirectory } from '@content-directories/content-directory.abstract';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 
@@ -16,12 +17,26 @@ import { mapYTSQuality, mapYTSTypeToSource, mapYTSVideoCodec } from './yts.utils
 export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
   protected readonly api: YTSApi;
 
-  constructor(cache: Cache, requestService: RequestService, statsService: StatsService) {
+  constructor(
+    cache: Cache,
+    requestService: RequestService,
+    statsService: StatsService,
+    config: ConfigService
+  ) {
     super();
-    this.api = new YTSApi(cache, statsService, requestService);
+    this.api = new YTSApi(cache, statsService, requestService, config);
+    config.registerService('YTS', this);
   }
 
   name = 'YTS';
+
+  getStatus(): ServiceInstanceStatus {
+    return this.api.getStatus();
+  }
+
+  async reload(): Promise<void> {
+    await this.api.reload();
+  }
 
   private normalize = (
     sourceMetadata: YTSSourceMetadata,

@@ -1,13 +1,4 @@
-import { createCache } from 'cache-manager';
-
-import { ApiError } from '@errors/api.errors';
-import type { RequestService } from '@services/request/request.service';
-import type { StatsService } from '@services/stats/stats.service';
 import { serviceConfiguration, transforms, variable } from '@utils/config';
-
-import { TMDBApi } from './tmdb.api';
-
-// Use the helper function instead of explicit type annotation
 
 export const tmdbConfigurationDefinition = serviceConfiguration({
   name: 'The Movie Database (TMDB)',
@@ -27,35 +18,18 @@ export const tmdbConfigurationDefinition = serviceConfiguration({
       required: true,
       password: true,
     }),
-  },
-  test: async (requestService: RequestService, statsService: StatsService) => {
-    try {
-      const cache = createCache();
-      const tmdbApi = new TMDBApi(cache, statsService);
-
-      // Use test because it doesn't use cache
-      await tmdbApi.test();
-    } catch (error: unknown) {
-      console.error(error);
-      if (error) {
-        if (typeof error === 'object' && error && 'status' in error) {
-          if (error.status === 401) {
-            throw new ApiError(
-              'Invalid Access Token',
-              'not_configured',
-              'tmdb',
-              error.status as number
-            );
-          }
-          throw new ApiError(
-            `Connection error: ${error.status}`,
-            'connection_error',
-            'tmdb',
-            error.status as number
-          );
-        }
-        throw error;
-      }
-    }
+    EPISODE_SYNC_MODE: variable({
+      description: 'Episode metadata sync strategy',
+      example: 'ON_DEMAND',
+      defaultValue: 'ON_DEMAND',
+      required: false,
+      options: {
+        GREEDY: 'sync every tv show',
+        ON_DEMAND: 'sync only tv shows marked as watching',
+      },
+      transform: transforms.enum({
+        values: ['GREEDY', 'ON_DEMAND'] as const,
+      }),
+    }),
   },
 });

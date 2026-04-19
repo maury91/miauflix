@@ -1,8 +1,6 @@
 import { getConnInfo } from '@hono/node-server/conninfo';
 import type { Context } from 'hono';
 
-import { ENV } from '@constants';
-
 // Header name for the reverse proxy secret
 const PROXY_SECRET_HEADER = 'x-reverse-proxy-secret';
 
@@ -10,12 +8,14 @@ const PROXY_SECRET_HEADER = 'x-reverse-proxy-secret';
  * Gets the real client IP address from a request considering X-Forwarded-For header,
  * but only when the request includes a valid reverse proxy secret header
  *
- * @param request - The HTTP request
- * @param directIp - The direct IP that connected to the server (the proxy)
+ * @param context - The HTTP context
+ * @param proxySecret - The shared secret configured for the reverse proxy
  * @returns The real client IP address or the direct IP if validation fails
  */
-export const getRealClientIp = (context: Context | undefined): string | undefined => {
-  const proxySecret = ENV('REVERSE_PROXY_SECRET');
+export const getRealClientIp = (
+  context: Context | undefined,
+  proxySecret: string | undefined
+): string | undefined => {
   const ipAddress = context ? getConnInfo(context).remote.address : undefined;
 
   // If no secret is configured, don't trust X-Forwarded-For headers

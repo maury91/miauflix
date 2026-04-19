@@ -4,13 +4,17 @@ import type { Context } from 'hono';
 import type { Database } from '@database/database';
 import type { AuditLog } from '@entities/audit-log.entity';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
+import type { ConfigService } from '@mytypes/configuration';
 import type { AuditLogRepository } from '@repositories/audit-log.repository';
 import { getRealClientIp } from '@utils/proxy.util';
 
 export class AuditLogService {
   private repository: AuditLogRepository;
 
-  constructor(db: Database) {
+  constructor(
+    db: Database,
+    private readonly config: ConfigService
+  ) {
     this.repository = db.getAuditLogRepository();
   }
 
@@ -40,7 +44,8 @@ export class AuditLogService {
   }): Promise<void> {
     try {
       const { eventType, severity, description, context, userEmail, metadata } = params;
-      const ipAddress = getRealClientIp(context);
+      const ipAddress =
+        getRealClientIp(context, this.config.get('REVERSE_PROXY_SECRET') ?? '') || 'unknown';
       const userAgent = context?.req.header('user-agent') || undefined;
 
       const logData = {

@@ -1,17 +1,27 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { TheRARBGApi } from './therarbg.api';
 
+jest.mock('@services/configuration/configuration.service');
+
 describe('TheRARBGService', () => {
   const setupTest = () => {
     const mockCache = new MockCache();
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockConfigService.get.mockReturnValue(undefined as never);
+    mockConfigService.getOrThrow.mockImplementation((key: string) => {
+      if (key === 'THE_RARBG_API_URL') return 'https://therarbg.to' as never;
+      throw new Error(`${key} is not set`);
+    });
     // Use real RequestService - HTTP-VCR will intercept fetch call ( already recorded calls will not go out to the real API )
     const statsService = new StatsService();
-    const requestService = new RequestService(statsService);
-    const service = new TheRARBGApi(mockCache, statsService, requestService);
+    const requestService = new RequestService(statsService, mockConfigService);
+    const service = new TheRARBGApi(mockCache, statsService, requestService, mockConfigService);
 
     return { service, requestService, statsService, mockCache };
   };
@@ -132,17 +142,9 @@ describe('TheRARBGService', () => {
   describe('error handling', () => {
     it('should handle network errors gracefully', async () => {
       const { service } = setupTest();
-
-      // Mock fetch to simulate a network error
-      const originalFetch = global.fetch;
-      global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
-
-      try {
-        await expect(service.searchByImdbId('tt0111161')).rejects.toThrow();
-      } finally {
-        // Restore original fetch
-        global.fetch = originalFetch;
-      }
+      // The fixture for tt0111161 returns a 503 Service Unavailable response,
+      // replayed by HTTP-VCR without making a real network call.
+      await expect(service.searchByImdbId('tt0111161')).rejects.toThrow();
     });
   });
 });
