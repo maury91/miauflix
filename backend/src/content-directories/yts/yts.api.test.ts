@@ -1,20 +1,26 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { YTSApi } from './yts.api';
 
+jest.mock('@services/configuration/configuration.service');
+
 const imdbId = 'tt29623480';
 
 describe('YTSApi', () => {
   const setupTest = () => {
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockConfigService.get.mockReturnValue(undefined as never);
     // Create a minimal mock cache with just the required methods
     const mockCache = new MockCache();
     const statsService = new StatsService();
-    const requestService = new RequestService(statsService);
+    const requestService = new RequestService(statsService, mockConfigService);
 
-    const api = new YTSApi(mockCache, statsService, requestService);
+    const api = new YTSApi(mockCache, statsService, requestService, mockConfigService);
 
     return { api, requestService, mockCache };
   };

@@ -1,7 +1,6 @@
 import { getCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
 
-import { ENV } from '@constants';
 import type { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
 import type { UserDto } from '@routes/auth.types';
@@ -19,9 +18,10 @@ declare module 'hono' {
   }
 }
 
-export const createAuthMiddleware = (authService: AuthService) => {
-  const accessTokenCookieName = ENV('ACCESS_TOKEN_COOKIE_NAME');
-
+export const createAuthMiddleware = (
+  authService: AuthService,
+  accessTokenCookieName: () => string
+) => {
   return createMiddleware<{
     Variables: {
       sessionInfo?: SessionInfo;
@@ -31,7 +31,7 @@ export const createAuthMiddleware = (authService: AuthService) => {
       const sessionId = c.req.header('X-Session-Id');
 
       if (sessionId) {
-        const cookieName = `${accessTokenCookieName}_${sessionId}`;
+        const cookieName = `${accessTokenCookieName()}_${sessionId}`;
         const token = getCookie(c, cookieName);
 
         if (token) {

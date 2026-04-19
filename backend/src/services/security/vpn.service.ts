@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
-import { ENV } from '@constants';
 import { VpnError } from '@errors/vpn.errors';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 
 interface NordVpnIpInsightsResponse {
   ip: string;
@@ -28,13 +28,17 @@ type VpnEventType = 'connect' | 'disconnect';
 type VpnEventListener = () => void;
 
 export class VpnDetectionService {
+  getStatus(): ServiceInstanceStatus {
+    return { status: 'ready' };
+  }
   private readonly knownVpnIps: string[] = [];
   private eventListeners: Map<VpnEventType, VpnEventListener[]> = new Map([
     ['connect', []],
     ['disconnect', []],
   ]);
-  private readonly disabled = ENV('DISABLE_VPN_CHECK');
+  private disabled: boolean;
   private monitoringInterval: ReturnType<typeof setInterval> | null = null;
+  private readonly config: ConfigService;
   private lastVpnStatus: boolean | null = null;
   protected currentProviderIndex: number = 0;
 
@@ -77,8 +81,29 @@ export class VpnDetectionService {
     },
   ];
 
-  constructor(private readonly checkIntervalMs: number = 5000) {
+  constructor(
+    config: ConfigService,
+    private readonly checkIntervalMs: number = 5000
+  ) {
+    this.config = config;
+    this.disabled = config.getOrThrow('DISABLE_VPN_CHECK');
     if (this.disabled) {
+      this.lastVpnStatus = true;
+    } else {
+      this.startMonitoring();
+    }
+    config.registerService('VPN', this);
+  }
+
+  async reload(): Promise<void> {
+    const newDisabled = this.config.getOrThrow('DISABLE_VPN_CHECK');
+    if (newDisabled === this.disabled) return;
+    this.disabled = newDisabled;
+    if (this.disabled) {
+      if (this.monitoringInterval) {
+        clearInterval(this.monitoringInterval);
+        this.monitoringInterval = null;
+      }
       this.lastVpnStatus = true;
     } else {
       this.startMonitoring();

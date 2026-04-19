@@ -6,6 +6,7 @@ import type {
   VideoCodec,
 } from '@miauflix/source-metadata-extractor';
 
+import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import type { Api } from '@utils/api.util';
 
 export interface SourceMetadata {
@@ -33,6 +34,9 @@ export abstract class AbstractContentDirectory<T extends Api = Api> {
   protected api: T;
 
   abstract name: string;
+
+  abstract getStatus(): ServiceInstanceStatus;
+  abstract reload(): Promise<void>;
 
   abstract getMovie(
     imdbId: string,

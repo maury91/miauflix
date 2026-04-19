@@ -1,9 +1,9 @@
 import { logger } from '@logger';
 
-import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { MovieSource } from '@entities/movie-source.entity';
 import { SourceError } from '@errors/source.errors';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type {
   MovieSourceRepository,
@@ -27,35 +27,118 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
  * Service for searching and managing sources
  */
 export class SourceService {
+  getStatus(): ServiceInstanceStatus {
+    if (!this.searchOnlyBehindVpn) {
+      return { status: 'ready' };
+    }
+    if (this.startError !== null) {
+      const msg =
+        this.startError instanceof Error ? this.startError.message : String(this.startError);
+      return { status: 'error', errorMessage: msg, error: this.startError };
+    }
+    if (!this.startResolved) {
+      return {
+        status: 'initializing',
+        details: 'Checking VPN connection',
+        startedAt: this.startStartedAt,
+      };
+    }
+    if (!this.vpnConnected) {
+      return { status: 'degraded', reason: 'vpn-disconnected' };
+    }
+    return { status: 'ready' };
+  }
+
   private readonly movieRepository: MovieRepository;
   private readonly movieSourceRepository: MovieSourceRepository;
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
 
   private vpnConnected = false;
-  private readonly searchOnlyBehindVpn = !ENV('DISABLE_VPN_CHECK');
-  private readonly startPromise: Promise<void>;
+  private searchOnlyBehindVpn: boolean;
+  private startPromise: Promise<void>;
+  private startError: unknown = null;
+  private startResolved = false;
+  private startStartedAt = 0;
+  private vpnProbeVersion = 0;
+  private readonly config: ConfigService;
+  private readonly vpnService: VpnDetectionService;
+  private vpnUnsubscribers: Array<() => void> = [];
 
   constructor(
     db: Database,
     vpnService: VpnDetectionService,
     private readonly contentDirectoryService: ContentDirectoryService,
     private readonly magnetService: SourceMetadataFileService,
-    private readonly requestService: RequestService
+    private readonly requestService: RequestService,
+    config: ConfigService
   ) {
+    this.config = config;
+    this.vpnService = vpnService;
+    this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
+    config.registerService('SOURCE', this);
     if (this.searchOnlyBehindVpn) {
-      this.startPromise = vpnService.isVpnActive().then(connected => {
-        this.vpnConnected = connected;
-      });
-      vpnService.on('connect', () => {
-        this.vpnConnected = true;
-      });
-      vpnService.on('disconnect', () => {
-        this.vpnConnected = false;
-      });
+      this.startPromise = this.trackStartPromise(this.refreshVpnState());
+      this.vpnUnsubscribers = [
+        vpnService.on('connect', () => {
+          this.vpnConnected = true;
+        }),
+        vpnService.on('disconnect', () => {
+          this.vpnConnected = false;
+        }),
+      ];
     } else {
       this.vpnConnected = true; // If not searching only behind VPN, assume connected
+      this.startResolved = true;
+      this.startPromise = Promise.resolve();
+    }
+  }
+
+  private trackStartPromise(promise: Promise<void>): Promise<void> {
+    this.startResolved = false;
+    this.startError = null;
+    this.startStartedAt = Date.now();
+    promise.then(
+      () => {
+        this.startResolved = true;
+      },
+      (err: unknown) => {
+        this.startError = err;
+      }
+    );
+    return promise;
+  }
+
+  private refreshVpnState(): Promise<void> {
+    const version = ++this.vpnProbeVersion;
+    return this.vpnService.isVpnActive().then(connected => {
+      if (version === this.vpnProbeVersion && this.searchOnlyBehindVpn) {
+        this.vpnConnected = connected;
+      }
+    });
+  }
+
+  async reload(): Promise<void> {
+    this.searchOnlyBehindVpn = !this.config.getOrThrow('DISABLE_VPN_CHECK');
+    if (!this.searchOnlyBehindVpn) {
+      this.vpnConnected = true;
+      this.startResolved = true;
+      this.startPromise = Promise.resolve();
+      this.startError = null;
+      for (const unsub of this.vpnUnsubscribers) unsub();
+      this.vpnUnsubscribers = [];
+    } else {
+      for (const unsub of this.vpnUnsubscribers) unsub();
+      this.startPromise = this.trackStartPromise(this.refreshVpnState());
+      this.vpnUnsubscribers = [
+        this.vpnService.on('connect', () => {
+          this.vpnConnected = true;
+        }),
+        this.vpnService.on('disconnect', () => {
+          this.vpnConnected = false;
+        }),
+      ];
     }
   }
 

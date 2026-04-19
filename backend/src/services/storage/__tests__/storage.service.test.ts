@@ -1,18 +1,56 @@
 jest.unmock('@database/database');
 
-import { createTestDatabase, type TestDatabaseHelper } from '@__test-utils__/database.helpers';
+import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { TestDataFactory } from '@__test-utils__/test-data.factory';
 import fs from 'fs';
 
 import { StorageService } from '../storage.service';
 
+const parseStorageThreshold = (value: string): bigint => {
+  const units: Record<string, bigint> = {
+    B: BigInt(1),
+    KB: BigInt(1024),
+    MB: BigInt(1024 * 1024),
+    GB: BigInt(1024 * 1024 * 1024),
+    TB: BigInt(1024) * BigInt(1024 * 1024 * 1024),
+  };
+  const match = value.toUpperCase().match(/^(\d+)\s*(B|KB|MB|GB|TB)$/);
+  if (!match) return BigInt(0);
+  return BigInt(match[1]) * (units[match[2]] ?? BigInt(1));
+};
+
+const DEFAULT_THRESHOLD = BigInt(50) * BigInt(1024 * 1024 * 1024); // 50GB
+
+const resolveStorageThreshold = (): bigint => {
+  const raw = process.env.STORAGE_THRESHOLD;
+  if (!raw) return DEFAULT_THRESHOLD;
+  const parsed = parseStorageThreshold(raw);
+  return parsed === 0n ? DEFAULT_THRESHOLD : parsed;
+};
+
+const mockConfig = {
+  get: (key: string) => {
+    if (key === 'STORAGE_THRESHOLD') {
+      return resolveStorageThreshold() as never;
+    }
+    return undefined as never;
+  },
+  getOrThrow: (key: string) => {
+    if (key === 'STORAGE_THRESHOLD') {
+      return resolveStorageThreshold() as never;
+    }
+    throw new Error(`${key} is not set`);
+  },
+  registerService: () => {},
+};
+
 describe('StorageService', () => {
-  let dbHelper: TestDatabaseHelper;
+  let dbHelper: ReturnType<typeof createTestDatabase>;
   let testDataFactory: TestDataFactory;
 
   const setupTest = () => {
     const database = dbHelper.getDatabase();
-    const storageService = new StorageService(database);
+    const storageService = new StorageService(database, mockConfig);
     return { storageService, database };
   };
 

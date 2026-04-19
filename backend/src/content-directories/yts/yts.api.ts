@@ -1,8 +1,8 @@
 import { logger } from '@logger';
 import type { Cache } from 'cache-manager';
 
-import { ENV } from '@constants';
 import { ApiError } from '@errors/api.errors';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { Api } from '@utils/api.util';
@@ -28,24 +28,62 @@ export class YTSApi extends Api {
   private currentDomainIndex = 0;
   private domainMirrors: string[] = fallbackDomainMirrors;
   private domainMirrorsPromise: Promise<string[]> | null = null;
+  private isReady = false; // kept for internal use
+  private _initStatus: ServiceInstanceStatus = {
+    status: 'initializing',
+    details: 'Starting up',
+    startedAt: Date.now(),
+  };
 
   constructor(
     cache: Cache,
     statsService: StatsService,
-    private readonly requestService: RequestService
+    private readonly requestService: RequestService,
+    private readonly config: ConfigService
   ) {
     super(
       cache,
       statsService,
-      ENV('YTS_API_URL') || `https://${fallbackDomainMirrors[0]}`,
+      config.getOrThrow('YTS_API_URL'),
       // YTS doesn't document rate limits specifically, but we'll implement
       // a conservative rate limiter (20 requests per minute) to be safe
       20 / 60, // Default RateLimiter: 20 requests per minute ( 1 request every 3 seconds )
       2 // High priority RateLimiter: 2 request per second
     );
 
-    // Start discovering domains asynchronously
-    this.initializeDomainMirrors();
+    // Start discovering domains and run init test asynchronously
+    void this.init();
+  }
+
+  getStatus(): ServiceInstanceStatus {
+    return this._initStatus;
+  }
+
+  private async init(): Promise<void> {
+    const startedAt = Date.now();
+    this._initStatus = {
+      status: 'initializing_mirrors',
+      details: 'Discovering mirrors',
+      startedAt,
+    };
+    await this.initializeDomainMirrors();
+
+    this._initStatus = {
+      status: 'initializing',
+      details: `Testing API connectivity using mirror ${this.currentDomainIndex + 1} of ${this.domainMirrors.length}`,
+      startedAt,
+    };
+
+    this.isReady = await this.test();
+    this._initStatus = this.isReady
+      ? { status: 'ready' }
+      : { status: 'error', errorMessage: 'YTS API connectivity test failed', error: null };
+  }
+
+  public async reload(): Promise<void> {
+    this.apiUrl = this.config.getOrThrow('YTS_API_URL');
+    this.domainMirrorsPromise = null;
+    await this.init();
   }
 
   /**
@@ -61,9 +99,10 @@ export class YTSApi extends Api {
       .catch(() => fallbackDomainMirrors)
       .then(domains => {
         this.domainMirrors = domains;
-        if (!ENV('YTS_API_URL') && domains.length > 0) {
+        if (!this.config.get('YTS_API_URL') && domains.length > 0) {
           this.apiUrl = `https://${domains[0]}`;
         }
+        logger.info('YTS', 'Discovered mirrors', domains);
         return domains;
       });
   }

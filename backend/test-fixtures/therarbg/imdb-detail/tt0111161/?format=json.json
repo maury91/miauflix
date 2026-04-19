@@ -1,0 +1,10 @@
+{
+  "status": 503,
+  "statusText": "Service Unavailable",
+  "headers": {
+    "content-type": "text/html; charset=utf-8"
+  },
+  "body": "<!DOCTYPE html>\n\n<html lang=\"en\"></html>\n",
+  "bodyIsJson": false,
+  "isTransformed": true
+}

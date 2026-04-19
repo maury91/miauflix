@@ -8,13 +8,13 @@ import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { UserRepository } from '@repositories/user.repository';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 
 import { AuthService } from './auth.service';
 
-// Mock the ENV function - must be hoisted
-jest.mock('@constants');
 jest.mock('@database/database');
+jest.mock('@services/configuration/configuration.service');
 
 // Mock the tracing decorator
 jest.mock('@utils/tracing.util', () => ({
@@ -52,6 +52,33 @@ jest.mock('@utils/proxy.util', () => ({
 // Mock JWT secret for testing
 const jwtSecret = 'test-jwt-secret-key-for-hmac-sha256';
 
+const createMockConfig = (): ConfigurationService => {
+  const mockedConfigService =
+    new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+  mockedConfigService.get.mockImplementation((key: string) => {
+    const config: Record<string, unknown> = {
+      JWT_SECRET: jwtSecret,
+      REFRESH_TOKEN_EXPIRATION: 7 * 24 * 60 * 60 * 1000,
+      ACCESS_TOKEN_EXPIRATION: 15 * 60 * 1000,
+      REFRESH_TOKEN_MAX_REFRESH_DAYS: 30,
+      MAX_DEVICE_SLOTS_PER_USER: 5,
+      REFRESH_TOKEN_COOKIE_NAME: '__test_rt',
+      ACCESS_TOKEN_COOKIE_NAME: '__test_at',
+      COOKIE_SECURE: true,
+      STREAM_TOKEN_EXPIRATION: 21600000,
+      STREAM_KEY_SALT: 'test-salt',
+      ALLOW_CREATE_ADMIN_ON_FIRST_RUN: false,
+    };
+    return config[key] as never;
+  });
+  mockedConfigService.getOrThrow.mockImplementation((key: string) => {
+    const result = mockedConfigService.get(key as never);
+    if (result === undefined) throw new Error(`${key} is not set`);
+    return result as never;
+  });
+  return mockedConfigService;
+};
+
 describe('AuthService', () => {
   let authService: AuthService;
   let mockDatabase: jest.Mocked<Database>;
@@ -60,10 +87,8 @@ describe('AuthService', () => {
   let mockAuditLogService: jest.Mocked<AuditLogService>;
   let mockContext: Context;
 
-  // Get the mocked ENV function
-  const { ENV } = jest.requireMock('@constants');
-
   const setupTest = () => {
+    const configService = createMockConfig();
     mockDatabase = new Database({} as never) as jest.Mocked<Database>;
     mockUserRepository = mockDatabase.getUserRepository() as jest.Mocked<UserRepository>;
     mockRefreshTokenRepository =
@@ -81,7 +106,7 @@ describe('AuthService', () => {
     } as unknown as Context;
 
     return {
-      authService: new AuthService(mockDatabase, mockAuditLogService),
+      authService: new AuthService(mockDatabase, mockAuditLogService, configService),
       mockUserRepository,
       mockRefreshTokenRepository,
       mockAuditLogService,
@@ -90,23 +115,6 @@ describe('AuthService', () => {
   };
 
   beforeEach(() => {
-    // Mock ENV to return test configuration
-    ENV.mockImplementation((key: string) => {
-      const config = {
-        JWT_SECRET: jwtSecret,
-        REFRESH_TOKEN_EXPIRATION: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
-        ACCESS_TOKEN_EXPIRATION: 15 * 60 * 1000, // 15 minutes in ms
-        REFRESH_TOKEN_MAX_REFRESH_DAYS: 30,
-        MAX_DEVICE_SLOTS_PER_USER: 5,
-        REFRESH_TOKEN_COOKIE_NAME: '__test_rt',
-        ACCESS_TOKEN_COOKIE_NAME: '__test_at',
-        COOKIE_SECURE: true,
-        STREAM_TOKEN_EXPIRATION: 21600000, // 6 hours in ms
-        STREAM_KEY_SALT: 'test-salt',
-      };
-      return config[key as keyof typeof config];
-    });
-
     const setup = setupTest();
     authService = setup.authService;
     mockUserRepository = setup.mockUserRepository;
