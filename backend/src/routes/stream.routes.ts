@@ -8,13 +8,14 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import type { Deps, ErrorResponse } from './common.types';
 
 export const createStreamRoutes = ({
+  auditLogService,
   authService,
+  configurationService,
+  downloadService,
   mediaService,
   streamService,
-  auditLogService,
-  downloadService,
 }: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
+  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono().get(
     '/:token',

@@ -6,17 +6,18 @@ import { CacheableMemory, Keyv } from 'cacheable';
 import path from 'path';
 import sqlite3 from 'sqlite3';
 
-import { ENV } from '@constants';
+import type { ConfigService } from '@mytypes/configuration';
 import { traced } from '@utils/tracing.util';
 
 export class CacheService {
   private db: sqlite3.Database;
-  private maximumEmptySpace = ENV('MAXIMUM_CACHE_EMPTY_SPACE');
+  private maximumEmptySpace: bigint;
   public cache: Cache;
 
-  constructor() {
+  constructor(config: ConfigService) {
+    this.maximumEmptySpace = config.getOrThrow('MAXIMUM_CACHE_EMPTY_SPACE');
     // Also create direct database connection for queries
-    const dbFilePath = path.resolve(ENV('DATA_DIR'), 'cache.sqlite');
+    const dbFilePath = path.resolve(config.getOrThrow('DATA_DIR'), 'cache.sqlite');
     this.db = new sqlite3.Database(dbFilePath);
 
     this.cache = createCache({
@@ -143,12 +144,12 @@ export class CacheService {
 
       const deletedCount = await this.deleteExpiredEntriesFromDB();
 
-      const shouldVacuum = (await this.getEmptySpace()) >= this.maximumEmptySpace;
+      const shouldVacuum = (await this.getEmptySpace()) >= Number(this.maximumEmptySpace);
       if (shouldVacuum) {
         const freeSpace = await this.getEmptySpace();
         logger.info(
           'CacheService',
-          `Accumulated free space: ${this.formatBytes(freeSpace)} - running VACUUM`
+          `Accumulated free space: ${this.formatBytes(Number(freeSpace))} - running VACUUM`
         );
         await this.vacuumDatabase();
       }

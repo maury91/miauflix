@@ -13,10 +13,11 @@ export const createMovieRoutes = ({
   auditLogService,
   authService,
   catalogService,
+  configurationService,
   sourceService,
   streamService,
 }: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
+  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
   const supportedQualities: ['auto', ...Quality[]] = ['auto', ...Object.values(Quality)];
 
   // Get a single movie by ID

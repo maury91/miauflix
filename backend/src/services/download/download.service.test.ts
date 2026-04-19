@@ -7,8 +7,8 @@ import { logger } from '@logger';
 import { Client as BTClient } from 'bittorrent-tracker';
 import loadIPSet from 'load-ip-set';
 
-import { ENV } from '@constants';
 import { Database } from '@database/database';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
@@ -18,37 +18,49 @@ import { mockedTorrentInstance } from '../../__mocks__/webtorrent';
 import { DownloadService } from './download.service';
 
 // Mock all external dependencies
-jest.mock('@constants');
 jest.mock('bittorrent-tracker');
 jest.mock('load-ip-set');
 jest.mock('@logger');
 jest.mock('@services/storage/storage.service');
 jest.mock('@services/request/request.service');
 jest.mock('@database/database');
+jest.mock('@services/configuration/configuration.service');
+
+const createMockConfig = (): ConfigurationService => {
+  const values: Record<string, unknown> = {
+    CONTENT_CONNECTION_LIMIT: 100,
+    CONTENT_DOWNLOAD_LIMIT: 1000000,
+    CONTENT_UPLOAD_LIMIT: 500000,
+    DISABLE_DISCOVERY: false,
+    STATIC_TRACKERS: ['udp://tracker1.example.com:1337', 'udp://tracker2.example.com:1337'],
+    SCRAPE_TRACKERS: ['udp://tracker.opentrackr.org:1337/announce'],
+    BEST_TRACKERS_DOWNLOAD_URL: 'https://example.com/trackers_best.txt',
+    BLACKLISTED_TRACKERS_DOWNLOAD_URL: 'https://example.com/blacklist.txt',
+    DOWNLOAD_PATH: '/tmp/test-downloads',
+    DOWNLOAD_SALT: 'a'.repeat(32),
+    SOURCE_SECURITY_KEY: 'b'.repeat(32),
+  };
+  const mockedConfigService =
+    new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+  mockedConfigService.get.mockImplementation((key: string) => values[key] as never);
+  mockedConfigService.getOrThrow.mockImplementation((key: string) => {
+    if (key in values) return values[key] as never;
+    throw new Error(`${key} is not set`);
+  });
+  return mockedConfigService;
+};
 
 describe('DownloadService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-
-    // Mock ENV function
-    (ENV as jest.MockedFunction<typeof ENV>).mockImplementation((key: string) => {
-      const envMock: Record<string, string[] | boolean | number | string> = {
-        CONTENT_CONNECTION_LIMIT: 100,
-        CONTENT_DOWNLOAD_LIMIT: 1000000,
-        CONTENT_UPLOAD_LIMIT: 500000,
-        DISABLE_DISCOVERY: false,
-        STATIC_TRACKERS: ['udp://tracker1.example.com:1337', 'udp://tracker2.example.com:1337'],
-        BEST_TRACKERS_DOWNLOAD_URL: 'https://example.com/trackers_best.txt',
-        BLACKLISTED_TRACKERS_DOWNLOAD_URL: 'https://example.com/blacklist.txt',
-      };
-      return envMock[key];
-    });
   });
 
   const setupTest = (mockConfig?: {
     requestServiceMock?: (mock: jest.Mocked<RequestService>) => void;
     loadIPSetMock?: (mock: jest.MockedFunction<typeof loadIPSet>) => void;
   }) => {
+    const configService = createMockConfig();
+
     // Mock BT Client
     const mockBTClient = {
       once: jest.fn(),
@@ -60,7 +72,8 @@ describe('DownloadService', () => {
 
     // Mock RequestService
     const mockRequestService = new RequestService(
-      new StatsService()
+      new StatsService(),
+      configService
     ) as unknown as jest.Mocked<RequestService>;
 
     // Mock loadIPSet
@@ -76,10 +89,11 @@ describe('DownloadService', () => {
 
     // Mock StorageService as EventEmitter
     const mockStorageService = new StorageService(
-      new Database({} as never)
+      new Database({} as never),
+      configService
     ) as jest.Mocked<StorageService>;
 
-    const service = new DownloadService(mockStorageService, mockRequestService);
+    const service = new DownloadService(mockStorageService, mockRequestService, configService);
 
     return {
       service,

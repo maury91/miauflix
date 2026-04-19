@@ -1,19 +1,24 @@
+jest.mock('@services/request/request.service');
+jest.mock('@services/configuration/configuration.service');
+
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { discoverYTSMirrors } from './yts-mirror-discovery';
 
-jest.mock('@services/request/request.service');
-
 describe('YTS Mirror Discovery', () => {
   let mockRequestService: jest.Mocked<RequestService>;
 
   beforeEach(() => {
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
     mockRequestService = new RequestService(
-      new StatsService()
+      new StatsService(),
+      mockConfigService
     ) as unknown as jest.Mocked<RequestService>;
   });
 

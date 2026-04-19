@@ -1,7 +1,4 @@
-import { ApiError } from '@errors/api.errors';
 import { serviceConfiguration, transforms, variable } from '@utils/config';
-
-import { TraktApi } from './trakt.api';
 
 export const traktConfigurationDefinition = serviceConfiguration({
   name: 'Trakt.tv',
@@ -28,26 +25,5 @@ export const traktConfigurationDefinition = serviceConfiguration({
       required: true,
       password: true,
     }),
-  },
-  test: async () => {
-    try {
-      const traktApi = new TraktApi();
-
-      await traktApi.test();
-    } catch (error: unknown) {
-      if (typeof error === 'object' && error !== null && 'status' in error) {
-        const err = error as { status: number };
-        if (err.status === 401) {
-          throw new ApiError('Invalid Client ID', 'not_configured', 'trakt', err.status);
-        }
-        throw new ApiError(
-          `Connection error: ${err.status}`,
-          'connection_error',
-          'trakt',
-          err.status
-        );
-      }
-      throw error;
-    }
   },
 });

@@ -16,8 +16,13 @@ import type {
   TraktAssociationResponse,
 } from './trakt.types';
 
-export const createTraktRoutes = ({ traktService, auditLogService, authService }: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
+export const createTraktRoutes = ({
+  auditLogService,
+  authService,
+  configurationService,
+  traktService,
+}: Deps) => {
+  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   // Initiate Trakt device authentication (authenticated users only)
   return (

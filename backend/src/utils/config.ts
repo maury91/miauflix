@@ -9,16 +9,6 @@ import type {
   VariableInfo,
 } from '@mytypes/configuration';
 
-export class ConfigurationError extends Error {
-  constructor(
-    message: string,
-    public variable?: string
-  ) {
-    super(message);
-    this.name = 'ConfigurationError';
-  }
-}
-
 const timeMultipliers = {
   s: 1000,
   m: 60,

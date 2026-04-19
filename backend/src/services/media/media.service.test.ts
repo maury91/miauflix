@@ -1,10 +1,12 @@
 jest.mock('@database/database');
+jest.mock('@services/configuration/configuration.service');
 
 import { MockCache } from '@__test-utils__/cache.mock';
 import { logger as mockLogger } from '@logger';
 
 import { Database } from '@database/database';
 import type { Movie } from '@entities/movie.entity';
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { TMDBApi } from '@services/content-catalog/tmdb/tmdb.api';
 import { TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
 import { StatsService } from '@services/stats/stats.service';
@@ -23,11 +25,21 @@ describe('MediaService', () => {
   let mockSyncStateRepo: jest.Mocked<ReturnType<Database['getSyncStateRepository']>>;
 
   const setupTest = async () => {
-    process.env.TMDB_API_ACCESS_TOKEN = 'test-token';
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockConfigService.get.mockImplementation((key: string) => {
+      if (key === 'TMDB_API_ACCESS_TOKEN') return 'test-token' as never;
+      if (key === 'TMDB_API_URL') return 'https://api.themoviedb.org/3' as never;
+      return undefined as never;
+    });
+    mockConfigService.getOrThrow.mockImplementation((key: string) => {
+      const result = mockConfigService.get(key as never);
+      if (result === undefined) throw new Error(`${key} is not set`);
+      return result as never;
+    });
 
     // Create a new Database instance (which will be the mock)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mockDb = new Database({} as any);
+    mockDb = new Database({} as never);
     mockMovieRepo = mockDb.getMovieRepository() as jest.Mocked<
       ReturnType<Database['getMovieRepository']>
     >;
@@ -41,18 +53,18 @@ describe('MediaService', () => {
     // Create TmdbService (with TMDBApi) and MediaService with mock DB
     const mockCache = new MockCache();
     const statsService = new StatsService();
-    const tmdbApi = new TMDBApi(mockCache, statsService);
-    const tmdbService = new TmdbService(mockDb, tmdbApi);
+    const tmdbApi = new TMDBApi(mockCache, statsService, mockConfigService);
+    const tmdbService = new TmdbService(mockDb, tmdbApi, mockConfigService);
     const mediaService = new MediaService(mockDb, tmdbService);
 
-    // Wait a bit for any async initialization (like getConfiguration) to complete
-    await Promise.resolve();
+    // Wait for async initialization (init() → test() + getConfiguration()) to complete
+    await tmdbApi.reload();
     jest.clearAllMocks();
     return { mediaService, statsService, tmdbApi, tmdbService };
   };
 
   afterEach(() => {
-    delete process.env.TMDB_API_ACCESS_TOKEN;
+    jest.clearAllMocks();
   });
 
   // Group existing movie tests

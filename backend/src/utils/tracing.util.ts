@@ -7,7 +7,17 @@ import {
   ATTR_URL_FULL,
 } from '@opentelemetry/semantic-conventions';
 
-import { ENV } from '@constants';
+// Module-level tracing toggle — set once via initTracing() after ConfigurationService initializes.
+// Defaults to false so all tracing no-ops in tests and early bootstrap.
+let _tracingEnabled = false;
+
+export function initTracing(enabled: boolean): void {
+  _tracingEnabled = enabled;
+}
+
+export function isTracingEnabled(): boolean {
+  return _tracingEnabled;
+}
 
 /**
  * Tracing utility for creating and managing spans throughout the application
@@ -23,7 +33,7 @@ export class TracingUtil {
     methodName: string,
     attributes: Attributes = {}
   ): Span | null {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return null;
     }
 
@@ -52,7 +62,7 @@ export class TracingUtil {
     attributes: Attributes = {},
     peerService?: string
   ): Span | null {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return null;
     }
 
@@ -87,7 +97,7 @@ export class TracingUtil {
     attributes: Attributes = {},
     peerService?: string
   ): Span | null {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return null;
     }
 
@@ -121,7 +131,7 @@ export class TracingUtil {
     filePath: string,
     attributes: Attributes = {}
   ): Span | null {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return null;
     }
 
@@ -145,7 +155,7 @@ export class TracingUtil {
    * Create a span for background tasks (root span; no parent)
    */
   static createTaskSpan(taskName: string, attributes: Attributes = {}): Span | null {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return null;
     }
 
@@ -173,7 +183,7 @@ export class TracingUtil {
     fn: () => Promise<T> | T,
     additionalAttributes: Attributes = {}
   ): Promise<T> {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return await fn();
     }
 
@@ -204,7 +214,7 @@ export class TracingUtil {
    * Execute a function within a span context (sync version)
    */
   static executeInSpanSync<T>(span: Span, fn: () => T, additionalAttributes: Attributes = {}): T {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return fn();
     }
 
@@ -235,7 +245,7 @@ export class TracingUtil {
    * Create a child span from the current active span
    */
   static createChildSpan(name: string, attributes: Attributes = {}): Span | null {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return null;
     }
 
@@ -255,7 +265,7 @@ export class TracingUtil {
    * Add an event to the current span
    */
   static addEvent(name: string, attributes: Attributes = {}): void {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return;
     }
 
@@ -269,7 +279,7 @@ export class TracingUtil {
    * Add attributes to the current span
    */
   static addAttributes(attributes: Attributes): void {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return;
     }
 
@@ -283,7 +293,7 @@ export class TracingUtil {
    * Record an error in the current span
    */
   static recordError(error: Error): void {
-    if (!ENV('ENABLE_TRACING')) {
+    if (!_tracingEnabled) {
       return;
     }
 
@@ -420,7 +430,7 @@ export function tracedApi<
  * Utility function to create a span for any operation
  */
 export function createSpan(name: string, attributes: Attributes = {}): Span {
-  if (!ENV('ENABLE_TRACING')) {
+  if (!_tracingEnabled) {
     return trace.getTracer('dummy').startSpan('dummy') as Span;
   }
 
@@ -447,7 +457,7 @@ export async function withClientSpan<T>(
   fn: () => Promise<T> | T,
   attributes: Attributes = {}
 ): Promise<T> {
-  if (!ENV('ENABLE_TRACING')) {
+  if (!_tracingEnabled) {
     const result = fn();
     return result instanceof Promise ? result : Promise.resolve(result);
   }

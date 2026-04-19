@@ -149,6 +149,13 @@ fi
 # Export VERBOSE for subscripts
 export VERBOSE
 
+# Backup .env.test before test run so container writes don't persist
+ENV_TEST_FILE="$backend_e2e_dir/.env.test"
+ENV_TEST_BACKUP="$backend_e2e_dir/.env.test.bak"
+if [[ "$MODE" == "test" && -f "$ENV_TEST_FILE" ]]; then
+    cp "$ENV_TEST_FILE" "$ENV_TEST_BACKUP"
+fi
+
 # Function to cleanup artifacts
 cleanupArtifacts() {
     echo "🧹 Cleaning up previous build artifacts..."
@@ -187,6 +194,13 @@ cleanup() {
         echo "🚀 Detached mode - leaving containers running"
         cleanupArtifacts
     fi
+    
+    # Restore .env.test from backup if one was made
+    if [[ -f "$ENV_TEST_BACKUP" ]]; then
+        cp "$ENV_TEST_BACKUP" "$ENV_TEST_FILE"
+        rm -f "$ENV_TEST_BACKUP"
+    fi
+
     exit $TERM_SIGNAL
 }
 

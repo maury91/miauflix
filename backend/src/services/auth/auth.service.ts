@@ -6,7 +6,6 @@ import type { JWTPayload } from 'jose';
 import { jwtVerify, SignJWT } from 'jose';
 import { hostname } from 'os';
 
-import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import type { RefreshToken } from '@entities/refresh-token.entity';
@@ -17,6 +16,7 @@ import {
   InvalidTokenError,
   UserAlreadyExistsError,
 } from '@errors/auth.errors';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import type { UserRepository } from '@repositories/user.repository';
@@ -63,47 +63,70 @@ export class AuthService {
   private readonly userRepository: UserRepository;
   private readonly refreshTokenRepository: RefreshTokenRepository;
   private readonly streamingKeyRepository: StreamingKeyRepository;
-  private readonly secretKey: Uint8Array;
+  private secretKey: Uint8Array;
   private readonly issuer = 'miauflix-api';
   private readonly audience = 'miauflix-client';
-  private readonly streamingKeyTTL: number;
-  private readonly streamingKeySalt: string;
+  private streamingKeyTTL: number;
+  private streamingKeySalt: string;
   private readonly streamingKeyCache = new InMemoryCache<StreamingToken>();
 
   // Configuration
-  private readonly allowCreateAdminOnFirstRun: boolean;
-  private readonly refreshTokenTTL: number;
-  private readonly accessTokenTTL: number;
-  private readonly refreshTokenMaxRefreshDays: number;
-  private readonly maxDeviceSlotsPerUser: number;
-  private readonly cookieName: string;
-  private readonly accessTokenCookieName: string;
-  private readonly cookieDomain?: string;
-  private readonly cookieSecure: boolean;
+  private allowCreateAdminOnFirstRun: boolean;
+  private refreshTokenTTL: number;
+  private accessTokenTTL: number;
+  private refreshTokenMaxRefreshDays: number;
+  private maxDeviceSlotsPerUser: number;
+  private cookieName: string;
+  private accessTokenCookieName: string;
+  private cookieDomain?: string;
+  private cookieSecure: boolean;
+  private readonly config: ConfigService;
+
+  getStatus(): ServiceInstanceStatus {
+    return { status: 'ready' };
+  }
 
   constructor(
     db: Database,
-    private readonly auditLogService: AuditLogService
+    private readonly auditLogService: AuditLogService,
+    config: ConfigService
   ) {
+    this.config = config;
     this.userRepository = db.getUserRepository();
     this.refreshTokenRepository = db.getRefreshTokenRepository();
     this.streamingKeyRepository = db.getStreamingKeyRepository();
+    config.registerService('JWT', this);
 
     // Convert the secret to a Uint8Array for jose
-    this.secretKey = new TextEncoder().encode(ENV('JWT_SECRET'));
+    this.secretKey = new TextEncoder().encode(config.getOrThrow('JWT_SECRET'));
 
     // Configuration
-    this.allowCreateAdminOnFirstRun = ENV('ALLOW_CREATE_ADMIN_ON_FIRST_RUN');
-    this.streamingKeyTTL = ENV('STREAM_TOKEN_EXPIRATION');
-    this.streamingKeySalt = ENV('STREAM_KEY_SALT');
-    this.refreshTokenTTL = ENV('REFRESH_TOKEN_EXPIRATION');
-    this.accessTokenTTL = ENV('ACCESS_TOKEN_EXPIRATION');
-    this.refreshTokenMaxRefreshDays = ENV('REFRESH_TOKEN_MAX_REFRESH_DAYS');
-    this.maxDeviceSlotsPerUser = ENV('MAX_DEVICE_SLOTS_PER_USER');
-    this.cookieName = ENV('REFRESH_TOKEN_COOKIE_NAME');
-    this.accessTokenCookieName = ENV('ACCESS_TOKEN_COOKIE_NAME');
-    this.cookieDomain = ENV('COOKIE_DOMAIN') || undefined;
-    this.cookieSecure = ENV('COOKIE_SECURE');
+    this.allowCreateAdminOnFirstRun = config.getOrThrow('ALLOW_CREATE_ADMIN_ON_FIRST_RUN');
+    this.streamingKeyTTL = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
+    this.streamingKeySalt = config.getOrThrow('STREAM_KEY_SALT');
+    this.refreshTokenTTL = config.getOrThrow('REFRESH_TOKEN_EXPIRATION');
+    this.accessTokenTTL = config.getOrThrow('ACCESS_TOKEN_EXPIRATION');
+    this.refreshTokenMaxRefreshDays = config.getOrThrow('REFRESH_TOKEN_MAX_REFRESH_DAYS');
+    this.maxDeviceSlotsPerUser = config.getOrThrow('MAX_DEVICE_SLOTS_PER_USER');
+    this.cookieName = config.getOrThrow('REFRESH_TOKEN_COOKIE_NAME');
+    this.accessTokenCookieName = config.getOrThrow('ACCESS_TOKEN_COOKIE_NAME');
+    this.cookieDomain = config.get('COOKIE_DOMAIN') || undefined;
+    this.cookieSecure = config.getOrThrow('COOKIE_SECURE');
+  }
+
+  async reload(): Promise<void> {
+    this.secretKey = new TextEncoder().encode(this.config.getOrThrow('JWT_SECRET'));
+    this.allowCreateAdminOnFirstRun = this.config.getOrThrow('ALLOW_CREATE_ADMIN_ON_FIRST_RUN');
+    this.streamingKeyTTL = this.config.getOrThrow('STREAM_TOKEN_EXPIRATION');
+    this.streamingKeySalt = this.config.getOrThrow('STREAM_KEY_SALT');
+    this.refreshTokenTTL = this.config.getOrThrow('REFRESH_TOKEN_EXPIRATION');
+    this.accessTokenTTL = this.config.getOrThrow('ACCESS_TOKEN_EXPIRATION');
+    this.refreshTokenMaxRefreshDays = this.config.getOrThrow('REFRESH_TOKEN_MAX_REFRESH_DAYS');
+    this.maxDeviceSlotsPerUser = this.config.getOrThrow('MAX_DEVICE_SLOTS_PER_USER');
+    this.cookieName = this.config.getOrThrow('REFRESH_TOKEN_COOKIE_NAME');
+    this.accessTokenCookieName = this.config.getOrThrow('ACCESS_TOKEN_COOKIE_NAME');
+    this.cookieDomain = this.config.get('COOKIE_DOMAIN') || undefined;
+    this.cookieSecure = this.config.getOrThrow('COOKIE_SECURE');
   }
 
   /**
@@ -214,7 +237,8 @@ export class AuthService {
 
   @traced('AuthService')
   async generateTokens(user: User, context: Context): Promise<AuthResult> {
-    const ipAddress = getRealClientIp(context) || 'unknown';
+    const ipAddress =
+      getRealClientIp(context, this.config.get('REVERSE_PROXY_SECRET') ?? '') || 'unknown';
     const userAgent = context.req.header('user-agent');
 
     // Always generate fresh session for security (prevents enumeration attacks)
@@ -362,7 +386,8 @@ export class AuthService {
     context: Context
   ): Promise<AuthResult | null> {
     try {
-      const ipAddress = getRealClientIp(context) || 'unknown';
+      const ipAddress =
+        getRealClientIp(context, this.config.get('REVERSE_PROXY_SECRET') ?? '') || 'unknown';
       const userAgent = context.req.header('user-agent');
 
       // Verify the refresh token

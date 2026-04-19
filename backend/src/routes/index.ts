@@ -3,7 +3,6 @@ import { httpInstrumentationMiddleware } from '@hono/otel';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
-import { ENV } from '@constants';
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
@@ -11,6 +10,7 @@ import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 
 import { createAuthRoutes } from './auth.routes';
 import type { Deps } from './common.types';
+import { createConfigRoutes } from './config.routes';
 import { createListRoutes } from './list.routes';
 import { createMovieRoutes } from './movie.routes';
 import { createProgressRoutes } from './progress.routes';
@@ -19,12 +19,20 @@ import { createStreamRoutes } from './stream.routes';
 import { createTraktRoutes } from './trakt.routes';
 
 function createApiRoutes(deps: Deps) {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(deps.auditLogService);
+  const rateLimitGuard = createRateLimitMiddlewareFactory(
+    deps.auditLogService,
+    deps.configurationService
+  );
 
   return new Hono()
     .use(httpInstrumentationMiddleware({}))
     .use(traceContextMiddleware)
-    .use(createAuthMiddleware(deps.authService))
+    .use(
+      createAuthMiddleware(
+        deps.authService,
+        () => deps.configurationService.get('ACCESS_TOKEN_COOKIE_NAME') ?? '__at'
+      )
+    )
     .use(createAuditLogMiddleware(deps.auditLogService))
     .get('/health', rateLimitGuard(10), c => {
       return c.json({ status: 'ok' });
@@ -35,9 +43,11 @@ function createApiRoutes(deps: Deps) {
     .get('/status', rateLimitGuard(10), c => {
       return c.json({
         vpn: deps.vpnDetectionService.status(),
+        services: deps.configurationService.getServiceStatuses(),
       });
     })
     .route('/auth', createAuthRoutes(deps))
+    .route('/config', createConfigRoutes(deps))
     .route('/movies', createMovieRoutes(deps))
     .route('/shows', createShowRoutes(deps))
     .route('/stream', createStreamRoutes(deps))
@@ -47,9 +57,10 @@ function createApiRoutes(deps: Deps) {
 }
 
 export function createRoutes(deps: Deps) {
-  const frontendDir = ENV('FRONTEND_DIR');
-  const corsOrigin = ENV('CORS_ORIGIN');
-  const origins = corsOrigin.map((origin: string) => origin.trim()).filter(Boolean);
+  const frontendDir = deps.configurationService.get('FRONTEND_DIR');
+  const origins = (deps.configurationService.get('CORS_ORIGIN') ?? [])
+    .map((origin: string) => origin.trim())
+    .filter(Boolean);
 
   const app = new Hono()
     .use(

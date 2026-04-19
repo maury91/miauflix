@@ -5,9 +5,9 @@ The backend uses OpenTelemetry for tracing. Traces are written to the filesystem
 ## Enabling tracing
 
 - Set **`ENABLE_TRACING=true`** in your environment or `.env`.
-- Optionally set **`TRACE_FILE`** to the directory for trace files (default: `/tmp`). The backend creates:
-  - One file per trace: `{TRACE_FILE}/{traceId}.log` (NDJSON, one JSON object per span).
-  - An index: `{TRACE_FILE}/index.ndjson` (one line per trace: `traceId`, `type`, `name`, `start`).
+- Optionally set **`TRACE_DIR`** to the directory for trace files (default: `/tmp`). The backend creates:
+  - One file per trace: `{TRACE_DIR}/{traceId}.log` (NDJSON, one JSON object per span).
+  - An index: `{TRACE_DIR}/index.ndjson` (one line per trace: `traceId`, `type`, `name`, `start`).
 - Optionally set **`TRACE_MAX_TRACES`** to cap how many trace files are kept (default: `1000`). Before creating a new trace file, the backend deletes the oldest trace files so only the most recent N remain. Set to `0` to disable pruning (keep all traces).
 
 With tracing disabled, the SDK is not started and there is no overhead.
@@ -20,7 +20,7 @@ With tracing disabled, the SDK is not started and there is no overhead.
   - `npm run traces -- list [N]` — list the N most recent traces (default 20).
   - `npm run traces -- last <taskName>` — print trace ID and file path for the last run of a task (e.g. `refreshLists`, `syncMovies`).
   - `npm run traces -- show <traceId>` — pretty-print the trace file.
-    Set `TRACE_FILE` if your backend uses a different trace directory.
+    Set `TRACE_DIR` if your backend uses a different trace directory.
 
 ## Adding spans and events in code
 

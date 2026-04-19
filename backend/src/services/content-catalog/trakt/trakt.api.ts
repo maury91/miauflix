@@ -1,5 +1,6 @@
-import { ENV } from '@constants';
 import { ApiError } from '@errors/api.errors';
+import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import { tracedApi } from '@utils/tracing.util';
 
 import type {
@@ -21,9 +22,16 @@ interface RateLimitInfo {
 }
 
 export class TraktApi {
-  private readonly clientId = ENV('TRAKT_CLIENT_ID');
-  private readonly clientSecret = ENV('TRAKT_CLIENT_SECRET');
-  private readonly apiUrl = ENV('TRAKT_API_URL');
+  private clientId: string;
+  private clientSecret: string;
+  private apiUrl: string;
+  private configured: boolean;
+  private _isReady = false; // kept for internal use
+  private _initStatus: ServiceInstanceStatus = {
+    status: 'initializing',
+    details: 'Starting up',
+    startedAt: Date.now(),
+  };
   private rateLimits: Partial<Record<RateLimitInfo['name'], RateLimitInfo>> = {};
   private staticLimits: Record<RateLimitInfo['name'], [number, number]> = {
     // These are from the documentation
@@ -32,13 +40,58 @@ export class TraktApi {
     AUTHED_API_POST_LIMIT: [1, 1],
   };
 
-  constructor() {
-    if (!this.clientId) {
-      throw new ApiError('TRAKT_CLIENT_ID is not set', 'not_configured', 'trakt');
+  constructor(private readonly config: ConfigService) {
+    this.clientId = config.get('TRAKT_CLIENT_ID') ?? '';
+    this.clientSecret = config.get('TRAKT_CLIENT_SECRET') ?? '';
+    this.apiUrl = config.getOrThrow('TRAKT_API_URL');
+    this.configured = !!(this.clientId && this.clientSecret);
+    void this.init();
+  }
+
+  getStatus(): ServiceInstanceStatus {
+    return this._initStatus;
+  }
+
+  private async init(): Promise<void> {
+    const startedAt = Date.now();
+    this._isReady = false;
+    if (!this.configured) {
+      this._initStatus = {
+        status: 'error',
+        errorMessage: 'Trakt.tv credentials not configured',
+        error: null,
+      };
+      return;
     }
-    if (!this.clientSecret) {
-      throw new ApiError('TRAKT_CLIENT_SECRET is not set', 'not_configured', 'trakt');
+    this._initStatus = { status: 'initializing', details: 'Testing API connectivity', startedAt };
+    try {
+      await this.test();
+      this._isReady = true;
+      this._initStatus = { status: 'ready' };
+    } catch (err) {
+      this._isReady = false;
+      this._initStatus = {
+        status: 'error',
+        errorMessage: 'Trakt.tv API connectivity test failed',
+        error: err,
+      };
     }
+  }
+
+  public isConfigured(): boolean {
+    return this.configured;
+  }
+
+  public reloadConfig(): void {
+    this.clientId = this.config.get('TRAKT_CLIENT_ID') ?? '';
+    this.clientSecret = this.config.get('TRAKT_CLIENT_SECRET') ?? '';
+    this.apiUrl = this.config.getOrThrow('TRAKT_API_URL');
+    this.configured = !!(this.clientId && this.clientSecret);
+  }
+
+  public async reload(): Promise<void> {
+    this.reloadConfig();
+    await this.init();
   }
 
   private getRateLimit(limitName: RateLimitInfo['name']) {
@@ -101,6 +154,9 @@ export class TraktApi {
     init: RequestInit,
     limitName: RateLimitInfo['name']
   ): Promise<TraktPagination<T>> {
+    if (!this.configured) {
+      throw new ServiceNotConfiguredError('TRAKT');
+    }
     const delay = this.calculateDelay(limitName);
 
     if (delay > 0) {

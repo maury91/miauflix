@@ -19,8 +19,13 @@ import type {
 import type { Deps, ErrorResponse } from './common.types';
 import type { DeviceAuthResponse } from './trakt.types';
 
-export const createAuthRoutes = ({ authService, auditLogService, traktService }: Deps) => {
-  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService);
+export const createAuthRoutes = ({
+  authService,
+  auditLogService,
+  configurationService,
+  traktService,
+}: Deps) => {
+  const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono()
     .post(

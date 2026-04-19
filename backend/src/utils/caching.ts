@@ -4,9 +4,7 @@ import { CacheableMemory } from 'cacheable';
 import Keyv from 'keyv';
 import path from 'path';
 
-import { ENV } from '@constants';
-
-export const buildCache = () =>
+export const buildCache = (dataDir: string) =>
   createCache({
     stores: [
       // Memory-based cache
@@ -18,7 +16,7 @@ export const buildCache = () =>
 
       // File-based cache
       new Keyv({
-        store: new KeyvSqlite(`sqlite://${path.resolve(ENV('DATA_DIR'), 'cache.sqlite')}`),
+        store: new KeyvSqlite(`sqlite://${path.resolve(dataDir, 'cache.sqlite')}`),
       }),
     ],
   });

@@ -1,5 +1,6 @@
 import { createMiddleware } from 'hono/factory';
 
+import type { ConfigService } from '@mytypes/configuration';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { getRealClientIp } from '@utils/proxy.util';
 import { RateLimiter } from '@utils/rateLimiter';
@@ -17,7 +18,7 @@ const getRateLimiter = (ip: string, path: string, limit: number): RateLimiter =>
 };
 
 export const createRateLimitMiddlewareFactory =
-  (auditLogService: AuditLogService) => (limit: number) => {
+  (auditLogService: AuditLogService, configService: ConfigService) => (limit: number) => {
     return createMiddleware(async (context, next) => {
       const request = context.req.raw;
       const url = new URL(request.url);
@@ -32,7 +33,8 @@ export const createRateLimitMiddlewareFactory =
         return;
       }
 
-      const clientIp = getRealClientIp(context) || 'unknown';
+      const clientIp =
+        getRealClientIp(context, configService.get('REVERSE_PROXY_SECRET') ?? '') || 'unknown';
       const path = url.pathname;
       const routePath = context.req.routePath;
       const rateLimiter = getRateLimiter(clientIp, routePath, limit);

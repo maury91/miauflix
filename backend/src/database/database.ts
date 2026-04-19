@@ -3,7 +3,6 @@ import path from 'path';
 import type { EntityTarget, LogLevel, LogMessage, ObjectLiteral, Repository } from 'typeorm';
 import { AbstractLogger, DataSource } from 'typeorm';
 
-import { ENV } from '@constants';
 import { AuditLog } from '@entities/audit-log.entity';
 import { Episode } from '@entities/episode.entity';
 import { Genre, GenreTranslation } from '@entities/genre.entity';
@@ -33,7 +32,8 @@ import { SyncStateRepository } from '@repositories/syncState.repository';
 import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
-import type { EncryptionService } from '@services/encryption/encryption.service';
+import type { ConfigurationService } from '@services/configuration/configuration.service';
+import { EncryptionService } from '@services/encryption/encryption.service';
 
 class DatabaseLogger extends AbstractLogger {
   protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {
@@ -96,19 +96,21 @@ export class Database {
   private streamingKeyRepository: StreamingKeyRepository;
   private progressRepository: ProgressRepository;
 
-  constructor(private readonly encryptionService: EncryptionService) {
-    // Set up static encryption services for entities
-    Movie.encryptionService = this.encryptionService;
-    MovieSource.encryptionService = this.encryptionService;
-
-    logger.debug(
-      'DATABASE',
-      `Initializing database ${path.resolve(ENV('DATA_DIR'), 'database.sqlite')}`
+  constructor(configurationService: ConfigurationService) {
+    const encryptionService = new EncryptionService(
+      configurationService.getOrThrow('SOURCE_SECURITY_KEY')
     );
+    const dataDir = configurationService.getOrThrow('DATA_DIR');
+    const databasePath = path.resolve(dataDir, 'database.sqlite');
+    // Set up static encryption services for entities
+    Movie.encryptionService = encryptionService;
+    MovieSource.encryptionService = encryptionService;
+
+    logger.debug('DATABASE', `Initializing database ${databasePath}`);
 
     this.dataSource = new DataSource({
       type: 'sqlite',
-      database: path.resolve(ENV('DATA_DIR'), 'database.sqlite'),
+      database: databasePath,
       entities: [
         Movie,
         MovieTranslation,

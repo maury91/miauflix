@@ -61,7 +61,6 @@ export default [
             ['^@?\\w'],
             // Internal aliases. Matches specific aliases like @entities/, @services/, etc.
             [
-              '^@config', // Assuming @config maps to configuration.ts
               '^@constants',
               '^@content-directories/',
               '^@database/',

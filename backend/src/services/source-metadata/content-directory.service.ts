@@ -3,6 +3,7 @@ import type { Cache } from 'cache-manager';
 import type { AbstractContentDirectory } from '@content-directories/content-directory.abstract';
 import { TherarbgContentDirectory } from '@content-directories/therarbg';
 import { YTSContentDirectory } from '@content-directories/yts';
+import type { ConfigService } from '@mytypes/configuration';
 import type { DownloadService } from '@services/download/download.service';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
@@ -13,17 +14,25 @@ import { traced } from '@utils/tracing.util';
  */
 export class ContentDirectoryService {
   private readonly movieDirectories: AbstractContentDirectory[];
+  public readonly ytsDirectory: YTSContentDirectory;
+  public readonly therarbgDirectory: TherarbgContentDirectory;
 
   constructor(
     cache: Cache,
     downloadService: DownloadService,
     requestService: RequestService,
-    statsService: StatsService
+    statsService: StatsService,
+    config: ConfigService
   ) {
-    this.movieDirectories = [
-      new YTSContentDirectory(cache, requestService, statsService),
-      new TherarbgContentDirectory(cache, downloadService, requestService, statsService),
-    ];
+    this.ytsDirectory = new YTSContentDirectory(cache, requestService, statsService, config);
+    this.therarbgDirectory = new TherarbgContentDirectory(
+      cache,
+      downloadService,
+      requestService,
+      statsService,
+      config
+    );
+    this.movieDirectories = [this.ytsDirectory, this.therarbgDirectory];
   }
 
   /**

@@ -1,9 +1,11 @@
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { getSourceMetadataFileFromTorrage } from './torrage';
 
 jest.mock('@services/request/request.service');
+jest.mock('@services/configuration/configuration.service');
 
 describe('Torrage service', () => {
   let mockRequestService: jest.Mocked<RequestService>;
@@ -14,7 +16,12 @@ describe('Torrage service', () => {
   });
 
   beforeEach(() => {
-    mockRequestService = new RequestService(new StatsService()) as jest.Mocked<RequestService>;
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockRequestService = new RequestService(
+      new StatsService(),
+      mockConfigService
+    ) as jest.Mocked<RequestService>;
   });
 
   it('should fetch a source metadata file from Torrage', async () => {

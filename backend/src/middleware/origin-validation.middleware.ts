@@ -1,15 +1,11 @@
 import { createMiddleware } from 'hono/factory';
 import { HTTPException } from 'hono/http-exception';
 
-import { ENV } from '@constants';
-
 /**
  * Middleware to validate Origin and Referer headers for sensitive operations
  * Helps prevent CSRF attacks on cookie-based authentication
  */
-export const createOriginValidationMiddleware = () => {
-  const allowedOrigins = ENV('CORS_ORIGIN') as string[];
-
+export const createOriginValidationMiddleware = (allowedOrigins: string[]) => {
   return createMiddleware(async (c, next) => {
     // Skip validation for non-sensitive methods
     const method = c.req.method;

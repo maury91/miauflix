@@ -1,6 +1,5 @@
 import { logger } from '@logger';
 
-import { ENV } from '@constants';
 import type { Database } from '@database/database';
 import type { Genre } from '@entities/genre.entity';
 import type { Movie } from '@entities/movie.entity';
@@ -8,6 +7,7 @@ import type { Season } from '@entities/season.entity';
 import type { TVShow } from '@entities/tvshow.entity';
 import { ApiError } from '@errors/api.errors';
 import { MediaError } from '@errors/media.errors';
+import type { ConfigService } from '@mytypes/configuration';
 import type { ScheduleTask } from '@mytypes/scheduler.types';
 import type { GenreRepository } from '@repositories/genre.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
@@ -90,9 +90,14 @@ export class TmdbService {
   private readonly syncStateRepository: SyncStateRepository;
   private genreCache = new Map<number, GenreWithLanguages>();
 
+  public isConfigured(): boolean {
+    return this.tmdbApi.getStatus().status === 'ready';
+  }
+
   constructor(
     db: Database,
     private readonly tmdbApi: TMDBApi,
+    private readonly config: ConfigService,
     private readonly defaultLanguage: string = 'en'
   ) {
     this.movieRepository = db.getMovieRepository();
@@ -678,7 +683,10 @@ export class TmdbService {
 
   @traced('TmdbService')
   public async syncIncompleteSeasons(): Promise<void> {
-    const episodeSyncMode = ENV('EPISODE_SYNC_MODE');
+    if (!this.isConfigured()) {
+      return;
+    }
+    const episodeSyncMode = this.config.getOrThrow('EPISODE_SYNC_MODE');
 
     const incompleteSeasons =
       episodeSyncMode === 'GREEDY'
@@ -720,6 +728,9 @@ export class TmdbService {
 
   @traced('TmdbService')
   public async syncMovies(): Promise<void> {
+    if (!this.isConfigured()) {
+      return;
+    }
     const lastMovieSync = await this.syncStateRepository.getLastSync(MOVIE_SYNC_NAME);
     const now = new Date();
     const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -788,6 +799,9 @@ export class TmdbService {
 
   @traced('TmdbService')
   public async syncTVShows(): Promise<void> {
+    if (!this.isConfigured()) {
+      return;
+    }
     const lastTVShowSync = await this.syncStateRepository.getLastSync(TV_SYNC_NAME);
     const now = new Date();
     const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);

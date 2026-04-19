@@ -1,9 +1,10 @@
+import { randomBytes } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Database } from '@database/database';
-import { EncryptionService } from '@services/encryption/encryption.service';
+import type { ConfigurationService } from '@services/configuration/configuration.service';
 
 /**
  * Test database helper utilities for creating isolated test databases
@@ -12,12 +13,12 @@ export class TestDatabaseHelper {
   private static readonly TEST_BASE_DIR = '/tmp/miauflix-test';
   private testDir: string;
   private database: Database | null = null;
-  private encryptionService: EncryptionService;
+  private readonly encryptionKey: string;
 
   constructor() {
     // Create unique test directory for this test instance
     this.testDir = path.join(TestDatabaseHelper.TEST_BASE_DIR, `test-${uuidv4()}`);
-    this.encryptionService = new EncryptionService();
+    this.encryptionKey = randomBytes(32).toString('base64');
   }
 
   /**
@@ -27,11 +28,23 @@ export class TestDatabaseHelper {
     // Ensure test directory exists
     await fs.promises.mkdir(this.testDir, { recursive: true });
 
-    // Set DATA_DIR to our unique test directory
-    process.env.DATA_DIR = this.testDir;
+    const testDir = this.testDir;
+    const encryptionKey = this.encryptionKey;
+    const mockConfig = {
+      get: (key: string) => {
+        if (key === 'DATA_DIR') return testDir;
+        if (key === 'SOURCE_SECURITY_KEY') return encryptionKey;
+        return undefined;
+      },
+      getOrThrow: (key: string) => {
+        if (key === 'DATA_DIR') return testDir;
+        if (key === 'SOURCE_SECURITY_KEY') return encryptionKey;
+        throw new Error(`${key} is not set`);
+      },
+    } as unknown as ConfigurationService;
 
     // Initialize database
-    this.database = new Database(this.encryptionService);
+    this.database = new Database(mockConfig);
     await this.database.initialize();
 
     return this.database;

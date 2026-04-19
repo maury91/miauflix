@@ -1,5 +1,6 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 
+import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
@@ -7,6 +8,7 @@ import { StorageService } from '@services/storage/storage.service';
 jest.mock('@services/download/download.service');
 jest.mock('@services/storage/storage.service');
 jest.mock('@database/database');
+jest.mock('@services/configuration/configuration.service');
 
 import { Database } from '@database/database';
 import { DownloadService } from '@services/download/download.service';
@@ -18,20 +20,25 @@ const imdbId = 'tt29623480'; // Same IMDb ID from the YTSApi tests
 describe('ContentDirectoryService', () => {
   const setupTest = () => {
     const mockCache = new MockCache();
+    const mockConfigService =
+      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockConfigService.get.mockReturnValue(undefined as never);
 
     // Create a mock StorageService
     const mockStorageService = new StorageService(
-      new Database({} as never)
+      new Database({} as never),
+      mockConfigService
     ) as jest.Mocked<StorageService>;
 
     const statsService = new StatsService();
     // Use real RequestService - HTTP-VCR will intercept fetch calls ( already recorded calls will not go out to the real API )
-    const requestService = new RequestService(statsService);
+    const requestService = new RequestService(statsService, mockConfigService);
 
     // Create a mock DownloadService
     const mockDownloadService = new DownloadService(
       mockStorageService,
-      requestService
+      requestService,
+      mockConfigService
     ) as jest.Mocked<DownloadService>;
     mockDownloadService.generateLink.mockReturnValue('magnet:?xt=urn:btih:test');
 
@@ -39,7 +46,8 @@ describe('ContentDirectoryService', () => {
       mockCache,
       mockDownloadService,
       requestService,
-      statsService
+      statsService,
+      mockConfigService
     );
 
     return {

@@ -30,8 +30,4 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       transform: transforms.boolean(),
     }),
   },
-  test: async () => {
-    // Placeholder for any test logic if needed
-    return;
-  },
 });

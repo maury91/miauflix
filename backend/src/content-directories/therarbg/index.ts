@@ -4,6 +4,7 @@ import type { Cache } from 'cache-manager';
 
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import { AbstractContentDirectory } from '@content-directories/content-directory.abstract';
+import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { DownloadService } from '@services/download/download.service';
 import type { RequestService } from '@services/request/request.service';
 import type { StatsService } from '@services/stats/stats.service';
@@ -16,20 +17,30 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
 
   name = 'TheRARBG';
 
+  getStatus(): ServiceInstanceStatus {
+    return this.api.getStatus();
+  }
+
+  async reload(): Promise<void> {
+    await this.api.reload();
+  }
+
   constructor(
     cache: Cache,
     private readonly downloadService: DownloadService,
     requestService: RequestService,
-    statsService: StatsService
+    statsService: StatsService,
+    config: ConfigService
   ) {
     super();
-    this.api = new TheRARBGApi(cache, statsService, requestService);
+    this.api = new TheRARBGApi(cache, statsService, requestService, config);
+    config.registerService('THE_RARBG', this);
   }
 
   /**
    * Normalize a ImdbPost (from detailed API) into SourceMetadata format.
    */
-  private normalizaImdbPost(
+  private normalizeImdbPost(
     sourceMetadata: ImdbDetailPost,
     movieDetails: ImdbMetadata
   ): SourceMetadata {
@@ -90,7 +101,7 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
 
     return {
       sources: movie.trb_posts.map(sourceMetadata =>
-        this.normalizaImdbPost(sourceMetadata, movie.imdb)
+        this.normalizeImdbPost(sourceMetadata, movie.imdb)
       ),
       trailerCode: '',
     };
@@ -113,7 +124,7 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
     if (tvShow && tvShow.trb_posts && tvShow.trb_posts.length) {
       return {
         sources: tvShow.trb_posts.map(sourceMetadata =>
-          this.normalizaImdbPost(sourceMetadata, tvShow.imdb)
+          this.normalizeImdbPost(sourceMetadata, tvShow.imdb)
         ),
         trailerCode: '',
       };

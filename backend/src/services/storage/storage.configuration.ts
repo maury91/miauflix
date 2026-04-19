@@ -14,7 +14,4 @@ export const storageConfigurationDefinition = serviceConfiguration({
       transform: transforms.size(),
     }),
   },
-  test: async () => {
-    return;
-  },
 });
