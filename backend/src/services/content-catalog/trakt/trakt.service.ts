@@ -23,7 +23,7 @@ export class TraktService {
     config.registerService('TRAKT', this);
   }
 
-  testable: true;
+  testable = true;
   getStatus(): ServiceInstanceStatus {
     return this.traktApi.getStatus();
   }
