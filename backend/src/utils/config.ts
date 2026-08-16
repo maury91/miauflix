@@ -1,5 +1,6 @@
 import type {
   BaseVariableInfo,
+  BooleanTransform,
   DefaultVariableInfo,
   ServiceConfiguration,
   SkipUserInteractionVariableInfo,
@@ -145,19 +146,22 @@ export const transforms = {
       }
     },
 
-  boolean: (): ValidatorTransform<boolean> => (value: string) => {
-    const normalized = value.toLowerCase().trim();
-    if (['true', 'false', '1', '0', 'yes', 'no'].includes(normalized)) {
-      const boolValue = ['true', '1', 'yes'].includes(normalized);
-      return { isValid: true, value: boolValue };
-    }
-
-    return {
-      isValid: false,
-      error: 'Must be a boolean value',
-      suggestions: ['Try: true, false, yes, no, 1, 0'],
-    };
-  },
+  boolean: (): BooleanTransform =>
+    Object.assign(
+      (value: string) => {
+        const normalized = value.toLowerCase().trim();
+        if (['true', 'false', '1', '0', 'yes', 'no'].includes(normalized)) {
+          const boolValue = ['true', '1', 'yes'].includes(normalized);
+          return { isValid: true, value: boolValue };
+        }
+        return {
+          isValid: false,
+          error: 'Must be a boolean value',
+          suggestions: ['Try: true, false, yes, no, 1, 0'],
+        };
+      },
+      { __boolean: true as const }
+    ),
 
   url: (): ValidatorTransform<string> => (value: string) => {
     try {

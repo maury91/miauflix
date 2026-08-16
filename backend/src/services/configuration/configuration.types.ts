@@ -22,6 +22,8 @@ export interface ConfigEntryView {
   description: string;
   required: boolean;
   hasValue: boolean;
+  link?: string;
+  example?: string;
 }
 
 export type ServiceName = keyof typeof services;

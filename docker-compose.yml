@@ -3,7 +3,9 @@ services:
     image: ghcr.io/bubuntux/nordlynx
     hostname: nordvpn
     container_name: nordvpn
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false
     cap_add:
       - NET_ADMIN # Required
       - SYS_MODULE # Maybe required
@@ -98,7 +100,9 @@ services:
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
       - frontend_static:/usr/share/nginx/html:ro
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false
     environment:
       - REVERSE_PROXY_SECRET=${REVERSE_PROXY_SECRET}
       - DOMAIN=${DOMAIN}

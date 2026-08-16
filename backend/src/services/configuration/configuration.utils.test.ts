@@ -42,6 +42,7 @@ const mockInput = input as jest.MockedFunction<typeof input>;
 const mockConfirm = confirm as jest.MockedFunction<typeof confirm>;
 
 const makeMockService = (isReady: boolean): ConfigurableService => ({
+  testable: true,
   getStatus: () =>
     isReady ? { status: 'ready' } : { status: 'error', errorMessage: 'not ready', error: null },
   reload: jest.fn().mockResolvedValue(undefined),
@@ -258,6 +259,7 @@ describe('validateExistingConfiguration', () => {
 
   it('returns the service entry with the reload error message on reload failure', async () => {
     const instance: ConfigurableService = {
+      testable: true,
       getStatus: () => ({ status: 'error', errorMessage: 'not ready', error: null }),
       reload: jest.fn().mockRejectedValue(new Error('connection refused')),
     };

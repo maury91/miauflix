@@ -333,6 +333,7 @@ export class ConfigurationService {
           );
         }
       } else {
+        await this.waitForServicesReady(30_000);
         if (forceReconfigure) {
           console.log(chalk.yellow.bold('🔄 Reconfiguring all services as requested.'));
         } else {
@@ -373,6 +374,7 @@ export class ConfigurationService {
               }
             },
             handler: registeredInstance ? handlerFromInstance(registeredInstance) : undefined,
+            testable: registeredInstance?.testable,
           });
 
           for (const [varName, prevValue] of objectEntries(currentValues)) {
@@ -455,6 +457,17 @@ export class ConfigurationService {
       }
     }
     return result;
+  }
+
+  async waitForServicesReady(timeoutMs = 30_000): Promise<void> {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      const allDone = [...this._registeredServices.values()].every(
+        service => !service.getStatus().status.startsWith('initializing')
+      );
+      if (allDone) return;
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
   }
 
   getMissingVarsForGroup(group: keyof typeof services): string[] {

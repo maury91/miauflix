@@ -4,8 +4,8 @@
   "main": "src/app.ts",
   "types": "./dist/client/index.d.ts",
   "scripts": {
-    "start": "node --env-file ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
-    "start:prod": "node --env-file ../.env dist/app.js",
+    "start": "node --env-file-if-exists ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
+    "start:prod": "node --env-file-if-exists ../.env dist/app.js",
     "dev": "npm start --watch",
     "config": "npm start -- --config",
     "config-only": "npm start -- --only-config",

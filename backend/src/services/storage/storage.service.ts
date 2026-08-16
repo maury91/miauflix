@@ -30,6 +30,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     config.registerService('STORAGE', this);
   }
 
+  testable = false;
   async reload(): Promise<void> {
     this.maxStorageBytes = this.config.getOrThrow('STORAGE_THRESHOLD');
   }

@@ -62,6 +62,7 @@ export type ServiceInstanceStatus =
   | { status: 'ready' };
 
 export type ConfigurableService = {
+  testable: boolean;
   getStatus(): ServiceInstanceStatus;
   reload(): Promise<void>;
 };
@@ -88,6 +89,8 @@ export type ValidationTransformResult<T> = {
 };
 
 export type ValidatorTransform<T> = (value: string) => ValidationTransformResult<T>;
+
+export type BooleanTransform = ValidatorTransform<boolean> & { readonly __boolean: true };
 
 export type ValidatedVariableInfo<T = unknown> =
   | BaseVariableInfoWithTransform<T>

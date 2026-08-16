@@ -106,6 +106,7 @@ export class DownloadService {
     });
   }
 
+  testable = true;
   getStatus(): ServiceInstanceStatus {
     return this._initStatus;
   }

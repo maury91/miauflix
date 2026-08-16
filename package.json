@@ -10,6 +10,7 @@
     "build": "turbo run build",
     "check:ts": "turbo run check:ts",
     "config-only": "npm run start:backend -- --only-config",
+    "config-only:docker": "./scripts/docker-config.sh",
     "config": "npm run start:backend -- --config",
     "deploy:frontend": "./scripts/deploy-frontend.sh",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" --names \"backend,frontend\" --prefix-colors \"blue,green\"",

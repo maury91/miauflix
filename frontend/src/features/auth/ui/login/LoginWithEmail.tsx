@@ -7,7 +7,7 @@ import { ErrorMessage } from './ErrorMessage';
 import { LoginSection, SectionTitle } from './Sections';
 
 const InputGroup = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   width: 100%;
   max-width: 260px;
 `;

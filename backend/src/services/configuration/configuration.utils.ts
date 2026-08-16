@@ -84,6 +84,7 @@ export async function configureService<
     currentValues: Partial<ConfiguredServiceValues<S>>;
     applyValues: (values: ConfiguredServiceValues<S>) => Promise<void>;
     handler?: ServiceHandler;
+    testable?: boolean;
   }
 ): Promise<ConfiguredServiceValues<S>> {
   console.log();
@@ -144,9 +145,14 @@ export async function configureService<
         currentValues: toRecord(),
         applyValues: options.applyValues,
         handler: options.handler,
+        testable: options.testable,
       });
     }
     throw error;
+  }
+
+  if (options.testable === false) {
+    return toRecord();
   }
 
   // Test the configuration — always re-test after config change (skipIfAlive=false)
@@ -170,11 +176,27 @@ export async function configureService<
       currentValues: toRecord(),
       applyValues: options.applyValues,
       handler: options.handler,
+      testable: options.testable,
     });
   }
 
   console.log(chalk.yellow(`Warning: Using potentially invalid configuration for ${service.name}`));
   return toRecord();
+}
+
+function getVarOptions(varInfo: VariableInfo): [string, string][] | undefined {
+  if ('options' in varInfo && varInfo.options) {
+    return Object.entries(varInfo.options).map(([value, description]) => [
+      value,
+      `${value} - ${description}`,
+    ]);
+  }
+  if ('transform' in varInfo && varInfo.transform && '__boolean' in varInfo.transform) {
+    return [
+      ['true', 'true'],
+      ['false', 'false'],
+    ];
+  }
 }
 
 /**
@@ -252,16 +274,17 @@ async function promptForVariable(
     return passwordValue || currentValue || defaultValue || '';
   }
 
-  if ('options' in varInfo && varInfo.options) {
-    const optionEntries = Object.entries(varInfo.options);
+  const optionEntries = getVarOptions(varInfo);
+
+  if (optionEntries) {
     const optionValues = optionEntries.map(([value]) => value);
     const fallbackValue =
-      currentValue && optionValues.includes(currentValue) ? currentValue : undefined;
+      currentValue && optionValues.includes(currentValue) ? currentValue : defaultValue;
 
     const selectedValue = await select({
       message: `Select ${chalk.cyan(varName)}:`,
       choices: optionEntries.map(([value, description]) => ({
-        name: `${value} - ${description}`,
+        name: description,
         value,
       })),
       default: fallbackValue,
@@ -289,6 +312,9 @@ export async function validateExistingConfiguration(
   const results = await Promise.all(
     objectEntries(services).map(async ([serviceKey]) => {
       const instance = registeredServices.get(serviceKey);
+      if (instance && !instance.testable) {
+        return { serviceKey, success: true, error: '' };
+      }
       const handler = instance ? handlerFromInstance(instance) : undefined;
       const testResult = await testService(handler, true);
       return {
@@ -417,6 +443,8 @@ export function buildAllConfigs(rawValues: Map<VariableName, string>): ConfigEnt
         description: varInfo.description,
         required: varInfo.required,
         hasValue: rawValue.length > 0,
+        link: varInfo.link,
+        example: varInfo.example,
       });
     }
   }
