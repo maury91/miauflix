@@ -1,11 +1,28 @@
 import { useListSessionsQuery } from '@features/auth/api/auth.api';
-import { useGetConfigQuery } from '@features/config/api/config.api';
+import {
+  type ServiceStatuses,
+  useGetConfigQuery,
+  useGetServiceStatusesQuery,
+} from '@features/config/api/config.api';
 import { useCheckSetupStatusQuery } from '@features/setup/api/setup.api';
+import type { ConfigEntryView } from '@miauflix/backend';
 import { useAppSelector } from '@store';
 import { selectConfigDismissed, selectSetupAvailable } from '@store/slices/appState';
 import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 
 export type AppState = 'loading' | 'initial_setup' | 'login' | 'config' | 'home';
+
+export function hasConfigurationIssue(
+  configEntries: ConfigEntryView[] | undefined,
+  serviceStatuses: ServiceStatuses | undefined
+): boolean {
+  const hasMissingRequiredValue = configEntries?.some(entry => entry.required && !entry.hasValue);
+  const hasMisconfiguredService = Object.values(serviceStatuses ?? {}).some(({ status }) =>
+    ['needs_configuration', 'degraded', 'error'].includes(status)
+  );
+
+  return hasMissingRequiredValue === true || hasMisconfiguredService;
+}
 
 export function useAppState(): AppState {
   const configDismissed = useAppSelector(selectConfigDismissed);
@@ -21,6 +38,10 @@ export function useAppState(): AppState {
   const { data: configData, isLoading: isConfigLoading } = useGetConfigQuery(undefined, {
     skip: !isAuthenticated || !isAdmin,
   });
+  const { data: serviceStatuses, isLoading: isServiceStatusesLoading } = useGetServiceStatusesQuery(
+    undefined,
+    { skip: !isAuthenticated || !isAdmin }
+  );
 
   // 1. Still loading initial checks
   if (isSetupCheckLoading || isSessionsLoading) {
@@ -42,14 +63,16 @@ export function useAppState(): AppState {
     return 'home';
   }
 
-  // 5. Config is still loading → show home in the meantime (non-blocking)
-  if (isConfigLoading) {
-    return 'home';
+  // 5. Wait for the admin configuration check before selecting a destination.
+  // This prevents a newly logged-in admin from landing on Home before being
+  // redirected to the configuration wizard when required values are missing.
+  if (isConfigLoading || isServiceStatusesLoading) {
+    return 'loading';
   }
 
-  // 6. Admin with missing required config vars → show config wizard
-  const hasMissingConfig = configData?.some(e => e.required && !e.hasValue) ?? false;
-  if (hasMissingConfig && !configDismissed) {
+  // 6. The setup flag only governs first-admin registration. The wizard is
+  // exclusively driven by missing configuration or a degraded/error service.
+  if (hasConfigurationIssue(configData, serviceStatuses) && !configDismissed) {
     return 'config';
   }
 

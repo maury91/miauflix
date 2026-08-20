@@ -3,7 +3,15 @@ set -e
 
 # Ensure .env exists on the host so Docker can bind-mount it as a file.
 # The config wizard will populate it interactively.
-touch .env
+if [ -e .env ] && [ ! -f .env ]; then
+  echo "Error: .env must be a regular file, but it is not." >&2
+  echo "Move or remove the existing path, then rerun this command." >&2
+  exit 1
+fi
+
+if [ ! -e .env ]; then
+  touch .env
+fi
 
 # Try to read NORDVPN_PRIVATE_KEY from .env if not already set in environment
 if [ -z "$NORDVPN_PRIVATE_KEY" ] && [ -f .env ]; then

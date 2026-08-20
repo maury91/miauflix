@@ -1,5 +1,5 @@
 import type { ConfigEntryView } from '@miauflix/backend';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface FormValues {
   [key: string]: string;
@@ -17,6 +17,20 @@ export function useConfigForm(entries: ConfigEntryView[]) {
 
   const [values, setValues] = useState<FormValues>(initialValues);
   const [dirtyFields, setDirtyFields] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setValues(current => {
+      const next: FormValues = {};
+      for (const entry of entries) {
+        next[entry.key] = dirtyFields.has(entry.key)
+          ? (current[entry.key] ?? '')
+          : entry.isSecret
+            ? ''
+            : entry.value;
+      }
+      return next;
+    });
+  }, [entries, dirtyFields]);
 
   const handleChange = useCallback((key: string, value: string) => {
     setValues(prev => ({ ...prev, [key]: value }));
@@ -37,10 +51,49 @@ export function useConfigForm(entries: ConfigEntryView[]) {
       .map(entry => ({ key: entry.key, value: values[entry.key] ?? '' }));
   }, [entries, values, dirtyFields]);
 
+  const getServiceEntries = useCallback(
+    (serviceGroup: string): { key: string; value: string }[] =>
+      entries
+        .filter(entry => entry.serviceGroup === serviceGroup)
+        .filter(entry => !entry.isSecret || (values[entry.key] ?? '').trim().length > 0)
+        .map(entry => ({ key: entry.key, value: values[entry.key] ?? '' })),
+    [entries, values]
+  );
+
+  const dirtyServices = useMemo(
+    () =>
+      new Set(entries.filter(entry => dirtyFields.has(entry.key)).map(entry => entry.serviceGroup)),
+    [dirtyFields, entries]
+  );
+
+  const markServiceSaved = useCallback(
+    (serviceGroup: string) => {
+      const serviceEntries = entries.filter(entry => entry.serviceGroup === serviceGroup);
+      const serviceKeys = new Set(serviceEntries.map(entry => entry.key));
+      setDirtyFields(current => new Set([...current].filter(key => !serviceKeys.has(key))));
+      setValues(current => {
+        const next = { ...current };
+        for (const entry of serviceEntries) {
+          if (entry.isSecret) next[entry.key] = '';
+        }
+        return next;
+      });
+    },
+    [entries]
+  );
+
   const reset = useCallback(() => {
     setValues(initialValues);
     setDirtyFields(new Set());
   }, [initialValues]);
 
-  return { values, handleChange, getSubmittableEntries, reset };
+  return {
+    values,
+    dirtyServices,
+    handleChange,
+    getSubmittableEntries,
+    getServiceEntries,
+    markServiceSaved,
+    reset,
+  };
 }

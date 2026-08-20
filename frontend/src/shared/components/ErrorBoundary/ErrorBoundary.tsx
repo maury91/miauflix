@@ -1,3 +1,4 @@
+import { PALETTE } from '@shared/config/constants';
 import type { ComponentType, ReactNode } from 'react';
 import { Component } from 'react';
 import styled from 'styled-components';
@@ -64,7 +65,7 @@ const ErrorStack = styled.pre`
 `;
 
 const RetryButton = styled.button`
-  background-color: #db202c;
+  background-color: ${PALETTE.color.brand};
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -75,7 +76,7 @@ const RetryButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #c01e28;
+    background-color: ${PALETTE.color.brandHover};
   }
 `;
 

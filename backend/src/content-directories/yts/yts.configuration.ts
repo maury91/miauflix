@@ -1,7 +1,7 @@
 import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 export const ytsConfigurationDefinition = serviceConfiguration({
-  name: 'YTS)',
+  name: 'YTS',
   description: 'Service for fetching movie sources from YTS',
   variables: {
     YTS_API_URL: variable({

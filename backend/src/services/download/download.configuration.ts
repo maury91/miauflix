@@ -60,6 +60,10 @@ export const downloadConfigurationDefinition = serviceConfiguration({
     }),
     DISABLE_DISCOVERY: variable({
       description: 'Disable DHT for peer-to-peer client',
+      booleanStateDescriptions: {
+        true: 'DHT discovery disabled',
+        false: 'DHT discovery enabled',
+      },
       example: 'false',
       defaultValue: 'false',
       required: false,
@@ -73,7 +77,7 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       transform: transforms.stringArray(),
     }),
     SCRAPE_TRACKERS: variable({
-      description: 'Scrape trackers for peer-to-peer client',
+      description: 'Tracker announce URLs used to scrape peer and seeder statistics',
       example: 'udp://tracker1.example.com:1337,udp://tracker2.example.com:1337',
       defaultValue: scrapeTrackers.join(','),
       required: false,
@@ -88,14 +92,14 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       transform: transforms.string(),
     }),
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: variable({
-      description: 'URL to download blacklisted trackers',
+      description: 'URL of the IP blocklist applied to peer connections',
       example: 'https://example.com/blacklist.txt',
       defaultValue: 'https://raw.githubusercontent.com/ngosang/trackerslist/master/blacklist.txt',
       required: false,
       transform: transforms.string(),
     }),
     DOWNLOAD_PATH: variable({
-      description: 'Directory for storing downloaded media files (must be writable)',
+      description: 'Directory for storing downloaded and encrypted media files (must be writable)',
       required: false,
       defaultValue: path.resolve(process.cwd(), './downloads'),
       example: '/var/miauflix/cache',

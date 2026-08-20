@@ -49,11 +49,15 @@ if (tizenBuild) {
 // ];
 
 /**
- * Rewrite Set-Cookie header for dev proxy so cookies work when backend is proxied.
- * Sets Domain=localhost.
+ * Rewrite Set-Cookie headers from the backend proxy to host-only cookies.
+ *
+ * The browser may reach Vite as either localhost or 127.0.0.1. Retaining the
+ * backend's Domain=localhost attribute blocks cookies received through the
+ * latter, so remove Domain and let the browser bind the cookie to the host
+ * that served the proxied response.
  */
 function rewriteSetCookieForDev(cookie: string): string {
-  return cookie.replace(/\bDomain=[^;]*/gi, 'Domain=localhost');
+  return cookie.replace(/\s*;\s*Domain=[^;]*/gi, '');
 }
 
 function proxyCookieRewriteConfigure(

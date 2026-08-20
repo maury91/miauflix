@@ -1,4 +1,5 @@
 import type { ConfigEntryView } from '@miauflix/backend';
+import { PALETTE } from '@shared/config/constants';
 import type { FC } from 'react';
 import styled from 'styled-components';
 
@@ -23,7 +24,7 @@ const FieldKey = styled.label`
 const RequiredBadge = styled.span`
   font-size: 10px;
   font-weight: 600;
-  color: #db202c;
+  color: ${PALETTE.color.danger};
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `;
@@ -48,7 +49,7 @@ const FieldLink = styled.a`
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  color: #db202c;
+  color: ${PALETTE.color.link};
   text-decoration: none;
   margin-bottom: 6px;
 
@@ -67,7 +68,7 @@ const FieldExample = styled.p`
 const FieldInput = styled.input<{ $missing?: boolean }>`
   width: 100%;
   padding: 8px 10px;
-  border: 1px solid ${props => (props.$missing ? '#db202c' : '#444')};
+  border: 1px solid ${props => (props.$missing ? PALETTE.color.danger : '#444')};
   border-radius: 4px;
   background-color: #1a1d20;
   color: white;
@@ -77,12 +78,82 @@ const FieldInput = styled.input<{ $missing?: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${props => (props.$missing ? '#db202c' : '#db202c')};
+    border-color: ${props => (props.$missing ? PALETTE.color.danger : PALETTE.color.interactive)};
+    box-shadow: 0 0 0 3px
+      ${props => (props.$missing ? PALETTE.color.dangerSubtle : PALETTE.color.interactiveSubtle)};
   }
 
   &::placeholder {
     color: #555;
   }
+`;
+
+const FieldSelect = styled.select`
+  padding: 8px 10px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background-color: #1a1d20;
+  color: white;
+  font:
+    13px 'Poppins',
+    sans-serif;
+
+  &:focus {
+    outline: none;
+    border-color: ${PALETTE.color.interactive};
+    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
+  }
+`;
+
+const InputRow = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const Toggle = styled.button<{ $enabled: boolean; $missing?: boolean }>`
+  position: relative;
+  width: 46px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid
+    ${props =>
+      props.$missing ? PALETTE.color.danger : props.$enabled ? PALETTE.color.interactive : '#444'};
+  border-radius: 999px;
+  background: ${props => (props.$enabled ? PALETTE.color.interactive : '#1a1d20')};
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: ${props => (props.$enabled ? '23px' : '3px')};
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: ${props => (props.$enabled ? '#1a1d20' : 'white')};
+    transition: left 0.2s;
+  }
+`;
+
+const ToggleValue = styled.span`
+  color: #aaa;
+  font-size: 12px;
+`;
+
+const ToggleRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const UnitNumberInput = styled(FieldInput)`
+  flex: 1;
 `;
 
 interface ConfigFieldProps {
@@ -91,15 +162,129 @@ interface ConfigFieldProps {
   onChange: (key: string, value: string) => void;
 }
 
+function booleanStateLabel(
+  key: string,
+  value: boolean,
+  stateDescriptions?: { true: string; false: string }
+): string {
+  if (stateDescriptions) return stateDescriptions[String(value) as 'true' | 'false'];
+  if (!key.startsWith('DISABLE_')) return value ? 'Enabled' : 'Disabled';
+
+  const featureName = key.slice('DISABLE_'.length).toLowerCase().replace(/_/g, ' ');
+  return `${featureName.charAt(0).toUpperCase()}${featureName.slice(1)} ${
+    value ? 'disabled' : 'enabled'
+  }`;
+}
+
+function timeUnitLabel(unit: string): string {
+  const labels: Record<string, string> = {
+    s: 'Seconds',
+    m: 'Minutes',
+    h: 'Hours',
+    d: 'Days',
+  };
+
+  return labels[unit] ?? unit;
+}
+
 export const ConfigField: FC<ConfigFieldProps> = ({ entry, value, onChange }) => {
   const isMissingRequired = entry.required && !entry.hasValue;
+  const isBoolean = entry.inputType === 'boolean';
+  const isSize = entry.inputType === 'size';
+  const isTime = entry.inputType === 'time';
+  const isNumber = entry.inputType === 'number';
+  const isUnitValue = isSize || isTime;
+  const unitMatch = isUnitValue ? value.match(/^(\d+)\s*([A-Za-z]+)$/) : null;
+  const units = isSize ? (entry.sizeUnits ?? []) : (entry.timeUnits ?? []);
+  const unit = isSize
+    ? (unitMatch?.[2].toUpperCase() ?? units[0] ?? '')
+    : (unitMatch?.[2].toLowerCase() ?? units[0] ?? '');
+  const unitNumber = unitMatch?.[1] ?? '';
+  const isEnabled = ['true', '1', 'yes'].includes(value.trim().toLowerCase());
+
+  const renderInput = () => {
+    if (isBoolean) {
+      return (
+        <ToggleRow>
+          <Toggle
+            id={entry.key}
+            type="button"
+            role="switch"
+            aria-checked={isEnabled}
+            aria-label={entry.key}
+            $enabled={isEnabled}
+            $missing={isMissingRequired}
+            onClick={() => onChange(entry.key, isEnabled ? 'false' : 'true')}
+          />
+          <ToggleValue>
+            {booleanStateLabel(entry.key, isEnabled, entry.booleanStateDescriptions)}
+          </ToggleValue>
+        </ToggleRow>
+      );
+    }
+
+    if (isUnitValue) {
+      return (
+        <InputRow>
+          <UnitNumberInput
+            id={entry.key}
+            type="number"
+            min="0"
+            step="1"
+            inputMode="numeric"
+            value={unitNumber}
+            onChange={event =>
+              onChange(entry.key, event.target.value ? `${event.target.value}${unit}` : '')
+            }
+            placeholder="0"
+            $missing={isMissingRequired}
+          />
+          <FieldSelect
+            aria-label={`${entry.key} unit`}
+            value={unit}
+            onChange={event =>
+              onChange(entry.key, unitNumber ? `${unitNumber}${event.target.value}` : '')
+            }
+          >
+            {units.map(unit => (
+              <option key={unit} value={unit}>
+                {isTime ? timeUnitLabel(unit) : unit}
+              </option>
+            ))}
+          </FieldSelect>
+        </InputRow>
+      );
+    }
+
+    return (
+      <FieldInput
+        id={entry.key}
+        type={entry.isSecret ? 'password' : isNumber ? 'number' : 'text'}
+        min={isNumber ? entry.numberOptions?.min : undefined}
+        max={isNumber ? entry.numberOptions?.max : undefined}
+        step={isNumber ? (entry.numberOptions?.integer ? '1' : 'any') : undefined}
+        inputMode={isNumber ? (entry.numberOptions?.integer ? 'numeric' : 'decimal') : undefined}
+        value={value}
+        onChange={event => onChange(entry.key, event.target.value)}
+        placeholder={
+          entry.isSecret && entry.hasValue
+            ? 'A value is saved — enter a new value to replace it'
+            : entry.example
+              ? `e.g. ${entry.example}`
+              : ''
+        }
+        $missing={isMissingRequired}
+        autoComplete={entry.isSecret ? 'new-password' : 'off'}
+      />
+    );
+  };
 
   return (
     <FieldWrapper>
       <FieldHeader>
         <FieldKey htmlFor={entry.key}>{entry.key}</FieldKey>
         {entry.required && !entry.hasValue && <RequiredBadge>required</RequiredBadge>}
-        {entry.hasValue && <AlreadyConfiguredBadge>✓ configured</AlreadyConfiguredBadge>}
+        {entry.hasValue && <AlreadyConfiguredBadge>✓ value saved</AlreadyConfiguredBadge>}
       </FieldHeader>
 
       <FieldDescription>{entry.description}</FieldDescription>
@@ -112,21 +297,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({ entry, value, onChange }) =>
 
       {entry.example && <FieldExample>Example: {entry.example}</FieldExample>}
 
-      <FieldInput
-        id={entry.key}
-        type={entry.isSecret ? 'password' : 'text'}
-        value={value}
-        onChange={e => onChange(entry.key, e.target.value)}
-        placeholder={
-          entry.isSecret && entry.hasValue
-            ? 'Leave blank to keep current value'
-            : entry.example
-              ? `e.g. ${entry.example}`
-              : ''
-        }
-        $missing={isMissingRequired}
-        autoComplete={entry.isSecret ? 'new-password' : 'off'}
-      />
+      {renderInput()}
     </FieldWrapper>
   );
 };

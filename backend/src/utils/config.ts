@@ -75,76 +75,84 @@ export const transforms = {
     return { isValid: true, value: value.split(',').map(item => item.trim()) };
   },
 
-  number:
-    (options?: { min?: number; max?: number; integer?: boolean }): ValidatorTransform<number> =>
-    (value: string) => {
-      // Validation & Transform
-      const num = parseFloat(value);
-      if (isNaN(num)) {
-        return {
-          isValid: false,
-          error: 'Must be a valid number',
-          suggestions: ['Try: 123, 45.67, etc.'],
-        };
-      }
-      if (options?.integer && !Number.isInteger(num)) {
-        return {
-          isValid: false,
-          error: 'Must be an integer',
-          suggestions: [`${Math.round(num)} (rounded)`],
-        };
-      }
-      if (options?.min !== undefined && num < options.min) {
-        return { isValid: false, error: `Must be at least ${options.min}` };
-      }
-      if (options?.max !== undefined && num > options.max) {
-        return { isValid: false, error: `Must be no more than ${options.max}` };
-      }
-
-      return { isValid: true, value: num };
-    },
-
-  size:
-    (units: string[] = ['B', 'KB', 'MB', 'GB', 'TB']): ValidatorTransform<bigint> =>
-    (value: string) => {
-      const regex = new RegExp(`^(\\d+)\\s*(${units.join('|')})$`, 'i');
-      const match = value.match(regex);
-
-      if (!match) {
-        return {
-          isValid: false,
-          error: `Must be a valid size with units: ${units.join(', ')}`,
-          suggestions: ['Try: 10MB, 1GB, 500KB'],
-        };
-      }
-
-      try {
-        const number = BigInt(match[1]);
-        const unitMap = {
-          B: 1n,
-          KB: 1024n,
-          MB: 1024n ** 2n,
-          GB: 1024n ** 3n,
-          TB: 1024n ** 4n,
-        };
-        const unit = match[2].toUpperCase() as keyof typeof unitMap;
-
-        if (!(unit in unitMap)) {
+  number: (options?: {
+    min?: number;
+    max?: number;
+    integer?: boolean;
+  }): ValidatorTransform<number> =>
+    Object.assign(
+      (value: string) => {
+        // Validation & Transform
+        const num = parseFloat(value);
+        if (isNaN(num)) {
           return {
             isValid: false,
-            error: `Unknown unit: ${unit}`,
-            suggestions: units,
+            error: 'Must be a valid number',
+            suggestions: ['Try: 123, 45.67, etc.'],
+          };
+        }
+        if (options?.integer && !Number.isInteger(num)) {
+          return {
+            isValid: false,
+            error: 'Must be an integer',
+            suggestions: [`${Math.round(num)} (rounded)`],
+          };
+        }
+        if (options?.min !== undefined && num < options.min) {
+          return { isValid: false, error: `Must be at least ${options.min}` };
+        }
+        if (options?.max !== undefined && num > options.max) {
+          return { isValid: false, error: `Must be no more than ${options.max}` };
+        }
+
+        return { isValid: true, value: num };
+      },
+      { __configInput: { type: 'number' as const, ...options } }
+    ),
+
+  size: (units: string[] = ['B', 'KB', 'MB', 'GB', 'TB']): ValidatorTransform<bigint> =>
+    Object.assign(
+      (value: string) => {
+        const regex = new RegExp(`^(\\d+)\\s*(${units.join('|')})$`, 'i');
+        const match = value.match(regex);
+
+        if (!match) {
+          return {
+            isValid: false,
+            error: `Must be a valid size with units: ${units.join(', ')}`,
+            suggestions: ['Try: 10MB, 1GB, 500KB'],
           };
         }
 
-        return { isValid: true, value: number * unitMap[unit] };
-      } catch (error) {
-        return {
-          isValid: false,
-          error: `Invalid size: ${error instanceof Error ? error.message : String(error)}`,
-        };
-      }
-    },
+        try {
+          const number = BigInt(match[1]);
+          const unitMap = {
+            B: 1n,
+            KB: 1024n,
+            MB: 1024n ** 2n,
+            GB: 1024n ** 3n,
+            TB: 1024n ** 4n,
+          };
+          const unit = match[2].toUpperCase() as keyof typeof unitMap;
+
+          if (!(unit in unitMap)) {
+            return {
+              isValid: false,
+              error: `Unknown unit: ${unit}`,
+              suggestions: units,
+            };
+          }
+
+          return { isValid: true, value: number * unitMap[unit] };
+        } catch (error) {
+          return {
+            isValid: false,
+            error: `Invalid size: ${error instanceof Error ? error.message : String(error)}`,
+          };
+        }
+      },
+      { __configInput: { type: 'size' as const, units } }
+    ),
 
   boolean: (): BooleanTransform =>
     Object.assign(
@@ -160,7 +168,7 @@ export const transforms = {
           suggestions: ['Try: true, false, yes, no, 1, 0'],
         };
       },
-      { __boolean: true as const }
+      { __boolean: true as const, __configInput: { type: 'boolean' as const } }
     ),
 
   url: (): ValidatorTransform<string> => (value: string) => {
@@ -176,34 +184,38 @@ export const transforms = {
     }
   },
 
-  time:
-    (units: TimeUnit[] = Object.keys(timeMultipliers) as TimeUnit[]): ValidatorTransform<number> =>
-    (value: string) => {
-      const regex = new RegExp(`^(\\d+)([${units.join('')}])$`);
-      const match = value.match(regex);
+  time: (
+    units: TimeUnit[] = Object.keys(timeMultipliers) as TimeUnit[]
+  ): ValidatorTransform<number> =>
+    Object.assign(
+      (value: string) => {
+        const regex = new RegExp(`^(\\d+)([${units.join('')}])$`);
+        const match = value.match(regex);
 
-      if (!match) {
-        return {
-          isValid: false,
-          error: `Must be a number followed by ${units.join(', ')} (e.g., 6h, 30m, 2d)`,
-          suggestions: ['6h', '30m', '2d', '3600s'],
-        };
-      }
+        if (!match) {
+          return {
+            isValid: false,
+            error: `Must be a number followed by ${units.join(', ')} (e.g., 6h, 30m, 2d)`,
+            suggestions: ['6h', '30m', '2d', '3600s'],
+          };
+        }
 
-      const [, numberStr, unit] = match;
-      const number = parseInt(numberStr, 10);
+        const [, numberStr, unit] = match;
+        const number = parseInt(numberStr, 10);
 
-      if (!(unit in timeMultipliers)) {
-        return {
-          isValid: false,
-          error: `Unknown time unit: ${unit}`,
-          suggestions: units.map(u => `1${u}`),
-        };
-      }
+        if (!(unit in timeMultipliers)) {
+          return {
+            isValid: false,
+            error: `Unknown time unit: ${unit}`,
+            suggestions: units.map(u => `1${u}`),
+          };
+        }
 
-      const milliseconds = number * timeMultipliers[unit as TimeUnit];
-      return { isValid: true, value: milliseconds };
-    },
+        const milliseconds = number * timeMultipliers[unit as TimeUnit];
+        return { isValid: true, value: milliseconds };
+      },
+      { __configInput: { type: 'time' as const, units } }
+    ),
 
   domain:
     (options?: { allowLocalhost?: boolean }): ValidatorTransform<string> =>

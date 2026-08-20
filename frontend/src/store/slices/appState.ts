@@ -1,3 +1,4 @@
+import { authApi } from '@features/auth/api/auth.api';
 import { setupApi } from '@features/setup/api/setup.api';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -24,6 +25,16 @@ export const appStateSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    // A "Go to Home" choice only applies to the current session. Check the
+    // configuration again after the next successful login.
+    builder.addMatcher(authApi.endpoints.login.matchFulfilled, state => {
+      state.configDismissed = false;
+    });
+    builder.addMatcher(authApi.endpoints.checkDeviceLoginStatus.matchFulfilled, (state, action) => {
+      if (action.payload.success) {
+        state.configDismissed = false;
+      }
+    });
     builder.addMatcher(setupApi.endpoints.checkSetupStatus.matchFulfilled, (state, action) => {
       state.setupAvailable = action.payload.available;
     });

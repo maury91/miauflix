@@ -19,9 +19,19 @@ export interface ConfigEntryView {
   value: string;
   isSecret: boolean;
   serviceGroup: string;
+  serviceDescription: string;
   description: string;
   required: boolean;
   hasValue: boolean;
+  inputType: 'boolean' | 'number' | 'size' | 'text' | 'time';
+  booleanStateDescriptions?: { true: string; false: string };
+  numberOptions?: {
+    min?: number;
+    max?: number;
+    integer?: boolean;
+  };
+  sizeUnits?: string[];
+  timeUnits?: string[];
   link?: string;
   example?: string;
 }
@@ -53,3 +63,29 @@ export type UpdateConfigsResult =
       restarted: ServiceName[];
       needsProcessRestart: ServiceName[];
     };
+
+export type ConfigTestMode = 'live' | 'validation';
+
+export type ConfigServiceActionResult = {
+  service: ServiceName;
+  success: boolean;
+  testMode: ConfigTestMode;
+  message: string;
+};
+
+export type TestConfigsResult = {
+  success: boolean;
+  services: ConfigServiceActionResult[];
+};
+
+export type ServiceRecovery = {
+  service: ServiceName;
+  previousStatus: ServiceInstanceStatus['status'];
+};
+
+export type SaveConfigsResult = TestConfigsResult & {
+  restarted: ServiceName[];
+  needsProcessRestart: ServiceName[];
+  changed: ServiceName[];
+  recovered: ServiceRecovery[];
+};

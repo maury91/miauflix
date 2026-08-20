@@ -358,7 +358,11 @@ export function applyTransform<K extends keyof EnvironmentVariableTypes>(
  * Pure function — no instance state.
  */
 export function saveToEnvFile(vars: Record<VariableName, string>): void {
-  const envFilePath = path.resolve(process.cwd(), '.env');
+  const currentDirectory = process.cwd();
+  const envFilePath = path.resolve(
+    currentDirectory,
+    path.basename(currentDirectory) === 'backend' ? '../.env' : '.env'
+  );
   let envContent = '';
   try {
     if (existsSync(envFilePath)) {
@@ -395,6 +399,34 @@ function maskValue(value: string): string {
 
 function isSecretVariable(varInfo: VariableInfo): boolean {
   return 'password' in varInfo && varInfo.password === true;
+}
+
+function getConfigInputMetadata(
+  varInfo: VariableInfo
+): Pick<ConfigEntryView, 'inputType' | 'numberOptions' | 'sizeUnits' | 'timeUnits'> {
+  const metadata = 'transform' in varInfo ? varInfo.transform?.__configInput : undefined;
+  if (!metadata) return { inputType: 'text' };
+
+  if (metadata.type === 'number') {
+    return {
+      inputType: 'number',
+      numberOptions: {
+        min: metadata.min,
+        max: metadata.max,
+        integer: metadata.integer,
+      },
+    };
+  }
+
+  if (metadata.type === 'size') {
+    return { inputType: 'size', sizeUnits: metadata.units ? [...metadata.units] : [] };
+  }
+
+  if (metadata.type === 'time') {
+    return { inputType: 'time', timeUnits: metadata.units ? [...metadata.units] : [] };
+  }
+
+  return { inputType: metadata.type };
 }
 
 export function isServiceName(name: string): name is ServiceName {
@@ -440,9 +472,12 @@ export function buildAllConfigs(rawValues: Map<VariableName, string>): ConfigEnt
         value: isSecret ? maskValue(rawValue) : rawValue,
         isSecret,
         serviceGroup: groupKey,
+        serviceDescription: service.description,
         description: varInfo.description,
         required: varInfo.required,
         hasValue: rawValue.length > 0,
+        ...getConfigInputMetadata(varInfo),
+        booleanStateDescriptions: varInfo.booleanStateDescriptions,
         link: varInfo.link,
         example: varInfo.example,
       });

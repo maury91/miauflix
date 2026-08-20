@@ -2,6 +2,8 @@ import type { EnvironmentVariableTypes } from '@services/configuration/configura
 
 export type BaseVariableInfo = {
   description: string;
+  /** Human-readable state descriptions for boolean inputs, keyed by their raw boolean value. */
+  booleanStateDescriptions?: { true: string; false: string };
   example?: string;
   link?: string;
   required: boolean;
@@ -88,7 +90,19 @@ export type ValidationTransformResult<T> = {
   value?: T; // Transformed value if valid
 };
 
-export type ValidatorTransform<T> = (value: string) => ValidationTransformResult<T>;
+export type ConfigInputType = 'boolean' | 'number' | 'size' | 'text' | 'time';
+
+export type ConfigInputMetadata = {
+  type: ConfigInputType;
+  min?: number;
+  max?: number;
+  integer?: boolean;
+  units?: readonly string[];
+};
+
+export type ValidatorTransform<T> = ((value: string) => ValidationTransformResult<T>) & {
+  readonly __configInput?: ConfigInputMetadata;
+};
 
 export type BooleanTransform = ValidatorTransform<boolean> & { readonly __boolean: true };
 

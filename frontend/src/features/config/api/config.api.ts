@@ -1,80 +1,141 @@
-import type { ConfigEntryView, UpdateConfigsResult } from '@miauflix/backend';
+import { authApi } from '@features/auth/api/auth.api';
+import type { ConfigEntryView, SaveConfigsResult, TestConfigsResult } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { authenticatedRequest, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
-async function handleConfigRequest<T>(
-  requestFn: () => Promise<Response>,
-  errorContext: string
-): Promise<{ data: T } | { error: { status: number; data: string } }> {
-  try {
-    const res = await requestFn();
-    if (res.status >= 200 && res.status < 300) {
-      const data: T = await res.json();
-      return { data };
-    }
-
-    const responseData = await res.json();
-    const errorMessage =
-      'error' in responseData && typeof responseData.error === 'string'
-        ? responseData.error
-        : errorContext;
-    return { error: { status: res.status, data: errorMessage } };
-  } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    const errorStatus = (error as { status?: number })?.status || 500;
-    return { error: { status: errorStatus, data: errorMessage } };
-  }
-}
+export type ServiceStatuses = Record<string, { status: string }>;
+type SystemStatusResponse = { services: ServiceStatuses };
+type ConfigEntriesRequest = { entries: { key: string; value: string }[] };
 
 export const configApi = createApi({
   reducerPath: 'configApi',
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
-  tagTypes: ['Config'],
+  tagTypes: ['Config', 'ServiceStatus'],
   endpoints: builder => ({
     getConfig: builder.query<ConfigEntryView[], void>({
       providesTags: ['Config'],
-      async queryFn(_arg, { getState }) {
+      async queryFn(_arg, { getState, dispatch }) {
         const sessionId = selectCurrentSessionId(getState() as RootState);
         const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
-        return handleConfigRequest<ConfigEntryView[]>(
-          () => backendClient.api.config.$get({}, { headers }),
-          'Failed to fetch config'
-        );
+        return authenticatedRequest<ConfigEntryView[]>({
+          requestFn: () => backendClient.api.config.$get({}, { headers }),
+          session: sessionId,
+          errorContext: 'Failed to fetch config',
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
       },
     }),
 
-    updateConfig: builder.mutation<
-      { success: boolean; restarting: string[]; needsProcessRestart: string[] },
-      { entries: { key: string; value: string }[] }
-    >({
-      invalidatesTags: ['Config'],
-      async queryFn({ entries }, { getState }) {
+    getServiceStatuses: builder.query<ServiceStatuses, void>({
+      providesTags: ['ServiceStatus'],
+      async queryFn() {
+        return request<SystemStatusResponse>(
+          () => backendClient.api.status.$get(),
+          'Failed to fetch service status'
+        ).then(result => {
+          if ('data' in result) {
+            return { data: result.data['services'] };
+          }
+          return result;
+        });
+      },
+    }),
+
+    updateConfig: builder.mutation<SaveConfigsResult, ConfigEntriesRequest>({
+      invalidatesTags: ['Config', 'ServiceStatus'],
+      async queryFn({ entries }, { getState, dispatch }) {
         const sessionId = selectCurrentSessionId(getState() as RootState);
         const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
-        return handleConfigRequest<UpdateConfigsResult>(
-          () => backendClient.api.config.$put({ json: { entries } }, { headers }),
-          'Failed to update config'
-        ) as Promise<
-          | { data: { success: boolean; restarting: string[]; needsProcessRestart: string[] } }
-          | { error: { status: number; data: string } }
-        >;
+        return authenticatedRequest<SaveConfigsResult>({
+          requestFn: () => backendClient.api.config.$put({ json: { entries } }, { headers }),
+          session: sessionId,
+          errorContext: 'Failed to update config',
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
+      },
+    }),
+
+    testServiceConfig: builder.mutation<
+      TestConfigsResult,
+      ConfigEntriesRequest & { service: string }
+    >({
+      async queryFn({ service, entries }, { getState, dispatch }) {
+        const sessionId = selectCurrentSessionId(getState() as RootState);
+        const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
+        return authenticatedRequest<TestConfigsResult>({
+          requestFn: () =>
+            backendClient.api.config[':service'].test.$post(
+              { param: { service }, json: { entries } },
+              { headers }
+            ),
+          session: sessionId,
+          errorContext: `Failed to test ${service} configuration`,
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
+      },
+    }),
+
+    saveServiceConfig: builder.mutation<
+      SaveConfigsResult,
+      ConfigEntriesRequest & { service: string }
+    >({
+      invalidatesTags: ['Config', 'ServiceStatus'],
+      async queryFn({ service, entries }, { getState, dispatch }) {
+        const sessionId = selectCurrentSessionId(getState() as RootState);
+        const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
+        return authenticatedRequest<SaveConfigsResult>({
+          requestFn: () =>
+            backendClient.api.config[':service'].$put(
+              { param: { service }, json: { entries } },
+              { headers }
+            ),
+          session: sessionId,
+          errorContext: `Failed to save ${service} configuration`,
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
       },
     }),
 
     restartService: builder.mutation<{ success: boolean }, { service: string }>({
-      async queryFn({ service }, { getState }) {
+      invalidatesTags: ['ServiceStatus'],
+      async queryFn({ service }, { getState, dispatch }) {
         const sessionId = selectCurrentSessionId(getState() as RootState);
         const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
-        return handleConfigRequest<{ success: boolean }>(
-          () =>
+        return authenticatedRequest<{ success: boolean }>({
+          requestFn: () =>
             backendClient.api.config[':service'].restart.$post({ param: { service } }, { headers }),
-          'Failed to restart service'
-        );
+          session: sessionId,
+          errorContext: 'Failed to restart service',
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
       },
     }),
   }),
 });
 
-export const { useGetConfigQuery, useUpdateConfigMutation, useRestartServiceMutation } = configApi;
+export const {
+  useGetConfigQuery,
+  useGetServiceStatusesQuery,
+  useUpdateConfigMutation,
+  useTestServiceConfigMutation,
+  useSaveServiceConfigMutation,
+  useRestartServiceMutation,
+} = configApi;

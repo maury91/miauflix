@@ -1,4 +1,5 @@
 import { useCreateAdminMutation } from '@features/setup/api/setup.api';
+import { PALETTE } from '@shared/config/constants';
 import { useAppDispatch } from '@store';
 import { authSlice } from '@store/slices/auth';
 import { motion } from 'framer-motion';
@@ -69,7 +70,8 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #db202c;
+    border-color: ${PALETTE.color.interactive};
+    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
   }
 
   &::placeholder {
@@ -89,7 +91,7 @@ const PasswordStrengthFill = styled.div<{ $strength: number }>`
   height: 100%;
   width: ${props => props.$strength * 25}%;
   background-color: ${props => {
-    if (props.$strength <= 1) return '#db202c';
+    if (props.$strength <= 1) return PALETTE.color.danger;
     if (props.$strength === 2) return '#ff8c00';
     if (props.$strength === 3) return '#a8c23a';
     return '#4caf50';
@@ -102,7 +104,7 @@ const PasswordStrengthFill = styled.div<{ $strength: number }>`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 10px 12px;
-  background-color: #db202c;
+  background-color: ${PALETTE.color.brand};
   color: white;
   border: none;
   border-radius: 4px;
@@ -114,7 +116,7 @@ const SubmitButton = styled.button`
   margin-top: 24px;
 
   &:hover {
-    background-color: #c01e28;
+    background-color: ${PALETTE.color.brandHover};
   }
 
   &:disabled {
@@ -124,7 +126,7 @@ const SubmitButton = styled.button`
 `;
 
 const ErrorMessage = styled.p`
-  color: #ff6b6b;
+  color: ${PALETTE.color.danger};
   font-size: 13px;
   margin: 12px 0 0 0;
 `;

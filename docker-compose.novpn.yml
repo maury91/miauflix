@@ -36,6 +36,7 @@ services:
       - PUID=${USER_ID:-1000}
       - PGID=${GROUP_ID:-1000}
       - DISABLE_VPN_CHECK=true
+      - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
       - COOKIE_DOMAIN=${DOMAIN}
       - COOKIE_SECURE=true
       - ENABLE_TRACING=true

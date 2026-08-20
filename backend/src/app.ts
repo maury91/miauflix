@@ -192,7 +192,8 @@ try {
     scheduler.scheduleTask(
       'refreshLists',
       60 * 60, // 1 hour
-      bind(listSynchronizer, 'synchronize')
+      bind(listSynchronizer, 'synchronize'),
+      ['TMDB']
     );
 
     scheduler.scheduleTasks(catalogService.getSyncTasks());
