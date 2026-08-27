@@ -37,6 +37,7 @@ export interface TVShowDto {
   tagline?: string;
   poster: string;
   backdrop: string;
+  logo?: string;
   genres: string[];
   popularity: number;
   rating: number;
@@ -53,4 +54,7 @@ export type MediaDto = MovieDto | TVShowDto;
 export interface ListResponse {
   results: MediaDto[];
   total: number;
+  page?: number;
+  pageSize?: number;
+  totalPages?: number;
 }

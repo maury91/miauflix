@@ -243,7 +243,7 @@ Frontend needs to integrate with existing backend authentication system.
 ## 🔒 **Security & Environment**
 
 - **Never hardcode secrets** - Use environment variables only
-- **Follow existing configuration.ts pattern** - Interactive setup system exists
+- **Follow existing configuration.utils.ts pattern** - Interactive setup system exists
 - **VPN detection is active** - Backend detects VPN status
 - **Encryption is production-ready** - AES-256-GCM for sensitive fields
 

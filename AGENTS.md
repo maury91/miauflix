@@ -524,7 +524,7 @@ miauflix/
 ### Environment Variables
 
 - **Never hardcode secrets** - Use environment variables only
-- **Follow existing configuration.ts pattern** - Interactive setup system exists
+- **Follow existing configuration.utils.ts pattern** - Interactive setup system exists
 - **Use `ENV()` helper** - Never read `process.env` directly
 - **VPN detection is active** - Backend detects VPN status
 - **Encryption is production-ready** - AES-256-GCM for sensitive fields

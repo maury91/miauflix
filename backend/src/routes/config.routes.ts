@@ -7,10 +7,14 @@ import { ConfigurationServiceError } from '@errors/configuration.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { services } from '@services/configuration/configuration.consts';
+import { isServiceName } from '@services/configuration/configuration.utils';
 
 import type { Deps } from './common.types';
 
 const ALL_VAR_NAMES = new Set(Object.values(services).flatMap(s => Object.keys(s.variables)));
+const configEntriesSchema = z.object({
+  entries: z.array(z.object({ key: z.string(), value: z.string() })),
+});
 
 export const createConfigRoutes = (deps: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(
@@ -30,17 +34,7 @@ export const createConfigRoutes = (deps: Deps) => {
         '/',
         rateLimitGuard(2),
         authGuard(UserRole.ADMIN),
-        zValidator(
-          'json',
-          z.object({
-            entries: z.array(
-              z.object({
-                key: z.string(),
-                value: z.string(),
-              })
-            ),
-          })
-        ),
+        zValidator('json', configEntriesSchema),
         async c => {
           const { entries } = c.req.valid('json');
 
@@ -52,15 +46,43 @@ export const createConfigRoutes = (deps: Deps) => {
             );
           }
 
-          const result = await deps.configurationService.updateConfigs(entries);
-          if (result.success) {
-            return c.json({
-              success: true,
-              restarting: result.restarted,
-              needsProcessRestart: result.needsProcessRestart,
-            });
+          const result = await deps.configurationService.testAndSaveConfigs(entries);
+          if (result.success) deps.scheduler.notifyServicesRecovered(result.recovered);
+          return c.json(result);
+        }
+      )
+
+      // POST /api/config/:service/test — test draft values without persisting them
+      .post(
+        '/:service/test',
+        rateLimitGuard(2),
+        authGuard(UserRole.ADMIN),
+        zValidator('json', configEntriesSchema),
+        async c => {
+          const serviceParam = c.req.param('service').toUpperCase();
+          if (!isServiceName(serviceParam)) {
+            return c.json({ error: `Service '${serviceParam}' does not exist` }, 404);
           }
-          return c.json({ success: false, invalidKeys: result.invalidKeys }, 400);
+          const { entries } = c.req.valid('json');
+          return c.json(await deps.configurationService.testServiceConfigs(serviceParam, entries));
+        }
+      )
+
+      // PUT /api/config/:service — test and persist one service's values
+      .put(
+        '/:service',
+        rateLimitGuard(2),
+        authGuard(UserRole.ADMIN),
+        zValidator('json', configEntriesSchema),
+        async c => {
+          const serviceParam = c.req.param('service').toUpperCase();
+          if (!isServiceName(serviceParam)) {
+            return c.json({ error: `Service '${serviceParam}' does not exist` }, 404);
+          }
+          const { entries } = c.req.valid('json');
+          const result = await deps.configurationService.saveServiceConfigs(serviceParam, entries);
+          if (result.success) deps.scheduler.notifyServicesRecovered(result.recovered);
+          return c.json(result);
         }
       )
 
@@ -69,8 +91,9 @@ export const createConfigRoutes = (deps: Deps) => {
         const serviceParam = c.req.param('service').toUpperCase();
 
         try {
-          await deps.configurationService.restartService(serviceParam);
+          const recovery = await deps.configurationService.restartService(serviceParam);
           const status = deps.configurationService.getServiceStatuses()[serviceParam];
+          if (recovery) deps.scheduler.notifyServicesRecovered([recovery]);
           return c.json({ success: true, status });
         } catch (e) {
           if (e instanceof ConfigurationServiceError) {

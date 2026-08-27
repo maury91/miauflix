@@ -10,6 +10,10 @@ import { TracingUtil } from '@utils/tracing.util';
 interface ScheduledTaskRecord {
   timerId: NodeJS.Timeout | null;
   cancelled: boolean;
+  dependencies: Set<string>;
+  execute: () => Promise<void>;
+  running: boolean;
+  runAgain: boolean;
 }
 
 export class Scheduler {
@@ -21,7 +25,12 @@ export class Scheduler {
     this.traceDir = config.getOrThrow('TRACE_DIR');
   }
 
-  scheduleTask(taskName: string, interval: number, task: () => Promise<void> | void): void {
+  scheduleTask(
+    taskName: string,
+    interval: number,
+    task: () => Promise<void> | void,
+    dependencies: string[] = []
+  ): void {
     if (this.tasks.has(taskName)) {
       throw new SchedulerError(
         `Task with name "${taskName}" is already scheduled.`,
@@ -30,10 +39,23 @@ export class Scheduler {
     }
 
     // Register before first run so cancelTask works immediately
-    const record: ScheduledTaskRecord = { timerId: null, cancelled: false };
+    const record: ScheduledTaskRecord = {
+      timerId: null,
+      cancelled: false,
+      dependencies: new Set(dependencies),
+      execute: async () => {},
+      running: false,
+      runAgain: false,
+    };
     this.tasks.set(taskName, record);
 
     const executeTask = async () => {
+      if (record.running) {
+        record.runAgain = true;
+        return;
+      }
+
+      record.running = true;
       try {
         logger.debug('Scheduler', `Executing task: ${taskName}`);
 
@@ -58,8 +80,14 @@ export class Scheduler {
       } catch (err) {
         logger.error('Scheduler', `Task ${taskName} failed with error:`, err);
       } finally {
-        // Only reschedule if the task has not been cancelled
-        if (!record.cancelled) {
+        record.running = false;
+        if (record.cancelled) return;
+
+        if (record.runAgain) {
+          record.runAgain = false;
+          const emptyCtx = trace.deleteSpan(context.active());
+          record.timerId = setTimeout(() => context.with(emptyCtx, executeTask), 0);
+        } else {
           const emptyCtx = trace.deleteSpan(context.active());
           record.timerId = setTimeout(() => {
             context.with(emptyCtx, executeTask);
@@ -68,12 +96,45 @@ export class Scheduler {
       }
     };
 
+    record.execute = executeTask;
     context.with(trace.deleteSpan(context.active()), executeTask);
   }
 
   scheduleTasks(tasks: ScheduleTask[]) {
     for (const task of tasks) {
-      this.scheduleTask(task.name, task.interval, task.task);
+      this.scheduleTask(task.name, task.interval, task.task, task.dependencies);
+    }
+  }
+
+  runTaskNow(taskName: string): void {
+    const record = this.tasks.get(taskName);
+    if (!record) {
+      throw new SchedulerError(`Task with name "${taskName}" is not scheduled.`, 'not_scheduled');
+    }
+
+    if (record.timerId) {
+      clearTimeout(record.timerId);
+      record.timerId = null;
+    }
+    void record.execute();
+  }
+
+  notifyServicesRecovered(recoveries: Iterable<{ service: string; previousStatus: string }>): void {
+    for (const recovery of recoveries) {
+      const taskNames = [...this.tasks]
+        .filter(([, record]) => record.dependencies.has(recovery.service))
+        .map(([taskName]) => taskName);
+
+      logger.info(
+        'Scheduler',
+        taskNames.length > 0
+          ? `${recovery.service} recovered (${recovery.previousStatus} → ready); triggering dependent tasks: ${taskNames.join(', ')}`
+          : `${recovery.service} recovered (${recovery.previousStatus} → ready); no dependent tasks to trigger`
+      );
+
+      for (const taskName of taskNames) {
+        this.runTaskNow(taskName);
+      }
     }
   }
 

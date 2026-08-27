@@ -45,10 +45,10 @@ export class EncryptionService {
    * Decrypt a previously encrypted value using AES-256-GCM
    * To save space when plainEmpty is true, an empty string is decrypted as an empty string
    */
-  decryptString(encryptedValue: string, plainEmpty = true): string {
+  decryptString(encryptedValue: string, plainEmpty = true, logFailure = true): string {
     return encryptedValue === '' && plainEmpty
       ? ''
-      : this.decryptBuffer(Buffer.from(encryptedValue, 'base64')).toString('utf8');
+      : this.decryptBuffer(Buffer.from(encryptedValue, 'base64'), logFailure).toString('utf8');
   }
 
   /**
@@ -85,7 +85,7 @@ export class EncryptionService {
    * Decrypt binary data that was encrypted with encryptBuffer
    * Expects Buffer: IV (12 bytes) + AuthTag (16 bytes) + Encrypted Data
    */
-  decryptBuffer(encryptedData: Buffer): Buffer {
+  decryptBuffer(encryptedData: Buffer, logFailure = true): Buffer {
     try {
       if (encryptedData.length < this.IV_LENGTH + this.TAG_LENGTH) {
         throw new EncryptionError('Invalid encrypted data length', 'invalid_data_length');
@@ -106,11 +106,13 @@ export class EncryptionService {
       if (error instanceof EncryptionError) {
         throw error;
       }
-      logger.error(
-        'EncryptionService',
-        `Buffer decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        error
-      );
+      if (logFailure) {
+        logger.error(
+          'EncryptionService',
+          `Buffer decryption failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          error
+        );
+      }
       throw new EncryptionError(
         'Buffer decryption failed - data may be corrupted or key may be incorrect',
         'decrypt_failed'

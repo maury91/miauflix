@@ -2,7 +2,7 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 export const traktConfigurationDefinition = serviceConfiguration({
   name: 'Trakt.tv',
-  description: 'Service for tracking movies and TV shows watched by users',
+  description: 'Trakt account integration for lists and watch-state synchronization',
   variables: {
     TRAKT_API_URL: variable({
       description: 'URL for the Trakt API',
