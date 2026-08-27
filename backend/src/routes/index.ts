@@ -58,6 +58,7 @@ function createApiRoutes(deps: Deps) {
 
 export function createRoutes(deps: Deps) {
   const frontendDir = deps.configurationService.get('FRONTEND_DIR');
+  const frontendEnabled = deps.configurationService.get('ENABLE_FRONTEND');
   const origins = (deps.configurationService.get('CORS_ORIGIN') ?? [])
     .map((origin: string) => origin.trim())
     .filter(Boolean);
@@ -75,7 +76,7 @@ export function createRoutes(deps: Deps) {
 
   // Optionally serve the frontend as static files from FRONTEND_DIR
   // This allows running a single container that serves both API and SPA
-  if (frontendDir) {
+  if (frontendEnabled && frontendDir) {
     app.get('/assets/*', serveStatic({ root: frontendDir }));
     app.get('/favicon.png', serveStatic({ root: frontendDir }));
     app.get('/robots.txt', serveStatic({ root: frontendDir }));

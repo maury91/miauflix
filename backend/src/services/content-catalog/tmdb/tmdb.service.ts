@@ -902,16 +902,19 @@ export class TmdbService {
         name: 'syncMovies',
         interval: 1.5 * 60 * 60, // 1.5 hour
         task: this.syncMovies.bind(this),
+        dependencies: ['TMDB'],
       },
       {
         name: 'syncTVShows',
         interval: 1.5 * 60 * 60, // 1.5 hour
         task: this.syncTVShows.bind(this),
+        dependencies: ['TMDB'],
       },
       {
         name: 'syncIncompleteSeasons',
         interval: 1, // 1 second
         task: this.syncIncompleteSeasons.bind(this),
+        dependencies: ['TMDB'],
       },
     ];
   }

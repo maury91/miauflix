@@ -28,9 +28,6 @@ type VpnEventType = 'connect' | 'disconnect';
 type VpnEventListener = () => void;
 
 export class VpnDetectionService {
-  getStatus(): ServiceInstanceStatus {
-    return { status: 'ready' };
-  }
   private readonly knownVpnIps: string[] = [];
   private eventListeners: Map<VpnEventType, VpnEventListener[]> = new Map([
     ['connect', []],
@@ -93,6 +90,11 @@ export class VpnDetectionService {
       this.startMonitoring();
     }
     config.registerService('VPN', this);
+  }
+
+  testable = false;
+  getStatus(): ServiceInstanceStatus {
+    return { status: 'ready' };
   }
 
   async reload(): Promise<void> {

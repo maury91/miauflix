@@ -65,6 +65,45 @@ try {
   // Create and initialize the configuration service, it is used by all the other services for configuring themeself
   const configurationService = new ConfigurationService();
   await configurationService.init();
+
+  // if (configOnly) {
+  //   await sleep(1_000);
+  //   // Run the wizard first with no services running — clean interactive UI
+  //   await configurationService.runSetup({ forceReconfigure: true, configOnly: true });
+  //
+  //   // Now create services so they self-test with the saved values and log their results
+  //   initializeInstrumentation(configurationService);
+  //   const cfgDb = new Database(configurationService);
+  //   await cfgDb.initialize();
+  //   const cfgCache = new CacheService(configurationService);
+  //   const cfgStats = new StatsService();
+  //   const cfgRequest = new RequestService(cfgStats, configurationService);
+  //   new TMDBApi(cfgCache.cache, cfgStats, configurationService);
+  //   const cfgAuditLog = new AuditLogService(cfgDb, configurationService);
+  //   const cfgAuth = new AuthService(cfgDb, cfgAuditLog, configurationService);
+  //   new TraktService(cfgDb, cfgAuth, configurationService);
+  //   const cfgVpn = new VpnDetectionService(configurationService);
+  //   const cfgStorage = new StorageService(cfgDb, configurationService);
+  //   const cfgDownload = new DownloadService(cfgStorage, cfgRequest, configurationService);
+  //   const cfgContentDir = new ContentDirectoryService(
+  //     cfgCache.cache,
+  //     cfgDownload,
+  //     cfgRequest,
+  //     cfgStats,
+  //     configurationService
+  //   );
+  //   const cfgMagnet = new SourceMetadataFileService(
+  //     cfgDownload,
+  //     cfgRequest,
+  //     cfgStats,
+  //     configurationService
+  //   );
+  //   new SourceService(cfgDb, cfgVpn, cfgContentDir, cfgMagnet, cfgRequest, configurationService);
+  //
+  //   await configurationService.waitForServicesReady(30_000);
+  //   process.exit(0);
+  // }
+
   // OTEL
   initializeInstrumentation(configurationService);
 
@@ -112,6 +151,7 @@ try {
   );
   const streamService = new StreamService(db, sourceService, downloadService, mediaService);
   const serverService = {
+    testable: false as const,
     _status: {
       status: 'initializing',
       details: 'Waiting for HTTP server to start',
@@ -120,7 +160,9 @@ try {
     getStatus(): ServiceInstanceStatus {
       return serverService._status;
     },
-    reload: async () => {},
+    reload: async () => {
+      serverService._status = { status: 'ready' };
+    },
   };
   configurationService.registerService('SERVER', serverService);
 
@@ -150,7 +192,8 @@ try {
     scheduler.scheduleTask(
       'refreshLists',
       60 * 60, // 1 hour
-      bind(listSynchronizer, 'synchronize')
+      bind(listSynchronizer, 'synchronize'),
+      ['TMDB']
     );
 
     scheduler.scheduleTasks(catalogService.getSyncTasks());

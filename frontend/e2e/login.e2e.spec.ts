@@ -23,6 +23,20 @@ test.describe('Login flow', () => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForLoadState('networkidle');
 
+    // The login page fades in via a framer-motion opacity animation (JS-driven, not a
+    // CSS transition/animation), so Playwright's `animations: 'disabled'` option cannot
+    // fast-forward it. Wait for the fade-in to fully settle before comparing screenshots.
+    await page.waitForFunction(() => {
+      let node: Element | null = document.querySelector('#email');
+      while (node) {
+        if (getComputedStyle(node).position === 'fixed') {
+          return getComputedStyle(node).opacity === '1';
+        }
+        node = node.parentElement;
+      }
+      return true;
+    });
+
     await expect(page).toHaveScreenshot('login-page-complete.png', {
       fullPage: true,
       animations: 'disabled',

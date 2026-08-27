@@ -1,4 +1,5 @@
 import { useLoginMutation } from '@features/auth/api/auth.api';
+import { PALETTE } from '@shared/config/constants';
 import type { FC } from 'react';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
@@ -7,7 +8,7 @@ import { ErrorMessage } from './ErrorMessage';
 import { LoginSection, SectionTitle } from './Sections';
 
 const InputGroup = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   width: 100%;
   max-width: 260px;
 `;
@@ -31,7 +32,8 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: #db202c;
+    border-color: ${PALETTE.color.interactive};
+    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
   }
 
   &::placeholder {
@@ -43,7 +45,7 @@ const ContinueButton = styled.button`
   width: 100%;
   max-width: 260px;
   padding: 10px 12px;
-  background-color: #db202c;
+  background-color: ${PALETTE.color.brand};
   color: white;
   border: none;
   border-radius: 4px;
@@ -55,7 +57,7 @@ const ContinueButton = styled.button`
   margin-top: 8px;
 
   &:hover {
-    background-color: #c01e28;
+    background-color: ${PALETTE.color.brandHover};
   }
 
   &:disabled {

@@ -36,6 +36,7 @@ services:
       - PUID=${USER_ID:-1000}
       - PGID=${GROUP_ID:-1000}
       - DISABLE_VPN_CHECK=true
+      - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
       - COOKIE_DOMAIN=${DOMAIN}
       - COOKIE_SECURE=true
       - ENABLE_TRACING=true
@@ -72,7 +73,9 @@ services:
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
       - frontend_static:/usr/share/nginx/html:ro
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false
     environment:
       - REVERSE_PROXY_SECRET=${REVERSE_PROXY_SECRET}
       - DOMAIN=${DOMAIN}

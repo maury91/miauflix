@@ -30,6 +30,7 @@ export class YTSContentDirectory extends AbstractContentDirectory<YTSApi> {
 
   name = 'YTS';
 
+  testable = true;
   getStatus(): ServiceInstanceStatus {
     return this.api.getStatus();
   }

@@ -194,7 +194,7 @@ npm run build -w frontend  # Verify build status
 ### ❌ **DON'T hardcode secrets or API keys**
 
 - Use environment variables only
-- Follow existing configuration.ts pattern
+- Follow existing configuration.utils.ts pattern
 - Never commit .env files
 
 ### ❌ **DON'T read or share `.env` contents**
