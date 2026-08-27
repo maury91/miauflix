@@ -27,28 +27,6 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
  * Service for searching and managing sources
  */
 export class SourceService {
-  getStatus(): ServiceInstanceStatus {
-    if (!this.searchOnlyBehindVpn) {
-      return { status: 'ready' };
-    }
-    if (this.startError !== null) {
-      const msg =
-        this.startError instanceof Error ? this.startError.message : String(this.startError);
-      return { status: 'error', errorMessage: msg, error: this.startError };
-    }
-    if (!this.startResolved) {
-      return {
-        status: 'initializing',
-        details: 'Checking VPN connection',
-        startedAt: this.startStartedAt,
-      };
-    }
-    if (!this.vpnConnected) {
-      return { status: 'degraded', reason: 'vpn-disconnected' };
-    }
-    return { status: 'ready' };
-  }
-
   private readonly movieRepository: MovieRepository;
   private readonly movieSourceRepository: MovieSourceRepository;
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
@@ -140,6 +118,29 @@ export class SourceService {
         }),
       ];
     }
+  }
+
+  testable = false;
+  getStatus(): ServiceInstanceStatus {
+    if (!this.searchOnlyBehindVpn) {
+      return { status: 'ready' };
+    }
+    if (this.startError !== null) {
+      const msg =
+        this.startError instanceof Error ? this.startError.message : String(this.startError);
+      return { status: 'error', errorMessage: msg, error: this.startError };
+    }
+    if (!this.startResolved) {
+      return {
+        status: 'initializing',
+        details: 'Checking VPN connection',
+        startedAt: this.startStartedAt,
+      };
+    }
+    if (!this.vpnConnected) {
+      return { status: 'degraded', reason: 'vpn-disconnected' };
+    }
+    return { status: 'ready' };
   }
 
   private async checkForVpnConnection(action: string): Promise<boolean> {

@@ -1,0 +1,32 @@
+# Development image used by docker-compose.dev.yml. Source directories are
+# bind-mounted at runtime; dependencies remain in the Linux container.
+FROM node:22-slim
+
+WORKDIR /usr/src/app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python3 make g++ && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY package.json package-lock.json tsconfig.json turbo.json ./
+COPY backend/package.json ./backend/
+COPY frontend/package.json ./frontend/
+COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
+COPY packages/yts-sanitizer/package.json ./packages/yts-sanitizer/
+COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
+
+# Some workspace packages have prepare scripts that require their source. The
+# source is copied after dependency installation, so skip those scripts here.
+RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
+RUN --mount=type=cache,target=/root/.npm npm ci
+
+COPY packages/ ./packages/
+RUN npm run build:libs
+
+# Seed the remaining workspaces. These files are replaced by bind mounts when
+# the development stack runs.
+COPY backend/ ./backend/
+COPY frontend/ ./frontend/
+RUN npm run build:backend
+
+EXPOSE 3000 4173

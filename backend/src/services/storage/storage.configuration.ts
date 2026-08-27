@@ -6,8 +6,8 @@ export const storageConfigurationDefinition = serviceConfiguration({
   variables: {
     STORAGE_THRESHOLD: variable({
       description:
-        'Maximum storage capacity that can be used for downloaded content. Supports any unit (GB, TB, MB) or percentage (e.g., "80%" of the total storage). When this threshold is reached, the oldest content will be automatically removed to maintain storage limits.',
-      example: '70%',
+        'Maximum disk space available to downloaded content. When reached, the oldest content is removed to stay within this limit.',
+      example: '50GB',
       required: false,
       defaultValue: '50GB',
       // FixMe: Add support for percentage

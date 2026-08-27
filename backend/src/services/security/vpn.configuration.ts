@@ -6,6 +6,10 @@ export const vpnConfigurationDefinition = serviceConfiguration({
   variables: {
     DISABLE_VPN_CHECK: variable({
       description: 'Disable VPN check',
+      booleanStateDescriptions: {
+        true: 'VPN check disabled',
+        false: 'VPN check enabled',
+      },
       example: 'false',
       defaultValue: 'false',
       required: false,

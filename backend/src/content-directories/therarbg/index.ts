@@ -17,6 +17,7 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
 
   name = 'TheRARBG';
 
+  testable = true;
   getStatus(): ServiceInstanceStatus {
     return this.api.getStatus();
   }

@@ -70,6 +70,7 @@ describe('SourceMetadataFileService', () => {
   let getSourceMetadataFileFromWebTorrentSpy: jest.MockedFunction<
     DownloadService['getSourceMetadataFile']
   >;
+  let mockConfigService: jest.Mocked<ConfigurationService>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -104,8 +105,7 @@ describe('SourceMetadataFileService', () => {
     } as Partial<DownloadService> as DownloadService;
 
     const statsService = new StatsService();
-    const mockConfigService =
-      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+    mockConfigService = new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
     mockConfigService.get.mockReturnValue(undefined as never);
     mockConfigService.getOrThrow.mockImplementation((key: string) => {
       if (key === 'DATA_DIR') return '/tmp/test' as never;
@@ -136,7 +136,9 @@ describe('SourceMetadataFileService', () => {
       mockDownloadService,
       mockRequestService,
       statsService,
-      mockConfigService
+      mockConfigService,
+      true,
+      true
     );
   });
 
@@ -145,11 +147,23 @@ describe('SourceMetadataFileService', () => {
   });
 
   describe('constructor', () => {
-    it('should initialize with three services', () => {
+    it('should initialize with three services when WebTorrent metadata is enabled', () => {
       expect(sourceMetadataFileService).toBeInstanceOf(SourceMetadataFileService);
 
       const stats = sourceMetadataFileService.getServiceStatistics();
       expect(Object.keys(stats)).toEqual(['webTorrent', 'itorrents', 'torrage']);
+    });
+
+    it('should disable background metadata resolution by default', () => {
+      const boundedService = new SourceMetadataFileService(
+        mockDownloadService,
+        mockRequestService,
+        new StatsService(),
+        mockConfigService
+      );
+
+      expect(Object.keys(boundedService.getServiceStatistics())).toEqual([]);
+      expect(boundedService.getAvailableConcurrency()).toBe(0);
     });
   });
 
@@ -330,6 +344,8 @@ describe('SourceMetadataFileService', () => {
     });
 
     it('should handle concurrent requests exceeding service limits', async () => {
+      const initialConcurrency = sourceMetadataFileService.getAvailableConcurrency();
+      expect(initialConcurrency).toBe(1);
       // Create many concurrent requests
       const promises = Array.from({ length: 20 }, () =>
         sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash)
@@ -341,6 +357,26 @@ describe('SourceMetadataFileService', () => {
       results.forEach(result => {
         expect(result).toBeInstanceOf(Buffer);
       });
+      await new Promise(resolve => setImmediate(resolve));
+      expect(sourceMetadataFileService.getAvailableConcurrency()).toBe(initialConcurrency);
+    });
+
+    it('should coalesce concurrent requests for the same hash', async () => {
+      let complete: ((value: Buffer) => void) | undefined;
+      getSourceMetadataFileFromWebTorrentSpy.mockImplementation(
+        () =>
+          new Promise<Buffer>(resolve => {
+            complete = resolve;
+          })
+      );
+
+      const first = sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
+      const second = sourceMetadataFileService.getSourceMetadataFile(magnetLink, hash);
+      await new Promise(resolve => setImmediate(resolve));
+
+      expect(getSourceMetadataFileFromWebTorrentSpy).toHaveBeenCalledTimes(1);
+      complete?.(mockFileBuffer);
+      await expect(Promise.all([first, second])).resolves.toEqual([mockFileBuffer, mockFileBuffer]);
     });
   });
 
