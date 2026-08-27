@@ -82,6 +82,7 @@ export class AuthService {
   private cookieSecure: boolean;
   private readonly config: ConfigService;
 
+  testable = false;
   getStatus(): ServiceInstanceStatus {
     return { status: 'ready' };
   }
@@ -188,6 +189,12 @@ export class AuthService {
       metadata: { role: UserRole.ADMIN, isEmailVerified: false },
     });
     return newUser;
+  }
+
+  async isSetupAvailable(): Promise<boolean> {
+    if (!this.allowCreateAdminOnFirstRun) return false;
+    const admins = await this.userRepository.findByRole(UserRole.ADMIN);
+    return admins.length === 0;
   }
 
   @traced('AuthService')

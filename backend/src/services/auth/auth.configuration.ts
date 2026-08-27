@@ -50,7 +50,7 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       skipUserInteraction: true,
     }),
     COOKIE_DOMAIN: variable({
-      description: 'Domain for refresh token cookies (leave empty for same-origin)',
+      description: 'Domain for authentication cookies (leave empty for same-origin cookies)',
       example: 'example.com',
       required: false,
       transform: transforms.optional(
@@ -59,6 +59,10 @@ export const jwtConfigurationDefinition = serviceConfiguration({
     }),
     COOKIE_SECURE: variable({
       description: 'Whether to use secure flag for cookies (HTTPS only)',
+      booleanStateDescriptions: {
+        true: 'Secure cookies enabled',
+        false: 'Secure cookies disabled',
+      },
       example: 'true',
       defaultValue: 'false',
       required: false,

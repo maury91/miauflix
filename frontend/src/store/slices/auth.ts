@@ -107,3 +107,6 @@ export const selectAvailableSessions = (state: { auth: AuthState }) => state.aut
 export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.currentUser;
 export const selectIsAuthenticated = (state: { auth: AuthState }) =>
   state.auth.currentSessionId !== null && state.auth.currentUser !== null;
+
+export const selectIsAdmin = (state: { auth: AuthState }) =>
+  state.auth.currentUser?.role === 'admin';

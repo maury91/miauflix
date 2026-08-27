@@ -11,6 +11,22 @@ export const DISABLE_STREAMING = false;
 export const { DEV, PROD } = computedEnv;
 
 export const PALETTE = {
+  color: {
+    /** Miauflix identity and high-emphasis calls to action. */
+    brand: '#db202c',
+    brandHover: '#c01e28',
+    /** Keyboard focus, selection, and enabled controls. */
+    interactive: '#d6dbe0',
+    interactiveSubtle: 'rgba(214, 219, 224, 0.18)',
+    /** Informational links remain distinct from selection and validation states. */
+    link: '#2cb8b2',
+    /** Validation failures and destructive states only. */
+    danger: '#ff5c68',
+    dangerSubtle: 'rgba(255, 92, 104, 0.14)',
+    dangerBorder: 'rgba(255, 92, 104, 0.42)',
+    success: '#4caf50',
+    warning: '#ffb74d',
+  },
   background: {
     primary: '#d81f27',
     secondary: '#cdcdcd',

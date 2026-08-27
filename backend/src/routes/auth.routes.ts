@@ -28,6 +28,10 @@ export const createAuthRoutes = ({
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono()
+    .get('/setup', rateLimitGuard(0.5), async context => {
+      const available = await authService.isSetupAvailable();
+      return context.json({ available });
+    })
     .post(
       '/setup',
       rateLimitGuard(0.2), // 1 request per 5 seconds
@@ -45,13 +49,14 @@ export const createAuthRoutes = ({
           if (!user) {
             return context.json({ error: 'Not found' } satisfies ErrorResponse, 404);
           }
+          // Auto-login: generate tokens so the frontend gets a session immediately
+          const authResult = await authService.generateTokens(user, context);
+          setCookies(context, authService.getCookies(authResult));
           return context.json(
             {
-              id: user.id,
-              email: user.email,
-              displayName: user.displayName,
-              role: user.role,
-            } satisfies CreateUserResponse,
+              session: authResult.session,
+              user: authResult.user,
+            } satisfies LoginResponse,
             201
           );
         } catch (error: unknown) {

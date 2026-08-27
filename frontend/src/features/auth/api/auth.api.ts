@@ -7,6 +7,7 @@ import type {
   RefreshResponse,
 } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { refreshSession, request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 import type { SessionInfo } from '@store/slices/auth';
 
@@ -74,10 +75,33 @@ export const authApi = createApi({
 
     listSessions: builder.query<SessionInfo[], void>({
       async queryFn() {
-        return handleAuthRequest<SessionInfo[]>(
+        const sessionsResult = await handleAuthRequest<SessionInfo[]>(
           () => backendClient.api.auth.sessions.$get(),
           'List sessions failed'
         );
+        if (!('data' in sessionsResult) || sessionsResult.data.length !== 1) {
+          return sessionsResult;
+        }
+
+        const [session] = sessionsResult.data;
+        const headers = { 'X-Session-Id': session.session };
+        const validation = await request(
+          () => backendClient.api.auth.session.$get({}, { headers }),
+          'Session validation failed'
+        );
+
+        if (!('error' in validation) || validation.error.status !== 401) {
+          return 'error' in validation ? validation : sessionsResult;
+        }
+
+        const refresh = await refreshSession(session.session);
+        if ('error' in refresh) {
+          // An invalid refresh cookie is no longer a usable session. Transient
+          // errors remain visible so bootstrap can be retried without logging out.
+          return refresh.error.status === 401 ? { data: [] } : refresh;
+        }
+
+        return sessionsResult;
       },
     }),
 

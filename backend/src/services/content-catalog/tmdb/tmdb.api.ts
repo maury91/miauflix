@@ -85,6 +85,7 @@ export class TMDBApi extends Api {
     this.init();
   }
 
+  testable = true;
   getStatus(): ServiceInstanceStatus {
     return this._initStatus;
   }

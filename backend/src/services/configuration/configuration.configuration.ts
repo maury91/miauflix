@@ -4,7 +4,7 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 export const serverConfigurationDefinition = serviceConfiguration({
   name: 'Server',
-  description: 'Server configuration',
+  description: 'HTTP server, runtime storage, reverse proxy, tracing, and static frontend settings',
   restartable: false,
   variables: {
     CORS_ORIGIN: variable({
@@ -23,7 +23,8 @@ export const serverConfigurationDefinition = serviceConfiguration({
       transform: transforms.number({ min: 1, max: 65535, integer: true }),
     }),
     DATA_DIR: variable({
-      description: 'Directory for storing data files',
+      description:
+        'Directory for Miauflix runtime data, including configuration, database, and cache files',
       required: false,
       defaultValue: path.resolve(process.cwd(), './data'),
       example: '/path/to/data',
@@ -31,15 +32,14 @@ export const serverConfigurationDefinition = serviceConfiguration({
     }),
     MAXIMUM_CACHE_EMPTY_SPACE: variable({
       description:
-        'Cache will be cleaned periodically, however, the database file will not shrink automatically, empty space will be reused in the future, this is the maximum size of the empty space',
+        'Maximum unused space allowed in the SQLite cache database before expired entries are vacuumed',
       required: false,
       defaultValue: '10MB',
       example: '10MB',
       transform: transforms.size(['B', 'KB', 'MB', 'GB', 'TB']),
     }),
     REVERSE_PROXY_SECRET: variable({
-      description:
-        'Secret key shared between the reverse proxy and the backend to validate requests',
+      description: 'Secret shared with a reverse proxy to validate forwarded client IP addresses',
       required: false,
       defaultValue: '',
       example: 'your-secure-random-string',
@@ -47,6 +47,10 @@ export const serverConfigurationDefinition = serviceConfiguration({
     }),
     DISABLE_BACKGROUND_TASKS: variable({
       description: 'Disable all background tasks for testing on-demand functionality',
+      booleanStateDescriptions: {
+        true: 'Background tasks disabled',
+        false: 'Background tasks enabled',
+      },
       required: false,
       defaultValue: 'false',
       example: 'true',
@@ -57,6 +61,10 @@ export const serverConfigurationDefinition = serviceConfiguration({
         'When enabled, the initial admin user is not automatically created on first run. ' +
         'An unauthenticated POST /api/auth/setup endpoint is exposed to create the first admin. ' +
         'The endpoint is disabled once any admin user exists.',
+      booleanStateDescriptions: {
+        true: 'Initial admin setup enabled',
+        false: 'Initial admin setup disabled',
+      },
       required: false,
       defaultValue: 'false',
       example: 'true',
@@ -77,6 +85,10 @@ export const serverConfigurationDefinition = serviceConfiguration({
     }),
     ENABLE_TRACING: variable({
       description: 'Enable OpenTelemetry distributed tracing',
+      booleanStateDescriptions: {
+        true: 'Tracing enabled',
+        false: 'Tracing disabled',
+      },
       required: false,
       defaultValue: 'false',
       example: 'true',
@@ -91,6 +103,10 @@ export const serverConfigurationDefinition = serviceConfiguration({
     ENABLE_OTLP: variable({
       description:
         'Enable OTLP trace export to localhost:4318 when no OTEL_EXPORTER_OTLP_ENDPOINT is set',
+      booleanStateDescriptions: {
+        true: 'OTLP trace export enabled',
+        false: 'OTLP trace export disabled',
+      },
       required: false,
       defaultValue: 'false',
       example: 'true',
@@ -115,7 +131,11 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: '/usr/src/app/public',
     }),
     ENABLE_FRONTEND: variable({
-      description: 'Enable the frontend',
+      description: 'Serve static frontend files from FRONTEND_DIR alongside the API',
+      booleanStateDescriptions: {
+        true: 'Static frontend serving enabled',
+        false: 'Static frontend serving disabled',
+      },
       required: false,
       defaultValue: 'true',
       example: 'true',
@@ -130,6 +150,10 @@ export const serverConfigurationDefinition = serviceConfiguration({
     }),
     ENABLE_FLARESOLVERR: variable({
       description: 'Enable FlareSolverr for bypassing Cloudflare protection on 403 responses',
+      booleanStateDescriptions: {
+        true: 'FlareSolverr enabled',
+        false: 'FlareSolverr disabled',
+      },
       required: false,
       defaultValue: 'false',
       example: 'true',

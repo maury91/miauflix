@@ -4,7 +4,7 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 export const sourceConfigurationDefinition = serviceConfiguration({
   name: 'Source Service',
-  description: 'Configuration for the source service',
+  description: 'Torrent source discovery, scoring, and source-metadata processing settings',
   variables: {
     SOURCE_SECURITY_KEY: variable({
       description: 'Base64 AES-256 encryption key for source metadata identifiers',
@@ -23,7 +23,11 @@ export const sourceConfigurationDefinition = serviceConfiguration({
     }),
     DOWNLOAD_ALL_SOURCE_FILES: variable({
       description:
-        'Download metadata files for all sources instead of only the top 2 sources per media',
+        'Reserved for future source metadata processing: download files for all sources instead of only the top 2 per media. This setting currently has no effect.',
+      booleanStateDescriptions: {
+        true: 'Download metadata for all sources',
+        false: 'Download metadata only for the top 2 sources',
+      },
       example: 'false',
       defaultValue: 'false',
       required: false,

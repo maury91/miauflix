@@ -21,9 +21,13 @@ const generateRequestId = (): string => {
   return `req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 };
 
+const webTorrentMetadataTimeoutMs = 15_000;
+
 /**
  * Service for getting source files from URI links ( or identifier )
- * Uses both WebTorrent and online cache services with adaptive optimization
+ * Resolves source metadata through explicitly enabled providers. WebTorrent remains available
+ * for playback and swarm stats, but is excluded from background metadata resolution because an
+ * unresolved magnet can retain unbounded peer-discovery state until the process exhausts its heap.
  */
 export class SourceMetadataFileService {
   private readonly services: Record<string, ServiceData> = {};
@@ -33,91 +37,112 @@ export class SourceMetadataFileService {
     hash: string;
     onComplete: (result: Buffer | null) => void;
   }> = [];
+  private readonly pendingResolutions = new Map<string, Promise<Buffer | null>>();
   private activeWorkers = 0;
 
   constructor(
     private readonly downloadService: DownloadService,
     private readonly requestService: RequestService,
     private readonly statsService: StatsService,
-    private readonly config: ConfigService
+    private readonly config: ConfigService,
+    enableWebTorrentMetadata = false,
+    enableCacheMetadata = false
   ) {
-    this.createService('webTorrent', {
-      maxConcurrentRequests: 50,
-      shouldVerify: false,
-      getSourceMetadata: async (sourceLink: string, hash: string): Promise<Buffer> => {
-        return downloadService.getSourceMetadataFile(sourceLink, hash, 120000);
-      },
-    });
+    if (enableWebTorrentMetadata) {
+      this.createService('webTorrent', {
+        maxConcurrentRequests: 1,
+        shouldVerify: false,
+        getSourceMetadata: async (sourceLink: string, hash: string): Promise<Buffer> => {
+          return downloadService.getSourceMetadataFile(
+            sourceLink,
+            hash,
+            webTorrentMetadataTimeoutMs
+          );
+        },
+      });
+    }
 
-    this.createService('itorrents', {
-      maxConcurrentRequests: 1,
-      rateLimit: {
-        windowSize: 60000, // 1 minute
-        limit: 90, // 90 requests per minute
-      },
-      shouldVerify: true,
-      getSourceMetadata: async (
-        _magnetLink: string,
-        hash: string,
-        rateLimiter?: DynamicRateLimit
-      ): Promise<Buffer> => {
-        const response = await getSourceMetadataFileFromITorrents(hash, 5000, this.requestService);
-        if (response) {
-          rateLimiter?.reportResponse(response);
-          if (response.ok) {
-            if (response.body instanceof ArrayBuffer) {
-              return Buffer.from(response.body);
+    if (enableCacheMetadata) {
+      this.createService('itorrents', {
+        maxConcurrentRequests: 1,
+        rateLimit: {
+          windowSize: 60000, // 1 minute
+          limit: 90, // 90 requests per minute
+        },
+        shouldVerify: true,
+        getSourceMetadata: async (
+          _magnetLink: string,
+          hash: string,
+          rateLimiter?: DynamicRateLimit
+        ): Promise<Buffer> => {
+          const response = await getSourceMetadataFileFromITorrents(
+            hash,
+            5000,
+            this.requestService
+          );
+          if (response) {
+            rateLimiter?.reportResponse(response);
+            if (response.ok) {
+              if (response.body instanceof ArrayBuffer) {
+                return Buffer.from(response.body);
+              }
+              throw new SourceError('Invalid response body', 'invalid_response_body');
             }
-            throw new SourceError('Invalid response body', 'invalid_response_body');
           }
-        }
-        logger.warn(
-          'DataResolver',
-          `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`
-        );
-        throw new ErrorWithStatus(
-          `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`,
-          response?.status.toString(10) || 'unknown_error'
-        );
-      },
-    });
+          logger.warn(
+            'DataResolver',
+            `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`
+          );
+          throw new ErrorWithStatus(
+            `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`,
+            response?.status.toString(10) || 'unknown_error'
+          );
+        },
+      });
 
-    this.createService('torrage', {
-      maxConcurrentRequests: 1,
-      rateLimit: {
-        windowSize: 60000, // 1 minute
-        limit: 90, // 90 requests per minute
-      },
-      shouldVerify: true,
-      getSourceMetadata: async (
-        _magnetLink: string,
-        hash: string,
-        rateLimiter?: DynamicRateLimit
-      ): Promise<Buffer> => {
-        const response = await getSourceMetadataFileFromTorrage(hash, 5000, this.requestService);
-        if (response) {
-          rateLimiter?.reportResponse(response);
-          if (response.ok) {
-            if (typeof response.body === 'string') {
-              return Buffer.from(response.body, 'binary');
+      this.createService('torrage', {
+        maxConcurrentRequests: 1,
+        rateLimit: {
+          windowSize: 60000, // 1 minute
+          limit: 90, // 90 requests per minute
+        },
+        shouldVerify: true,
+        getSourceMetadata: async (
+          _magnetLink: string,
+          hash: string,
+          rateLimiter?: DynamicRateLimit
+        ): Promise<Buffer> => {
+          const response = await getSourceMetadataFileFromTorrage(hash, 5000, this.requestService);
+          if (response) {
+            rateLimiter?.reportResponse(response);
+            if (response.ok) {
+              if (typeof response.body === 'string') {
+                return Buffer.from(response.body, 'binary');
+              }
+              throw new SourceError('Invalid response body', 'invalid_response_body');
             }
-            throw new SourceError('Invalid response body', 'invalid_response_body');
           }
-        }
-        logger.warn(
-          'DataResolver',
-          `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`
-        );
-        throw new ErrorWithStatus(
-          `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`,
-          response?.status.toString(10) || 'unknown_error'
-        );
-      },
-    });
+          logger.warn(
+            'DataResolver',
+            `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`
+          );
+          throw new ErrorWithStatus(
+            `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`,
+            response?.status.toString(10) || 'unknown_error'
+          );
+        },
+      });
+    }
 
-    this.concurrency = Object.values(this.services).reduce((concurrency, service) => {
-      return concurrency + service.config.maxConcurrentRequests;
-    }, 0);
+    // Cache-provider responses are untrusted and can be expensive to decode. Keep metadata
+    // resolution globally serialized so one source cannot cause multiple large responses to be
+    // buffered at the same time.
+    this.concurrency = Math.min(
+      1,
+      Object.values(this.services).reduce((concurrency, service) => {
+        return concurrency + service.config.maxConcurrentRequests;
+      }, 0)
+    );
 
     logger.debug(
       'DataResolver',
@@ -141,11 +166,22 @@ export class SourceMetadataFileService {
       'DataResolver',
       `Converting URI link with identifier: ${hash.substring(0, 6)}-redacted-${preferIdle ? ' (preferring idle services)' : ''}`
     );
-    this.createWorker();
+    if (this.concurrency === 0) {
+      logger.debug('DataResolver', 'Background metadata resolution is disabled');
+      return null;
+    }
+    const existingResolution = this.pendingResolutions.get(hash);
+    if (existingResolution) {
+      return existingResolution;
+    }
     // Wait for the worker to process it
-    return new Promise<Buffer | null>(resolve => {
+    const resolution = new Promise<Buffer | null>(resolve => {
       this.queue.push({ sourceLink: sourceLink, hash, onComplete: resolve });
+      this.createWorker();
     });
+    this.pendingResolutions.set(hash, resolution);
+    void resolution.finally(() => this.pendingResolutions.delete(hash));
+    return resolution;
   }
 
   public async getStats(hash: string): Promise<{ broadcasters: number; watchers: number }> {
@@ -162,6 +198,10 @@ export class SourceMetadataFileService {
 
   public getAvailableConcurrency(): number {
     return this.concurrency - this.activeWorkers;
+  }
+
+  public isEnabled(): boolean {
+    return this.concurrency > 0;
   }
 
   private createService(name: string, service: Service) {
@@ -308,8 +348,15 @@ export class SourceMetadataFileService {
   }
 
   private workerCycle = async () => {
-    while (this.queue.length > 0) {
-      await this.processQueue();
+    try {
+      while (this.queue.length > 0) {
+        await this.processQueue();
+      }
+    } finally {
+      this.activeWorkers--;
+      if (this.queue.length > 0) {
+        this.createWorker();
+      }
     }
   };
 
@@ -317,7 +364,7 @@ export class SourceMetadataFileService {
     if (this.activeWorkers < this.concurrency) {
       this.activeWorkers++;
       logger.debug('DataResolver', `Creating new worker, active workers: ${this.activeWorkers}`);
-      setImmediate(this.workerCycle);
+      setImmediate(() => void this.workerCycle());
     }
   }
 

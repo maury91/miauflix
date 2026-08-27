@@ -25,6 +25,7 @@ import type { ConfigurableService, ValidatorTransform, VariableInfo } from '@myt
 
 import {
   applyTransform,
+  buildAllConfigs,
   configureService,
   getDefaultValue,
   handlerFromInstance,
@@ -42,6 +43,7 @@ const mockInput = input as jest.MockedFunction<typeof input>;
 const mockConfirm = confirm as jest.MockedFunction<typeof confirm>;
 
 const makeMockService = (isReady: boolean): ConfigurableService => ({
+  testable: true,
   getStatus: () =>
     isReady ? { status: 'ready' } : { status: 'error', errorMessage: 'not ready', error: null },
   reload: jest.fn().mockResolvedValue(undefined),
@@ -83,6 +85,33 @@ describe('getDefaultValue', () => {
     const factory = jest.fn().mockReturnValue('generated');
     expect(getDefaultValue(factory)).toBe('generated');
     expect(factory).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('buildAllConfigs', () => {
+  it('includes UI input metadata derived from configuration transforms', () => {
+    const entries = buildAllConfigs(new Map());
+
+    expect(entries.find(entry => entry.key === 'DISABLE_DISCOVERY')).toMatchObject({
+      inputType: 'boolean',
+      booleanStateDescriptions: {
+        true: 'DHT discovery disabled',
+        false: 'DHT discovery enabled',
+      },
+    });
+    expect(entries.find(entry => entry.key === 'PORT')).toMatchObject({
+      inputType: 'number',
+      numberOptions: { min: 1, max: 65535, integer: true },
+    });
+    expect(entries.find(entry => entry.key === 'MAXIMUM_CACHE_EMPTY_SPACE')).toMatchObject({
+      inputType: 'size',
+      sizeUnits: ['B', 'KB', 'MB', 'GB', 'TB'],
+    });
+    expect(entries.find(entry => entry.key === 'ACCESS_TOKEN_EXPIRATION')).toMatchObject({
+      inputType: 'time',
+      timeUnits: ['s', 'm', 'h', 'd'],
+    });
+    expect(entries.find(entry => entry.key === 'CORS_ORIGIN')).toMatchObject({ inputType: 'text' });
   });
 });
 
@@ -231,6 +260,19 @@ describe('saveToEnvFile', () => {
     expect(written).toContain('JWT_SECRET=a');
     expect(written).toContain('STREAM_KEY_SALT=b');
   });
+
+  it('writes to the project-root .env when the backend is the working directory', () => {
+    jest.spyOn(process, 'cwd').mockReturnValue('/project/backend');
+    mockExistsSync.mockReturnValue(false);
+
+    saveToEnvFile({ JWT_SECRET: 'secret123' } as never);
+
+    expect(mockWriteFileSync).toHaveBeenCalledWith(
+      '/project/.env',
+      'JWT_SECRET=secret123\n',
+      'utf-8'
+    );
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -258,6 +300,7 @@ describe('validateExistingConfiguration', () => {
 
   it('returns the service entry with the reload error message on reload failure', async () => {
     const instance: ConfigurableService = {
+      testable: true,
       getStatus: () => ({ status: 'error', errorMessage: 'not ready', error: null }),
       reload: jest.fn().mockRejectedValue(new Error('connection refused')),
     };

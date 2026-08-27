@@ -1,0 +1,50 @@
+name: miauflix-dev
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm --workspace backend run dev
+    environment:
+      DATA_DIR: /usr/data
+      NODE_ENV: development
+      PORT: 3000
+      DISABLE_VPN_CHECK: 'true'
+      ENABLE_FLARESOLVERR: 'false'
+      ENABLE_FRONTEND: 'false'
+      COOKIE_DOMAIN: localhost
+      # The frontend is served over Vite HTTPS, so auth cookies must be Secure.
+      COOKIE_SECURE: 'true'
+      ALLOW_CREATE_ADMIN_ON_FIRST_RUN: ${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
+    ports:
+      - '127.0.0.1:5000:3000'
+    volumes:
+      - ./.env:/usr/src/app/.env
+      # Keep generated backend client files from the image available to Vite.
+      - ./backend/src:/usr/src/app/backend/src
+      - ./backend/loader.js:/usr/src/app/backend/loader.js:ro
+      - ./backend/package.json:/usr/src/app/backend/package.json:ro
+      - ./backend/tsconfig.json:/usr/src/app/backend/tsconfig.json:ro
+      - ./backend/tsconfig.app.json:/usr/src/app/backend/tsconfig.app.json:ro
+      - ./backend/tsconfig.client.json:/usr/src/app/backend/tsconfig.client.json:ro
+      - ./data:/usr/data
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm --workspace frontend run dev -- --host 0.0.0.0
+    environment:
+      BACKEND_URL: http://backend:3000
+      VITE_API_URL: /
+      # Docker Desktop bind mounts can miss filesystem events without polling.
+      CHOKIDAR_USEPOLLING: 'true'
+    depends_on:
+      - backend
+    ports:
+      - '127.0.0.1:4173:4173'
+    volumes:
+      - ./.env:/usr/src/app/.env:ro
+      - ./frontend:/usr/src/app/frontend

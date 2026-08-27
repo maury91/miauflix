@@ -1,70 +1,82 @@
 import type { MediaDto } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
-import type { FC } from 'react';
+import { forwardRef, type KeyboardEvent } from 'react';
 import styled from 'styled-components';
 
-const Card = styled.div<{ $backdrop: string }>`
-  flex-shrink: 0;
+import { getImageUrl, getMediaTitle } from '../media.utils';
+
+const Card = styled.button<{ $backdrop: string; $width: number }>`
+  flex: 0 0 ${({ $width }) => $width}px;
+  width: ${({ $width }) => $width}px;
   position: relative;
   aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 0;
   border-radius: 6px;
   overflow: hidden;
   background: url(${props => props.$backdrop}) center / cover no-repeat;
   background-color: ${PALETTE.background.popup};
+  color: ${PALETTE.text.primary};
   cursor: pointer;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 160ms ease,
+    box-shadow 160ms ease;
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 2px ${PALETTE.background.primary};
+  &:hover,
+  &:focus-visible {
+    transform: scale(1.045);
+    box-shadow: 0 0 0 3px ${PALETTE.color.interactive};
+    outline: none;
+    z-index: 2;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 `;
 
-const TitleOverlay = styled.div`
+const TitleOverlay = styled.span`
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 8px 10px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
-  color: ${PALETTE.text.primary};
-  font-size: 0.85rem;
-  font-weight: 600;
+  inset: auto 0 0;
+  padding: 18px 10px 8px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
+  font:
+    600 0.85rem 'Poppins',
+    sans-serif;
+  text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
-function getTitle(media: MediaDto): string {
-  if (media._type === 'movie') {
-    return media.title;
-  }
-  return media.name;
-}
-
-function getBackdropUrl(path: string): string {
-  if (!path) return '';
-  // TMDB images: use w500 for card-sized backdrops
-  if (path.startsWith('/')) {
-    return `https://image.tmdb.org/t/p/w500${path}`;
-  }
-  return path;
-}
-
 interface MediaCardProps {
   media: MediaDto;
   width: number;
+  tabIndex: number;
+  onFocus: () => void;
+  onHover: () => void;
+  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
 }
 
-export const MediaCard: FC<MediaCardProps> = ({ media, width }) => {
-  const title = getTitle(media);
-  const backdrop = getBackdropUrl(media.backdrop);
-
+export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function MediaCard(
+  { media, onFocus, onHover, onKeyDown, tabIndex, width },
+  ref
+) {
+  const title = getMediaTitle(media);
   return (
-    <Card $backdrop={backdrop} style={{ width }} title={title}>
+    <Card
+      ref={ref}
+      type="button"
+      $backdrop={getImageUrl(media.backdrop)}
+      $width={width}
+      aria-label={title}
+      tabIndex={tabIndex}
+      onFocus={onFocus}
+      onMouseEnter={onHover}
+      onClick={onFocus}
+      onKeyDown={onKeyDown}
+    >
       <TitleOverlay>{title}</TitleOverlay>
     </Card>
   );
-};
+});

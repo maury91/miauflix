@@ -139,8 +139,13 @@ update_env_var() {
   local var_value=$2
   local env_file="${SCRIPT_DIR}/../.env"
   
+  if [ -e "$env_file" ] && [ ! -f "$env_file" ]; then
+    print_error ".env must be a regular file, but it is not: $env_file"
+    return 1
+  fi
+
   # Create .env file if it doesn't exist
-  if [ ! -f "$env_file" ]; then
+  if [ ! -e "$env_file" ]; then
     touch "$env_file"
     print_status "Created new .env file at $env_file"
   fi

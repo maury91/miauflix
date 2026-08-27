@@ -4,9 +4,9 @@
   "main": "src/app.ts",
   "types": "./dist/client/index.d.ts",
   "scripts": {
-    "start": "node --env-file ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
-    "start:prod": "node --env-file ../.env dist/app.js",
-    "dev": "npm start --watch",
+    "start": "node --env-file-if-exists ../.env --experimental-specifier-resolution=node --loader ./loader.js  src/app.ts",
+    "start:prod": "node --env-file-if-exists ../.env dist/app.js",
+    "dev": "node --watch --env-file-if-exists ../.env --experimental-specifier-resolution=node --loader ./loader.js src/app.ts",
     "config": "npm start -- --config",
     "config-only": "npm start -- --only-config",
     "build": "tsc --project tsconfig.app.json && tsc-alias -p tsconfig.app.json --resolve-full-paths",

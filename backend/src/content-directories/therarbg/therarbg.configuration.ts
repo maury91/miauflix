@@ -2,7 +2,7 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 export const theRarbgConfigurationDefinition = serviceConfiguration({
   name: 'TheRARBG',
-  description: 'Service for fetching media sources from TheRARBG',
+  description: 'TheRARBG source provider for fetching media torrent sources',
   variables: {
     THE_RARBG_API_URL: variable({
       description: 'URL for the TheRARBG API',

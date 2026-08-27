@@ -319,7 +319,6 @@ Use SSR mode when:
 
 - 🔍 **Testing SSR functionality** - Debug server-side rendering issues
 - 🎯 **Production verification** - Ensure production-like behavior
-- 📱 **SEO testing** - Verify meta tags and initial page load
 
 > **Note**: SSR mode requires manual rebuild after changes - use regular dev mode for active development.
 
