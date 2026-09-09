@@ -27,19 +27,19 @@ export class StreamService {
    */
   @traced('StreamService')
   async getBestSourceForStreaming(
-    tmdbMovieId: number,
+    movieId: number,
     quality: Quality | 'auto',
     allowHevc = true
   ): Promise<MovieSource | null> {
-    // First, get the movie (will fetch from TMDB if not in database)
-    const movie = await this.mediaService.getMovieByTmdbId(tmdbMovieId);
+    // First, get the movie (the caller ensures fresh catalog data beforehand)
+    const movie = await this.mediaService.getMovieById(movieId);
     if (!movie) {
-      logger.warn('StreamService', `Movie with ID ${tmdbMovieId} not found`);
+      logger.warn('StreamService', `Movie with ID ${movieId} not found`);
       return null;
     }
 
     // Get sources with on-demand search if needed
-    const sources = await this.sourceService.getSourcesForMovieWithOnDemandSearch(
+    let sources = await this.sourceService.getSourcesForMovieWithOnDemandSearch(
       {
         id: movie.id,
         imdbId: movie.imdbId,
@@ -50,15 +50,28 @@ export class StreamService {
     );
 
     if (!sources.length) {
-      logger.warn('StreamService', `No sources found for movie ID ${tmdbMovieId}`);
+      logger.warn('StreamService', `No sources found for movie ID ${movieId}`);
       return null;
     }
 
-    // Filter and sort sources for streaming
-    const streamableSources = filterSources(sources, allowHevc);
+    // A streaming endpoint needs a usable source now. Resolve a small number inline instead of
+    // waiting for the background metadata queue to catch up.
+    let streamableSources = filterSources(sources, allowHevc);
+    if (!streamableSources.length) {
+      for (const source of filterHevcSources(sources, allowHevc).slice(0, 2)) {
+        try {
+          await this.sourceService.processSourceMetadata(source.id);
+        } catch (error) {
+          logger.warn('StreamService', `Inline metadata resolution failed for ${source.id}`, error);
+        }
+        sources = await this.sourceService.getSourcesForMovie(movie.id);
+        streamableSources = filterSources(sources, allowHevc);
+        if (streamableSources.length) break;
+      }
+    }
 
     if (!streamableSources.length) {
-      logger.warn('StreamService', `No streamable sources found for movie ID ${tmdbMovieId}`);
+      logger.warn('StreamService', `No streamable sources found for movie ID ${movieId}`);
       const nonStreamableSources = filterHevcSources(sources, allowHevc);
       if (nonStreamableSources.length) {
         // ToDo: Use source service to have a source with file

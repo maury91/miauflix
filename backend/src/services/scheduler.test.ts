@@ -58,4 +58,38 @@ describe('Scheduler service recovery', () => {
     expect(task).not.toHaveBeenCalled();
     scheduler.cancelTask('cacheCleanup');
   });
+
+  it('spaces initial task executions by three seconds', async () => {
+    const { scheduler } = setupTest();
+    const firstTask = jest.fn().mockResolvedValue(undefined);
+    const secondTask = jest.fn().mockResolvedValue(undefined);
+
+    scheduler.scheduleTask('sourceSearch', 10, firstTask);
+    scheduler.scheduleTask('sourceMetadata', 10, secondTask);
+
+    await jest.advanceTimersByTimeAsync(0);
+    expect(firstTask).toHaveBeenCalledTimes(1);
+    expect(secondTask).not.toHaveBeenCalled();
+
+    await jest.advanceTimersByTimeAsync(2_999);
+    expect(secondTask).not.toHaveBeenCalled();
+
+    await jest.advanceTimersByTimeAsync(1);
+    expect(secondTask).toHaveBeenCalledTimes(1);
+    scheduler.cancelTask('sourceSearch');
+    scheduler.cancelTask('sourceMetadata');
+  });
+
+  it('runs a queued task immediately when its dependency recovers', async () => {
+    const { scheduler } = setupTest();
+    const task = jest.fn().mockResolvedValue(undefined);
+
+    scheduler.scheduleTask('firstTask', 3600, jest.fn().mockResolvedValue(undefined));
+    scheduler.scheduleTask('refreshLists', 3600, task, ['TMDB']);
+    scheduler.notifyServicesRecovered([{ service: 'TMDB', previousStatus: 'degraded' }]);
+    await Promise.resolve();
+
+    expect(task).toHaveBeenCalledTimes(1);
+    scheduler.cancelTask('refreshLists');
+  });
 });

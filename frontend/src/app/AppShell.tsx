@@ -1,5 +1,6 @@
 import { useAppState } from '@app/hooks/useAppState';
 import { IntroAnimation, type LogoAnimationHandle } from '@app/shell/IntroAnimation';
+import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
@@ -24,6 +25,7 @@ const LoadingContainer = styled.div`
 export function AppShell() {
   const dispatch = useAppDispatch();
   const [introComplete, setIntroComplete] = useState(false);
+  const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
   const logoRef = useRef<LogoAnimationHandle>(null);
   const appState = useAppState();
 
@@ -51,10 +53,18 @@ export function AppShell() {
   }, []);
 
   const handleConfigDismiss = useCallback(() => {
+    setConfigurationWizardActive(false);
     dispatch(dismissConfigWizard());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (appState === 'config_wizard') setConfigurationWizardActive(true);
+  }, [appState]);
+
   const renderPage = () => {
+    if (configurationWizardActive) {
+      return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
+    }
     switch (appState) {
       case 'loading':
         return <LoadingContainer key="loading" />;
@@ -64,6 +74,8 @@ export function AppShell() {
         return <LoginPage key="login" />;
       case 'config':
         return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} />;
+      case 'config_wizard':
+        return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
       case 'home':
       default:
         return <HomePage key="home" />;

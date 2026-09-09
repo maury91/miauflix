@@ -2,22 +2,23 @@ import type { DataSource, EntityManager, Repository } from 'typeorm';
 import { In } from 'typeorm';
 
 import { Episode } from '@entities/episode.entity';
-import type { Genre } from '@entities/genre.entity';
 import { Season } from '@entities/season.entity';
 import { TVShow } from '@entities/tvshow.entity';
-import { TVShowTranslation } from '@entities/tvshow.entity';
 import { RepositoryError } from '@errors/repository.errors';
-import { objectKeys } from '@utils/object.util';
+import type { SeasonDetail, TVShowDetail } from '@services/catalog/catalog.types';
 
+/**
+ * Local index of catalog tv shows, seasons and episodes — see movie.repository.ts.
+ * Full catalog data lives in the media-catalog service; this maintains only the
+ * mirror needed for local SQL (watching flags, playback joins, source search).
+ */
 export class TVShowRepository {
   private readonly tvShowRepository: Repository<TVShow>;
   private readonly seasonRepository: Repository<Season>;
   private readonly episodeRepository: Repository<Episode>;
-  private readonly tvShowTranslationRepository: Repository<TVShowTranslation>;
 
   constructor(private readonly dataSource: DataSource) {
     this.tvShowRepository = dataSource.getRepository(TVShow);
-    this.tvShowTranslationRepository = dataSource.getRepository(TVShowTranslation);
     this.seasonRepository = dataSource.getRepository(Season);
     this.episodeRepository = dataSource.getRepository(Episode);
   }
@@ -26,45 +27,210 @@ export class TVShowRepository {
     return this.tvShowRepository.findBy({ id: In(ids) });
   }
 
-  async findByTMDBId(tmdbId: number): Promise<TVShow | null> {
+  async findByMediaId(mediaId: number): Promise<TVShow | null> {
     return this.tvShowRepository.findOne({
-      where: { tmdbId },
+      where: { mediaId },
       relations: {
-        genres: true,
-        translations: true,
         seasons: true,
       },
     });
   }
 
-  async findIncompleteSeasons(): Promise<Season[]> {
-    return this.seasonRepository.find({
-      where: { synced: false },
-      relations: {
-        tvShow: true,
-      },
+  async findListItemsByMediaIds(mediaIds: number[]): Promise<TVShow[]> {
+    if (mediaIds.length === 0) return [];
+    return this.tvShowRepository.find({
+      where: { mediaId: In(mediaIds) },
     });
   }
 
-  async findIncompleteSeasonsByShowIds(showIds: number[]): Promise<Season[]> {
-    if (showIds.length === 0) {
+  /** Lightweight lookup used by list refreshes; deliberately bypasses relations. */
+  async findReferencesByMediaIds(
+    mediaIds: number[]
+  ): Promise<Array<Pick<TVShow, 'id' | 'mediaId'>>> {
+    if (mediaIds.length === 0) {
       return [];
     }
+    return this.tvShowRepository
+      .createQueryBuilder('tvShow')
+      .select(['tvShow.id', 'tvShow.mediaId'])
+      .where('tvShow.tmdbId IN (:...mediaIds)', { mediaIds })
+      .getMany();
+  }
 
-    return this.seasonRepository.find({
-      where: {
-        synced: false,
-        tvShow: { id: In(showIds) },
-      },
-      relations: {
-        tvShow: true,
-      },
+  /** Mirrors a catalog tv show detail into the local index (upsert by mediaId). */
+  async upsertTVShowDetail(detail: TVShowDetail): Promise<TVShow> {
+    return this.dataSource.transaction(async manager => {
+      const tvShowRepo = manager.getRepository(TVShow);
+      const existing = await tvShowRepo.findOneBy({ mediaId: detail.mediaId });
+      const payload = {
+        mediaId: detail.mediaId,
+        name: detail.name,
+        overview: detail.overview,
+        firstAirDate: detail.firstAirDate,
+        poster: detail.poster,
+        backdrop: detail.backdrop,
+        imdbId: detail.imdbId ?? '',
+        status: detail.status,
+        popularity: detail.popularity,
+        rating: detail.rating,
+      };
+      let show: TVShow;
+      if (existing) {
+        await tvShowRepo.update(existing.id, payload);
+        show = { ...existing, ...payload };
+      } else {
+        show = await tvShowRepo.save(tvShowRepo.create(payload));
+      }
+      for (const season of detail.seasons) {
+        await this.upsertSeasonSummary(manager, show, season);
+      }
+      return show;
     });
+  }
+
+  /** Upserts season metadata without touching synced state or stored episodes. */
+  private async upsertSeasonSummary(
+    manager: EntityManager,
+    show: TVShow,
+    season: TVShowDetail['seasons'][number]
+  ): Promise<void> {
+    const seasonRepo = manager.getRepository(Season);
+    const existing = await seasonRepo.findOneBy({
+      tvShowId: show.id,
+      seasonNumber: season.seasonNumber,
+    });
+    const payload = {
+      mediaId: season.mediaId,
+      name: season.name,
+      overview: season.overview,
+      airDate: season.airDate ?? undefined,
+      posterPath: season.poster ?? undefined,
+    };
+    if (existing) {
+      await seasonRepo.update(existing.id, payload);
+    } else {
+      await seasonRepo.save(
+        seasonRepo.create({ ...payload, tvShowId: show.id, seasonNumber: season.seasonNumber })
+      );
+    }
+  }
+
+  /** Mirrors a catalog season (with episodes) into the local index. */
+  async upsertSeasonDetail(detail: SeasonDetail): Promise<Season> {
+    return this.dataSource.transaction(async manager => {
+      const tvShowRepo = manager.getRepository(TVShow);
+      const show = await tvShowRepo.findOneBy({ mediaId: detail.tvMediaId });
+      if (!show) {
+        throw new RepositoryError(
+          `Cannot mirror season of unknown show ${detail.tvMediaId}`,
+          'not_found'
+        );
+      }
+      const seasonRepo = manager.getRepository(Season);
+      const existingSeason = await seasonRepo.findOneBy({
+        tvShowId: show.id,
+        seasonNumber: detail.seasonNumber,
+      });
+      const payload = {
+        mediaId: detail.seasonMediaId,
+        name: detail.name,
+        overview: detail.overview,
+        airDate: detail.airDate ?? undefined,
+        posterPath: detail.poster ?? undefined,
+        synced: true,
+      };
+      let season: Season;
+      if (existingSeason) {
+        await seasonRepo.update(existingSeason.id, payload);
+        season = { ...existingSeason, ...payload };
+      } else {
+        season = await seasonRepo.save(
+          seasonRepo.create({
+            ...payload,
+            tvShowId: show.id,
+            seasonNumber: detail.seasonNumber,
+          })
+        );
+      }
+      const episodeRepo = manager.getRepository(Episode);
+      for (const episode of detail.episodes) {
+        const existing = await episodeRepo.findOneBy({
+          seasonId: season.id,
+          episodeNumber: episode.episodeNumber,
+        });
+        const episodePayload = {
+          mediaId: episode.mediaId,
+          name: episode.name,
+          overview: episode.overview,
+          airDate: episode.airDate,
+          stillPath: episode.still ?? '',
+          imdbId: '',
+        };
+        if (existing) {
+          await episodeRepo.update(existing.id, episodePayload);
+        } else {
+          await episodeRepo.save(episodeRepo.create({ ...episodePayload, seasonId: season.id }));
+        }
+      }
+      return season;
+    });
+  }
+
+  async updateFromSummary(mediaId: number, tvShow: Partial<TVShow>): Promise<void> {
+    await this.tvShowRepository.update({ mediaId }, tvShow);
+  }
+
+  async createFromSummary(tvShow: Partial<TVShow>): Promise<TVShow> {
+    const created = this.tvShowRepository.create({
+      backdrop: '',
+      firstAirDate: '',
+      imdbId: '',
+      name: '',
+      overview: '',
+      popularity: 0,
+      poster: '',
+      rating: 0,
+      status: '',
+      ...tvShow,
+    });
+    await this.tvShowRepository
+      .createQueryBuilder()
+      .insert()
+      .into(TVShow)
+      .values(created)
+      .orUpdate(
+        ['name', 'overview', 'firstAirDate', 'poster', 'backdrop', 'popularity', 'rating'],
+        // orUpdate expects database column names; the column predates the mediaId rename.
+        ['tmdbId']
+      )
+      .updateEntity(false)
+      .execute();
+    const stored = await this.tvShowRepository.findOneBy({ mediaId: created.mediaId });
+    if (!stored) {
+      throw new RepositoryError('Failed to persist TV show summary', 'retrieve_failed');
+    }
+    return stored;
   }
 
   async findIncompleteSeason(): Promise<Season | null> {
     return this.seasonRepository.findOne({
       where: { synced: false },
+      relations: {
+        tvShow: true,
+      },
+    });
+  }
+
+  async findIncompleteSeasonByShowIds(showIds: number[]): Promise<Season | null> {
+    if (showIds.length === 0) {
+      return null;
+    }
+
+    return this.seasonRepository.findOne({
+      where: {
+        synced: false,
+        tvShow: { id: In(showIds) },
+      },
       relations: {
         tvShow: true,
       },
@@ -87,65 +253,6 @@ export class TVShowRepository {
       where: { id },
       relations: { episodes: true },
     });
-  }
-
-  async create(
-    tvShow: Partial<TVShow>,
-    {
-      translations = [],
-      seasons = [],
-    }: {
-      translations?: Pick<TVShowTranslation, 'language' | 'name' | 'overview' | 'tagline'>[];
-      seasons?: Pick<
-        Season,
-        'airDate' | 'name' | 'overview' | 'posterPath' | 'seasonNumber' | 'tmdbId'
-      >[];
-    } = {}
-  ): Promise<TVShow> {
-    return this.dataSource.transaction(async manager => {
-      const tvShowRepo = manager.getRepository(TVShow);
-      const newTVShow = tvShowRepo.create(tvShow);
-      const savedShow = await tvShowRepo.save(newTVShow);
-
-      if (translations.length) {
-        savedShow.translations = await Promise.all(
-          translations.map(translation => this.addTranslation(savedShow, translation, manager))
-        );
-      }
-
-      if (seasons.length) {
-        savedShow.seasons = await Promise.all(
-          seasons.map(season => this.createSeason(savedShow, season, { manager }))
-        );
-      }
-      return savedShow;
-    });
-  }
-
-  async addTranslation(
-    tvShow: TVShow,
-    translation: Partial<TVShowTranslation>,
-    manager?: EntityManager
-  ): Promise<TVShowTranslation> {
-    const translationRepo = manager
-      ? manager.getRepository(TVShowTranslation)
-      : this.tvShowTranslationRepository;
-    const newTranslation = translationRepo.create({
-      ...translation,
-      tvShow,
-    });
-    await translationRepo.upsert(newTranslation, ['tvShowId', 'language']);
-
-    return newTranslation;
-  }
-
-  async checkForChangesAndUpdate(tvShow: TVShow, updatedTVShow: Partial<TVShow>): Promise<void> {
-    const hasChanges = objectKeys(updatedTVShow).some(key => {
-      return tvShow[key] !== updatedTVShow[key];
-    });
-    if (hasChanges) {
-      await this.tvShowRepository.update(tvShow.id, updatedTVShow);
-    }
   }
 
   async saveTVShow(tvShow: TVShow): Promise<TVShow> {
@@ -206,7 +313,8 @@ export class TVShowRepository {
     });
 
     if (existingEpisode) {
-      return existingEpisode;
+      await episodeRepository.update(existingEpisode.id, episodeData);
+      return Object.assign(existingEpisode, episodeData);
     }
 
     const newEpisode = episodeRepository.create({
@@ -215,30 +323,6 @@ export class TVShowRepository {
     });
 
     return await episodeRepository.save(newEpisode);
-  }
-
-  async checkForChangesAndUpdateGenres(show: TVShow, genres: Genre[]): Promise<void> {
-    const showGenreIds = show.genres?.map(genre => genre.id).sort() ?? [];
-    if (
-      showGenreIds.toString() !==
-      genres
-        .map(g => g.id)
-        .sort()
-        .toString()
-    ) {
-      await this.updateGenres(show, genres);
-    }
-  }
-
-  async updateGenres(show: TVShow, genres: Genre[]): Promise<void> {
-    const updatedShow = await this.tvShowRepository.findOneBy({
-      id: show.id,
-    });
-    if (!updatedShow) {
-      throw new RepositoryError('TV Show not found', 'not_found');
-    }
-    updatedShow.genres = genres;
-    await this.tvShowRepository.save(updatedShow);
   }
 
   async updateSeasonSyncStatus(season: Season, synced: boolean): Promise<void> {
@@ -266,6 +350,16 @@ export class TVShowRepository {
     });
 
     return watchingShows.map(show => show.id);
+  }
+
+  /** Catalog media ids of shows marked as watching (used to push the watching set). */
+  async getWatchingTVShowMediaIds(): Promise<number[]> {
+    const watchingShows = await this.tvShowRepository.find({
+      where: { watching: true },
+      select: ['mediaId'],
+    });
+
+    return watchingShows.map(show => show.mediaId);
   }
 
   /**

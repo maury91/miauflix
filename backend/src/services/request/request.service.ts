@@ -34,6 +34,7 @@ export interface RequestOptions<B = false> {
   signal?: AbortSignal;
   redirect?: RequestRedirect;
   asBuffer?: B;
+  maxResponseBytes?: number;
 }
 
 export interface RequestServiceResponse<T> {
@@ -42,6 +43,60 @@ export interface RequestServiceResponse<T> {
   ok: boolean;
   status: number;
   statusText: string;
+}
+
+async function readResponseWithLimit<T>(
+  response: Response,
+  maxResponseBytes: number,
+  asBuffer: boolean
+): Promise<ArrayBuffer | T | string> {
+  const contentLength = Number(response.headers.get('content-length'));
+  if (Number.isFinite(contentLength) && contentLength > maxResponseBytes) {
+    await response.body?.cancel();
+    throw new RequestError(`Response exceeds ${maxResponseBytes} byte limit`, 'response_too_large');
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    return asBuffer ? new ArrayBuffer(0) : ('' as T | string);
+  }
+
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    totalBytes += value.byteLength;
+    if (totalBytes > maxResponseBytes) {
+      await reader.cancel();
+      throw new RequestError(
+        `Response exceeds ${maxResponseBytes} byte limit`,
+        'response_too_large'
+      );
+    }
+    chunks.push(value);
+  }
+
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  if (asBuffer) {
+    return bytes.buffer;
+  }
+
+  const text = new TextDecoder().decode(bytes);
+  const contentType = response.headers.get('content-type');
+  if (!contentType || contentType.toLowerCase().includes('application/json')) {
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      return text;
+    }
+  }
+  return text;
 }
 
 /**
@@ -279,7 +334,7 @@ export class RequestService {
     const successMetricId = this.statsService.metricStart('request.success');
     const errorMetricId = this.statsService.metricStart('request.error');
 
-    const { headers = {}, queryString, timeout, ...fetchOptions } = options ?? {};
+    const { headers = {}, queryString, timeout, maxResponseBytes, ...fetchOptions } = options ?? {};
 
     // Build URL with query string
     const urlObj = buildUrlWithQuery(rawUrl, queryString);
@@ -329,8 +384,6 @@ export class RequestService {
         signal,
         headers: requestHeaders,
       });
-
-      clearTimeout(timeoutId);
 
       // If we get a 403 and FlareSolverr is enabled, retry through FlareSolverr
       if (response.status === 403 && this.isFlareSolverrEnabled) {
@@ -403,14 +456,19 @@ export class RequestService {
       // Request was successful, store the user agent for this domain
       this.userAgentByDomain.set(domain, userAgent);
 
+      const body = maxResponseBytes
+        ? await readResponseWithLimit<T>(response, maxResponseBytes, options?.asBuffer === true)
+        : options?.asBuffer
+          ? await response.arrayBuffer()
+          : await parseResponseBody<T>(response);
+
+      clearTimeout(timeoutId);
       this.statsService.metricEnd(successMetricId);
       this.statsService.metricEnd(requestMetricId);
       this.statsService.metricCancel(errorMetricId);
 
       return {
-        body: options?.asBuffer
-          ? await response.arrayBuffer()
-          : await parseResponseBody<T>(response),
+        body,
         headers: normalizeHeaders(response.headers),
         ok: response.ok,
         status: response.status,

@@ -2,12 +2,10 @@ import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import z from 'zod';
 
-import type { MediaList } from '@entities/list.entity';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 
 import type { Deps } from './common.types';
-import { paginate } from './list.pagination';
 import { serializeMedia } from './list.serializers';
 import type { ListDto, ListResponse, ListsResponse } from './list.types';
 
@@ -48,23 +46,16 @@ export const createListRoutes = ({ auditLogService, configurationService, listSe
       async c => {
         const slug = c.req.valid('param').slug;
         const { lang, limit, page } = c.req.valid('query');
-        const list = await listService.getListContent(slug, lang);
-        const paginationRequested = page !== undefined || limit !== undefined;
         const pageSize = limit ?? 20;
         const currentPage = page ?? 0;
-        const pagination = paginationRequested ? paginate(list, currentPage, pageSize) : null;
+        const { medias, total } = await listService.getListPage(slug, lang, currentPage, pageSize);
         return c.json({
-          results: (pagination?.results ?? list).map(serializeMedia),
-          total: list.length,
-          ...(pagination
-            ? {
-                page: pagination.page,
-                pageSize: pagination.pageSize,
-                totalPages: pagination.totalPages,
-              }
-            : {}),
-          list: await listService.getListBySlug(slug),
-        } satisfies ListResponse & { list: MediaList });
+          results: medias.map(serializeMedia),
+          total,
+          page: currentPage,
+          pageSize,
+          totalPages: Math.ceil(total / pageSize),
+        } satisfies ListResponse);
       }
     );
 };

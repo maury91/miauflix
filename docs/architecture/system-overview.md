@@ -4,15 +4,15 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 
 ## Technology Stack
 
-| **Layer**          | **Technology**                  | **Purpose**                         | **Key Components**                    |
-| ------------------ | ------------------------------- | ----------------------------------- | ------------------------------------- |
-| **Frontend**       | React 19 + Vite + Redux Toolkit | Single-page application             | Components, pages, state management   |
-| **HTTP API**       | Node.js 22 + Hono Framework     | REST API and static file serving    | Routes, middleware, authentication    |
-| **Authentication** | JWT + HttpOnly cookies + bcrypt | User authentication & authorization | JWT API access, refresh token cookies |
-| **Database**       | TypeORM + SQLite                | Data persistence with auto-sync     | Entities, repositories, migrations    |
-| **Streaming**      | WebTorrent + BitTorrent         | Peer-to-peer media streaming        | Torrent client, source aggregation    |
-| **External APIs**  | TMDB, Trakt.tv, NordVPN         | Metadata, lists, VPN integration    | Service integrations, rate limiting   |
-| **Deployment**     | Docker + Nginx + Let's Encrypt  | Containerized deployment with SSL   | Reverse proxy, SSL termination        |
+| **Layer**          | **Technology**                                 | **Purpose**                          | **Key Components**                          |
+| ------------------ | ---------------------------------------------- | ------------------------------------ | ------------------------------------------- |
+| **Frontend**       | React 19 + Vite + Redux Toolkit                | Single-page application              | Components, pages, state management         |
+| **HTTP API**       | Node.js 22 + Hono Framework                    | REST API and static file serving     | Routes, middleware, authentication          |
+| **Authentication** | JWT + HttpOnly cookies + bcrypt                | User authentication & authorization  | JWT API access, refresh token cookies       |
+| **Database**       | TypeORM + SQLite                               | Data persistence with auto-sync      | Entities, repositories, migrations          |
+| **Streaming**      | WebTorrent + BitTorrent                        | Peer-to-peer media streaming         | Torrent client, source aggregation          |
+| **External APIs**  | Media catalog (Bun service), Trakt.tv, NordVPN | Catalog data, lists, VPN integration | Catalog provider abstraction, rate limiting |
+| **Deployment**     | Docker + Nginx + Let's Encrypt                 | Containerized deployment with SSL    | Reverse proxy, SSL termination              |
 
 ## System Components
 
@@ -36,7 +36,9 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 
 #### Media Services
 
-- **TMDB Integration** - Movie/TV metadata, posters, ratings (see [External Sync + Query with Fallback](external-sync-and-query-fallback.md) for sync/query architecture and TmdbService layering)
+- **Media Catalog Service** - A standalone **Bun service** (`services/media-catalog`) that owns the media catalog: it talks to the catalog provider (TMDB today), stores full catalog data in its own SQLite database, enforces freshness, and publishes the versioned `catalog` capability. The backend discovers its manifest through `/.well-known/miauflix-service`; both processes validate requests and responses with `@miauflix/service-contracts`.
+- **Local Media Index** - The backend keeps a slim mirror of catalog data (identity, imdbId, popularity, posters) in its own database, written through the catalog service responses, so source-discovery and streaming SQL joins keep working locally.
+- **Remote Service Management** - Named service URLs such as `CATALOG_SERVICE_URL` feed a generic discovery manager. Service-owned configuration is namespaced, rendered by the existing wizard/admin UI, pushed with explicit set/unset semantics, and continuously monitored with retrying discovery and status polling.
 - **Source Discovery** - Multi-provider content aggregation
 - **Quality Management** - Automatic quality detection and selection
 - **Progress Tracking** - User watch history and resume functionality

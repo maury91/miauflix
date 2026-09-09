@@ -5,6 +5,7 @@ import path from 'path';
 
 import { ConfigurationServiceError } from '@errors/configuration.errors';
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
+import type { VariableInfo } from '@mytypes/configuration';
 import { ALL_VAR_NAMES, services } from '@services/configuration/configuration.consts';
 import { EncryptionService } from '@services/encryption/encryption.service';
 import { hasKey, objectEntries, objectFromEntries, objectKeys } from '@utils/object.util';
@@ -116,6 +117,25 @@ export class ConfigurationService {
   }
 
   /**
+   * Registers runtime-declared variables (e.g. a remote service's published
+   * schema) after init(): snapshots env for them, re-reads persisted values from
+   * config.json — loadConfigFile skips unknown keys, so dynamic keys need a second
+   * pass once they are known — and precomputes their transforms.
+   */
+  registerDynamicVariables(
+    variables: Record<string, VariableInfo>,
+    serviceName: ServiceName
+  ): void {
+    for (const [name, info] of Object.entries(variables)) {
+      this._variablesInfo.set(name as VariableName, { ...info, serviceName });
+      const envValue = process.env[name];
+      if (envValue) this._rawValues.set(name as VariableName, envValue);
+    }
+    this.loadConfigFile();
+    this.precomputeValues();
+  }
+
+  /**
    * Return the pre-computed value for a config variable.
    * Will not throw, instead it will return undefined
    */
@@ -139,6 +159,11 @@ export class ConfigurationService {
       );
     }
     return value;
+  }
+
+  /** Runtime lookup for namespaced variables published by remote services. */
+  getDynamic(variable: string): unknown {
+    return (this._computedValues as Record<string, unknown>)[variable];
   }
 
   /**

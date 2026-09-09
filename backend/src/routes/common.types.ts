@@ -1,6 +1,6 @@
 import type { AuthService } from '@services/auth/auth.service';
+import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
-import type { ContentCatalogService } from '@services/content-catalog/content-catalog.service';
 import type { TraktService } from '@services/content-catalog/trakt/trakt.service';
 import type { DownloadService } from '@services/download/download.service';
 import type { ListService } from '@services/media/list.service';
@@ -20,7 +20,7 @@ import type { StreamService } from '@services/stream/stream.service';
 export interface Deps {
   auditLogService: AuditLogService;
   authService: AuthService;
-  catalogService: ContentCatalogService;
+  catalogClient: CatalogClientService;
   configurationService: ConfigurationService;
   contentDirectoryService: ContentDirectoryService;
   downloadService: DownloadService;

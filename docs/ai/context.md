@@ -7,10 +7,11 @@
 **DO NOT rebuild these systems:**
 
 - **Authentication**: Full JWT system with refresh tokens (AuthService: 325 lines, ~15 methods)
+- **Media Catalog Service**: Standalone Bun service (`services/media-catalog`) that owns all catalog data (TMDB today), freshness, change-syncs, and its own `/configuration` schema — the backend never talks to TMDB directly
 - **Source Discovery**: Multi-provider content aggregation (YTS + THERARBG) with background processing
 - **Media Streaming Infrastructure**: Complete client with peer-to-peer networking (DownloadService)
-- **Database Layer**: 13 entities with AES-256-GCM encryption, complete repository pattern
-- **Background Tasks**: 7 scheduled tasks running continuously (0.1s - 5s intervals)
+- **Database Layer**: SQLite entities with AES-256-GCM encryption; movie/tv tables are slim local indexes mirrored from the catalog service
+- **Background Tasks**: Queue jobs on the shared Bunqueue broker (backend: lists/sources/maintenance; catalog service: hydration scans/season sync)
 - **API Infrastructure**: All routes implemented, including streaming endpoint
 
 ### Frontend Status
@@ -34,12 +35,14 @@
 - Rebuild frontend integration (it's complete)
 - Rebuild source aggregation (it's complete)
 - Rebuild WebTorrent infrastructure (it's complete)
-- Create new database entities (13 already exist)
-- Rebuild background processing (7 tasks already running)
+- Rebuild the media catalog inside the backend — catalog data comes from the Bun service (`services/media-catalog`) over HTTP (`CATALOG_SERVICE_URL`); backend entities named `*MediaId` keep their legacy `tmdbId` DB columns
+- Create new database entities unnecessarily
+- Rebuild background processing (queue jobs on the shared Bunqueue broker)
 
 ## 🏗️ **Architecture Quick Facts**
 
-- **Backend**: Node.js + Hono framework + SQLite + TypeORM
+- **Backend**: Node.js + Hono framework + SQLite + TypeORM (local index of catalog data + sources/progress/users)
+- **Media Catalog**: Bun + `Bun.serve` + `bun:sqlite` + `bunqueue-client` in `services/media-catalog` (port 3001, internal network only, no auth)
 - **Frontend**: React + Redux Toolkit + Vite
 - **Deployment**: Docker + docker-compose + nginx
 - **Media Streaming**: WebTorrent library for peer-to-peer delivery
@@ -57,43 +60,29 @@
 
 ```typescript
 // These are production-ready, don't rebuild:
-backend/src/services/auth/auth.service.ts       // 325 lines, ~15 methods
-backend/src/services/source/source.service.ts   // 464 lines
+backend/src/services/auth/auth.service.ts         // 325 lines, ~15 methods
+backend/src/services/source/source.service.ts     // 464 lines
 backend/src/services/download/download.service.ts // 587 lines
-backend/src/services/media/                      // TMDB + Trakt integration
+backend/src/services/catalog/                     // CatalogClient + remote config group
+backend/src/services/media/                       // MediaService (local index mirroring), ListService
+services/media-catalog/                           // Standalone Bun catalog service (provider abstraction)
 ```
 
-## 🎬 **Episode Sync Management (New Feature)**
+## 🎬 **Episode Sync Management**
 
 ### **Configuration**
 
-- **Environment Variable**: `EPISODE_SYNC_MODE`
+- **Config Variable**: `EPISODE_SYNC_MODE` (owned by the media-catalog service; configurable from the app UI/CLI)
 - **Values**: `GREEDY` (sync all episodes) or `ON_DEMAND` (sync only watched shows)
 - **Default**: `ON_DEMAND`
 
 ### **How It Works**
 
-1. **GREEDY Mode**: Background task syncs all incomplete seasons (original behavior)
+1. **GREEDY Mode**: catalog worker syncs all incomplete seasons
 2. **ON_DEMAND Mode**:
    - Shows are marked as "watching" when user accesses them
-   - Background task only syncs episodes for shows where `watching: true`
-   - Efficient tracking without heavy progress queries
-
-### **Database Changes**
-
-- **TVShow Entity**: Added `watching: boolean` field (default: false)
-- **TVShowRepository**: Methods to manage watching status
-- **MediaService**: Automatically marks shows as watching on access
-
-### **Usage**
-
-```bash
-# Set sync mode
-export EPISODE_SYNC_MODE=ON_DEMAND  # Default behavior
-export EPISODE_SYNC_MODE=GREEDY     # Sync all episodes
-
-# Background task automatically adapts to mode
-```
+   - The backend pushes the watching set to the discovered catalog v1 capability
+   - The catalog worker only syncs episodes for shows in the watching set
 
 ## 🧪 **Testing Infrastructure**
 
