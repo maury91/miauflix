@@ -13,7 +13,10 @@ import { TrackStatus } from '@utils/trackStatus.util';
 import type { GetPostsResponse, ImdbDetailResponse } from './therarbg.types';
 import { validateImdbId } from './therarbg.utils';
 
-const mirrors = ['https://therarbg.to', 'https://therar.site'];
+const defaultMirrors = ['https://therarbg.to', 'https://therar.site'];
+const cooldownMs = 15 * 60 * 1000;
+
+const normalizeBaseUrl = (url: string): string => url.replace(/\/+$/, '');
 
 type SearchPostsSortKey = 'added' | 'broadcasters' | 'size' | 'watchers';
 
@@ -29,7 +32,8 @@ interface SearchPostsOptions {
 }
 
 export class TheRARBGApi extends Api {
-  private currentMirrorIndex = 0;
+  private mirrors: string[];
+  private cooldownUntil = 0;
   private isReady = false; // kept for internal use if needed
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
@@ -43,7 +47,9 @@ export class TheRARBGApi extends Api {
     private readonly requestService: RequestService,
     private readonly config: ConfigService
   ) {
-    super(cache, statsService, config.getOrThrow('THE_RARBG_API_URL'), 2, 4);
+    const configuredUrl = normalizeBaseUrl(config.getOrThrow('THE_RARBG_API_URL'));
+    super(cache, statsService, configuredUrl, 2, 4);
+    this.mirrors = [...new Set([configuredUrl, ...defaultMirrors.map(normalizeBaseUrl)])];
     void this.init();
   }
 
@@ -55,15 +61,50 @@ export class TheRARBGApi extends Api {
     const startedAt = Date.now();
     this._initStatus = { status: 'initializing', details: 'Testing API connectivity', startedAt };
     this.isReady = await this.test();
-    this._initStatus = this.isReady
-      ? { status: 'ready' }
-      : { status: 'error', errorMessage: 'TheRARBG API connectivity test failed', error: null };
+    if (this.isReady) {
+      this._initStatus = { status: 'ready' };
+    } else if (this.cooldownUntil === 0) {
+      this._initStatus = {
+        status: 'error',
+        errorMessage: 'TheRARBG API connectivity test failed',
+        error: null,
+      };
+    }
   }
 
   public async reload(): Promise<void> {
-    this.apiUrl = this.config.getOrThrow('THE_RARBG_API_URL');
-    this.currentMirrorIndex = 0;
+    const configuredUrl = normalizeBaseUrl(this.config.getOrThrow('THE_RARBG_API_URL'));
+    this.apiUrl = configuredUrl;
+    this.mirrors = [...new Set([configuredUrl, ...defaultMirrors.map(normalizeBaseUrl)])];
+    this.cooldownUntil = 0;
     await this.init();
+  }
+
+  private enterCooldown(error: unknown): void {
+    this.isReady = false;
+    this.cooldownUntil = Date.now() + cooldownMs;
+    const activeMirrorIndex = this.mirrors.indexOf(this.apiUrl);
+    this.apiUrl = this.mirrors[(activeMirrorIndex + 1) % this.mirrors.length];
+    this._initStatus = {
+      status: 'degraded',
+      reason: `all mirrors unavailable; retrying after ${new Date(this.cooldownUntil).toISOString()}`,
+    };
+    const message = error instanceof Error ? error.message : String(error);
+    logger.warn(
+      'TheRARBG',
+      `All mirrors unavailable; pausing requests for 15 minutes (${message})`
+    );
+  }
+
+  private markReady(mirror: string): void {
+    const wasUnavailable = this.cooldownUntil > 0;
+    this.apiUrl = mirror;
+    this.cooldownUntil = 0;
+    this.isReady = true;
+    this._initStatus = { status: 'ready' };
+    if (wasUnavailable) {
+      logger.info('TheRARBG', `Provider recovered using ${mirror}`);
+    }
   }
 
   /**
@@ -74,10 +115,12 @@ export class TheRARBGApi extends Api {
     endpoint: string,
     params: Record<string, number | string> = {},
     highPriority = false
-  ): Promise<T> {
-    await this.throttle(highPriority);
+  ): Promise<T | null> {
+    if (Date.now() < this.cooldownUntil) {
+      throw new ApiError('TheRARBG is temporarily unavailable', 'service_unavailable', 'therarbg');
+    }
 
-    const url = `${this.apiUrl}/${endpoint}`;
+    await this.throttle(highPriority);
 
     // Always add format=json to get JSON response instead of HTML
     const queryParams = {
@@ -85,6 +128,8 @@ export class TheRARBGApi extends Api {
       format: 'json',
     };
 
+    const mirror = this.apiUrl;
+    const url = `${mirror}/${endpoint}`;
     try {
       const response = await this.requestService.request<T>(url, {
         queryString: queryParams,
@@ -95,8 +140,8 @@ export class TheRARBGApi extends Api {
       if (response.status === 302) {
         const location = response.headers['location'] || '';
         if (location === '/') {
-          // This is essentially a 404, it means they have nothing about this movie
-          throw new ApiError('Redirect to homepage', 'http_error', 'therarbg', 404);
+          // The provider uses its homepage redirect as a normal "not found" response.
+          return null;
         }
         logger.error('TheRARBG', `Redirected to ${location}`);
       }
@@ -131,32 +176,18 @@ export class TheRARBGApi extends Api {
           'therarbg'
         );
       }
+      this.markReady(mirror);
       return response.body;
     } catch (error) {
-      logger.error('TheRARBG', `Request failed for ${url}:`, error);
-
-      // ApiErrors come from valid (but bad) server responses — no point switching mirrors
-      if (!(error instanceof ApiError) && this.currentMirrorIndex < mirrors.length - 1) {
-        this.currentMirrorIndex++;
-        const newMirror = mirrors[this.currentMirrorIndex];
-        logger.debug('TheRARBG', `Switching to mirror: ${newMirror}`);
-        this.apiUrl = newMirror;
-        return this.request<T>(endpoint, params, highPriority);
-      }
-
       if (error instanceof ApiError) {
         throw error;
       }
-
-      if (error instanceof Error && error.name === 'TimeoutError') {
-        throw new ApiError('Request timeout', 'timeout', 'therarbg');
-      }
-
-      if (error instanceof Error) {
-        throw new ApiError(error.message, 'response_error', 'therarbg');
-      }
-
-      throw new ApiError('Unknown request failure', 'response_error', 'therarbg');
+      this.enterCooldown(error);
+      throw new ApiError(
+        'TheRARBG mirror is temporarily unavailable',
+        'service_unavailable',
+        'therarbg'
+      );
     }
   }
 
@@ -180,7 +211,7 @@ export class TheRARBGApi extends Api {
     try {
       const data = await this.request<ImdbDetailResponse>(endpoint, {}, highPriority);
 
-      if (!data.imdb || !data.trb_posts) {
+      if (!data?.imdb || !data.trb_posts) {
         return null;
       }
 

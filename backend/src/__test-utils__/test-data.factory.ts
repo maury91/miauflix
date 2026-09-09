@@ -18,24 +18,20 @@ export class TestDataFactory {
     const movieRepository = this.database.getMovieRepository();
 
     const defaultMovie: Partial<Movie> = {
-      tmdbId: Math.floor(Math.random() * 1000000),
+      mediaId: Math.floor(Math.random() * 1000000),
       title: 'Test Movie',
       overview: 'A test movie for unit testing',
       runtime: 120,
-      tagline: 'Test tagline',
       rating: 7.5,
       popularity: 100.0,
       releaseDate: '2023-01-01',
       poster: '/test-poster.jpg',
       backdrop: '/test-backdrop.jpg',
-      logo: '/test-logo.png',
       contentDirectoriesSearched: [],
-      genres: [],
-      translations: [],
       ...overrides,
     };
 
-    return movieRepository.create(defaultMovie);
+    return movieRepository.createFromSummary(defaultMovie);
   }
 
   /**

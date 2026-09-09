@@ -82,6 +82,71 @@ describe('ConfigField', () => {
     expect(input).toHaveAttribute('step', '1');
   });
 
+  it('shows a question-circle tooltip for fields without an external link', () => {
+    render(
+      <ConfigField
+        entry={makeEntry({ description: 'Numeric setting help' })}
+        value=""
+        onChange={vi.fn()}
+      />
+    );
+
+    expect(screen.getByRole('img', { name: 'Numeric setting help' })).toHaveAttribute(
+      'data-tooltip',
+      'Numeric setting help'
+    );
+  });
+
+  it('renders constrained options as a dropdown without an example', () => {
+    const onChange = vi.fn();
+    render(
+      <ConfigField
+        entry={makeEntry({
+          inputType: 'select',
+          options: { GREEDY: 'sync every tv show', ON_DEMAND: 'sync watched tv shows' },
+          example: 'ON_DEMAND',
+        })}
+        value="ON_DEMAND"
+        onChange={onChange}
+      />
+    );
+
+    expect(screen.getByLabelText('CONFIG_KEY')).toHaveValue('ON_DEMAND');
+    expect(screen.getByRole('option', { name: 'GREEDY — sync every tv show' })).toBeInTheDocument();
+    expect(screen.queryByText('Example: ON_DEMAND')).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('CONFIG_KEY'), { target: { value: 'GREEDY' } });
+    expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', 'GREEDY');
+  });
+
+  it('uses the input placeholder instead of repeating an example', () => {
+    render(
+      <ConfigField
+        entry={makeEntry({ example: 'https://api.example.com' })}
+        value=""
+        onChange={vi.fn()}
+      />
+    );
+
+    expect(screen.getByLabelText('CONFIG_KEY')).toHaveAttribute(
+      'placeholder',
+      'e.g. https://api.example.com'
+    );
+    expect(screen.queryByText('Example: https://api.example.com')).not.toBeInTheDocument();
+  });
+
+  it('does not show examples for boolean toggles', () => {
+    render(
+      <ConfigField
+        entry={makeEntry({ inputType: 'boolean', example: 'false' })}
+        value="false"
+        onChange={vi.fn()}
+      />
+    );
+
+    expect(screen.queryByText('Example: false')).not.toBeInTheDocument();
+  });
+
   it('makes saved secret values clear without exposing them', () => {
     render(
       <ConfigField
@@ -91,10 +156,37 @@ describe('ConfigField', () => {
       />
     );
 
-    expect(screen.getByText('✓ value saved')).toBeInTheDocument();
+    expect(screen.queryByText('✓ value saved')).not.toBeInTheDocument();
     expect(screen.getByLabelText('CONFIG_KEY')).toHaveAttribute(
       'placeholder',
       'A value is saved — enter a new value to replace it'
+    );
+  });
+
+  it('explains where a linked configuration value can be found', () => {
+    render(
+      <ConfigField
+        entry={makeEntry({
+          description: 'Create an API token in the provider settings, then paste it here.',
+          link: 'https://example.com/api-settings',
+          linkLabel: 'Open provider API settings',
+        })}
+        value=""
+        onChange={vi.fn()}
+      />
+    );
+
+    expect(
+      screen.getByText('Create an API token in the provider settings, then paste it here.')
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('img', {
+        name: 'Create an API token in the provider settings, then paste it here.',
+      })
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Open provider API settings' })).toHaveAttribute(
+      'href',
+      'https://example.com/api-settings'
     );
   });
 
@@ -102,7 +194,7 @@ describe('ConfigField', () => {
     const onChange = vi.fn();
     render(
       <ConfigField
-        entry={makeEntry({ inputType: 'size', sizeUnits: ['MB', 'GB'] })}
+        entry={makeEntry({ inputType: 'size', sizeUnits: ['MB', 'GB'], example: '20MB' })}
         value="20MB"
         onChange={onChange}
       />
@@ -112,13 +204,14 @@ describe('ConfigField', () => {
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '30MB');
     fireEvent.change(screen.getByLabelText('CONFIG_KEY unit'), { target: { value: 'GB' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '20GB');
+    expect(screen.queryByText('Example: 20MB')).not.toBeInTheDocument();
   });
 
   it('composes a duration from its number and unit controls', () => {
     const onChange = vi.fn();
     render(
       <ConfigField
-        entry={makeEntry({ inputType: 'time', timeUnits: ['s', 'm', 'h', 'd'] })}
+        entry={makeEntry({ inputType: 'time', timeUnits: ['s', 'm', 'h', 'd'], example: '15m' })}
         value="15m"
         onChange={onChange}
       />
@@ -130,5 +223,6 @@ describe('ConfigField', () => {
     expect(screen.getByRole('option', { name: 'Hours' })).toHaveValue('h');
     fireEvent.change(screen.getByLabelText('CONFIG_KEY unit'), { target: { value: 'h' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '15h');
+    expect(screen.queryByText('Example: 15m')).not.toBeInTheDocument();
   });
 });

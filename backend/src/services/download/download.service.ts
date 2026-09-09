@@ -184,13 +184,19 @@ export class DownloadService {
   @traced('DownloadService')
   async getSourceMetadataFile(sourceLink: string, hash: string, timeout: number): Promise<Buffer> {
     return new Promise((resolve, rejectRaw) => {
-      const remove = () => {
-        this.client.remove(hash, () => {});
+      let settled = false;
+      const remove = async () => {
+        try {
+          await this.client.remove(hash, { destroyStore: true });
+        } catch (error) {
+          logger.debug('DownloadService', `Failed to remove metadata torrent ${hash}`, error);
+        }
       };
       const reject = (error: unknown) => {
+        if (settled) return;
+        settled = true;
         clearTimeout(timeoutId);
-        remove();
-        rejectRaw(error);
+        void remove().finally(() => rejectRaw(error));
       };
       const timeoutId = setTimeout(() => {
         reject(new ErrorWithStatus(`Timeout after ${timeout} ms while adding file`, 'timeout'));
@@ -198,16 +204,18 @@ export class DownloadService {
 
       try {
         const onSourceMetadata = (sourceMetadata: Torrent) => {
+          if (settled) return;
           if (!sourceMetadata.torrentFile) {
             return reject(new ErrorWithStatus(`File not found`, 'added_but_no_file'));
           }
+          settled = true;
           clearTimeout(timeoutId);
-          remove();
-          resolve(sourceMetadata.torrentFile);
+          void remove().finally(() => resolve(sourceMetadata.torrentFile!));
         };
         const existingSourceFile = this.client.torrents.find(t => t.infoHash === hash);
         if (existingSourceFile) {
           onSourceMetadata(existingSourceFile);
+          return;
         }
         this.client.add(
           sourceLink,

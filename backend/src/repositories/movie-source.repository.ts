@@ -65,26 +65,8 @@ export class MovieSourceRepository {
     if (source.movieId && source.hash) {
       const existing = await this.findByMovieAndHash(source.movieId, source.hash);
       if (existing) {
-        const {
-          quality: existingQuality,
-          size: existingSize,
-          videoCodec: existingVideoCodec,
-          source: existingSource,
-          sourceType: existingSourceType,
-        } = existing;
-        const { quality, size, videoCodec, source: srcSource, sourceType } = source;
-        const isDuplicate =
-          existingQuality === quality &&
-          existingSize === size &&
-          existingVideoCodec === videoCodec &&
-          existingSource === srcSource &&
-          existingSourceType === sourceType;
-        if (!isDuplicate) {
-          console.warn(
-            `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, size, videoCodec, source: srcSource, sourceType })}`
-          );
-        }
-        return existing;
+        await this.refreshProviderMetadata(existing.id, source);
+        return (await this.findById(existing.id)) ?? existing;
       }
     }
     const newSource = this.movieSourceRepository.create(source);
@@ -100,26 +82,8 @@ export class MovieSourceRepository {
       if (source.movieId && source.hash) {
         const existing = await this.findByMovieAndHash(source.movieId, source.hash);
         if (existing) {
-          const {
-            quality: existingQuality,
-            size: existingSize,
-            videoCodec: existingVideoCodec,
-            source: existingSource,
-            sourceType: existingSourceType,
-          } = existing;
-          const { quality, size, videoCodec, source: srcSource, sourceType } = source;
-          const isDuplicate =
-            existingQuality === quality &&
-            existingSize === size &&
-            existingVideoCodec === videoCodec &&
-            existingSource === srcSource &&
-            existingSourceType === sourceType;
-          if (!isDuplicate) {
-            console.warn(
-              `[MovieSourceRepository] Duplicate (movieId, hash) with differing data: movieId=${source.movieId}, hash=${source.hash}, existing=${JSON.stringify({ quality: existingQuality, size: existingSize, videoCodec: existingVideoCodec, source: existingSource, sourceType: existingSourceType })}, incoming=${JSON.stringify({ quality, size, videoCodec, source: srcSource, sourceType })}`
-            );
-          }
-          results.push(existing);
+          await this.refreshProviderMetadata(existing.id, source);
+          results.push((await this.findById(existing.id)) ?? existing);
           continue;
         }
       }
@@ -128,6 +92,24 @@ export class MovieSourceRepository {
       results.push(saved);
     }
     return results;
+  }
+
+  private async refreshProviderMetadata(id: number, source: Partial<MovieSource>): Promise<void> {
+    const providerMetadata = {
+      ...(source.magnetLink !== undefined ? { magnetLink: source.magnetLink } : {}),
+      ...(source.url !== undefined ? { url: source.url } : {}),
+      ...(source.quality !== undefined ? { quality: source.quality } : {}),
+      ...(source.size !== undefined ? { size: source.size } : {}),
+      ...(source.videoCodec !== undefined ? { videoCodec: source.videoCodec } : {}),
+      ...(source.source !== undefined ? { source: source.source } : {}),
+      ...(source.sourceType !== undefined ? { sourceType: source.sourceType } : {}),
+      ...(source.sourceUploadedAt !== undefined
+        ? { sourceUploadedAt: source.sourceUploadedAt }
+        : {}),
+    };
+    if (Object.keys(providerMetadata).length > 0) {
+      await this.movieSourceRepository.update(id, providerMetadata);
+    }
   }
 
   /**
