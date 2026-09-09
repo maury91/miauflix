@@ -10,7 +10,7 @@ services:
       - PORT=3000
       - NODE_ENV=development
       - RATE_LIMIT_TEST_MODE=true
-      - TMDB_API_URL=http://tmdb-mock/3
+      - CATALOG_SERVICE_URL=http://media-catalog:3001
       - YTS_API_URL=http://yts-mock
       - TRAKT_API_URL=http://trakt-mock
       - THE_RARBG_API_URL=http://therarbg-mock
@@ -46,6 +46,8 @@ services:
       retries: 30
       start_period: 10s
     depends_on:
+      media-catalog:
+        condition: service_healthy
       tmdb-mock:
         condition: service_healthy
       yts-mock:
@@ -53,6 +55,33 @@ services:
       trakt-mock:
         condition: service_healthy
       therarbg-mock:
+        condition: service_healthy
+
+  # Media catalog service (fronts the TMDB mock)
+  media-catalog:
+    build:
+      context: ../../
+      dockerfile: services/media-catalog/Dockerfile
+      target: development
+    environment:
+      - CATALOG_DATA_DIR=/app/data
+      - TMDB_API_URL=http://tmdb-mock/3
+      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
+      - CATALOG_DISABLE_BACKGROUND_TASKS=true
+      - DEBUG=*,-require-in-the-middle
+    volumes:
+      # Hot reload of the catalog service sources
+      - ../../services/media-catalog/src:/workspace/services/media-catalog/src
+    networks:
+      - test-network
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://localhost:3001/health']
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+    depends_on:
+      tmdb-mock:
         condition: service_healthy
 
   # TMDB Mock Service

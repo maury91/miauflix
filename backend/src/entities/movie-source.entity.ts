@@ -110,7 +110,8 @@ export class MovieSource {
     nullable: true,
     transformer: {
       to: (value: MovieSourceQuality | null) => (value ? QUALITIES.indexOf(value) : undefined),
-      from: (value?: number) => (value ? QUALITIES[value] : undefined),
+      from: (value?: number | null) =>
+        value !== undefined && value !== null ? QUALITIES[value] : null,
     },
   })
   quality: MovieSourceQuality | null;
@@ -123,7 +124,8 @@ export class MovieSource {
     type: 'int',
     transformer: {
       to: (value: VideoCodec | null) => (value ? VIDEO_CODECS.indexOf(value) : undefined),
-      from: (value?: number) => (value ? VIDEO_CODECS[value] : undefined),
+      from: (value?: number | null) =>
+        value !== undefined && value !== null ? VIDEO_CODECS[value] : null,
     },
   })
   videoCodec: VideoCodec | null; // e.g. "x264", "x265", "HVEC"
@@ -142,7 +144,8 @@ export class MovieSource {
     nullable: true,
     transformer: {
       to: (value: Source | null) => (value ? SOURCE_TYPES.indexOf(value) : undefined),
-      from: (value?: number) => (value ? SOURCE_TYPES[value] : undefined),
+      from: (value?: number | null) =>
+        value !== undefined && value !== null ? SOURCE_TYPES[value] : null,
     },
   })
   sourceType: Source | null; // e.g. "web", "cam", "bluray", "dvd", ...

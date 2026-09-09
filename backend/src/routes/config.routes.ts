@@ -6,12 +6,10 @@ import { UserRole } from '@entities/user.entity';
 import { ConfigurationServiceError } from '@errors/configuration.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import { services } from '@services/configuration/configuration.consts';
+import { ALL_VAR_NAMES } from '@services/configuration/configuration.consts';
 import { isServiceName } from '@services/configuration/configuration.utils';
 
 import type { Deps } from './common.types';
-
-const ALL_VAR_NAMES = new Set(Object.values(services).flatMap(s => Object.keys(s.variables)));
 const configEntriesSchema = z.object({
   entries: z.array(z.object({ key: z.string(), value: z.string() })),
 });

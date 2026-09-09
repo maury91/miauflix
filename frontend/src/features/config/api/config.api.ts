@@ -6,7 +6,10 @@ import { backendClient } from '@shared/api/backend-client';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
-export type ServiceStatuses = Record<string, { status: string }>;
+export type ServiceStatuses = Record<
+  string,
+  { status: string; errorMessage?: string; reason?: string; details?: string }
+>;
 type SystemStatusResponse = { services: ServiceStatuses };
 type ConfigEntriesRequest = { entries: { key: string; value: string }[] };
 

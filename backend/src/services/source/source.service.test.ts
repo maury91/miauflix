@@ -8,6 +8,7 @@ jest.mock('@services/download/download.service');
 jest.mock('@services/source-metadata/content-directory.service');
 jest.mock('@services/storage/storage.service');
 jest.mock('@services/configuration/configuration.service');
+jest.mock('@logger');
 
 import {
   createMockMovie,
@@ -15,6 +16,7 @@ import {
   createMockSourceMetadata,
 } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed, delayedResult } from '@__test-utils__/utils';
+import { logger as mockLogger } from '@logger';
 import { Quality, Source } from '@miauflix/source-metadata-extractor';
 import type { UpdateResult } from 'typeorm';
 
@@ -26,6 +28,7 @@ import { ConfigurationService } from '@services/configuration/configuration.serv
 import { DownloadService } from '@services/download/download.service';
 import type { RequestService } from '@services/request/request.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
+import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import { SourceService } from '@services/source/source.service';
 import { SourceMetadataFileService } from '@services/source/source-metadata-file.service';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
@@ -249,7 +252,8 @@ describe('SourceService', () => {
       expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
         mockMovie.imdbId,
         false, // isOnDemand
-        expect.anything()
+        expect.anything(),
+        true
       );
       // The search failed, so no sources were created
       expect(mockMovieSourceRepository.createMany).not.toHaveBeenCalled();
@@ -343,7 +347,8 @@ describe('SourceService', () => {
         expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
           mockMovie.imdbId,
           true,
-          expect.any(Array)
+          expect.any(Array),
+          true
         );
 
         // The search is not finished yet, so markSourceSearched is not called
@@ -361,7 +366,8 @@ describe('SourceService', () => {
         expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
           mockMovie.imdbId,
           true, // isOnDemand
-          expect.anything() // contentDirectoriesSearched
+          expect.anything(), // contentDirectoriesSearched
+          true
         );
       });
 
@@ -449,7 +455,8 @@ describe('SourceService', () => {
         expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
           mockMovie.imdbId,
           true,
-          expect.any(Array)
+          expect.any(Array),
+          true
         );
 
         // The search failed, so no sources are returned
@@ -547,6 +554,31 @@ describe('SourceService', () => {
       expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledWith(sourceToUpdate.hash);
 
       // So it should not update the stats for the source
+      expect(mockMovieSourceRepository.updateStats).not.toHaveBeenCalled();
+    });
+
+    it('should classify scrape timeouts as expected debug events', async () => {
+      const { service, mockSource1, mockSourceMetadataFileService, mockMovieSourceRepository } =
+        setupTest();
+      const sourceToUpdate = createMockSourceForStats({ hash: mockSource1.hash });
+      mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
+        sourceToUpdate,
+      ]);
+      mockSourceMetadataFileService.getStats.mockRejectedValueOnce(
+        new ErrorWithStatus('Scrape request timed out', 'scrape_timeout')
+      );
+
+      await service.syncStatsForSources();
+
+      expect(mockLogger.debug).toHaveBeenCalledWith(
+        'SourceService',
+        `Stats scrape timed out for source ${sourceToUpdate.id} (quality: ${sourceToUpdate.quality})`
+      );
+      expect(mockLogger.error).not.toHaveBeenCalledWith(
+        'SourceService',
+        expect.stringContaining(`source ${sourceToUpdate.id}`),
+        expect.anything()
+      );
       expect(mockMovieSourceRepository.updateStats).not.toHaveBeenCalled();
     });
 

@@ -9,6 +9,7 @@ import type {
   MovieSourceRepository,
   SourceProcessingResult,
 } from '@repositories/movie-source.repository';
+import type { BackgroundJobService } from '@services/background-job/background-job.service';
 import type { RequestService } from '@services/request/request.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
@@ -21,6 +22,7 @@ import { traced } from '@utils/tracing.util';
 import { providerSourcesToEntities } from '@utils/transformers.util';
 import { validateContentFileResponse } from '@utils/validation.util';
 
+import { ErrorWithStatus } from './services/error-with-status.util';
 import type { SourceMetadataFileService } from './source-metadata-file.service';
 
 /**
@@ -40,6 +42,7 @@ export class SourceService {
   private vpnProbeVersion = 0;
   private readonly config: ConfigService;
   private readonly vpnService: VpnDetectionService;
+  private readonly backgroundJobs?: BackgroundJobService;
   private vpnUnsubscribers: Array<() => void> = [];
 
   constructor(
@@ -48,13 +51,15 @@ export class SourceService {
     private readonly contentDirectoryService: ContentDirectoryService,
     private readonly magnetService: SourceMetadataFileService,
     private readonly requestService: RequestService,
-    config: ConfigService
+    config: ConfigService,
+    backgroundJobs?: BackgroundJobService
   ) {
     this.config = config;
     this.vpnService = vpnService;
     this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
     this.movieSourceRepository = db.getMovieSourceRepository();
+    this.backgroundJobs = backgroundJobs;
     config.registerService('SOURCE', this);
     if (this.searchOnlyBehindVpn) {
       this.startPromise = this.trackStartPromise(this.refreshVpnState());
@@ -156,6 +161,15 @@ export class SourceService {
     return true;
   }
 
+  public async canRunSourceJobs(): Promise<boolean> {
+    await this.startPromise;
+    return this.vpnConnected || !this.searchOnlyBehindVpn;
+  }
+
+  public async canRunMetadataJobs(): Promise<boolean> {
+    return this.magnetService.isEnabled() && (await this.canRunSourceJobs());
+  }
+
   /**
    * Process movies that need source search
    * This method is designed to be run by the scheduler
@@ -214,10 +228,15 @@ export class SourceService {
       const movieWithSources = await this.contentDirectoryService.searchSourcesForMovie(
         movie.imdbId,
         isOnDemand,
-        movie.contentDirectoriesSearched || []
+        movie.contentDirectoriesSearched || [],
+        true
       );
 
-      if (!movieWithSources || !movieWithSources.sources?.length) {
+      for (const directory of movieWithSources?.searched ?? [movieWithSources?.source ?? '']) {
+        if (!directory) continue;
+        await this.movieRepository.markSourceSearched(movie.id, directory);
+      }
+      if (!movieWithSources?.sources?.length) {
         logger.debug('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
         await this.movieRepository.markSourceSearchAttempt(movie.id);
         return;
@@ -244,11 +263,26 @@ export class SourceService {
       );
 
       const createdSources = await this.movieSourceRepository.createMany(sources);
+      this.backgroundJobs?.bulkBestEffort(
+        createdSources.flatMap(source => [
+          {
+            type: 'source.metadata' as const,
+            dedupeKey: String(source.id),
+            payload: { sourceId: source.id },
+            options: { priority: 40 },
+          },
+          {
+            type: 'source.stats' as const,
+            dedupeKey: String(source.id),
+            payload: { sourceId: source.id },
+            options: { priority: 20 },
+          },
+        ])
+      );
       logger.debug(
         'SourceService',
         `Saved ${sources.length} sources for movie ${movie.id} (${movie.title})`
       );
-      await this.movieRepository.markSourceSearched(movie.id, movieWithSources.source);
       return { directory: movieWithSources.source, sources: createdSources };
     } catch (error) {
       logger.error(
@@ -257,6 +291,93 @@ export class SourceService {
         error
       );
     }
+  }
+
+  public async processSourceDiscovery(
+    movieId: number
+  ): Promise<{ complete: boolean; sourceCount: number }> {
+    let movie = await this.movieRepository.findById(movieId);
+    if (!movie?.imdbId) return { complete: true, sourceCount: 0 };
+    const providerNames = this.contentDirectoryService.getMovieDirectoryNames();
+    if (providerNames.every(name => movie?.contentDirectoriesSearched.includes(name))) {
+      await this.movieRepository.resetSourceSearchState(movieId);
+      movie = await this.movieRepository.findById(movieId);
+      if (!movie?.imdbId) return { complete: true, sourceCount: 0 };
+    }
+    const result = await this.searchSourcesForMovie(movie, false);
+    const refreshed = await this.movieRepository.findById(movieId);
+    const complete = providerNames.every(name =>
+      refreshed?.contentDirectoriesSearched.includes(name)
+    );
+    return { complete, sourceCount: result?.sources.length ?? 0 };
+  }
+
+  public async processSourceDiscoveryByMediaId(movieMediaId: number): Promise<void> {
+    const movie = await this.movieRepository.findByMediaId(movieMediaId);
+    if (movie) await this.processSourceDiscovery(movie.id);
+  }
+
+  public async seedSourceDiscoveryJobs(limit = 25): Promise<void> {
+    const movies = await this.movieRepository.findMoviesPendingSourceSearch(limit);
+    await this.backgroundJobs?.enqueueBulk(
+      movies.map(movie => ({
+        type: 'source.discover',
+        dedupeKey: String(movie.id),
+        payload: { movieId: movie.id },
+        options: { priority: 20 },
+      }))
+    );
+  }
+
+  public async seedSourceMetadataJobs(): Promise<void> {
+    const sources = await this.movieSourceRepository.getNextSourcesToProcess(
+      Math.max(2, this.magnetService.getAvailableConcurrency())
+    );
+    await this.backgroundJobs?.enqueueBulk(
+      sources.map(source => ({
+        type: 'source.metadata',
+        dedupeKey: String(source.id),
+        payload: { sourceId: source.id },
+        options: { priority: 40 },
+      }))
+    );
+  }
+
+  public async seedSourceStatsJobs(limit = 25): Promise<void> {
+    const sources = await this.movieSourceRepository.findSourceThatNeedsStatsUpdate(limit);
+    await this.backgroundJobs?.enqueueBulk(
+      sources.map(source => ({
+        type: 'source.stats',
+        dedupeKey: String(source.id),
+        payload: { sourceId: source.id },
+        options: { priority: 20 },
+      }))
+    );
+  }
+
+  public async processSourceMetadata(sourceId: number): Promise<void> {
+    const source = await this.movieSourceRepository.findById(sourceId);
+    if (!source?.file) {
+      if (!source) return;
+      await this.downloadSourceFileForSource(source as unknown as SourceProcessingResult);
+      const updated = await this.movieSourceRepository.findById(sourceId);
+      if (!updated?.file) throw new Error('Source metadata could not be resolved');
+    }
+  }
+
+  public async processSourceStats(sourceId: number): Promise<Date> {
+    const source = await this.movieSourceRepository.findById(sourceId);
+    if (!source) return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const { broadcasters, watchers } = await this.magnetService.getStats(source.hash);
+    const nextCheckTime = scheduleNextCheck(
+      source.lastStatsCheck && source.nextStatsCheckAt
+        ? source.nextStatsCheckAt.getTime() - source.lastStatsCheck.getTime()
+        : undefined,
+      { old: source.broadcasters ?? 0, new: broadcasters },
+      { old: source.watchers ?? 0, new: watchers }
+    );
+    await this.movieSourceRepository.updateStats(source.id, broadcasters, watchers, nextCheckTime);
+    return nextCheckTime;
   }
 
   /**
@@ -293,7 +414,6 @@ export class SourceService {
         'SourceService',
         `On-demand source search triggered for movie ${movie.id} (${movie.title})`
       );
-
       let status: 'pending' | 'success' | 'timeout' = 'pending';
       const searchPromise = (async () => {
         const sources = await this.searchSourcesForMovie(movie, true);
@@ -379,11 +499,18 @@ export class SourceService {
             `Updated stats for source ${source.id} (quality: ${source.quality})`
           );
         } catch (error) {
-          logger.error(
-            'SourceService',
-            `Error updating stats for source ${source.id} (quality: ${source.quality}):`,
-            error
-          );
+          if (error instanceof ErrorWithStatus && error.status === 'scrape_timeout') {
+            logger.debug(
+              'SourceService',
+              `Stats scrape timed out for source ${source.id} (quality: ${source.quality})`
+            );
+          } else {
+            logger.error(
+              'SourceService',
+              `Error updating stats for source ${source.id} (quality: ${source.quality}):`,
+              error
+            );
+          }
         }
       })
     );
@@ -396,6 +523,11 @@ export class SourceService {
   @traced('SourceService')
   public async syncMissingSourceFiles(): Promise<void> {
     await this.startPromise;
+
+    if (!this.magnetService.isEnabled()) {
+      adaptiveLog('SourceService', 'Background source metadata resolution is disabled');
+      return;
+    }
 
     if (!this.vpnConnected && this.searchOnlyBehindVpn) {
       logger.warn('SourceService', 'VPN is not connected, skipping data file search');
@@ -414,6 +546,15 @@ export class SourceService {
     // Early exit if no movies need processing - avoid log spam with exponential backoff
     if (sourcesToProcess.length === 0) {
       adaptiveLog('SourceService', 'No sources requiring source files found');
+      return;
+    }
+
+    if (this.backgroundJobs) {
+      for (const source of sourcesToProcess) {
+        await this.backgroundJobs.enqueue('source.metadata', String(source.id), {
+          sourceId: source.id,
+        });
+      }
       return;
     }
 

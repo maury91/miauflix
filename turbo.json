@@ -79,6 +79,8 @@
         "src/**/*.test.tsx",
         "src/**/*.spec.ts",
         "src/**/*.spec.tsx",
+        "tests/**/*.{ts,tsx}",
+        "tests/fixtures/**/*",
         "jest.config.*",
         "jest.setup.ts",
         "vitest.config.*",
@@ -97,6 +99,7 @@
       "inputs": [
         "src/**/*.ts",
         "src/**/*.tsx",
+        "tests/**/*.{ts,tsx}",
         ".eslintrc.*",
         "eslint.config.*",
         "../eslint.config.*",
@@ -109,7 +112,13 @@
       "cache": true
     },
     "check:ts": {
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig*.json", "package.json"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "tests/**/*.{ts,tsx}",
+        "tsconfig*.json",
+        "package.json"
+      ],
       "outputs": [],
       "cache": true
     },

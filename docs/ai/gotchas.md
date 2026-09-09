@@ -257,7 +257,7 @@ npm run docker:cleanup                 # Clean up when done
 
 ### ❌ **DON'T assume external APIs are always available**
 
-- TMDB API has rate limits
+- The catalog provider API (TMDB today) is only accessed by the media-catalog Bun service (`services/media-catalog`), never by the backend; it rate-limits itself (40 req/s) and serves stale data when the provider is down
 - YTS mirrors can be unreliable
 - Trakt.tv has OAuth requirements
 
