@@ -1,4 +1,9 @@
 services:
+  bunqueue:
+    image: ghcr.io/egeominotti/bunqueue:2.8.61
+    volumes:
+      - bunqueue_data:/app/data
+
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: miauflix-jaeger
@@ -20,6 +25,26 @@ services:
       - flaresolver_config:/config
     restart: unless-stopped
 
+  media-catalog:
+    build:
+      context: .
+      dockerfile: services/media-catalog/Dockerfile
+    image: miauflix-media-catalog
+    container_name: miauflix-media-catalog
+    environment:
+      - DATA_DIR=/usr/data
+      - BUNQUEUE_HOST=bunqueue
+      - BUNQUEUE_PORT=6789
+      # Optional bootstrap fallback only — the main app pushes the authoritative
+      # catalog configuration (including this token) once it has read config.json.
+      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-}
+      - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
+    ports:
+      - '127.0.0.1:3001:3001'
+    volumes:
+      - ./data:/usr/data/
+    restart: unless-stopped
+
   miauflix:
     build:
       context: .
@@ -27,9 +52,13 @@ services:
     image: miauflix
     container_name: miauflix
     depends_on:
+      bunqueue:
+        condition: service_healthy
       flaresolverr:
         condition: service_started
       jaeger:
+        condition: service_started
+      media-catalog:
         condition: service_started
     environment:
       - DATA_DIR=/usr/data
@@ -45,6 +74,9 @@ services:
       - DEBUG=SourceService,DataResolver,DownloadService
       - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://miauflix-flaresolverr:8191}
       - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
+      - BUNQUEUE_HOST=bunqueue
+      - BUNQUEUE_PORT=6789
+      - CATALOG_SERVICE_URL=http://media-catalog:3001
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
       interval: 30s
@@ -99,6 +131,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  bunqueue_data:
   frontend_static:
     name: frontend_static
   flaresolver_config:

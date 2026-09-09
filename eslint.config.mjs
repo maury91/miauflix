@@ -223,5 +223,16 @@ export default [
       '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
+  {
+    files: ['services/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
+  },
   ...storybookConfigs,
 ];

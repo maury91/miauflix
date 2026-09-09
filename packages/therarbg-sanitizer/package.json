@@ -8,9 +8,9 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "lint": "eslint .",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "clean": "rm -rf dist coverage",
     "prepublishOnly": "npm run clean && npm run build"
   },
@@ -33,7 +33,10 @@
     "ts-jest": "29.4.5"
   },
   "jest": {
-    "preset": "ts-jest",
+    "preset": "ts-jest/presets/default-esm",
+    "extensionsToTreatAsEsm": [
+      ".ts"
+    ],
     "testEnvironment": "node",
     "collectCoverageFrom": [
       "src/**/*.ts",
@@ -45,6 +48,20 @@
       "text",
       "lcov",
       "html"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "useESM": true,
+          "tsconfig": {
+            "module": "ESNext"
+          }
+        }
+      ]
+    }
   }
 }
