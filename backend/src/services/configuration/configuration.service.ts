@@ -58,6 +58,8 @@ export class ConfigurationService {
   /** Raw string values: env snapshot + auto-generated + file-loaded + runtime set */
   private _rawValues = new Map<VariableName, string>();
   private _variablesInfo = new Map<VariableName, ExtendedVariableInfo>();
+  /** Names currently published by each runtime-registered service. */
+  private _dynamicVariableNames = new Map<ServiceName, Set<VariableName>>();
   /** Services that have self-registered with their live instance */
   private _registeredServices = new Map<ServiceName, ConfigurableService>();
   /** Serializes temporary config overlays so concurrent requests cannot see each other's drafts. */
@@ -126,11 +128,27 @@ export class ConfigurationService {
     variables: Record<string, VariableInfo>,
     serviceName: ServiceName
   ): void {
-    for (const [name, info] of Object.entries(variables)) {
-      this._variablesInfo.set(name as VariableName, { ...info, serviceName });
-      const envValue = process.env[name];
-      if (envValue) this._rawValues.set(name as VariableName, envValue);
+    const nextVariableNames = new Set(Object.keys(variables) as VariableName[]);
+    const previousVariableNames = this._dynamicVariableNames.get(serviceName) ?? new Set();
+
+    // Keep raw values and _fileData so a removed variable can recover its saved
+    // value if the remote service publishes it again later. It must not remain
+    // in either active metadata or computed values while absent from the schema.
+    for (const variableName of previousVariableNames) {
+      if (!nextVariableNames.has(variableName)) {
+        this._variablesInfo.delete(variableName);
+        delete (this._computedValues as Record<string, unknown>)[variableName];
+      }
     }
+
+    const registeredVariableNames: VariableName[] = [];
+    for (const [name, info] of Object.entries(variables)) {
+      const variableName = name as VariableName;
+      this._variablesInfo.set(variableName, { ...info, serviceName });
+      registeredVariableNames.push(variableName);
+    }
+    this._dynamicVariableNames.set(serviceName, nextVariableNames);
+    this.autoConfigureDefaults(registeredVariableNames);
     this.loadConfigFile();
     this.precomputeValues();
   }
@@ -200,9 +218,14 @@ export class ConfigurationService {
    * Snapshot process.env for all known variables and auto-generate skipUserInteraction defaults.
    * Called once at the top of init(), before anything else.
    */
-  private autoConfigureDefaults() {
+  private autoConfigureDefaults(
+    variableNames: Iterable<VariableName> = this._variablesInfo.keys()
+  ) {
     const autoConfigured = new Set<VariableName>();
-    for (const [varName, varInfo] of this._variablesInfo.entries()) {
+    for (const varName of variableNames) {
+      const varInfo = this._variablesInfo.get(varName);
+      if (!varInfo || this._rawValues.has(varName)) continue;
+
       // Coming from process.env, maximum precedence in this stage
       if (process.env[varName]) {
         this._rawValues.set(varName, process.env[varName]!);

@@ -44,6 +44,10 @@ const setupTest = () => {
 };
 
 describe('RemoteServiceManager', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
     jest.useRealTimers();
@@ -107,6 +111,95 @@ describe('RemoteServiceManager', () => {
     );
   });
 
+  it('retries discovery after the initial schema request fails', async () => {
+    const { configuration, manager } = setupTest();
+    let schemaRequests = 0;
+    jest.spyOn(global, 'fetch').mockImplementation(async input => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') {
+        schemaRequests += 1;
+        if (schemaRequests === 1) throw new Error('schema unavailable');
+        return Response.json({
+          name: 'Media Catalog',
+          description: 'Catalog settings',
+          variables: [],
+        });
+      }
+      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/status') return Response.json({ state: 'ready' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    expect(manager.getStatus()).toEqual(
+      expect.objectContaining({ status: 'error', errorMessage: 'schema unavailable' })
+    );
+
+    await jest.advanceTimersByTimeAsync(15_000);
+    manager.stop();
+
+    expect(schemaRequests).toBe(2);
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
+    expect(configuration.registerDynamicVariables).toHaveBeenCalledTimes(1);
+  });
+
+  it('replaces remote configuration keys when rediscovery removes a variable', async () => {
+    const { configuration, manager } = setupTest();
+    let discovery = 0;
+    const requests: Array<{ path: string; body?: unknown }> = [];
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      requests.push({
+        path,
+        body: init?.body ? JSON.parse(String(init.body)) : undefined,
+      });
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') {
+        discovery += 1;
+        return Response.json({
+          name: 'Media Catalog',
+          description: 'Catalog settings',
+          variables: [
+            {
+              key: 'API_TOKEN',
+              description: 'Provider token',
+              required: true,
+              inputType: 'password',
+            },
+            ...(discovery === 1
+              ? [
+                  {
+                    key: 'REMOVED_KEY',
+                    description: 'Removed later',
+                    required: false,
+                    inputType: 'string',
+                  },
+                ]
+              : []),
+          ],
+        });
+      }
+      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/status') return Response.json({ state: 'ready' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    (manager as unknown as { manifest: null }).manifest = null;
+    requests.length = 0;
+    await manager.reload();
+    manager.stop();
+
+    expect(requests.filter(request => request.path === '/configuration').at(-1)).toEqual({
+      path: '/configuration',
+      body: { values: {}, unsetKeys: ['API_TOKEN'] },
+    });
+    expect(
+      Object.keys(configuration.registerDynamicVariables.mock.calls.at(-1)?.[0] ?? {})
+    ).toEqual(['CATALOG__API_TOKEN']);
+  });
+
   it('retains a rejected remote fetch error instead of treating it as missing configuration', async () => {
     const { manager } = setupTest();
     const transportError = new Error('connection reset by peer');
@@ -116,7 +209,6 @@ describe('RemoteServiceManager', () => {
   });
 
   it('times out while consuming a remote response body and clears its timer', async () => {
-    jest.useFakeTimers();
     const { configuration, manager } = setupTest();
     (configuration.getDynamic as jest.Mock).mockImplementation((key: string) =>
       key === 'CATALOG_SERVICE_TIMEOUT_MS' ? 25 : 'http://catalog:3001'

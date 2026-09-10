@@ -123,6 +123,6 @@ export class CatalogClientService implements ConfigurableService {
   }
 
   private path(path: string): string {
-    return `${this.remote.capabilityBasePath}${path}`;
+    return `${this.remote.capabilityBasePath.replace(/\/+$/, '')}${path}`;
   }
 }

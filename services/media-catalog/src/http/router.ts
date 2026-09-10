@@ -97,7 +97,11 @@ const matchPattern = (pattern: string, segments: string[]): RouteParams | null =
     const expected = patternSegments[index];
     const actual = segments[index];
     if (expected.startsWith(':')) {
-      params[expected.slice(1)] = decodeURIComponent(actual);
+      try {
+        params[expected.slice(1)] = decodeURIComponent(actual);
+      } catch {
+        params[expected.slice(1)] = actual;
+      }
     } else if (expected !== actual) {
       return null;
     }

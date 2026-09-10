@@ -15,6 +15,21 @@ const catalogEntries = (url: string) => [
   { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '60000' },
 ];
 
+const dynamicVariableName = 'DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST';
+let previousDynamicVariableValue: string | undefined;
+
+const setupTest = () => {
+  previousDynamicVariableValue = process.env[dynamicVariableName];
+  delete process.env[dynamicVariableName];
+  return new ConfigurationService();
+};
+
+afterEach(() => {
+  if (previousDynamicVariableValue === undefined) delete process.env[dynamicVariableName];
+  else process.env[dynamicVariableName] = previousDynamicVariableValue;
+  previousDynamicVariableValue = undefined;
+});
+
 function setupLiveCatalog() {
   const configuration = new ConfigurationService();
   let status: ServiceInstanceStatus = {
@@ -72,6 +87,42 @@ describe('ConfigurationService web configuration actions', () => {
     Reflect.apply(Reflect.get(configuration, 'loadConfigFile') as () => void, configuration, []);
 
     expect(rawValues.get('TRAKT_CLIENT_ID')).toBe('environment-token');
+  });
+
+  it('applies a non-empty default to an absent optional dynamic string', () => {
+    const configuration = setupTest();
+
+    configuration.registerDynamicVariables(
+      {
+        [dynamicVariableName]: {
+          description: 'Optional dynamic string',
+          required: false,
+          defaultValue: 'dynamic-default',
+        },
+      },
+      'CATALOG'
+    );
+
+    expect(configuration.getDynamic(dynamicVariableName)).toBe('dynamic-default');
+  });
+
+  it('removes dynamic variables omitted from a rediscovered schema', () => {
+    const configuration = new ConfigurationService();
+
+    configuration.registerDynamicVariables(
+      {
+        CATALOG__RETAINED: { description: 'Retained', required: false, defaultValue: 'yes' },
+        CATALOG__REMOVED: { description: 'Removed', required: false, defaultValue: 'no' },
+      },
+      'CATALOG'
+    );
+    configuration.registerDynamicVariables(
+      { CATALOG__RETAINED: { description: 'Retained', required: false, defaultValue: 'yes' } },
+      'CATALOG'
+    );
+
+    expect(configuration.getDynamic('CATALOG__RETAINED')).toBe('yes');
+    expect(configuration.getDynamic('CATALOG__REMOVED')).toBeUndefined();
   });
 
   it('tests values transiently and restores the previous runtime configuration', async () => {

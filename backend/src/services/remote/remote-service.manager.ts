@@ -16,7 +16,7 @@ import type { ZodType } from 'zod';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ServiceInstanceStatus, VariableInfo } from '@mytypes/configuration';
-import { extendServiceVariables } from '@services/configuration/configuration.consts';
+import { replaceServiceVariables } from '@services/configuration/configuration.consts';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import type { ServiceName } from '@services/configuration/configuration.types';
 import { transforms, variable } from '@utils/config';
@@ -59,7 +59,10 @@ export class RemoteServiceManager {
   }
 
   async initialize(): Promise<void> {
-    await this.discover().catch(error => this.markUnavailable(error));
+    await this.discover().catch(error => {
+      this.manifest = null;
+      this.markUnavailable(error);
+    });
     this.schedulePoll();
   }
 
@@ -168,9 +171,10 @@ export class RemoteServiceManager {
       serviceConfigSchemaSchema,
       manifest.management.configurationSchemaPath
     );
-    const variables = this.toVariableInfos(schema.variables);
-    extendServiceVariables(this.descriptor.serviceName, variables);
+    const { variables, remoteKeys } = this.toVariableInfos(schema.variables);
     this.configuration.registerDynamicVariables(variables, this.descriptor.serviceName);
+    replaceServiceVariables(this.descriptor.serviceName, variables);
+    this.remoteKeys = remoteKeys;
     if (options.applyConfiguration ?? true) {
       try {
         await this.pushConfiguration();
@@ -224,15 +228,18 @@ export class RemoteServiceManager {
     return { values, unsetKeys };
   }
 
-  private toVariableInfos(entries: ConfigVariable[]): Record<string, VariableInfo> {
+  private toVariableInfos(entries: ConfigVariable[]): {
+    variables: Record<string, VariableInfo>;
+    remoteKeys: Map<string, string>;
+  } {
     const result: Record<string, VariableInfo> = {};
+    const remoteKeys = new Map<string, string>();
     for (const entry of entries) {
       const localKey = `${this.descriptor.serviceName}__${entry.key}`;
-      if (this.remoteKeys.has(localKey)) continue;
-      this.remoteKeys.set(localKey, entry.key);
+      remoteKeys.set(localKey, entry.key);
       result[localKey] = this.toVariableInfo(entry);
     }
-    return result;
+    return { variables: result, remoteKeys };
   }
 
   private toVariableInfo(entry: ConfigVariable): VariableInfo {

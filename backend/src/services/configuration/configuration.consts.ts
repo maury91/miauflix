@@ -34,21 +34,29 @@ export const ALL_VAR_NAMES = new Set<string>(
 export const ALL_SERVICE_NAMES = new Set(objectKeys(services));
 
 /**
- * Merges remotely-declared variables into a service group at runtime.
+ * Replaces remotely-declared variables in a service group at runtime.
  *
  * The media catalog service publishes its own configuration schema
  * (GET /configuration/schema); its variables are folded into the CATALOG group
  * here so the wizard, the admin config API and validation treat them like any
- * locally-declared variable. Group keys are stable (they exist statically), only
- * the variables are extended.
+ * locally-declared variable. Group keys are stable (they exist statically), while
+ * remote variables are replaced whenever the schema is rediscovered.
  */
-export function extendServiceVariables(
+const remoteServiceVariableNames = new Map<keyof typeof services, Set<string>>();
+
+export function replaceServiceVariables(
   serviceName: keyof typeof services,
   variables: Record<string, VariableInfo>
 ): void {
   const definition = services[serviceName];
-  definition.variables = { ...definition.variables, ...variables };
-  for (const key of objectKeys(variables)) {
-    ALL_VAR_NAMES.add(key);
-  }
+  const previousNames = remoteServiceVariableNames.get(serviceName) ?? new Set<string>();
+  const nextNames = new Set(objectKeys(variables));
+  const staticVariables = Object.fromEntries(
+    Object.entries(definition.variables).filter(([key]) => !previousNames.has(key))
+  );
+
+  definition.variables = { ...staticVariables, ...variables } as typeof definition.variables;
+  for (const key of previousNames) ALL_VAR_NAMES.delete(key);
+  for (const key of nextNames) ALL_VAR_NAMES.add(key);
+  remoteServiceVariableNames.set(serviceName, nextNames);
 }

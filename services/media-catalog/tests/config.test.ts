@@ -33,14 +33,14 @@ describe('CatalogConfigService', () => {
     rmSync(dataDir, { recursive: true, force: true });
   });
 
-  it('env overrides defaults and file loses to env', () => {
+  it('env overrides defaults and file loses to env', async () => {
     const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
     const envConfig = new CatalogConfigService(dataDir, {
       TMDB_API_URL: 'https://env.example/3',
     });
     envConfig.registerProber(prober(true));
     // Seed the file with a different value; env must still win.
-    envConfig.applyRemote({ TMDB_API_URL: '' }); // empty push is a no-op
+    await envConfig.applyRemote({ TMDB_API_URL: '' }); // empty push is a no-op
     expect(envConfig.resolve('TMDB_API_URL')).toBe('https://env.example/3');
     rmSync(dataDir, { recursive: true, force: true });
   });

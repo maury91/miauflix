@@ -28,7 +28,7 @@ const isEnabled = (scope: string): boolean => {
 const print = (severity: Severity, scope: string, message: string, ...metadata: unknown[]) => {
   if (severity === 'debug' && !isEnabled(scope)) return;
 
-  const timestamp = new Date().toISOString().replace('T', ' ').slice(5, 22);
+  const timestamp = new Date().toISOString().replace('T', ' ').slice(5, 19);
   const formatted = `[${timestamp}] [${scope}] ${message}`;
   const formattedMetadata = metadata.map(entry => {
     if (entry instanceof Error) return entry;
