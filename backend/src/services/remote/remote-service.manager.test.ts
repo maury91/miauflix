@@ -46,6 +46,7 @@ const setupTest = () => {
 describe('RemoteServiceManager', () => {
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.useRealTimers();
   });
 
   it('discovers capability metadata and registers namespaced configuration', async () => {
@@ -112,6 +113,35 @@ describe('RemoteServiceManager', () => {
     jest.spyOn(global, 'fetch').mockRejectedValue(transportError);
 
     await expect(manager.request(z.object({}), '/health')).rejects.toBe(transportError);
+  });
+
+  it('times out while consuming a remote response body and clears its timer', async () => {
+    jest.useFakeTimers();
+    const { configuration, manager } = setupTest();
+    (configuration.getDynamic as jest.Mock).mockImplementation((key: string) =>
+      key === 'CATALOG_SERVICE_TIMEOUT_MS' ? 25 : 'http://catalog:3001'
+    );
+    jest.spyOn(global, 'fetch').mockImplementation(async (_input, init) => {
+      const signal = init?.signal as AbortSignal;
+      return {
+        ok: true,
+        status: 200,
+        json: () =>
+          new Promise((_, reject) => {
+            signal.addEventListener('abort', () => reject(new Error('body aborted')), {
+              once: true,
+            });
+          }),
+      } as Response;
+    });
+
+    const request = expect(manager.request(z.object({}), '/health')).rejects.toThrow(
+      'CATALOG request timed out after 25ms'
+    );
+    await jest.advanceTimersByTimeAsync(25);
+
+    await request;
+    expect(jest.getTimerCount()).toBe(0);
   });
 
   it('uses the remote observational configuration test endpoint without applying values', async () => {

@@ -99,28 +99,51 @@ export class RemoteServiceManager {
     options: RequestInit & { notFound?: () => T } = {}
   ): Promise<T> {
     const { notFound, ...requestOptions } = options;
-    const response = await this.fetch(path, requestOptions);
-    if (response.status === 404 && notFound) {
-      await response.body?.cancel().catch(() => undefined);
-      return notFound();
+    const baseUrl = String(this.configuration.getDynamic(this.descriptor.urlKey) ?? '').replace(
+      /\/+$/,
+      ''
+    );
+    if (!baseUrl) throw new Error(`${this.descriptor.urlKey} is not configured`);
+    const timeoutMs = Number(this.configuration.getDynamic(this.descriptor.timeoutKey) ?? 120_000);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    const signal = requestOptions.signal
+      ? AbortSignal.any([requestOptions.signal, controller.signal])
+      : controller.signal;
+
+    try {
+      const response = await fetch(new URL(path, `${baseUrl}/`), { ...requestOptions, signal });
+      if (response.status === 404 && notFound) {
+        await response.body?.cancel().catch(() => undefined);
+        return notFound();
+      }
+      if (response.status === 503) {
+        await response.body?.cancel().catch(() => undefined);
+        throw new ServiceNotConfiguredError(this.descriptor.serviceName);
+      }
+      const body = await response.json().catch(() => null);
+      if (!response.ok) {
+        throw new Error(
+          `${this.descriptor.serviceName} request failed: ${response.status} ${JSON.stringify(body)}`
+        );
+      }
+      const parsed = schema.safeParse(body);
+      if (!parsed.success) {
+        throw new Error(
+          `${this.descriptor.serviceName} returned an invalid contract payload: ${parsed.error.message}`
+        );
+      }
+      return parsed.data;
+    } catch (error) {
+      if (controller.signal.aborted) {
+        throw new Error(`${this.descriptor.serviceName} request timed out after ${timeoutMs}ms`, {
+          cause: error,
+        });
+      }
+      throw error;
+    } finally {
+      clearTimeout(timeout);
     }
-    if (response.status === 503) {
-      await response.body?.cancel().catch(() => undefined);
-      throw new ServiceNotConfiguredError(this.descriptor.serviceName);
-    }
-    const body = await response.json().catch(() => null);
-    if (!response.ok) {
-      throw new Error(
-        `${this.descriptor.serviceName} request failed: ${response.status} ${JSON.stringify(body)}`
-      );
-    }
-    const parsed = schema.safeParse(body);
-    if (!parsed.success) {
-      throw new Error(
-        `${this.descriptor.serviceName} returned an invalid contract payload: ${parsed.error.message}`
-      );
-    }
-    return parsed.data;
   }
 
   private async discover(options: { applyConfiguration?: boolean } = {}): Promise<void> {
@@ -303,21 +326,5 @@ export class RemoteServiceManager {
       error: null,
     };
     logger.warn('RemoteService', `${this.descriptor.serviceName} discovery/status failed`, error);
-  }
-
-  private async fetch(path: string, options: RequestInit = {}): Promise<Response> {
-    const baseUrl = String(this.configuration.getDynamic(this.descriptor.urlKey) ?? '').replace(
-      /\/+$/,
-      ''
-    );
-    if (!baseUrl) throw new Error(`${this.descriptor.urlKey} is not configured`);
-    const timeoutMs = Number(this.configuration.getDynamic(this.descriptor.timeoutKey) ?? 120_000);
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      return await fetch(new URL(path, `${baseUrl}/`), { ...options, signal: controller.signal });
-    } finally {
-      clearTimeout(timeout);
-    }
   }
 }

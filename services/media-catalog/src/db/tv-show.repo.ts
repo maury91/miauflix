@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNotNull, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNotNull, ne, sql } from 'drizzle-orm';
 
 import { type CatalogTx, replaceGenres, replaceTranslations } from './catalog-db.helpers';
 import { episodeRow, seasonRow, showRow } from './catalog-db.mappers';
@@ -92,6 +92,11 @@ export class TVShowRepository {
         .run();
       replaceGenres(tx, 'tv', show.mediaId, show.genreIds);
       replaceTranslations(tx, 'tv', show.mediaId, show.translations);
+      this.removeAbsentSeasons(
+        tx,
+        show.mediaId,
+        show.seasons.map(season => season.mediaId)
+      );
       for (const season of show.seasons)
         this.upsertSeasonSummary(tx, { ...season, tvMediaId: show.mediaId }, now);
     });
@@ -177,6 +182,17 @@ export class TVShowRepository {
         .values({ mediaId: season.tvMediaId, createdAt: now, updatedAt: now })
         .onConflictDoNothing()
         .run();
+      // A provider can replace a season's ID while retaining its season number.
+      // Remove that obsolete row first, including its episodes via the FK cascade.
+      tx.delete(seasons)
+        .where(
+          and(
+            eq(seasons.tvMediaId, season.tvMediaId),
+            eq(seasons.seasonNumber, season.seasonNumber),
+            ne(seasons.mediaId, season.mediaId)
+          )
+        )
+        .run();
       tx.insert(seasons)
         .values({
           mediaId: season.mediaId,
@@ -206,6 +222,11 @@ export class TVShowRepository {
           },
         })
         .run();
+      this.removeAbsentEpisodes(
+        tx,
+        season.mediaId,
+        season.episodes.map(episode => episode.mediaId)
+      );
       for (const episode of season.episodes)
         tx.insert(episodes)
           .values({ ...episode, seasonMediaId: season.mediaId, createdAt: now, updatedAt: now })
@@ -223,6 +244,32 @@ export class TVShowRepository {
           })
           .run();
     });
+  }
+
+  /** Provider detail responses are complete snapshots of a show's season list. */
+  private removeAbsentSeasons(tx: CatalogTx, tvMediaId: number, incomingIds: number[]): void {
+    const staleIds = tx
+      .select({ mediaId: seasons.mediaId })
+      .from(seasons)
+      .where(eq(seasons.tvMediaId, tvMediaId))
+      .all()
+      .map(row => row.mediaId)
+      .filter(mediaId => !incomingIds.includes(mediaId));
+    for (const batch of inBatches(staleIds))
+      tx.delete(seasons).where(inArray(seasons.mediaId, batch)).run();
+  }
+
+  /** Provider season detail responses are complete snapshots of episode rows. */
+  private removeAbsentEpisodes(tx: CatalogTx, seasonMediaId: number, incomingIds: number[]): void {
+    const staleIds = tx
+      .select({ mediaId: episodes.mediaId })
+      .from(episodes)
+      .where(eq(episodes.seasonMediaId, seasonMediaId))
+      .all()
+      .map(row => row.mediaId)
+      .filter(mediaId => !incomingIds.includes(mediaId));
+    for (const batch of inBatches(staleIds))
+      tx.delete(episodes).where(inArray(episodes.mediaId, batch)).run();
   }
 
   findIncompleteSeason(watchingOnly: boolean): SeasonRow | undefined {

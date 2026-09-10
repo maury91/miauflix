@@ -157,8 +157,8 @@ export class CatalogConfigService {
   }
 
   /**
-   * The main app's "green flag": merge the pushed values into the resolution chain,
-   * persist the merged result as last-known-good, hot-reload the provider and probe.
+   * The main app's "green flag": validate and activate a candidate configuration
+   * before making it the live, persisted last-known-good configuration.
    */
   applyRemote(
     values: Record<string, string>,
@@ -173,24 +173,32 @@ export class CatalogConfigService {
         return { success: false, reloaded: false, invalidKeys };
       }
 
-      const applicable = this.applicableValues(values);
-      for (const [key, value] of Object.entries(applicable)) {
-        this.pushedValues[key] = value;
-      }
+      const candidatePushed = { ...this.pushedValues, ...this.applicableValues(values) };
+      const candidateFile = { ...this.fileValues };
       for (const key of unsetKeys) {
-        delete this.pushedValues[key];
-        delete this.fileValues[key];
+        delete candidatePushed[key];
+        delete candidateFile[key];
       }
 
-      this.persistFile();
+      const test = await this.probe(this.resolvedValuesFrom(candidatePushed, candidateFile), {
+        mutateState: false,
+        activate: true,
+      });
+      if (!test.success) {
+        return { success: false, reloaded: false, test };
+      }
+
+      this.replaceValues(this.pushedValues, candidatePushed);
+      this.replaceValues(this.fileValues, candidateFile);
+      this.persistFile(candidatePushed, candidateFile);
       logger.info(
         SCOPE,
-        `Configuration pushed (${Object.keys(applicable).length} value(s) applied)`
+        `Configuration pushed (${Object.keys(this.applicableValues(values)).length} value(s) applied)`
       );
-
-      const test = await this.probe();
+      this._state = 'ready';
+      this._errorMessage = null;
       return {
-        success: test.success,
+        success: true,
         reloaded: true,
         test,
       };
@@ -236,9 +244,31 @@ export class CatalogConfigService {
     return merged;
   }
 
+  private resolvedValuesFrom(
+    pushedValues: Record<string, string>,
+    fileValues: Record<string, string>
+  ): Record<string, string> {
+    return Object.fromEntries(
+      this.schema.variables.map(variable => [
+        variable.key,
+        [
+          pushedValues[variable.key],
+          this.env[variable.key],
+          fileValues[variable.key],
+          variable.defaultValue,
+        ].find(value => value && value.length > 0) ?? '',
+      ])
+    );
+  }
+
+  private replaceValues(target: Record<string, string>, source: Record<string, string>): void {
+    for (const key of Object.keys(target)) delete target[key];
+    Object.assign(target, source);
+  }
+
   private async probe(
     values: Record<string, string> = this.resolvedValues(),
-    options: { mutateState?: boolean } = {}
+    options: { mutateState?: boolean; activate?: boolean } = {}
   ): Promise<CatalogConfigTestResult> {
     const mutateState = options.mutateState ?? true;
     const missing = this.schema.variables
@@ -269,7 +299,7 @@ export class CatalogConfigService {
     if (mutateState) this._state = 'configuring';
     try {
       const result =
-        mutateState && this.prober.activate
+        (options.activate ?? mutateState) && this.prober.activate
           ? await this.prober.activate(values)
           : await this.prober.test(values);
       if (mutateState) {
@@ -309,11 +339,14 @@ export class CatalogConfigService {
   }
 
   /** Atomic write of the merged last-known-good values (standalone fallback). */
-  private persistFile(): void {
+  private persistFile(
+    pushedValues: Record<string, string> = this.pushedValues,
+    fileValues: Record<string, string> = this.fileValues
+  ): void {
     try {
       mkdirSync(this.dataDir, { recursive: true });
       const payload: StoredValues = {
-        values: { ...this.fileValues, ...this.applicableValues(this.pushedValues) },
+        values: { ...fileValues, ...this.applicableValues(pushedValues) },
       };
       const tmpPath = `${this.filePath}.tmp`;
       writeFileSync(tmpPath, JSON.stringify(payload, null, 2));

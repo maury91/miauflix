@@ -13,7 +13,7 @@ import { CatalogDatabase } from '../src/db/database';
 import { ListRepository } from '../src/db/list.repo';
 import { LocalizationRepository } from '../src/db/localization.repo';
 import { MovieRepository } from '../src/db/movie.repo';
-import { listPages, movies } from '../src/db/schema';
+import { episodes, listPages, movies } from '../src/db/schema';
 import { SyncStateRepository } from '../src/db/sync-state.repo';
 import { TVShowRepository } from '../src/db/tv-show.repo';
 import { HttpError } from '../src/errors';
@@ -62,6 +62,27 @@ const makeSeason = (): ProviderSeason => ({
   episodes: [
     { mediaId: 10000, episodeNumber: 1, name: 'Pilot', overview: '', airDate: null, still: '' },
   ],
+});
+
+const makeTVShow = (seasons: ProviderTVShow['seasons']): ProviderTVShow => ({
+  mediaId: 100,
+  imdbId: 'tt0000100',
+  name: 'Show 100',
+  overview: '',
+  tagline: '',
+  firstAirDate: '2000-01-01',
+  status: 'Returning Series',
+  type: 'Scripted',
+  inProduction: true,
+  poster: '',
+  backdrop: '',
+  logo: '',
+  genreIds: [],
+  episodeRunTime: [],
+  popularity: 1,
+  rating: 1,
+  seasons,
+  translations: [],
 });
 
 class FakeProvider implements CatalogProvider {
@@ -210,6 +231,127 @@ describe('CatalogService', () => {
 
     expect(repo.movies.getMovie(603)?.title).toBe('Movie 603');
     cleanup();
+  });
+
+  it('reconciles authoritative season and episode snapshots, including replaced numbers', () => {
+    const { db, repo, cleanup } = setup();
+    try {
+      repo.tvShows.upsertTVShow(
+        makeTVShow([
+          {
+            mediaId: 1000,
+            seasonNumber: 1,
+            name: 'Original',
+            overview: '',
+            airDate: null,
+            poster: '',
+          },
+          {
+            mediaId: 2000,
+            seasonNumber: 2,
+            name: 'Removed',
+            overview: '',
+            airDate: null,
+            poster: '',
+          },
+        ])
+      );
+      repo.tvShows.upsertSeasonWithEpisodes({
+        ...makeSeason(),
+        episodes: [
+          {
+            mediaId: 10000,
+            episodeNumber: 1,
+            name: 'Old one',
+            overview: '',
+            airDate: null,
+            still: '',
+          },
+          {
+            mediaId: 10001,
+            episodeNumber: 2,
+            name: 'Old two',
+            overview: '',
+            airDate: null,
+            still: '',
+          },
+        ],
+      });
+      repo.tvShows.upsertSeasonWithEpisodes({
+        ...makeSeason(),
+        mediaId: 2000,
+        seasonNumber: 2,
+        episodes: [
+          {
+            mediaId: 20000,
+            episodeNumber: 1,
+            name: 'Removed',
+            overview: '',
+            airDate: null,
+            still: '',
+          },
+        ],
+      });
+
+      repo.tvShows.upsertTVShow(
+        makeTVShow([
+          {
+            mediaId: 1001,
+            seasonNumber: 1,
+            name: 'Replacement',
+            overview: '',
+            airDate: null,
+            poster: '',
+          },
+        ])
+      );
+
+      expect(repo.tvShows.getSeasonsOf(100).map(season => season.media_id)).toEqual([1001]);
+      expect(db.db.select({ mediaId: episodes.mediaId }).from(episodes).all()).toEqual([]);
+
+      repo.tvShows.upsertSeasonWithEpisodes({
+        ...makeSeason(),
+        mediaId: 1001,
+        episodes: [
+          {
+            mediaId: 11000,
+            episodeNumber: 1,
+            name: 'Old one',
+            overview: '',
+            airDate: null,
+            still: '',
+          },
+          {
+            mediaId: 11001,
+            episodeNumber: 2,
+            name: 'Omitted',
+            overview: '',
+            airDate: null,
+            still: '',
+          },
+        ],
+      });
+      repo.tvShows.upsertSeasonWithEpisodes({
+        ...makeSeason(),
+        mediaId: 1001,
+        episodes: [
+          {
+            mediaId: 12001,
+            episodeNumber: 1,
+            name: 'Replacement',
+            overview: '',
+            airDate: null,
+            still: '',
+          },
+        ],
+      });
+
+      expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toMatchObject([
+        { media_id: 12001, episode_number: 1, name: 'Replacement' },
+      ]);
+    } finally {
+      cleanup();
+    }
   });
 
   it('fetches on first read, then serves from the store within the TTL', async () => {

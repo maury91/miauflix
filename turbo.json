@@ -94,7 +94,7 @@
         "!**/*.e2e.spec.ts",
         "!**/*.e2e.test.ts"
       ],
-      "outputs": ["coverage/**"],
+      "outputs": [],
       "cache": true
     },
     "lint": {

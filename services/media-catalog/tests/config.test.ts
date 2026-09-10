@@ -87,15 +87,44 @@ describe('CatalogConfigService', () => {
     rmSync(dataDir, { recursive: true, force: true });
   });
 
+  it('keeps the active configuration, persisted file, and data plane on a rejected candidate', async () => {
+    const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
+    const config = new CatalogConfigService(dataDir, {});
+    let activeToken = '';
+    config.registerProber({
+      test: async () => ({ success: true, message: 'provider ready' }),
+      activate: async values => {
+        if (values.TMDB_API_ACCESS_TOKEN === 'bad-token') {
+          return { success: false, message: 'candidate rejected' };
+        }
+        activeToken = values.TMDB_API_ACCESS_TOKEN;
+        return { success: true, message: 'provider ready' };
+      },
+    });
+
+    await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'known-good-token' });
+    const persistedBefore = readFileSync(join(dataDir, 'catalog.config.json'), 'utf8');
+
+    const result = await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'bad-token' });
+
+    expect(result).toMatchObject({ success: false, reloaded: false });
+    expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('known-good-token');
+    expect(readFileSync(join(dataDir, 'catalog.config.json'), 'utf8')).toBe(persistedBefore);
+    expect(activeToken).toBe('known-good-token');
+    expect(config.state).toBe('ready');
+    rmSync(dataDir, { recursive: true, force: true });
+  });
+
   it('reports secret presence without exposing it and supports explicit clearing', async () => {
-    const { config, dataDir } = makeConfig(prober(true));
+    const { config, dataDir } = makeConfig(prober(true), { TMDB_API_ACCESS_TOKEN: 'env-token' });
     await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'super-secret-token' });
 
     expect(config.getValues().configuredKeys).toContain('TMDB_API_ACCESS_TOKEN');
     expect(JSON.stringify(config.getValues())).not.toContain('super-secret-token');
 
-    await config.applyRemote({}, ['TMDB_API_ACCESS_TOKEN']);
-    expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('');
+    const result = await config.applyRemote({}, ['TMDB_API_ACCESS_TOKEN']);
+    expect(result).toMatchObject({ success: true, reloaded: true });
+    expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('env-token');
     rmSync(dataDir, { recursive: true, force: true });
   });
 
