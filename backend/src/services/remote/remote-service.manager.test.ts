@@ -1,4 +1,5 @@
 import { SERVICE_MANIFEST_PATH } from '@miauflix/service-contracts';
+import { z } from 'zod';
 
 import { RemoteServiceManager } from '@services/remote/remote-service.manager';
 
@@ -103,5 +104,69 @@ describe('RemoteServiceManager', () => {
         errorMessage: expect.stringContaining('expected v1'),
       })
     );
+  });
+
+  it('retains a rejected remote fetch error instead of treating it as missing configuration', async () => {
+    const { manager } = setupTest();
+    const transportError = new Error('connection reset by peer');
+    jest.spyOn(global, 'fetch').mockRejectedValue(transportError);
+
+    await expect(manager.request(z.object({}), '/health')).rejects.toBe(transportError);
+  });
+
+  it('uses the remote observational configuration test endpoint without applying values', async () => {
+    const { configuration, manager } = setupTest();
+    const requests: Array<{ path: string; method: string; body?: unknown }> = [];
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      requests.push({
+        path,
+        method: init?.method ?? 'GET',
+        body: init?.body ? JSON.parse(String(init.body)) : undefined,
+      });
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') {
+        return Response.json({
+          name: 'Media Catalog',
+          description: 'Catalog settings',
+          variables: [
+            {
+              key: 'API_TOKEN',
+              description: 'Provider token',
+              required: true,
+              secret: true,
+              inputType: 'password',
+            },
+          ],
+        });
+      }
+      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration/test') {
+        return Response.json({
+          success: true,
+          mode: 'live',
+          message: 'Catalog provider is reachable',
+        });
+      }
+      if (path === '/status') return Response.json({ state: 'ready' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    requests.length = 0;
+    (configuration.getDynamic as jest.Mock).mockReturnValueOnce('draft-token');
+
+    await expect(
+      (manager as unknown as { testConfiguration(): Promise<unknown> }).testConfiguration()
+    ).resolves.toEqual({ success: true, mode: 'live', message: 'Catalog provider is reachable' });
+    manager.stop();
+
+    expect(requests).toEqual([
+      {
+        path: '/configuration/test',
+        method: 'POST',
+        body: { values: { API_TOKEN: 'draft-token' }, unsetKeys: [] },
+      },
+    ]);
   });
 });

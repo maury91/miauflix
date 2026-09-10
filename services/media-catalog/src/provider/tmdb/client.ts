@@ -116,6 +116,7 @@ interface TmdbChanges extends TmdbPaged {
 
 const oneHourMs = 36e5;
 const dayMs = 24 * oneHourMs;
+const requestTimeoutMs = 15_000;
 
 /**
  * TMDB HTTP client — port of the backend's `TMDBApi` (bearer auth, 40 req/s
@@ -140,28 +141,40 @@ export class TmdbClient {
 
   private async request<T>(path: string): Promise<T> {
     await this.rateLimiter.throttle();
-    const response = await fetch(`${this.values.apiUrl}${path}`, {
-      headers: {
-        Authorization: `Bearer ${this.values.accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok || response.status >= 400) {
-      // Cancel the body explicitly so a misconfigured URL cannot leave an open
-      // stream/socket retained in memory.
-      await response.body?.cancel().catch(() => undefined);
-      logger.error(
-        'TmdbClient',
-        `${this.values.apiUrl}${path}`,
-        response.status,
-        response.statusText
-      );
-      throw new ProviderError(
-        `TMDB API error: (${response.status}) ${response.statusText}`,
-        response.status
-      );
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), requestTimeoutMs);
+    try {
+      const response = await fetch(`${this.values.apiUrl}${path}`, {
+        headers: {
+          Authorization: `Bearer ${this.values.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        signal: controller.signal,
+      });
+      if (!response.ok || response.status >= 400) {
+        // Cancel the body explicitly so a misconfigured URL cannot leave an open
+        // stream/socket retained in memory.
+        await response.body?.cancel().catch(() => undefined);
+        logger.error(
+          'TmdbClient',
+          `${this.values.apiUrl}${path}`,
+          response.status,
+          response.statusText
+        );
+        throw new ProviderError(
+          `TMDB API error: (${response.status}) ${response.statusText}`,
+          response.status
+        );
+      }
+      return (await response.json()) as T;
+    } catch (error) {
+      if (controller.signal.aborted) {
+        throw new ProviderError(`TMDB API request timed out after ${requestTimeoutMs}ms`);
+      }
+      throw error;
+    } finally {
+      clearTimeout(timeout);
     }
-    return (await response.json()) as T;
   }
 
   private cached<T>(key: string, ttlMs: number, path: string): Promise<T> {
@@ -292,24 +305,24 @@ export class TmdbClient {
 
   /* ------------------------------------------------------------------- lists */
 
-  async popularMovies(page: number) {
+  async popularMovies(page: number, language = this.language) {
     return this.list(
-      `list:movies-popular:${page}:${this.language}`,
-      `/discover/movie?include_adult=false&include_video=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
+      `list:movies-popular:${page}:${language}`,
+      `/discover/movie?include_adult=false&include_video=false&language=${language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
     );
   }
 
-  async topRatedMovies(page: number) {
+  async topRatedMovies(page: number, language = this.language) {
     return this.list(
-      `list:movies-top-rated:${page}:${this.language}`,
-      `/movie/top_rated?language=${this.language}&page=${page}`
+      `list:movies-top-rated:${page}:${language}`,
+      `/movie/top_rated?language=${language}&page=${page}`
     );
   }
 
-  async popularShows(page: number) {
+  async popularShows(page: number, language = this.language) {
     return this.list(
-      `list:shows-popular:${page}:${this.language}`,
-      `/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${this.language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
+      `list:shows-popular:${page}:${language}`,
+      `/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
     );
   }
 

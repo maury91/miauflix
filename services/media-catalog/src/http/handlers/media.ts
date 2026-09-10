@@ -17,30 +17,26 @@ import { BASE_PATH } from './consts.ts';
 
 export const MAX_BATCH_ITEMS = 50;
 
-const parseMediaId = (raw: string): number => {
-  const mediaId = Number.parseInt(raw, 10);
-  if (!Number.isInteger(mediaId) || mediaId <= 0) {
-    throw new HttpError(400, `Invalid mediaId: ${raw}`);
+const parseDecimalSafeInteger = (raw: string, minimum: number, label: string): number => {
+  const value = Number(raw);
+  if (!/^\d+$/.test(raw) || !Number.isSafeInteger(value) || value < minimum) {
+    throw new HttpError(400, `Invalid ${label}: ${raw}`);
   }
-  return mediaId;
+  return value;
+};
+
+const parseMediaId = (raw: string): number => {
+  return parseDecimalSafeInteger(raw, 1, 'mediaId');
 };
 
 const parseSeasonNumber = (raw: string): number => {
-  const seasonNumber = Number.parseInt(raw, 10);
-  if (!Number.isInteger(seasonNumber) || seasonNumber < 0) {
-    throw new HttpError(400, `Invalid season number: ${raw}`);
-  }
-  return seasonNumber;
+  return parseDecimalSafeInteger(raw, 0, 'season number');
 };
 
 const parseLanguage = (url: URL): string => url.searchParams.get('language') ?? 'en';
 
 const parsePage = (url: URL): number => {
-  const page = Number.parseInt(url.searchParams.get('page') ?? '1', 10);
-  if (!Number.isInteger(page) || page < 1) {
-    throw new HttpError(400, `Invalid page: ${url.searchParams.get('page')}`);
-  }
-  return page;
+  return parseDecimalSafeInteger(url.searchParams.get('page') ?? '1', 1, 'page');
 };
 
 /**

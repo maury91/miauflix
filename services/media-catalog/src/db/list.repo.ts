@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, lte } from 'drizzle-orm';
 
 import type { ListDefinition } from './catalog-db.types';
 import type { CatalogDatabase } from './database';
@@ -62,9 +62,14 @@ export class ListRepository {
     slug: string,
     page: number,
     language: string,
-    data: { items: unknown; totalPages: number; totalItems: number }
+    data: { items: unknown; totalPages: number; totalItems: number },
+    ttlMs = 36e5
   ): void {
     const fetchedAt = Date.now();
+    this.db
+      .delete(listPages)
+      .where(lte(listPages.fetchedAt, fetchedAt - ttlMs))
+      .run();
     this.db
       .insert(listPages)
       .values({

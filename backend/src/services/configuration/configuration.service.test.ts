@@ -90,6 +90,40 @@ describe('ConfigurationService web configuration actions', () => {
     expect(instance.reload).toHaveBeenCalledTimes(2);
   });
 
+  it('uses an observational configuration test when the service provides one', async () => {
+    const configuration = new ConfigurationService();
+    const testConfiguration = jest.fn().mockResolvedValue({
+      success: true,
+      message: 'Catalog provider is reachable',
+    });
+    const instance: ConfigurableService & { testConfiguration: typeof testConfiguration } = {
+      testable: true,
+      getStatus: () => ({ status: 'error', errorMessage: 'not configured', error: null }),
+      reload: jest.fn().mockResolvedValue(undefined),
+      testConfiguration,
+    };
+    configuration.registerService('CATALOG', instance);
+
+    const result = await configuration.testServiceConfigs(
+      'CATALOG',
+      catalogEntries('http://catalog:3001')
+    );
+
+    expect(result).toEqual({
+      success: true,
+      services: [
+        expect.objectContaining({
+          service: 'CATALOG',
+          success: true,
+          testMode: 'live',
+          message: 'Catalog provider is reachable',
+        }),
+      ],
+    });
+    expect(testConfiguration).toHaveBeenCalledTimes(1);
+    expect(instance.reload).not.toHaveBeenCalled();
+  });
+
   it('keeps successful saved values active without restoring the draft', async () => {
     const { configuration, instance } = setupLiveCatalog();
 

@@ -13,6 +13,7 @@ import {
   okResponseSchema,
   type SeasonDetail,
   seasonDetailSchema,
+  type ServiceConfigTestResult,
   type TVShowDetail,
   tvShowDetailSchema,
 } from '@miauflix/service-contracts';
@@ -53,6 +54,10 @@ export class CatalogClientService implements ConfigurableService {
 
   reload(): Promise<void> {
     return this.remote.reload();
+  }
+
+  testConfiguration(): Promise<ServiceConfigTestResult> {
+    return this.remote.testConfiguration();
   }
 
   async getMovie(mediaId: number, language: string): Promise<MovieDetail | null> {

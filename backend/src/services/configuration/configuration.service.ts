@@ -675,23 +675,37 @@ export class ConfigurationService {
         }
 
         try {
-          liveTested.add(serviceName);
-          const previousStatus = instance.getStatus().status;
-          previousStatuses.set(serviceName, previousStatus);
-          logger.info(
-            'Config',
-            save
-              ? `Restarting ${serviceName} to validate the saved configuration (previous status: ${previousStatus})`
-              : `Testing ${serviceName} configuration (previous status: ${previousStatus})`
-          );
-          await instance.reload();
-          const ready = instance.getStatus().status === 'ready';
+          const observationalTest = !save ? instance.testConfiguration : undefined;
+          let ready: boolean;
+          let message: string | undefined;
+          if (observationalTest) {
+            logger.info(
+              'Config',
+              `Testing ${serviceName} configuration without applying the draft`
+            );
+            const test = await observationalTest.call(instance);
+            ready = test.success;
+            message = test.message;
+          } else {
+            liveTested.add(serviceName);
+            const previousStatus = instance.getStatus().status;
+            previousStatuses.set(serviceName, previousStatus);
+            logger.info(
+              'Config',
+              save
+                ? `Restarting ${serviceName} to validate the saved configuration (previous status: ${previousStatus})`
+                : `Testing ${serviceName} configuration (previous status: ${previousStatus})`
+            );
+            await instance.reload();
+            ready = instance.getStatus().status === 'ready';
+            message = ready ? undefined : this.serviceStatusMessage(serviceName);
+          }
           if (ready) {
             logger.info('Config', `${serviceName} configuration restart completed: ready`);
           } else {
             logger.warn(
               'Config',
-              `${serviceName} configuration restart completed without becoming ready: ${this.serviceStatusMessage(serviceName)}`
+              `${serviceName} configuration test failed: ${message ?? this.serviceStatusMessage(serviceName)}`
             );
           }
           results.push({
@@ -699,8 +713,8 @@ export class ConfigurationService {
             success: ready,
             testMode: 'live',
             message: ready
-              ? `${serviceName} test successful.`
-              : this.serviceStatusMessage(serviceName),
+              ? (message ?? `${serviceName} test successful.`)
+              : (message ?? this.serviceStatusMessage(serviceName)),
           });
         } catch (error) {
           results.push({

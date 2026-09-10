@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { logger } from '../logger';
@@ -17,6 +17,7 @@ const SCOPE = 'CatalogConfig';
 /** Live probe of the catalog provider with a candidate set of values. */
 export interface ConfigProber {
   test(values: Record<string, string>): Promise<{ success: boolean; message: string }>;
+  activate?(values: Record<string, string>): Promise<{ success: boolean; message: string }>;
 }
 
 /** Serializes async work so state transitions never interleave. */
@@ -81,11 +82,9 @@ export class CatalogConfigService {
   resolve(key: string): string {
     const variable = this.variable(key);
     return (
-      this.pushedValues[key] ??
-      this.env[key] ??
-      this.fileValues[key] ??
-      variable?.defaultValue ??
-      ''
+      [this.pushedValues[key], this.env[key], this.fileValues[key], variable?.defaultValue].find(
+        value => value && value.length > 0
+      ) ?? ''
     );
   }
 
@@ -269,7 +268,10 @@ export class CatalogConfigService {
 
     if (mutateState) this._state = 'configuring';
     try {
-      const result = await this.prober.test(values);
+      const result =
+        mutateState && this.prober.activate
+          ? await this.prober.activate(values)
+          : await this.prober.test(values);
       if (mutateState) {
         this._state = result.success ? 'ready' : 'error';
         this._errorMessage = result.success ? null : result.message;
@@ -315,6 +317,7 @@ export class CatalogConfigService {
       };
       const tmpPath = `${this.filePath}.tmp`;
       writeFileSync(tmpPath, JSON.stringify(payload, null, 2));
+      chmodSync(tmpPath, 0o600);
       renameSync(tmpPath, this.filePath);
     } catch (error) {
       logger.warn(SCOPE, 'Could not persist last-known-good configuration', error);

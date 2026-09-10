@@ -73,6 +73,8 @@ export type ConfigurableService = {
   testable: boolean;
   getStatus(): ServiceInstanceStatus;
   reload(): Promise<void>;
+  /** Optional non-mutating probe used for draft configuration validation. */
+  testConfiguration?(): Promise<{ success: boolean; message: string }>;
 };
 
 export type ConfigService = {

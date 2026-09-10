@@ -3,7 +3,10 @@ import { z } from 'zod';
 export const MANAGEMENT_PROTOCOL_VERSION = 1 as const;
 export const SERVICE_MANIFEST_PATH = '/service' as const;
 
-const relativePathSchema = z.string().startsWith('/');
+const relativePathSchema = z
+  .string()
+  .regex(/^\/(?!\/)/)
+  .refine(path => !/[\\\u0000-\u001F\u007F]/.test(path));
 
 export const serviceCapabilitySchema = z.object({
   version: z.number().int().positive(),

@@ -102,14 +102,14 @@ export class TmdbProvider implements CatalogProvider {
     };
   }
 
-  async getListPage(slug: string, page: number): Promise<ProviderListPage> {
+  async getListPage(slug: string, page: number, language: string): Promise<ProviderListPage> {
     switch (slug) {
       case '@@tmdb_movies_popular':
-        return this.toSummaryPage(await this.client.popularMovies(page), 'movie');
+        return this.toSummaryPage(await this.client.popularMovies(page, language), 'movie');
       case '@@tmdb_movies_top-rated':
-        return this.toSummaryPage(await this.client.topRatedMovies(page), 'movie');
+        return this.toSummaryPage(await this.client.topRatedMovies(page, language), 'movie');
       case '@@tmdb_shows_popular':
-        return this.toSummaryPage(await this.client.popularShows(page), 'tv');
+        return this.toSummaryPage(await this.client.popularShows(page, language), 'tv');
       default:
         throw new ProviderError(`List with slug ${slug} not found`);
     }

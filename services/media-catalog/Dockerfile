@@ -32,6 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=builder /tmp/media-catalog.js ./index.js
+# CatalogDatabase resolves Drizzle migrations relative to the bundled entrypoint.
+COPY --from=builder /workspace/services/media-catalog/src/db/migrations ./migrations
 
 ENV DATA_DIR=/app/data
 RUN mkdir -p /app/data

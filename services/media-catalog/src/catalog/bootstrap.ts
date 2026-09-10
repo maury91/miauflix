@@ -19,9 +19,9 @@ const SCOPE = 'CatalogBootstrap';
  * Wires the catalog data plane to the service lifecycle:
  * - registers the configuration prober (the live provider probe behind
  *   `POST /configuration/test` and the main app's config push)
- * - on the first successful probe ("green flag") builds the provider + data plane
- *   and attaches it to the HTTP layer
- * - installs the queue workers once attached
+ * - activates the provider + data plane only after an applied or reloaded
+ *   configuration succeeds
+ * - installs the queue workers once activation attaches the data plane
  */
 export class CatalogRuntime {
   private readonly movies: MovieRepository;
@@ -31,6 +31,7 @@ export class CatalogRuntime {
   private readonly syncState: SyncStateRepository;
   private readonly apiCache: ApiCache;
   private workerManager: CatalogWorkerManager;
+  private stopped = false;
 
   constructor(
     private readonly ctx: ServiceContext,
@@ -58,6 +59,12 @@ export class CatalogRuntime {
     }
   }
 
+  async stop(): Promise<void> {
+    this.stopped = true;
+    await this.workerManager.stop();
+    this.ctx.catalog = null;
+  }
+
   private buildProvider(values: Record<string, string>): CatalogProvider {
     return TmdbProvider.build(this.apiCache, {
       apiUrl: values.TMDB_API_URL,
@@ -81,8 +88,21 @@ export class CatalogRuntime {
         const message = error instanceof Error ? error.message : String(error);
         return { success: false, message };
       }
+      return { success: true, message: `Catalog provider '${provider.name}' is ready` };
+    },
 
-      // Probe succeeded — swap the active provider/data plane (hot reload).
+    activate: async values => {
+      if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
+      const provider = this.buildProvider(values);
+      try {
+        await provider.test();
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return { success: false, message };
+      }
+
+      if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
+
       this.lists.upsertListDefinitions(provider.listDefinitions(), provider.name);
       this.ctx.catalog = new CatalogService(
         this.movies,

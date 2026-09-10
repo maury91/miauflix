@@ -76,33 +76,35 @@ export class CatalogHydrator {
   }
 
   async ensureSeasonFresh(tvMediaId: number, seasonNumber: number): Promise<SeasonEntry> {
-    let entry = this.tvShows.getSeasonWithEpisodes(tvMediaId, seasonNumber);
-    if (
-      entry?.season.synced &&
-      entry.season.episodes_synced_at &&
-      Date.now() - entry.season.episodes_synced_at < this.hydrationTtlMs
-    ) {
-      return entry;
-    }
-    try {
-      const season = await this.provider.getSeason(tvMediaId, seasonNumber);
-      if (!season) {
-        throw new HttpError(404, `Season ${seasonNumber} of show ${tvMediaId} not found`);
-      }
-      this.tvShows.upsertSeasonWithEpisodes(season);
-    } catch (error) {
-      if (entry && !(error instanceof HttpError)) {
-        logger.warn(
-          SCOPE,
-          `Season ${seasonNumber} of show ${tvMediaId} refresh failed, serving stale data`,
-          error
-        );
+    return this.singleFlight.run(`season:${tvMediaId}:${seasonNumber}`, async () => {
+      let entry = this.tvShows.getSeasonWithEpisodes(tvMediaId, seasonNumber);
+      if (
+        entry?.season.synced &&
+        entry.season.episodes_synced_at &&
+        Date.now() - entry.season.episodes_synced_at < this.hydrationTtlMs
+      ) {
         return entry;
       }
-      throw error;
-    }
-    entry = this.tvShows.getSeasonWithEpisodes(tvMediaId, seasonNumber);
-    if (!entry) throw new HttpError(404, `Season ${seasonNumber} of show ${tvMediaId} not found`);
-    return entry;
+      try {
+        const season = await this.provider.getSeason(tvMediaId, seasonNumber);
+        if (!season) {
+          throw new HttpError(404, `Season ${seasonNumber} of show ${tvMediaId} not found`);
+        }
+        this.tvShows.upsertSeasonWithEpisodes(season);
+      } catch (error) {
+        if (entry && !(error instanceof HttpError)) {
+          logger.warn(
+            SCOPE,
+            `Season ${seasonNumber} of show ${tvMediaId} refresh failed, serving stale data`,
+            error
+          );
+          return entry;
+        }
+        throw error;
+      }
+      entry = this.tvShows.getSeasonWithEpisodes(tvMediaId, seasonNumber);
+      if (!entry) throw new HttpError(404, `Season ${seasonNumber} of show ${tvMediaId} not found`);
+      return entry;
+    });
   }
 }

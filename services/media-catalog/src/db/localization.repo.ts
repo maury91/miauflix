@@ -55,6 +55,23 @@ export class LocalizationRepository {
     );
   }
 
+  getCachedGenres(language: string): Array<{ id: number; name: string }> | undefined {
+    const rows = this.db
+      .select({ id: genres.id, name: translations.title })
+      .from(genres)
+      .leftJoin(
+        translations,
+        and(
+          eq(translations.entityType, 'genre'),
+          eq(translations.entityId, genres.id),
+          eq(translations.language, language)
+        )
+      )
+      .all();
+    if (rows.length === 0 || rows.some(row => row.name === null)) return undefined;
+    return rows.map(row => ({ id: row.id, name: row.name ?? '' }));
+  }
+
   upsertGenres(values: Array<{ id: number; name: string }>, language: string): void {
     this.db.transaction(tx => {
       for (const genre of values) {

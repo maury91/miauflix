@@ -24,6 +24,8 @@ export class CatalogWorkerManager {
   private readonly queues = new Map<string, Queue>();
   private readonly workers: Worker[] = [];
   private retryTimer: ReturnType<typeof setTimeout> | null = null;
+  private installInFlight = false;
+  private refreshRequested = false;
   private stopped = false;
 
   constructor(
@@ -37,7 +39,16 @@ export class CatalogWorkerManager {
       logger.info(SCOPE, 'Background tasks disabled - on-demand catalog mode only');
       return;
     }
-    void this.install();
+    if (this.stopped) return;
+    if (this.retryTimer) {
+      clearTimeout(this.retryTimer);
+      this.retryTimer = null;
+    }
+    // A catalog configuration apply calls start() again after activation. Workers
+    // remain singleton, while the persisted upsert schedules are deliberately
+    // refreshed so their intervals follow the newly applied configuration.
+    this.refreshRequested = true;
+    this.install();
   }
 
   async stop(): Promise<void> {
@@ -66,16 +77,31 @@ export class CatalogWorkerManager {
     return queue;
   }
 
-  private async install(): Promise<void> {
+  private install(): void {
+    if (this.installInFlight) return;
+    this.installInFlight = true;
+    void this.installRequested().finally(() => {
+      this.installInFlight = false;
+    });
+  }
+
+  private async installRequested(): Promise<void> {
     try {
-      this.startWorkers();
-      await this.installSchedules();
-      await this.cleanupLegacySchedules();
-      logger.info(SCOPE, 'Catalog workers and persisted schedules are ready');
+      while (this.refreshRequested && !this.stopped) {
+        this.refreshRequested = false;
+        this.startWorkers();
+        await this.installSchedules();
+        await this.cleanupLegacySchedules();
+        logger.info(SCOPE, 'Catalog workers and persisted schedules are ready');
+      }
     } catch (error) {
       logger.warn(SCOPE, 'Bunqueue unavailable, retrying in the background', error);
       if (!this.stopped) {
-        this.retryTimer = setTimeout(() => void this.install(), RETRY_MS);
+        this.retryTimer = setTimeout(() => {
+          this.retryTimer = null;
+          this.refreshRequested = true;
+          this.install();
+        }, RETRY_MS);
       }
     }
   }

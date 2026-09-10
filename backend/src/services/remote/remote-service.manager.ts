@@ -5,6 +5,8 @@ import {
   SERVICE_MANIFEST_PATH,
   serviceConfigApplyResultSchema,
   serviceConfigSchemaSchema,
+  type ServiceConfigTestResult,
+  serviceConfigTestResultSchema,
   type ServiceManifest,
   serviceManifestSchema,
   type ServiceStatus,
@@ -72,6 +74,25 @@ export class RemoteServiceManager {
     await this.refreshStatus();
   }
 
+  /**
+   * Probe the remote service with the current (possibly draft) values without
+   * applying them. This is intentionally separate from reload(), which pushes
+   * configuration and activates the service.
+   */
+  async testConfiguration(): Promise<ServiceConfigTestResult> {
+    if (!this.manifest) await this.discover({ applyConfiguration: false });
+    if (!this.manifest) throw new Error('Remote service has not been discovered');
+    return this.request(
+      serviceConfigTestResultSchema,
+      this.manifest.management.configurationTestPath,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.configurationMutation()),
+      }
+    );
+  }
+
   async request<T>(
     schema: ZodType<T>,
     path: string,
@@ -102,7 +123,7 @@ export class RemoteServiceManager {
     return parsed.data;
   }
 
-  private async discover(): Promise<void> {
+  private async discover(options: { applyConfiguration?: boolean } = {}): Promise<void> {
     const manifest = await this.request(serviceManifestSchema, SERVICE_MANIFEST_PATH);
     if (manifest.managementProtocolVersion !== MANAGEMENT_PROTOCOL_VERSION) {
       throw new Error(
@@ -127,14 +148,16 @@ export class RemoteServiceManager {
     const variables = this.toVariableInfos(schema.variables);
     extendServiceVariables(this.descriptor.serviceName, variables);
     this.configuration.registerDynamicVariables(variables, this.descriptor.serviceName);
-    try {
-      await this.pushConfiguration();
-    } catch (error) {
-      logger.debug(
-        'RemoteService',
-        `${this.descriptor.serviceName} configuration is not ready yet`,
-        error
-      );
+    if (options.applyConfiguration ?? true) {
+      try {
+        await this.pushConfiguration();
+      } catch (error) {
+        logger.debug(
+          'RemoteService',
+          `${this.descriptor.serviceName} configuration is not ready yet`,
+          error
+        );
+      }
     }
     await this.refreshStatus();
     logger.info(
@@ -151,20 +174,13 @@ export class RemoteServiceManager {
 
   private async pushConfiguration(): Promise<void> {
     if (!this.manifest) throw new Error('Remote service has not been discovered');
-    const values: Record<string, string> = {};
-    const unsetKeys: string[] = [];
-    for (const [localKey, remoteKey] of this.remoteKeys) {
-      const value = this.configuration.getDynamic(localKey);
-      if (value === undefined || value === null || value === '') unsetKeys.push(remoteKey);
-      else values[remoteKey] = String(value);
-    }
     const result = await this.request(
       serviceConfigApplyResultSchema,
       this.manifest.management.configurationApplyPath,
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ values, unsetKeys }),
+        body: JSON.stringify(this.configurationMutation()),
       }
     );
     if (!result.success) {
@@ -172,6 +188,17 @@ export class RemoteServiceManager {
         result.test?.message ?? `Rejected keys: ${(result.invalidKeys ?? []).join(', ')}`
       );
     }
+  }
+
+  private configurationMutation(): { values: Record<string, string>; unsetKeys: string[] } {
+    const values: Record<string, string> = {};
+    const unsetKeys: string[] = [];
+    for (const [localKey, remoteKey] of this.remoteKeys) {
+      const value = this.configuration.getDynamic(localKey);
+      if (value === undefined || value === null || value === '') unsetKeys.push(remoteKey);
+      else values[remoteKey] = String(value);
+    }
+    return { values, unsetKeys };
   }
 
   private toVariableInfos(entries: ConfigVariable[]): Record<string, VariableInfo> {
@@ -289,9 +316,6 @@ export class RemoteServiceManager {
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     try {
       return await fetch(new URL(path, `${baseUrl}/`), { ...options, signal: controller.signal });
-    } catch (error) {
-      if (error instanceof ServiceNotConfiguredError) throw error;
-      throw new ServiceNotConfiguredError(this.descriptor.serviceName);
     } finally {
       clearTimeout(timeout);
     }

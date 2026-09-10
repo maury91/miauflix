@@ -11,6 +11,7 @@ import { afterEach, describe, expect, it } from 'bun:test';
 
 import { CatalogConfigService } from '../src/config/config.service';
 import { registerConfigurationRoutes } from '../src/http/handlers/configuration';
+import { registerMediaRoutes } from '../src/http/handlers/media';
 import { registerSystemRoutes } from '../src/http/handlers/system';
 import { Router } from '../src/http/router';
 import type { ServiceContext } from '../src/service-context';
@@ -33,6 +34,34 @@ const setupTest = () => {
   const router = new Router();
   registerSystemRoutes(router, context);
   registerConfigurationRoutes(router, context);
+  return router;
+};
+
+const setupReadyMediaRouter = () => {
+  const router = new Router();
+  const context = {
+    config: { state: 'ready' },
+    catalog: {
+      getMovie: async (mediaId: number) => ({
+        mediaType: 'movie' as const,
+        mediaId,
+        imdbId: null,
+        title: 'Movie',
+        overview: '',
+        tagline: '',
+        releaseDate: '',
+        runtime: 0,
+        poster: '',
+        backdrop: '',
+        logo: '',
+        genres: [],
+        popularity: 0,
+        rating: 0,
+        detailsSyncedAt: null,
+      }),
+    },
+  } as unknown as ServiceContext;
+  registerMediaRoutes(router, context);
   return router;
 };
 
@@ -63,5 +92,14 @@ describe('media-catalog management contract', () => {
     );
     expect(response.status).toBe(400);
     expect(serviceErrorSchema.parse(await response.json()).code).toBe('invalid_contract_payload');
+  });
+
+  it('rejects route parameters that only begin with a valid media ID', async () => {
+    const response = await setupReadyMediaRouter().handle(
+      new Request('http://catalog/v1/catalog/movie/7junk')
+    );
+
+    expect(response.status).toBe(400);
+    expect(serviceErrorSchema.parse(await response.json()).code).toBe('invalid_request');
   });
 });

@@ -1,10 +1,13 @@
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { describe, expect, it } from 'bun:test';
 
+import { CatalogRuntime } from '../src/catalog/bootstrap';
 import { CatalogConfigService, type ConfigProber } from '../src/config/config.service';
+import { CatalogDatabase } from '../src/db/database';
+import type { ServiceContext } from '../src/service-context';
 
 const prober = (ok: boolean): ConfigProber => ({
   test: async () => ({ success: ok, message: ok ? 'provider ready' : 'probe failed' }),
@@ -42,6 +45,29 @@ describe('CatalogConfigService', () => {
     rmSync(dataDir, { recursive: true, force: true });
   });
 
+  it('falls through empty pushed and environment candidates to persisted values', () => {
+    const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
+    writeFileSync(
+      join(dataDir, 'catalog.config.json'),
+      JSON.stringify({
+        values: {
+          TMDB_API_URL: 'https://file.example/3',
+          TMDB_API_ACCESS_TOKEN: 'file-token',
+        },
+      })
+    );
+    const config = new CatalogConfigService(dataDir, { TMDB_API_URL: '' });
+
+    // An empty pushed candidate must never hide the persisted fallback either.
+    (config as unknown as { pushedValues: Record<string, string> }).pushedValues[
+      'TMDB_API_ACCESS_TOKEN'
+    ] = '';
+
+    expect(config.resolve('TMDB_API_URL')).toBe('https://file.example/3');
+    expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('file-token');
+    rmSync(dataDir, { recursive: true, force: true });
+  });
+
   it('push overrides env, persists last-known-good, and hot-reloads to ready', async () => {
     const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
     const config = new CatalogConfigService(dataDir, {
@@ -57,6 +83,7 @@ describe('CatalogConfigService', () => {
 
     const persisted = JSON.parse(readFileSync(join(dataDir, 'catalog.config.json'), 'utf8'));
     expect(persisted.values.TMDB_API_ACCESS_TOKEN).toBe('pushed-token');
+    expect(statSync(join(dataDir, 'catalog.config.json')).mode & 0o777).toBe(0o600);
     rmSync(dataDir, { recursive: true, force: true });
   });
 
@@ -116,6 +143,21 @@ describe('CatalogConfigService', () => {
     rmSync(dataDir, { recursive: true, force: true });
   });
 
+  it('retains the registered prober receiver during activation', async () => {
+    const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
+    const config = new CatalogConfigService(dataDir, { TMDB_API_ACCESS_TOKEN: 'token' });
+    const receiverAwareProber = {
+      message: 'receiver preserved',
+      async test() {
+        return { success: this.message === 'receiver preserved', message: this.message };
+      },
+    };
+    config.registerProber(receiverAwareProber);
+
+    expect(await config.reload()).toBe(true);
+    rmSync(dataDir, { recursive: true, force: true });
+  });
+
   it('reloades from the last-known-good file on restart (standalone mode)', async () => {
     const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
     const first = new CatalogConfigService(dataDir, {});
@@ -141,5 +183,40 @@ describe('CatalogConfigService', () => {
     expect(config.state).toBe('standby');
     expect(existsSync(join(dataDir, 'catalog.config.json'))).toBe(false);
     rmSync(dataDir, { recursive: true, force: true });
+  });
+
+  it('test() leaves the catalog data plane detached', async () => {
+    const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
+    const db = new CatalogDatabase(dataDir);
+    const config = new CatalogConfigService(dataDir, {});
+    const context: ServiceContext = {
+      env: {
+        host: '127.0.0.1',
+        port: 3001,
+        dataDir,
+        disableBackgroundTasks: true,
+        bunqueue: { host: '127.0.0.1', port: 6789 },
+      },
+      config,
+      db,
+      catalog: null,
+    };
+    new CatalogRuntime(context, config);
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async () =>
+      Response.json({
+        images: { secure_base_url: 'https://image.tmdb.org/t/p/' },
+      })) as unknown as typeof fetch;
+
+    try {
+      const result = await config.test({ TMDB_API_ACCESS_TOKEN: 'candidate-token' });
+
+      expect(result.success).toBe(true);
+      expect(context.catalog).toBeNull();
+    } finally {
+      globalThis.fetch = originalFetch;
+      db.close();
+      rmSync(dataDir, { recursive: true, force: true });
+    }
   });
 });

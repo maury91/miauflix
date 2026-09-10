@@ -15,9 +15,9 @@ const SCOPE = 'MediaCatalog';
  * Boot sequence. The HTTP server binds immediately so /health, /status and
  * /configuration* are reachable in every lifecycle state — the main app configures
  * this service through them, possibly before anything else is up. The catalog data
- * plane attaches on the first successful configuration probe ("green flag"), which
- * can come from the main app's push or from local env/file configuration
- * (standalone mode). Workers are broker-optional and retried in the background.
+ * plane attaches after a successful main-app configuration apply or a local
+ * env/file configuration reload (standalone mode). Workers are broker-optional and
+ * retried in the background.
  */
 
 const env = loadEnv();
@@ -49,17 +49,30 @@ const server = Bun.serve({
 
 logger.info(SCOPE, `Media catalog service listening on http://${env.host}:${env.port}`);
 
-const shutdown = (signal: string) => {
-  logger.info(SCOPE, `Received ${signal}, shutting down...`);
-  server.stop(true);
-  db.close();
-  process.exit(0);
+let shutdownPromise: Promise<void> | undefined;
+let exitCode = 0;
+const shutdown = (signal: string, code = 0): Promise<void> => {
+  exitCode = Math.max(exitCode, code);
+  shutdownPromise ??= (async () => {
+    logger.info(SCOPE, `Received ${signal}, shutting down...`);
+    try {
+      await server.stop();
+      await runtime.stop();
+      db.close();
+    } catch (error) {
+      exitCode = 1;
+      logger.error(SCOPE, 'Shutdown failed', error);
+    }
+    process.exit(exitCode);
+  })();
+  return shutdownPromise;
 };
 
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => void shutdown('SIGTERM'));
+process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('uncaughtException', error => {
   logger.error(SCOPE, 'Uncaught exception', error);
+  void shutdown('uncaughtException', 1);
 });
 process.on('unhandledRejection', reason => {
   logger.error(SCOPE, 'Unhandled rejection', reason);

@@ -134,11 +134,13 @@ export class CatalogService {
       };
     }
     const fetched = await this.provider.getListPage(slug, page, language);
-    this.lists.putCachedListPage(slug, page, language, {
-      items: fetched.items,
-      totalPages: fetched.totalPages,
-      totalItems: fetched.totalItems,
-    });
+    this.lists.putCachedListPage(
+      slug,
+      page,
+      language,
+      { items: fetched.items, totalPages: fetched.totalPages, totalItems: fetched.totalItems },
+      oneHourMs
+    );
     return {
       slug,
       page: fetched.page,
@@ -151,6 +153,8 @@ export class CatalogService {
   /* -------------------------------------------------------------------- genres */
 
   async getGenres(language: string): Promise<Array<{ id: number; name: string }>> {
+    const cached = this.localization.getCachedGenres(language);
+    if (cached) return cached;
     const genres = await this.provider.getGenres(language);
     this.localization.upsertGenres(genres, language);
     return genres;

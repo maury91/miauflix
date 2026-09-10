@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it, spyOn } from 'bun:test';
 import { eq } from 'drizzle-orm';
 
 import { CatalogHydrator } from '../src/catalog/catalog.hydrator';
@@ -13,7 +13,7 @@ import { CatalogDatabase } from '../src/db/database';
 import { ListRepository } from '../src/db/list.repo';
 import { LocalizationRepository } from '../src/db/localization.repo';
 import { MovieRepository } from '../src/db/movie.repo';
-import { movies } from '../src/db/schema';
+import { listPages, movies } from '../src/db/schema';
 import { SyncStateRepository } from '../src/db/sync-state.repo';
 import { TVShowRepository } from '../src/db/tv-show.repo';
 import { HttpError } from '../src/errors';
@@ -51,6 +51,19 @@ const makeMovie = (mediaId: number, title = `Movie ${mediaId}`): ProviderMovie =
   ],
 });
 
+const makeSeason = (): ProviderSeason => ({
+  tvMediaId: 100,
+  mediaId: 1000,
+  seasonNumber: 1,
+  name: 'Season 1',
+  overview: '',
+  airDate: null,
+  poster: '',
+  episodes: [
+    { mediaId: 10000, episodeNumber: 1, name: 'Pilot', overview: '', airDate: null, still: '' },
+  ],
+});
+
 class FakeProvider implements CatalogProvider {
   readonly name = 'fake';
   movies = new Map<number, ProviderMovie>();
@@ -58,6 +71,7 @@ class FakeProvider implements CatalogProvider {
   movieCalls = 0;
   listCalls = 0;
   genreCalls = 0;
+  seasonCalls = 0;
   seasons = new Map<string, ProviderSeason>();
   changedIds: number[] = [];
 
@@ -80,6 +94,7 @@ class FakeProvider implements CatalogProvider {
   }
 
   async getSeason(tvMediaId: number, seasonNumber: number): Promise<ProviderSeason | null> {
+    this.seasonCalls++;
     return this.seasons.get(`${tvMediaId}:${seasonNumber}`) ?? null;
   }
 
@@ -100,9 +115,9 @@ class FakeProvider implements CatalogProvider {
     return { page, totalPages: 1, totalItems: items.length, items };
   }
 
-  async getGenres(_language: string): Promise<ProviderGenre[]> {
+  async getGenres(language: string): Promise<ProviderGenre[]> {
     this.genreCalls++;
-    return [{ id: 28, name: 'Action' }];
+    return [{ id: 28, name: language === 'it' ? 'Azione' : 'Action' }];
   }
 
   async *changedMovies(): AsyncGenerator<ProviderChangesPage> {
@@ -143,7 +158,10 @@ const setup = () => {
     repo,
     provider,
     service,
-    cleanup: () => rmSync(dataDir, { recursive: true, force: true }),
+    cleanup: () => {
+      db.close();
+      rmSync(dataDir, { recursive: true, force: true });
+    },
   };
 };
 
@@ -224,7 +242,7 @@ describe('CatalogService', () => {
 
   it('answers 404 for media unknown to the provider', async () => {
     const { service, cleanup } = setup();
-    expect(service.getMovie(404, 'en')).rejects.toThrow(HttpError);
+    await expect(service.getMovie(404, 'en')).rejects.toThrow(HttpError);
     try {
       await service.getMovie(404, 'en');
     } catch (error) {
@@ -282,6 +300,103 @@ describe('CatalogService', () => {
     const definitions = await service.listDefinitions();
     expect(definitions).toEqual([{ slug: 'fake-list', name: 'Fake List', description: '' }]);
     cleanup();
+  });
+
+  it('reuses persisted genres when every known genre has the requested translation', async () => {
+    const { repo, provider, service, cleanup } = setup();
+    try {
+      repo.localization.upsertGenres([{ id: 28, name: 'Action' }], 'en');
+      repo.localization.upsertGenres([{ id: 28, name: 'Azione' }], 'it');
+
+      expect(await service.getGenres('it')).toEqual([{ id: 28, name: 'Azione' }]);
+      expect(provider.genreCalls).toBe(0);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('fetches missing genre translations once and then serves the persisted locale', async () => {
+    const { repo, provider, service, cleanup } = setup();
+    try {
+      repo.localization.upsertGenres([{ id: 28, name: 'Action' }], 'en');
+
+      expect(await service.getGenres('it')).toEqual([{ id: 28, name: 'Azione' }]);
+      expect(await service.getGenres('it')).toEqual([{ id: 28, name: 'Azione' }]);
+      expect(provider.genreCalls).toBe(1);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('removes expired list pages on writes while retaining fresh pages from other locales', async () => {
+    const { db, repo, provider, service, cleanup } = setup();
+    const clock = spyOn(Date, 'now').mockReturnValue(10_000_000);
+    try {
+      repo.lists.upsertListDefinitions(provider.listDefinitions(), provider.name);
+      const page = { items: [], totalPages: 3, totalItems: 0 };
+      repo.lists.putCachedListPage('fake-list', 1, 'en', page);
+      clock.mockReturnValue(10_000_001);
+      repo.lists.putCachedListPage('fake-list', 1, 'it', page);
+      clock.mockReturnValue(13_600_000);
+
+      await service.getListPage('fake-list', 2, 'en');
+
+      expect(
+        db.db
+          .select({ page: listPages.page, language: listPages.language })
+          .from(listPages)
+          .orderBy(listPages.page)
+          .all()
+      ).toEqual([
+        { page: 1, language: 'it' },
+        { page: 2, language: 'en' },
+      ]);
+    } finally {
+      clock.mockRestore();
+      cleanup();
+    }
+  });
+
+  it('coalesces concurrent stale season refreshes into one provider call', async () => {
+    const { repo, provider, cleanup } = setup();
+    try {
+      repo.tvShows.upsertSeasonWithEpisodes(makeSeason());
+      repo.tvShows.markSeasonUnsynced(100, 1);
+      provider.seasons.set('100:1', { ...makeSeason(), name: 'Updated season' });
+      const hydrator = new CatalogHydrator(
+        repo.movies,
+        repo.tvShows,
+        provider,
+        VALUES.hydrationTtlMs
+      );
+
+      const entries = await Promise.all([
+        hydrator.ensureSeasonFresh(100, 1),
+        hydrator.ensureSeasonFresh(100, 1),
+      ]);
+
+      expect(entries.map(entry => entry.season.name)).toEqual(['Updated season', 'Updated season']);
+      expect(provider.seasonCalls).toBe(1);
+      expect(repo.tvShows.getSeasonRow(100, 1)?.synced).toBe(1);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('reselects invalidated seasons with existing episodes and respects the watching filter', () => {
+    const { db, repo, cleanup } = setup();
+    try {
+      repo.tvShows.upsertSeasonWithEpisodes(makeSeason());
+      expect(repo.tvShows.findIncompleteSeason(false)).toBeUndefined();
+      repo.tvShows.markSeasonUnsynced(100, 1);
+
+      expect(repo.tvShows.findIncompleteSeason(false)?.media_id).toBe(1000);
+      expect(repo.tvShows.findIncompleteSeason(true)).toBeUndefined();
+      db.setWatching([100]);
+      expect(repo.tvShows.findIncompleteSeason(true)?.media_id).toBe(1000);
+    } finally {
+      cleanup();
+    }
   });
 
   it('syncs changes only for locally-known media', async () => {
@@ -380,6 +495,7 @@ describe('CatalogService', () => {
     db.setWatching([]);
     await greedy.syncIncompleteSeasons();
     expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(1);
+    expect(repo.tvShows.getSeasonRow(100, 1)?.synced).toBe(1);
     cleanup();
   });
 });

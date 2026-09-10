@@ -230,13 +230,7 @@ export class TVShowRepository {
       .select({ season: seasons })
       .from(seasons)
       .leftJoin(tvShows, eq(tvShows.mediaId, seasons.tvMediaId))
-      .where(
-        and(
-          eq(seasons.synced, 0),
-          watchingOnly ? eq(tvShows.watching, 1) : undefined,
-          sql`NOT EXISTS (SELECT 1 FROM episodes e WHERE e.season_media_id = ${seasons.mediaId})`
-        )
-      )
+      .where(and(eq(seasons.synced, 0), watchingOnly ? eq(tvShows.watching, 1) : undefined))
       .orderBy(seasons.seasonNumber)
       .limit(1)
       .all();
