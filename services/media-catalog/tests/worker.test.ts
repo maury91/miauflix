@@ -1,11 +1,16 @@
 import { describe, expect, it, mock } from 'bun:test';
 
 const installedSchedules: Array<{ scheduleId: string; every: number }> = [];
+const queues: FakeQueue[] = [];
 let workerCount = 0;
 let schedulerGate: Promise<void> | undefined;
 
 class FakeQueue {
-  constructor(_name: string, _connection: unknown) {}
+  closed = false;
+
+  constructor(_name: string, _connection: unknown) {
+    queues.push(this);
+  }
 
   async upsertJobScheduler(scheduleId: string, scheduler: { every: number }): Promise<void> {
     installedSchedules.push({ scheduleId, every: scheduler.every });
@@ -14,7 +19,9 @@ class FakeQueue {
 
   async removeJobScheduler(): Promise<void> {}
 
-  close(): void {}
+  close(): void {
+    this.closed = true;
+  }
 }
 
 class FakeWorker {
@@ -40,6 +47,7 @@ const waitFor = async (predicate: () => boolean): Promise<void> => {
 describe('CatalogWorkerManager', () => {
   it('keeps workers idempotent while refreshing persisted schedules on later starts', async () => {
     installedSchedules.length = 0;
+    queues.length = 0;
     workerCount = 0;
     schedulerGate = undefined;
     const { CatalogWorkerManager } = await import('../src/workers/worker');
@@ -81,6 +89,7 @@ describe('CatalogWorkerManager', () => {
 
   it('coalesces refresh requests that arrive while schedules are being installed', async () => {
     installedSchedules.length = 0;
+    queues.length = 0;
     workerCount = 0;
     const gate = Promise.withResolvers<void>();
     schedulerGate = gate.promise;
@@ -115,5 +124,37 @@ describe('CatalogWorkerManager', () => {
     expect(workerCount).toBe(3);
     schedulerGate = undefined;
     await manager.stop();
+  });
+
+  it('waits for an in-flight schedule install before closing queues', async () => {
+    installedSchedules.length = 0;
+    queues.length = 0;
+    const gate = Promise.withResolvers<void>();
+    schedulerGate = gate.promise;
+    const { CatalogWorkerManager } = await import('../src/workers/worker');
+    const manager = new CatalogWorkerManager(
+      {
+        host: '127.0.0.1',
+        port: 3001,
+        dataDir: '/tmp/catalog',
+        disableBackgroundTasks: false,
+        bunqueue: { host: '127.0.0.1', port: 6789 },
+      },
+      () => null,
+      () => '60'
+    );
+
+    manager.start();
+    await waitFor(() => installedSchedules.length === 1);
+    const stopping = manager.stop();
+    await Promise.resolve();
+    expect(queues[0]?.closed).toBe(false);
+
+    gate.resolve();
+    await stopping;
+
+    expect(queues).toHaveLength(5);
+    expect(queues.every(queue => queue.closed)).toBe(true);
+    schedulerGate = undefined;
   });
 });

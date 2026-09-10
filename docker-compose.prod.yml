@@ -33,7 +33,7 @@ services:
       nordvpn:
         condition: service_started
     environment:
-      - DATA_DIR=/usr/data
+      - DATA_DIR=/app/data
       - BUNQUEUE_HOST=127.0.0.1
       - BUNQUEUE_PORT=6789
       # Optional bootstrap fallback only — the main app pushes the authoritative
@@ -41,7 +41,7 @@ services:
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-}
       - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
     volumes:
-      - ./data:/usr/data/
+      - ./data:/app/data/
     network_mode: service:nordvpn # Reach the catalog provider through NordVPN
     restart: unless-stopped
 

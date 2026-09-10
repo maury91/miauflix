@@ -69,6 +69,7 @@ export class LocalizationRepository {
       )
       .all();
     if (rows.length === 0 || rows.some(row => row.name === null)) return undefined;
+    // TODO: Track provider fetch time and enforce a freshness TTL in CatalogService.getGenres.
     return rows.map(row => ({ id: row.id, name: row.name ?? '' }));
   }
 

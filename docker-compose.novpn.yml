@@ -32,7 +32,7 @@ services:
     image: miauflix-media-catalog
     container_name: miauflix-media-catalog
     environment:
-      - DATA_DIR=/usr/data
+      - DATA_DIR=/app/data
       - BUNQUEUE_HOST=bunqueue
       - BUNQUEUE_PORT=6789
       # Optional bootstrap fallback only — the main app pushes the authoritative
@@ -42,7 +42,7 @@ services:
     ports:
       - '127.0.0.1:3001:3001'
     volumes:
-      - ./data:/usr/data/
+      - ./data:/app/data/
     restart: unless-stopped
 
   miauflix:

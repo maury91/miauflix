@@ -24,7 +24,7 @@ export class CatalogWorkerManager {
   private readonly queues = new Map<string, Queue>();
   private readonly workers: Worker[] = [];
   private retryTimer: ReturnType<typeof setTimeout> | null = null;
-  private installInFlight = false;
+  private installPromise: Promise<void> | null = null;
   private refreshRequested = false;
   private stopped = false;
 
@@ -54,6 +54,7 @@ export class CatalogWorkerManager {
   async stop(): Promise<void> {
     this.stopped = true;
     if (this.retryTimer) clearTimeout(this.retryTimer);
+    await this.installPromise;
     await Promise.all(this.workers.map(worker => worker.close()));
     this.workers.length = 0;
     for (const queue of this.queues.values()) queue.close();
@@ -78,10 +79,9 @@ export class CatalogWorkerManager {
   }
 
   private install(): void {
-    if (this.installInFlight) return;
-    this.installInFlight = true;
-    void this.installRequested().finally(() => {
-      this.installInFlight = false;
+    if (this.installPromise) return;
+    this.installPromise = this.installRequested().finally(() => {
+      this.installPromise = null;
     });
   }
 

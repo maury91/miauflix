@@ -115,6 +115,30 @@ describe('CatalogConfigService', () => {
     rmSync(dataDir, { recursive: true, force: true });
   });
 
+  it('does not activate or become ready when configuration persistence fails', async () => {
+    const dataPath = join(tmpdir(), `catalog-config-file-${Date.now()}`);
+    writeFileSync(dataPath, 'not a directory');
+    let activated = false;
+    const config = new CatalogConfigService(dataPath, {
+      TMDB_API_ACCESS_TOKEN: 'env-token',
+    });
+    config.registerProber({
+      test: async () => ({ success: true, message: 'provider ready' }),
+      activate: async () => {
+        activated = true;
+        return { success: true, message: 'provider ready' };
+      },
+    });
+
+    await expect(
+      config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'candidate-token' })
+    ).rejects.toThrow();
+    expect(activated).toBe(false);
+    expect(config.state).toBe('standby');
+    expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('env-token');
+    rmSync(dataPath, { force: true });
+  });
+
   it('reports secret presence without exposing it and supports explicit clearing', async () => {
     const { config, dataDir } = makeConfig(prober(true), { TMDB_API_ACCESS_TOKEN: 'env-token' });
     await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'super-secret-token' });

@@ -1,6 +1,7 @@
 import { logger } from '../../logger';
 import type { ApiCache } from '../../utils/api-cache';
 import { RateLimiter } from '../../utils/rate-limiter';
+import { SingleFlight } from '../../utils/single-flight';
 import { ProviderError } from '../provider';
 
 /* Raw TMDB wire shapes (only the fields we consume) ------------------------- */
@@ -130,6 +131,7 @@ export class TmdbClient {
    * adapting its limit from the response headers.
    */
   private readonly rateLimiter = new RateLimiter(40, 'tmdb');
+  private readonly configurationFlight = new SingleFlight();
 
   constructor(
     private readonly apiCache: ApiCache,
@@ -190,7 +192,9 @@ export class TmdbClient {
   }
 
   private configuration(): Promise<TmdbConfiguration> {
-    return this.cached('configuration', 30 * dayMs, '/configuration');
+    return this.configurationFlight.run('configuration', () =>
+      this.cached('configuration', 30 * dayMs, '/configuration')
+    );
   }
 
   private async imageUrl(path: string | null | undefined, size = 'original'): Promise<string> {
@@ -396,12 +400,14 @@ export class TmdbClient {
     );
   }
 
-  tvShowChanges(mediaId: number) {
+  tvShowChanges(mediaId: number, page = 1) {
     return this.cached<{
       changes: Array<{
         key: string;
         items: Array<{ value?: { season_number?: number } }>;
       }>;
-    }>(`tv-changes:${mediaId}`, oneHourMs, `/tv/${mediaId}/changes?page=1`);
+      page?: number;
+      total_pages?: number;
+    }>(`tv-changes:${mediaId}:${page}`, oneHourMs, `/tv/${mediaId}/changes?page=${page}`);
   }
 }

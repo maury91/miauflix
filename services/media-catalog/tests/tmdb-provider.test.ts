@@ -123,6 +123,29 @@ describe('TmdbClient', () => {
       'https://tmdb.example/3/discover/movie?include_adult=false&include_video=false&language=it&page=2&sort_by=popularity.desc&vote_count.gte=10',
     ]);
   });
+
+  it('shares concurrent configuration requests and clears the flight afterward', async () => {
+    const cacheKeys: string[] = [];
+    let requests = 0;
+    globalThis.fetch = (async () => {
+      requests++;
+      return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+    }) as unknown as typeof fetch;
+    const client = new TmdbClient(makeCache(cacheKeys), {
+      apiUrl: 'https://tmdb.example/3',
+      accessToken: 'token',
+    });
+    const configuration = () =>
+      (client as unknown as { configuration(): Promise<unknown> }).configuration();
+
+    await Promise.all([configuration(), configuration()]);
+    expect(requests).toBe(1);
+    expect(cacheKeys).toEqual(['tmdb:v1:configuration']);
+
+    await configuration();
+    expect(requests).toBe(2);
+    expect(cacheKeys).toEqual(['tmdb:v1:configuration', 'tmdb:v1:configuration']);
+  });
 });
 
 describe('TmdbProvider', () => {
@@ -151,5 +174,70 @@ describe('TmdbProvider', () => {
     const page = await provider.getListPage('@@tmdb_movies_popular', 1, 'it');
 
     expect(page.items[0]?.title).toBe('Italiano');
+  });
+
+  it('collects season changes from every valid page', async () => {
+    const pages = new Map([
+      [
+        1,
+        {
+          page: 1,
+          total_pages: 2,
+          changes: [{ key: 'season', items: [{ value: { season_number: 1 } }] }],
+        },
+      ],
+      [
+        2,
+        {
+          page: 2,
+          total_pages: 2,
+          changes: [{ key: 'season', items: [{ value: { season_number: 2 } }] }],
+        },
+      ],
+    ]);
+    const requestedPages: number[] = [];
+    const provider = new TmdbProvider({
+      tvShowChanges: async (_mediaId: number, page: number) => {
+        requestedPages.push(page);
+        return pages.get(page);
+      },
+    } as unknown as TmdbClient);
+
+    await expect(provider.seasonChanges(100)).resolves.toEqual([1, 2]);
+    expect(requestedPages).toEqual([1, 2]);
+  });
+
+  it('stops season change pagination when metadata is missing or inconsistent', async () => {
+    const requestedPages: number[] = [];
+    const provider = new TmdbProvider({
+      tvShowChanges: async (_mediaId: number, page: number) => {
+        requestedPages.push(page);
+        return {
+          page: 2,
+          changes: [{ key: 'season', items: [{ value: { season_number: 1 } }] }],
+        };
+      },
+    } as unknown as TmdbClient);
+
+    await expect(provider.seasonChanges(100)).resolves.toEqual([1]);
+    expect(requestedPages).toEqual([1]);
+  });
+
+  it('caps season change pagination', async () => {
+    const requestedPages: number[] = [];
+    const provider = new TmdbProvider({
+      tvShowChanges: async (_mediaId: number, page: number) => {
+        requestedPages.push(page);
+        return {
+          page,
+          total_pages: Number.MAX_SAFE_INTEGER,
+          changes: [],
+        };
+      },
+    } as unknown as TmdbClient);
+
+    await expect(provider.seasonChanges(100)).resolves.toEqual([]);
+    expect(requestedPages).toHaveLength(100);
+    expect(requestedPages.at(-1)).toBe(100);
   });
 });

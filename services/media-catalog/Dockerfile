@@ -36,8 +36,12 @@ COPY --from=builder /tmp/media-catalog.js ./index.js
 COPY --from=builder /workspace/services/media-catalog/src/db/migrations ./migrations
 
 ENV DATA_DIR=/app/data
-RUN mkdir -p /app/data
+RUN groupadd --system linuxserver && \
+    useradd --system --gid linuxserver --create-home --shell /usr/sbin/nologin linuxserver && \
+    mkdir -p /app/data && \
+    chown -R linuxserver:linuxserver /app/data
 VOLUME /app/data
+USER linuxserver
 EXPOSE 3001
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=5 \
   CMD wget -qO- http://localhost:3001/health || exit 1

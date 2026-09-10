@@ -165,12 +165,11 @@ export class RemoteServiceManager {
         `Unsupported ${this.descriptor.capability} contract v${capability.version}; expected v${this.descriptor.capabilityVersion}`
       );
     }
-    this.manifest = manifest;
-
     const schema = await this.request(
       serviceConfigSchemaSchema,
       manifest.management.configurationSchemaPath
     );
+    this.manifest = manifest;
     const { variables, remoteKeys } = this.toVariableInfos(schema.variables);
     this.configuration.registerDynamicVariables(variables, this.descriptor.serviceName);
     replaceServiceVariables(this.descriptor.serviceName, variables);

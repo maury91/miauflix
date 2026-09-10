@@ -23,10 +23,12 @@ const setupTest = () => {
   directories.push(dataDir);
   const config = new CatalogConfigService(dataDir, {});
   const db = {
-    sql: {
-      query: (sql: string) => ({
-        get: () => ({ total: 0 }),
-        all: () => (sql.includes('sync_state') ? [] : []),
+    db: {
+      select: () => ({
+        from: () => ({
+          get: () => ({ total: 0 }),
+          all: () => [],
+        }),
       }),
     },
   };

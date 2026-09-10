@@ -13,7 +13,7 @@ import { CatalogDatabase } from '../src/db/database';
 import { ListRepository } from '../src/db/list.repo';
 import { LocalizationRepository } from '../src/db/localization.repo';
 import { MovieRepository } from '../src/db/movie.repo';
-import { episodes, listPages, movies } from '../src/db/schema';
+import { episodes, listPages, movies, tvShows } from '../src/db/schema';
 import { SyncStateRepository } from '../src/db/sync-state.repo';
 import { TVShowRepository } from '../src/db/tv-show.repo';
 import { HttpError } from '../src/errors';
@@ -393,6 +393,38 @@ describe('CatalogService', () => {
     cleanup();
   });
 
+  it('answers 404 when the provider no longer has a stale movie', async () => {
+    const { db, repo, service, cleanup } = setup();
+    try {
+      repo.movies.upsertMovie(makeMovie(603));
+      db.db
+        .update(movies)
+        .set({ detailsSyncedAt: Date.now() - 48 * 60 * 60 * 1000 })
+        .where(eq(movies.mediaId, 603))
+        .run();
+
+      await expect(service.getMovie(603, 'en')).rejects.toMatchObject({ status: 404 });
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('answers 404 when the provider no longer has a stale TV show', async () => {
+    const { db, repo, service, cleanup } = setup();
+    try {
+      repo.tvShows.upsertTVShow(makeTVShow([]));
+      db.db
+        .update(tvShows)
+        .set({ detailsSyncedAt: Date.now() - 48 * 60 * 60 * 1000 })
+        .where(eq(tvShows.mediaId, 100))
+        .run();
+
+      await expect(service.getTVShow(100, 'en')).rejects.toMatchObject({ status: 404 });
+    } finally {
+      cleanup();
+    }
+  });
+
   it('serves stale data when a refresh fails, but still has the row', async () => {
     const { db, provider, service, cleanup } = setup();
     provider.movies.set(603, makeMovie(603, 'Original'));
@@ -426,6 +458,21 @@ describe('CatalogService', () => {
     );
     expect(result.items.map(item => item.mediaId).sort()).toEqual([603, 604]);
     expect(result.missing).toEqual([{ mediaType: 'movie', mediaId: 999 }]);
+    expect(result.errors).toEqual([]);
+    cleanup();
+  });
+
+  it('propagates provider failures from batch reads', async () => {
+    const { provider, service, cleanup } = setup();
+    provider.failingMovies.add(605);
+
+    await expect(
+      service.batch([{ mediaType: 'movie', mediaId: 605 }], 'en')
+    ).resolves.toMatchObject({
+      items: [],
+      missing: [],
+      errors: [{ ref: { mediaType: 'movie', mediaId: 605 }, error: 'upstream down' }],
+    });
     cleanup();
   });
 

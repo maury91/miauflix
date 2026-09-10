@@ -10,24 +10,25 @@ import { EncryptionService } from '@services/encryption/encryption.service';
 
 import { ConfigurationService } from './configuration.service';
 
+const clearEnvironmentVariable = jest.requireActual('../../../test-utils/environment')
+  .clearEnvironmentVariable as (name: string) => () => void;
+
 const catalogEntries = (url: string) => [
   { key: 'CATALOG_SERVICE_URL', value: url },
   { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '60000' },
 ];
 
 const dynamicVariableName = 'DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST';
-let previousDynamicVariableValue: string | undefined;
+let restoreDynamicVariable: (() => void) | undefined;
 
 const setupTest = () => {
-  previousDynamicVariableValue = process.env[dynamicVariableName];
-  delete process.env[dynamicVariableName];
+  restoreDynamicVariable = clearEnvironmentVariable(dynamicVariableName);
   return new ConfigurationService();
 };
 
 afterEach(() => {
-  if (previousDynamicVariableValue === undefined) delete process.env[dynamicVariableName];
-  else process.env[dynamicVariableName] = previousDynamicVariableValue;
-  previousDynamicVariableValue = undefined;
+  restoreDynamicVariable?.();
+  restoreDynamicVariable = undefined;
 });
 
 function setupLiveCatalog() {
@@ -107,7 +108,7 @@ describe('ConfigurationService web configuration actions', () => {
   });
 
   it('removes dynamic variables omitted from a rediscovered schema', () => {
-    const configuration = new ConfigurationService();
+    const configuration = setupTest();
 
     configuration.registerDynamicVariables(
       {

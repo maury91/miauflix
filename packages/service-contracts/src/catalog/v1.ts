@@ -108,9 +108,14 @@ export const batchRequestSchema = z.object({
   items: z.array(mediaRefSchema).max(50),
   language: z.string().default('en'),
 });
+export const batchErrorSchema = z.object({
+  ref: mediaRefSchema,
+  error: z.string(),
+});
 export const batchResponseSchema = z.object({
   items: z.array(z.discriminatedUnion('mediaType', [movieDetailSchema, tvShowDetailSchema])),
   missing: z.array(mediaRefSchema),
+  errors: z.array(batchErrorSchema).default([]),
 });
 export const watchingRequestSchema = z.object({ mediaIds: z.array(z.number().int().positive()) });
 export const okResponseSchema = z.object({ ok: z.literal(true) });
@@ -135,5 +140,6 @@ export type SeasonDetail = z.infer<typeof seasonDetailSchema>;
 export type MediaSummary = z.infer<typeof mediaSummarySchema>;
 export type ListDefinition = z.infer<typeof listDefinitionSchema>;
 export type ListPage = z.infer<typeof listPageSchema>;
+export type BatchError = z.infer<typeof batchErrorSchema>;
 export type BatchResponse = z.infer<typeof batchResponseSchema>;
 export type CatalogStatusDetails = z.infer<typeof catalogStatusDetailsSchema>;

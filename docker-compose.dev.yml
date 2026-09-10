@@ -14,7 +14,7 @@ services:
       dockerfile: services/media-catalog/Dockerfile
       target: development
     environment:
-      DATA_DIR: /usr/data
+      DATA_DIR: /app/data
       BUNQUEUE_HOST: bunqueue
       BUNQUEUE_PORT: '6789'
     ports:
@@ -22,7 +22,7 @@ services:
     volumes:
       # Hot reload: sources are bind-mounted (bun runs TypeScript directly)
       - ./services/media-catalog/src:/workspace/services/media-catalog/src
-      - ./data:/usr/data
+      - ./data:/app/data
 
   backend:
     build:

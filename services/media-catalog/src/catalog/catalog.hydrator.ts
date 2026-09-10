@@ -34,8 +34,7 @@ export class CatalogHydrator {
       try {
         const movie = await this.provider.getMovie(mediaId);
         if (!movie) {
-          if (!row) throw new HttpError(404, `Movie ${mediaId} not found`);
-          return;
+          throw new HttpError(404, `Movie ${mediaId} not found`);
         }
         this.movies.upsertMovie(movie);
       } catch (error) {
@@ -61,8 +60,7 @@ export class CatalogHydrator {
       try {
         const show = await this.provider.getTVShow(mediaId);
         if (!show) {
-          if (!row) throw new HttpError(404, `TV show ${mediaId} not found`);
-          return;
+          throw new HttpError(404, `TV show ${mediaId} not found`);
         }
         this.tvShows.upsertTVShow(show);
       } catch (error) {

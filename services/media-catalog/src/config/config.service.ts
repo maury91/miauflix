@@ -180,17 +180,27 @@ export class CatalogConfigService {
         delete candidateFile[key];
       }
 
+      const previousPushed = { ...this.pushedValues };
+      const previousFile = { ...this.fileValues };
+      this.persistFile(candidatePushed, candidateFile);
+
       const test = await this.probe(this.resolvedValuesFrom(candidatePushed, candidateFile), {
         mutateState: false,
         activate: true,
       });
       if (!test.success) {
+        try {
+          this.persistFile(previousPushed, previousFile);
+        } catch (error) {
+          this._state = 'error';
+          this._errorMessage = error instanceof Error ? error.message : String(error);
+          logger.error(SCOPE, 'Could not roll back persisted configuration', error);
+        }
         return { success: false, reloaded: false, test };
       }
 
       this.replaceValues(this.pushedValues, candidatePushed);
       this.replaceValues(this.fileValues, candidateFile);
-      this.persistFile(candidatePushed, candidateFile);
       logger.info(
         SCOPE,
         `Configuration pushed (${Object.keys(this.applicableValues(values)).length} value(s) applied)`
@@ -343,17 +353,13 @@ export class CatalogConfigService {
     pushedValues: Record<string, string> = this.pushedValues,
     fileValues: Record<string, string> = this.fileValues
   ): void {
-    try {
-      mkdirSync(this.dataDir, { recursive: true });
-      const payload: StoredValues = {
-        values: { ...fileValues, ...this.applicableValues(pushedValues) },
-      };
-      const tmpPath = `${this.filePath}.tmp`;
-      writeFileSync(tmpPath, JSON.stringify(payload, null, 2));
-      chmodSync(tmpPath, 0o600);
-      renameSync(tmpPath, this.filePath);
-    } catch (error) {
-      logger.warn(SCOPE, 'Could not persist last-known-good configuration', error);
-    }
+    mkdirSync(this.dataDir, { recursive: true });
+    const payload: StoredValues = {
+      values: { ...fileValues, ...this.applicableValues(pushedValues) },
+    };
+    const tmpPath = `${this.filePath}.tmp`;
+    writeFileSync(tmpPath, JSON.stringify(payload, null, 2));
+    chmodSync(tmpPath, 0o600);
+    renameSync(tmpPath, this.filePath);
   }
 }

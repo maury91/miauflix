@@ -105,14 +105,20 @@ export class CatalogService {
               ? await this.getMovie(ref.mediaId, language)
               : await this.getTVShow(ref.mediaId, language);
           return { detail };
-        } catch {
-          return { ref };
+        } catch (error) {
+          if (error instanceof HttpError && error.status === 404) return { ref };
+          return {
+            error: { ref, message: error instanceof Error ? error.message : String(error) },
+          };
         }
       })
     );
     return {
       items: resolved.flatMap(entry => (entry.detail ? [entry.detail] : [])),
       missing: resolved.flatMap(entry => (entry.ref ? [entry.ref] : [])),
+      errors: resolved.flatMap(entry =>
+        entry.error ? [{ ref: entry.error.ref, error: entry.error.message }] : []
+      ),
     };
   }
 

@@ -15,6 +15,8 @@ import type {
 import { ProviderError } from '../provider';
 import { TmdbClient } from './client';
 
+const MAX_SEASON_CHANGE_PAGES = 100;
+
 /**
  * The Movie Database (TMDB) implementation of the catalog provider abstraction.
  * This is the only module in the service that knows about TMDB specifics —
@@ -144,15 +146,31 @@ export class TmdbProvider implements CatalogProvider {
   }
 
   async seasonChanges(mediaId: number): Promise<number[]> {
-    const changes = await this.client.tvShowChanges(mediaId);
     const seasonNumbers = new Set<number>();
-    for (const change of changes.changes) {
-      if (change.key !== 'season') continue;
-      for (const item of change.items) {
-        if (typeof item.value?.season_number === 'number') {
-          seasonNumbers.add(item.value.season_number);
+    const seenPages = new Set<number>();
+    let page = 1;
+    while (!seenPages.has(page) && page <= MAX_SEASON_CHANGE_PAGES) {
+      seenPages.add(page);
+      const changes = await this.client.tvShowChanges(mediaId, page);
+      for (const change of changes.changes) {
+        if (change.key !== 'season') continue;
+        for (const item of change.items) {
+          if (typeof item.value?.season_number === 'number') {
+            seasonNumbers.add(item.value.season_number);
+          }
         }
       }
+
+      const totalPages = changes.total_pages;
+      if (
+        typeof totalPages !== 'number' ||
+        !Number.isSafeInteger(totalPages) ||
+        totalPages < 1 ||
+        page >= totalPages ||
+        (changes.page !== undefined && changes.page !== page)
+      )
+        break;
+      page++;
     }
     return [...seasonNumbers];
   }

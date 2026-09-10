@@ -144,6 +144,48 @@ describe('RemoteServiceManager', () => {
     expect(configuration.registerDynamicVariables).toHaveBeenCalledTimes(1);
   });
 
+  it('keeps the previous discovery state when a rediscovered schema is invalid', async () => {
+    const { manager } = setupTest();
+    let schemaRequests = 0;
+    let manifestRequests = 0;
+    jest.spyOn(global, 'fetch').mockImplementation(async input => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) {
+        return Response.json({
+          ...manifest,
+          capabilities: {
+            catalog: {
+              version: 1,
+              basePath: manifestRequests++ === 0 ? '/v1/catalog' : '/v2/catalog',
+            },
+          },
+        });
+      }
+      if (path === '/configuration/schema') {
+        schemaRequests += 1;
+        if (schemaRequests === 1) {
+          return Response.json({
+            name: 'Media Catalog',
+            description: 'Catalog settings',
+            variables: [],
+          });
+        }
+        throw new Error('schema unavailable');
+      }
+      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/status') return Response.json({ state: 'ready' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    await expect((manager as unknown as { discover(): Promise<void> }).discover()).rejects.toThrow(
+      'schema unavailable'
+    );
+
+    expect(manager.capabilityBasePath).toBe('/v1/catalog');
+    manager.stop();
+  });
+
   it('replaces remote configuration keys when rediscovery removes a variable', async () => {
     const { configuration, manager } = setupTest();
     let discovery = 0;
