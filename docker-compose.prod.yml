@@ -1,4 +1,13 @@
 services:
+  bunqueue:
+    image: ghcr.io/egeominotti/bunqueue:2.8.61
+    network_mode: service:nordvpn
+    depends_on:
+      - nordvpn
+    volumes:
+      - bunqueue_data:/app/data
+    restart: unless-stopped
+
   nordvpn:
     image: ghcr.io/bubuntux/nordlynx
     hostname: nordvpn
@@ -17,14 +26,41 @@ services:
       - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
     restart: unless-stopped
 
+  media-catalog:
+    image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}-media-catalog:${MIAUFLIX_VERSION:-latest}
+    container_name: miauflix-media-catalog
+    depends_on:
+      nordvpn:
+        condition: service_started
+    environment:
+      - DATA_DIR=/app/data
+      - BUNQUEUE_HOST=127.0.0.1
+      - BUNQUEUE_PORT=6789
+      # Optional bootstrap fallback only — the main app pushes the authoritative
+      # catalog configuration (including this token) once it has read config.json.
+      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-}
+      - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
+    volumes:
+      - ./data/media-catalog:/app/data
+    network_mode: service:nordvpn # Reach the catalog provider through NordVPN
+    restart: unless-stopped
+
   backend:
     image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}:${MIAUFLIX_VERSION:-latest}
     container_name: miauflix-backend
     depends_on:
-      - nordvpn
+      nordvpn:
+        condition: service_started
+      bunqueue:
+        condition: service_healthy
+      media-catalog:
+        condition: service_started
     environment:
       - DATA_DIR=/usr/data
       - DEBUG=SourceService,App,MovieSync,ListService,Cache,MagnetService
+      - BUNQUEUE_HOST=127.0.0.1
+      - BUNQUEUE_PORT=6789
+      - CATALOG_SERVICE_URL=http://localhost:3001 # Same network namespace as media-catalog
     volumes:
       - ./data:/usr/data/
     network_mode: service:nordvpn # Route traffic through NordVPN
@@ -64,3 +100,6 @@ services:
     depends_on:
       - nginx
     restart: unless-stopped
+
+volumes:
+  bunqueue_data:

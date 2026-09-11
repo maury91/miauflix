@@ -1,6 +1,29 @@
 name: miauflix-dev
 
 services:
+  bunqueue:
+    image: ghcr.io/egeominotti/bunqueue:2.8.61
+    volumes:
+      - bunqueue_data:/app/data
+    ports:
+      - '127.0.0.1:6790:6790'
+
+  media-catalog:
+    build:
+      context: .
+      dockerfile: services/media-catalog/Dockerfile
+      target: development
+    environment:
+      DATA_DIR: /app/data
+      BUNQUEUE_HOST: bunqueue
+      BUNQUEUE_PORT: '6789'
+    ports:
+      - '127.0.0.1:3001:3001'
+    volumes:
+      # Hot reload: sources are bind-mounted (bun runs TypeScript directly)
+      - ./services/media-catalog/src:/workspace/services/media-catalog/src
+      - ./data:/app/data
+
   backend:
     build:
       context: .
@@ -17,6 +40,14 @@ services:
       # The frontend is served over Vite HTTPS, so auth cookies must be Secure.
       COOKIE_SECURE: 'true'
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: ${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
+      BUNQUEUE_HOST: bunqueue
+      BUNQUEUE_PORT: '6789'
+      CATALOG_SERVICE_URL: http://media-catalog:3001
+    depends_on:
+      bunqueue:
+        condition: service_healthy
+      media-catalog:
+        condition: service_started
     ports:
       - '127.0.0.1:5000:3000'
     volumes:
@@ -48,3 +79,6 @@ services:
     volumes:
       - ./.env:/usr/src/app/.env:ro
       - ./frontend:/usr/src/app/frontend
+
+volumes:
+  bunqueue_data:

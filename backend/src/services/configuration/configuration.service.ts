@@ -5,6 +5,7 @@ import path from 'path';
 
 import { ConfigurationServiceError } from '@errors/configuration.errors';
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
+import type { VariableInfo } from '@mytypes/configuration';
 import { ALL_VAR_NAMES, services } from '@services/configuration/configuration.consts';
 import { EncryptionService } from '@services/encryption/encryption.service';
 import { hasKey, objectEntries, objectFromEntries, objectKeys } from '@utils/object.util';
@@ -57,6 +58,8 @@ export class ConfigurationService {
   /** Raw string values: env snapshot + auto-generated + file-loaded + runtime set */
   private _rawValues = new Map<VariableName, string>();
   private _variablesInfo = new Map<VariableName, ExtendedVariableInfo>();
+  /** Names currently published by each runtime-registered service. */
+  private _dynamicVariableNames = new Map<ServiceName, Set<VariableName>>();
   /** Services that have self-registered with their live instance */
   private _registeredServices = new Map<ServiceName, ConfigurableService>();
   /** Serializes temporary config overlays so concurrent requests cannot see each other's drafts. */
@@ -116,6 +119,41 @@ export class ConfigurationService {
   }
 
   /**
+   * Registers runtime-declared variables (e.g. a remote service's published
+   * schema) after init(): snapshots env for them, re-reads persisted values from
+   * config.json — loadConfigFile skips unknown keys, so dynamic keys need a second
+   * pass once they are known — and precomputes their transforms.
+   */
+  registerDynamicVariables(
+    variables: Record<string, VariableInfo>,
+    serviceName: ServiceName
+  ): void {
+    const nextVariableNames = new Set(Object.keys(variables) as VariableName[]);
+    const previousVariableNames = this._dynamicVariableNames.get(serviceName) ?? new Set();
+
+    // Keep raw values and _fileData so a removed variable can recover its saved
+    // value if the remote service publishes it again later. It must not remain
+    // in either active metadata or computed values while absent from the schema.
+    for (const variableName of previousVariableNames) {
+      if (!nextVariableNames.has(variableName)) {
+        this._variablesInfo.delete(variableName);
+        delete (this._computedValues as Record<string, unknown>)[variableName];
+      }
+    }
+
+    const registeredVariableNames: VariableName[] = [];
+    for (const [name, info] of Object.entries(variables)) {
+      const variableName = name as VariableName;
+      this._variablesInfo.set(variableName, { ...info, serviceName });
+      registeredVariableNames.push(variableName);
+    }
+    this._dynamicVariableNames.set(serviceName, nextVariableNames);
+    this.autoConfigureDefaults(registeredVariableNames);
+    this.loadConfigFile();
+    this.precomputeValues();
+  }
+
+  /**
    * Return the pre-computed value for a config variable.
    * Will not throw, instead it will return undefined
    */
@@ -139,6 +177,11 @@ export class ConfigurationService {
       );
     }
     return value;
+  }
+
+  /** Runtime lookup for namespaced variables published by remote services. */
+  getDynamic(variable: string): unknown {
+    return (this._computedValues as Record<string, unknown>)[variable];
   }
 
   /**
@@ -175,9 +218,14 @@ export class ConfigurationService {
    * Snapshot process.env for all known variables and auto-generate skipUserInteraction defaults.
    * Called once at the top of init(), before anything else.
    */
-  private autoConfigureDefaults() {
+  private autoConfigureDefaults(
+    variableNames: Iterable<VariableName> = this._variablesInfo.keys()
+  ) {
     const autoConfigured = new Set<VariableName>();
-    for (const [varName, varInfo] of this._variablesInfo.entries()) {
+    for (const varName of variableNames) {
+      const varInfo = this._variablesInfo.get(varName);
+      if (!varInfo || this._rawValues.has(varName)) continue;
+
       // Coming from process.env, maximum precedence in this stage
       if (process.env[varName]) {
         this._rawValues.set(varName, process.env[varName]!);
@@ -650,23 +698,37 @@ export class ConfigurationService {
         }
 
         try {
-          liveTested.add(serviceName);
-          const previousStatus = instance.getStatus().status;
-          previousStatuses.set(serviceName, previousStatus);
-          logger.info(
-            'Config',
-            save
-              ? `Restarting ${serviceName} to validate the saved configuration (previous status: ${previousStatus})`
-              : `Testing ${serviceName} configuration (previous status: ${previousStatus})`
-          );
-          await instance.reload();
-          const ready = instance.getStatus().status === 'ready';
+          const observationalTest = !save ? instance.testConfiguration : undefined;
+          let ready: boolean;
+          let message: string | undefined;
+          if (observationalTest) {
+            logger.info(
+              'Config',
+              `Testing ${serviceName} configuration without applying the draft`
+            );
+            const test = await observationalTest.call(instance);
+            ready = test.success;
+            message = test.message;
+          } else {
+            liveTested.add(serviceName);
+            const previousStatus = instance.getStatus().status;
+            previousStatuses.set(serviceName, previousStatus);
+            logger.info(
+              'Config',
+              save
+                ? `Restarting ${serviceName} to validate the saved configuration (previous status: ${previousStatus})`
+                : `Testing ${serviceName} configuration (previous status: ${previousStatus})`
+            );
+            await instance.reload();
+            ready = instance.getStatus().status === 'ready';
+            message = ready ? undefined : this.serviceStatusMessage(serviceName);
+          }
           if (ready) {
             logger.info('Config', `${serviceName} configuration restart completed: ready`);
           } else {
             logger.warn(
               'Config',
-              `${serviceName} configuration restart completed without becoming ready: ${this.serviceStatusMessage(serviceName)}`
+              `${serviceName} configuration test failed: ${message ?? this.serviceStatusMessage(serviceName)}`
             );
           }
           results.push({
@@ -674,8 +736,8 @@ export class ConfigurationService {
             success: ready,
             testMode: 'live',
             message: ready
-              ? `${serviceName} test successful.`
-              : this.serviceStatusMessage(serviceName),
+              ? (message ?? `${serviceName} test successful.`)
+              : (message ?? this.serviceStatusMessage(serviceName)),
           });
         } catch (error) {
           results.push({
