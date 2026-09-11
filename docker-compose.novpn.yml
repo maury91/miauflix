@@ -3,6 +3,7 @@ services:
     image: ghcr.io/egeominotti/bunqueue:2.8.61
     volumes:
       - bunqueue_data:/app/data
+    restart: unless-stopped
 
   jaeger:
     image: jaegertracing/all-in-one:latest
