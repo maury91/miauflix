@@ -54,6 +54,27 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
+# Prepare the host-visible catalog data directory used by the Docker catalog
+# service. The image runs as linuxserver (UID/GID 911), so bind-mounted data
+# must be owned by that account before the container starts.
+ensure_catalog_data_dir() {
+  local project_dir="${1:-$(pwd)}"
+  local catalog_data_dir="${project_dir}/data/media-catalog"
+
+  mkdir -p "$catalog_data_dir"
+  if chown -R 911:911 "$catalog_data_dir" 2>/dev/null; then
+    return 0
+  fi
+
+  if command_exists sudo && sudo chown -R 911:911 "$catalog_data_dir"; then
+    return 0
+  fi
+
+  print_error "Cannot provision ${catalog_data_dir} for catalog UID/GID 911:911."
+  print_status "Run: sudo chown -R 911:911 ${catalog_data_dir}"
+  return 1
+}
+
 # Function to get the appropriate docker compose command
 get_docker_compose_cmd() {
   if command_exists "docker-compose"; then

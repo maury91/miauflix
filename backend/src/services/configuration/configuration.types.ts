@@ -23,7 +23,7 @@ export interface ConfigEntryView {
   description: string;
   required: boolean;
   hasValue: boolean;
-  inputType: 'boolean' | 'number' | 'size' | 'text' | 'time';
+  inputType: 'boolean' | 'number' | 'select' | 'size' | 'text' | 'time';
   booleanStateDescriptions?: { true: string; false: string };
   numberOptions?: {
     min?: number;
@@ -32,7 +32,11 @@ export interface ConfigEntryView {
   };
   sizeUnits?: string[];
   timeUnits?: string[];
+  options?: Record<string, string>;
   link?: string;
+  linkLabel?: string;
+  testRelevant?: boolean;
+  testFailureHelp?: string;
   example?: string;
 }
 

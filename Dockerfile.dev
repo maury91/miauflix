@@ -14,6 +14,8 @@ COPY frontend/package.json ./frontend/
 COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
 COPY packages/yts-sanitizer/package.json ./packages/yts-sanitizer/
 COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
+COPY packages/service-contracts/package.json ./packages/service-contracts/
+COPY services/media-catalog/package.json ./services/media-catalog/
 
 # Some workspace packages have prepare scripts that require their source. The
 # source is copied after dependency installation, so skip those scripts here.

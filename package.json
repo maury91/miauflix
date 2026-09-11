@@ -6,21 +6,21 @@
   "scripts": {
     "build:backend": "turbo run build build:client --filter=@miauflix/backend...",
     "build:frontend": "turbo run build --filter='./frontend'",
-    "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer'",
+    "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer' --filter='./packages/service-contracts'",
     "build": "turbo run build",
     "check:ts": "turbo run check:ts",
     "config-only": "npm run start:backend -- --only-config",
     "config-only:docker": "./scripts/docker-config.sh",
     "config": "npm run start:backend -- --config",
     "deploy:frontend": "./scripts/deploy-frontend.sh",
-    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" --names \"backend,frontend\" --prefix-colors \"blue,green\"",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:catalog\" --names \"backend,frontend,catalog\" --prefix-colors \"blue,green,yellow\"",
     "docker:build": "./scripts/docker-publish.sh latest build",
     "docker:cleanup": "./scripts/docker-publish.sh cleanup",
     "docker:deploy": "./scripts/docker-publish.sh latest deploy",
     "docker:list": "./scripts/docker-publish.sh list",
     "docker:push": "./scripts/docker-publish.sh latest push",
-    "format:check": "prettier --check \"{backend,backend-e2e,packages,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
-    "format": "prettier --write \"{backend,backend-e2e,packages,frontend,scripts}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
+    "format:check": "prettier --check \"{backend,backend-e2e,packages,frontend,scripts,services}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
+    "format": "prettier --write \"{backend,backend-e2e,packages,frontend,scripts,services}/**/*.{js,ts,tsx,json,css,scss,md}\" \"*.{js,ts,tsx,json,css,scss,md}\"",
     "lint:fix": "turbo run lint -- --fix",
     "lint": "turbo run lint",
     "prepare": "node -e \"if (process.env.NODE_ENV !== 'production' && !process.env.CI){ process.exit(1)} \" || (command -v husky >/dev/null 2>&1 && husky || true)",
@@ -30,6 +30,8 @@
     "start:backend:docker:prod:allow-initial-user": "ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true npm run start:backend:docker:prod",
     "start:backend:docker:prod": "./scripts/start-docker-prod.sh up -d --build miauflix",
     "start:backend:e2e": "backend-e2e/scripts/env.sh dev",
+    "start:catalog": "bun run --cwd services/media-catalog src/index.ts",
+    "start:catalog:watch": "bun --watch --cwd services/media-catalog src/index.ts",
     "start:backend:prod": "npm -w backend run start:prod",
     "start:backend": "npm -w backend start",
     "start:frontend:proxy-prod": "BACKEND_URL=http://localhost:5000 npm -w frontend run dev",
@@ -49,7 +51,7 @@
     "test:frontend:e2e": "backend-e2e/scripts/env.sh test --frontend-only",
     "test:frontend:visual:update": "npm -w frontend run test:visual:update",
     "test:frontend:visual": "npm -w frontend run test:visual",
-    "test": "turbo run test --filter='./backend' --filter='./frontend' --filter='./packages/*'"
+    "test": "turbo run test --filter='./backend' --filter='./frontend' --filter='./packages/*' --filter='./services/*'"
   },
   "dependencies": {
     "concurrently": "9.2.1"
@@ -95,6 +97,7 @@
     "frontend",
     "backend",
     "backend-e2e",
-    "packages/*"
+    "packages/*",
+    "services/*"
   ]
 }
