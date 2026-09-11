@@ -1,4 +1,13 @@
 services:
+  bunqueue:
+    image: ghcr.io/egeominotti/bunqueue:2.8.61
+    network_mode: service:vpn
+    depends_on:
+      - vpn
+    volumes:
+      - bunqueue_data:/app/data
+    restart: unless-stopped
+
   vpn:
     image: ghcr.io/bubuntux/nordlynx
     hostname: nordvpn
@@ -46,6 +55,28 @@ services:
       - flaresolver_config:/config
     restart: unless-stopped
 
+  media-catalog:
+    build:
+      context: .
+      dockerfile: services/media-catalog/Dockerfile
+    image: miauflix-media-catalog
+    container_name: miauflix-media-catalog
+    depends_on:
+      vpn:
+        condition: service_healthy
+    environment:
+      - DATA_DIR=/app/data
+      - BUNQUEUE_HOST=127.0.0.1
+      - BUNQUEUE_PORT=6789
+      # Optional bootstrap fallback only — the main app pushes the authoritative
+      # catalog configuration (including this token) once it has read config.json.
+      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-}
+      - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
+    volumes:
+      - ./data:/app/data/
+    network_mode: service:vpn # Reach the catalog provider through NordVPN
+    restart: unless-stopped
+
   miauflix:
     build:
       context: .
@@ -55,9 +86,13 @@ services:
     depends_on:
       vpn:
         condition: service_healthy
+      bunqueue:
+        condition: service_healthy
       flaresolverr:
         condition: service_started
       jaeger:
+        condition: service_started
+      media-catalog:
         condition: service_started
     environment:
       - DATA_DIR=/usr/data
@@ -73,6 +108,9 @@ services:
       - DEBUG=SourceService,DataResolver,DownloadService
       - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://localhost:8191}
       - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
+      - BUNQUEUE_HOST=127.0.0.1
+      - BUNQUEUE_PORT=6789
+      - CATALOG_SERVICE_URL=http://localhost:3001 # Same network namespace as media-catalog
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
       interval: 30s
@@ -127,6 +165,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  bunqueue_data:
   frontend_static:
     name: frontend_static
   flaresolver_config:

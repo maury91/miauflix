@@ -162,8 +162,9 @@ First command runs the configuration wizard (TMDB API key, etc.), then start the
 
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
 - [Node.js](https://nodejs.org/) (for local development)
+- [Bun](https://bun.sh/) (for local development — runs the media-catalog service)
 - VPN subscription (for VPN functionality, currently only NordVPN is supported)
-- [TMDB API Access Token](https://developer.themoviedb.org/docs) (for media content)
+- [TMDB API Access Token](https://developer.themoviedb.org/docs) (for media content — configured from the app UI/CLI; the media-catalog service consumes it)
 - [Trakt.tv API Client ID](https://trakt.tv/oauth/applications) (optional, for list synchronization)
 
 ### Setup

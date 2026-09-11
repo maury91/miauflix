@@ -1,0 +1,29 @@
+{
+  "name": "@miauflix/media-catalog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "test": "bun test",
+    "check:ts": "tsc --noEmit",
+    "lint": "eslint \"{src,tests}/**/*.ts\"",
+    "db:generate": "drizzle-kit generate",
+    "clean": "rm -rf node_modules"
+  },
+  "dependencies": {
+    "@miauflix/service-contracts": "*",
+    "bunqueue-client": "0.1.9",
+    "drizzle-orm": "^0.45.2"
+  },
+  "devDependencies": {
+    "bun-types": "^1.4.0",
+    "drizzle-kit": "^0.31.10",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "bun": ">=1.1.0"
+  }
+}

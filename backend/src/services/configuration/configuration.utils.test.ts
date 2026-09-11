@@ -285,7 +285,7 @@ describe('validateExistingConfiguration', () => {
 
   it('returns an empty array when all registered services are alive', async () => {
     const map = new Map<string, ConfigurableService>([
-      ['TMDB', makeMockService(true)],
+      ['CATALOG', makeMockService(true)],
       ['JWT', makeMockService(true)],
     ]);
     const result = await validateExistingConfiguration(map);
@@ -293,9 +293,9 @@ describe('validateExistingConfiguration', () => {
   });
 
   it('returns the service entry when the registered service is not ready after reload', async () => {
-    const map = new Map<string, ConfigurableService>([['TMDB', makeMockService(false)]]);
+    const map = new Map<string, ConfigurableService>([['CATALOG', makeMockService(false)]]);
     const result = await validateExistingConfiguration(map);
-    expect(result).toContainEqual({ serviceKey: 'TMDB', error: 'Not ready' });
+    expect(result).toContainEqual({ serviceKey: 'CATALOG', error: 'Not ready' });
   });
 
   it('returns the service entry with the reload error message on reload failure', async () => {
@@ -304,9 +304,9 @@ describe('validateExistingConfiguration', () => {
       getStatus: () => ({ status: 'error', errorMessage: 'not ready', error: null }),
       reload: jest.fn().mockRejectedValue(new Error('connection refused')),
     };
-    const map = new Map<string, ConfigurableService>([['TMDB', instance]]);
+    const map = new Map<string, ConfigurableService>([['CATALOG', instance]]);
     const result = await validateExistingConfiguration(map);
-    expect(result).toContainEqual({ serviceKey: 'TMDB', error: 'connection refused' });
+    expect(result).toContainEqual({ serviceKey: 'CATALOG', error: 'connection refused' });
   });
 });
 

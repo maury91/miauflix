@@ -29,16 +29,31 @@ If you need to configure manually or understand all available variables, create 
 
 ### Required Variables
 
-#### TMDB Integration (Required)
+#### Media Catalog Service (Required)
+
+The media catalog (TMDB today) runs as its own Bun service. It is configured from
+Miauflix's UI or CLI: values are stored encrypted in the backend's `config.json`
+and pushed to the service at startup. No catalog variable is required in `.env`,
+with one exception for deployments where the backend cannot reach the service
+before it is configured:
 
 ```bash
-# The Movie Database API - Required for movie/TV metadata
+# URL of the media catalog service (internal network). Default: http://localhost:3001
+CATALOG_SERVICE_URL=http://localhost:3001
+```
+
+Optional bootstrap fallback for the catalog service container itself (used only
+until the backend pushes the authoritative configuration):
+
+```bash
+# The Movie Database API access token - Required for movie/TV metadata
 TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
 ```
 
-- **Description**: Access token for TMDB API v3
+- **Description**: Access token for the catalog provider API (TMDB v3 today)
 - **Get from**: [TMDB API Settings](https://www.themoviedb.org/settings/api)
 - **Format**: JWT token starting with `eyJ`
+- **Precedence in the service**: backend push > environment > service-local file > default
 
 ### External API Integration
 

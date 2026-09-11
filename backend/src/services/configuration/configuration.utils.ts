@@ -403,7 +403,11 @@ function isSecretVariable(varInfo: VariableInfo): boolean {
 
 function getConfigInputMetadata(
   varInfo: VariableInfo
-): Pick<ConfigEntryView, 'inputType' | 'numberOptions' | 'sizeUnits' | 'timeUnits'> {
+): Pick<ConfigEntryView, 'inputType' | 'numberOptions' | 'options' | 'sizeUnits' | 'timeUnits'> {
+  if ('options' in varInfo && varInfo.options) {
+    return { inputType: 'select', options: { ...varInfo.options } };
+  }
+
   const metadata = 'transform' in varInfo ? varInfo.transform?.__configInput : undefined;
   if (!metadata) return { inputType: 'text' };
 
@@ -479,6 +483,9 @@ export function buildAllConfigs(rawValues: Map<VariableName, string>): ConfigEnt
         ...getConfigInputMetadata(varInfo),
         booleanStateDescriptions: varInfo.booleanStateDescriptions,
         link: varInfo.link,
+        linkLabel: varInfo.linkLabel,
+        testRelevant: varInfo.testRelevant,
+        testFailureHelp: varInfo.testFailureHelp,
         example: varInfo.example,
       });
     }

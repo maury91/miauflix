@@ -27,24 +27,37 @@ check_login() {
 # Build images
 build_images() {
     print_status "Building MiauFlix Docker image..."
-    
+
     export DOCKER_BUILDKIT=1
     print_status "Building and compiling backend image..."
     docker build -t "${REGISTRY}/${REPOSITORY}:${VERSION}" \
                  -t "${REGISTRY}/${REPOSITORY}:latest" \
                  -f Dockerfile .
-    
+
     print_status "Backend image built successfully!"
+
+    print_status "Building media catalog service image..."
+    docker build -t "${REGISTRY}/${REPOSITORY}-media-catalog:${VERSION}" \
+                 -t "${REGISTRY}/${REPOSITORY}-media-catalog:latest" \
+                 -f services/media-catalog/Dockerfile .
+
+    print_status "Media catalog service image built successfully!"
 }
 
 # Push images
 push_images() {
     print_status "Pushing image to GitHub Container Registry..."
-    
+
     # Push backend image
     docker push "${REGISTRY}/${REPOSITORY}:${VERSION}"
     if [ "$VERSION" != "latest" ]; then
         docker push "${REGISTRY}/${REPOSITORY}:latest"
+    fi
+
+    # Push media catalog service image
+    docker push "${REGISTRY}/${REPOSITORY}-media-catalog:${VERSION}"
+    if [ "$VERSION" != "latest" ]; then
+        docker push "${REGISTRY}/${REPOSITORY}-media-catalog:latest"
     fi
 }
 

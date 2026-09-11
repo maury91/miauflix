@@ -94,3 +94,32 @@ flowchart TB
 - **MediaService / ListService**: Enter the TMDB flow through `ContentCatalogService` rather than talking to `TMDBApi` directly.
 
 Implementation: `backend/src/services/content-catalog/tmdb/tmdb.service.ts` (via `backend/src/services/content-catalog/content-catalog.service.ts`).
+
+## Progressive ingestion and durable work
+
+Catalog synchronization is progressive and database-backed:
+
+- List pages are ingested as summary rows first. Full movie/show details are represented by a
+  nullable `detailsSyncedAt` timestamp and hydrated later by prioritized `media.hydrate` jobs.
+- Lists use ordered snapshot generations. A refresh builds a staging generation page by page and
+  changes `activeGeneration` only after the complete snapshot succeeds. A new installation may
+  publish a first-page bootstrap generation while the full snapshot is built.
+- List API pagination happens in SQLite; only the requested media rows, genres, and translations
+  are loaded.
+- Episodes are hydrated per season when requested instead of polling all incomplete seasons.
+- Catalog, list, source, source-metadata, source-statistics, and cache work use Bunqueue's
+  separate SQLite-backed broker. Typed queues are deduplicated, prioritized, leased with
+  heartbeats, retried with backoff, and scheduled persistently by the broker; failed work is kept
+  in its dead-letter queue. The legacy `BackgroundJob` table is retained only for one-release
+  compatibility and receives no new work.
+- Workers execute bounded entity/page jobs. List refreshes use a page fan-out followed by an
+  activation fan-in, and movie summaries use an ordered hydration-to-source-discovery flow.
+  Independent source metadata and statistics jobs are submitted in bulk rather than coupled.
+- HTTP cache misses never wait for queue execution: TMDB data, first-list bootstrap data, source
+  discovery, and source metadata required for streaming are resolved inline. Broker failures only
+  postpone follow-up enrichment and do not take request-time hydration offline.
+- TMDB list summaries keep discovery data current. Full details use a 24-hour TTL, eliminating the
+  global TMDB changes-feed scan and its per-ID database probes.
+
+The legacy list junctions, sync cursors, and interval configuration remain temporarily for an
+additive SQLite rollout, but runtime reads and background execution use snapshots and jobs.
