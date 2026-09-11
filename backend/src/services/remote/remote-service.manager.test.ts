@@ -1,3 +1,4 @@
+import { configureFakerSeed } from '@__test-utils__/utils';
 import { SERVICE_MANIFEST_PATH } from '@miauflix/service-contracts';
 import { z } from 'zod';
 
@@ -44,6 +45,10 @@ const setupTest = () => {
 };
 
 describe('RemoteServiceManager', () => {
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
   beforeEach(() => {
     jest.useFakeTimers();
   });

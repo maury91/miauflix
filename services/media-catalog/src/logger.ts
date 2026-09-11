@@ -30,17 +30,10 @@ const print = (severity: Severity, scope: string, message: string, ...metadata: 
 
   const timestamp = new Date().toISOString().replace('T', ' ').slice(5, 19);
   const formatted = `[${timestamp}] [${scope}] ${message}`;
-  const formattedMetadata = metadata.map(entry => {
-    if (entry instanceof Error) return entry;
-    try {
-      return ` ${JSON.stringify(entry)}`;
-    } catch {
-      return entry;
-    }
-  });
+  const formattedMetadata = metadata.map(entry => ` ${Bun.inspect(entry)}`).join('');
 
   const emit = (console[severity] as (...args: unknown[]) => void).bind(console);
-  emit(`${SEVERITY_COLORS[severity]}${formatted}\x1b[0m`, ...formattedMetadata);
+  emit(`${SEVERITY_COLORS[severity]}${formatted}${formattedMetadata}\x1b[0m`, ...metadata);
 };
 
 export const logger = {

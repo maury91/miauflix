@@ -1,3 +1,5 @@
+import { configureFakerSeed } from '@__test-utils__/utils';
+
 import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import type { RemoteServiceManager } from '@services/remote/remote-service.manager';
@@ -31,6 +33,18 @@ const setupTest = () => {
 };
 
 describe('CatalogClientService contract validation', () => {
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('uses the discovered capability path and encodes query values', async () => {
     const { client, remote } = setupTest();
     await expect(client.getMovie(603, 'pt-BR')).resolves.toEqual(movie);
