@@ -1,0 +1,35 @@
+{
+  "name": "@miauflix/service-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./management/v1": {
+      "types": "./src/management/v1.ts",
+      "default": "./dist/management/v1.js"
+    },
+    "./catalog/v1": {
+      "types": "./src/catalog/v1.ts",
+      "default": "./dist/catalog/v1.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check:ts": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint src/",
+    "test": "npm run build && node --test dist/contracts.test.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

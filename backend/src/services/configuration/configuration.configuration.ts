@@ -56,6 +56,73 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'true',
       transform: transforms.boolean(),
     }),
+    REFRESH_LISTS_INTERVAL: variable({
+      description: 'Interval in seconds between list refreshes',
+      required: false,
+      defaultValue: '3600',
+      example: '3600',
+      transform: transforms.number({ min: 1 }),
+    }),
+    SYNC_MOVIES_INTERVAL: variable({
+      description: 'Interval in seconds between TMDB movie synchronization runs',
+      required: false,
+      defaultValue: '5400',
+      example: '5400',
+      transform: transforms.number({ min: 1 }),
+    }),
+    SYNC_TV_SHOWS_INTERVAL: variable({
+      description: 'Interval in seconds between TMDB TV-show synchronization runs',
+      required: false,
+      defaultValue: '5400',
+      example: '5400',
+      transform: transforms.number({ min: 1 }),
+    }),
+    SYNC_INCOMPLETE_SEASONS_INTERVAL: variable({
+      description: 'Interval in seconds between incomplete-season synchronization runs',
+      required: false,
+      defaultValue: '1',
+      example: '1',
+      transform: transforms.number({ min: 0.1 }),
+    }),
+    MOVIE_SOURCE_SEARCH_INTERVAL: variable({
+      description: 'Interval in seconds between allocation-heavy movie source searches',
+      required: false,
+      defaultValue: '2',
+      example: '2',
+      transform: transforms.number({ min: 0.1 }),
+    }),
+    SOURCE_METADATA_SEARCH_INTERVAL: variable({
+      description: 'Interval in seconds between source metadata processing runs',
+      required: false,
+      defaultValue: '0.2',
+      example: '0.2',
+      transform: transforms.number({ min: 0.1 }),
+    }),
+    SOURCE_STATS_INTERVAL: variable({
+      description: 'Interval in seconds between source statistics updates',
+      required: false,
+      defaultValue: '2',
+      example: '2',
+      transform: transforms.number({ min: 0.1 }),
+    }),
+    CACHE_CLEANUP_INTERVAL: variable({
+      description: 'Interval in seconds between cache cleanup runs',
+      required: false,
+      defaultValue: '21600',
+      example: '21600',
+      transform: transforms.number({ min: 1 }),
+    }),
+    SCHEDULER_MEMORY_DIAGNOSTICS: variable({
+      description: 'Log scheduler task duration and process memory after each task execution',
+      booleanStateDescriptions: {
+        true: 'Scheduler memory diagnostics enabled',
+        false: 'Scheduler memory diagnostics disabled',
+      },
+      required: false,
+      defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
     ALLOW_CREATE_ADMIN_ON_FIRST_RUN: variable({
       description:
         'When enabled, the initial admin user is not automatically created on first run. ' +

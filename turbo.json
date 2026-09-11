@@ -79,6 +79,10 @@
         "src/**/*.test.tsx",
         "src/**/*.spec.ts",
         "src/**/*.spec.tsx",
+        "src/db/migrations/**/*.sql",
+        "src/db/migrations/meta/**/*.json",
+        "tests/**/*.{ts,tsx}",
+        "tests/fixtures/**/*",
         "jest.config.*",
         "jest.setup.ts",
         "vitest.config.*",
@@ -90,13 +94,14 @@
         "!**/*.e2e.spec.ts",
         "!**/*.e2e.test.ts"
       ],
-      "outputs": ["coverage/**"],
+      "outputs": [],
       "cache": true
     },
     "lint": {
       "inputs": [
         "src/**/*.ts",
         "src/**/*.tsx",
+        "tests/**/*.{ts,tsx}",
         ".eslintrc.*",
         "eslint.config.*",
         "../eslint.config.*",
@@ -109,7 +114,13 @@
       "cache": true
     },
     "check:ts": {
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "tsconfig*.json", "package.json"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "tests/**/*.{ts,tsx}",
+        "tsconfig*.json",
+        "package.json"
+      ],
       "outputs": [],
       "cache": true
     },

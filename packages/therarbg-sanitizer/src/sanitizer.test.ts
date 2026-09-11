@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 import { sanitize, sanitizeImdbData, sanitizeImdbDetail, sanitizePost } from './sanitizer';
 import type { SanitizationOptions, TheRARBGImdbData, TheRARBGPost } from './types';
 import { getLegalHashMetadata, shouldUseLegalHash } from './utils';
@@ -506,7 +508,7 @@ describe('Sanitizer Functions', () => {
       };
 
       // Should log warning and return unchanged
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
       const result = sanitize(unknownResponse);
 
       expect(result).toBe(unknownResponse);

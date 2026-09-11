@@ -10,13 +10,28 @@ import { EncryptionService } from '@services/encryption/encryption.service';
 
 import { ConfigurationService } from './configuration.service';
 
-const tmdbEntries = (token: string) => [
-  { key: 'TMDB_API_URL', value: 'https://api.themoviedb.org/3' },
-  { key: 'TMDB_API_ACCESS_TOKEN', value: token },
-  { key: 'EPISODE_SYNC_MODE', value: 'ON_DEMAND' },
+const clearEnvironmentVariable = jest.requireActual('../../../test-utils/environment')
+  .clearEnvironmentVariable as (name: string) => () => void;
+
+const catalogEntries = (url: string) => [
+  { key: 'CATALOG_SERVICE_URL', value: url },
+  { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '60000' },
 ];
 
-function setupLiveTmdb() {
+const dynamicVariableName = 'DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST';
+let restoreDynamicVariable: (() => void) | undefined;
+
+const setupTest = () => {
+  restoreDynamicVariable = clearEnvironmentVariable(dynamicVariableName);
+  return new ConfigurationService();
+};
+
+afterEach(() => {
+  restoreDynamicVariable?.();
+  restoreDynamicVariable = undefined;
+});
+
+function setupLiveCatalog() {
   const configuration = new ConfigurationService();
   let status: ServiceInstanceStatus = {
     status: 'error',
@@ -27,14 +42,14 @@ function setupLiveTmdb() {
     testable: true,
     getStatus: () => status,
     reload: jest.fn(async () => {
-      const token = configuration.get('TMDB_API_ACCESS_TOKEN');
+      const url = configuration.get('CATALOG_SERVICE_URL');
       status =
-        token === 'valid-token'
+        url === 'http://catalog:3001'
           ? { status: 'ready' }
-          : { status: 'error', errorMessage: 'Invalid TMDB token', error: null };
+          : { status: 'error', errorMessage: 'Catalog is unreachable', error: null };
     }),
   };
-  configuration.registerService('TMDB', instance);
+  configuration.registerService('CATALOG', instance);
   return { configuration, instance };
 }
 
@@ -42,10 +57,10 @@ describe('ConfigurationService web configuration actions', () => {
   it('decrypts encrypted values when loading config.json', () => {
     const configuration = new ConfigurationService();
     const encryption = new EncryptionService(Buffer.alloc(32, 1).toString('base64'));
-    const encryptedToken = encryption.encryptString('saved-tmdb-token');
+    const encryptedToken = encryption.encryptString('saved-trakt-client-id');
     const readConfigFile = jest.mocked(readFileSync);
     readConfigFile.mockReturnValue(
-      JSON.stringify({ TMDB_API_ACCESS_TOKEN: `enc:${encryptedToken}` }) as never
+      JSON.stringify({ TRAKT_CLIENT_ID: `enc:${encryptedToken}` }) as never
     );
     Reflect.set(configuration, '_filePath', '/tmp/config.json');
     Reflect.set(configuration, '_encryptionService', encryption);
@@ -53,62 +68,141 @@ describe('ConfigurationService web configuration actions', () => {
     Reflect.apply(Reflect.get(configuration, 'loadConfigFile') as () => void, configuration, []);
 
     const rawValues = Reflect.get(configuration, '_rawValues') as Map<string, string>;
-    expect(rawValues.get('TMDB_API_ACCESS_TOKEN')).toBe('saved-tmdb-token');
+    expect(rawValues.get('TRAKT_CLIENT_ID')).toBe('saved-trakt-client-id');
   });
 
   it('ignores an encrypted value that cannot be decrypted', () => {
     const configuration = new ConfigurationService();
     const encryption = new EncryptionService(Buffer.alloc(32, 1).toString('base64'));
     const differentEncryption = new EncryptionService(Buffer.alloc(32, 2).toString('base64'));
-    const encryptedToken = differentEncryption.encryptString('saved-tmdb-token');
+    const encryptedToken = differentEncryption.encryptString('saved-trakt-client-id');
     const readConfigFile = jest.mocked(readFileSync);
     readConfigFile.mockReturnValue(
-      JSON.stringify({ TMDB_API_ACCESS_TOKEN: `enc:${encryptedToken}` }) as never
+      JSON.stringify({ TRAKT_CLIENT_ID: `enc:${encryptedToken}` }) as never
     );
     Reflect.set(configuration, '_filePath', '/tmp/config.json');
     Reflect.set(configuration, '_encryptionService', encryption);
     const rawValues = Reflect.get(configuration, '_rawValues') as Map<string, string>;
-    rawValues.set('TMDB_API_ACCESS_TOKEN', 'environment-token');
+    rawValues.set('TRAKT_CLIENT_ID', 'environment-token');
 
     Reflect.apply(Reflect.get(configuration, 'loadConfigFile') as () => void, configuration, []);
 
-    expect(rawValues.get('TMDB_API_ACCESS_TOKEN')).toBe('environment-token');
+    expect(rawValues.get('TRAKT_CLIENT_ID')).toBe('environment-token');
+  });
+
+  it('applies a non-empty default to an absent optional dynamic string', () => {
+    const configuration = setupTest();
+
+    configuration.registerDynamicVariables(
+      {
+        [dynamicVariableName]: {
+          description: 'Optional dynamic string',
+          required: false,
+          defaultValue: 'dynamic-default',
+        },
+      },
+      'CATALOG'
+    );
+
+    expect(configuration.getDynamic(dynamicVariableName)).toBe('dynamic-default');
+  });
+
+  it('removes dynamic variables omitted from a rediscovered schema', () => {
+    const configuration = setupTest();
+
+    configuration.registerDynamicVariables(
+      {
+        CATALOG__RETAINED: { description: 'Retained', required: false, defaultValue: 'yes' },
+        CATALOG__REMOVED: { description: 'Removed', required: false, defaultValue: 'no' },
+      },
+      'CATALOG'
+    );
+    configuration.registerDynamicVariables(
+      { CATALOG__RETAINED: { description: 'Retained', required: false, defaultValue: 'yes' } },
+      'CATALOG'
+    );
+
+    expect(configuration.getDynamic('CATALOG__RETAINED')).toBe('yes');
+    expect(configuration.getDynamic('CATALOG__REMOVED')).toBeUndefined();
   });
 
   it('tests values transiently and restores the previous runtime configuration', async () => {
-    const { configuration, instance } = setupLiveTmdb();
+    const { configuration, instance } = setupLiveCatalog();
 
-    const result = await configuration.testServiceConfigs('TMDB', tmdbEntries('valid-token'));
+    const result = await configuration.testServiceConfigs(
+      'CATALOG',
+      catalogEntries('http://catalog:3001')
+    );
 
     expect(result).toEqual({
       success: true,
-      services: [expect.objectContaining({ service: 'TMDB', success: true, testMode: 'live' })],
+      services: [expect.objectContaining({ service: 'CATALOG', success: true, testMode: 'live' })],
     });
-    expect(configuration.get('TMDB_API_ACCESS_TOKEN')).toBeUndefined();
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBeUndefined();
     expect(instance.reload).toHaveBeenCalledTimes(2);
   });
 
-  it('keeps successful saved values active without restoring the draft', async () => {
-    const { configuration, instance } = setupLiveTmdb();
+  it('uses an observational configuration test when the service provides one', async () => {
+    const configuration = new ConfigurationService();
+    const testConfiguration = jest.fn().mockResolvedValue({
+      success: true,
+      message: 'Catalog provider is reachable',
+    });
+    const instance: ConfigurableService & { testConfiguration: typeof testConfiguration } = {
+      testable: true,
+      getStatus: () => ({ status: 'error', errorMessage: 'not configured', error: null }),
+      reload: jest.fn().mockResolvedValue(undefined),
+      testConfiguration,
+    };
+    configuration.registerService('CATALOG', instance);
 
-    const result = await configuration.saveServiceConfigs('TMDB', tmdbEntries('valid-token'));
+    const result = await configuration.testServiceConfigs(
+      'CATALOG',
+      catalogEntries('http://catalog:3001')
+    );
+
+    expect(result).toEqual({
+      success: true,
+      services: [
+        expect.objectContaining({
+          service: 'CATALOG',
+          success: true,
+          testMode: 'live',
+          message: 'Catalog provider is reachable',
+        }),
+      ],
+    });
+    expect(testConfiguration).toHaveBeenCalledTimes(1);
+    expect(instance.reload).not.toHaveBeenCalled();
+  });
+
+  it('keeps successful saved values active without restoring the draft', async () => {
+    const { configuration, instance } = setupLiveCatalog();
+
+    const result = await configuration.saveServiceConfigs(
+      'CATALOG',
+      catalogEntries('http://catalog:3001')
+    );
 
     expect(result.success).toBe(true);
-    expect(result.changed).toEqual(['TMDB']);
-    expect(result.restarted).toEqual(['TMDB']);
-    expect(result.recovered).toEqual([{ service: 'TMDB', previousStatus: 'error' }]);
-    expect(configuration.get('TMDB_API_ACCESS_TOKEN')).toBe('valid-token');
+    expect(result.changed).toEqual(['CATALOG']);
+    expect(result.restarted).toEqual(['CATALOG']);
+    expect(result.recovered).toEqual([{ service: 'CATALOG', previousStatus: 'error' }]);
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog:3001');
     expect(instance.reload).toHaveBeenCalledTimes(1);
   });
 
   it('does not retain values when a live save test fails', async () => {
-    const { configuration, instance } = setupLiveTmdb();
+    const { configuration, instance } = setupLiveCatalog();
 
-    const result = await configuration.saveServiceConfigs('TMDB', tmdbEntries('bad-token'));
+    const result = await configuration.saveServiceConfigs(
+      'CATALOG',
+      catalogEntries('http://bad:1')
+    );
 
     expect(result.success).toBe(false);
     expect(result.changed).toEqual([]);
-    expect(configuration.get('TMDB_API_ACCESS_TOKEN')).toBeUndefined();
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBeUndefined();
     expect(instance.reload).toHaveBeenCalledTimes(2);
   });
 
@@ -132,16 +226,16 @@ describe('ConfigurationService web configuration actions', () => {
   });
 
   it('rolls back every service when one global validation fails', async () => {
-    const { configuration } = setupLiveTmdb();
+    const { configuration } = setupLiveCatalog();
 
     const result = await configuration.testAndSaveConfigs([
-      ...tmdbEntries('valid-token'),
+      ...catalogEntries('http://catalog:3001'),
       { key: 'STORAGE_THRESHOLD', value: 'not-a-size' },
     ]);
 
     expect(result.success).toBe(false);
     expect(result.changed).toEqual([]);
-    expect(configuration.get('TMDB_API_ACCESS_TOKEN')).toBeUndefined();
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBeUndefined();
     expect(configuration.get('STORAGE_THRESHOLD')).toBeUndefined();
   });
 });

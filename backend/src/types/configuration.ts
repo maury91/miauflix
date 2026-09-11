@@ -6,6 +6,12 @@ export type BaseVariableInfo = {
   booleanStateDescriptions?: { true: string; false: string };
   example?: string;
   link?: string;
+  /** Clear call to action shown beside a link in the configuration wizard. */
+  linkLabel?: string;
+  /** Whether this value is used by the service connectivity test. */
+  testRelevant?: boolean;
+  /** User-facing troubleshooting hint shown if the service test fails. */
+  testFailureHelp?: string;
   required: boolean;
 };
 
@@ -67,6 +73,8 @@ export type ConfigurableService = {
   testable: boolean;
   getStatus(): ServiceInstanceStatus;
   reload(): Promise<void>;
+  /** Optional non-mutating probe used for draft configuration validation. */
+  testConfiguration?(): Promise<{ success: boolean; message: string }>;
 };
 
 export type ConfigService = {
