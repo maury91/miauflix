@@ -115,6 +115,38 @@ describe('CatalogConfigService', () => {
     rmSync(dataDir, { recursive: true, force: true });
   });
 
+  it('promotes only after activation and ignores stale pending configuration on startup', async () => {
+    const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
+    const config = new CatalogConfigService(dataDir, {});
+    config.registerProber(prober(true));
+    await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'known-good-token' });
+    const previousFile = readFileSync(join(dataDir, 'catalog.config.json'), 'utf8');
+    let fileDuringActivation = '';
+
+    config.registerProber({
+      test: async () => ({ success: true, message: 'provider ready' }),
+      activate: async () => {
+        fileDuringActivation = readFileSync(join(dataDir, 'catalog.config.json'), 'utf8');
+        return { success: true, message: 'provider ready' };
+      },
+    });
+
+    await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'candidate-token' });
+
+    expect(fileDuringActivation).toBe(previousFile);
+    expect(JSON.parse(readFileSync(join(dataDir, 'catalog.config.json'), 'utf8')).values).toEqual({
+      TMDB_API_ACCESS_TOKEN: 'candidate-token',
+    });
+
+    writeFileSync(
+      join(dataDir, 'catalog.config.json.pending'),
+      JSON.stringify({ values: { TMDB_API_ACCESS_TOKEN: 'stale-candidate' } })
+    );
+    const restarted = new CatalogConfigService(dataDir, {});
+    expect(restarted.resolve('TMDB_API_ACCESS_TOKEN')).toBe('candidate-token');
+    rmSync(dataDir, { recursive: true, force: true });
+  });
+
   it('does not activate or become ready when configuration persistence fails', async () => {
     const dataPath = join(tmpdir(), `catalog-config-file-${Date.now()}`);
     writeFileSync(dataPath, 'not a directory');

@@ -4,6 +4,7 @@ import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
 import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
+import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
 import type {
   BatchResponse,
@@ -19,6 +20,7 @@ import { CatalogLocalizer } from './catalog.localizer';
 import { CatalogSynchronizer } from './catalog.syncer';
 
 const oneHourMs = 36e5;
+const SCOPE = 'CatalogService';
 
 export interface CatalogValues {
   /** Refresh details older than this (ms). */
@@ -107,8 +109,9 @@ export class CatalogService {
           return { detail };
         } catch (error) {
           if (error instanceof HttpError && error.status === 404) return { ref };
+          logger.error(SCOPE, `Batch item failed for ${ref.mediaType} ${ref.mediaId}`, error);
           return {
-            error: { ref, message: error instanceof Error ? error.message : String(error) },
+            error: { ref, message: 'catalog_batch_item_failed' },
           };
         }
       })

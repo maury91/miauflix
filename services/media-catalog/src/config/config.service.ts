@@ -1,4 +1,4 @@
-import { chmodSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { logger } from '../logger';
@@ -182,21 +182,39 @@ export class CatalogConfigService {
 
       const previousPushed = { ...this.pushedValues };
       const previousFile = { ...this.fileValues };
-      this.persistFile(candidatePushed, candidateFile);
+      this.persistFile(this.pendingFilePath, candidatePushed, candidateFile);
 
       const test = await this.probe(this.resolvedValuesFrom(candidatePushed, candidateFile), {
         mutateState: false,
         activate: true,
       });
       if (!test.success) {
-        try {
-          this.persistFile(previousPushed, previousFile);
-        } catch (error) {
-          this._state = 'error';
-          this._errorMessage = error instanceof Error ? error.message : String(error);
-          logger.error(SCOPE, 'Could not roll back persisted configuration', error);
-        }
+        this.removePendingFile();
         return { success: false, reloaded: false, test };
+      }
+
+      try {
+        renameSync(this.pendingFilePath, this.filePath);
+      } catch (error) {
+        logger.error(SCOPE, 'Could not promote candidate configuration', error);
+        const restored = await this.probe(this.resolvedValuesFrom(previousPushed, previousFile), {
+          mutateState: false,
+          activate: true,
+        });
+        if (!restored.success) {
+          this._state = 'error';
+          this._errorMessage = 'Could not restore the previous catalog configuration';
+          logger.error(SCOPE, 'Could not restore previous catalog configuration', restored);
+        }
+        return {
+          success: false,
+          reloaded: false,
+          test: {
+            success: false,
+            mode: 'live',
+            message: 'Could not persist the activated catalog configuration',
+          },
+        };
       }
 
       this.replaceValues(this.pushedValues, candidatePushed);
@@ -348,8 +366,9 @@ export class CatalogConfigService {
     }
   }
 
-  /** Atomic write of the merged last-known-good values (standalone fallback). */
+  /** Atomic write of a configuration candidate or last-known-good values. */
   private persistFile(
+    targetPath: string = this.filePath,
     pushedValues: Record<string, string> = this.pushedValues,
     fileValues: Record<string, string> = this.fileValues
   ): void {
@@ -357,9 +376,23 @@ export class CatalogConfigService {
     const payload: StoredValues = {
       values: { ...fileValues, ...this.applicableValues(pushedValues) },
     };
-    const tmpPath = `${this.filePath}.tmp`;
+    const tmpPath = `${targetPath}.tmp`;
     writeFileSync(tmpPath, JSON.stringify(payload, null, 2));
     chmodSync(tmpPath, 0o600);
-    renameSync(tmpPath, this.filePath);
+    renameSync(tmpPath, targetPath);
+  }
+
+  private get pendingFilePath(): string {
+    return `${this.filePath}.pending`;
+  }
+
+  private removePendingFile(): void {
+    try {
+      unlinkSync(this.pendingFilePath);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+        logger.warn(SCOPE, 'Could not remove rejected catalog configuration candidate', error);
+      }
+    }
   }
 }

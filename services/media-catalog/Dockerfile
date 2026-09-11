@@ -36,8 +36,8 @@ COPY --from=builder /tmp/media-catalog.js ./index.js
 COPY --from=builder /workspace/services/media-catalog/src/db/migrations ./migrations
 
 ENV DATA_DIR=/app/data
-RUN groupadd --system linuxserver && \
-    useradd --system --gid linuxserver --create-home --shell /usr/sbin/nologin linuxserver && \
+RUN groupadd --gid 911 linuxserver && \
+    useradd --uid 911 --gid 911 --create-home --shell /usr/sbin/nologin linuxserver && \
     mkdir -p /app/data && \
     chown -R linuxserver:linuxserver /app/data
 VOLUME /app/data

@@ -17,6 +17,7 @@ import { episodes, listPages, movies, tvShows } from '../src/db/schema';
 import { SyncStateRepository } from '../src/db/sync-state.repo';
 import { TVShowRepository } from '../src/db/tv-show.repo';
 import { HttpError } from '../src/errors';
+import { logger } from '../src/logger';
 import type {
   CatalogProvider,
   ProviderChangesPage,
@@ -465,15 +466,24 @@ describe('CatalogService', () => {
   it('propagates provider failures from batch reads', async () => {
     const { provider, service, cleanup } = setup();
     provider.failingMovies.add(605);
+    const errorLog = spyOn(logger, 'error').mockImplementation(() => {});
 
-    await expect(
-      service.batch([{ mediaType: 'movie', mediaId: 605 }], 'en')
-    ).resolves.toMatchObject({
-      items: [],
-      missing: [],
-      errors: [{ ref: { mediaType: 'movie', mediaId: 605 }, error: 'upstream down' }],
-    });
-    cleanup();
+    try {
+      const result = await service.batch([{ mediaType: 'movie', mediaId: 605 }], 'en');
+      expect(result).toMatchObject({
+        items: [],
+        missing: [],
+        errors: [{ ref: { mediaType: 'movie', mediaId: 605 }, error: 'catalog_batch_item_failed' }],
+      });
+      expect(errorLog).toHaveBeenCalledWith(
+        'CatalogService',
+        'Batch item failed for movie 605',
+        expect.objectContaining({ message: 'upstream down' })
+      );
+    } finally {
+      errorLog.mockRestore();
+      cleanup();
+    }
   });
 
   it('caches list pages and serves definitions', async () => {
