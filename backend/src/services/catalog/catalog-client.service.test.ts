@@ -26,6 +26,7 @@ const setupTest = () => {
   const client = new CatalogClientService({} as ConfigurationService);
   const remote = (client as unknown as { remote: RemoteServiceManager }).remote;
   jest.spyOn(remote, 'capabilityBasePath', 'get').mockReturnValue('/v1/catalog');
+  jest.spyOn(remote, 'isReady').mockReturnValue(true);
   jest
     .spyOn(remote, 'request')
     .mockImplementation(async (schema, path) => schema.parse(path.includes('broken') ? {} : movie));

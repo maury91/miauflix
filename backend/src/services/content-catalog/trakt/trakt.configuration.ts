@@ -9,6 +9,7 @@ export const traktConfigurationDefinition = serviceConfiguration({
       example: 'https://api.trakt.tv',
       defaultValue: 'https://api.trakt.tv',
       required: false,
+      advanced: true,
       testRelevant: true,
       testFailureHelp: 'The URL may be incorrect, or Trakt may be temporarily unavailable.',
       transform: transforms.url(),

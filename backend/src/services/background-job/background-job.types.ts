@@ -1,3 +1,5 @@
+import type { CatalogJobPayloads } from '@miauflix/service-contracts';
+
 export interface BackgroundJobPayloads {
   'list.refresh.plan': { slug: string; maxPages: number };
   'list.page.stage': {
@@ -14,7 +16,18 @@ export interface BackgroundJobPayloads {
   'cache.cleanup': Record<string, never>;
 }
 
-export type BackgroundJobName = keyof BackgroundJobPayloads;
+export type AllBackgroundJobPayloads = BackgroundJobPayloads & CatalogJobPayloads;
+
+export type BackgroundJobName = keyof AllBackgroundJobPayloads;
+
+export type BackgroundJobSchedule<K extends BackgroundJobName = BackgroundJobName> = {
+  job: K;
+  id: string;
+  intervalSeconds: number;
+  payload: AllBackgroundJobPayloads[K];
+  priority?: number;
+  runOnStart?: boolean;
+};
 
 /**
  * Catalog maintenance jobs (hydration, change scans, season sync) are consumed by
@@ -30,4 +43,7 @@ export const BACKGROUND_JOB_QUEUES: Record<BackgroundJobName, string> = {
   'source.metadata': 'miauflix-source-metadata',
   'source.stats': 'miauflix-source-stats',
   'cache.cleanup': 'miauflix-maintenance',
+  'catalog.movie-changes.scan': 'miauflix-catalog-movie-changes',
+  'catalog.show-changes.scan': 'miauflix-catalog-show-changes',
+  'catalog.season-sync.seed': 'miauflix-catalog-season-sync',
 };

@@ -11,6 +11,8 @@ services:
       - NODE_ENV=development
       - RATE_LIMIT_TEST_MODE=true
       - CATALOG_SERVICE_URL=http://media-catalog:3001
+      - CATALOG__TMDB_API_URL=http://tmdb-mock/3
+      - CATALOG__TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
       - YTS_API_URL=http://yts-mock
       - TRAKT_API_URL=http://trakt-mock
       - THE_RARBG_API_URL=http://therarbg-mock
@@ -94,7 +96,7 @@ services:
       - DATA_DIR=/app/data
       - API_BASE_URL=https://api.themoviedb.org/3
       - API_AUTH_HEADER_IS_BEARER=true
-      - API_KEY=$TMDB_API_ACCESS_TOKEN
+      - API_KEY=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s

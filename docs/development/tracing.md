@@ -14,7 +14,7 @@ With tracing disabled, the SDK is not started and there is no overhead.
 
 ## Finding traces
 
-- **From logs**: When a scheduled task runs, the scheduler logs the trace ID and trace file path at debug level (e.g. `Trace ID for task 'refreshLists': <id> (trace file: ...)`). Use that path to open the trace file.
+- **From logs**: Bunqueue job names identify recurring work (`source.discover`, `list.refresh.plan`, and similar). Service methods executed by those jobs emit their own spans.
 - **From the index**: The index lists every trace (HTTP and background tasks) with type (`http` or `task`), name (e.g. task name or HTTP path), and start time. Grep or use the trace CLI.
 - **Trace CLI**: From the repo root:
   - `npm run traces -- list [N]` — list the N most recent traces (default 20).
@@ -28,7 +28,7 @@ With tracing disabled, the SDK is not started and there is no overhead.
 - **Ad-hoc spans**: Use `withSpan('spanName', async () => { ... }, { 'attr.key': value })` for a child span with attributes.
 - **Events on the current span**: Call `TracingUtil.addEvent('eventName', { key: value })` from `@utils/tracing.util` (e.g. “page_fetched” with page number). Only primitive attribute values are supported.
 
-Background tasks (scheduler) get a root span automatically (`task.<taskName>`). Child spans and events (e.g. per-list in list sync) are created with `withSpan` and `TracingUtil.addEvent`.
+Background job handlers should use the same `@traced` and `withSpan` helpers as request-path code. Child spans and events (for example, per-list sync work) are created with `withSpan` and `TracingUtil.addEvent`.
 
 ## OTLP and Jaeger (optional)
 

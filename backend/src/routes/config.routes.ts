@@ -44,9 +44,7 @@ export const createConfigRoutes = (deps: Deps) => {
             );
           }
 
-          const result = await deps.configurationService.testAndSaveConfigs(entries);
-          if (result.success) deps.scheduler.notifyServicesRecovered(result.recovered);
-          return c.json(result);
+          return c.json(await deps.configurationService.testAndSaveConfigs(entries));
         }
       )
 
@@ -78,9 +76,7 @@ export const createConfigRoutes = (deps: Deps) => {
             return c.json({ error: `Service '${serviceParam}' does not exist` }, 404);
           }
           const { entries } = c.req.valid('json');
-          const result = await deps.configurationService.saveServiceConfigs(serviceParam, entries);
-          if (result.success) deps.scheduler.notifyServicesRecovered(result.recovered);
-          return c.json(result);
+          return c.json(await deps.configurationService.saveServiceConfigs(serviceParam, entries));
         }
       )
 
@@ -89,9 +85,8 @@ export const createConfigRoutes = (deps: Deps) => {
         const serviceParam = c.req.param('service').toUpperCase();
 
         try {
-          const recovery = await deps.configurationService.restartService(serviceParam);
+          await deps.configurationService.restartService(serviceParam);
           const status = deps.configurationService.getServiceStatuses()[serviceParam];
-          if (recovery) deps.scheduler.notifyServicesRecovered([recovery]);
           return c.json({ success: true, status });
         } catch (e) {
           if (e instanceof ConfigurationServiceError) {

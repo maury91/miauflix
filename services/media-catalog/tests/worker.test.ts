@@ -1,57 +1,32 @@
 import { describe, expect, it, mock } from 'bun:test';
 
-const installedSchedules: Array<{ scheduleId: string; every: number }> = [];
-const queues: FakeQueue[] = [];
 let workerCount = 0;
-let schedulerGate: Promise<void> | undefined;
+let processors: Array<(_job: unknown) => Promise<void>> = [];
 
 class FakeQueue {
-  closed = false;
-
-  constructor(_name: string, _connection: unknown) {
-    queues.push(this);
-  }
-
-  async upsertJobScheduler(scheduleId: string, scheduler: { every: number }): Promise<void> {
-    installedSchedules.push({ scheduleId, every: scheduler.every });
-    await schedulerGate;
-  }
-
-  async removeJobScheduler(): Promise<void> {}
-
-  close(): void {
-    this.closed = true;
-  }
+  close(): void {}
 }
-
 class FakeWorker {
-  constructor(_queue: string, _handler: unknown, _options: unknown) {
+  constructor(_queue: string, handler: (_job: unknown) => Promise<void>) {
     workerCount++;
+    processors.push(handler);
   }
-
   on(): void {}
-
   async close(): Promise<void> {}
 }
-
 mock.module('bunqueue-client', () => ({ Queue: FakeQueue, Worker: FakeWorker }));
 
-const waitFor = async (predicate: () => boolean): Promise<void> => {
-  for (let attempt = 0; attempt < 100; attempt++) {
-    if (predicate()) return;
-    await new Promise(resolve => setTimeout(resolve, 1));
-  }
-  throw new Error('Timed out waiting for catalog schedules');
-};
-
 describe('CatalogWorkerManager', () => {
-  it('keeps workers idempotent while refreshing persisted schedules on later starts', async () => {
-    installedSchedules.length = 0;
-    queues.length = 0;
+  it('creates workers without installing schedules and skips jobs while unready', async () => {
     workerCount = 0;
-    schedulerGate = undefined;
+    processors = [];
     const { CatalogWorkerManager } = await import('../src/workers/worker');
-    let intervalS = 60;
+    let ready = true;
+    const catalog = {
+      syncMovies: mock(() => Promise.resolve()),
+      syncTVShows: mock(() => Promise.resolve()),
+      syncIncompleteSeasons: mock(() => Promise.resolve()),
+    };
     const manager = new CatalogWorkerManager(
       {
         host: '127.0.0.1',
@@ -60,101 +35,15 @@ describe('CatalogWorkerManager', () => {
         disableBackgroundTasks: false,
         bunqueue: { host: '127.0.0.1', port: 6789 },
       },
-      () => null,
-      () => String(intervalS)
+      () => (ready ? catalog : null) as never
     );
-
     manager.start();
-    await waitFor(() => installedSchedules.length === 3);
-    expect(installedSchedules).toEqual(
-      expect.arrayContaining([
-        { scheduleId: 'catalog-movie-changes', every: 60_000 },
-        { scheduleId: 'catalog-show-changes', every: 60_000 },
-        { scheduleId: 'catalog-season-sync', every: 60_000 },
-      ])
-    );
-
-    intervalS = 120;
-    manager.start();
-    await waitFor(() => installedSchedules.length === 6);
-
-    expect(installedSchedules.slice(3)).toEqual([
-      { scheduleId: 'catalog-movie-changes', every: 120_000 },
-      { scheduleId: 'catalog-show-changes', every: 120_000 },
-      { scheduleId: 'catalog-season-sync', every: 120_000 },
-    ]);
     expect(workerCount).toBe(3);
+    await processors[0]?.({ raw: { name: 'catalog.movie-changes.scan' } });
+    expect(catalog.syncMovies).toHaveBeenCalledTimes(1);
+    ready = false;
+    await processors[0]?.({ raw: { name: 'catalog.movie-changes.scan' } });
+    expect(catalog.syncMovies).toHaveBeenCalledTimes(1);
     await manager.stop();
-  });
-
-  it('coalesces refresh requests that arrive while schedules are being installed', async () => {
-    installedSchedules.length = 0;
-    queues.length = 0;
-    workerCount = 0;
-    const gate = Promise.withResolvers<void>();
-    schedulerGate = gate.promise;
-    const { CatalogWorkerManager } = await import('../src/workers/worker');
-    let intervalS = 60;
-    const manager = new CatalogWorkerManager(
-      {
-        host: '127.0.0.1',
-        port: 3001,
-        dataDir: '/tmp/catalog',
-        disableBackgroundTasks: false,
-        bunqueue: { host: '127.0.0.1', port: 6789 },
-      },
-      () => null,
-      () => String(intervalS)
-    );
-
-    manager.start();
-    await waitFor(() => installedSchedules.length === 1);
-    intervalS = 120;
-    manager.start();
-    manager.start();
-    gate.resolve();
-
-    await waitFor(() => installedSchedules.length === 6);
-    expect(installedSchedules).toHaveLength(6);
-    expect(installedSchedules.slice(-3)).toEqual([
-      { scheduleId: 'catalog-movie-changes', every: 120_000 },
-      { scheduleId: 'catalog-show-changes', every: 120_000 },
-      { scheduleId: 'catalog-season-sync', every: 120_000 },
-    ]);
-    expect(workerCount).toBe(3);
-    schedulerGate = undefined;
-    await manager.stop();
-  });
-
-  it('waits for an in-flight schedule install before closing queues', async () => {
-    installedSchedules.length = 0;
-    queues.length = 0;
-    const gate = Promise.withResolvers<void>();
-    schedulerGate = gate.promise;
-    const { CatalogWorkerManager } = await import('../src/workers/worker');
-    const manager = new CatalogWorkerManager(
-      {
-        host: '127.0.0.1',
-        port: 3001,
-        dataDir: '/tmp/catalog',
-        disableBackgroundTasks: false,
-        bunqueue: { host: '127.0.0.1', port: 6789 },
-      },
-      () => null,
-      () => '60'
-    );
-
-    manager.start();
-    await waitFor(() => installedSchedules.length === 1);
-    const stopping = manager.stop();
-    await Promise.resolve();
-    expect(queues[0]?.closed).toBe(false);
-
-    gate.resolve();
-    await stopping;
-
-    expect(queues).toHaveLength(5);
-    expect(queues.every(queue => queue.closed)).toBe(true);
-    schedulerGate = undefined;
   });
 });

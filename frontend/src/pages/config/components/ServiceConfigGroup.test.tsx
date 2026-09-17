@@ -16,6 +16,11 @@ const entry = (key: string, required: boolean): ConfigEntryView => ({
   inputType: 'text',
 });
 
+const advancedEntry = (key: string, required: boolean): ConfigEntryView => ({
+  ...entry(key, required),
+  advanced: true,
+});
+
 describe('ServiceConfigGroup', () => {
   it('shows required fields first and keeps multiple optional fields collapsed initially', () => {
     render(
@@ -34,13 +39,13 @@ describe('ServiceConfigGroup', () => {
       />
     );
 
-    expect(screen.getByText('REQUIRED_KEY')).toBeInTheDocument();
+    expect(screen.getByText('Required Key')).toBeInTheDocument();
     expect(screen.getByText('Service description')).toBeInTheDocument();
-    expect(screen.queryByText('OPTIONAL_KEY')).not.toBeInTheDocument();
+    expect(screen.queryByText('Optional Key')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeDisabled();
 
     fireEvent.click(screen.getByRole('button', { name: /Optional settings/ }));
-    expect(screen.getByText('OPTIONAL_KEY')).toBeInTheDocument();
+    expect(screen.getByText('Optional Key')).toBeInTheDocument();
   });
 
   it('shows a single optional field without a collapsible section', () => {
@@ -56,7 +61,7 @@ describe('ServiceConfigGroup', () => {
       />
     );
 
-    expect(screen.getByText('OPTIONAL_KEY')).toBeInTheDocument();
+    expect(screen.getByText('Optional Key')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Optional settings/ })).not.toBeInTheDocument();
   });
 
@@ -78,9 +83,104 @@ describe('ServiceConfigGroup', () => {
       />
     );
 
-    expect(screen.getByText('API_URL')).toBeInTheDocument();
-    expect(screen.getByText('EPISODE_SYNC_MODE')).toBeInTheDocument();
+    expect(screen.getByText('API URL')).toBeInTheDocument();
+    expect(screen.getByText('Episode Sync Mode')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Optional settings/ })).not.toBeInTheDocument();
+  });
+
+  it('keeps advanced fields collapsed and separate from optional fields', () => {
+    render(
+      <ServiceConfigGroup
+        groupName="CATALOG"
+        entries={[entry('TIMEOUT', false), advancedEntry('CATALOG_SERVICE_URL', false)]}
+        values={{ TIMEOUT: '', CATALOG_SERVICE_URL: '' }}
+        onChange={vi.fn()}
+        onTest={vi.fn()}
+        onSave={vi.fn()}
+        hasChanges={false}
+      />
+    );
+
+    expect(screen.getByText('Timeout')).toBeInTheDocument();
+    expect(screen.queryByText('Catalog Service URL')).not.toBeInTheDocument();
+
+    const toggle = screen.getByRole('button', { name: /Advanced settings/ });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(toggle);
+
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Catalog Service URL')).toBeInTheDocument();
+  });
+
+  it('opens advanced settings when an advanced required value is missing', () => {
+    render(
+      <ServiceConfigGroup
+        groupName="CATALOG"
+        entries={[advancedEntry('CATALOG_SERVICE_URL', true)]}
+        values={{ CATALOG_SERVICE_URL: '' }}
+        onChange={vi.fn()}
+        onTest={vi.fn()}
+        onSave={vi.fn()}
+        hasChanges={false}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: /Advanced settings/ })).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+    expect(screen.getByText('Catalog Service URL')).toBeInTheDocument();
+    expect(screen.getByText('1 missing')).toBeInTheDocument();
+  });
+
+  it('opens advanced settings when an advanced field is implicated in a failed test', () => {
+    const advanced = {
+      ...advancedEntry('CATALOG_SERVICE_URL', true),
+      testRelevant: true,
+      testFailureHelp: 'The catalog URL may be unavailable.',
+    };
+    render(
+      <ServiceConfigGroup
+        groupName="CATALOG"
+        entries={[advanced]}
+        values={{ CATALOG_SERVICE_URL: 'http://localhost:3001' }}
+        onChange={vi.fn()}
+        onTest={vi.fn()}
+        onSave={vi.fn()}
+        hasChanges={false}
+        result={{
+          service: 'CATALOG',
+          success: false,
+          testMode: 'live',
+          message: 'Connection refused',
+        }}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: /Advanced settings/ })).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    );
+    expect(
+      screen.getByLabelText('Catalog Service URL').closest('[data-test-failure]')
+    ).toHaveAttribute('data-test-failure', 'true');
+  });
+
+  it('shows an advanced field warning when supplied', () => {
+    render(
+      <ServiceConfigGroup
+        groupName="DOWNLOAD"
+        entries={[{ ...advancedEntry('DOWNLOAD_SALT', false), warning: 'Keep this unchanged.' }]}
+        values={{ DOWNLOAD_SALT: '' }}
+        onChange={vi.fn()}
+        onTest={vi.fn()}
+        onSave={vi.fn()}
+        hasChanges={false}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /Advanced settings/ }));
+    expect(screen.getByText('Warning: Keep this unchanged.')).toBeInTheDocument();
   });
 
   it('provides per-service Test and Save actions', () => {
@@ -131,11 +231,11 @@ describe('ServiceConfigGroup', () => {
 
     expect(screen.getByText('Failed to test CATALOG')).toBeInTheDocument();
     expect(screen.getByText('The URL may be unavailable.')).toBeInTheDocument();
-    expect(screen.getByLabelText('API_URL').closest('[data-test-failure]')).toHaveAttribute(
+    expect(screen.getByLabelText('API URL').closest('[data-test-failure]')).toHaveAttribute(
       'data-test-failure',
       'true'
     );
-    expect(screen.getByLabelText('UNRELATED_SETTING').closest('[data-test-failure]')).toBeNull();
+    expect(screen.getByLabelText('Unrelated Setting').closest('[data-test-failure]')).toBeNull();
   });
 
   it('keeps missing required values distinct from a failed test', () => {
@@ -160,7 +260,7 @@ describe('ServiceConfigGroup', () => {
 
     expect(screen.getByText('1 missing')).toBeInTheDocument();
     expect(screen.queryByText('Failed to test CATALOG')).not.toBeInTheDocument();
-    expect(screen.getByLabelText('API_TOKEN').closest('[data-test-failure]')).toBeNull();
+    expect(screen.getByLabelText('API Token').closest('[data-test-failure]')).toBeNull();
   });
 
   it('shows a failed result after a required value has been entered locally', () => {

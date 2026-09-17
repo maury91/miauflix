@@ -5,16 +5,17 @@ import { createHash } from 'crypto';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 
 import {
+  type AllBackgroundJobPayloads,
   BACKGROUND_JOB_QUEUES,
   type BackgroundJobName,
-  type BackgroundJobPayloads,
+  type BackgroundJobSchedule,
 } from './background-job.types';
 
 type EnqueueOptions = { maxAttempts?: number; priority?: number; runAfter?: Date };
 export type BackgroundJobSpec<K extends BackgroundJobName = BackgroundJobName> = {
   type: K;
   dedupeKey: string;
-  payload: BackgroundJobPayloads[K];
+  payload: AllBackgroundJobPayloads[K];
   options?: EnqueueOptions;
 };
 
@@ -67,7 +68,7 @@ export class BackgroundJobService {
   async enqueue<K extends BackgroundJobName>(
     type: K,
     dedupeKey: string,
-    payload: BackgroundJobPayloads[K],
+    payload: AllBackgroundJobPayloads[K],
     options: EnqueueOptions = {}
   ): Promise<void> {
     const delay = options.runAfter
@@ -132,17 +133,20 @@ export class BackgroundJobService {
     );
   }
 
-  async schedule<K extends BackgroundJobName>(
-    type: K,
-    scheduleId: string,
-    everyMs: number,
-    payload: BackgroundJobPayloads[K],
-    options: EnqueueOptions = {}
-  ): Promise<void> {
-    await this.getQueue(BACKGROUND_JOB_QUEUES[type]).upsertJobScheduler(
-      scheduleId,
-      { every: everyMs, immediately: true, preventOverlap: true, skipMissedOnRestart: true },
-      { name: type, data: payload, opts: this.jobOptions(options) }
+  async schedule<K extends BackgroundJobName>(schedule: BackgroundJobSchedule<K>): Promise<void> {
+    await this.getQueue(BACKGROUND_JOB_QUEUES[schedule.job]).upsertJobScheduler(
+      schedule.id,
+      {
+        every: schedule.intervalSeconds * 1000,
+        immediately: schedule.runOnStart ?? true,
+        preventOverlap: true,
+        skipMissedOnRestart: true,
+      },
+      {
+        name: schedule.job,
+        data: schedule.payload,
+        opts: this.jobOptions({ priority: schedule.priority }),
+      }
     );
   }
 
@@ -151,6 +155,26 @@ export class BackgroundJobService {
       await this.getQueue(BACKGROUND_JOB_QUEUES[type]).removeJobScheduler(scheduleId);
     } catch (error) {
       if (error instanceof Error && error.message === 'Cron job not found') return;
+      throw error;
+    }
+  }
+
+  async removeSchedulesByPrefix(queueName: string, prefix: string): Promise<void> {
+    const queue = this.getQueue(queueName);
+    const schedules = await queue.getJobSchedulers();
+    await Promise.all(
+      schedules
+        .map((schedule: { name?: string }) => schedule.name)
+        .filter((name): name is string => Boolean(name?.startsWith(prefix)))
+        .map(name => queue.removeJobScheduler(name))
+    );
+  }
+
+  async removeScheduleByQueue(queueName: string, scheduleId: string): Promise<void> {
+    try {
+      await this.getQueue(queueName).removeJobScheduler(scheduleId);
+    } catch (error) {
+      if (error instanceof Error && /not found/i.test(error.message)) return;
       throw error;
     }
   }

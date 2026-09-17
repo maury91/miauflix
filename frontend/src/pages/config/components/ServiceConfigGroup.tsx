@@ -216,19 +216,29 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
     entry => entry.required && !entry.hasValue && !values[entry.key]?.trim()
   ).length;
   const [showOptionalSettings, setShowOptionalSettings] = useState(false);
-  const requiredEntries = entries.filter(entry => entry.required);
-  const optionalEntries = entries.filter(entry => !entry.required);
+  const advancedEntries = entries.filter(entry => entry.advanced);
+  const requiredEntries = entries.filter(entry => entry.required && !entry.advanced);
+  const optionalEntries = entries.filter(entry => !entry.required && !entry.advanced);
   const serviceDescription = entries[0]?.serviceDescription;
   const hasMissingRequiredValues = missingCount > 0;
   const hasFailedTest = Boolean(result && !result.success && !hasMissingRequiredValues);
   const failedTestEntries = hasFailedTest ? entries.filter(entry => entry.testRelevant) : [];
   const hasTestFailure = (entry: ConfigEntryView) => Boolean(hasFailedTest && entry.testRelevant);
   const hasOptionalTestFailure = optionalEntries.some(entry => hasTestFailure(entry));
+  const hasAdvancedTestFailure = advancedEntries.some(entry => hasTestFailure(entry));
+  const hasMissingAdvancedRequiredValue = advancedEntries.some(
+    entry => entry.required && !entry.hasValue && !values[entry.key]?.trim()
+  );
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(hasMissingAdvancedRequiredValue);
   const showOptionalFields = showAllOptionalFields || showOptionalSettings;
 
   useEffect(() => {
     if (hasOptionalTestFailure) setShowOptionalSettings(true);
   }, [hasOptionalTestFailure]);
+
+  useEffect(() => {
+    if (hasMissingAdvancedRequiredValue || hasAdvancedTestFailure) setShowAdvancedSettings(true);
+  }, [hasAdvancedTestFailure, hasMissingAdvancedRequiredValue]);
 
   return (
     <GroupContainer>
@@ -298,6 +308,36 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
           {showOptionalFields && (
             <OptionalFields>
               {optionalEntries.map(entry => (
+                <ConfigField
+                  key={entry.key}
+                  entry={entry}
+                  value={values[entry.key] ?? ''}
+                  onChange={onChange}
+                  hasTestFailure={hasTestFailure(entry)}
+                />
+              ))}
+            </OptionalFields>
+          )}
+        </>
+      )}
+
+      {advancedEntries.length > 0 && (
+        <>
+          <OptionalSettingsButton
+            type="button"
+            onClick={() => setShowAdvancedSettings(isOpen => !isOpen)}
+            aria-expanded={showAdvancedSettings}
+          >
+            {showAdvancedSettings ? (
+              <ChevronDownIcon aria-hidden="true" />
+            ) : (
+              <ChevronRightIcon aria-hidden="true" />
+            )}
+            Advanced settings ({advancedEntries.length})
+          </OptionalSettingsButton>
+          {showAdvancedSettings && (
+            <OptionalFields>
+              {advancedEntries.map(entry => (
                 <ConfigField
                   key={entry.key}
                   entry={entry}

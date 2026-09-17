@@ -3,15 +3,15 @@ import { Worker } from 'bunqueue-client';
 
 import type { BackgroundJobService } from './background-job.service';
 import {
+  type AllBackgroundJobPayloads,
   BACKGROUND_JOB_QUEUES,
   type BackgroundJobName,
-  type BackgroundJobPayloads,
 } from './background-job.types';
 
 export interface BackgroundJobHandler<K extends BackgroundJobName> {
   concurrency: number;
   leaseMs?: number;
-  run(payload: BackgroundJobPayloads[K]): Promise<void>;
+  run(payload: AllBackgroundJobPayloads[K]): Promise<void>;
 }
 
 type RegisteredHandler = BackgroundJobHandler<BackgroundJobName>;

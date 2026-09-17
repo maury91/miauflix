@@ -24,7 +24,7 @@ describe('ConfigField', () => {
       <ConfigField entry={makeEntry({ inputType: 'boolean' })} value="false" onChange={onChange} />
     );
 
-    fireEvent.click(screen.getByRole('switch', { name: 'CONFIG_KEY' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'Config Key' }));
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', 'true');
   });
 
@@ -75,7 +75,7 @@ describe('ConfigField', () => {
       />
     );
 
-    const input = screen.getByLabelText('CONFIG_KEY');
+    const input = screen.getByLabelText('Config Key');
     expect(input).toHaveAttribute('type', 'number');
     expect(input).toHaveAttribute('min', '1');
     expect(input).toHaveAttribute('max', '10');
@@ -111,11 +111,11 @@ describe('ConfigField', () => {
       />
     );
 
-    expect(screen.getByLabelText('CONFIG_KEY')).toHaveValue('ON_DEMAND');
+    expect(screen.getByLabelText('Config Key')).toHaveValue('ON_DEMAND');
     expect(screen.getByRole('option', { name: 'GREEDY — sync every tv show' })).toBeInTheDocument();
     expect(screen.queryByText('Example: ON_DEMAND')).not.toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText('CONFIG_KEY'), { target: { value: 'GREEDY' } });
+    fireEvent.change(screen.getByLabelText('Config Key'), { target: { value: 'GREEDY' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', 'GREEDY');
   });
 
@@ -128,7 +128,7 @@ describe('ConfigField', () => {
       />
     );
 
-    expect(screen.getByLabelText('CONFIG_KEY')).toHaveAttribute(
+    expect(screen.getByLabelText('Config Key')).toHaveAttribute(
       'placeholder',
       'e.g. https://api.example.com'
     );
@@ -157,7 +157,7 @@ describe('ConfigField', () => {
     );
 
     expect(screen.queryByText('✓ value saved')).not.toBeInTheDocument();
-    expect(screen.getByLabelText('CONFIG_KEY')).toHaveAttribute(
+    expect(screen.getByLabelText('Config Key')).toHaveAttribute(
       'placeholder',
       'A value is saved — enter a new value to replace it'
     );
@@ -190,6 +190,29 @@ describe('ConfigField', () => {
     );
   });
 
+  it('shows a friendly label and keeps the raw key in a tooltip', () => {
+    render(
+      <ConfigField entry={makeEntry({ key: 'CATALOG_SERVICE_URL' })} value="" onChange={vi.fn()} />
+    );
+
+    expect(screen.getByText('Catalog Service URL')).toHaveAttribute(
+      'title',
+      'Configuration key: CATALOG_SERVICE_URL'
+    );
+  });
+
+  it('uses an explicit label when one is provided', () => {
+    render(
+      <ConfigField
+        entry={makeEntry({ key: 'CATALOG_SERVICE_URL', label: 'Catalog endpoint' })}
+        value=""
+        onChange={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText('Catalog endpoint')).toBeInTheDocument();
+  });
+
   it('composes a size from its number and unit controls', () => {
     const onChange = vi.fn();
     render(
@@ -200,9 +223,9 @@ describe('ConfigField', () => {
       />
     );
 
-    fireEvent.change(screen.getByLabelText('CONFIG_KEY'), { target: { value: '30' } });
+    fireEvent.change(screen.getByLabelText('Config Key'), { target: { value: '30' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '30MB');
-    fireEvent.change(screen.getByLabelText('CONFIG_KEY unit'), { target: { value: 'GB' } });
+    fireEvent.change(screen.getByLabelText('Config Key unit'), { target: { value: 'GB' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '20GB');
     expect(screen.queryByText('Example: 20MB')).not.toBeInTheDocument();
   });
@@ -217,11 +240,11 @@ describe('ConfigField', () => {
       />
     );
 
-    fireEvent.change(screen.getByLabelText('CONFIG_KEY'), { target: { value: '30' } });
+    fireEvent.change(screen.getByLabelText('Config Key'), { target: { value: '30' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '30m');
     expect(screen.getByRole('option', { name: 'Minutes' })).toHaveValue('m');
     expect(screen.getByRole('option', { name: 'Hours' })).toHaveValue('h');
-    fireEvent.change(screen.getByLabelText('CONFIG_KEY unit'), { target: { value: 'h' } });
+    fireEvent.change(screen.getByLabelText('Config Key unit'), { target: { value: 'h' } });
     expect(onChange).toHaveBeenCalledWith('CONFIG_KEY', '15h');
     expect(screen.queryByText('Example: 15m')).not.toBeInTheDocument();
   });

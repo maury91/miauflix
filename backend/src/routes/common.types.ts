@@ -6,7 +6,6 @@ import type { DownloadService } from '@services/download/download.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
 import type { RequestService } from '@services/request/request.service';
-import type { Scheduler } from '@services/scheduler';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type {
@@ -28,7 +27,6 @@ export interface Deps {
   magnetService: SourceMetadataFileService;
   mediaService: MediaService;
   requestService: RequestService;
-  scheduler: Scheduler;
   sourceService: SourceService;
   statsService: StatsService;
   streamService: StreamService;

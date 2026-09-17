@@ -11,6 +11,7 @@ import { AuthService } from '@services/auth/auth.service';
 import { registerBackgroundJobHandlers } from '@services/background-job/background-job.handlers';
 import { BackgroundJobService } from '@services/background-job/background-job.service';
 import { BackgroundJobWorker } from '@services/background-job/background-job.worker';
+import { ServiceScheduleCoordinator } from '@services/background-job/service-schedule.coordinator';
 import { CacheService } from '@services/cache/cache.service';
 import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import { ConfigurationService } from '@services/configuration/configuration.service';
@@ -19,7 +20,6 @@ import { DownloadService } from '@services/download/download.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
 import { RequestService } from '@services/request/request.service';
-import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
@@ -73,7 +73,6 @@ try {
   const authService = new AuthService(db, auditLogService, configurationService);
   const traktService = new TraktService(db, authService, configurationService);
   const mediaService = new MediaService(db, catalogClient);
-  const scheduler = new Scheduler(configurationService);
   const backgroundJobs = new BackgroundJobService(configurationService);
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
   const listService = new ListService(db, catalogClient, backgroundJobs);
@@ -139,7 +138,12 @@ try {
   });
 
   const disableBackgroundTasks = configurationService.get('DISABLE_BACKGROUND_TASKS');
-  let backgroundQueueRetryTimer: NodeJS.Timeout | null = null;
+  const scheduleCoordinator = new ServiceScheduleCoordinator(
+    backgroundJobs,
+    configurationService,
+    catalogClient,
+    listService
+  );
   if (disableBackgroundTasks) {
     logger.info('App', 'Background tasks disabled - running in on-demand mode only');
   } else {
@@ -156,73 +160,17 @@ try {
     });
 
     backgroundWorker.start();
-    const installSchedules = async (): Promise<void> => {
-      try {
-        await backgroundJobs.connect();
-        for (const { slug } of await listService.getLists()) {
-          await backgroundJobs.schedule(
-            'list.refresh.plan',
-            `refresh-${slug}`,
-            configurationService.getOrThrow('REFRESH_LISTS_INTERVAL') * 1000,
-            { slug, maxPages: 6 },
-            { priority: 100 }
-          );
-        }
-        await backgroundJobs.schedule(
-          'source.discover',
-          'source-discovery-seed',
-          configurationService.getOrThrow('MOVIE_SOURCE_SEARCH_INTERVAL') * 1000,
-          {},
-          { priority: 5 }
-        );
-        await backgroundJobs.schedule(
-          'source.metadata',
-          'source-metadata-seed',
-          configurationService.getOrThrow('SOURCE_METADATA_SEARCH_INTERVAL') * 1000,
-          {},
-          { priority: 5 }
-        );
-        await backgroundJobs.schedule(
-          'source.stats',
-          'source-stats-seed',
-          configurationService.getOrThrow('SOURCE_STATS_INTERVAL') * 1000,
-          {},
-          { priority: 5 }
-        );
-        await backgroundJobs.schedule(
-          'cache.cleanup',
-          'cache-cleanup',
-          configurationService.getOrThrow('CACHE_CLEANUP_INTERVAL') * 1000,
-          {},
-          { priority: 1 }
-        );
-        logger.info('App', 'Bunqueue workers and persisted schedules are ready');
-      } catch (error) {
-        logger.error('App', 'Bunqueue is unavailable; endpoint hydration remains active', error);
-        backgroundQueueRetryTimer = setTimeout(() => void installSchedules(), 15_000);
-      }
-    };
-    void installSchedules();
   }
+  scheduleCoordinator.start(!disableBackgroundTasks);
 
   // Graceful shutdown handlers
   const gracefulShutdown = async (signal: string) => {
     logger.info('App', `Received ${signal}, shutting down gracefully...`);
 
-    if (backgroundQueueRetryTimer) clearTimeout(backgroundQueueRetryTimer);
+    await scheduleCoordinator.stop();
     catalogClient.stop();
     await backgroundWorker.stop();
     backgroundJobs.close();
-
-    // Stop compatibility scheduler tasks
-    for (const taskName of scheduler.listTasks()) {
-      try {
-        scheduler.cancelTask(taskName);
-        logger.debug('App', `Cancelled task: ${taskName}`);
-      } catch (error) {
-        logger.warn('App', `Failed to cancel task ${taskName}:`, error);
-      }
-    }
 
     await db.close();
 
@@ -241,7 +189,6 @@ try {
     catalogClient,
     configurationService,
     mediaService,
-    scheduler,
     sourceService,
     listService,
     vpnDetectionService,

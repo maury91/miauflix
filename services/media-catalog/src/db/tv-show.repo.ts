@@ -26,6 +26,16 @@ export class TVShowRepository {
     return row && showRow(row);
   }
 
+  hasKnownTVShows(): boolean {
+    return (
+      this.db
+        .select({ mediaId: tvShows.mediaId })
+        .from(tvShows)
+        .where(isNotNull(tvShows.detailsSyncedAt))
+        .get() !== undefined
+    );
+  }
+
   getSeasonsOf(tvMediaId: number): SeasonRow[] {
     return this.db
       .select()

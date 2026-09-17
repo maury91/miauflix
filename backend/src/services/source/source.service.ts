@@ -172,7 +172,7 @@ export class SourceService {
 
   /**
    * Process movies that need source search
-   * This method is designed to be run by the scheduler
+   * This method is designed to be run by the source background-job handler
    */
   @traced('SourceService')
   public async searchSourcesForMovies(): Promise<void> {

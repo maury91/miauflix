@@ -55,6 +55,7 @@ export class CatalogConfigService {
   private readonly pushedValues: Record<string, string> = {};
   private readonly operations = new OperationQueue();
   private prober: ConfigProber | null = null;
+  private readonly listeners = new Set<() => void>();
 
   private _state: CatalogState = 'standby';
   private _errorMessage: string | null = null;
@@ -114,6 +115,18 @@ export class CatalogConfigService {
 
   registerProber(prober: ConfigProber): void {
     this.prober = prober;
+  }
+
+  subscribe(listener: () => void): () => void {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  private transition(state: CatalogState, errorMessage: string | null): void {
+    if (this._state === state && this._errorMessage === errorMessage) return;
+    this._state = state;
+    this._errorMessage = errorMessage;
+    for (const listener of this.listeners) listener();
   }
 
   /**
@@ -202,8 +215,7 @@ export class CatalogConfigService {
           activate: true,
         });
         if (!restored.success) {
-          this._state = 'error';
-          this._errorMessage = 'Could not restore the previous catalog configuration';
+          this.transition('error', 'Could not restore the previous catalog configuration');
           logger.error(SCOPE, 'Could not restore previous catalog configuration', restored);
         }
         return {
@@ -223,8 +235,7 @@ export class CatalogConfigService {
         SCOPE,
         `Configuration pushed (${Object.keys(this.applicableValues(values)).length} value(s) applied)`
       );
-      this._state = 'ready';
-      this._errorMessage = null;
+      this.transition('ready', null);
       return {
         success: true,
         reloaded: true,
@@ -305,8 +316,7 @@ export class CatalogConfigService {
 
     if (missing.length > 0) {
       if (mutateState) {
-        this._state = 'standby';
-        this._errorMessage = null;
+        this.transition('standby', null);
       }
       return {
         success: false,
@@ -316,7 +326,7 @@ export class CatalogConfigService {
     }
 
     if (!this.prober) {
-      if (mutateState) this._state = 'configuring';
+      if (mutateState) this.transition('configuring', null);
       return {
         success: false,
         mode: 'live',
@@ -324,15 +334,14 @@ export class CatalogConfigService {
       };
     }
 
-    if (mutateState) this._state = 'configuring';
+    if (mutateState) this.transition('configuring', null);
     try {
       const result =
         (options.activate ?? mutateState) && this.prober.activate
           ? await this.prober.activate(values)
           : await this.prober.test(values);
       if (mutateState) {
-        this._state = result.success ? 'ready' : 'error';
-        this._errorMessage = result.success ? null : result.message;
+        this.transition(result.success ? 'ready' : 'error', result.success ? null : result.message);
       }
       return {
         success: result.success,
@@ -341,8 +350,7 @@ export class CatalogConfigService {
       };
     } catch (error) {
       if (mutateState) {
-        this._state = 'error';
-        this._errorMessage = error instanceof Error ? error.message : String(error);
+        this.transition('error', error instanceof Error ? error.message : String(error));
       }
       return {
         success: false,

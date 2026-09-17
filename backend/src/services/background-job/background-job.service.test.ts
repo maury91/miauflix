@@ -91,4 +91,32 @@ describe('BackgroundJobService', () => {
       expect.objectContaining({ name: 'list.generation.activate' })
     );
   });
+
+  it('translates a readable schedule definition into Bunqueue repeat options', async () => {
+    const service = setupTest();
+
+    await service.schedule({
+      job: 'source.discover',
+      id: 'source-discovery-seed',
+      intervalSeconds: 5,
+      payload: {},
+      priority: 5,
+      runOnStart: false,
+    });
+
+    expect(queueSchedule).toHaveBeenCalledWith(
+      'source-discovery-seed',
+      {
+        every: 5000,
+        immediately: false,
+        preventOverlap: true,
+        skipMissedOnRestart: true,
+      },
+      expect.objectContaining({
+        name: 'source.discover',
+        data: {},
+        opts: expect.objectContaining({ priority: 5, attempts: 12, durable: true }),
+      })
+    );
+  });
 });

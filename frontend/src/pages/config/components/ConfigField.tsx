@@ -49,7 +49,12 @@ const FieldKey = styled.label`
   font-size: 13px;
   font-weight: 600;
   color: ${SETTINGS_PALETTE.text.primary};
-  font-family: 'Courier New', monospace;
+  font-family: 'Poppins', sans-serif;
+`;
+
+const FieldKeyAbbr = styled.abbr`
+  text-decoration: none;
+  cursor: help;
 `;
 
 const FieldHelp = styled.span`
@@ -103,6 +108,13 @@ const FieldDescription = styled.p`
   font-size: 12px;
   color: ${SETTINGS_PALETTE.text.secondary};
   margin: 0 0 6px 0;
+  line-height: 1.4;
+`;
+
+const FieldWarning = styled.p`
+  font-size: 12px;
+  color: ${SETTINGS_PALETTE.color.warning};
+  margin: 0 0 6px;
   line-height: 1.4;
 `;
 
@@ -254,12 +266,51 @@ function timeUnitLabel(unit: string): string {
   return labels[unit] ?? unit;
 }
 
+const DISPLAY_TOKEN_OVERRIDES: Record<string, string> = {
+  API: 'API',
+  CORS: 'CORS',
+  DHT: 'DHT',
+  ENV: 'Environment',
+  FLARESOLVERR: 'FlareSolverr',
+  HTTP: 'HTTP',
+  HTTPS: 'HTTPS',
+  ID: 'ID',
+  IP: 'IP',
+  JWT: 'JWT',
+  NODE: 'Node.js',
+  OTEL: 'OTEL',
+  OTLP: 'OTLP',
+  RARBG: 'RARBG',
+  SSL: 'SSL',
+  TCP: 'TCP',
+  TMDB: 'TMDB',
+  TTL: 'TTL',
+  UI: 'UI',
+  URL: 'URL',
+  VPN: 'VPN',
+  YTS: 'YTS',
+};
+
+function humanizeConfigKey(key: string): string {
+  const tokens = key
+    .split('_')
+    .filter(Boolean)
+    .map(token => DISPLAY_TOKEN_OVERRIDES[token] ?? `${token[0]}${token.slice(1).toLowerCase()}`);
+
+  if (key.includes('__') && tokens.length > 1 && tokens[0] === tokens[1]) {
+    tokens.splice(1, 1);
+  }
+
+  return tokens.join(' ');
+}
+
 export const ConfigField: FC<ConfigFieldProps> = ({
   entry,
   value,
   onChange,
   hasTestFailure = false,
 }) => {
+  const fieldLabel = entry.label ?? humanizeConfigKey(entry.key);
   const isMissingRequired = (entry.required && !entry.hasValue && !value.trim()) || hasTestFailure;
   const isBoolean = entry.inputType === 'boolean';
   const isSize = entry.inputType === 'size';
@@ -284,7 +335,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
             type="button"
             role="switch"
             aria-checked={isEnabled}
-            aria-label={entry.key}
+            aria-label={fieldLabel}
             $enabled={isEnabled}
             $missing={isMissingRequired}
             onClick={() => onChange(entry.key, isEnabled ? 'false' : 'true')}
@@ -329,7 +380,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
             $missing={isMissingRequired}
           />
           <FieldSelect
-            aria-label={`${entry.key} unit`}
+            aria-label={`${fieldLabel} unit`}
             value={unit}
             onChange={event =>
               onChange(entry.key, unitNumber ? `${unitNumber}${event.target.value}` : '')
@@ -371,7 +422,9 @@ export const ConfigField: FC<ConfigFieldProps> = ({
   return (
     <FieldWrapper $hasError={hasTestFailure} data-test-failure={hasTestFailure || undefined}>
       <FieldHeader>
-        <FieldKey htmlFor={entry.key}>{entry.key}</FieldKey>
+        <FieldKey htmlFor={entry.key}>
+          <FieldKeyAbbr title={`Configuration key: ${entry.key}`}>{fieldLabel}</FieldKeyAbbr>
+        </FieldKey>
         {!entry.link && (
           <FieldHelp
             role="img"
@@ -386,6 +439,8 @@ export const ConfigField: FC<ConfigFieldProps> = ({
       </FieldHeader>
 
       {entry.link && <FieldDescription>{entry.description}</FieldDescription>}
+
+      {entry.warning && <FieldWarning role="note">Warning: {entry.warning}</FieldWarning>}
 
       {entry.link && (
         <FieldLink href={entry.link} target="_blank" rel="noopener noreferrer">
