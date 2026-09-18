@@ -58,6 +58,21 @@ export class BackgroundJobWorker {
       worker.on('error', error =>
         logger.error('BackgroundJobWorker', `Bunqueue ${queue} worker error`, error)
       );
+      worker.on('failed', (job, error) => {
+        const type = (job.raw.name ?? job.name) as BackgroundJobName | undefined;
+        const attempt = job.attempts + 1;
+        const terminal = job.maxAttempts > 0 && attempt >= job.maxAttempts;
+        const message = `Bunqueue ${queue} ${terminal ? 'terminal' : 'retryable'} job failure`;
+        const details = {
+          jobId: job.id,
+          jobType: type,
+          attempt,
+          maxAttempts: job.maxAttempts,
+          error,
+        };
+        if (terminal) logger.error('BackgroundJobWorker', message, details);
+        else logger.warn('BackgroundJobWorker', message, details);
+      });
       this.workers.push(worker);
     }
   }

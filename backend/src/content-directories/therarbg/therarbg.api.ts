@@ -141,6 +141,7 @@ export class TheRARBGApi extends Api {
         const location = response.headers['location'] || '';
         if (location === '/') {
           // The provider uses its homepage redirect as a normal "not found" response.
+          this.markReady(mirror);
           return null;
         }
         logger.error('TheRARBG', `Redirected to ${location}`);

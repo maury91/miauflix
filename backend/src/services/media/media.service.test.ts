@@ -1,6 +1,8 @@
 import { MockCache } from '@__test-utils__/cache.mock';
 import { createMockMovie } from '@__test-utils__/mocks/movie.mock';
+import { createMockSeasonDetail } from '@__test-utils__/mocks/movie.mock';
 import { createMockTVShow } from '@__test-utils__/mocks/movie.mock';
+import { configureFakerSeed } from '@__test-utils__/utils';
 
 import { Database } from '@database/database';
 import type { MovieDetail, TVShowDetail } from '@services/catalog/catalog.types';
@@ -75,8 +77,17 @@ describe('MediaService', () => {
     return { mediaService };
   };
 
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
+    jest.useRealTimers();
     void MockCache;
   });
 
@@ -120,6 +131,37 @@ describe('MediaService', () => {
       expect(mockCatalogClient.getTVShow).toHaveBeenCalledWith(1234, 'en');
       expect(mockTVShowRepo.upsertTVShowDetail).toHaveBeenCalledWith(detail);
       expect(result?.local).toBe(local);
+    });
+  });
+
+  describe('getSeason', () => {
+    it('mirrors the parent show before mirroring season details', async () => {
+      const { mediaService } = setupTest();
+      const detail = createMockSeasonDetail({ tvMediaId: 1234, seasonNumber: 1 });
+      const show = createMockTVShow({ mediaId: 1234 });
+      const season = { id: 9, mediaId: detail.seasonMediaId } as never;
+
+      mockCatalogClient.getTVShow.mockResolvedValueOnce(tvShowDetail(1234));
+      mockCatalogClient.getSeason.mockResolvedValueOnce(detail);
+      mockTVShowRepo.upsertTVShowDetail.mockResolvedValueOnce(show);
+      mockTVShowRepo.upsertSeasonDetail.mockResolvedValueOnce(season);
+      mockTVShowRepo.findSeasonByIdWithEpisodes.mockResolvedValueOnce(season);
+
+      await expect(mediaService.getSeason(1234, 1, 'en')).resolves.toBe(season);
+      expect(mockCatalogClient.getTVShow).toHaveBeenCalledWith(1234, 'en');
+      expect(mockCatalogClient.getSeason).toHaveBeenCalledWith(1234, 1, 'en');
+      expect(mockTVShowRepo.upsertTVShowDetail.mock.invocationCallOrder[0]).toBeLessThan(
+        mockTVShowRepo.upsertSeasonDetail.mock.invocationCallOrder[0]
+      );
+    });
+
+    it('does not fetch a season when the parent show is missing', async () => {
+      const { mediaService } = setupTest();
+      mockCatalogClient.getTVShow.mockResolvedValueOnce(null);
+
+      await expect(mediaService.getSeason(1234, 1, 'en')).resolves.toBeNull();
+      expect(mockCatalogClient.getSeason).not.toHaveBeenCalled();
+      expect(mockTVShowRepo.upsertSeasonDetail).not.toHaveBeenCalled();
     });
   });
 

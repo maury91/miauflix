@@ -1,3 +1,6 @@
+jest.mock('@services/configuration/configuration.service');
+jest.mock('@logger');
+
 import { MockCache } from '@__test-utils__/cache.mock';
 import { logger as mockLogger } from '@logger';
 
@@ -6,9 +9,6 @@ import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { TheRARBGApi } from './therarbg.api';
-
-jest.mock('@services/configuration/configuration.service');
-jest.mock('@logger');
 
 describe('TheRARBGService', () => {
   const setupTest = () => {
@@ -104,6 +104,7 @@ describe('TheRARBGService', () => {
       );
 
       await expect(service.searchByImdbId('tt0119698')).resolves.toBeNull();
+      expect(service.getStatus()).toEqual({ status: 'ready' });
       expect(mockLogger.error).not.toHaveBeenCalledWith(
         'TheRARBG',
         expect.stringContaining('Redirected')

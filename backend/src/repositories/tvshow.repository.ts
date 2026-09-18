@@ -153,13 +153,16 @@ export class TVShowRepository {
         );
       }
       const episodeRepo = manager.getRepository(Episode);
+      const existingEpisodes = await episodeRepo.findBy({ seasonId: season.id });
+      const existingByNumber = new Map(
+        existingEpisodes.map(episode => [episode.episodeNumber, episode])
+      );
+      const retainedIds = new Set<number>();
       for (const episode of detail.episodes) {
-        const existing = await episodeRepo.findOneBy({
-          seasonId: season.id,
-          episodeNumber: episode.episodeNumber,
-        });
+        const existing = existingByNumber.get(episode.episodeNumber);
         const episodePayload = {
           mediaId: episode.mediaId,
+          episodeNumber: episode.episodeNumber,
           name: episode.name,
           overview: episode.overview,
           airDate: episode.airDate,
@@ -168,9 +171,16 @@ export class TVShowRepository {
         };
         if (existing) {
           await episodeRepo.update(existing.id, episodePayload);
+          retainedIds.add(existing.id);
         } else {
           await episodeRepo.save(episodeRepo.create({ ...episodePayload, seasonId: season.id }));
         }
+      }
+      const staleIds = existingEpisodes
+        .filter(episode => !retainedIds.has(episode.id))
+        .map(episode => episode.id);
+      if (staleIds.length > 0) {
+        await episodeRepo.delete({ id: In(staleIds) });
       }
       return season;
     });

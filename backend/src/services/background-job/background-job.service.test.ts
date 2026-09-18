@@ -23,6 +23,8 @@ jest.mock(
   { virtual: true }
 );
 
+import { configureFakerSeed } from '@__test-utils__/utils';
+
 import type { ConfigService } from '@mytypes/configuration';
 
 import { BackgroundJobService } from './background-job.service';
@@ -37,13 +39,22 @@ describe('BackgroundJobService', () => {
     return new BackgroundJobService(config);
   };
 
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
   beforeEach(() => {
+    jest.useFakeTimers();
     jest.clearAllMocks();
     queueAdd.mockResolvedValue({});
     queueAddBulk.mockResolvedValue([]);
     queueSchedule.mockResolvedValue(undefined);
     flowAddChain.mockResolvedValue({ jobIds: [] });
     flowAddBulkThen.mockResolvedValue({ parallelIds: [], finalId: 'final' });
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it('adds deterministic durable jobs', async () => {
@@ -90,6 +101,33 @@ describe('BackgroundJobService', () => {
       [expect.objectContaining({ name: 'list.page.stage' })],
       expect.objectContaining({ name: 'list.generation.activate' })
     );
+  });
+
+  it('preserves runAfter delays for bulk jobs', async () => {
+    const service = setupTest();
+    const now = 1_700_000_000_000;
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(now);
+
+    await service.enqueueBulk([
+      {
+        type: 'source.discover',
+        dedupeKey: 'future',
+        payload: { movieMediaId: 42 },
+        options: { runAfter: new Date(now + 5_000) },
+      },
+      {
+        type: 'source.discover',
+        dedupeKey: 'past',
+        payload: { movieMediaId: 43 },
+        options: { runAfter: new Date(now - 1_000) },
+      },
+    ]);
+
+    expect(queueAddBulk).toHaveBeenCalledWith([
+      expect.objectContaining({ opts: expect.objectContaining({ delay: 5_000 }) }),
+      expect.objectContaining({ opts: expect.objectContaining({ delay: 0 }) }),
+    ]);
+    nowSpy.mockRestore();
   });
 
   it('translates a readable schedule definition into Bunqueue repeat options', async () => {

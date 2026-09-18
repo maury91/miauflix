@@ -184,7 +184,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
     {}
   );
   const [serviceActions, setServiceActions] = useState<
-    Record<string, 'test' | 'save' | 'testing' | 'saved'>
+    Record<string, 'testing' | 'saving' | 'saved'>
   >({});
   const [serviceNotices, setServiceNotices] = useState<
     Record<string, { restarted?: boolean; needsProcessRestart?: boolean }>
@@ -260,7 +260,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
 
   const handleServiceTest = useCallback(
     async (service: string) => {
-      setServiceActions(current => ({ ...current, [service]: 'test' }));
+      setServiceActions(current => ({ ...current, [service]: 'testing' }));
       setServiceNotices(current => {
         const next = { ...current };
         delete next[service];
@@ -297,7 +297,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
 
   const handleServiceSave = useCallback(
     async (service: string) => {
-      setServiceActions(current => ({ ...current, [service]: 'save' }));
+      setServiceActions(current => ({ ...current, [service]: 'saving' }));
       try {
         const response = await saveServiceConfig({ service, entries: getServiceEntries(service) });
         if ('error' in response) {

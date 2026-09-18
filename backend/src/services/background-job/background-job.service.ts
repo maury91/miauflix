@@ -71,12 +71,8 @@ export class BackgroundJobService {
     payload: AllBackgroundJobPayloads[K],
     options: EnqueueOptions = {}
   ): Promise<void> {
-    const delay = options.runAfter
-      ? Math.max(0, options.runAfter.getTime() - Date.now())
-      : undefined;
     await this.getQueue(BACKGROUND_JOB_QUEUES[type]).add(type, payload, {
       ...this.jobOptions(options),
-      delay,
       jobId: this.jobId(type, dedupeKey),
     });
   }
@@ -207,6 +203,7 @@ export class BackgroundJobService {
     return {
       attempts: options.maxAttempts ?? 12,
       priority: options.priority,
+      delay: options.runAfter ? Math.max(0, options.runAfter.getTime() - Date.now()) : undefined,
       backoff: { type: 'exponential', delay: 1000, maxDelay: 60_000 },
       durable: true,
       removeOnComplete: true,

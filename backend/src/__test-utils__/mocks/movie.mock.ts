@@ -143,10 +143,11 @@ export function createMockTVShowDetail(overrides: Partial<TVShowDetail> = {}): T
 }
 
 export function createMockSeason(overrides: Partial<Season> = {}): Season {
+  const tvShow = overrides.tvShow ?? createMockTVShow({ id: overrides.tvShowId });
   return {
     id: overrides.id ?? faker.number.int({ min: 1, max: 100000 }),
     mediaId: overrides.mediaId ?? faker.number.int({ min: 1, max: 1000000 }),
-    tvShowId: overrides.tvShowId ?? faker.number.int({ min: 1, max: 100000 }),
+    tvShowId: overrides.tvShowId ?? tvShow.id,
     seasonNumber: overrides.seasonNumber ?? 1,
     name: overrides.name ?? 'Season 1',
     overview: overrides.overview ?? faker.lorem.paragraph(),
@@ -154,7 +155,7 @@ export function createMockSeason(overrides: Partial<Season> = {}): Season {
     posterPath: overrides.posterPath ?? `/posters/${faker.string.alphanumeric(8)}.jpg`,
     synced: overrides.synced ?? false,
     episodes: overrides.episodes ?? [],
-    tvShow: overrides.tvShow ?? createMockTVShow(),
+    tvShow,
     createdAt: overrides.createdAt ?? faker.date.past(),
     updatedAt: overrides.updatedAt ?? faker.date.recent(),
     ...overrides,
@@ -189,17 +190,18 @@ export function createMockSeasonDetail(overrides: Partial<SeasonDetail> = {}): S
 }
 
 export function createMockEpisode(overrides: Partial<Episode> = {}): Episode {
+  const season = overrides.season ?? createMockSeason({ id: overrides.seasonId });
   return {
     id: overrides.id ?? faker.number.int({ min: 1, max: 100000 }),
     mediaId: overrides.mediaId ?? faker.number.int({ min: 1, max: 1000000 }),
-    seasonId: overrides.seasonId ?? faker.number.int({ min: 1, max: 100000 }),
+    seasonId: overrides.seasonId ?? season.id,
     episodeNumber: overrides.episodeNumber ?? 1,
     name: overrides.name ?? 'Episode 1',
     overview: overrides.overview ?? faker.lorem.paragraph(),
     airDate: overrides.airDate ?? faker.date.past().toISOString().split('T')[0],
     stillPath: overrides.stillPath ?? `/stills/${faker.string.alphanumeric(8)}.jpg`,
     imdbId: overrides.imdbId ?? '',
-    season: overrides.season ?? createMockSeason(),
+    season,
     createdAt: overrides.createdAt ?? faker.date.past(),
     updatedAt: overrides.updatedAt ?? faker.date.recent(),
     ...overrides,

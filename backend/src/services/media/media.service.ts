@@ -64,6 +64,8 @@ export class MediaService {
     seasonNumber: number,
     language = 'en'
   ): Promise<Season | null> {
+    const show = await this.getTVShowByMediaId(tvMediaId, language);
+    if (!show) return null;
     const detail = await this.catalogClient.getSeason(tvMediaId, seasonNumber, language);
     if (!detail) return null;
     const season = await this.tvShowRepository.upsertSeasonDetail(detail);

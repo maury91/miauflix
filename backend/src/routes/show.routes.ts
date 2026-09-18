@@ -137,7 +137,7 @@ export const createShowRoutes = ({ auditLogService, mediaService, configurationS
             return context.json({ error: 'Season not found' } satisfies ErrorResponse, 404);
           }
           return context.json({
-            id: hydrated.id,
+            id: hydrated.mediaId,
             seasonNumber: hydrated.seasonNumber,
             name: hydrated.name,
             overview: hydrated.overview || null,

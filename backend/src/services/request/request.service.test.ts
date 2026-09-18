@@ -1,30 +1,39 @@
 jest.mock('@logger');
 
+import { configureFakerSeed } from '@__test-utils__/utils';
+
 import type { ConfigService } from '@mytypes/configuration';
 import { StatsService } from '@services/stats/stats.service';
 
 import { RequestService } from './request.service';
 
 describe('RequestService response limits', () => {
-  const config = {
-    get: jest.fn().mockReturnValue(undefined),
-  } as unknown as ConfigService;
+  let fetchSpy: jest.SpyInstance | undefined;
 
-  let fetchSpy: jest.SpyInstance;
-  let requestService: RequestService;
+  const setupTest = () => {
+    const config = {
+      get: jest.fn().mockReturnValue(undefined),
+    } as unknown as ConfigService;
+    fetchSpy = jest.spyOn(global, 'fetch');
+    const requestService = new RequestService(new StatsService(), config);
+    return { config, fetchSpy, requestService };
+  };
+
+  beforeAll(() => {
+    configureFakerSeed();
+  });
 
   beforeEach(() => {
     jest.useFakeTimers();
-    fetchSpy = jest.spyOn(global, 'fetch');
-    requestService = new RequestService(new StatsService(), config);
   });
 
   afterEach(() => {
-    fetchSpy.mockRestore();
+    fetchSpy?.mockRestore();
     jest.useRealTimers();
   });
 
   it('rejects a response whose declared size exceeds the configured limit', async () => {
+    const { fetchSpy, requestService } = setupTest();
     fetchSpy.mockResolvedValue(
       new Response('too large', {
         headers: { 'content-length': '9' },
@@ -40,6 +49,7 @@ describe('RequestService response limits', () => {
   });
 
   it('stops a chunked response once it crosses the configured limit', async () => {
+    const { fetchSpy, requestService } = setupTest();
     const body = new ReadableStream<Uint8Array>({
       start(controller) {
         controller.enqueue(new Uint8Array(6));
@@ -58,6 +68,7 @@ describe('RequestService response limits', () => {
   });
 
   it('bounds the original response when a FlareSolverr response is oversized', async () => {
+    const { config, fetchSpy, requestService } = setupTest();
     const configGet = config.get as unknown as jest.Mock;
     configGet.mockImplementation((key: string) => {
       if (key === 'ENABLE_FLARESOLVERR') return true as never;
@@ -84,6 +95,7 @@ describe('RequestService response limits', () => {
   });
 
   it('clears the request timeout when FlareSolverr returns early', async () => {
+    const { config, fetchSpy, requestService } = setupTest();
     const configGet = config.get as unknown as jest.Mock;
     configGet.mockImplementation((key: string) => {
       if (key === 'ENABLE_FLARESOLVERR') return true as never;

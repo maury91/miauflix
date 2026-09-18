@@ -189,7 +189,7 @@ interface ServiceConfigGroupProps {
   onTest: () => void;
   onSave: () => void;
   hasChanges: boolean;
-  activeAction?: 'test' | 'save' | 'testing' | 'saved';
+  activeAction?: 'testing' | 'saving' | 'saved';
   disabled?: boolean;
   result?: ConfigServiceActionResult;
   restarted?: boolean;
@@ -353,7 +353,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
 
       <Actions>
         <ActionButton type="button" onClick={onTest} disabled={disabled || Boolean(activeAction)}>
-          {activeAction === 'test' ? 'Testing...' : 'Test'}
+          {activeAction === 'testing' ? 'Testing...' : 'Test'}
         </ActionButton>
         <ActionButton
           type="button"
@@ -361,14 +361,16 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
           onClick={onSave}
           disabled={disabled || Boolean(activeAction) || !hasChanges}
         >
-          {activeAction === 'save' || activeAction === 'testing' ? (
+          {activeAction === 'saving' ? (
+            <ActionLabel>
+              <ButtonSpinner aria-hidden="true" /> Saving
+            </ActionLabel>
+          ) : activeAction === 'testing' ? (
             <ActionLabel>
               <ButtonSpinner aria-hidden="true" /> Testing
             </ActionLabel>
           ) : activeAction === 'saved' ? (
-            <ActionLabel>
-              <ButtonSpinner aria-hidden="true" /> Saved
-            </ActionLabel>
+            'Saved'
           ) : (
             'Save'
           )}

@@ -1,6 +1,7 @@
 jest.mock('@logger');
 
 import { createMockMovie, createMockMovieSource } from '@__test-utils__/mocks/movie.mock';
+import { configureFakerSeed } from '@__test-utils__/utils';
 import { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
@@ -11,7 +12,7 @@ import type { SourceService } from '@services/source/source.service';
 import { StreamService } from './stream.service';
 
 describe('StreamService immediate source readiness', () => {
-  it('resolves source metadata inline instead of waiting for a queue worker', async () => {
+  const setupTest = () => {
     const movie = createMockMovie();
     const pending = createMockMovieSource({ movieId: movie.id, file: undefined });
     const ready = createMockMovieSource({
@@ -32,6 +33,24 @@ describe('StreamService immediate source readiness', () => {
       getMovieById: jest.fn().mockResolvedValue(movie),
     } as unknown as jest.Mocked<MediaService>;
     const service = new StreamService(database, sourceService, {} as DownloadService, mediaService);
+
+    return { movie, pending, ready, service, sourceService };
+  };
+
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('resolves source metadata inline instead of waiting for a queue worker', async () => {
+    const { movie, pending, ready, service, sourceService } = setupTest();
 
     await expect(service.getBestSourceForStreaming(movie.id, 'auto')).resolves.toEqual(ready);
     expect(sourceService.processSourceMetadata).toHaveBeenCalledWith(pending.id);

@@ -302,4 +302,28 @@ describe('ServiceConfigGroup', () => {
 
     expect(screen.getByText('configured')).toBeInTheDocument();
   });
+
+  it.each([
+    ['testing', 'Testing'],
+    ['saving', 'Saving'],
+    ['saved', 'Saved'],
+  ] as const)('renders the %s action state accurately', (activeAction, label) => {
+    render(
+      <ServiceConfigGroup
+        groupName="Service"
+        entries={[{ ...entry('REQUIRED_KEY', true), hasValue: true }]}
+        values={{ REQUIRED_KEY: 'value' }}
+        onChange={vi.fn()}
+        onTest={vi.fn()}
+        onSave={vi.fn()}
+        hasChanges={activeAction === 'saving'}
+        activeAction={activeAction}
+      />
+    );
+
+    expect(screen.getByRole('button', { name: label, exact: true })).toBeInTheDocument();
+    if (activeAction === 'saved') {
+      expect(screen.getByRole('button', { name: 'Saved' }).querySelector('svg')).toBeNull();
+    }
+  });
 });

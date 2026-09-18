@@ -2,6 +2,8 @@ jest.mock('@logger', () => ({
   logger: { debug: jest.fn(), error: jest.fn(), info: jest.fn(), warn: jest.fn() },
 }));
 
+import { configureFakerSeed } from '@__test-utils__/utils';
+
 import { ServiceScheduleCoordinator } from './service-schedule.coordinator';
 
 const setupTest = (ready: boolean, enabled = true) => {
@@ -54,6 +56,10 @@ const setupTest = (ready: boolean, enabled = true) => {
 };
 
 describe('ServiceScheduleCoordinator', () => {
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
   beforeEach(() => {
     jest.useFakeTimers();
   });
@@ -88,7 +94,6 @@ describe('ServiceScheduleCoordinator', () => {
   });
 
   it('retries a broker failure without creating duplicate retry timers', async () => {
-    jest.useFakeTimers();
     const { coordinator, jobs } = setupTest(false);
     jobs.connect
       .mockReset()

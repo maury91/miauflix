@@ -253,8 +253,9 @@ const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, du
 
 export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const { data: entries = [], isLoading } = useGetConfigQuery(undefined);
-  const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =
+  const { data: serviceStatusData, isLoading: isServiceStatusesLoading } =
     useGetServiceStatusesQuery(undefined);
+  const serviceStatuses = useMemo(() => serviceStatusData ?? {}, [serviceStatusData]);
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
   const { values, dirtyServices, handleChange, getServiceEntries, markServiceSaved } =
@@ -262,7 +263,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const [step, setStep] = useState(0);
   const [optionalService, setOptionalService] = useState<string | null>(null);
   const [results, setResults] = useState<Record<string, ConfigServiceActionResult>>({});
-  const [actions, setActions] = useState<Record<string, 'test' | 'testing' | 'saved'>>({});
+  const [actions, setActions] = useState<Record<string, 'testing' | 'saving' | 'saved'>>({});
   const [savedServices, setSavedServices] = useState<Set<string>>(new Set());
   const [editedServices, setEditedServices] = useState<Set<string>>(new Set());
   const [initialRequiredServiceNames, setInitialRequiredServiceNames] = useState<string[] | null>(
@@ -279,8 +280,9 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
       sortServiceGroups(
         Object.fromEntries(
           Object.entries(groups).filter(([name, group]) => {
-            const isReady = serviceStatuses[name]?.status === 'ready';
-            return !isReady || group.some(entry => entry.required && !entry.hasValue);
+            const status = serviceStatuses[name]?.status;
+            const hasMissingRequiredValue = group.some(entry => entry.required && !entry.hasValue);
+            return hasMissingRequiredValue || (status !== undefined && status !== 'ready');
           })
         ),
         serviceStatuses
@@ -311,8 +313,11 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
       sortServiceGroups(
         Object.fromEntries(
           Object.entries(groups).filter(([name, group]) => {
-            const isReady = serviceStatuses[name]?.status === 'ready';
-            return isReady && group.every(entry => !entry.required || entry.hasValue);
+            const status = serviceStatuses[name]?.status;
+            const hasCompleteRequiredValues = group.every(
+              entry => !entry.required || entry.hasValue
+            );
+            return hasCompleteRequiredValues && (status === undefined || status === 'ready');
           })
         ),
         serviceStatuses
@@ -347,7 +352,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const runAction = useCallback(
     async (service: string, action: 'test' | 'save') => {
       const startedAt = Date.now();
-      setActions(current => ({ ...current, [service]: action === 'save' ? 'testing' : 'test' }));
+      setActions(current => ({ ...current, [service]: action === 'save' ? 'saving' : 'testing' }));
       const response =
         action === 'test'
           ? await testServiceConfig({ service, entries: getServiceEntries(service) })
@@ -423,7 +428,14 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     );
   }
 
-  const canContinue = isOptionalStep || savedServices.has(currentName);
+  const hasCompleteRequiredValues = current.every(entry => !entry.required || entry.hasValue);
+  const statusAllowsNoSave =
+    serviceStatuses[currentName]?.status === undefined ||
+    serviceStatuses[currentName]?.status === 'ready';
+  const canContinue =
+    isOptionalStep ||
+    savedServices.has(currentName) ||
+    (!dirtyServices.has(currentName) && hasCompleteRequiredValues && statusAllowsNoSave);
   const hasPreviousStep = isOptionalStep || step > 0;
   const currentResult =
     results[currentName] ??
