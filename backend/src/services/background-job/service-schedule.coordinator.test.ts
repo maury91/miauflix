@@ -22,30 +22,49 @@ const setupTest = (ready: boolean, enabled = true) => {
     CATALOG__CATALOG_SHOW_SYNC_INTERVAL: 5400,
     CATALOG__CATALOG_SEASON_SYNC_INTERVAL: 5,
   };
-  const config = { getOrThrow: jest.fn((key: string) => values[key]) };
+  const config = {
+    getOrThrow: jest.fn((key: string) => values[key]),
+    subscribeChanges: jest.fn().mockReturnValue(jest.fn()),
+  };
+  let statusListener: (() => void) | undefined;
+  let configListener: (() => void) | undefined;
   const catalog = {
     isReady: jest.fn(() => ready),
-    subscribeStatus: jest.fn().mockReturnValue(jest.fn()),
+    subscribeStatus: jest.fn((listener: () => void) => {
+      statusListener = listener;
+      return jest.fn();
+    }),
   };
   const lists = { getLists: jest.fn().mockResolvedValue([{ slug: 'popular' }]) };
+  const configWithSubscription = {
+    ...config,
+    subscribeChanges: jest.fn((listener: () => void) => {
+      configListener = listener;
+      return jest.fn();
+    }),
+  };
   const coordinator = new ServiceScheduleCoordinator(
     jobs as never,
-    config as never,
+    configWithSubscription as never,
     catalog as never,
     lists as never
   );
   coordinator.start(enabled);
-  return { coordinator, jobs };
+  return { coordinator, jobs, catalog, lists, statusListener, configListener };
 };
 
 describe('ServiceScheduleCoordinator', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
   afterEach(() => {
     jest.useRealTimers();
   });
 
   it('installs the enabled schedule set when the catalog is ready', async () => {
     const { coordinator, jobs } = setupTest(true);
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await jest.advanceTimersByTimeAsync(0);
 
     expect(jobs.schedule).toHaveBeenCalledTimes(8);
     expect(jobs.schedule).toHaveBeenCalledWith(
@@ -59,7 +78,7 @@ describe('ServiceScheduleCoordinator', () => {
 
   it('removes all persisted schedules when background work is disabled', async () => {
     const { coordinator, jobs } = setupTest(false, false);
-    await new Promise(resolve => setTimeout(resolve, 0));
+    await jest.advanceTimersByTimeAsync(0);
 
     expect(jobs.schedule).not.toHaveBeenCalled();
     expect(jobs.removeSchedule).toHaveBeenCalledTimes(7);
@@ -84,6 +103,38 @@ describe('ServiceScheduleCoordinator', () => {
     await Promise.resolve();
     await Promise.resolve();
     expect(jobs.connect).toHaveBeenCalledTimes(2);
+    await coordinator.stop();
+  });
+
+  it('reconciles when configuration changes', async () => {
+    const { coordinator, jobs, configListener } = setupTest(true);
+    await jest.advanceTimersByTimeAsync(0);
+    jobs.schedule.mockClear();
+
+    configListener?.();
+    await jest.advanceTimersByTimeAsync(0);
+
+    expect(jobs.schedule).toHaveBeenCalled();
+    await coordinator.stop();
+  });
+
+  it('does not install stale catalog schedules after list loading yields', async () => {
+    let resolveLists!: (lists: Array<{ slug: string }>) => void;
+    const { coordinator, jobs, catalog, lists, configListener } = setupTest(true);
+    lists.getLists.mockImplementationOnce(() => new Promise(resolve => (resolveLists = resolve)));
+
+    jobs.schedule.mockClear();
+    configListener?.();
+    await jest.advanceTimersByTimeAsync(0);
+    catalog.isReady.mockReturnValue(false);
+    resolveLists([{ slug: 'popular' }]);
+    await jest.advanceTimersByTimeAsync(0);
+    await jest.advanceTimersByTimeAsync(0);
+
+    expect(jobs.schedule).not.toHaveBeenCalledWith(
+      expect.objectContaining({ job: 'catalog.movie-changes.scan' })
+    );
+    expect(jobs.removeSchedulesByPrefix).toHaveBeenCalledWith('miauflix-list-refresh', 'refresh-');
     await coordinator.stop();
   });
 });

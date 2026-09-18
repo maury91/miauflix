@@ -245,11 +245,11 @@ export class RemoteServiceManager {
           const chunk = await reader.read();
           if (chunk.done) break;
           buffer += decoder.decode(chunk.value, { stream: true });
-          const events = buffer.split('\n\n');
+          const events = buffer.split(/\r\n\r\n|\n\n|\r\r/);
           buffer = events.pop() ?? '';
           for (const event of events) {
             const data = event
-              .split('\n')
+              .split(/\r\n|\n|\r/)
               .find(line => line.startsWith('data:'))
               ?.slice(5)
               .trim();

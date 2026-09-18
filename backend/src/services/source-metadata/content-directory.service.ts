@@ -65,9 +65,9 @@ export class ContentDirectoryService {
       if (contentDirectoriesSearched.includes(contentDirectory.name)) {
         continue;
       }
-      searched.push(contentDirectory.name);
       try {
         const { sources, trailerCode } = await contentDirectory.getMovie(imdbId, highPriority);
+        searched.push(contentDirectory.name);
         if (sources.length > 0) {
           return {
             sources,

@@ -123,5 +123,29 @@ describe('ContentDirectoryService', () => {
       expect(result).toEqual({ ...expectedResult, source: 'Fallback' });
       expect(fallbackDirectory.getMovie).toHaveBeenCalledTimes(1);
     });
+
+    it('should only report providers that completed successfully as searched', async () => {
+      const { service } = setupTest();
+      const unavailableDirectory = {
+        name: 'Unavailable',
+        getMovie: jest
+          .fn()
+          .mockRejectedValue(new ApiError('Unavailable', 'service_unavailable', 'test')),
+      };
+      const emptyDirectory = {
+        name: 'Empty',
+        getMovie: jest.fn().mockResolvedValue({ sources: [], trailerCode: '' }),
+      };
+      (service as unknown as { movieDirectories: Array<unknown> }).movieDirectories = [
+        unavailableDirectory,
+        emptyDirectory,
+      ];
+
+      await expect(service.searchSourcesForMovie(imdbId, false, [], true)).resolves.toEqual({
+        source: '',
+        sources: [],
+        searched: ['Empty'],
+      });
+    });
   });
 });

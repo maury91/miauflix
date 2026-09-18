@@ -21,7 +21,7 @@ describe('CatalogWorkerManager', () => {
     workerCount = 0;
     processors = [];
     const { CatalogWorkerManager } = await import('../src/workers/worker');
-    let ready = true;
+    let catalogAvailable = true;
     const catalog = {
       syncMovies: mock(() => Promise.resolve()),
       syncTVShows: mock(() => Promise.resolve()),
@@ -35,13 +35,13 @@ describe('CatalogWorkerManager', () => {
         disableBackgroundTasks: false,
         bunqueue: { host: '127.0.0.1', port: 6789 },
       },
-      () => (ready ? catalog : null) as never
+      () => (catalogAvailable ? catalog : null) as never
     );
     manager.start();
     expect(workerCount).toBe(3);
     await processors[0]?.({ raw: { name: 'catalog.movie-changes.scan' } });
     expect(catalog.syncMovies).toHaveBeenCalledTimes(1);
-    ready = false;
+    catalogAvailable = false;
     await processors[0]?.({ raw: { name: 'catalog.movie-changes.scan' } });
     expect(catalog.syncMovies).toHaveBeenCalledTimes(1);
     await manager.stop();

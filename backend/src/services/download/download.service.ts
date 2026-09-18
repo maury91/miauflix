@@ -185,9 +185,11 @@ export class DownloadService {
   async getSourceMetadataFile(sourceLink: string, hash: string, timeout: number): Promise<Buffer> {
     return new Promise((resolve, rejectRaw) => {
       let settled = false;
+      let temporaryTorrent: Torrent | null = null;
       const remove = async () => {
+        if (!temporaryTorrent) return;
         try {
-          await this.client.remove(hash, { destroyStore: true });
+          await this.client.remove(temporaryTorrent.infoHash, { destroyStore: true });
         } catch (error) {
           logger.debug('DownloadService', `Failed to remove metadata torrent ${hash}`, error);
         }
@@ -217,7 +219,7 @@ export class DownloadService {
           onSourceMetadata(existingSourceFile);
           return;
         }
-        this.client.add(
+        temporaryTorrent = this.client.add(
           sourceLink,
           {
             deselect: true,
@@ -225,7 +227,10 @@ export class DownloadService {
             skipVerify: true,
             store: MemoryChunkStore,
           },
-          onSourceMetadata
+          torrent => {
+            temporaryTorrent ??= torrent;
+            onSourceMetadata(torrent);
+          }
         );
       } catch (error: unknown) {
         console.error(`Error adding data source`, error);

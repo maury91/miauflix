@@ -43,9 +43,7 @@ export class CatalogRuntime {
     this.lists = new ListRepository(ctx.db);
     this.syncState = new SyncStateRepository(ctx.db);
     this.apiCache = new ApiCache(ctx.db);
-    this.workerManager = new CatalogWorkerManager(ctx.env, () =>
-      config.state === 'ready' ? ctx.catalog : null
-    );
+    this.workerManager = new CatalogWorkerManager(ctx.env, () => ctx.catalog);
     config.registerProber(this.prober);
   }
 

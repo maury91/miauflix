@@ -21,6 +21,7 @@ export class ServiceScheduleCoordinator {
   private enabled = true;
   private revision = 0;
   private unsubscribe: (() => void) | null = null;
+  private unsubscribeConfig: (() => void) | null = null;
   private retryTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
@@ -34,6 +35,7 @@ export class ServiceScheduleCoordinator {
     if (this.unsubscribe) return;
     this.enabled = enabled;
     this.unsubscribe = this.catalog.subscribeStatus(() => this.reconcile());
+    this.unsubscribeConfig = this.config.subscribeChanges(() => this.reconcile());
     this.reconcile();
   }
 
@@ -42,6 +44,8 @@ export class ServiceScheduleCoordinator {
     this.revision++;
     this.unsubscribe?.();
     this.unsubscribe = null;
+    this.unsubscribeConfig?.();
+    this.unsubscribeConfig = null;
     this.clearRetryTimer();
     await this.operation.catch(() => undefined);
   }
@@ -80,7 +84,13 @@ export class ServiceScheduleCoordinator {
       return;
     }
 
-    const desiredLists = listSchedules(this.config, await this.lists.getLists());
+    const lists = await this.lists.getLists();
+    if (this.stopped || revision !== this.revision || !this.catalog.isReady()) {
+      await this.removeCatalogSchedules();
+      return;
+    }
+
+    const desiredLists = listSchedules(this.config, lists);
     await this.install(catalogSchedules(this.config));
     await this.replaceListSchedules(desiredLists);
     await this.removeLegacySchedules();

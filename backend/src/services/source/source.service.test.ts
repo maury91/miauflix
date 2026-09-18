@@ -261,6 +261,25 @@ describe('SourceService', () => {
     });
   });
 
+  describe('processSourceDiscovery', () => {
+    it('does not reset provider state while the search backoff is active', async () => {
+      const { service, mockMovie, mockMovieRepository, mockContentDirectoryService } = setupTest();
+      mockMovieRepository.findById.mockResolvedValue({
+        ...mockMovie,
+        contentDirectoriesSearched: ['YTS', 'THERARBG'],
+        nextSourceSearchAt: new Date(Date.now() + 60_000),
+      });
+      mockContentDirectoryService.getMovieDirectoryNames.mockReturnValue(['YTS', 'THERARBG']);
+
+      await expect(service.processSourceDiscovery(mockMovie.id)).resolves.toEqual({
+        complete: true,
+        sourceCount: 0,
+      });
+      expect(mockMovieRepository.resetSourceSearchState).not.toHaveBeenCalled();
+      expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
+    });
+  });
+
   describe('getSourcesForMovie', () => {
     it('should return sources for a movie', async () => {
       const {

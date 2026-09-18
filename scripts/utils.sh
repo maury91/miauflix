@@ -82,19 +82,36 @@ ensure_data_dir() {
     fi
   fi
 
-  # Docker Desktop bind mounts enforce host permissions even for container root.
-  # Keep file modes unchanged (they may contain encrypted configuration) and
-  # only make the directory entries writable for the service users.
-  if chmod a+rwx "$data_dir" "$catalog_data_dir" 2>/dev/null; then
+  # Keep the host owner for the backend and share the directory with the
+  # catalog's fixed UID/GID without granting access to every local account.
+  if chgrp 911 "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+    chmod 2770 "$data_dir" 2>/dev/null && chmod 0770 "$catalog_data_dir" 2>/dev/null; then
     return 0
   fi
 
-  if command_exists sudo && sudo chmod a+rwx "$data_dir" "$catalog_data_dir"; then
+  if command_exists sudo && \
+    sudo chgrp 911 "$data_dir" "$catalog_data_dir" && \
+    sudo chmod 2770 "$data_dir" && sudo chmod 0770 "$catalog_data_dir"; then
+    return 0
+  fi
+
+  # Some host systems do not expose the catalog GID to the invoking user.
+  # Grant only UID 911 access through the host ACL instead of opening the
+  # directories to every local account.
+  chmod 0700 "$data_dir" "$catalog_data_dir" 2>/dev/null || true
+  if command_exists setfacl && \
+    setfacl -m u:911:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+    setfacl -d -m u:911:rwx "$catalog_data_dir" 2>/dev/null; then
+    return 0
+  fi
+
+  if [ "$(uname -s)" = "Darwin" ] && \
+    chmod +a "user:911 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null; then
     return 0
   fi
 
   print_error "Cannot make ${data_dir} writable for the Docker services."
-  print_status "Run: sudo chmod a+rwx ${data_dir} ${catalog_data_dir}"
+  print_status "Run: sudo chgrp 911 ${data_dir} ${catalog_data_dir} && sudo chmod 2770 ${data_dir} && sudo chmod 0770 ${catalog_data_dir}"
   return 1
 }
 

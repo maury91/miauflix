@@ -300,6 +300,9 @@ export class SourceService {
     if (!movie?.imdbId) return { complete: true, sourceCount: 0 };
     const providerNames = this.contentDirectoryService.getMovieDirectoryNames();
     if (providerNames.every(name => movie?.contentDirectoriesSearched.includes(name))) {
+      if (movie.nextSourceSearchAt && movie.nextSourceSearchAt > new Date()) {
+        return { complete: true, sourceCount: 0 };
+      }
       await this.movieRepository.resetSourceSearchState(movieId);
       movie = await this.movieRepository.findById(movieId);
       if (!movie?.imdbId) return { complete: true, sourceCount: 0 };

@@ -122,7 +122,7 @@ export class Database {
         StreamingKey,
         Progress,
       ],
-      synchronize: true,
+      synchronize: false,
       logger: new DatabaseLogger('all'),
       logging: true,
     });
@@ -130,6 +130,8 @@ export class Database {
 
   public async initialize() {
     await this.dataSource.initialize();
+    await this.repairLegacyDuplicates();
+    await this.dataSource.synchronize();
     this.mediaListRepository = new MediaListRepository(this);
     this.movieSourceRepository = new MovieSourceRepository(this);
     this.movieRepository = new MovieRepository(this);
@@ -141,6 +143,105 @@ export class Database {
     this.storageRepository = new StorageRepository(this);
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this.dataSource);
+  }
+
+  private async repairLegacyDuplicates(): Promise<void> {
+    const runner = this.dataSource.createQueryRunner();
+    await runner.connect();
+    await runner.startTransaction();
+
+    const quote = (name: string) => `"${name.replaceAll('"', '""')}"`;
+
+    try {
+      const tvShowMetadata = this.dataSource.getMetadata(TVShow);
+      const seasonMetadata = this.dataSource.getMetadata(Season);
+      const episodeMetadata = this.dataSource.getMetadata(Episode);
+      const tvShowTable = quote(tvShowMetadata.tableName);
+      const seasonTable = quote(seasonMetadata.tableName);
+      const episodeTable = quote(episodeMetadata.tableName);
+      const tableNames = new Set(
+        (
+          (await runner.query(
+            `SELECT name FROM sqlite_master WHERE type = 'table' AND name IN (?, ?, ?)`,
+            [tvShowMetadata.tableName, seasonMetadata.tableName, episodeMetadata.tableName]
+          )) as Array<{ name: string }>
+        ).map(row => row.name)
+      );
+
+      if (tableNames.has(tvShowMetadata.tableName)) {
+        const duplicateShows = (await runner.query(
+          `SELECT "tmdbId" AS media_id FROM ${tvShowTable} GROUP BY "tmdbId" HAVING COUNT(*) > 1`
+        )) as Array<{ media_id: number }>;
+        for (const { media_id: mediaId } of duplicateShows) {
+          const rows = (await runner.query(
+            `SELECT "id", "watching" FROM ${tvShowTable} WHERE "tmdbId" = ? ORDER BY "updatedAt" DESC, "id" DESC`,
+            [mediaId]
+          )) as Array<{ id: number; watching: boolean | number }>;
+          const [keep, ...duplicates] = rows;
+          if (!keep) continue;
+          if (duplicates.some(row => Boolean(row.watching))) {
+            await runner.query(`UPDATE ${tvShowTable} SET "watching" = 1 WHERE "id" = ?`, [
+              keep.id,
+            ]);
+          }
+          for (const duplicate of duplicates) {
+            if (tableNames.has(seasonMetadata.tableName)) {
+              await runner.query(`UPDATE ${seasonTable} SET "tvShowId" = ? WHERE "tvShowId" = ?`, [
+                keep.id,
+                duplicate.id,
+              ]);
+            }
+            await runner.query(`DELETE FROM ${tvShowTable} WHERE "id" = ?`, [duplicate.id]);
+          }
+        }
+      }
+
+      if (tableNames.has(seasonMetadata.tableName)) {
+        const duplicateSeasons = (await runner.query(
+          `SELECT "tvShowId" AS tv_show_id, "seasonNumber" AS season_number FROM ${seasonTable} GROUP BY "tvShowId", "seasonNumber" HAVING COUNT(*) > 1`
+        )) as Array<{ tv_show_id: number; season_number: number }>;
+        for (const { tv_show_id: tvShowId, season_number: seasonNumber } of duplicateSeasons) {
+          const rows = (await runner.query(
+            `SELECT "id" FROM ${seasonTable} WHERE "tvShowId" = ? AND "seasonNumber" = ? ORDER BY "updatedAt" DESC, "id" DESC`,
+            [tvShowId, seasonNumber]
+          )) as Array<{ id: number }>;
+          const [keep, ...duplicates] = rows;
+          if (!keep) continue;
+          for (const duplicate of duplicates) {
+            if (tableNames.has(episodeMetadata.tableName)) {
+              await runner.query(`UPDATE ${episodeTable} SET "seasonId" = ? WHERE "seasonId" = ?`, [
+                keep.id,
+                duplicate.id,
+              ]);
+            }
+            await runner.query(`DELETE FROM ${seasonTable} WHERE "id" = ?`, [duplicate.id]);
+          }
+        }
+
+        if (tableNames.has(episodeMetadata.tableName)) {
+          const duplicateEpisodes = (await runner.query(
+            `SELECT "seasonId" AS season_id, "episodeNumber" AS episode_number FROM ${episodeTable} GROUP BY "seasonId", "episodeNumber" HAVING COUNT(*) > 1`
+          )) as Array<{ season_id: number; episode_number: number }>;
+          for (const { season_id: seasonId, episode_number: episodeNumber } of duplicateEpisodes) {
+            const rows = (await runner.query(
+              `SELECT "id" FROM ${episodeTable} WHERE "seasonId" = ? AND "episodeNumber" = ? ORDER BY "updatedAt" DESC, "id" DESC`,
+              [seasonId, episodeNumber]
+            )) as Array<{ id: number }>;
+            const [, ...duplicates] = rows;
+            for (const duplicate of duplicates) {
+              await runner.query(`DELETE FROM ${episodeTable} WHERE "id" = ?`, [duplicate.id]);
+            }
+          }
+        }
+      }
+
+      await runner.commitTransaction();
+    } catch (error) {
+      await runner.rollbackTransaction();
+      throw error;
+    } finally {
+      await runner.release();
+    }
   }
 
   public async close(): Promise<void> {
