@@ -18,6 +18,8 @@ port_assignment=$("$script_dir/find-port.sh")
 eval "$port_assignment"
 export PORT
 export ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true
+export E2E_CATALOG_TMDB_TOKEN=''
+export TMDB_API_ACCESS_TOKEN='e2e-dummy-token'
 export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
 
