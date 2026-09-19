@@ -155,6 +155,10 @@ fi
 
 if [[ "$INITIAL_SETUP" == "true" ]]; then
     export ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true
+    # Keep the provider mock usable while forcing the app's Catalog service
+    # configuration to be completed through the first-run UI.
+    export E2E_CATALOG_TMDB_TOKEN=''
+    export TMDB_API_ACCESS_TOKEN='e2e-dummy-token'
 fi
 
 # Export VERBOSE for subscripts

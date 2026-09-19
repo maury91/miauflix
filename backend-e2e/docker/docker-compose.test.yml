@@ -1,4 +1,13 @@
 services:
+  # Real broker keeps the Queue service ready so the initial-setup flow can
+  # exercise the Catalog configuration step deterministically.
+  bunqueue:
+    image: ghcr.io/egeominotti/bunqueue:2.8.61
+    volumes:
+      - test_bunqueue_data:/app/data
+    networks:
+      - test-network
+
   # Backend service
   backend:
     build:
@@ -11,9 +20,13 @@ services:
       - NODE_ENV=test
       - RATE_LIMIT_TEST_MODE=true
       - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
+      - BUNQUEUE_HOST=bunqueue
+      - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://media-catalog:3001
       - CATALOG__TMDB_API_URL=http://tmdb-mock/3
-      - CATALOG__TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
+      # The initial-setup lane overrides E2E_CATALOG_TMDB_TOKEN with an empty
+      # value so the browser must complete Catalog configuration through the UI.
+      - CATALOG__TMDB_API_ACCESS_TOKEN=${E2E_CATALOG_TMDB_TOKEN-e2e-dummy-token}
       - YTS_API_URL=http://yts-mock
       - TRAKT_API_URL=http://trakt-mock
       - THE_RARBG_API_URL=http://therarbg-mock
@@ -41,6 +54,8 @@ services:
       retries: 30
       start_period: 10s
     depends_on:
+      bunqueue:
+        condition: service_started
       media-catalog:
         condition: service_healthy
       tmdb-mock:
@@ -60,7 +75,7 @@ services:
     environment:
       - CATALOG_DATA_DIR=/app/data
       - TMDB_API_URL=http://tmdb-mock/3
-      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
+      - TMDB_API_ACCESS_TOKEN=${E2E_CATALOG_TMDB_TOKEN-e2e-dummy-token}
       - CATALOG_DISABLE_BACKGROUND_TASKS=true
       - DEBUG=*
     networks:
@@ -173,5 +188,7 @@ networks:
     driver: bridge
 
 volumes:
+  test_bunqueue_data:
+    name: miauflix_test_bunqueue_data
   test_downloads:
     name: miauflix_test_downloads
