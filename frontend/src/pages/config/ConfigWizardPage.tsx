@@ -253,6 +253,11 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
         delete next[service];
         return next;
       });
+      setServiceActions(current => {
+        const next = { ...current };
+        delete next[service];
+        return next;
+      });
       setGlobalResult(null);
     },
     [configEntries, handleChange]
@@ -298,6 +303,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
   const handleServiceSave = useCallback(
     async (service: string) => {
       setServiceActions(current => ({ ...current, [service]: 'saving' }));
+      let saved = false;
       try {
         const response = await saveServiceConfig({ service, entries: getServiceEntries(service) });
         if ('error' in response) {
@@ -330,13 +336,19 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             needsProcessRestart: response.data.needsProcessRestart.includes(service as never),
           },
         }));
-        if (response.data.success) markServiceSaved(service);
+        if (response.data.success) {
+          markServiceSaved(service);
+          saved = true;
+          setServiceActions(current => ({ ...current, [service]: 'saved' }));
+        }
       } finally {
-        setServiceActions(current => {
-          const next = { ...current };
-          delete next[service];
-          return next;
-        });
+        if (!saved) {
+          setServiceActions(current => {
+            const next = { ...current };
+            delete next[service];
+            return next;
+          });
+        }
       }
     },
     [getServiceEntries, markServiceSaved, saveServiceConfig]

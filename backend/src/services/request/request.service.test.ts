@@ -94,6 +94,60 @@ describe('RequestService response limits', () => {
     ).rejects.toMatchObject({ code: 'response_too_large' });
   });
 
+  it('bounds the FlareSolverr envelope before parsing it', async () => {
+    const { config, fetchSpy, requestService } = setupTest();
+    const configGet = config.get as unknown as jest.Mock;
+    configGet.mockImplementation((key: string) => {
+      if (key === 'ENABLE_FLARESOLVERR') return true as never;
+      if (key === 'FLARESOLVERR_URL') return 'https://solver.example' as never;
+      return undefined as never;
+    });
+    fetchSpy.mockResolvedValueOnce(new Response('', { status: 403 })).mockResolvedValueOnce(
+      Response.json({
+        status: 'ok',
+        message: 'x'.repeat(70_000),
+        solution: {
+          status: 200,
+          headers: {},
+          response: 'ok',
+          cookies: [],
+        },
+      })
+    );
+
+    await expect(
+      requestService.request('https://example.com/file', { maxResponseBytes: 8 })
+    ).rejects.toMatchObject({ code: 'response_too_large' });
+  });
+
+  it('allows envelope overhead when the solved response is within its limit', async () => {
+    const { config, fetchSpy, requestService } = setupTest();
+    const configGet = config.get as unknown as jest.Mock;
+    configGet.mockImplementation((key: string) => {
+      if (key === 'ENABLE_FLARESOLVERR') return true as never;
+      if (key === 'FLARESOLVERR_URL') return 'https://solver.example' as never;
+      return undefined as never;
+    });
+    const solvedResponse = '"'.repeat(32);
+    fetchSpy.mockResolvedValueOnce(new Response('', { status: 403 })).mockResolvedValueOnce(
+      Response.json({
+        status: 'ok',
+        solution: {
+          status: 200,
+          headers: {},
+          response: solvedResponse,
+          cookies: [],
+        },
+      })
+    );
+
+    const result = await requestService.request('https://example.com/file', {
+      maxResponseBytes: solvedResponse.length,
+    });
+
+    expect(result.body).toBe(solvedResponse);
+  });
+
   it('clears the request timeout when FlareSolverr returns early', async () => {
     const { config, fetchSpy, requestService } = setupTest();
     const configGet = config.get as unknown as jest.Mock;

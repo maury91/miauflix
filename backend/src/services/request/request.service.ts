@@ -99,6 +99,16 @@ async function readResponseWithLimit<T>(
   return text;
 }
 
+const FLARESOLVERR_JSON_EXPANSION_FACTOR = 6;
+const FLARESOLVERR_ENVELOPE_OVERHEAD_BYTES = 64 * 1024;
+
+function getFlareSolverrEnvelopeLimit(maxResponseBytes: number): number {
+  return Math.min(
+    Number.MAX_SAFE_INTEGER,
+    maxResponseBytes * FLARESOLVERR_JSON_EXPANSION_FACTOR + FLARESOLVERR_ENVELOPE_OVERHEAD_BYTES
+  );
+}
+
 /**
  * Service for making HTTP requests with cookie management, user agent rotation,
  * and FlareSolverr integration for bypassing Cloudflare protection.
@@ -226,7 +236,17 @@ export class RequestService {
         );
       }
 
-      const data = (await response.json()) as FlareSolverrResponse;
+      const rawData =
+        maxResponseBytes === undefined
+          ? await response.json()
+          : await readResponseWithLimit<FlareSolverrResponse>(
+              response,
+              getFlareSolverrEnvelopeLimit(maxResponseBytes),
+              false
+            );
+      const data = (
+        typeof rawData === 'string' ? JSON.parse(rawData) : rawData
+      ) as FlareSolverrResponse;
 
       logger.debug(
         'FlareSolverr',
@@ -448,6 +468,9 @@ export class RequestService {
           this.statsService.metricEnd(errorMetricId);
           this.statsService.metricEnd(requestMetricId);
           this.statsService.metricCancel(successMetricId);
+          if (flareError instanceof RequestError && flareError.code === 'response_too_large') {
+            throw flareError;
+          }
           // Return the original 403 response if FlareSolverr fails
           return {
             body: maxResponseBytes

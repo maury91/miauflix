@@ -142,4 +142,47 @@ describe('ServiceScheduleCoordinator', () => {
     expect(jobs.removeSchedulesByPrefix).toHaveBeenCalledWith('miauflix-list-refresh', 'refresh-');
     await coordinator.stop();
   });
+
+  it('stops installing catalog schedules when readiness changes during installation', async () => {
+    let resolveFirstSchedule!: () => void;
+    const firstSchedule = new Promise<void>(resolve => {
+      resolveFirstSchedule = resolve;
+    });
+    const { coordinator, jobs, catalog } = setupTest(true);
+    jobs.schedule.mockImplementation(schedule =>
+      schedule.job === 'catalog.movie-changes.scan' ? firstSchedule : Promise.resolve(undefined)
+    );
+
+    await jest.advanceTimersByTimeAsync(0);
+    catalog.isReady.mockReturnValue(false);
+    resolveFirstSchedule();
+    await jest.advanceTimersByTimeAsync(0);
+
+    expect(jobs.schedule).not.toHaveBeenCalledWith(
+      expect.objectContaining({ job: 'catalog.show-changes.scan' })
+    );
+    expect(jobs.removeSchedulesByPrefix).toHaveBeenCalledWith('miauflix-list-refresh', 'refresh-');
+    await coordinator.stop();
+  });
+
+  it('does not install list schedules after the list removal becomes stale', async () => {
+    let resolveRemoval!: () => void;
+    const removal = new Promise<void>(resolve => {
+      resolveRemoval = resolve;
+    });
+    const { coordinator, jobs, catalog, configListener } = setupTest(true);
+    await jest.advanceTimersByTimeAsync(0);
+    jobs.schedule.mockClear();
+    jobs.removeSchedulesByPrefix.mockImplementationOnce(() => removal);
+
+    configListener?.();
+    await jest.advanceTimersByTimeAsync(0);
+    catalog.isReady.mockReturnValue(false);
+    resolveRemoval();
+    await coordinator.stop();
+
+    expect(jobs.schedule).not.toHaveBeenCalledWith(
+      expect.objectContaining({ job: 'list.refresh.plan' })
+    );
+  });
 });

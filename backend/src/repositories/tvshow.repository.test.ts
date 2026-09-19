@@ -6,19 +6,32 @@ import { createMockSeasonDetail, createMockTVShowDetail } from '@__test-utils__/
 import { configureFakerSeed } from '@__test-utils__/utils';
 
 describe('TVShowRepository season snapshots', () => {
-  const dbHelper = createTestDatabase();
+  type TestDbHelper = ReturnType<typeof createTestDatabase>;
+  let cleanupHelper: TestDbHelper | undefined;
+
+  const setupTest = async () => {
+    const dbHelper = createTestDatabase();
+    cleanupHelper = dbHelper;
+    const database = await dbHelper.setupTestDatabase();
+    return { database, repository: database.getTVShowRepository() };
+  };
 
   beforeAll(() => {
     configureFakerSeed();
   });
 
+  beforeEach(() => {
+    jest.useFakeTimers({ doNotFake: ['Date'] });
+  });
+
   afterEach(async () => {
-    await dbHelper.cleanup();
+    await cleanupHelper?.cleanup();
+    cleanupHelper = undefined;
+    jest.useRealTimers();
   });
 
   it('removes episodes absent from the latest catalog snapshot', async () => {
-    const database = await dbHelper.setupTestDatabase();
-    const repository = database.getTVShowRepository();
+    const { repository } = await setupTest();
     await repository.upsertTVShowDetail(createMockTVShowDetail({ mediaId: 500, seasons: [] }));
 
     const firstSnapshot = createMockSeasonDetail({
@@ -51,8 +64,7 @@ describe('TVShowRepository season snapshots', () => {
   });
 
   it('clears all episodes when the catalog returns an empty snapshot', async () => {
-    const database = await dbHelper.setupTestDatabase();
-    const repository = database.getTVShowRepository();
+    const { repository } = await setupTest();
     await repository.upsertTVShowDetail(createMockTVShowDetail({ mediaId: 501, seasons: [] }));
 
     const snapshot = createMockSeasonDetail({

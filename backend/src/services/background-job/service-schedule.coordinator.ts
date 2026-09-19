@@ -76,8 +76,14 @@ export class ServiceScheduleCoordinator {
       return;
     }
 
-    await this.install(sourceSchedules(this.config));
-    await this.install(cacheSchedules(this.config));
+    if (!(await this.install(sourceSchedules(this.config), revision))) {
+      await this.removeCatalogSchedules();
+      return;
+    }
+    if (!(await this.install(cacheSchedules(this.config), revision))) {
+      await this.removeCatalogSchedules();
+      return;
+    }
 
     if (revision !== this.revision || !this.catalog.isReady()) {
       await this.removeCatalogSchedules();
@@ -91,18 +97,48 @@ export class ServiceScheduleCoordinator {
     }
 
     const desiredLists = listSchedules(this.config, lists);
-    await this.install(catalogSchedules(this.config));
-    await this.replaceListSchedules(desiredLists);
+    if (!(await this.install(catalogSchedules(this.config), revision, true))) {
+      await this.removeCatalogSchedules();
+      return;
+    }
+    if (!(await this.replaceListSchedules(desiredLists, revision))) {
+      await this.removeCatalogSchedules();
+      return;
+    }
+    if (this.isStale(revision, true)) {
+      await this.removeCatalogSchedules();
+      return;
+    }
     await this.removeLegacySchedules();
   }
 
-  private async install(schedules: BackgroundJobSchedule[]): Promise<void> {
-    for (const schedule of schedules) await this.jobs.schedule(schedule);
+  private isStale(revision: number, catalogRequired = false): boolean {
+    return (
+      this.stopped || revision !== this.revision || (catalogRequired && !this.catalog.isReady())
+    );
   }
 
-  private async replaceListSchedules(desired: BackgroundJobSchedule[]): Promise<void> {
+  private async install(
+    schedules: BackgroundJobSchedule[],
+    revision: number,
+    catalogRequired = false
+  ): Promise<boolean> {
+    for (const schedule of schedules) {
+      if (this.isStale(revision, catalogRequired)) return false;
+      await this.jobs.schedule(schedule);
+      if (this.isStale(revision, catalogRequired)) return false;
+    }
+    return true;
+  }
+
+  private async replaceListSchedules(
+    desired: BackgroundJobSchedule[],
+    revision: number
+  ): Promise<boolean> {
+    if (this.isStale(revision, true)) return false;
     await this.jobs.removeSchedulesByPrefix(BACKGROUND_JOB_QUEUES['list.refresh.plan'], 'refresh-');
-    await this.install(desired);
+    if (this.isStale(revision, true)) return false;
+    return this.install(desired, revision, true);
   }
 
   private async removeCatalogSchedules(): Promise<void> {
