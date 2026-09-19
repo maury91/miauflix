@@ -8,7 +8,7 @@ export function Cacheable<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Args extends any[],
   Return,
->(ttlMs: number, reset = false) {
+>(ttlMs: number, reset = false, version?: string) {
   return function (
     target: This,
     key: string | symbol,
@@ -18,7 +18,8 @@ export function Cacheable<
 
     if (typeof originalMethod === 'function') {
       async function cacheMethod(this: This, ...args: Args): Promise<Return> {
-        const cacheKey = `cache.${target.constructor.name}.${String(key)}.${JSON.stringify(args)}`;
+        const versionSegment = version ? `${version}.` : '';
+        const cacheKey = `cache.${target.constructor.name}.${String(key)}.${versionSegment}${JSON.stringify(args)}`;
         const cached = await withClientSpan(
           'cache.get',
           () => this.cache.get<Return>(cacheKey).catch(() => null),

@@ -1,16 +1,16 @@
 import type { EntityTarget, ObjectLiteral, Repository } from 'typeorm';
 
 import type { Episode } from '@entities/episode.entity';
-import type { Genre } from '@entities/genre.entity';
 import type { Movie } from '@entities/movie.entity';
 import type { MovieSource } from '@entities/movie-source.entity';
 import type { RefreshToken } from '@entities/refresh-token.entity';
+import type { Season } from '@entities/season.entity';
 import type { Storage } from '@entities/storage.entity';
 import type { StreamingKey } from '@entities/streaming-key.entity';
+import type { TVShow } from '@entities/tvshow.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
 import type { AuditLogRepository } from '@repositories/audit-log.repository';
-import type { GenreRepository } from '@repositories/genre.repository';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type { MovieSourceRepository } from '@repositories/movie-source.repository';
@@ -18,72 +18,76 @@ import type { ProgressRepository } from '@repositories/progress.repository';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StorageRepository } from '@repositories/storage.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
-import type { SyncStateRepository } from '@repositories/syncState.repository';
 import type { TraktUserRepository } from '@repositories/trakt-user.repository';
 import type { TVShowRepository } from '@repositories/tvshow.repository';
 import type { UserRepository } from '@repositories/user.repository';
+import type { MovieDetail } from '@services/catalog/catalog.types';
 import type { EncryptionService } from '@services/encryption/encryption.service';
 
-// Mock MovieRepository
+// Mock MovieRepository — mirrors the slim local movie index (catalog data lives
+// in the media-catalog service, the backend only mirrors what its SQL needs).
 const createMockMovieRepository = (): jest.Mocked<MovieRepository> => {
   return {
-    findByTMDBId: jest.fn(
-      (_tmdbId: number | string): Promise<Movie | null> => Promise.resolve(null)
+    findByIds: jest.fn((): Promise<Movie[]> => Promise.resolve([])),
+    findById: jest.fn((): Promise<Movie | null> => Promise.resolve(null)),
+    findByMediaId: jest.fn((): Promise<Movie | null> => Promise.resolve(null)),
+    findListItemsByMediaIds: jest.fn((): Promise<Movie[]> => Promise.resolve([])),
+    findReferencesByMediaIds: jest.fn(
+      (): Promise<Array<Pick<Movie, 'id' | 'mediaId'>>> => Promise.resolve([])
     ),
-    create: jest.fn(details =>
-      Promise.resolve({
-        id: 1,
-        tmdbId: details.tmdbId,
-        title: details.title,
-        overview: details.overview,
-        tagline: details.tagline,
-        releaseDate: details.releaseDate,
-        poster: details.poster,
-        backdrop: details.backdrop,
-        logo: details.logo,
-        runtime: details.runtime,
-        popularity: details.popularity,
-        rating: details.rating,
-        genres: details.genres || [],
-        translations: [],
-      } as unknown as Movie)
+    upsertMovieDetail: jest.fn(
+      (detail: MovieDetail): Promise<Movie> =>
+        Promise.resolve({ id: 1, mediaId: detail.mediaId } as unknown as Movie)
     ),
-    addTranslation: jest.fn(() => Promise.resolve({})),
-    checkForChangesAndUpdate: jest.fn(() => Promise.resolve({})),
-    updateGenres: jest.fn(() => Promise.resolve({})),
-    findByIds: jest.fn(() => Promise.resolve([])),
-    findById: jest.fn(() => Promise.resolve(null)),
-    findMoviesPendingSourceSearch: jest.fn(() => Promise.resolve([])),
-    findMoviesWithoutSources: jest.fn(() => Promise.resolve([])),
+    updateFromSummary: jest.fn((): Promise<void> => Promise.resolve()),
+    createFromSummary: jest.fn(
+      (movie: Partial<Movie>): Promise<Movie> =>
+        Promise.resolve({ id: 1, mediaId: movie.mediaId ?? 1 } as unknown as Movie)
+    ),
+    findMoviesPendingSourceSearch: jest.fn((): Promise<Movie[]> => Promise.resolve([])),
+    findMoviesWithoutSources: jest.fn((): Promise<Movie[]> => Promise.resolve([])),
+    markSourceSearched: jest.fn((): Promise<void> => Promise.resolve()),
+    markSourceSearchAttempt: jest.fn((): Promise<void> => Promise.resolve()),
+    resetSourceSearchState: jest.fn((): Promise<void> => Promise.resolve()),
+    updateMovieTrailerIfDoesntExists: jest.fn((): Promise<void> => Promise.resolve()),
+    saveMovie: jest.fn((movie: Movie): Promise<Movie> => Promise.resolve(movie)),
+    findMoviesByIdsWithImdb: jest.fn((): Promise<Movie[]> => Promise.resolve([])),
   } as unknown as jest.Mocked<MovieRepository>;
 };
 
-// Mock GenreRepository
-const createMockGenreRepository = (): jest.Mocked<GenreRepository> => {
+// Mock TVShowRepository — mirrors the slim local tv show index.
+const createMockTVShowRepository = (): jest.Mocked<TVShowRepository> => {
   return {
-    findAll: jest.fn(() =>
-      Promise.resolve([
-        { id: 1, name: 'Action', translations: [{ language: 'en' }] },
-      ] as unknown as Genre[])
+    findByIds: jest.fn((): Promise<TVShow[]> => Promise.resolve([])),
+    findByMediaId: jest.fn((): Promise<TVShow | null> => Promise.resolve(null)),
+    findListItemsByMediaIds: jest.fn((): Promise<TVShow[]> => Promise.resolve([])),
+    findReferencesByMediaIds: jest.fn(
+      (): Promise<Array<Pick<TVShow, 'id' | 'mediaId'>>> => Promise.resolve([])
     ),
-    createOrGetGenre: jest.fn(id =>
-      Promise.resolve({
-        id,
-        name: 'Mocked Genre',
-        translations: [{ language: 'en' }],
-      } as unknown as Genre)
+    upsertTVShowDetail: jest.fn(
+      (detail: { mediaId: number }): Promise<TVShow> =>
+        Promise.resolve({ id: 1, mediaId: detail.mediaId } as unknown as TVShow)
     ),
-    createTranslation: jest.fn(() => Promise.resolve()),
-  } as unknown as jest.Mocked<GenreRepository>;
-};
-
-// Mock SyncStateRepository
-const createMockSyncStateRepository = (): jest.Mocked<SyncStateRepository> => {
-  return {
-    getLastSync: jest.fn((): Promise<Date | null> => Promise.resolve(null)),
-    setLastSync: jest.fn((): Promise<void> => Promise.resolve()),
-    getByName: jest.fn(() => Promise.resolve(null)),
-  } as unknown as jest.Mocked<SyncStateRepository>;
+    upsertSeasonDetail: jest.fn((): Promise<Season> => Promise.resolve({ id: 1 } as Season)),
+    updateFromSummary: jest.fn((): Promise<void> => Promise.resolve()),
+    createFromSummary: jest.fn(
+      (tvShow: Partial<TVShow>): Promise<TVShow> =>
+        Promise.resolve({ id: 1, mediaId: tvShow.mediaId ?? 1 } as unknown as TVShow)
+    ),
+    findIncompleteSeason: jest.fn((): Promise<Season | null> => Promise.resolve(null)),
+    findIncompleteSeasonByShowIds: jest.fn((): Promise<Season | null> => Promise.resolve(null)),
+    markSeasonAsSynced: jest.fn((): Promise<void> => Promise.resolve()),
+    findSeasonByIdWithEpisodes: jest.fn((): Promise<Season | null> => Promise.resolve(null)),
+    saveTVShow: jest.fn((tvShow: TVShow): Promise<TVShow> => Promise.resolve(tvShow)),
+    createSeason: jest.fn((): Promise<Season> => Promise.resolve({ id: 1 } as Season)),
+    createEpisode: jest.fn((): Promise<Episode> => Promise.resolve({ id: 1 } as Episode)),
+    updateSeasonSyncStatus: jest.fn((): Promise<void> => Promise.resolve()),
+    updateSeasonDetails: jest.fn((): Promise<void> => Promise.resolve()),
+    getWatchingTVShowIds: jest.fn((): Promise<number[]> => Promise.resolve([])),
+    getWatchingTVShowMediaIds: jest.fn((): Promise<number[]> => Promise.resolve([])),
+    markAsWatching: jest.fn((): Promise<void> => Promise.resolve()),
+    markAsNotWatching: jest.fn((): Promise<void> => Promise.resolve()),
+  } as unknown as jest.Mocked<TVShowRepository>;
 };
 
 // Mock MovieSourceRepository
@@ -214,8 +218,6 @@ const createMockStorageRepository = (): jest.Mocked<StorageRepository> => {
 // Mock Database class
 export class Database {
   private movieRepository: jest.Mocked<MovieRepository>;
-  private genreRepository: jest.Mocked<GenreRepository>;
-  private syncStateRepository: jest.Mocked<SyncStateRepository>;
   private tvShowRepository: jest.Mocked<TVShowRepository>;
   private progressRepository: jest.Mocked<ProgressRepository>;
   private seasonRepository: jest.Mocked<Record<string, unknown>>;
@@ -231,8 +233,6 @@ export class Database {
   // Make getter methods jest mocks so they can be overridden
   public getMovieRepository: jest.Mock;
   public getTVShowRepository: jest.Mock;
-  public getGenreRepository: jest.Mock;
-  public getSyncStateRepository: jest.Mock;
   public getProgressRepository: jest.Mock;
   public getSeasonRepository: jest.Mock;
   public getMediaListRepository: jest.Mock;
@@ -247,9 +247,7 @@ export class Database {
   constructor(_encryptionService?: EncryptionService) {
     // Initialize all repositories with default mocks
     this.movieRepository = createMockMovieRepository();
-    this.genreRepository = createMockGenreRepository();
-    this.syncStateRepository = createMockSyncStateRepository();
-    this.tvShowRepository = {} as jest.Mocked<TVShowRepository>;
+    this.tvShowRepository = createMockTVShowRepository();
     this.progressRepository = {} as jest.Mocked<ProgressRepository>;
     this.seasonRepository = {} as jest.Mocked<Record<string, unknown>>;
     this.mediaListRepository = {} as jest.Mocked<MediaListRepository>;
@@ -264,8 +262,6 @@ export class Database {
     // Initialize getter methods as jest mocks that return the repositories
     this.getMovieRepository = jest.fn(() => this.movieRepository);
     this.getTVShowRepository = jest.fn(() => this.tvShowRepository);
-    this.getGenreRepository = jest.fn(() => this.genreRepository);
-    this.getSyncStateRepository = jest.fn(() => this.syncStateRepository);
     this.getProgressRepository = jest.fn(() => this.progressRepository);
     this.getSeasonRepository = jest.fn(() => this.seasonRepository);
     this.getMediaListRepository = jest.fn(() => this.mediaListRepository);

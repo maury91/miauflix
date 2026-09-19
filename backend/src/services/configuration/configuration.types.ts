@@ -21,7 +21,10 @@ export interface ConfigEntryView {
   serviceGroup: string;
   serviceDescription: string;
   description: string;
+  label?: string;
   required: boolean;
+  advanced?: boolean;
+  warning?: string;
   hasValue: boolean;
   inputType: 'boolean' | 'number' | 'select' | 'size' | 'text' | 'time';
   booleanStateDescriptions?: { true: string; false: string };

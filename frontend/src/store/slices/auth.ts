@@ -68,7 +68,8 @@ export const authSlice = createSlice({
       state.currentUser = null;
     });
 
-    // List sessions successful - update available sessions and auto-select if only one
+    // List sessions successful - update available sessions and auto-select when all cookies belong
+    // to one user. A browser can legitimately hold multiple session cookies for the same account.
     builder.addMatcher(authApi.endpoints.listSessions.matchFulfilled, (state, action) => {
       const sessions = action.payload;
       state.availableSessions = sessions;
@@ -80,13 +81,13 @@ export const authSlice = createSlice({
         }
       }
 
-      // Auto-select if only one session and no session is currently selected
-      if (sessions.length === 1 && !state.currentSessionId) {
+      const uniqueUserIds = new Set(sessions.map(session => session.user.id));
+      if (sessions.length > 0 && uniqueUserIds.size === 1 && !state.currentSessionId) {
         const session = sessions[0];
         state.currentSessionId = session.session;
         state.currentUser = session.user;
       }
-      // If multiple sessions or no sessions, state remains as is (user will select or login)
+      // If sessions belong to multiple users, state remains as is so the user can choose or log in.
     });
 
     // Device login successful - set session and user

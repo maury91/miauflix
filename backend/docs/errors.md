@@ -74,17 +74,6 @@ Single class `EncryptionError(message, code)`.
 
 ---
 
-### `scheduler` — `@errors/scheduler.errors`
-
-Single class `SchedulerError(message, code)`.
-
-| Code                | When used                                                    |
-| ------------------- | ------------------------------------------------------------ |
-| `already_scheduled` | `scheduleTask` called with a name that is already registered |
-| `not_scheduled`     | `cancelTask` called with a name that does not exist          |
-
----
-
 ### `api` — `@errors/api.errors`
 
 Class `ApiError(message, code, service?, status?)` where `service` is the external service name (e.g. `'trakt'`, `'tmdb'`, `'yts'`, `'therarbg'`) and `status` is the HTTP status code when applicable.

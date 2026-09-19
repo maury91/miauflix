@@ -13,6 +13,7 @@ export const vpnConfigurationDefinition = serviceConfiguration({
       example: 'false',
       defaultValue: 'false',
       required: false,
+      advanced: true,
       transform: transforms.boolean(),
     }),
   },

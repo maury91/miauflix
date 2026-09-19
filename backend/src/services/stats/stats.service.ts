@@ -10,11 +10,18 @@ interface MetricStart {
   timeframeIndex: number;
 }
 
+interface MetricAccumulator {
+  count: number;
+  min: number;
+  max: number;
+  sum: number;
+}
+
 export class StatsService {
   private readonly timeframeSize: number;
   private readonly maxTimeframes: number;
   private readonly metricStarts: Map<number, MetricStart>;
-  private readonly metricData: Map<string, Map<number, number[]>>;
+  private readonly metricData: Map<string, Map<number, MetricAccumulator>>;
   private readonly eventData: Map<string, Map<number, number>>;
   private readonly oldestUtcMidnightTimestamp = this.getStartOfUtcDay();
   private nextMetricId = 1;
@@ -114,11 +121,17 @@ export class StatsService {
     const metricTimeframes = this.metricData.get(metricStart.name)!;
 
     // Get or create the durations array for this timeframe
-    if (!metricTimeframes.has(metricStart.timeframeIndex)) {
-      metricTimeframes.set(metricStart.timeframeIndex, []);
-    }
-
-    metricTimeframes.get(metricStart.timeframeIndex)!.push(durationSeconds);
+    const accumulator = metricTimeframes.get(metricStart.timeframeIndex) ?? {
+      count: 0,
+      min: Number.POSITIVE_INFINITY,
+      max: Number.NEGATIVE_INFINITY,
+      sum: 0,
+    };
+    accumulator.count++;
+    accumulator.min = Math.min(accumulator.min, durationSeconds);
+    accumulator.max = Math.max(accumulator.max, durationSeconds);
+    accumulator.sum += durationSeconds;
+    metricTimeframes.set(metricStart.timeframeIndex, accumulator);
 
     // Clean up the start record
     this.metricStarts.delete(id);
@@ -167,21 +180,15 @@ export class StatsService {
   /**
    * Calculate statistics for a metric's durations
    */
-  private calculateMetricStats(durations: number[]): MetricStats {
-    if (durations.length === 0) {
+  private calculateMetricStats(accumulator?: MetricAccumulator): MetricStats {
+    if (!accumulator || accumulator.count === 0) {
       return { count: 0, min: 0, max: 0, avg: 0 };
     }
-
-    const min = Math.min(...durations);
-    const max = Math.max(...durations);
-    const sum = durations.reduce((acc, val) => acc + val, 0);
-    const avg = sum / durations.length;
-
     return {
-      count: durations.length,
-      min,
-      max,
-      avg,
+      count: accumulator.count,
+      min: accumulator.min,
+      max: accumulator.max,
+      avg: accumulator.sum / accumulator.count,
     };
   }
 
@@ -228,8 +235,7 @@ export class StatsService {
       const metricStats: MetricStats[] = [];
 
       for (let i = startTimeframeIndex; i <= endTimeframeIndex; i++) {
-        const durations = metricTimeframes.get(i) || [];
-        metricStats.push(this.calculateMetricStats(durations));
+        metricStats.push(this.calculateMetricStats(metricTimeframes.get(i)));
       }
 
       result[metricName] = metricStats;

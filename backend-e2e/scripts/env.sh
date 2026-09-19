@@ -24,6 +24,7 @@ shift # Remove first argument
 # Parse test scope flags
 FRONTEND_ONLY=false
 BACKEND_ONLY=false
+INITIAL_SETUP=false
 DETACHED_FLAG=false
 DETACHED_MODE=false
 UPDATE_SNAPSHOTS=false
@@ -33,6 +34,7 @@ for arg in "$@"; do
   case "$arg" in
     --frontend-only) FRONTEND_ONLY=true ;;
     --backend-only)  BACKEND_ONLY=true ;;
+    --initial-setup) INITIAL_SETUP=true; FRONTEND_ONLY=true ;;
     --update) UPDATE_SNAPSHOTS=true ;;
     -d) DETACHED_FLAG=true ;;
     -v) VERBOSE=1 ;;
@@ -48,6 +50,11 @@ fi
 # Validate that only one scope flag is used
 if [[ "$FRONTEND_ONLY" == "true" && "$BACKEND_ONLY" == "true" ]]; then
     echo "❌ Error: Cannot use both --frontend-only and --backend-only flags"
+    exit 1
+fi
+
+if [[ "$INITIAL_SETUP" == "true" && "$MODE" != "test" ]]; then
+    echo "❌ Error: --initial-setup is only available in test mode"
     exit 1
 fi
 
@@ -144,6 +151,10 @@ else
     export TMDB_API_ACCESS_TOKEN="mock-tmdb-token-for-testing"
     export TRAKT_CLIENT_ID="mock-trakt-client-id"
     export TRAKT_CLIENT_SECRET="mock-trakt-client-secret"
+fi
+
+if [[ "$INITIAL_SETUP" == "true" ]]; then
+    export ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true
 fi
 
 # Export VERBOSE for subscripts
@@ -276,10 +287,14 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
         fi
     fi
 
-    # Extract admin credentials using separate script
-    echo "🔍 Extracting admin credentials..."
-    if ! ./scripts/extract-credentials.sh 60 "$PROJECT_NAME" "$DOCKER_COMPOSE_FILE"; then
-        echo "⚠️  Continuing without credentials - some tests may be skipped"
+    if [[ "$INITIAL_SETUP" == "true" ]]; then
+        echo "🧪 Initial-user setup mode - skipping generated-admin credential extraction"
+    else
+        # Extract admin credentials using separate script
+        echo "🔍 Extracting admin credentials..."
+        if ! ./scripts/extract-credentials.sh 60 "$PROJECT_NAME" "$DOCKER_COMPOSE_FILE"; then
+            echo "⚠️  Continuing without credentials - some tests may be skipped"
+        fi
     fi
 else
     echo "🔄 Using existing containers - skipping Docker startup"
@@ -336,7 +351,14 @@ else
 
     # Run frontend tests if not backend-only
     if [[ "$BACKEND_ONLY" != "true" ]]; then
-        if [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
+        if [[ "$INITIAL_SETUP" == "true" ]]; then
+            echo "🧪 Running initial-user setup frontend E2E test..."
+            if [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
+                npm run test:e2e:initial-setup -w frontend -- --update-snapshots || FRONTEND_TEST_PASSED=false
+            else
+                npm run test:e2e:initial-setup -w frontend || FRONTEND_TEST_PASSED=false
+            fi
+        elif [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
             echo "🧪 Running frontend integration tests with snapshot updates..."
             npm run test:e2e:update -w frontend || FRONTEND_TEST_PASSED=false
         else

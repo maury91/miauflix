@@ -1,11 +1,13 @@
 import {
+  type ServiceStatuses,
   useGetConfigQuery,
+  useGetServiceStatusesQuery,
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
   useUpdateConfigMutation,
 } from '@features/config/api/config.api';
 import type { ConfigServiceActionResult } from '@miauflix/backend';
-import { PALETTE } from '@shared/config/constants';
+import { SETTINGS_PALETTE } from '@shared/config/constants';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -15,7 +17,7 @@ import { ServiceConfigGroup } from './components/ServiceConfigGroup';
 import { useConfigForm } from './hooks/useConfigForm';
 import { preserveInitialServiceOrder, sortServiceGroups } from './config.utils';
 
-import LineMdAlertCircleTwotone from '~icons/line-md/alert-circle-twotone';
+import AlertIcon from '~icons/line-md/alert';
 
 const PageContainer = styled(motion.div)`
   position: fixed;
@@ -23,8 +25,8 @@ const PageContainer = styled(motion.div)`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #0a0d0f;
-  color: white;
+  background-color: ${SETTINGS_PALETTE.background.primary};
+  color: ${SETTINGS_PALETTE.text.primary};
   font-family: 'Poppins', sans-serif;
   overflow-y: auto;
   z-index: 1000;
@@ -48,12 +50,12 @@ const PageTitle = styled.h1`
   font-size: 28px;
   font-weight: 400;
   margin: 0 0 8px 0;
-  color: #ffffff;
+  color: ${SETTINGS_PALETTE.text.primary};
 `;
 
 const PageSubtitle = styled.p`
   font-size: 14px;
-  color: #888;
+  color: ${SETTINGS_PALETTE.text.secondary};
   margin: 0;
   line-height: 1.5;
 `;
@@ -62,8 +64,8 @@ const MissingConfigBanner = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: ${PALETTE.color.dangerSubtle};
-  border: 1px solid ${PALETTE.color.brand};
+  background-color: ${SETTINGS_PALETTE.color.dangerSubtle};
+  border: 1px solid ${SETTINGS_PALETTE.color.dangerBorder};
   border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 24px;
@@ -71,11 +73,11 @@ const MissingConfigBanner = styled.div`
   color: #eee;
 `;
 
-const MissingConfigIcon = styled(LineMdAlertCircleTwotone)`
+const MissingConfigIcon = styled(AlertIcon)`
   flex: 0 0 auto;
   width: 18px;
   height: 18px;
-  color: ${PALETTE.color.brand};
+  color: ${SETTINGS_PALETTE.color.danger};
 `;
 
 const Footer = styled.div`
@@ -84,13 +86,13 @@ const Footer = styled.div`
   align-items: center;
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #191e23;
+  border-top: 1px solid ${SETTINGS_PALETTE.background.border};
 `;
 
 const SaveButton = styled.button`
   padding: 10px 24px;
-  background-color: ${PALETTE.color.brand};
-  color: white;
+  background-color: ${SETTINGS_PALETTE.color.primaryButton};
+  color: #0a0d0f;
   border: none;
   border-radius: 4px;
   font-size: 14px;
@@ -100,11 +102,15 @@ const SaveButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: ${PALETTE.color.brandHover};
+    background-color: ${SETTINGS_PALETTE.color.primaryButtonHover};
+  }
+
+  &:active:not(:disabled) {
+    background-color: ${SETTINGS_PALETTE.color.primaryButtonPressed};
   }
 
   &:disabled {
-    background-color: #444;
+    background-color: #50585b;
     cursor: not-allowed;
   }
 `;
@@ -112,8 +118,8 @@ const SaveButton = styled.button`
 const SkipButton = styled.button`
   padding: 10px 24px;
   background-color: transparent;
-  color: #888;
-  border: 1px solid #444;
+  color: ${SETTINGS_PALETTE.text.secondary};
+  border: 1px solid ${SETTINGS_PALETTE.background.border};
   border-radius: 4px;
   font-size: 14px;
   font-family: 'Poppins', sans-serif;
@@ -121,8 +127,8 @@ const SkipButton = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    color: #ccc;
-    border-color: #666;
+    color: ${SETTINGS_PALETTE.text.primary};
+    border-color: ${SETTINGS_PALETTE.color.interactive};
   }
 `;
 
@@ -132,18 +138,42 @@ const StatusMessage = styled.div<{ $isError?: boolean }>`
   font-size: 13px;
   margin-top: 16px;
   background-color: ${props =>
-    props.$isError ? PALETTE.color.dangerSubtle : 'rgba(76, 175, 80, 0.1)'};
+    props.$isError ? SETTINGS_PALETTE.color.dangerSubtle : 'rgba(66, 184, 131, 0.1)'};
   border: 1px solid
-    ${props => (props.$isError ? PALETTE.color.dangerBorder : 'rgba(76, 175, 80, 0.3)')};
-  color: ${props => (props.$isError ? PALETTE.color.danger : '#81c784')};
+    ${props => (props.$isError ? SETTINGS_PALETTE.color.dangerBorder : 'rgba(66, 184, 131, 0.3)')};
+  color: ${props =>
+    props.$isError ? SETTINGS_PALETTE.color.danger : SETTINGS_PALETTE.color.success};
 `;
 
 interface ConfigWizardPageProps {
   onDismiss: () => void;
 }
 
+function statusFailureResult(
+  service: string,
+  serviceStatuses: ServiceStatuses
+): ConfigServiceActionResult | undefined {
+  const status = serviceStatuses[service];
+  if (!status || !['degraded', 'error', 'needs_configuration'].includes(status.status)) {
+    return undefined;
+  }
+
+  return {
+    service: service as ConfigServiceActionResult['service'],
+    success: false,
+    testMode: 'live',
+    message:
+      status.errorMessage ??
+      status.reason ??
+      status.details ??
+      `The service status is ${status.status.replace(/_/g, ' ')}.`,
+  };
+}
+
 const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
-  const { data: configEntries = [], isLoading } = useGetConfigQuery(undefined);
+  const { data: configEntries = [], isLoading: isConfigLoading } = useGetConfigQuery(undefined);
+  const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =
+    useGetServiceStatusesQuery(undefined);
   const [updateConfig, { isLoading: isSaving }] = useUpdateConfigMutation();
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
@@ -153,7 +183,9 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
   const [serviceResults, setServiceResults] = useState<Record<string, ConfigServiceActionResult>>(
     {}
   );
-  const [serviceActions, setServiceActions] = useState<Record<string, 'test' | 'save'>>({});
+  const [serviceActions, setServiceActions] = useState<
+    Record<string, 'testing' | 'saving' | 'saved'>
+  >({});
   const [serviceNotices, setServiceNotices] = useState<
     Record<string, { restarted?: boolean; needsProcessRestart?: boolean }>
   >({});
@@ -185,7 +217,10 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
       .map(([group]) => group);
   }, [groupedEntries]);
 
-  const initiallySortedGroups = useMemo(() => sortServiceGroups(groupedEntries), [groupedEntries]);
+  const initiallySortedGroups = useMemo(
+    () => sortServiceGroups(groupedEntries, serviceStatuses),
+    [groupedEntries, serviceStatuses]
+  );
 
   useEffect(() => {
     if (initialGroupOrder === null && initiallySortedGroups.length > 0) {
@@ -218,6 +253,11 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
         delete next[service];
         return next;
       });
+      setServiceActions(current => {
+        const next = { ...current };
+        delete next[service];
+        return next;
+      });
       setGlobalResult(null);
     },
     [configEntries, handleChange]
@@ -225,7 +265,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
 
   const handleServiceTest = useCallback(
     async (service: string) => {
-      setServiceActions(current => ({ ...current, [service]: 'test' }));
+      setServiceActions(current => ({ ...current, [service]: 'testing' }));
       setServiceNotices(current => {
         const next = { ...current };
         delete next[service];
@@ -262,7 +302,8 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
 
   const handleServiceSave = useCallback(
     async (service: string) => {
-      setServiceActions(current => ({ ...current, [service]: 'save' }));
+      setServiceActions(current => ({ ...current, [service]: 'saving' }));
+      let saved = false;
       try {
         const response = await saveServiceConfig({ service, entries: getServiceEntries(service) });
         if ('error' in response) {
@@ -295,13 +336,19 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             needsProcessRestart: response.data.needsProcessRestart.includes(service as never),
           },
         }));
-        if (response.data.success) markServiceSaved(service);
+        if (response.data.success) {
+          markServiceSaved(service);
+          saved = true;
+          setServiceActions(current => ({ ...current, [service]: 'saved' }));
+        }
       } finally {
-        setServiceActions(current => {
-          const next = { ...current };
-          delete next[service];
-          return next;
-        });
+        if (!saved) {
+          setServiceActions(current => {
+            const next = { ...current };
+            delete next[service];
+            return next;
+          });
+        }
       }
     },
     [getServiceEntries, markServiceSaved, saveServiceConfig]
@@ -349,7 +396,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
     }
   }, [dirtyServices, getSubmittableEntries, markServiceSaved, updateConfig]);
 
-  if (isLoading) {
+  if (isConfigLoading || isServiceStatusesLoading) {
     return (
       <PageContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <ContentWrapper>
@@ -396,7 +443,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             hasChanges={dirtyServices.has(groupName)}
             activeAction={serviceActions[groupName]}
             disabled={isSaving}
-            result={serviceResults[groupName]}
+            result={serviceResults[groupName] ?? statusFailureResult(groupName, serviceStatuses)}
             restarted={serviceNotices[groupName]?.restarted}
             needsProcessRestart={serviceNotices[groupName]?.needsProcessRestart}
           />

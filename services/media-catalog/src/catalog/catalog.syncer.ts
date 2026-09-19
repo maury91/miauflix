@@ -26,6 +26,7 @@ export class CatalogSynchronizer {
   async syncMovies(): Promise<void> {
     await this.runChangeSync(
       SYNC_STATE_MOVIES,
+      () => this.movies.hasKnownMovies(),
       (start, end) => this.provider.changedMovies(start, end),
       async mediaId => {
         const movie = await this.provider.getMovie(mediaId);
@@ -37,6 +38,7 @@ export class CatalogSynchronizer {
   async syncTVShows(): Promise<void> {
     await this.runChangeSync(
       SYNC_STATE_TV_SHOWS,
+      () => this.tvShows.hasKnownTVShows(),
       (start, end) => this.provider.changedTVShows(start, end),
       async mediaId => {
         const show = await this.provider.getTVShow(mediaId);
@@ -78,10 +80,17 @@ export class CatalogSynchronizer {
 
   private async runChangeSync(
     syncName: string,
+    hasKnownMedia: () => boolean,
     changes: (start: Date, end: Date) => AsyncGenerator<ProviderChangesPage>,
     refresh: (mediaId: number) => Promise<void>
   ): Promise<void> {
     const now = new Date();
+    if (!hasKnownMedia()) {
+      this.syncState.setLastSync(syncName, now);
+      logger.debug(SCOPE, `No known ${syncName} media. Advancing the sync watermark.`);
+      return;
+    }
+
     const chunks = this.buildSyncChunks(this.syncState.getLastSync(syncName), now);
     if (chunks.length === 0) {
       logger.debug(SCOPE, `Last ${syncName} sync was less than 1 hour ago. Skipping.`);

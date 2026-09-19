@@ -6,12 +6,10 @@ import { UserRole } from '@entities/user.entity';
 import { ConfigurationServiceError } from '@errors/configuration.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import { services } from '@services/configuration/configuration.consts';
+import { ALL_VAR_NAMES } from '@services/configuration/configuration.consts';
 import { isServiceName } from '@services/configuration/configuration.utils';
 
 import type { Deps } from './common.types';
-
-const ALL_VAR_NAMES = new Set(Object.values(services).flatMap(s => Object.keys(s.variables)));
 const configEntriesSchema = z.object({
   entries: z.array(z.object({ key: z.string(), value: z.string() })),
 });
@@ -46,9 +44,7 @@ export const createConfigRoutes = (deps: Deps) => {
             );
           }
 
-          const result = await deps.configurationService.testAndSaveConfigs(entries);
-          if (result.success) deps.scheduler.notifyServicesRecovered(result.recovered);
-          return c.json(result);
+          return c.json(await deps.configurationService.testAndSaveConfigs(entries));
         }
       )
 
@@ -80,9 +76,7 @@ export const createConfigRoutes = (deps: Deps) => {
             return c.json({ error: `Service '${serviceParam}' does not exist` }, 404);
           }
           const { entries } = c.req.valid('json');
-          const result = await deps.configurationService.saveServiceConfigs(serviceParam, entries);
-          if (result.success) deps.scheduler.notifyServicesRecovered(result.recovered);
-          return c.json(result);
+          return c.json(await deps.configurationService.saveServiceConfigs(serviceParam, entries));
         }
       )
 
@@ -91,9 +85,8 @@ export const createConfigRoutes = (deps: Deps) => {
         const serviceParam = c.req.param('service').toUpperCase();
 
         try {
-          const recovery = await deps.configurationService.restartService(serviceParam);
+          await deps.configurationService.restartService(serviceParam);
           const status = deps.configurationService.getServiceStatuses()[serviceParam];
-          if (recovery) deps.scheduler.notifyServicesRecovered([recovery]);
           return c.json({ success: true, status });
         } catch (e) {
           if (e instanceof ConfigurationServiceError) {

@@ -74,6 +74,7 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       example: 'udp://tracker1.example.com:1337,udp://tracker2.example.com:1337',
       defaultValue: staticTrackers.join(','),
       required: false,
+      advanced: true,
       transform: transforms.stringArray(),
     }),
     SCRAPE_TRACKERS: variable({
@@ -81,6 +82,7 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       example: 'udp://tracker1.example.com:1337,udp://tracker2.example.com:1337',
       defaultValue: scrapeTrackers.join(','),
       required: false,
+      advanced: true,
       transform: transforms.stringArray(),
     }),
     BEST_TRACKERS_DOWNLOAD_URL: variable({
@@ -89,6 +91,7 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       defaultValue:
         'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt',
       required: false,
+      advanced: true,
       transform: transforms.string(),
     }),
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: variable({
@@ -96,11 +99,13 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       example: 'https://example.com/blacklist.txt',
       defaultValue: 'https://raw.githubusercontent.com/ngosang/trackerslist/master/blacklist.txt',
       required: false,
+      advanced: true,
       transform: transforms.string(),
     }),
     DOWNLOAD_PATH: variable({
       description: 'Directory for storing downloaded and encrypted media files (must be writable)',
       required: false,
+      advanced: true,
       defaultValue: path.resolve(process.cwd(), './downloads'),
       example: '/var/miauflix/cache',
       transform: transforms.string({ minLength: 1 }),
@@ -108,6 +113,9 @@ export const downloadConfigurationDefinition = serviceConfiguration({
     DOWNLOAD_SALT: variable({
       description: 'Salt for generating secure storage paths (32+ character random string)',
       required: false,
+      advanced: true,
+      warning:
+        'Changing this value changes the derived storage paths for existing torrents; keep it unchanged unless you intentionally rotate the download storage layout.',
       defaultValue: 'miauflix-download-cache-salt-2024-secure-random-string',
       example: 'your-32-character-random-salt-string',
       transform: transforms.string({ minLength: 32 }),

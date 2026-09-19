@@ -8,7 +8,7 @@ import { eq } from 'drizzle-orm';
 import { CatalogHydrator } from '../src/catalog/catalog.hydrator';
 import { CatalogService, type CatalogValues } from '../src/catalog/catalog.service';
 import { CatalogSynchronizer } from '../src/catalog/catalog.syncer';
-import { SYNC_STATE_MOVIES } from '../src/db/catalog-db.types';
+import { SYNC_STATE_MOVIES, SYNC_STATE_TV_SHOWS } from '../src/db/catalog-db.types';
 import { CatalogDatabase } from '../src/db/database';
 import { ListRepository } from '../src/db/list.repo';
 import { LocalizationRepository } from '../src/db/localization.repo';
@@ -94,6 +94,8 @@ class FakeProvider implements CatalogProvider {
   listCalls = 0;
   genreCalls = 0;
   seasonCalls = 0;
+  changedMovieCalls = 0;
+  changedTVShowCalls = 0;
   seasons = new Map<string, ProviderSeason>();
   changedIds: number[] = [];
 
@@ -143,10 +145,12 @@ class FakeProvider implements CatalogProvider {
   }
 
   async *changedMovies(): AsyncGenerator<ProviderChangesPage> {
+    this.changedMovieCalls++;
     yield { page: 1, totalPages: 1, items: this.changedIds };
   }
 
   async *changedTVShows(): AsyncGenerator<ProviderChangesPage> {
+    this.changedTVShowCalls++;
     yield { page: 1, totalPages: 1, items: [] };
   }
 
@@ -208,7 +212,6 @@ describe('CatalogService', () => {
     const { repo, provider, cleanup } = setup();
     provider.movies.set(603, makeMovie(603));
     repo.movies.upsertMovie(makeMovie(603));
-    repo.syncState.setLastSync(SYNC_STATE_MOVIES, new Date(Date.now() - 2 * 60 * 60 * 1000));
     provider.changedIds = [603];
     provider.movies.set(603, makeMovie(603, 'Updated Title'));
     const synchronizer = new CatalogSynchronizer(
@@ -223,6 +226,35 @@ describe('CatalogService', () => {
 
     expect(repo.movies.getMovie(603)?.title).toBe('Updated Title');
     cleanup();
+  });
+
+  it('baselines empty catalogs without requesting provider change feeds', async () => {
+    const { repo, provider, service, cleanup } = setup();
+    try {
+      const startedAt = Date.now();
+
+      await service.syncMovies();
+      await service.syncTVShows();
+
+      expect(provider.changedMovieCalls).toBe(0);
+      expect(provider.changedTVShowCalls).toBe(0);
+      expect(repo.syncState.getLastSync(SYNC_STATE_MOVIES)?.getTime()).toBeGreaterThanOrEqual(
+        startedAt
+      );
+      expect(repo.syncState.getLastSync(SYNC_STATE_TV_SHOWS)?.getTime()).toBeGreaterThanOrEqual(
+        startedAt
+      );
+
+      repo.syncState.setLastSync(SYNC_STATE_MOVIES, new Date(0));
+      await service.syncMovies();
+
+      expect(provider.changedMovieCalls).toBe(0);
+      expect(repo.syncState.getLastSync(SYNC_STATE_MOVIES)?.getTime()).toBeGreaterThanOrEqual(
+        startedAt
+      );
+    } finally {
+      cleanup();
+    }
   });
 
   it('supports focused movie persistence through the entity repository', () => {

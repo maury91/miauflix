@@ -178,6 +178,8 @@ describe('ConfigurationService web configuration actions', () => {
 
   it('keeps successful saved values active without restoring the draft', async () => {
     const { configuration, instance } = setupLiveCatalog();
+    const changed = jest.fn();
+    configuration.subscribeChanges(changed);
 
     const result = await configuration.saveServiceConfigs(
       'CATALOG',
@@ -190,6 +192,24 @@ describe('ConfigurationService web configuration actions', () => {
     expect(result.recovered).toEqual([{ service: 'CATALOG', previousStatus: 'error' }]);
     expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog:3001');
     expect(instance.reload).toHaveBeenCalledTimes(1);
+    expect(changed).toHaveBeenCalledTimes(1);
+  });
+
+  it('notifies subscribers after a direct successful service restart', async () => {
+    const configuration = new ConfigurationService();
+    const instance: ConfigurableService = {
+      testable: true,
+      getStatus: () => ({ status: 'ready' }),
+      reload: jest.fn().mockResolvedValue(undefined),
+    };
+    const changed = jest.fn();
+    configuration.registerService('CATALOG', instance);
+    configuration.subscribeChanges(changed);
+
+    await expect(configuration.restartService('CATALOG')).resolves.toBeNull();
+
+    expect(instance.reload).toHaveBeenCalledTimes(1);
+    expect(changed).toHaveBeenCalledTimes(1);
   });
 
   it('does not retain values when a live save test fails', async () => {

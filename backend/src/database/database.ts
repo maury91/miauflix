@@ -4,23 +4,20 @@ import type { EntityTarget, LogLevel, LogMessage, ObjectLiteral, Repository } fr
 import { AbstractLogger, DataSource } from 'typeorm';
 
 import { AuditLog } from '@entities/audit-log.entity';
+import { BackgroundJob } from '@entities/background-job.entity';
 import { Episode } from '@entities/episode.entity';
-import { Genre, GenreTranslation } from '@entities/genre.entity';
-import { MediaList } from '@entities/list.entity';
-import { Movie, MovieTranslation } from '@entities/movie.entity';
+import { MediaList, MediaListItem } from '@entities/list.entity';
+import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
 import { Progress } from '@entities/progress.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
 import { StreamingKey } from '@entities/streaming-key.entity';
-import { SyncState } from '@entities/sync-state.entity';
 import { TraktUser } from '@entities/trakt-user.entity';
 import { TVShow } from '@entities/tvshow.entity';
-import { TVShowTranslation } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
 import { AuditLogRepository } from '@repositories/audit-log.repository';
-import { GenreRepository } from '@repositories/genre.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
@@ -28,7 +25,6 @@ import { ProgressRepository } from '@repositories/progress.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { StorageRepository } from '@repositories/storage.repository';
 import { StreamingKeyRepository } from '@repositories/streaming-key.repository';
-import { SyncStateRepository } from '@repositories/syncState.repository';
 import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
@@ -86,11 +82,9 @@ export class Database {
   private movieRepository: MovieRepository;
   private movieSourceRepository: MovieSourceRepository;
   private tvShowRepository: TVShowRepository;
-  private genreRepository: GenreRepository;
   private userRepository: UserRepository;
   private refreshTokenRepository: RefreshTokenRepository;
   private auditLogRepository: AuditLogRepository;
-  private syncStateRepository: SyncStateRepository;
   private traktUserRepository: TraktUserRepository;
   private storageRepository: StorageRepository;
   private streamingKeyRepository: StreamingKeyRepository;
@@ -113,25 +107,22 @@ export class Database {
       database: databasePath,
       entities: [
         Movie,
-        MovieTranslation,
         MovieSource,
         TVShow,
-        TVShowTranslation,
         Season,
         Episode,
         MediaList,
-        Genre,
-        GenreTranslation,
+        MediaListItem,
         User,
         RefreshToken,
         AuditLog,
-        SyncState,
+        BackgroundJob,
         TraktUser,
         Storage,
         StreamingKey,
         Progress,
       ],
-      synchronize: true,
+      synchronize: false,
       logger: new DatabaseLogger('all'),
       logging: true,
     });
@@ -139,15 +130,14 @@ export class Database {
 
   public async initialize() {
     await this.dataSource.initialize();
+    await this.dataSource.synchronize();
     this.mediaListRepository = new MediaListRepository(this);
     this.movieSourceRepository = new MovieSourceRepository(this);
     this.movieRepository = new MovieRepository(this);
     this.tvShowRepository = new TVShowRepository(this.dataSource);
-    this.genreRepository = new GenreRepository(this.dataSource);
     this.userRepository = new UserRepository(this.dataSource);
     this.refreshTokenRepository = new RefreshTokenRepository(this.dataSource);
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
-    this.syncStateRepository = new SyncStateRepository(this.dataSource);
     this.traktUserRepository = new TraktUserRepository(this.dataSource);
     this.storageRepository = new StorageRepository(this);
     this.streamingKeyRepository = new StreamingKeyRepository(this);
@@ -162,10 +152,6 @@ export class Database {
 
   public getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
     return this.dataSource.getRepository<T>(entity);
-  }
-
-  public getSyncStateRepository(): SyncStateRepository {
-    return this.syncStateRepository;
   }
 
   public getMovieRepository() {
@@ -186,10 +172,6 @@ export class Database {
 
   public getMediaListRepository() {
     return this.mediaListRepository;
-  }
-
-  public getGenreRepository() {
-    return this.genreRepository;
   }
 
   public getUserRepository() {

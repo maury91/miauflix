@@ -1,12 +1,14 @@
+jest.mock('@services/configuration/configuration.service');
+jest.mock('@logger');
+
 import { MockCache } from '@__test-utils__/cache.mock';
+import { logger as mockLogger } from '@logger';
 
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import { RequestService } from '@services/request/request.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { TheRARBGApi } from './therarbg.api';
-
-jest.mock('@services/configuration/configuration.service');
 
 describe('TheRARBGService', () => {
   const setupTest = () => {
@@ -80,6 +82,34 @@ describe('TheRARBGService', () => {
       // Using a non-existent but valid format IMDB ID
       await expect(service.searchByImdbId('tt9999999')).rejects.toThrow();
     });
+
+    it('should treat a homepage redirect as a normal missing result', async () => {
+      const mockConfigService = {
+        getOrThrow: jest.fn(() => 'https://therarbg.to'),
+      } as unknown as jest.Mocked<ConfigurationService>;
+      const requestService = {
+        request: jest.fn().mockResolvedValue({
+          body: '',
+          headers: { location: '/' },
+          ok: false,
+          status: 302,
+          statusText: 'Found',
+        }),
+      } as unknown as jest.Mocked<RequestService>;
+      const service = new TheRARBGApi(
+        new MockCache(),
+        new StatsService(),
+        requestService,
+        mockConfigService
+      );
+
+      await expect(service.searchByImdbId('tt0119698')).resolves.toBeNull();
+      expect(service.getStatus()).toEqual({ status: 'ready' });
+      expect(mockLogger.error).not.toHaveBeenCalledWith(
+        'TheRARBG',
+        expect.stringContaining('Redirected')
+      );
+    });
   });
 
   describe('searchPosts', () => {
@@ -145,6 +175,91 @@ describe('TheRARBGService', () => {
       // The fixture for tt0111161 returns a 503 Service Unavailable response,
       // replayed by HTTP-VCR without making a real network call.
       await expect(service.searchByImdbId('tt0111161')).rejects.toThrow();
+    });
+  });
+
+  describe('mirror availability', () => {
+    const waitForInitialization = async (service: TheRARBGApi): Promise<void> => {
+      while (service.getStatus().status.startsWith('initializing')) {
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+    };
+
+    it('deduplicates mirrors and enters cooldown after transport failures', async () => {
+      const now = 1_700_000_000_000;
+      const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(now);
+      jest.mocked(mockLogger.warn).mockClear();
+      jest.mocked(mockLogger.info).mockClear();
+      const mockCache = new MockCache();
+      const mockConfigService = {
+        getOrThrow: jest.fn(() => 'https://therarbg.to/'),
+      } as unknown as jest.Mocked<ConfigurationService>;
+      const requestService = {
+        request: jest.fn().mockRejectedValue(new Error('DNS lookup failed')),
+      } as unknown as jest.Mocked<RequestService>;
+      const service = new TheRARBGApi(
+        mockCache,
+        new StatsService(),
+        requestService,
+        mockConfigService
+      );
+      await waitForInitialization(service);
+
+      expect(requestService.request).toHaveBeenCalledTimes(1);
+      expect(service.getStatus()).toEqual(expect.objectContaining({ status: 'degraded' }));
+
+      await expect(service.searchByImdbId('tt0119698')).rejects.toMatchObject({
+        code: 'service_unavailable',
+      });
+      expect(requestService.request).toHaveBeenCalledTimes(1);
+      expect(mockLogger.warn).toHaveBeenCalledTimes(1);
+
+      requestService.request.mockResolvedValue({
+        body: { imdb: {}, trb_posts: [] },
+        headers: { 'content-type': 'application/json' },
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+      });
+      nowSpy.mockReturnValue(now + 15 * 60 * 1000 + 1);
+
+      await expect(service.searchByImdbId('tt0119698')).resolves.not.toBeNull();
+      expect(requestService.request).toHaveBeenCalledTimes(2);
+      expect(service.getStatus()).toEqual({ status: 'ready' });
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        'TheRARBG',
+        expect.stringContaining('Provider recovered')
+      );
+      nowSpy.mockRestore();
+    });
+
+    it('rotates to the next mirror after cooldown', async () => {
+      const mockCache = new MockCache();
+      const mockConfigService = {
+        getOrThrow: jest.fn(() => 'https://therarbg.to'),
+      } as unknown as jest.Mocked<ConfigurationService>;
+      const requestService = {
+        request: jest
+          .fn()
+          .mockRejectedValueOnce(new Error('Primary unavailable'))
+          .mockResolvedValue({
+            body: {},
+            headers: { 'content-type': 'application/json' },
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+          }),
+      } as unknown as jest.Mocked<RequestService>;
+      const service = new TheRARBGApi(
+        mockCache,
+        new StatsService(),
+        requestService,
+        mockConfigService
+      );
+      await waitForInitialization(service);
+
+      expect(requestService.request).toHaveBeenCalledTimes(1);
+      expect(service.getStatus()).toEqual(expect.objectContaining({ status: 'degraded' }));
     });
   });
 });

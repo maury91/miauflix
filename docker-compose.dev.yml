@@ -17,6 +17,7 @@ services:
       DATA_DIR: /app/data
       BUNQUEUE_HOST: bunqueue
       BUNQUEUE_PORT: '6789'
+      DEBUG: '*'
     ports:
       - '127.0.0.1:3001:3001'
     volumes:

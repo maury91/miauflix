@@ -19,6 +19,7 @@ import {
 } from '@miauflix/service-contracts';
 import type { ZodType } from 'zod';
 
+import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import { RemoteServiceManager } from '@services/remote/remote-service.manager';
@@ -50,6 +51,14 @@ export class CatalogClientService implements ConfigurableService {
 
   getStatus(): ServiceInstanceStatus {
     return this.remote.getStatus();
+  }
+
+  isReady(): boolean {
+    return this.remote.isReady();
+  }
+
+  subscribeStatus(listener: (status: ServiceInstanceStatus) => void): () => void {
+    return this.remote.subscribeStatus(listener);
   }
 
   reload(): Promise<void> {
@@ -90,7 +99,7 @@ export class CatalogClientService implements ConfigurableService {
   }
 
   async batch(items: MediaRef[], language: string): Promise<BatchResponse> {
-    return this.remote.request(batchResponseSchema, this.path('/media/batch'), {
+    return this.remote.requestCapability(batchResponseSchema, this.path('/media/batch'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items, language }),
@@ -98,7 +107,7 @@ export class CatalogClientService implements ConfigurableService {
   }
 
   async setWatching(mediaIds: number[]): Promise<void> {
-    await this.remote.request(okResponseSchema, this.path('/watching'), {
+    await this.remote.requestCapability(okResponseSchema, this.path('/watching'), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ mediaIds }),
@@ -115,7 +124,7 @@ export class CatalogClientService implements ConfigurableService {
     const requestPath = `${this.path(path)}${params.size ? `?${params}` : ''}`;
     const existing = this.inflight.get(requestPath) as Promise<T> | undefined;
     if (existing) return existing;
-    const promise = this.remote.request(schema, requestPath, { notFound }).finally(() => {
+    const promise = this.remote.requestCapability(schema, requestPath, { notFound }).finally(() => {
       this.inflight.delete(requestPath);
     });
     this.inflight.set(requestPath, promise);
@@ -123,6 +132,7 @@ export class CatalogClientService implements ConfigurableService {
   }
 
   private path(path: string): string {
+    if (!this.remote.isReady()) throw new ServiceNotConfiguredError('CATALOG');
     return `${this.remote.capabilityBasePath.replace(/\/+$/, '')}${path}`;
   }
 }

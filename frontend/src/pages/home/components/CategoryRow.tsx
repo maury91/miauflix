@@ -47,7 +47,7 @@ const State = styled.div`
   display: flex;
   align-items: center;
   min-height: 120px;
-  color: ${PALETTE.background.disabled};
+  color: ${PALETTE.text.muted};
 `;
 
 export interface CategoryRowHandle {

@@ -6,6 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   type Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -14,12 +15,14 @@ import { TVShow } from './tvshow.entity';
 
 // ToDo: support translations ( priority low )
 @Entity()
+@Unique(['tvShowId', 'seasonNumber'])
 export class Season {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  tmdbId: number;
+  /** Catalog season id (column name kept for existing databases). */
+  @Column({ name: 'tmdbId' })
+  mediaId: number;
 
   @Column()
   tvShowId: number;

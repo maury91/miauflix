@@ -26,17 +26,41 @@ describe('sortServiceGroups', () => {
 
     expect(groups.map(([name]) => name)).toEqual(['Alpha', 'Bravo', 'Echo', 'Zulu']);
   });
+
+  it('puts services with an unhealthy status before healthy services', () => {
+    const groups = sortServiceGroups(
+      {
+        TRAKT: [entry(false, true)],
+        CATALOG: [entry(false, true)],
+      },
+      { CATALOG: { status: 'error' }, TRAKT: { status: 'ready' } }
+    );
+
+    expect(groups.map(([service]) => service)).toEqual(['CATALOG', 'TRAKT']);
+  });
+
+  it('prioritizes broken services over services with missing values', () => {
+    const groups = sortServiceGroups(
+      {
+        TRAKT: [entry(true, false)],
+        CATALOG: [entry(true, true)],
+      },
+      { CATALOG: { status: 'error' }, TRAKT: { status: 'needs_configuration' } }
+    );
+
+    expect(groups.map(([service]) => service)).toEqual(['CATALOG', 'TRAKT']);
+  });
 });
 
 describe('preserveInitialServiceOrder', () => {
   it('keeps the first-render order when service configuration changes', () => {
     const initiallySorted = sortServiceGroups({
-      TMDB: [entry(true, false)],
+      CATALOG: [entry(true, false)],
       TRAKT: [entry(true, false)],
       SERVER: [entry(false, true)],
     });
     const afterSave = sortServiceGroups({
-      TMDB: [entry(true, true)],
+      CATALOG: [entry(true, true)],
       TRAKT: [entry(true, false)],
       SERVER: [entry(false, true)],
     });
@@ -46,6 +70,6 @@ describe('preserveInitialServiceOrder', () => {
         afterSave,
         initiallySorted.map(([name]) => name)
       ).map(([name]) => name)
-    ).toEqual(['TMDB', 'TRAKT', 'SERVER']);
+    ).toEqual(['CATALOG', 'TRAKT', 'SERVER']);
   });
 });

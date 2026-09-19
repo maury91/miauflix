@@ -1,5 +1,8 @@
 import type { RequestService, RequestServiceResponse } from '@services/request/request.service';
 
+const maxTorrentResponseBytes = 2 * 1024 * 1024;
+const responseHeaders = { 'accept-encoding': 'identity' };
+
 export const caesarShift = (str: string, shift: number): string => {
   return str
     .split('')
@@ -24,7 +27,12 @@ export const getSourceMetadataFileFromTorrage = async (
   requestService: RequestService
 ): Promise<RequestServiceResponse<string>> => {
   const encryptedTTLRaw = await requestService.request<string>(
-    `https://torrage.info/torrent.php?h=${hash}&ttl=${Math.floor(Date.now() / 1000)}`
+    `https://torrage.info/torrent.php?h=${hash}&ttl=${Math.floor(Date.now() / 1000)}`,
+    {
+      headers: responseHeaders,
+      timeout,
+      maxResponseBytes: maxTorrentResponseBytes,
+    }
   );
   const encryptedTTL = encryptedTTLRaw.body.match(/getTTL\("([^"]+)"/)?.[1];
   if (encryptedTTL) {
@@ -32,7 +40,9 @@ export const getSourceMetadataFileFromTorrage = async (
     return await requestService.request<string>(
       `https://torrage.info/download.php?h=${hash}&ttl=${decryptedTTL}`,
       {
+        headers: responseHeaders,
         timeout,
+        maxResponseBytes: maxTorrentResponseBytes,
       }
     );
   }

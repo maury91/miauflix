@@ -6,6 +6,7 @@ type ApiErrorCode =
   | 'invalid_response'
   | 'not_configured'
   | 'response_error'
+  | 'service_unavailable'
   | 'timeout'
   | 'validation_error';
 

@@ -25,6 +25,12 @@ class TestApi extends Api {
     this.count++;
     return x * 3;
   }
+
+  @Cacheable(1000, false, 'v2')
+  async getVersionedValue(x: number): Promise<number> {
+    this.count++;
+    return x * 4;
+  }
 }
 
 describe('Cacheable', () => {
@@ -86,5 +92,18 @@ describe('Cacheable', () => {
     expect(testApi.count).toBe(2); // Method should be called twice
     expect(mockCache.getCallCount()).toBe(2); // Cache gets checked twice
     expect(mockCache.setCallCount()).toBe(2); // Cache gets set twice
+  });
+
+  it('includes the optional version in the cache key', async () => {
+    const { mockCache, testApi } = setupTest();
+
+    await testApi.getVersionedValue(2);
+
+    expect(mockCache.getMockGetFn()).toHaveBeenCalledWith('cache.TestApi.getVersionedValue.v2.[2]');
+    expect(mockCache.getMockSetFn()).toHaveBeenCalledWith(
+      'cache.TestApi.getVersionedValue.v2.[2]',
+      8,
+      1000
+    );
   });
 });

@@ -8,12 +8,7 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import type { Deps, ErrorResponse } from './common.types';
 import type { SeasonResponse, ShowResponse } from './show.types';
 
-export const createShowRoutes = ({
-  auditLogService,
-  catalogService,
-  configurationService,
-  mediaService,
-}: Deps) => {
+export const createShowRoutes = ({ auditLogService, mediaService, configurationService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono()
@@ -24,7 +19,7 @@ export const createShowRoutes = ({
       zValidator(
         'param',
         z.object({
-          id: z.string().regex(/^\d+$/, 'TMDB Show ID must be a number'),
+          id: z.string().regex(/^\d+$/, 'Show ID must be a number'),
         })
       ),
       zValidator(
@@ -44,44 +39,43 @@ export const createShowRoutes = ({
             return context.json({ error: 'Invalid show ID' } satisfies ErrorResponse, 400);
           }
 
-          // Get the show from the database or fetch from TMDB if not available
-          const show = await catalogService.getTVShowByTmdbId(showId, lang);
+          // Ensure fresh catalog data (the media-catalog service enforces freshness)
+          // and mirror it into the local index.
+          const result = await mediaService.getTVShowByMediaId(showId, lang);
 
-          if (!show) {
+          if (!result) {
             return context.json({ error: 'Show not found' } satisfies ErrorResponse, 404);
           }
+          const { local: show, detail } = result;
 
-          // Get translated version of the show
           // Build the response object matching ShowResponse DTO
           const response: ShowResponse = {
             type: 'show',
             id: show.id,
-            tmdbId: show.tmdbId,
-            imdbId: show.imdbId || null,
-            title: show.name, // Map 'name' to 'title'
-            overview: show.overview || null,
-            tagline: show.tagline || null,
-            firstAirDate: show.firstAirDate || null,
-            lastAirDate: null, // Not available in entity
-            poster: show.poster || null,
-            backdrop: show.backdrop || null,
-            logo: null, // Not available in entity
-            genres: show.genres,
-            popularity: show.popularity || null,
-            rating: show.rating || null,
-            seasons: show.seasons.map(season => ({
-              id: season.id,
+            mediaId: detail.mediaId,
+            imdbId: detail.imdbId,
+            title: detail.name, // Map 'name' to 'title'
+            overview: detail.overview || null,
+            tagline: detail.tagline || null,
+            firstAirDate: detail.firstAirDate || null,
+            lastAirDate: null, // Not provided by the catalog contract
+            poster: detail.poster || null,
+            backdrop: detail.backdrop || null,
+            logo: detail.logo || null,
+            genres: detail.genres.map(genre => genre.name),
+            popularity: detail.popularity,
+            rating: detail.rating,
+            seasons: detail.seasons.map(season => ({
+              id: season.mediaId,
               seasonNumber: season.seasonNumber,
               name: season.name,
               overview: season.overview,
-              airDate: season.airDate || null,
-              poster: season.posterPath || null,
-              episodes: [], // TODO: Implement episodes
+              airDate: season.airDate,
+              poster: season.poster,
+              episodes: [], // Episodes are hydrated per season
             })),
             sources: [], // TODO: Implement sources
           };
-
-          await mediaService.markShowAsWatching(showId);
 
           return context.json(response satisfies ShowResponse);
         } catch (error: unknown) {
@@ -102,9 +96,22 @@ export const createShowRoutes = ({
       ),
       async context => {
         try {
-          // TODO: Implement seasons endpoint
-          // For now, return empty array
-          return context.json([]);
+          const showId = Number(context.req.valid('param').id);
+          const result = await mediaService.getTVShowByMediaId(showId, 'en');
+          if (!result) {
+            return context.json({ error: 'Show not found' } satisfies ErrorResponse, 404);
+          }
+          return context.json(
+            result.detail.seasons.map(season => ({
+              id: season.mediaId,
+              seasonNumber: season.seasonNumber,
+              name: season.name,
+              overview: season.overview || null,
+              airDate: season.airDate,
+              poster: season.poster,
+              episodes: [],
+            })) satisfies SeasonResponse[]
+          );
         } catch (error: unknown) {
           console.error('Failed to get show seasons:', error);
           return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);
@@ -124,9 +131,27 @@ export const createShowRoutes = ({
       ),
       async context => {
         try {
-          // TODO: Implement season endpoint
-          // For now, return empty object
-          return context.json({} as SeasonResponse);
+          const { id, season } = context.req.valid('param');
+          const hydrated = await mediaService.getSeason(Number(id), Number(season), 'en');
+          if (!hydrated) {
+            return context.json({ error: 'Season not found' } satisfies ErrorResponse, 404);
+          }
+          return context.json({
+            id: hydrated.mediaId,
+            seasonNumber: hydrated.seasonNumber,
+            name: hydrated.name,
+            overview: hydrated.overview || null,
+            airDate: hydrated.airDate || null,
+            poster: hydrated.posterPath || null,
+            episodes: (hydrated.episodes ?? []).map(episode => ({
+              id: episode.id,
+              episodeNumber: episode.episodeNumber,
+              title: episode.name,
+              overview: episode.overview || null,
+              airDate: episode.airDate,
+              still: episode.stillPath || null,
+            })),
+          } satisfies SeasonResponse);
         } catch (error: unknown) {
           console.error('Failed to get show season:', error);
           return context.json({ error: 'Internal server error' } satisfies ErrorResponse, 500);

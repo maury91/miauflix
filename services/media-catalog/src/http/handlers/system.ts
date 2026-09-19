@@ -82,6 +82,9 @@ const buildStatus = (ctx: ServiceContext): ServiceStatus => {
   };
 };
 
+const statusEvent = (status: ServiceStatus): string =>
+  `event: status\ndata: ${JSON.stringify(status)}\n\n`;
+
 export const registerSystemRoutes = (router: Router, ctx: ServiceContext): void => {
   const STATUS_PATH = '/status';
 
@@ -99,6 +102,7 @@ export const registerSystemRoutes = (router: Router, ctx: ServiceContext): void 
         },
         management: {
           statusPath: STATUS_PATH,
+          statusEventsPath: '/status/events',
           configurationSchemaPath: CONFIGURATION_SCHEMA_PATH,
           configurationStatePath: CONFIGURATION_STATE_PATH,
           configurationTestPath: CONFIGURATION_TEST_PATH,
@@ -117,4 +121,50 @@ export const registerSystemRoutes = (router: Router, ctx: ServiceContext): void 
   router.add('GET', STATUS_PATH, ({ json }: RequestContext) =>
     json(serviceStatusSchema.parse(buildStatus(ctx)))
   );
+
+  router.add('GET', '/status/events', ({ req }) => {
+    const encoder = new TextEncoder();
+    let closed = false;
+    let heartbeat: ReturnType<typeof setInterval> | undefined;
+    let unsubscribe: () => void = () => undefined;
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        const send = (status: ServiceStatus) => {
+          if (closed) return;
+          controller.enqueue(encoder.encode(statusEvent(serviceStatusSchema.parse(status))));
+        };
+        send(buildStatus(ctx));
+        unsubscribe = ctx.config.subscribe(() => send(buildStatus(ctx)));
+        heartbeat = setInterval(() => {
+          if (!closed) controller.enqueue(encoder.encode(': heartbeat\n\n'));
+        }, 15_000);
+        req.signal.addEventListener(
+          'abort',
+          () => {
+            closed = true;
+            unsubscribe();
+            if (heartbeat) clearInterval(heartbeat);
+            try {
+              controller.close();
+            } catch {
+              // The client may have closed the stream already.
+            }
+          },
+          { once: true }
+        );
+      },
+      cancel() {
+        closed = true;
+        unsubscribe();
+        if (heartbeat) clearInterval(heartbeat);
+      },
+    });
+    return new Response(stream, {
+      headers: {
+        'content-type': 'text/event-stream',
+        'cache-control': 'no-cache',
+        connection: 'keep-alive',
+      },
+    });
+  });
 };

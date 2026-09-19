@@ -15,7 +15,7 @@ export interface MovieSourceDto {
 export interface MovieResponse {
   type: 'movie';
   id: number;
-  tmdbId: number;
+  mediaId: number;
   imdbId: string | null;
   title: string;
   overview: string;

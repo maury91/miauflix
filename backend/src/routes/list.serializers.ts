@@ -1,56 +1,49 @@
-import type { TranslatedMedia } from '@services/media/media.types';
+import type { MovieDetail, TVShowDetail } from '@services/catalog/catalog.types';
 
 import type { MediaDto, MovieDto, TVShowDto } from './list.types';
 
-function toIsoString(val: Date | string): string {
-  if (val instanceof Date) return val.toISOString();
-  if (typeof val === 'string') return val;
-  return '';
-}
+/** Catalog detail joined with the local index id for list rendering. */
+export type SerializableMedia = { localId: number } & (MovieDetail | TVShowDetail);
 
-export function serializeMedia(media: TranslatedMedia): MediaDto {
-  if ('title' in media) {
-    // Movie
+export function serializeMedia(media: SerializableMedia): MediaDto {
+  if (media.mediaType === 'movie') {
+    const movie = media as MovieDetail & { localId: number };
     return {
       _type: 'movie',
-      id: media.id,
-      tmdbId: media.tmdbId,
-      imdbId: media.imdbId ?? undefined,
-      title: media.title,
-      overview: media.overview,
-      tagline: media.tagline ?? undefined,
-      poster: media.poster,
-      backdrop: media.backdrop,
-      logo: media.logo,
-      genres: media.genres,
-      popularity: media.popularity,
-      rating: media.rating,
-      releaseDate: media.releaseDate || '',
-      runtime: 'runtime' in media ? media.runtime : undefined,
-      createdAt: toIsoString(media.createdAt),
-      updatedAt: toIsoString(media.updatedAt),
+      id: movie.localId,
+      mediaId: movie.mediaId,
+      imdbId: movie.imdbId ?? undefined,
+      title: movie.title,
+      overview: movie.overview,
+      tagline: movie.tagline ?? undefined,
+      poster: movie.poster,
+      backdrop: movie.backdrop,
+      logo: movie.logo,
+      genres: movie.genres.map(genre => genre.name),
+      popularity: movie.popularity,
+      rating: movie.rating,
+      releaseDate: movie.releaseDate || '',
+      runtime: movie.runtime,
     } satisfies MovieDto;
-  } else {
-    // TV Show
-    return {
-      _type: 'tvshow',
-      id: media.id,
-      tmdbId: media.tmdbId,
-      imdbId: media.imdbId ?? undefined,
-      name: media.name,
-      overview: media.overview,
-      tagline: media.tagline ?? undefined,
-      poster: media.poster,
-      backdrop: media.backdrop,
-      genres: media.genres,
-      popularity: media.popularity,
-      rating: media.rating,
-      firstAirDate: media.firstAirDate || '',
-      episodeRunTime: 'episodeRunTime' in media ? media.episodeRunTime : undefined,
-      type: 'type' in media ? media.type : undefined,
-      inProduction: 'inProduction' in media ? media.inProduction : undefined,
-      createdAt: toIsoString(media.createdAt),
-      updatedAt: toIsoString(media.updatedAt),
-    } satisfies TVShowDto;
   }
+  const show = media as TVShowDetail & { localId: number };
+  return {
+    _type: 'tvshow',
+    id: show.localId,
+    mediaId: show.mediaId,
+    imdbId: show.imdbId ?? undefined,
+    name: show.name,
+    overview: show.overview,
+    tagline: show.tagline ?? undefined,
+    poster: show.poster,
+    backdrop: show.backdrop,
+    logo: show.logo,
+    genres: show.genres.map(genre => genre.name),
+    popularity: show.popularity,
+    rating: show.rating,
+    firstAirDate: show.firstAirDate || '',
+    episodeRunTime: show.episodeRunTime,
+    type: show.type,
+    inProduction: show.inProduction,
+  } satisfies TVShowDto;
 }
