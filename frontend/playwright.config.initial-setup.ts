@@ -10,6 +10,10 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   projects: baseConfig.projects?.filter(project => project.name === 'chromium-desktop'),
+  use: {
+    ...baseConfig.use,
+    trace: 'retain-on-failure',
+  },
   outputDir: './test-results-initial-setup',
   reporter: [
     ['html', { outputFolder: 'playwright-report-initial-setup', open: 'never' }],

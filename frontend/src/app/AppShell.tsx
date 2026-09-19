@@ -60,6 +60,8 @@ export function AppShell() {
     dispatch(dismissConfigWizard());
   }, [dispatch]);
 
+  const logoPage = configurationWizardActive ? 'config_wizard' : appState;
+
   useEffect(() => {
     if (appState === 'config_wizard' && isAuthenticated && isAdmin) {
       setConfigurationWizardActive(true);
@@ -91,7 +93,7 @@ export function AppShell() {
 
   return (
     <ErrorBoundary>
-      <Logo page={appState} />
+      <Logo page={logoPage} />
       <MotionConfig transition={{ duration: 0.5 }}>
         <AnimatePresence initial={false} mode="wait">
           {renderPage()}
