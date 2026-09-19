@@ -3,7 +3,7 @@ import type { Source } from '@miauflix/source-metadata-extractor';
 export interface ShowResponse {
   type: 'show';
   id: number;
-  tmdbId: number;
+  mediaId: number;
   imdbId: string | null;
   title: string;
   overview: string | null;

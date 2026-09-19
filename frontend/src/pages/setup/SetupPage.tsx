@@ -1,5 +1,5 @@
 import { useCreateAdminMutation } from '@features/setup/api/setup.api';
-import { PALETTE } from '@shared/config/constants';
+import { SETTINGS_PALETTE } from '@shared/config/constants';
 import { useAppDispatch } from '@store';
 import { authSlice } from '@store/slices/auth';
 import { motion } from 'framer-motion';
@@ -13,8 +13,8 @@ const PageContainer = styled(motion.div)`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #0a0d0f;
-  color: white;
+  background-color: ${SETTINGS_PALETTE.background.primary};
+  color: ${SETTINGS_PALETTE.text.primary};
   font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
@@ -24,8 +24,8 @@ const PageContainer = styled(motion.div)`
 `;
 
 const FormCard = styled.div`
-  background-color: #0c1214;
-  border: 1px solid #191e23;
+  background-color: ${SETTINGS_PALETTE.background.surface};
+  border: 1px solid ${SETTINGS_PALETTE.background.border};
   border-radius: 16px;
   padding: 32px;
   width: 100%;
@@ -41,7 +41,7 @@ const FormCard = styled.div`
 
 const Subtitle = styled.p`
   font-size: 13px;
-  color: #888;
+  color: ${SETTINGS_PALETTE.text.secondary};
   margin: 0 0 24px 0;
   line-height: 1.5;
 `;
@@ -54,15 +54,15 @@ const Label = styled.label`
   display: block;
   margin-bottom: 6px;
   font-size: 13px;
-  color: #cccccc;
+  color: ${SETTINGS_PALETTE.text.primary};
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #555;
+  border: 1px solid ${SETTINGS_PALETTE.background.border};
   border-radius: 4px;
-  background-color: #2a2a2a;
+  background-color: ${SETTINGS_PALETTE.background.input};
   color: white;
   font-size: 14px;
   font-family: 'Poppins', sans-serif;
@@ -70,12 +70,12 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: ${PALETTE.color.interactive};
-    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
+    border-color: ${SETTINGS_PALETTE.color.interactive};
+    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
   }
 
   &::placeholder {
-    color: #888;
+    color: #70777a;
   }
 `;
 
@@ -91,10 +91,10 @@ const PasswordStrengthFill = styled.div<{ $strength: number }>`
   height: 100%;
   width: ${props => props.$strength * 25}%;
   background-color: ${props => {
-    if (props.$strength <= 1) return PALETTE.color.danger;
+    if (props.$strength <= 1) return SETTINGS_PALETTE.color.danger;
     if (props.$strength === 2) return '#ff8c00';
     if (props.$strength === 3) return '#a8c23a';
-    return '#4caf50';
+    return SETTINGS_PALETTE.color.success;
   }};
   transition:
     width 0.3s ease,
@@ -104,8 +104,8 @@ const PasswordStrengthFill = styled.div<{ $strength: number }>`
 const SubmitButton = styled.button`
   width: 100%;
   padding: 10px 12px;
-  background-color: ${PALETTE.color.brand};
-  color: white;
+  background-color: ${SETTINGS_PALETTE.color.primaryButton};
+  color: #0a0d0f;
   border: none;
   border-radius: 4px;
   font-size: 14px;
@@ -116,17 +116,21 @@ const SubmitButton = styled.button`
   margin-top: 24px;
 
   &:hover {
-    background-color: ${PALETTE.color.brandHover};
+    background-color: ${SETTINGS_PALETTE.color.primaryButtonHover};
+  }
+
+  &:active:not(:disabled) {
+    background-color: ${SETTINGS_PALETTE.color.primaryButtonPressed};
   }
 
   &:disabled {
-    background-color: #444;
+    background-color: #50585b;
     cursor: not-allowed;
   }
 `;
 
 const ErrorMessage = styled.p`
-  color: ${PALETTE.color.danger};
+  color: ${SETTINGS_PALETTE.color.danger};
   font-size: 13px;
   margin: 12px 0 0 0;
 `;

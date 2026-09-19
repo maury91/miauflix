@@ -2,6 +2,12 @@ import type { EnvironmentVariableTypes } from '@services/configuration/configura
 
 export type BaseVariableInfo = {
   description: string;
+  /** Optional concise label for configuration UIs; falls back to a humanized key. */
+  label?: string;
+  /** Whether this value should be grouped under advanced settings in configuration UIs. */
+  advanced?: boolean;
+  /** Important consequence to show before changing this value. */
+  warning?: string;
   /** Human-readable state descriptions for boolean inputs, keyed by their raw boolean value. */
   booleanStateDescriptions?: { true: string; false: string };
   example?: string;

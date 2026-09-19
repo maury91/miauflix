@@ -1,283 +1,190 @@
-jest.mock('@database/database');
-jest.mock('@services/configuration/configuration.service');
-
 import { MockCache } from '@__test-utils__/cache.mock';
-import { logger as mockLogger } from '@logger';
+import { createMockMovie } from '@__test-utils__/mocks/movie.mock';
+import { createMockSeasonDetail } from '@__test-utils__/mocks/movie.mock';
+import { createMockTVShow } from '@__test-utils__/mocks/movie.mock';
+import { configureFakerSeed } from '@__test-utils__/utils';
 
 import { Database } from '@database/database';
-import type { Movie } from '@entities/movie.entity';
-import { ConfigurationService } from '@services/configuration/configuration.service';
-import { TMDBApi } from '@services/content-catalog/tmdb/tmdb.api';
-import { TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
-import { StatsService } from '@services/stats/stats.service';
+import type { MovieDetail, TVShowDetail } from '@services/catalog/catalog.types';
+import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 
 import { MediaService } from './media.service';
 
-const theWildRobotTMDBID = 1184918; // Movie: The Wild Robot
-const cosmicPrincessTMDBID = 346698; // Movie: Cosmic Princess
+const THE_WILD_ROBOT_MEDIA_ID = 1184918; // Movie: The Wild Robot
 
-const mockFetch = global.fetch as unknown as jest.Mock<typeof global.fetch>;
+const movieDetail = (mediaId: number): MovieDetail => ({
+  mediaType: 'movie',
+  mediaId,
+  imdbId: 'tt11286310',
+  title: 'The Wild Robot',
+  overview: 'Overview here.',
+  tagline: '',
+  releaseDate: '2024-09-12',
+  runtime: 102,
+  poster: 'https://img/poster.jpg',
+  backdrop: 'https://img/backdrop.jpg',
+  logo: '',
+  genres: [{ id: 16, name: 'Animation' }],
+  popularity: 100,
+  rating: 8.5,
+  detailsSyncedAt: new Date().toISOString(),
+});
+
+const tvShowDetail = (mediaId: number): TVShowDetail => ({
+  mediaType: 'tv',
+  mediaId,
+  imdbId: 'tt0999929',
+  name: 'Test Show',
+  overview: 'Overview here.',
+  tagline: '',
+  firstAirDate: '2010-01-01',
+  status: 'Ended',
+  type: 'Scripted',
+  inProduction: false,
+  episodeRunTime: [45],
+  poster: 'https://img/poster.jpg',
+  backdrop: 'https://img/backdrop.jpg',
+  logo: '',
+  genres: [{ id: 18, name: 'Drama' }],
+  popularity: 100,
+  rating: 8.5,
+  seasons: [],
+  detailsSyncedAt: new Date().toISOString(),
+});
 
 describe('MediaService', () => {
   let mockDb: Database;
   let mockMovieRepo: jest.Mocked<ReturnType<Database['getMovieRepository']>>;
-  let mockGenreRepo: jest.Mocked<ReturnType<Database['getGenreRepository']>>;
-  let mockSyncStateRepo: jest.Mocked<ReturnType<Database['getSyncStateRepository']>>;
+  let mockTVShowRepo: jest.Mocked<ReturnType<Database['getTVShowRepository']>>;
+  let mockCatalogClient: jest.Mocked<CatalogClientService>;
 
-  const setupTest = async () => {
-    const mockConfigService =
-      new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
-    mockConfigService.get.mockImplementation((key: string) => {
-      if (key === 'TMDB_API_ACCESS_TOKEN') return 'test-token' as never;
-      if (key === 'TMDB_API_URL') return 'https://api.themoviedb.org/3' as never;
-      return undefined as never;
-    });
-    mockConfigService.getOrThrow.mockImplementation((key: string) => {
-      const result = mockConfigService.get(key as never);
-      if (result === undefined) throw new Error(`${key} is not set`);
-      return result as never;
-    });
-
-    // Create a new Database instance (which will be the mock)
+  const setupTest = () => {
     mockDb = new Database({} as never);
     mockMovieRepo = mockDb.getMovieRepository() as jest.Mocked<
       ReturnType<Database['getMovieRepository']>
     >;
-    mockGenreRepo = mockDb.getGenreRepository() as jest.Mocked<
-      ReturnType<Database['getGenreRepository']>
+    mockTVShowRepo = mockDb.getTVShowRepository() as jest.Mocked<
+      ReturnType<Database['getTVShowRepository']>
     >;
-    mockSyncStateRepo = mockDb.getSyncStateRepository() as jest.Mocked<
-      ReturnType<Database['getSyncStateRepository']>
-    >;
+    mockCatalogClient = {
+      getMovie: jest.fn(),
+      getTVShow: jest.fn(),
+      getSeason: jest.fn(),
+      setWatching: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<CatalogClientService>;
 
-    // Create TmdbService (with TMDBApi) and MediaService with mock DB
-    const mockCache = new MockCache();
-    const statsService = new StatsService();
-    const tmdbApi = new TMDBApi(mockCache, statsService, mockConfigService);
-    const tmdbService = new TmdbService(mockDb, tmdbApi, mockConfigService);
-    const mediaService = new MediaService(mockDb, tmdbService);
-
-    // Wait for async initialization (init() → test() + getConfiguration()) to complete
-    await tmdbApi.reload();
-    jest.clearAllMocks();
-    return { mediaService, statsService, tmdbApi, tmdbService };
+    const mediaService = new MediaService(mockDb, mockCatalogClient);
+    return { mediaService };
   };
+
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
+    jest.useRealTimers();
+    void MockCache;
   });
 
-  // Group existing movie tests
-  describe('getMovie', () => {
-    it('should fetch a movie from TMDB API if not in database', async () => {
-      // Arrange
-      const { mediaService } = await setupTest();
-      mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null);
-      // Act
-      const movie = await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
+  describe('getMovieByMediaId', () => {
+    it('mirrors catalog details into the local index and returns the local row', async () => {
+      const { mediaService } = setupTest();
+      const detail = movieDetail(THE_WILD_ROBOT_MEDIA_ID);
+      const local = createMockMovie({ mediaId: THE_WILD_ROBOT_MEDIA_ID, title: detail.title });
+      mockCatalogClient.getMovie.mockResolvedValueOnce(detail);
+      mockMovieRepo.upsertMovieDetail.mockResolvedValueOnce(local);
 
-      // Assert - Check that fetch was called with expected URL
-      const movieDetailsCalls = mockFetch.mock.calls.filter(
-        call => typeof call[0] === 'string' && call[0].includes(`/movie/${theWildRobotTMDBID}`)
+      const result = await mediaService.getMovieByMediaId(THE_WILD_ROBOT_MEDIA_ID, 'en');
+
+      expect(mockCatalogClient.getMovie).toHaveBeenCalledWith(THE_WILD_ROBOT_MEDIA_ID, 'en');
+      expect(mockMovieRepo.upsertMovieDetail).toHaveBeenCalledWith(detail);
+      expect(result?.local).toBe(local);
+      expect(result?.detail).toBe(detail);
+    });
+
+    it('returns null when the catalog does not know the media', async () => {
+      const { mediaService } = setupTest();
+      mockCatalogClient.getMovie.mockResolvedValueOnce(null);
+
+      const result = await mediaService.getMovieByMediaId(999999999, 'en');
+
+      expect(result).toBeNull();
+      expect(mockMovieRepo.upsertMovieDetail).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getTVShowByMediaId', () => {
+    it('mirrors catalog show details into the local index', async () => {
+      const { mediaService } = setupTest();
+      const detail = tvShowDetail(1234);
+      const local = createMockTVShow({ mediaId: 1234, name: detail.name });
+      mockCatalogClient.getTVShow.mockResolvedValueOnce(detail);
+      mockTVShowRepo.upsertTVShowDetail.mockResolvedValueOnce(local);
+
+      const result = await mediaService.getTVShowByMediaId(1234, 'en');
+
+      expect(mockCatalogClient.getTVShow).toHaveBeenCalledWith(1234, 'en');
+      expect(mockTVShowRepo.upsertTVShowDetail).toHaveBeenCalledWith(detail);
+      expect(result?.local).toBe(local);
+    });
+  });
+
+  describe('getSeason', () => {
+    it('mirrors the parent show before mirroring season details', async () => {
+      const { mediaService } = setupTest();
+      const detail = createMockSeasonDetail({ tvMediaId: 1234, seasonNumber: 1 });
+      const show = createMockTVShow({ mediaId: 1234 });
+      const season = { id: 9, mediaId: detail.seasonMediaId } as never;
+
+      mockCatalogClient.getTVShow.mockResolvedValueOnce(tvShowDetail(1234));
+      mockCatalogClient.getSeason.mockResolvedValueOnce(detail);
+      mockTVShowRepo.upsertTVShowDetail.mockResolvedValueOnce(show);
+      mockTVShowRepo.upsertSeasonDetail.mockResolvedValueOnce(season);
+      mockTVShowRepo.findSeasonByIdWithEpisodes.mockResolvedValueOnce(season);
+
+      await expect(mediaService.getSeason(1234, 1, 'en')).resolves.toBe(season);
+      expect(mockCatalogClient.getTVShow).toHaveBeenCalledWith(1234, 'en');
+      expect(mockCatalogClient.getSeason).toHaveBeenCalledWith(1234, 1, 'en');
+      expect(mockTVShowRepo.upsertTVShowDetail.mock.invocationCallOrder[0]).toBeLessThan(
+        mockTVShowRepo.upsertSeasonDetail.mock.invocationCallOrder[0]
       );
-
-      expect(movieDetailsCalls.length).toBeGreaterThan(0);
-      expect(movieDetailsCalls[0][0]).toContain(`/movie/${theWildRobotTMDBID}`);
-
-      // Check database operations
-      expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(theWildRobotTMDBID);
-      expect(mockMovieRepo.create).toHaveBeenCalled();
-
-      // Check movie properties
-      expect(movie).not.toBeNull();
-      expect(movie!.tmdbId).toBe(theWildRobotTMDBID);
     });
 
-    it('should return a movie from the database if it exists', async () => {
-      // Arrange
-      const { mediaService } = await setupTest();
+    it('does not fetch a season when the parent show is missing', async () => {
+      const { mediaService } = setupTest();
+      mockCatalogClient.getTVShow.mockResolvedValueOnce(null);
 
-      const existingMovie = {
-        id: 1,
-        tmdbId: theWildRobotTMDBID,
-        title: 'Test Movie',
-        overview: 'Test Overview',
-        // Add other necessary movie properties
-      } as Movie;
-      mockMovieRepo.findByTMDBId.mockResolvedValueOnce(existingMovie);
+      await expect(mediaService.getSeason(1234, 1, 'en')).resolves.toBeNull();
+      expect(mockCatalogClient.getSeason).not.toHaveBeenCalled();
+      expect(mockTVShowRepo.upsertSeasonDetail).not.toHaveBeenCalled();
+    });
+  });
 
-      // Act
-      const movie = await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
+  describe('markShowAsWatching', () => {
+    it('marks the show locally and pushes the watching set to the catalog', async () => {
+      const { mediaService } = setupTest();
+      mockTVShowRepo.markAsWatching.mockResolvedValueOnce(undefined);
+      mockTVShowRepo.getWatchingTVShowMediaIds.mockResolvedValueOnce([1234, 5678]);
 
-      // Assert
-      expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(theWildRobotTMDBID);
-      expect(mockFetch).toHaveBeenCalledTimes(0);
-      expect(mockMovieRepo.create).not.toHaveBeenCalled();
-      expect(movie).toEqual(existingMovie);
+      await mediaService.markShowAsWatching(1234);
+
+      expect(mockTVShowRepo.markAsWatching).toHaveBeenCalledWith(1234);
+      expect(mockCatalogClient.setWatching).toHaveBeenCalledWith([1234, 5678]);
     });
 
-    it('should fetch and update genres when adding a new movie', async () => {
-      // Arrange
-      const { mediaService } = await setupTest();
-      mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null); // Movie not in DB
+    it('does not fail when the catalog push fails', async () => {
+      const { mediaService } = setupTest();
+      mockTVShowRepo.markAsWatching.mockResolvedValueOnce(undefined);
+      mockTVShowRepo.getWatchingTVShowMediaIds.mockResolvedValueOnce([1234]);
+      mockCatalogClient.setWatching.mockRejectedValueOnce(new Error('catalog down'));
 
-      // Act
-      await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
-
-      // Assert
-      expect(mockMovieRepo.create).toHaveBeenCalled();
-      // Based on TMDB 'en' movie genres (19) + TV genres (16) - duplicates = 27
-      // The ensureGenres method will fetch all standard genres.
-      expect(mockGenreRepo.createOrGetGenre).toHaveBeenCalledTimes(27);
-      expect(mockMovieRepo.updateGenres).not.toHaveBeenCalled();
-    });
-
-    it('should fetch and add translations when adding a new movie', async () => {
-      // Arrange
-      const { mediaService } = await setupTest();
-      mockMovieRepo.findByTMDBId.mockResolvedValueOnce(null); // Movie not in DB
-
-      // Act
-      await mediaService.getMovieByTmdbId(theWildRobotTMDBID);
-
-      const expectedTranslation = expect.objectContaining({
-        title: 'The Wild Robot',
-        overview: 'Overview here.',
-        tagline: '',
-        language: 'en',
-      });
-      expect(mockMovieRepo.create).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({
-          translations: expect.arrayContaining([expectedTranslation]),
-        })
-      );
-      // The modified fixture has 2 translations
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect((mockMovieRepo.create.mock.calls[0][1] as any).translations).toHaveLength(2);
-    }); // End of getMovie describe block
-
-    describe('syncMovies', () => {
-      const getAllChangedMovieIdsSpy = jest.spyOn(TMDBApi.prototype, 'getAllChangedMovieIds');
-      const MOVIE_SYNC_NAME = 'TMDB_Movies';
-
-      afterEach(() => {
-        getAllChangedMovieIdsSpy.mockClear();
-        jest.useRealTimers();
-      });
-
-      it('should skip sync if last sync was less than 1 hour ago', async () => {
-        // Arrange - syncMovies now lives on TmdbService
-        const { tmdbService } = await setupTest();
-        (mockSyncStateRepo.getLastSync as jest.Mock).mockResolvedValue(new Date());
-
-        // Act
-        await tmdbService.syncMovies();
-
-        // Assert
-        expect(mockSyncStateRepo.getLastSync).toHaveBeenCalledWith(MOVIE_SYNC_NAME);
-        expect(mockLogger.debug).toHaveBeenCalledWith(
-          'TmdbService',
-          'Last movie sync was less than 1 hour ago. Skipping.'
-        );
-        expect(getAllChangedMovieIdsSpy).not.toHaveBeenCalled();
-        expect(mockSyncStateRepo.setLastSync).not.toHaveBeenCalled();
-      });
-
-      it('should proceed with sync if no last sync state exists', async () => {
-        const { tmdbService } = await setupTest();
-        const now = new Date('2025-05-11T10:00:00Z');
-        jest.useFakeTimers({ now });
-        (mockSyncStateRepo.getLastSync as jest.Mock).mockResolvedValue(null); // No last sync
-
-        mockMovieRepo.findByTMDBId.mockImplementation(tmdbId => {
-          if (`${theWildRobotTMDBID}` === `${tmdbId}`) {
-            return Promise.resolve({
-              id: 1,
-              tmdbId,
-              title: 'The Wild Robot',
-              overview: 'Overview here.',
-              tagline: '',
-              releaseDate: new Date(),
-              poster: '',
-              backdrop: '',
-              logo: '',
-              runtime: 100,
-              popularity: 10,
-              rating: 8.5,
-              genres: [],
-              translations: [],
-            } as unknown as Movie);
-          }
-          if (`${cosmicPrincessTMDBID}` === `${tmdbId}`) {
-            return Promise.resolve({
-              id: 2,
-              tmdbId,
-              title: 'Cosmic Princess',
-              overview: 'Overview here.',
-              tagline: '',
-              releaseDate: new Date(),
-              poster: '',
-              backdrop: '',
-              logo: '',
-              runtime: 100,
-              popularity: 10,
-              rating: 8.5,
-              genres: [],
-              translations: [],
-            } as unknown as Movie);
-          }
-          return Promise.resolve(null);
-        });
-
-        // Act
-        await tmdbService.syncMovies();
-
-        // Assert - TmdbService uses 'TmdbService' as logger prefix
-        expect(mockSyncStateRepo.getLastSync).toHaveBeenCalledWith(MOVIE_SYNC_NAME);
-        expect(mockLogger.debug).toHaveBeenCalledWith(
-          'TmdbService',
-          expect.stringContaining('chunk 1/2')
-        );
-        expect(mockLogger.debug).toHaveBeenCalledWith(
-          'TmdbService',
-          expect.stringContaining('chunk 2/2')
-        );
-
-        expect(getAllChangedMovieIdsSpy).toHaveBeenCalledTimes(2); // 2 pages
-        const callArgs = getAllChangedMovieIdsSpy.mock.calls[0];
-        const startDateArg = callArgs[0] as Date;
-        const endDateArg = callArgs[1] as Date | undefined;
-
-        // Check that startDate is roughly 24 hours before endDate, as per logic when no last sync
-        expect(endDateArg).toBeDefined();
-        if (endDateArg) {
-          // Type guard for endDateArg
-          const diffHours = (endDateArg.getTime() - startDateArg.getTime()) / (1000 * 60 * 60);
-          expect(diffHours).toBeCloseTo(24, 0); // Check if it's approximately 24 hours
-        }
-
-        expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(theWildRobotTMDBID);
-        expect(mockMovieRepo.findByTMDBId).toHaveBeenCalledWith(cosmicPrincessTMDBID);
-
-        expect(mockMovieRepo.checkForChangesAndUpdate).toHaveBeenCalledTimes(2);
-        expect(mockMovieRepo.checkForChangesAndUpdate).toHaveBeenCalledWith(
-          expect.objectContaining({ tmdbId: theWildRobotTMDBID }),
-          expect.objectContaining({ tmdbId: theWildRobotTMDBID })
-        );
-        expect(mockMovieRepo.checkForChangesAndUpdate).toHaveBeenCalledWith(
-          expect.objectContaining({ tmdbId: cosmicPrincessTMDBID }),
-          expect.objectContaining({ tmdbId: cosmicPrincessTMDBID })
-        );
-
-        expect(mockSyncStateRepo.setLastSync).toHaveBeenCalledTimes(2);
-        expect(mockSyncStateRepo.setLastSync).toHaveBeenCalledWith(
-          MOVIE_SYNC_NAME,
-          new Date('2025-05-11T00:00:00Z')
-        );
-        expect(mockSyncStateRepo.setLastSync).toHaveBeenCalledTimes(2);
-        expect(mockSyncStateRepo.setLastSync).toHaveBeenCalledWith(MOVIE_SYNC_NAME, now);
-      });
+      await expect(mediaService.markShowAsWatching(1234)).resolves.toBeUndefined();
+      expect(mockTVShowRepo.markAsWatching).toHaveBeenCalledWith(1234);
     });
   });
 });

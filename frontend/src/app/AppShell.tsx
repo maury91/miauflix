@@ -1,13 +1,15 @@
 import { useAppState } from '@app/hooks/useAppState';
 import { IntroAnimation, type LogoAnimationHandle } from '@app/shell/IntroAnimation';
+import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
 import { Logo } from '@shared/ui/logo/Logo';
-import { useAppDispatch } from '@store';
+import { useAppDispatch, useAppSelector } from '@store';
 import { dismissConfigWizard } from '@store/slices/appState';
+import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -23,7 +25,10 @@ const LoadingContainer = styled.div`
 
 export function AppShell() {
   const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAdmin = useAppSelector(selectIsAdmin);
   const [introComplete, setIntroComplete] = useState(false);
+  const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
   const logoRef = useRef<LogoAnimationHandle>(null);
   const appState = useAppState();
 
@@ -51,10 +56,22 @@ export function AppShell() {
   }, []);
 
   const handleConfigDismiss = useCallback(() => {
+    setConfigurationWizardActive(false);
     dispatch(dismissConfigWizard());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (appState === 'config_wizard' && isAuthenticated && isAdmin) {
+      setConfigurationWizardActive(true);
+    } else if (!isAuthenticated || !isAdmin) {
+      setConfigurationWizardActive(false);
+    }
+  }, [appState, isAdmin, isAuthenticated]);
+
   const renderPage = () => {
+    if (configurationWizardActive) {
+      return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
+    }
     switch (appState) {
       case 'loading':
         return <LoadingContainer key="loading" />;
@@ -64,6 +81,8 @@ export function AppShell() {
         return <LoginPage key="login" />;
       case 'config':
         return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} />;
+      case 'config_wizard':
+        return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
       case 'home':
       default:
         return <HomePage key="home" />;

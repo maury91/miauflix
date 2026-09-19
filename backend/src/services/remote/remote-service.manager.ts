@@ -34,6 +34,7 @@ export interface RemoteServiceDescriptor {
 export class RemoteServiceManager {
   readonly testable = true;
   private manifest: ServiceManifest | null = null;
+  private statusEventsPath: string | null = null;
   private status: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Discovering remote service',
@@ -42,6 +43,9 @@ export class RemoteServiceManager {
   private remoteKeys = new Map<string, string>();
   private timer: ReturnType<typeof setTimeout> | null = null;
   private stopped = false;
+  private streamAbort: AbortController | null = null;
+  private streamTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly statusListeners = new Set<(status: ServiceInstanceStatus) => void>();
 
   constructor(
     private readonly configuration: ConfigurationService,
@@ -50,6 +54,24 @@ export class RemoteServiceManager {
 
   getStatus(): ServiceInstanceStatus {
     return this.status;
+  }
+
+  isReady(): boolean {
+    return this.status.status === 'ready';
+  }
+
+  subscribeStatus(listener: (status: ServiceInstanceStatus) => void): () => void {
+    this.statusListeners.add(listener);
+    return () => this.statusListeners.delete(listener);
+  }
+
+  async requestCapability<T>(
+    schema: ZodType<T>,
+    path: string,
+    options: RequestInit & { notFound?: () => T } = {}
+  ): Promise<T> {
+    if (!this.isReady()) throw new ServiceNotConfiguredError(this.descriptor.serviceName);
+    return this.request(schema, path, options);
   }
 
   get capabilityBasePath(): string {
@@ -69,6 +91,8 @@ export class RemoteServiceManager {
   stop(): void {
     this.stopped = true;
     if (this.timer) clearTimeout(this.timer);
+    if (this.streamTimer) clearTimeout(this.streamTimer);
+    this.streamAbort?.abort();
   }
 
   async reload(): Promise<void> {
@@ -170,6 +194,7 @@ export class RemoteServiceManager {
       manifest.management.configurationSchemaPath
     );
     this.manifest = manifest;
+    this.statusEventsPath = manifest.management.statusEventsPath ?? null;
     const { variables, remoteKeys } = this.toVariableInfos(schema.variables);
     this.configuration.registerDynamicVariables(variables, this.descriptor.serviceName);
     replaceServiceVariables(this.descriptor.serviceName, variables);
@@ -186,6 +211,7 @@ export class RemoteServiceManager {
       }
     }
     await this.refreshStatus();
+    this.startStatusStream();
     logger.info(
       'RemoteService',
       `Discovered ${manifest.name} ${manifest.version} (${this.descriptor.capability} v${capability.version})`
@@ -195,7 +221,70 @@ export class RemoteServiceManager {
   private async refreshStatus(): Promise<void> {
     if (!this.manifest) return;
     const remote = await this.request(serviceStatusSchema, this.manifest.management.statusPath);
-    this.status = this.toLocalStatus(remote);
+    this.setStatus(this.toLocalStatus(remote));
+  }
+
+  private setStatus(status: ServiceInstanceStatus): void {
+    const changed = JSON.stringify(this.status) !== JSON.stringify(status);
+    this.status = status;
+    if (changed) for (const listener of this.statusListeners) listener(status);
+  }
+
+  private startStatusStream(): void {
+    if (!this.statusEventsPath || this.stopped || this.streamAbort) return;
+    const controller = new AbortController();
+    this.streamAbort = controller;
+    void (async () => {
+      try {
+        const response = await this.requestRaw(this.statusEventsPath!, controller.signal);
+        if (!response.body) throw new Error('Status event stream returned no body');
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        while (!controller.signal.aborted) {
+          const chunk = await reader.read();
+          if (chunk.done) break;
+          buffer += decoder.decode(chunk.value, { stream: true });
+          const events = buffer.split(/\r\n\r\n|\n\n|\r\r/);
+          buffer = events.pop() ?? '';
+          for (const event of events) {
+            const data = event
+              .split(/\r\n|\n|\r/)
+              .find(line => line.startsWith('data:'))
+              ?.slice(5)
+              .trim();
+            if (!data) continue;
+            const parsed = serviceStatusSchema.parse(JSON.parse(data));
+            this.setStatus(this.toLocalStatus(parsed));
+          }
+        }
+      } catch (error) {
+        if (!controller.signal.aborted)
+          this.setStatus({ status: 'error', errorMessage: String(error), error });
+      } finally {
+        this.streamAbort = null;
+        if (!this.stopped)
+          this.streamTimer = setTimeout(() => {
+            this.streamTimer = null;
+            this.startStatusStream();
+          }, POLL_INTERVAL_MS);
+      }
+    })();
+  }
+
+  private async requestRaw(path: string, signal: AbortSignal): Promise<Response> {
+    const baseUrl = String(this.configuration.getDynamic(this.descriptor.urlKey) ?? '').replace(
+      /\/+$/,
+      ''
+    );
+    if (!baseUrl) throw new ServiceNotConfiguredError(this.descriptor.serviceName);
+    const response = await fetch(new URL(path, `${baseUrl}/`), {
+      signal,
+      headers: { Accept: 'text/event-stream' },
+    });
+    if (!response.ok)
+      throw new Error(`${this.descriptor.serviceName} status stream failed: ${response.status}`);
+    return response;
   }
 
   private async pushConfiguration(): Promise<void> {
@@ -326,11 +415,11 @@ export class RemoteServiceManager {
   }
 
   private markUnavailable(error: unknown): void {
-    this.status = {
+    this.setStatus({
       status: 'error',
       errorMessage: error instanceof Error ? error.message : String(error),
       error: null,
-    };
+    });
     logger.warn('RemoteService', `${this.descriptor.serviceName} discovery/status failed`, error);
   }
 }

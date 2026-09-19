@@ -1,10 +1,41 @@
 import type { ConfigEntryView } from '@miauflix/backend';
-import { PALETTE } from '@shared/config/constants';
-import type { FC } from 'react';
+import { SETTINGS_PALETTE } from '@shared/config/constants';
+import type { FC, SVGProps } from 'react';
 import styled from 'styled-components';
+
+import LinkIcon from '~icons/line-md/link';
+
+const QuestionIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="9" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9 10a3 3 0 1 1 4.8 2.4c-.73.55-1.3.6-1.8 1.6"
+    />
+    <path strokeLinecap="round" d="M12 17v.01" />
+  </svg>
+);
 
 const FieldWrapper = styled.div<{ $hasError?: boolean }>`
   margin-bottom: 20px;
+  ${props =>
+    props.$hasError &&
+    `
+      margin-inline: -10px;
+      padding: 10px;
+      border: 1px solid ${SETTINGS_PALETTE.color.danger};
+      border-radius: 8px;
+      background: ${SETTINGS_PALETTE.color.dangerSubtle};
+    `}
 `;
 
 const FieldHeader = styled.div`
@@ -17,30 +48,73 @@ const FieldHeader = styled.div`
 const FieldKey = styled.label`
   font-size: 13px;
   font-weight: 600;
-  color: #cccccc;
-  font-family: 'Courier New', monospace;
+  color: ${SETTINGS_PALETTE.text.primary};
+  font-family: 'Poppins', sans-serif;
+`;
+
+const FieldKeyAbbr = styled.abbr`
+  text-decoration: none;
+  cursor: help;
+`;
+
+const FieldHelp = styled.span`
+  position: relative;
+  display: inline-flex;
+  color: ${SETTINGS_PALETTE.text.secondary};
+  cursor: help;
+
+  &:focus-visible {
+    outline: none;
+    color: ${SETTINGS_PALETTE.color.interactive};
+  }
+
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    z-index: 1;
+    top: calc(100% + 8px);
+    left: 50%;
+    width: max-content;
+    max-width: 280px;
+    padding: 8px 10px;
+    border: 1px solid ${SETTINGS_PALETTE.background.border};
+    border-radius: 6px;
+    background: ${SETTINGS_PALETTE.background.input};
+    color: ${SETTINGS_PALETTE.text.primary};
+    font:
+      12px/1.4 'Poppins',
+      sans-serif;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    opacity: 1;
+  }
 `;
 
 const RequiredBadge = styled.span`
   font-size: 10px;
   font-weight: 600;
-  color: ${PALETTE.color.danger};
+  color: ${SETTINGS_PALETTE.color.danger};
   text-transform: uppercase;
   letter-spacing: 0.5px;
 `;
 
-const AlreadyConfiguredBadge = styled.span`
-  font-size: 10px;
-  color: #4caf50;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
 const FieldDescription = styled.p`
   font-size: 12px;
-  color: #888;
+  color: ${SETTINGS_PALETTE.text.secondary};
   margin: 0 0 6px 0;
+  line-height: 1.4;
+`;
+
+const FieldWarning = styled.p`
+  font-size: 12px;
+  color: ${SETTINGS_PALETTE.color.warning};
+  margin: 0 0 6px;
   line-height: 1.4;
 `;
 
@@ -49,7 +123,7 @@ const FieldLink = styled.a`
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  color: ${PALETTE.color.link};
+  color: ${SETTINGS_PALETTE.color.interactive};
   text-decoration: none;
   margin-bottom: 6px;
 
@@ -58,19 +132,14 @@ const FieldLink = styled.a`
   }
 `;
 
-const FieldExample = styled.p`
-  font-size: 11px;
-  color: #666;
-  margin: 0 0 6px 0;
-  font-family: 'Courier New', monospace;
-`;
-
 const FieldInput = styled.input<{ $missing?: boolean }>`
   width: 100%;
   padding: 8px 10px;
-  border: 1px solid ${props => (props.$missing ? PALETTE.color.danger : '#444')};
+  border: 1px solid
+    ${props =>
+      props.$missing ? SETTINGS_PALETTE.color.danger : SETTINGS_PALETTE.background.border};
   border-radius: 4px;
-  background-color: #1a1d20;
+  background-color: ${SETTINGS_PALETTE.background.input};
   color: white;
   font-size: 13px;
   font-family: 'Poppins', sans-serif;
@@ -78,21 +147,25 @@ const FieldInput = styled.input<{ $missing?: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: ${props => (props.$missing ? PALETTE.color.danger : PALETTE.color.interactive)};
+    border-color: ${props =>
+      props.$missing ? SETTINGS_PALETTE.color.danger : SETTINGS_PALETTE.color.interactive};
     box-shadow: 0 0 0 3px
-      ${props => (props.$missing ? PALETTE.color.dangerSubtle : PALETTE.color.interactiveSubtle)};
+      ${props =>
+        props.$missing
+          ? SETTINGS_PALETTE.color.dangerSubtle
+          : SETTINGS_PALETTE.color.interactiveSubtle};
   }
 
   &::placeholder {
-    color: #555;
+    color: #70777a;
   }
 `;
 
 const FieldSelect = styled.select`
   padding: 8px 10px;
-  border: 1px solid #444;
+  border: 1px solid ${SETTINGS_PALETTE.background.border};
   border-radius: 4px;
-  background-color: #1a1d20;
+  background-color: ${SETTINGS_PALETTE.background.input};
   color: white;
   font:
     13px 'Poppins',
@@ -100,8 +173,8 @@ const FieldSelect = styled.select`
 
   &:focus {
     outline: none;
-    border-color: ${PALETTE.color.interactive};
-    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
+    border-color: ${SETTINGS_PALETTE.color.interactive};
+    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
   }
 `;
 
@@ -117,15 +190,20 @@ const Toggle = styled.button<{ $enabled: boolean; $missing?: boolean }>`
   padding: 0;
   border: 1px solid
     ${props =>
-      props.$missing ? PALETTE.color.danger : props.$enabled ? PALETTE.color.interactive : '#444'};
+      props.$missing
+        ? SETTINGS_PALETTE.color.danger
+        : props.$enabled
+          ? SETTINGS_PALETTE.color.interactive
+          : SETTINGS_PALETTE.background.border};
   border-radius: 999px;
-  background: ${props => (props.$enabled ? PALETTE.color.interactive : '#1a1d20')};
+  background: ${props =>
+    props.$enabled ? SETTINGS_PALETTE.color.interactive : SETTINGS_PALETTE.background.input};
   cursor: pointer;
   transition: all 0.2s;
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
+    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
   }
 
   &::after {
@@ -136,7 +214,7 @@ const Toggle = styled.button<{ $enabled: boolean; $missing?: boolean }>`
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: ${props => (props.$enabled ? '#1a1d20' : 'white')};
+    background: ${props => (props.$enabled ? SETTINGS_PALETTE.background.input : 'white')};
     transition: left 0.2s;
   }
 `;
@@ -160,6 +238,7 @@ interface ConfigFieldProps {
   entry: ConfigEntryView;
   value: string;
   onChange: (key: string, value: string) => void;
+  hasTestFailure?: boolean;
 }
 
 function booleanStateLabel(
@@ -187,12 +266,57 @@ function timeUnitLabel(unit: string): string {
   return labels[unit] ?? unit;
 }
 
-export const ConfigField: FC<ConfigFieldProps> = ({ entry, value, onChange }) => {
-  const isMissingRequired = entry.required && !entry.hasValue;
+const DISPLAY_TOKEN_OVERRIDES: Record<string, string> = {
+  API: 'API',
+  CORS: 'CORS',
+  DHT: 'DHT',
+  ENV: 'Environment',
+  FLARESOLVERR: 'FlareSolverr',
+  HTTP: 'HTTP',
+  HTTPS: 'HTTPS',
+  ID: 'ID',
+  IP: 'IP',
+  JWT: 'JWT',
+  NODE: 'Node.js',
+  OTEL: 'OTEL',
+  OTLP: 'OTLP',
+  RARBG: 'RARBG',
+  SSL: 'SSL',
+  TCP: 'TCP',
+  TMDB: 'TMDB',
+  TTL: 'TTL',
+  UI: 'UI',
+  URL: 'URL',
+  VPN: 'VPN',
+  YTS: 'YTS',
+};
+
+function humanizeConfigKey(key: string): string {
+  const tokens = key
+    .split('_')
+    .filter(Boolean)
+    .map(token => DISPLAY_TOKEN_OVERRIDES[token] ?? `${token[0]}${token.slice(1).toLowerCase()}`);
+
+  if (key.includes('__') && tokens.length > 1 && tokens[0] === tokens[1]) {
+    tokens.splice(1, 1);
+  }
+
+  return tokens.join(' ');
+}
+
+export const ConfigField: FC<ConfigFieldProps> = ({
+  entry,
+  value,
+  onChange,
+  hasTestFailure = false,
+}) => {
+  const fieldLabel = entry.label ?? humanizeConfigKey(entry.key);
+  const isMissingRequired = (entry.required && !entry.hasValue && !value.trim()) || hasTestFailure;
   const isBoolean = entry.inputType === 'boolean';
   const isSize = entry.inputType === 'size';
   const isTime = entry.inputType === 'time';
   const isNumber = entry.inputType === 'number';
+  const isSelect = entry.inputType === 'select';
   const isUnitValue = isSize || isTime;
   const unitMatch = isUnitValue ? value.match(/^(\d+)\s*([A-Za-z]+)$/) : null;
   const units = isSize ? (entry.sizeUnits ?? []) : (entry.timeUnits ?? []);
@@ -211,7 +335,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({ entry, value, onChange }) =>
             type="button"
             role="switch"
             aria-checked={isEnabled}
-            aria-label={entry.key}
+            aria-label={fieldLabel}
             $enabled={isEnabled}
             $missing={isMissingRequired}
             onClick={() => onChange(entry.key, isEnabled ? 'false' : 'true')}
@@ -220,6 +344,22 @@ export const ConfigField: FC<ConfigFieldProps> = ({ entry, value, onChange }) =>
             {booleanStateLabel(entry.key, isEnabled, entry.booleanStateDescriptions)}
           </ToggleValue>
         </ToggleRow>
+      );
+    }
+
+    if (isSelect) {
+      return (
+        <FieldSelect
+          id={entry.key}
+          value={value}
+          onChange={event => onChange(entry.key, event.target.value)}
+        >
+          {Object.entries(entry.options ?? {}).map(([optionValue, optionDescription]) => (
+            <option key={optionValue} value={optionValue}>
+              {optionValue} — {optionDescription}
+            </option>
+          ))}
+        </FieldSelect>
       );
     }
 
@@ -240,7 +380,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({ entry, value, onChange }) =>
             $missing={isMissingRequired}
           />
           <FieldSelect
-            aria-label={`${entry.key} unit`}
+            aria-label={`${fieldLabel} unit`}
             value={unit}
             onChange={event =>
               onChange(entry.key, unitNumber ? `${unitNumber}${event.target.value}` : '')
@@ -280,22 +420,33 @@ export const ConfigField: FC<ConfigFieldProps> = ({ entry, value, onChange }) =>
   };
 
   return (
-    <FieldWrapper>
+    <FieldWrapper $hasError={hasTestFailure} data-test-failure={hasTestFailure || undefined}>
       <FieldHeader>
-        <FieldKey htmlFor={entry.key}>{entry.key}</FieldKey>
+        <FieldKey htmlFor={entry.key}>
+          <FieldKeyAbbr title={`Configuration key: ${entry.key}`}>{fieldLabel}</FieldKeyAbbr>
+        </FieldKey>
+        {!entry.link && (
+          <FieldHelp
+            role="img"
+            tabIndex={0}
+            aria-label={entry.description}
+            data-tooltip={entry.description}
+          >
+            <QuestionIcon aria-hidden="true" />
+          </FieldHelp>
+        )}
         {entry.required && !entry.hasValue && <RequiredBadge>required</RequiredBadge>}
-        {entry.hasValue && <AlreadyConfiguredBadge>✓ value saved</AlreadyConfiguredBadge>}
       </FieldHeader>
 
-      <FieldDescription>{entry.description}</FieldDescription>
+      {entry.link && <FieldDescription>{entry.description}</FieldDescription>}
+
+      {entry.warning && <FieldWarning role="note">Warning: {entry.warning}</FieldWarning>}
 
       {entry.link && (
         <FieldLink href={entry.link} target="_blank" rel="noopener noreferrer">
-          ↗ Get this value
+          <LinkIcon /> {entry.linkLabel ?? 'Open setup page'}
         </FieldLink>
       )}
-
-      {entry.example && <FieldExample>Example: {entry.example}</FieldExample>}
 
       {renderInput()}
     </FieldWrapper>

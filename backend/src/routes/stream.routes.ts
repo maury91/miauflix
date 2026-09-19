@@ -51,7 +51,7 @@ export const createStreamRoutes = ({
         }
 
         // Get the best source based on quality and codec preferences
-        const source = await streamService.getBestSourceForStreaming(movie.tmdbId, quality, hevc);
+        const source = await streamService.getBestSourceForStreaming(movieId, quality, hevc);
 
         if (!source) {
           const codecMsg = hevc === false ? ' (H.265 excluded)' : '';

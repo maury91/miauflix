@@ -25,11 +25,32 @@ test('management manifest requires the supported protocol and relative paths', (
     },
   });
   assert.equal(manifest.capabilities.catalog.version, 1);
+  assert.equal(manifest.management.statusEventsPath, undefined);
   assert.equal(
     serviceManifestSchema.parse({ ...manifest, managementProtocolVersion: 2 })
       .managementProtocolVersion,
     2
   );
+});
+
+test('management manifest accepts an optional status event stream path', () => {
+  const result = serviceManifestSchema.parse({
+    id: 'media-catalog',
+    name: 'Media Catalog',
+    description: 'Catalog',
+    version: '1.0.0',
+    managementProtocolVersion: 1,
+    capabilities: { catalog: { version: 1, basePath: '/v1/catalog' } },
+    management: {
+      statusPath: '/status',
+      statusEventsPath: '/status/events',
+      configurationSchemaPath: '/configuration/schema',
+      configurationStatePath: '/configuration',
+      configurationTestPath: '/configuration/test',
+      configurationApplyPath: '/configuration',
+    },
+  });
+  assert.equal(result.management.statusEventsPath, '/status/events');
 });
 
 test('management manifest rejects paths WHATWG URL normalizes as cross-origin', () => {

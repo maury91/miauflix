@@ -10,7 +10,7 @@ import { useAppSelector } from '@store';
 import { selectConfigDismissed, selectSetupAvailable } from '@store/slices/appState';
 import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 
-export type AppState = 'loading' | 'initial_setup' | 'login' | 'config' | 'home';
+export type AppState = 'loading' | 'initial_setup' | 'login' | 'config' | 'config_wizard' | 'home';
 
 export function hasConfigurationIssue(
   configEntries: ConfigEntryView[] | undefined,
@@ -72,6 +72,11 @@ export function useAppState(): AppState {
 
   // 6. The setup flag only governs first-admin registration. The wizard is
   // exclusively driven by missing configuration or a degraded/error service.
+  const hasMissingRequiredValue = configData?.some(entry => entry.required && !entry.hasValue);
+  if (hasMissingRequiredValue && !configDismissed) {
+    return 'config_wizard';
+  }
+
   if (hasConfigurationIssue(configData, serviceStatuses) && !configDismissed) {
     return 'config';
   }
