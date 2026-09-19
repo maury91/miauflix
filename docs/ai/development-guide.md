@@ -149,7 +149,6 @@ throw new Error('Something went wrong');
 | `@errors/vpn.errors`        | `vpn`        | `http_error`, `invalid_ip`                   |
 | `@errors/request.errors`    | `request`    | `not_configured`, `no_solution`              |
 | `@errors/source.errors`     | `source`     | `invalid_response_body`, `service_not_found` |
-| `@errors/scheduler.errors`  | `scheduler`  | `already_scheduled`, `not_scheduled`         |
 | `@errors/catalog.errors`    | `catalog`    | `user_not_found`                             |
 
 ## File Mapping for Common Tasks
@@ -181,7 +180,7 @@ backend/src/database/        # Database configuration
 ### Background Tasks
 
 ```
-backend/src/services/scheduler/  # Task scheduling
+backend/src/services/background-job/  # Bunqueue workers and schedule lifecycle
 backend/src/services/source/     # Content discovery
 backend/src/services/media/      # Metadata processing
 ```

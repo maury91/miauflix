@@ -2,21 +2,24 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   type Relation,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 import type { EncryptionService } from '@services/encryption/encryption.service';
 
-import { Genre } from './genre.entity';
 import { MovieSource } from './movie-source.entity';
 
+/**
+ * Local index of catalog movies.
+ *
+ * Catalog data (full details, translations, genres) lives in the media-catalog
+ * service; this slim mirror keeps only what the backend's own SQL joins need —
+ * source discovery, streaming and ranking read it locally. It is written through
+ * the media-catalog service responses (see media-index.service.ts).
+ */
 @Entity()
 export class Movie {
   static encryptionService: EncryptionService;
@@ -25,10 +28,12 @@ export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
 
+  /** Catalog media id (column name kept for existing databases). */
   @Column({
     unique: true,
+    name: 'tmdbId',
   })
-  tmdbId: number;
+  mediaId: number;
 
   @Column({
     unique: true,
@@ -48,9 +53,6 @@ export class Movie {
 
   @Column()
   runtime: number;
-
-  @Column()
-  tagline: string;
 
   // ToDo: Obtain data
   @Column({
@@ -77,17 +79,6 @@ export class Movie {
   @Column()
   releaseDate: string;
 
-  @ManyToMany(() => Genre, {
-    eager: true,
-  })
-  @JoinTable()
-  genres: Relation<Genre>[];
-
-  @OneToMany(() => MovieTranslation, translation => translation.movie, {
-    eager: true,
-  })
-  translations: Relation<MovieTranslation>[];
-
   /** Images */
 
   @Column()
@@ -95,9 +86,6 @@ export class Movie {
 
   @Column()
   backdrop: string;
-
-  @Column()
-  logo: string;
 
   /** Status */
 
@@ -117,37 +105,6 @@ export class Movie {
   sources: Relation<MovieSource>[];
 
   /** Time */
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-}
-
-@Unique(['movie', 'language'])
-@Entity()
-export class MovieTranslation {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  language: string;
-
-  @ManyToOne(() => Movie, movie => movie.translations)
-  movie: Relation<Movie>;
-
-  @Column()
-  movieId: number;
-
-  @Column('text')
-  overview: string;
-
-  @Column()
-  title: string;
-
-  @Column()
-  tagline: string;
 
   @CreateDateColumn()
   createdAt: Date;

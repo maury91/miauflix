@@ -54,24 +54,64 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
-# Prepare the host-visible catalog data directory used by the Docker catalog
-# service. The image runs as linuxserver (UID/GID 911), so bind-mounted data
-# must be owned by that account before the container starts.
-ensure_catalog_data_dir() {
+# Prepare the host-visible data directories used by the Docker services.
+# The catalog image runs as linuxserver (UID/GID 911) in production, while the
+# development compose stack shares the parent directory with the backend. Do
+# not chown the whole tree to the catalog user; make the directory boundaries
+# writable and scope catalog ownership to its own subdirectory.
+ensure_data_dir() {
   local project_dir="${1:-$(pwd)}"
+  local data_dir="${project_dir}/data"
   local catalog_data_dir="${project_dir}/data/media-catalog"
 
-  mkdir -p "$catalog_data_dir"
-  if chown -R 911:911 "$catalog_data_dir" 2>/dev/null; then
+  if ! mkdir -p "$catalog_data_dir" 2>/dev/null; then
+    if ! command_exists sudo || ! sudo mkdir -p "$catalog_data_dir"; then
+      print_error "Cannot create ${catalog_data_dir}."
+      return 1
+    fi
+  fi
+
+  local catalog_owner
+  catalog_owner=$(stat -c '%u:%g' "$catalog_data_dir" 2>/dev/null || stat -f '%u:%g' "$catalog_data_dir" 2>/dev/null) || catalog_owner=""
+
+  if [ "$catalog_owner" != "911:911" ]; then
+    if ! chown -R 911:911 "$catalog_data_dir" 2>/dev/null; then
+      if ! command_exists sudo || ! sudo chown -R 911:911 "$catalog_data_dir"; then
+        print_warning "Could not assign ${catalog_data_dir} to catalog UID/GID 911:911; continuing with shared directory permissions."
+      fi
+    fi
+  fi
+
+  # Keep the host owner for the backend and share the directory with the
+  # catalog's fixed UID/GID without granting access to every local account.
+  if chgrp 911 "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+    chmod 2770 "$data_dir" 2>/dev/null && chmod 0770 "$catalog_data_dir" 2>/dev/null; then
     return 0
   fi
 
-  if command_exists sudo && sudo chown -R 911:911 "$catalog_data_dir"; then
+  if command_exists sudo && \
+    sudo chgrp 911 "$data_dir" "$catalog_data_dir" && \
+    sudo chmod 2770 "$data_dir" && sudo chmod 0770 "$catalog_data_dir"; then
     return 0
   fi
 
-  print_error "Cannot provision ${catalog_data_dir} for catalog UID/GID 911:911."
-  print_status "Run: sudo chown -R 911:911 ${catalog_data_dir}"
+  # Some host systems do not expose the catalog GID to the invoking user.
+  # Grant only UID 911 access through the host ACL instead of opening the
+  # directories to every local account.
+  chmod 0700 "$data_dir" "$catalog_data_dir" 2>/dev/null || true
+  if command_exists setfacl && \
+    setfacl -m u:911:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+    setfacl -d -m u:911:rwx "$catalog_data_dir" 2>/dev/null; then
+    return 0
+  fi
+
+  if [ "$(uname -s)" = "Darwin" ] && \
+    chmod +a "user:911 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null; then
+    return 0
+  fi
+
+  print_error "Cannot make ${data_dir} writable for the Docker services."
+  print_status "Run: sudo chgrp 911 ${data_dir} ${catalog_data_dir} && sudo chmod 2770 ${data_dir} && sudo chmod 0770 ${catalog_data_dir}"
   return 1
 }
 

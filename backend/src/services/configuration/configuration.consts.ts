@@ -5,7 +5,6 @@ import { jwtConfigurationDefinition } from '@services/auth/auth.configuration';
 import { queueConfigurationDefinition } from '@services/background-job/background-job.configuration';
 import { catalogConfigurationDefinition } from '@services/catalog/catalog.configuration';
 import { serverConfigurationDefinition } from '@services/configuration/configuration.configuration';
-import { tmdbConfigurationDefinition } from '@services/content-catalog/tmdb/tmdb.configuration';
 import { traktConfigurationDefinition } from '@services/content-catalog/trakt/trakt.configuration';
 import { downloadConfigurationDefinition } from '@services/download/download.configuration';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
@@ -20,7 +19,6 @@ export const services = {
   SOURCE: sourceConfigurationDefinition,
   THE_RARBG: theRarbgConfigurationDefinition,
   CATALOG: catalogConfigurationDefinition,
-  TMDB: tmdbConfigurationDefinition,
   TRAKT: traktConfigurationDefinition,
   VPN: vpnConfigurationDefinition,
   YTS: ytsConfigurationDefinition,

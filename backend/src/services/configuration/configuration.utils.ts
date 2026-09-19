@@ -218,6 +218,10 @@ async function promptForVariable(
   );
   console.log(chalk.white(varInfo.description));
 
+  if (varInfo.warning) {
+    console.log(chalk.yellow(`Warning: ${varInfo.warning}`));
+  }
+
   if ('defaultValue' in varInfo) {
     console.log(chalk.dim(`Default: ${defaultValue}`));
   }
@@ -478,7 +482,10 @@ export function buildAllConfigs(rawValues: Map<VariableName, string>): ConfigEnt
         serviceGroup: groupKey,
         serviceDescription: service.description,
         description: varInfo.description,
+        label: varInfo.label,
         required: varInfo.required,
+        advanced: varInfo.advanced,
+        warning: varInfo.warning,
         hasValue: rawValue.length > 0,
         ...getConfigInputMetadata(varInfo),
         booleanStateDescriptions: varInfo.booleanStateDescriptions,

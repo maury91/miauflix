@@ -8,12 +8,14 @@ export const queueConfigurationDefinition = serviceConfiguration({
     BUNQUEUE_HOST: variable({
       description: 'Hostname of the Bunqueue broker',
       required: false,
+      advanced: true,
       defaultValue: '127.0.0.1',
       example: 'bunqueue',
     }),
     BUNQUEUE_PORT: variable({
       description: 'TCP port of the Bunqueue broker',
       required: false,
+      advanced: true,
       defaultValue: '6789',
       example: '6789',
       transform: transforms.number({ min: 1, max: 65535, integer: true }),
@@ -21,6 +23,7 @@ export const queueConfigurationDefinition = serviceConfiguration({
     BUNQUEUE_TOKEN: variable({
       description: 'Optional Bunqueue broker authentication token',
       required: false,
+      advanced: true,
       defaultValue: '',
       transform: transforms.optional(transforms.string({ minLength: 1 })),
     }),

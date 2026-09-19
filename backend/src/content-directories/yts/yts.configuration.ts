@@ -9,6 +9,7 @@ export const ytsConfigurationDefinition = serviceConfiguration({
       example: 'https://yts.mx',
       defaultValue: 'https://yts.mx',
       required: false,
+      advanced: true,
       transform: transforms.url(),
     }),
   },

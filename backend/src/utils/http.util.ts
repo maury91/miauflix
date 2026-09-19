@@ -20,11 +20,11 @@ export function bodyInitToString(body: BodyInit | null | undefined): string {
     // Convert FormData to URL-encoded string, skipping file entries
     const formDataEntries: string[] = [];
     for (const [key, value] of body.entries()) {
-      // Skip File entries (FormDataEntryValue is string | File)
-      if (value instanceof File) {
+      // Skip File/Blob entries (FormDataEntryValue is string | File)
+      if (typeof value !== 'string') {
         continue;
       }
-      formDataEntries.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+      formDataEntries.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
     }
     return formDataEntries.join('&');
   }

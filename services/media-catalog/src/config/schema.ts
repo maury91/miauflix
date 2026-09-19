@@ -11,7 +11,7 @@ import type { CatalogConfigSchema } from '../types';
 export const CATALOG_CONFIG_SCHEMA: CatalogConfigSchema = {
   name: 'Media Catalog',
   description:
-    'Media catalog provider credentials, catalog sync cadence and metadata freshness. ' +
+    'Media catalog provider credentials and metadata freshness. ' +
     'Values are stored by the main app and pushed to the catalog service.',
   variables: [
     {
@@ -46,30 +46,6 @@ export const CATALOG_CONFIG_SCHEMA: CatalogConfigSchema = {
         ON_DEMAND: 'sync episodes only of tv shows marked as watching',
       },
       description: 'How episode lists are kept in sync',
-    },
-    {
-      key: 'CATALOG_MOVIE_SYNC_INTERVAL',
-      inputType: 'number',
-      required: false,
-      defaultValue: '5400',
-      numberOptions: { min: 1 },
-      description: 'Interval in seconds between catalog movie change scans',
-    },
-    {
-      key: 'CATALOG_SHOW_SYNC_INTERVAL',
-      inputType: 'number',
-      required: false,
-      defaultValue: '5400',
-      numberOptions: { min: 1 },
-      description: 'Interval in seconds between catalog tv show change scans',
-    },
-    {
-      key: 'CATALOG_SEASON_SYNC_INTERVAL',
-      inputType: 'number',
-      required: false,
-      defaultValue: '1',
-      numberOptions: { min: 0.1 },
-      description: 'Interval in seconds between incomplete season sync seeds',
     },
     {
       key: 'CATALOG_HYDRATION_TTL_MS',

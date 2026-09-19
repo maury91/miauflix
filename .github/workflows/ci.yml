@@ -69,6 +69,12 @@ jobs:
           NODE_ENV: test
         timeout-minutes: 10
 
+      - name: Run initial-user setup E2E test
+        run: npm run test:frontend:e2e:initial-setup
+        env:
+          NODE_ENV: test
+        timeout-minutes: 10
+
       - name: Upload E2E test artifacts
         if: always()
         uses: actions/upload-artifact@v4
@@ -89,6 +95,9 @@ jobs:
           path: |
             frontend/playwright-report/
             frontend/test-results/
+            frontend/playwright-report-initial-setup/
+            frontend/test-results-initial-setup/
+            frontend/e2e/initial-user-setup.e2e.spec.ts-snapshots/
           if-no-files-found: ignore
           retention-days: 7
 

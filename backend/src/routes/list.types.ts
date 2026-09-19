@@ -10,7 +10,7 @@ export type ListsResponse = ListDto[];
 export interface MovieDto {
   _type: 'movie';
   id: number;
-  tmdbId: number;
+  mediaId: number;
   imdbId?: string | null;
   title: string;
   overview: string;
@@ -23,14 +23,12 @@ export interface MovieDto {
   rating: number;
   releaseDate: string;
   runtime?: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface TVShowDto {
   _type: 'tvshow';
   id: number;
-  tmdbId: number;
+  mediaId: number;
   imdbId?: string | null;
   name: string;
   overview: string;
@@ -45,8 +43,6 @@ export interface TVShowDto {
   episodeRunTime?: number[];
   type?: string;
   inProduction?: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export type MediaDto = MovieDto | TVShowDto;

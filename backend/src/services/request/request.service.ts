@@ -34,6 +34,7 @@ export interface RequestOptions<B = false> {
   signal?: AbortSignal;
   redirect?: RequestRedirect;
   asBuffer?: B;
+  maxResponseBytes?: number;
 }
 
 export interface RequestServiceResponse<T> {
@@ -42,6 +43,70 @@ export interface RequestServiceResponse<T> {
   ok: boolean;
   status: number;
   statusText: string;
+}
+
+async function readResponseWithLimit<T>(
+  response: Response,
+  maxResponseBytes: number,
+  asBuffer: boolean
+): Promise<ArrayBuffer | T | string> {
+  const contentLength = Number(response.headers.get('content-length'));
+  if (Number.isFinite(contentLength) && contentLength > maxResponseBytes) {
+    await response.body?.cancel();
+    throw new RequestError(`Response exceeds ${maxResponseBytes} byte limit`, 'response_too_large');
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    return asBuffer ? new ArrayBuffer(0) : ('' as T | string);
+  }
+
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    totalBytes += value.byteLength;
+    if (totalBytes > maxResponseBytes) {
+      await reader.cancel();
+      throw new RequestError(
+        `Response exceeds ${maxResponseBytes} byte limit`,
+        'response_too_large'
+      );
+    }
+    chunks.push(value);
+  }
+
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  if (asBuffer) {
+    return bytes.buffer;
+  }
+
+  const text = new TextDecoder().decode(bytes);
+  const contentType = response.headers.get('content-type');
+  if (!contentType || contentType.toLowerCase().includes('application/json')) {
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      return text;
+    }
+  }
+  return text;
+}
+
+const FLARESOLVERR_JSON_EXPANSION_FACTOR = 6;
+const FLARESOLVERR_ENVELOPE_OVERHEAD_BYTES = 64 * 1024;
+
+function getFlareSolverrEnvelopeLimit(maxResponseBytes: number): number {
+  return Math.min(
+    Number.MAX_SAFE_INTEGER,
+    maxResponseBytes * FLARESOLVERR_JSON_EXPANSION_FACTOR + FLARESOLVERR_ENVELOPE_OVERHEAD_BYTES
+  );
 }
 
 /**
@@ -113,18 +178,21 @@ export class RequestService {
   private async requestViaFlareSolverr<T>(
     url: string,
     options: RequestInit,
-    asBuffer: false
+    asBuffer: false,
+    maxResponseBytes?: number
   ): Promise<RequestServiceResponse<T>>;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private async requestViaFlareSolverr<T = ArrayBuffer>(
     url: string,
     options: RequestInit,
-    asBuffer: true
+    asBuffer: true,
+    maxResponseBytes?: number
   ): Promise<RequestServiceResponse<ArrayBuffer>>;
   private async requestViaFlareSolverr<T>(
     url: string,
     options: RequestInit = {},
-    asBuffer = false
+    asBuffer = false,
+    maxResponseBytes?: number
   ): Promise<RequestServiceResponse<ArrayBuffer | T>> {
     const flaresolverrUrl = this.flareSolverrUrl;
     if (!flaresolverrUrl) {
@@ -168,7 +236,17 @@ export class RequestService {
         );
       }
 
-      const data = (await response.json()) as FlareSolverrResponse;
+      const rawData =
+        maxResponseBytes === undefined
+          ? await response.json()
+          : await readResponseWithLimit<FlareSolverrResponse>(
+              response,
+              getFlareSolverrEnvelopeLimit(maxResponseBytes),
+              false
+            );
+      const data = (
+        typeof rawData === 'string' ? JSON.parse(rawData) : rawData
+      ) as FlareSolverrResponse;
 
       logger.debug(
         'FlareSolverr',
@@ -214,6 +292,16 @@ export class RequestService {
       if (isHtmlWrappedJson(responseBody)) {
         logger.debug('FlareSolverr', 'Detected HTML-wrapped JSON, unwrapping...');
         responseBody = unwrapJsonFromHtml(responseBody);
+      }
+
+      if (
+        maxResponseBytes !== undefined &&
+        new TextEncoder().encode(responseBody).byteLength > maxResponseBytes
+      ) {
+        throw new RequestError(
+          `Response exceeds ${maxResponseBytes} byte limit`,
+          'response_too_large'
+        );
       }
 
       solution.headers = normalizeHeaders(solution.headers);
@@ -279,7 +367,7 @@ export class RequestService {
     const successMetricId = this.statsService.metricStart('request.success');
     const errorMetricId = this.statsService.metricStart('request.error');
 
-    const { headers = {}, queryString, timeout, ...fetchOptions } = options ?? {};
+    const { headers = {}, queryString, timeout, maxResponseBytes, ...fetchOptions } = options ?? {};
 
     // Build URL with query string
     const urlObj = buildUrlWithQuery(rawUrl, queryString);
@@ -330,8 +418,6 @@ export class RequestService {
         headers: requestHeaders,
       });
 
-      clearTimeout(timeoutId);
-
       // If we get a 403 and FlareSolverr is enabled, retry through FlareSolverr
       if (response.status === 403 && this.isFlareSolverrEnabled) {
         logger.warn('FlareSolverr', `Received 403 for ${urlString}, retrying through FlareSolverr`);
@@ -347,7 +433,8 @@ export class RequestService {
                   signal,
                   headers: requestHeaders,
                 },
-                true
+                true,
+                maxResponseBytes
               )
             : await this.requestViaFlareSolverr<T>(
                 urlString,
@@ -356,7 +443,8 @@ export class RequestService {
                   signal,
                   headers: requestHeaders,
                 },
-                false
+                false,
+                maxResponseBytes
               );
           logger.info(
             'FlareSolverr',
@@ -380,9 +468,18 @@ export class RequestService {
           this.statsService.metricEnd(errorMetricId);
           this.statsService.metricEnd(requestMetricId);
           this.statsService.metricCancel(successMetricId);
+          if (flareError instanceof RequestError && flareError.code === 'response_too_large') {
+            throw flareError;
+          }
           // Return the original 403 response if FlareSolverr fails
           return {
-            body: await parseResponseBody<T>(response),
+            body: maxResponseBytes
+              ? await readResponseWithLimit<T>(
+                  response,
+                  maxResponseBytes,
+                  options?.asBuffer === true
+                )
+              : await parseResponseBody<T>(response),
             headers: normalizeHeaders(response.headers),
             ok: response.ok,
             status: response.status,
@@ -403,25 +500,30 @@ export class RequestService {
       // Request was successful, store the user agent for this domain
       this.userAgentByDomain.set(domain, userAgent);
 
+      const body = maxResponseBytes
+        ? await readResponseWithLimit<T>(response, maxResponseBytes, options?.asBuffer === true)
+        : options?.asBuffer
+          ? await response.arrayBuffer()
+          : await parseResponseBody<T>(response);
+
       this.statsService.metricEnd(successMetricId);
       this.statsService.metricEnd(requestMetricId);
       this.statsService.metricCancel(errorMetricId);
 
       return {
-        body: options?.asBuffer
-          ? await response.arrayBuffer()
-          : await parseResponseBody<T>(response),
+        body,
         headers: normalizeHeaders(response.headers),
         ok: response.ok,
         status: response.status,
         statusText: response.statusText,
       };
     } catch (error: unknown) {
-      clearTimeout(timeoutId);
       this.statsService.metricEnd(errorMetricId);
       this.statsService.metricEnd(requestMetricId);
       this.statsService.metricCancel(successMetricId);
       throw error;
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId);
     }
   }
 }

@@ -2,19 +2,21 @@ import type { Repository } from 'typeorm';
 import { And, In, IsNull, LessThanOrEqual, Not } from 'typeorm';
 
 import type { Database } from '@database/database';
-import type { Genre } from '@entities/genre.entity';
-import { Movie, MovieTranslation } from '@entities/movie.entity';
+import { Movie } from '@entities/movie.entity';
 import { type MovieSource } from '@entities/movie-source.entity';
 import { RepositoryError } from '@errors/repository.errors';
-import { objectKeys } from '@utils/object.util';
+import type { MovieDetail } from '@services/catalog/catalog.types';
 
+/**
+ * Local index of catalog movies. Catalog content is owned by the media-catalog
+ * service; this repository only maintains the slim mirror the backend's own SQL
+ * joins need (source discovery, streaming, ranking).
+ */
 export class MovieRepository {
   private readonly movieRepository: Repository<Movie>;
-  private readonly movieTranslationRepository: Repository<MovieTranslation>;
 
   constructor(db: Database) {
     this.movieRepository = db.getRepository(Movie);
-    this.movieTranslationRepository = db.getRepository(MovieTranslation);
   }
 
   async findByIds(ids: number[]): Promise<Movie[]> {
@@ -25,95 +27,110 @@ export class MovieRepository {
     return this.movieRepository.findOneBy({ id });
   }
 
-  async findByTMDBId(tmdbId: number): Promise<Movie | null> {
-    return this.movieRepository.findOneBy({ tmdbId });
+  async findByMediaId(mediaId: number): Promise<Movie | null> {
+    return this.movieRepository.findOneBy({ mediaId });
   }
 
-  async create(
-    movie: Partial<Movie>,
-    {
-      translations = [],
-    }: {
-      translations?: Pick<MovieTranslation, 'language' | 'overview' | 'tagline' | 'title'>[];
-    } = {}
-  ): Promise<Movie> {
-    const newMovie = this.movieRepository.create(movie);
-    const result = await this.movieRepository.upsert(newMovie, ['imdbId']);
-    if (!result.identifiers.length) {
-      throw new RepositoryError('Failed to create movie', 'create_failed');
-    }
-    const id = result.identifiers[0].id;
-    const updatedMovie = await this.movieRepository.findOneBy(
-      movie.imdbId ? { imdbId: movie.imdbId } : movie.tmdbId ? { tmdbId: movie.tmdbId } : { id }
-    );
-    if (!updatedMovie) {
-      console.log(
-        {
-          result,
-          movie,
-          where: movie.imdbId
-            ? { imdbId: movie.imdbId }
-            : movie.tmdbId
-              ? { tmdbId: movie.tmdbId }
-              : { id },
-        },
-        result
-      );
-      throw new RepositoryError('Failed to retrieve created movie', 'retrieve_failed');
-    }
-    if (translations.length) {
-      updatedMovie.translations = await Promise.all(
-        translations.map(translation => this.addTranslation(updatedMovie, translation))
-      );
-    }
-    return updatedMovie;
-  }
-
-  async addTranslation(
-    movie: Movie,
-    translation: Partial<MovieTranslation>
-  ): Promise<MovieTranslation> {
-    if (!movie.id) {
-      throw new RepositoryError('Movie ID is required to add a translation', 'id_required');
-    }
-    const newTranslation = this.movieTranslationRepository.create({
-      ...translation,
-      movie,
+  async findListItemsByMediaIds(mediaIds: number[]): Promise<Movie[]> {
+    if (mediaIds.length === 0) return [];
+    return this.movieRepository.find({
+      where: { mediaId: In(mediaIds) },
     });
-    await this.movieTranslationRepository.upsert(newTranslation, ['movieId', 'language']);
-    return newTranslation;
   }
 
-  async checkForChangesAndUpdate(
-    movie: Movie,
-    { genres: _, ...updatedMovie }: Partial<Movie>
-  ): Promise<void> {
-    const hasChanges = objectKeys(updatedMovie).some(key => {
-      return movie[key] !== updatedMovie[key];
+  /** Lightweight lookup used by list refreshes; deliberately bypasses eager relations. */
+  async findReferencesByMediaIds(
+    mediaIds: number[]
+  ): Promise<Array<Pick<Movie, 'id' | 'mediaId'>>> {
+    if (mediaIds.length === 0) {
+      return [];
+    }
+    return this.movieRepository
+      .createQueryBuilder('movie')
+      .select(['movie.id', 'movie.mediaId'])
+      .where('movie.tmdbId IN (:...mediaIds)', { mediaIds })
+      .getMany();
+  }
+
+  /** Mirrors a catalog movie detail into the local index (upsert by mediaId). */
+  async upsertMovieDetail(detail: MovieDetail): Promise<Movie> {
+    const created = this.movieRepository.create({
+      backdrop: detail.backdrop,
+      contentDirectoriesSearched: [],
+      imdbId: detail.imdbId,
+      overview: detail.overview,
+      popularity: detail.popularity,
+      poster: detail.poster,
+      rating: detail.rating,
+      releaseDate: detail.releaseDate,
+      runtime: detail.runtime,
+      title: detail.title,
+      mediaId: detail.mediaId,
     });
-    if (hasChanges) {
-      await this.movieRepository.update(movie.id, updatedMovie);
+    await this.movieRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Movie)
+      .values(created)
+      .orUpdate(
+        [
+          'title',
+          'overview',
+          'popularity',
+          'releaseDate',
+          'poster',
+          'backdrop',
+          'runtime',
+          'rating',
+          'imdbId',
+        ],
+        // orUpdate expects database column names; the column predates the mediaId rename.
+        ['tmdbId']
+      )
+      .updateEntity(false)
+      .execute();
+    const stored = await this.movieRepository.findOneBy({ mediaId: detail.mediaId });
+    if (!stored) {
+      throw new RepositoryError('Failed to persist movie index entry', 'retrieve_failed');
     }
+    return stored;
   }
 
-  async checkForChangesAndUpdateGenres(movie: Movie, genres: Genre[]): Promise<void> {
-    const movieGenreIds = movie.genres?.map(genre => genre.id).sort() ?? [];
-    const sortedGenres = genres.map(genre => genre.id).sort();
-
-    if (movieGenreIds.toString() !== sortedGenres.toString()) {
-      await this.updateGenres(movie, genres);
-    }
+  async updateFromSummary(mediaId: number, movie: Partial<Movie>): Promise<void> {
+    await this.movieRepository.update({ mediaId }, movie);
   }
 
-  async updateGenres(movie: Movie, genres: Genre[]): Promise<void> {
-    const updatedMovie = await this.movieRepository.findOneBy({
-      id: movie.id,
+  async createFromSummary(movie: Partial<Movie>): Promise<Movie> {
+    const created = this.movieRepository.create({
+      backdrop: '',
+      contentDirectoriesSearched: [],
+      imdbId: null,
+      overview: '',
+      popularity: 0,
+      poster: '',
+      rating: 0,
+      releaseDate: '',
+      runtime: 0,
+      title: '',
+      ...movie,
     });
-    if (!updatedMovie) {
-      throw new RepositoryError('Movie not found', 'not_found');
+    await this.movieRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Movie)
+      .values(created)
+      .orUpdate(
+        ['title', 'overview', 'popularity', 'releaseDate', 'poster', 'backdrop'],
+        // orUpdate expects database column names; the column predates the mediaId rename.
+        ['tmdbId']
+      )
+      .updateEntity(false)
+      .execute();
+    const stored = await this.movieRepository.findOneBy({ mediaId: created.mediaId });
+    if (!stored) {
+      throw new RepositoryError('Failed to persist movie summary', 'retrieve_failed');
     }
-    updatedMovie.genres = genres;
-    await this.movieRepository.save(updatedMovie);
+    return stored;
   }
 
   /**
@@ -153,7 +170,6 @@ export class MovieRepository {
       .addSelect('movie.popularity', 'popularity')
       .addSelect('COUNT(source.id)', 'sources')
       .addSelect('SUM(CASE WHEN source.file IS NULL THEN 1 ELSE 0 END)', 'missing')
-      .where('movie.sourceSearched = true')
       .groupBy('movie.id')
       .addGroupBy('movie.popularity')
       .having('SUM(CASE WHEN source.file IS NULL THEN 1 ELSE 0 END) > 0')
@@ -215,6 +231,13 @@ export class MovieRepository {
     const backoffMs = (45 + Math.random() * 30) * 60 * 1000; // 45-75 minutes
     const nextSearch = new Date(Date.now() + backoffMs);
     await this.movieRepository.update(movieId, { nextSourceSearchAt: nextSearch });
+  }
+
+  async resetSourceSearchState(movieId: number): Promise<void> {
+    await this.movieRepository.update(movieId, {
+      contentDirectoriesSearched: [],
+      nextSourceSearchAt: new Date(),
+    });
   }
 
   /**
