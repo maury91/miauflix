@@ -13,7 +13,7 @@ const PageContainer = styled.main`
   position: absolute;
   inset: 0;
   overflow: auto hidden;
-  background: #000;
+  background: ${PALETTE.background.primary};
   padding-top: 80px;
   scrollbar-width: none;
   &::-webkit-scrollbar {
@@ -28,7 +28,7 @@ const FullPageState = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: ${PALETTE.background.disabled};
+  color: ${PALETTE.text.muted};
 `;
 
 const HomePage: FC = () => {

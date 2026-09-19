@@ -53,8 +53,8 @@ Miauflix is a production-ready self-hosted streaming platform built with modern 
 
 #### Background Processing
 
-- **Scheduler Service** - Manages 7 background tasks
-- **Source Discovery** - Continuous content indexing (every 0.1-5 seconds)
+- **Bunqueue Background Processing** - Durable per-domain schedules and workers with retries, overlap prevention, and restart recovery
+- **Source Discovery** - Queue-backed content indexing with service-owned schedule definitions
 - **VPN-Aware Processing** - Automatic pause/resume based on VPN status
 - **Statistics Scraping** - Real-time seeders/leechers data
 - **Database Maintenance** - Cleanup and optimization tasks

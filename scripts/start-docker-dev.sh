@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/utils.sh"
 
-ensure_catalog_data_dir "${SCRIPT_DIR}/.."
+ensure_data_dir "${SCRIPT_DIR}/.."
 
 # Docker bind mounts require the source to exist as a regular file.
 if [ -e .env ] && [ ! -f .env ]; then

@@ -13,8 +13,8 @@ const Hero = styled.header<{ $backdrop: string }>`
   display: flex;
   align-items: flex-end;
   background-image:
-    linear-gradient(90deg, #000 5%, rgba(0, 0, 0, 0.78) 38%, rgba(0, 0, 0, 0.08) 72%),
-    linear-gradient(0deg, #000 0%, transparent 42%), url(${({ $backdrop }) => $backdrop});
+    linear-gradient(90deg, #0a0d0f 5%, rgba(10, 13, 15, 0.78) 38%, rgba(10, 13, 15, 0.08) 72%),
+    linear-gradient(0deg, #0a0d0f 0%, transparent 42%), url(${({ $backdrop }) => $backdrop});
   background-position: center;
   background-size: cover;
 `;
@@ -39,7 +39,7 @@ const Title = styled.h1`
 `;
 const Metadata = styled.p`
   margin: 0 0 12px;
-  color: ${PALETTE.color.interactive};
+  color: ${PALETTE.text.secondary};
   font-size: clamp(0.85rem, 1.35vw, 1.05rem);
 `;
 const Overview = styled.p`

@@ -15,7 +15,7 @@ const Card = styled.button<{ $backdrop: string; $width: number }>`
   border-radius: 6px;
   overflow: hidden;
   background: url(${props => props.$backdrop}) center / cover no-repeat;
-  background-color: ${PALETTE.background.popup};
+  background-color: ${PALETTE.background.surface2};
   color: ${PALETTE.text.primary};
   cursor: pointer;
   transition:

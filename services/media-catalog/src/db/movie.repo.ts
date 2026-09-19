@@ -20,6 +20,16 @@ export class MovieRepository {
     return row && movieRow(row);
   }
 
+  hasKnownMovies(): boolean {
+    return (
+      this.db
+        .select({ mediaId: movies.mediaId })
+        .from(movies)
+        .where(isNotNull(movies.detailsSyncedAt))
+        .get() !== undefined
+    );
+  }
+
   upsertMovie(movie: UpsertableMovie): void {
     const now = Date.now();
     this.db.transaction(tx => {

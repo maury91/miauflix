@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/utils.sh"
 
-ensure_catalog_data_dir "${SCRIPT_DIR}/.."
+ensure_data_dir "${SCRIPT_DIR}/.."
 
 # Ensure .env exists on the host so Docker can bind-mount it as a file.
 # The config wizard will populate it interactively.

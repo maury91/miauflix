@@ -40,6 +40,7 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       example: '__refresh_token',
       defaultValue: '__miauflix_rt',
       required: false,
+      advanced: true,
       skipUserInteraction: true,
     }),
     ACCESS_TOKEN_COOKIE_NAME: variable({
@@ -47,12 +48,14 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       example: '__access_token',
       defaultValue: '__miauflix_at',
       required: false,
+      advanced: true,
       skipUserInteraction: true,
     }),
     COOKIE_DOMAIN: variable({
       description: 'Domain for authentication cookies (leave empty for same-origin cookies)',
       example: 'example.com',
       required: false,
+      advanced: true,
       transform: transforms.optional(
         transforms.domain({ allowLocalhost: process.env.NODE_ENV !== 'production' })
       ),
@@ -66,6 +69,7 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       example: 'true',
       defaultValue: 'false',
       required: false,
+      advanced: true,
       transform: transforms.boolean(),
     }),
     REFRESH_TOKEN_EXPIRATION: variable({
@@ -73,6 +77,7 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       example: '7d',
       defaultValue: '7d',
       required: false,
+      advanced: true,
       transform: transforms.time(['s', 'm', 'h', 'd']),
     }),
     ACCESS_TOKEN_EXPIRATION: variable({
@@ -80,6 +85,7 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       example: '15m',
       defaultValue: '15m',
       required: false,
+      advanced: true,
       transform: transforms.time(['s', 'm', 'h', 'd']),
     }),
     REFRESH_TOKEN_MAX_REFRESH_DAYS: variable({
@@ -87,6 +93,7 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       example: '30',
       defaultValue: '30',
       required: false,
+      advanced: true,
       transform: transforms.number({ min: 1, max: 365, integer: true }),
     }),
     MAX_DEVICE_SLOTS_PER_USER: variable({
@@ -94,6 +101,7 @@ export const jwtConfigurationDefinition = serviceConfiguration({
       example: '5',
       defaultValue: '5',
       required: false,
+      advanced: true,
       transform: transforms.number({ min: 1, max: 20, integer: true }),
     }),
   },

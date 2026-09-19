@@ -11,6 +11,7 @@ jest.mock('@database/database');
 jest.mock('@services/configuration/configuration.service');
 
 import { Database } from '@database/database';
+import { ApiError } from '@errors/api.errors';
 import { DownloadService } from '@services/download/download.service';
 
 import { ContentDirectoryService } from './content-directory.service';
@@ -23,6 +24,11 @@ describe('ContentDirectoryService', () => {
     const mockConfigService =
       new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
     mockConfigService.get.mockReturnValue(undefined as never);
+    mockConfigService.getOrThrow.mockImplementation((key: string) => {
+      if (key === 'YTS_API_URL') return 'https://yts.mx' as never;
+      if (key === 'THE_RARBG_API_URL') return 'https://therarbg.to' as never;
+      throw new Error(`${key} is not set`);
+    });
 
     // Create a mock StorageService
     const mockStorageService = new StorageService(
@@ -88,6 +94,58 @@ describe('ContentDirectoryService', () => {
       const { service } = setupTest();
       const result = await service.searchSourcesForMovie('invalid-id');
       expect(result).toBeNull();
+    });
+
+    it('should continue to later providers when one provider is unavailable', async () => {
+      const { service } = setupTest();
+      const expectedResult = {
+        sources: [{ hash: 'fallback-source' }],
+        trailerCode: '',
+      };
+      const unavailableDirectory = {
+        name: 'Unavailable',
+        getMovie: jest
+          .fn()
+          .mockRejectedValue(new ApiError('Unavailable', 'service_unavailable', 'test')),
+      };
+      const fallbackDirectory = {
+        name: 'Fallback',
+        getMovie: jest.fn().mockResolvedValue(expectedResult),
+      };
+      (
+        service as unknown as {
+          movieDirectories: Array<{ name: string; getMovie: jest.Mock }>;
+        }
+      ).movieDirectories = [unavailableDirectory, fallbackDirectory];
+
+      const result = await service.searchSourcesForMovie(imdbId);
+
+      expect(result).toEqual({ ...expectedResult, source: 'Fallback' });
+      expect(fallbackDirectory.getMovie).toHaveBeenCalledTimes(1);
+    });
+
+    it('should only report providers that completed successfully as searched', async () => {
+      const { service } = setupTest();
+      const unavailableDirectory = {
+        name: 'Unavailable',
+        getMovie: jest
+          .fn()
+          .mockRejectedValue(new ApiError('Unavailable', 'service_unavailable', 'test')),
+      };
+      const emptyDirectory = {
+        name: 'Empty',
+        getMovie: jest.fn().mockResolvedValue({ sources: [], trailerCode: '' }),
+      };
+      (service as unknown as { movieDirectories: Array<unknown> }).movieDirectories = [
+        unavailableDirectory,
+        emptyDirectory,
+      ];
+
+      await expect(service.searchSourcesForMovie(imdbId, false, [], true)).resolves.toEqual({
+        source: '',
+        sources: [],
+        searched: ['Empty'],
+      });
     });
   });
 });

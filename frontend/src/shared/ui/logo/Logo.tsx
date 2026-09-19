@@ -44,7 +44,7 @@ const ConfigurationHeaderBackdrop = styled.div`
 
 export const Logo = ({ page }: { page?: AppState }) => {
   const isSetup = page === 'initial_setup';
-  const isConfiguration = page === 'config';
+  const isConfiguration = page === 'config' || page === 'config_wizard';
 
   return (
     <MotionConfig transition={{ duration: 0.4 }}>

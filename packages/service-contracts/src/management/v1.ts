@@ -22,6 +22,7 @@ export const serviceManifestSchema = z.object({
   capabilities: z.record(z.string(), serviceCapabilitySchema),
   management: z.object({
     statusPath: relativePathSchema,
+    statusEventsPath: relativePathSchema.optional(),
     configurationSchemaPath: relativePathSchema,
     configurationStatePath: relativePathSchema,
     configurationTestPath: relativePathSchema,

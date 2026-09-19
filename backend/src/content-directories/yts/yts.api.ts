@@ -164,16 +164,16 @@ export class YTSApi extends Api {
       }
       return response.body;
     } catch (error) {
-      logger.error('YTS', `API request failed for ${url}:`, error);
-
       // Try with a different domain mirror if available
       if (this.currentDomainIndex < this.domainMirrors.length - 1) {
+        logger.warn('YTS', `YTS mirror failed for ${url}; trying the next mirror`, error);
         this.currentDomainIndex++;
         this.apiUrl = `https://${this.domainMirrors[this.currentDomainIndex]}`;
         logger.info('YTS', `Trying alternative YTS domain: ${this.apiUrl}`);
         return this.request<T>(endpoint, params, highPriority);
       }
 
+      logger.error('YTS', `All YTS mirrors failed; last request was ${url}:`, error);
       throw error;
     }
   }

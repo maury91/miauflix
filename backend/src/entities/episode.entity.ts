@@ -4,18 +4,22 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { Season } from './season.entity';
 
 @Entity()
+@Unique(['seasonId', 'episodeNumber'])
 export class Episode {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  tmdbId: number;
+  /** Catalog episode id (column name kept for existing databases). */
+  @Column({ name: 'tmdbId' })
+  mediaId: number;
 
   @Column()
   seasonId: number;
@@ -43,7 +47,7 @@ export class Episode {
   imdbId: string;
 
   @ManyToOne(() => Season, season => season.episodes)
-  season: typeof Season;
+  season: Relation<Season>;
 
   @CreateDateColumn()
   createdAt: Date;

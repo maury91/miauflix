@@ -12,7 +12,7 @@ import type { MovieResponse, StreamingKeyResponse } from './movie.types';
 export const createMovieRoutes = ({
   auditLogService,
   authService,
-  catalogService,
+  mediaService,
   configurationService,
   sourceService,
   streamService,
@@ -54,30 +54,32 @@ export const createMovieRoutes = ({
             return context.json({ error: 'Invalid movie ID' } satisfies ErrorResponse, 400);
           }
 
-          // Get the movie from the database or fetch from TMDB if not available
-          const movie = await catalogService.getMovieByTmdbId(movieId, lang);
+          // Ensure fresh catalog data (the media-catalog service enforces freshness)
+          // and mirror it into the local index.
+          const result = await mediaService.getMovieByMediaId(movieId, lang);
 
-          if (!movie) {
+          if (!result) {
             return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           }
+          const { local: movie, detail } = result;
 
           // Build the response object
           const response: MovieResponse = {
             type: 'movie',
             id: movie.id,
-            tmdbId: movie.tmdbId,
-            imdbId: movie.imdbId,
-            title: movie.title,
-            overview: movie.overview,
-            tagline: movie.tagline,
-            releaseDate: movie.releaseDate,
-            runtime: movie.runtime,
-            poster: movie.poster,
-            backdrop: movie.backdrop,
-            logo: movie.logo,
-            genres: movie.genres,
-            popularity: movie.popularity,
-            rating: movie.rating,
+            mediaId: detail.mediaId,
+            imdbId: detail.imdbId,
+            title: detail.title,
+            overview: detail.overview,
+            tagline: detail.tagline,
+            releaseDate: detail.releaseDate,
+            runtime: detail.runtime,
+            poster: detail.poster,
+            backdrop: detail.backdrop,
+            logo: detail.logo,
+            genres: detail.genres.map(genre => genre.name),
+            popularity: detail.popularity,
+            rating: detail.rating,
           };
 
           // Include sources if requested
@@ -130,13 +132,13 @@ export const createMovieRoutes = ({
       }
     )
     .post(
-      '/:tmdbId/:quality',
+      '/:mediaId/:quality',
       rateLimitGuard(5), // 5 requests per second for streaming key generation
       authGuard(),
       zValidator(
         'param',
         z.object({
-          tmdbId: z.string().regex(/^\d+$/, 'Movie TMDB ID must be a number'),
+          mediaId: z.string().regex(/^\d+$/, 'Movie media ID must be a number'),
           quality: z.enum(supportedQualities),
         })
       ),
@@ -149,20 +151,21 @@ export const createMovieRoutes = ({
       async context => {
         try {
           const { user } = context.get('sessionInfo');
-          const { tmdbId, quality } = context.req.valid('param');
+          const { mediaId, quality } = context.req.valid('param');
           const { lang } = context.req.valid('query');
-          const movieId = parseInt(tmdbId, 10);
+          const parsedMediaId = parseInt(mediaId, 10);
 
           // Validate movie ID range
-          if (movieId <= 0) {
+          if (parsedMediaId <= 0) {
             return context.json({ error: 'Invalid movie ID' } satisfies ErrorResponse, 400);
           }
 
-          // Check if movie exists
-          const movie = await catalogService.getMovieByTmdbId(movieId, lang);
-          if (!movie) {
+          // Check if movie exists (ensuring fresh catalog data first)
+          const result = await mediaService.getMovieByMediaId(parsedMediaId, lang);
+          if (!result) {
             return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           }
+          const movie = result.local;
 
           // Get sources for the movie to find the best matching source
           const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
@@ -183,7 +186,7 @@ export const createMovieRoutes = ({
           }
 
           // Find the best source based on quality preference
-          const selectedSource = await streamService.getBestSourceForStreaming(movieId, quality);
+          const selectedSource = await streamService.getBestSourceForStreaming(movie.id, quality);
 
           if (!selectedSource) {
             return context.json(

@@ -8,18 +8,18 @@ import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/aut
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import { AuthService } from '@services/auth/auth.service';
+import { registerBackgroundJobHandlers } from '@services/background-job/background-job.handlers';
+import { BackgroundJobService } from '@services/background-job/background-job.service';
+import { BackgroundJobWorker } from '@services/background-job/background-job.worker';
+import { ServiceScheduleCoordinator } from '@services/background-job/service-schedule.coordinator';
 import { CacheService } from '@services/cache/cache.service';
+import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import { ConfigurationService } from '@services/configuration/configuration.service';
-import { ContentCatalogService } from '@services/content-catalog/content-catalog.service';
-import { TMDBApi } from '@services/content-catalog/tmdb/tmdb.api';
-import { TmdbService } from '@services/content-catalog/tmdb/tmdb.service';
 import { TraktService } from '@services/content-catalog/trakt/trakt.service';
 import { DownloadService } from '@services/download/download.service';
 import { ListService } from '@services/media/list.service';
-import { ListSynchronizer } from '@services/media/list.syncronizer';
 import { MediaService } from '@services/media/media.service';
 import { RequestService } from '@services/request/request.service';
-import { Scheduler } from '@services/scheduler';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
@@ -30,20 +30,6 @@ import { StreamService } from '@services/stream/stream.service';
 
 import { initializeInstrumentation } from './instrumentation';
 import { createRoutes } from './routes';
-
-type Methods<T> = {
-  [K in keyof T]: T[K] extends (...args: unknown[]) => void ? T[K] : never;
-};
-
-const bind =
-  <T extends object, K extends keyof Methods<T>>(
-    instance: T,
-    method: K,
-    ...args: Parameters<Methods<T>[K]>
-  ) =>
-  () => {
-    return (instance[method] as Methods<T>[K])(...args);
-  };
 
 // Enhanced error handling
 process.on('unhandledRejection', (reason, promise) => {
@@ -66,66 +52,30 @@ try {
   const configurationService = new ConfigurationService();
   await configurationService.init();
 
-  // if (configOnly) {
-  //   await sleep(1_000);
-  //   // Run the wizard first with no services running — clean interactive UI
-  //   await configurationService.runSetup({ forceReconfigure: true, configOnly: true });
-  //
-  //   // Now create services so they self-test with the saved values and log their results
-  //   initializeInstrumentation(configurationService);
-  //   const cfgDb = new Database(configurationService);
-  //   await cfgDb.initialize();
-  //   const cfgCache = new CacheService(configurationService);
-  //   const cfgStats = new StatsService();
-  //   const cfgRequest = new RequestService(cfgStats, configurationService);
-  //   new TMDBApi(cfgCache.cache, cfgStats, configurationService);
-  //   const cfgAuditLog = new AuditLogService(cfgDb, configurationService);
-  //   const cfgAuth = new AuthService(cfgDb, cfgAuditLog, configurationService);
-  //   new TraktService(cfgDb, cfgAuth, configurationService);
-  //   const cfgVpn = new VpnDetectionService(configurationService);
-  //   const cfgStorage = new StorageService(cfgDb, configurationService);
-  //   const cfgDownload = new DownloadService(cfgStorage, cfgRequest, configurationService);
-  //   const cfgContentDir = new ContentDirectoryService(
-  //     cfgCache.cache,
-  //     cfgDownload,
-  //     cfgRequest,
-  //     cfgStats,
-  //     configurationService
-  //   );
-  //   const cfgMagnet = new SourceMetadataFileService(
-  //     cfgDownload,
-  //     cfgRequest,
-  //     cfgStats,
-  //     configurationService
-  //   );
-  //   new SourceService(cfgDb, cfgVpn, cfgContentDir, cfgMagnet, cfgRequest, configurationService);
-  //
-  //   await configurationService.waitForServicesReady(30_000);
-  //   process.exit(0);
-  // }
-
   // OTEL
   initializeInstrumentation(configurationService);
+
+  // Remote services
+  const catalogClient = new CatalogClientService(configurationService);
+  await catalogClient.initialize();
 
   // Initialize DB
   const db = new Database(configurationService);
   await db.initialize();
+  await db.getMediaListRepository().backfillLegacyLists();
 
   // Create ( and initialize ) all the services
   const cacheService = new CacheService(configurationService);
   const statsService = new StatsService();
   const requestService = new RequestService(statsService, configurationService);
-  const tmdbApi = new TMDBApi(cacheService.cache, statsService, configurationService);
-  const tmdbService = new TmdbService(db, tmdbApi, configurationService);
   const vpnDetectionService = new VpnDetectionService(configurationService);
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
   const traktService = new TraktService(db, authService, configurationService);
-  const catalogService = new ContentCatalogService(tmdbService, traktService);
-  const mediaService = new MediaService(db, tmdbService);
-  const scheduler = new Scheduler(configurationService);
-  const listService = new ListService(db, tmdbService, mediaService);
-  const listSynchronizer = new ListSynchronizer(listService);
+  const mediaService = new MediaService(db, catalogClient);
+  const backgroundJobs = new BackgroundJobService(configurationService);
+  const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
+  const listService = new ListService(db, catalogClient, backgroundJobs);
   const storageService = new StorageService(db, configurationService);
   const downloadService = new DownloadService(storageService, requestService, configurationService);
   const contentDirectoryService = new ContentDirectoryService(
@@ -147,9 +97,11 @@ try {
     contentDirectoryService,
     magnetService,
     requestService,
-    configurationService
+    configurationService,
+    backgroundJobs
   );
   const streamService = new StreamService(db, sourceService, downloadService, mediaService);
+
   const serverService = {
     testable: false as const,
     _status: {
@@ -165,6 +117,7 @@ try {
     },
   };
   configurationService.registerService('SERVER', serverService);
+  configurationService.registerService('CATALOG', catalogClient);
 
   // Run the configuration setup, if the environment is interactive the setup will guide the user into configuring all the unconfigured services
   // if it is not, it will still be possible through the frontend
@@ -172,6 +125,7 @@ try {
     forceReconfigure: forceReconfigure || configOnly,
     configOnly,
   });
+  configurationService.registerService('QUEUE', backgroundJobs);
   // Create initial admin ( if it does not exist, also we do not create if the server runs in the mode that allows creating it from the frontend )
   await authService.configureUsers();
 
@@ -184,58 +138,39 @@ try {
   });
 
   const disableBackgroundTasks = configurationService.get('DISABLE_BACKGROUND_TASKS');
+  const scheduleCoordinator = new ServiceScheduleCoordinator(
+    backgroundJobs,
+    configurationService,
+    catalogClient,
+    listService
+  );
   if (disableBackgroundTasks) {
     logger.info('App', 'Background tasks disabled - running in on-demand mode only');
   } else {
     logger.info('App', 'Starting background tasks...');
 
-    scheduler.scheduleTask(
-      'refreshLists',
-      60 * 60, // 1 hour
-      bind(listSynchronizer, 'synchronize'),
-      ['TMDB']
-    );
+    registerBackgroundJobHandlers({
+      backgroundJobs,
+      cacheService,
+      listService,
+      magnetService,
+      mediaService,
+      sourceService,
+      worker: backgroundWorker,
+    });
 
-    scheduler.scheduleTasks(catalogService.getSyncTasks());
-
-    scheduler.scheduleTask(
-      'movieSourceSearch',
-      0.1, // 0.1 second
-      bind(sourceService, 'searchSourcesForMovies')
-    );
-
-    scheduler.scheduleTask(
-      'dataFileSearch',
-      0.2, // 0.2 second (slightly slower than source search to prioritize finding new sources first)
-      bind(sourceService, 'syncMissingSourceFiles')
-    );
-
-    scheduler.scheduleTask(
-      'updateSourcesStats',
-      2, // 2 seconds
-      bind(sourceService, 'syncStatsForSources')
-    );
-
-    scheduler.scheduleTask(
-      'cacheCleanup',
-      6 * 60 * 60, // 6 hours
-      bind(cacheService, 'cleanup')
-    );
+    backgroundWorker.start();
   }
+  scheduleCoordinator.start(!disableBackgroundTasks);
 
   // Graceful shutdown handlers
   const gracefulShutdown = async (signal: string) => {
     logger.info('App', `Received ${signal}, shutting down gracefully...`);
 
-    // Stop all scheduled tasks
-    for (const taskName of scheduler.listTasks()) {
-      try {
-        scheduler.cancelTask(taskName);
-        logger.debug('App', `Cancelled task: ${taskName}`);
-      } catch (error) {
-        logger.warn('App', `Failed to cancel task ${taskName}:`, error);
-      }
-    }
+    await scheduleCoordinator.stop();
+    catalogClient.stop();
+    await backgroundWorker.stop();
+    backgroundJobs.close();
 
     await db.close();
 
@@ -251,10 +186,9 @@ try {
   const app = createRoutes({
     authService,
     auditLogService,
-    catalogService,
+    catalogClient,
     configurationService,
     mediaService,
-    scheduler,
     sourceService,
     listService,
     vpnDetectionService,

@@ -6,6 +6,7 @@ import {
 import { logger } from '@logger';
 import { Client as BTClient } from 'bittorrent-tracker';
 import loadIPSet from 'load-ip-set';
+import type { Torrent } from 'webtorrent';
 
 import { Database } from '@database/database';
 import { ConfigurationService } from '@services/configuration/configuration.service';
@@ -316,6 +317,38 @@ describe('DownloadService', () => {
 
       // Verify no comma-separated trackers
       expect(result).not.toContain('tr=udp%3A%2F%2Ftracker4.example.com%3A1337%2C');
+    });
+  });
+
+  describe('getSourceMetadataFile', () => {
+    it('does not remove an existing torrent', async () => {
+      const { service } = setupTest();
+      const hash = 'abcdef1234567890abcdef1234567890abcdef12';
+      const torrentFile = Buffer.from('existing');
+      const torrent = { infoHash: hash, torrentFile } as unknown as Torrent;
+      (mockedTorrentInstance as unknown as { torrents: Torrent[] }).torrents = [torrent];
+
+      await expect(
+        service.getSourceMetadataFile(`magnet:?xt=urn:btih:${hash}`, hash, 5000)
+      ).resolves.toBe(torrentFile);
+      expect(mockedTorrentInstance.remove).not.toHaveBeenCalled();
+    });
+
+    it('removes only a torrent created for metadata lookup', async () => {
+      const { service } = setupTest();
+      const hash = 'abcdef1234567890abcdef1234567890abcdef12';
+      const torrentFile = Buffer.from('temporary');
+      const torrent = { infoHash: hash, torrentFile } as unknown as Torrent;
+      (mockedTorrentInstance as unknown as { torrents: Torrent[] }).torrents = [];
+      mockedTorrentInstance.add.mockImplementation((_link, _options, callback) => {
+        callback?.(torrent);
+        return torrent;
+      });
+
+      await expect(
+        service.getSourceMetadataFile(`magnet:?xt=urn:btih:${hash}`, hash, 5000)
+      ).resolves.toBe(torrentFile);
+      expect(mockedTorrentInstance.remove).toHaveBeenCalledWith(hash, { destroyStore: true });
     });
   });
 

@@ -64,6 +64,7 @@ export class ConfigurationService {
   private _registeredServices = new Map<ServiceName, ConfigurableService>();
   /** Serializes temporary config overlays so concurrent requests cannot see each other's drafts. */
   private _configOperation: Promise<void> = Promise.resolve();
+  private readonly _changeListeners = new Set<() => void>();
 
   constructor() {
     for (const [serviceName, service] of objectEntries(services)) {
@@ -482,6 +483,21 @@ export class ConfigurationService {
     this._registeredServices.set(key, instance);
   }
 
+  subscribeChanges(listener: () => void): () => void {
+    this._changeListeners.add(listener);
+    return () => this._changeListeners.delete(listener);
+  }
+
+  private notifyChanges(): void {
+    for (const listener of this._changeListeners) {
+      try {
+        listener();
+      } catch (error) {
+        logger.warn('Config', 'A configuration change listener failed', error);
+      }
+    }
+  }
+
   async restartService(key: string): Promise<ServiceRecovery | null> {
     // Check if key is a valid service
     if (!isServiceName(key)) {
@@ -509,6 +525,7 @@ export class ConfigurationService {
     const status = instance.getStatus();
     if (status.status === 'ready') {
       logger.info('Config', `${key} restart completed: ready`);
+      this.notifyChanges();
       return previousStatus === 'ready' ? null : { service: key, previousStatus };
     }
 
@@ -847,7 +864,7 @@ export class ConfigurationService {
         return [{ service: serviceName, previousStatus }];
       });
 
-      return {
+      const result = {
         success: true,
         services: results,
         restarted,
@@ -855,6 +872,8 @@ export class ConfigurationService {
         changed: [...changedServices],
         recovered,
       };
+      if (changedServices.size > 0) this.notifyChanges();
+      return result;
     });
   }
 

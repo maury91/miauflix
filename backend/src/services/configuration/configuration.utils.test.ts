@@ -112,6 +112,15 @@ describe('buildAllConfigs', () => {
       timeUnits: ['s', 'm', 'h', 'd'],
     });
     expect(entries.find(entry => entry.key === 'CORS_ORIGIN')).toMatchObject({ inputType: 'text' });
+    expect(entries.find(entry => entry.key === 'CATALOG_SERVICE_URL')).toMatchObject({
+      label: 'Catalog Service URL',
+      required: true,
+      advanced: true,
+    });
+    expect(entries.find(entry => entry.key === 'DOWNLOAD_SALT')).toMatchObject({
+      advanced: true,
+      warning: expect.stringContaining('derived storage paths'),
+    });
   });
 });
 

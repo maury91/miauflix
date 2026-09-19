@@ -94,7 +94,7 @@ describe('Movie Endpoints', () => {
 
       expect(response).toBeHttpStatus(200);
       expect(response.data).toHaveProperty('id');
-      expect(response.data).toHaveProperty('tmdbId');
+      expect(response.data).toHaveProperty('mediaId');
       expect(response.data).toHaveProperty('title');
       expect(response.data).toHaveProperty('overview');
       expect(response.data).toHaveProperty('releaseDate');
@@ -110,7 +110,7 @@ describe('Movie Endpoints', () => {
       }
       // Validate data types
       expect(typeof response.data.id).toBe('number');
-      expect(typeof response.data.tmdbId).toBe('number');
+      expect(typeof response.data.mediaId).toBe('number');
       expect(typeof response.data.title).toBe('string');
       expect(typeof response.data.overview).toBe('string');
       expect(typeof response.data.runtime).toBe('number');
@@ -248,7 +248,7 @@ describe('Movie Endpoints', () => {
     });
   });
 
-  // describe.skip('POST /movies/:tmdbId/:quality', () => {
+  // describe.skip('POST /movies/:mediaId/:quality', () => {
   //   it('should generate a streaming key for a valid movie', async () => {
   //     if (!userCredentials) {
   //       throw new Error(
@@ -256,8 +256,8 @@ describe('Movie Endpoints', () => {
   //       );
   //     }
 
-  //     const response = await client.post(['api', 'movies', ':tmdbId', ':quality'], {
-  //       param: { tmdbId: '550', quality: 'auto' },
+  //     const response = await client.post(['api', 'movies', ':mediaId', ':quality'], {
+  //       param: { mediaId: '550', quality: 'auto' },
   //     });
 
   //     expect(response).toBeHttpStatus(200);

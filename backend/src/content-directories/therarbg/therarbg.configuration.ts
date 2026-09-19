@@ -9,6 +9,7 @@ export const theRarbgConfigurationDefinition = serviceConfiguration({
       example: 'https://therarbg.to',
       defaultValue: 'https://therarbg.to',
       required: false,
+      advanced: true,
       transform: transforms.url(),
     }),
   },
