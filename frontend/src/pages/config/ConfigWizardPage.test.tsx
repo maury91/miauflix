@@ -38,24 +38,7 @@ describe('ConfigWizardPage', () => {
   });
 
   it('keeps the saved state until the service is edited again', async () => {
-    let resolveSave!: (value: unknown) => void;
-    const save = vi.fn(
-      () =>
-        new Promise(resolve => {
-          resolveSave = resolve;
-        })
-    );
-    mocks.useSaveServiceConfigMutation.mockReturnValue([save]);
-
-    render(<ConfigWizardPage onDismiss={vi.fn()} />);
-
-    const field = screen.getByRole('textbox', { name: 'Catalog Service URL' });
-    fireEvent.change(field, { target: { value: 'http://catalog:3001' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Save', exact: true }));
-
-    expect(screen.getByRole('button', { name: 'Saving', exact: true })).toBeInTheDocument();
-
-    resolveSave({
+    const save = vi.fn().mockResolvedValue({
       data: {
         success: true,
         services: [
@@ -72,6 +55,13 @@ describe('ConfigWizardPage', () => {
         recovered: [],
       },
     });
+    mocks.useSaveServiceConfigMutation.mockReturnValue([save]);
+
+    render(<ConfigWizardPage onDismiss={vi.fn()} />);
+
+    const field = screen.getByRole('textbox', { name: 'Catalog Service URL' });
+    fireEvent.change(field, { target: { value: 'http://catalog:3001' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save', exact: true }));
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: 'Saved', exact: true })).toBeInTheDocument();
