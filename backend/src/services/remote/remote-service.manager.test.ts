@@ -322,6 +322,41 @@ describe('RemoteServiceManager', () => {
     manager.stop();
   });
 
+  it('retains readiness when the optional status stream transport fails', async () => {
+    const { manager } = setupTest();
+    const streamError = new Error('connection reset by peer');
+    const eventManifest = {
+      ...manifest,
+      management: { ...manifest.management, statusEventsPath: '/events' },
+    };
+    jest.spyOn(global, 'fetch').mockImplementation(async input => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(eventManifest);
+      if (path === '/configuration/schema') {
+        return Response.json({ name: 'Catalog', description: 'Catalog', variables: [] });
+      }
+      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/status') return Response.json({ state: 'ready' });
+      if (path === '/events') {
+        const body = new ReadableStream({
+          start(controller) {
+            controller.error(streamError);
+          },
+        });
+        return new Response(body, { headers: { 'content-type': 'text/event-stream' } });
+      }
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    await Promise.resolve();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
+    manager.stop();
+  });
+
   it('uses the remote observational configuration test endpoint without applying values', async () => {
     const { configuration, manager } = setupTest();
     const requests: Array<{ path: string; method: string; body?: unknown }> = [];

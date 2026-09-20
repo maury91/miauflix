@@ -61,7 +61,6 @@ export const LoginWithQR: FC = () => {
       ) : (
         <QRDisplay
           codeUrl={qrData ? new URL(qrData.approvalPath, window.location.origin).toString() : ''}
-          userCode={qrData?.requestId}
           isLoading={isQrLoading}
           timeRemaining={timeRemaining}
         />

@@ -37,9 +37,12 @@ test.describe('Login flow', () => {
       return true;
     });
 
+    const qrStatus = page.getByText(/Expires in|Code expired/).locator('..');
     await expect(page).toHaveScreenshot('login-page-complete.png', {
       fullPage: true,
       animations: 'disabled',
+      // QR content and the countdown are generated per login request.
+      mask: [page.getByLabel('Login QR code'), qrStatus],
     });
 
     const title = await page.title();
