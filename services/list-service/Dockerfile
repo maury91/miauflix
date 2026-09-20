@@ -1,4 +1,7 @@
-FROM oven/bun:1.4.0 AS runtime
+FROM oven/bun:1.4.0 AS bun-runtime
+
+FROM node:22-slim AS runtime
+COPY --from=bun-runtime /usr/local/bin/bun /usr/local/bin/bun
 
 WORKDIR /workspace
 COPY package.json package-lock.json turbo.json tsconfig.json ./
@@ -11,6 +14,7 @@ COPY packages/therarbg-sanitizer/package.json packages/therarbg-sanitizer/packag
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY services/list-service/package.json services/list-service/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
+RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 RUN npm ci --ignore-scripts
 
 COPY packages/service-contracts packages/service-contracts
@@ -22,7 +26,7 @@ COPY --from=runtime /workspace /workspace
 WORKDIR /workspace/services/list-service
 CMD ["bun", "--watch", "src/index.ts"]
 
-FROM oven/bun:1.4.0 AS production
+FROM bun-runtime AS production
 WORKDIR /app
 COPY --from=runtime /workspace/node_modules /app/node_modules
 COPY --from=runtime /workspace/packages/service-contracts /app/packages/service-contracts
