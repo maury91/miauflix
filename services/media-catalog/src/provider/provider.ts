@@ -127,7 +127,10 @@ export interface CatalogProvider {
   /** Season with episodes. */
   getSeason(tvMediaId: number, seasonNumber: number): Promise<ProviderSeason | null>;
 
-  resolveExternal(ref: { mediaType: MediaType; ids: { imdb?: string } }): Promise<number | null>;
+  resolveExternal(ref: {
+    mediaType: MediaType;
+    ids: { tmdb?: number; imdb?: string };
+  }): Promise<number | null>;
 
   /** Merged genre set for the language (movie + tv). */
   getGenres(language: string): Promise<ProviderGenre[]>;

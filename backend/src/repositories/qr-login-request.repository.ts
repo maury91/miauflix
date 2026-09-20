@@ -39,13 +39,29 @@ export class QrLoginRequestRepository {
     return !!result.affected;
   }
 
-  async claim(id: string): Promise<QrLoginRequest | null> {
+  async beginClaim(id: string, lease: string): Promise<QrLoginRequest | null> {
     const result = await this.repository.update(
       { id, state: 'approved', expiresAt: MoreThan(new Date()) },
-      { state: 'claimed', claimedAt: new Date() }
+      { state: 'claiming', claimedAt: new Date(), claimLease: lease }
     );
     if (!result.affected) return null;
     return this.repository.findOne({ where: { id } });
+  }
+
+  async completeClaim(id: string, lease: string): Promise<boolean> {
+    const result = await this.repository.update(
+      { id, state: 'claiming', claimLease: lease },
+      { state: 'claimed', claimLease: null }
+    );
+    return !!result.affected;
+  }
+
+  async releaseClaim(id: string, lease: string): Promise<boolean> {
+    const result = await this.repository.update(
+      { id, state: 'claiming', claimLease: lease },
+      { state: 'approved', claimedAt: null, claimLease: null }
+    );
+    return !!result.affected;
   }
 
   async expireAndDelete(before: Date): Promise<void> {

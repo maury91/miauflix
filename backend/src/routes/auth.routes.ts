@@ -236,16 +236,39 @@ export const createAuthRoutes = ({
       zValidator('json', z.object({ claimToken: z.string().min(32) })),
       async context => {
         const { claimToken } = context.req.valid('json');
-        const request = await qrLoginService.claim(claimToken, context.req.param('requestId'));
-        if (!request) {
+        const claim = await qrLoginService.beginClaim(claimToken, context.req.param('requestId'));
+        if (!claim) {
           return context.json({ state: 'pending' as const }, 202);
         }
-        if (!request.approvedUserId) {
-          return context.json({ error: 'QR login request has no approving user' }, 409);
+        const { request, lease } = claim;
+        let authResult!: Awaited<ReturnType<typeof authService.generateTokens>>;
+        try {
+          if (!request.approvedUserId) {
+            await qrLoginService.releaseClaim(request.id, lease);
+            return context.json({ error: 'QR login request has no approving user' }, 409);
+          }
+          const user = await authService.getUserById(request.approvedUserId);
+          if (!user) {
+            await qrLoginService.releaseClaim(request.id, lease);
+            return context.json({ error: 'Approving user no longer exists' }, 409);
+          }
+          authResult = await authService.generateTokens(user, context);
+          const completed = await qrLoginService.completeClaim(request.id, lease);
+          if (!completed) {
+            await authService.revokeSession(user.id, authResult.session);
+            await qrLoginService.releaseClaim(request.id, lease);
+            return context.json({ state: 'pending' as const }, 202);
+          }
+        } catch (error) {
+          try {
+            if (authResult) {
+              await authService.revokeSession(authResult.user.id, authResult.session);
+            }
+          } finally {
+            await qrLoginService.releaseClaim(request.id, lease);
+          }
+          throw error;
         }
-        const user = await authService.getUserById(request.approvedUserId);
-        if (!user) return context.json({ error: 'Approving user no longer exists' }, 409);
-        const authResult = await authService.generateTokens(user, context);
         setCookies(context, authService.getCookies(authResult));
         return context.json({
           session: authResult.session,

@@ -1,6 +1,12 @@
 import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-export type QrLoginRequestState = 'approved' | 'claimed' | 'expired' | 'pending' | 'rejected';
+export type QrLoginRequestState =
+  | 'approved'
+  | 'claimed'
+  | 'claiming'
+  | 'expired'
+  | 'pending'
+  | 'rejected';
 
 @Entity('qr_login_requests')
 @Index(['approvalTokenHash'], { unique: true })
@@ -36,6 +42,9 @@ export class QrLoginRequest {
 
   @Column({ type: 'datetime', nullable: true })
   claimedAt: Date | null;
+
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  claimLease: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

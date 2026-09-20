@@ -309,7 +309,7 @@ describe('Service', () => {
 TMDB_API_ACCESS_TOKEN=your_tmdb_token
 TMDB_API_URL=https://api.themoviedb.org/3
 
-# Optional standalone list-service bootstrap
+# Standalone list-service bootstrap (required when the service is enabled)
 TRAKT_CLIENT_ID=your_trakt_client_id
 TRAKT_CLIENT_SECRET=your_trakt_client_secret
 TRAKT_API_URL=https://api.trakt.tv
@@ -320,6 +320,8 @@ NORDVPN_PRIVATE_KEY=your_nordvpn_private_key
 NODE_ENV=development
 LOG_LEVEL=debug
 ```
+
+These Trakt values are optional only when the List Service is disabled or unused. The service-owned encryption key must be supplied explicitly; the backend configuration wizard does not generate it.
 
 ### Development Commands
 

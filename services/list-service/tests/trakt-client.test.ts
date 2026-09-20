@@ -1,0 +1,74 @@
+import { afterEach, describe, expect, it } from 'bun:test';
+
+import { TraktClient, TraktProviderError } from '../src/trakt-client';
+
+describe('TraktClient', () => {
+  const originalFetch = globalThis.fetch;
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+
+  it('bounds stalled requests and exposes a provider error', async () => {
+    globalThis.fetch = (async (
+      _input: Parameters<typeof fetch>[0],
+      init: Parameters<typeof fetch>[1]
+    ) =>
+      await new Promise<Response>((_resolve, reject) => {
+        init?.signal?.addEventListener('abort', () =>
+          reject(new DOMException('The operation timed out', 'AbortError'))
+        );
+      })) as unknown as typeof fetch;
+
+    const request = new TraktClient('client', 'secret', 'https://trakt.example', 5).test();
+
+    try {
+      await request;
+      throw new Error('expected request to time out');
+    } catch (error) {
+      expect(error).toBeInstanceOf(TraktProviderError);
+      expect((error as TraktProviderError).status).toBe(504);
+    }
+  });
+
+  it('preserves upstream HTTP status errors', async () => {
+    globalThis.fetch = (async () =>
+      new Response('unauthorized', { status: 401 })) as unknown as typeof fetch;
+
+    try {
+      await new TraktClient('client', 'secret', 'https://trakt.example').test();
+      throw new Error('expected HTTP error');
+    } catch (error) {
+      expect(error).toBeInstanceOf(TraktProviderError);
+      expect((error as TraktProviderError).status).toBe(401);
+    }
+  });
+
+  it('bounds a stalled response body', async () => {
+    globalThis.fetch = (async (
+      _input: Parameters<typeof fetch>[0],
+      init: Parameters<typeof fetch>[1]
+    ) =>
+      new Promise<Response>(resolve => {
+        resolve({
+          ok: true,
+          status: 200,
+          headers: new Headers(),
+          json: () =>
+            new Promise<never>((_resolve, reject) =>
+              init?.signal?.addEventListener('abort', () =>
+                reject(new DOMException('The operation timed out', 'AbortError'))
+              )
+            ),
+        } as unknown as Response);
+      })) as unknown as typeof fetch;
+
+    try {
+      await new TraktClient('client', 'secret', 'https://trakt.example', 5).test();
+      throw new Error('expected body to time out');
+    } catch (error) {
+      expect(error).toBeInstanceOf(TraktProviderError);
+      expect((error as TraktProviderError).status).toBe(504);
+    }
+  });
+});

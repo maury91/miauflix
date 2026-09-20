@@ -57,7 +57,7 @@ TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
 
 ### External API Integration
 
-#### Trakt.tv list service (Optional)
+#### Trakt.tv list service
 
 ```bash
 # Trakt.tv credentials consumed by the standalone list service
@@ -68,7 +68,8 @@ LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 
 - **Description**: OAuth application credentials for Trakt.tv integration
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
-- **Required for**: Public lists and user list/account association
+- **Required for**: Public lists and user list/account association when the List Service is enabled
+- **Optional when**: The standalone List Service is disabled or unused
 
 #### NordVPN (Optional)
 
@@ -242,13 +243,13 @@ WWW_DOMAIN=www.yourdomain.com
 
 ### Enhanced Features (Optional)
 
-1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + LIST_SERVICE_ENCRYPTION_KEY** - Standalone Trakt list service
+1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + LIST_SERVICE_ENCRYPTION_KEY** - Standalone Trakt list service, required when that service is enabled
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
 3. **ENABLE_FLARESOLVERR + FLARESOLVERR_URL** - Cloudflare bypass for protected content sources
 
 ### Advanced Configuration (Auto-configured)
 
-- All JWT secrets and encryption keys are automatically generated
+- JWT secrets and backend encryption keys are automatically generated; the List Service encryption key is service-owned and must be supplied separately
 - Server settings use sensible defaults
 - Content source settings are optimized automatically
 

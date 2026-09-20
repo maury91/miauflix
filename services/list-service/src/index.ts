@@ -1,6 +1,5 @@
 import {
   connectionResultSchema,
-  externalMediaRefSchema,
   listServiceDefinitionSchema,
   listServicePageSchema,
   LIST_CAPABILITY,
@@ -21,6 +20,10 @@ import { createHash, createCipheriv, createDecipheriv, randomBytes } from 'node:
 import { mkdirSync } from 'node:fs';
 import { Database } from 'bun:sqlite';
 import { z } from 'zod';
+
+import { mapItems, normalizeListItems, type TraktItem } from './list-normalization';
+import { parsePositivePage } from './request-validation';
+import { TraktClient } from './trakt-client';
 
 const PORT = Number(process.env.LIST_SERVICE_PORT ?? 3002);
 const HOST = process.env.LIST_SERVICE_HOST ?? '0.0.0.0';
@@ -68,101 +71,6 @@ const open = (value: string): string => {
   decipher.setAuthTag(tag);
   return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8');
 };
-
-type TraktIds = { trakt?: number | null; tmdb?: number | null; imdb?: string | null };
-type TraktItem = { movie?: { ids: TraktIds }; show?: { ids: TraktIds }; type?: string };
-
-class TraktClient {
-  constructor(
-    private readonly clientId: string,
-    private readonly clientSecret: string,
-    private readonly apiUrl: string
-  ) {}
-
-  async request<T>(path: string, init: RequestInit = {}, accessToken?: string): Promise<T> {
-    const { data } = await this.requestWithHeaders<T>(path, init, accessToken);
-    return data;
-  }
-
-  private async requestWithHeaders<T>(
-    path: string,
-    init: RequestInit = {},
-    accessToken?: string
-  ): Promise<{ data: T; headers: Headers }> {
-    const response = await fetch(`${this.apiUrl}${path}`, {
-      ...init,
-      headers: {
-        'trakt-api-version': '2',
-        'trakt-api-key': this.clientId,
-        'content-type': 'application/json',
-        ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
-        ...(init.headers ?? {}),
-      },
-    });
-    if (!response.ok) {
-      const body = await response.text();
-      const error = new Error(`Trakt API ${response.status}: ${body}`);
-      Object.assign(error, { status: response.status });
-      throw error;
-    }
-    return { data: (await response.json()) as T, headers: response.headers };
-  }
-
-  test(): Promise<unknown> {
-    return this.request('/movies/popular?limit=1');
-  }
-
-  deviceCode(): Promise<{
-    device_code: string;
-    user_code: string;
-    verification_url: string;
-    expires_in: number;
-    interval: number;
-  }> {
-    return this.request('/oauth/device/code', {
-      method: 'POST',
-      body: JSON.stringify({ client_id: this.clientId }),
-    });
-  }
-
-  deviceToken(
-    code: string
-  ): Promise<{ access_token: string; refresh_token: string; expires_in: number }> {
-    return this.request('/oauth/device/token', {
-      method: 'POST',
-      body: JSON.stringify({ code, client_id: this.clientId, client_secret: this.clientSecret }),
-    });
-  }
-
-  profile(accessToken: string): Promise<{ username: string; ids: { slug: string } }> {
-    return this.request('/users/me', {}, accessToken);
-  }
-
-  revoke(accessToken: string): Promise<unknown> {
-    return this.request('/oauth/revoke', {
-      method: 'POST',
-      body: JSON.stringify({
-        token: accessToken,
-        client_id: this.clientId,
-        client_secret: this.clientSecret,
-      }),
-    });
-  }
-
-  async page(
-    path: string,
-    accessToken?: string
-  ): Promise<{ items: TraktItem[]; totalPages: number; totalItems: number }> {
-    const response = await this.requestWithHeaders<TraktItem[]>(path, {}, accessToken);
-    const totalPages = Number(response.headers.get('X-Pagination-Page-Count') ?? '0');
-    const totalItems = Number(response.headers.get('X-Pagination-Item-Count') ?? '0');
-    return {
-      items: response.data,
-      totalPages: Number.isSafeInteger(totalPages) && totalPages >= 0 ? totalPages : 0,
-      totalItems: Number.isSafeInteger(totalItems) && totalItems >= 0 ? totalItems : 0,
-    };
-  }
-}
 
 const schema = {
   name: 'List Service',
@@ -245,6 +153,39 @@ const client = () =>
     config.values.TRAKT_CLIENT_SECRET,
     config.values.TRAKT_API_URL
   );
+
+const candidateConfig = (values: Record<string, string>, unsetKeys: string[]) => {
+  const candidate = { ...config.values, ...values };
+  for (const key of unsetKeys) {
+    if (key in candidate)
+      candidate[key as keyof typeof candidate] = defaultFor(key as keyof typeof runtimeConfig);
+  }
+  return candidate;
+};
+
+const probeConfig = async (candidate: typeof config.values) => {
+  const hasRequiredValues = !!(
+    candidate.TRAKT_CLIENT_ID &&
+    candidate.TRAKT_CLIENT_SECRET &&
+    candidate.LIST_SERVICE_ENCRYPTION_KEY
+  );
+  if (!hasRequiredValues) {
+    return { success: false, message: 'Required Trakt configuration is missing' };
+  }
+  try {
+    await new TraktClient(
+      candidate.TRAKT_CLIENT_ID,
+      candidate.TRAKT_CLIENT_SECRET,
+      candidate.TRAKT_API_URL
+    ).test();
+    return { success: true, message: 'Trakt configuration is valid' };
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Trakt configuration test failed',
+    };
+  }
+};
 
 const publicDefinitions = [
   ['trakt-movies-popular', 'Popular Movies', 'Popular movies from Trakt', 'movies/popular'],
@@ -329,23 +270,6 @@ const accessToken = async (subjectId: string): Promise<string> => {
   return refreshed.access_token;
 };
 
-const mapItems = (items: TraktItem[], mediaType: 'movie' | 'tv') =>
-  items.flatMap((item, index) => {
-    const media = mediaType === 'movie' ? item.movie : item.show;
-    if (!media?.ids) return [];
-    const ids = media.ids;
-    const normalizedIds = Object.fromEntries(
-      Object.entries(ids).filter(([, value]) => value !== null && value !== undefined)
-    );
-    return [
-      {
-        key: `trakt:${mediaType}:${ids.trakt ?? index}`,
-        rank: index,
-        media: externalMediaRefSchema.parse({ mediaType, ids: normalizedIds }),
-      },
-    ];
-  });
-
 const listPage = async (listId: string, subjectId: string | undefined, page: number) => {
   let path: string;
   let mediaType: 'movie' | 'tv' = listId.includes('shows') ? 'tv' : 'movie';
@@ -366,8 +290,9 @@ const listPage = async (listId: string, subjectId: string | undefined, page: num
     else throw new Error('List not found');
   }
   path = path.replace('limit=50', `page=${page}&limit=50`);
-  const result = await client().page(path, token);
-  const items = mapItems(result.items, mediaType);
+  const result = await client().page<TraktItem>(path, token);
+  const bare = listId.endsWith('-popular');
+  const items = mapItems(normalizeListItems(result.items, mediaType, bare), mediaType);
   return listServicePageSchema.parse({
     listId,
     page,
@@ -440,39 +365,40 @@ const handler = async (request: Request): Promise<Response> => {
       );
     if (request.method === 'POST' && path === '/configuration/test') {
       const mutation = serviceConfigMutationSchema.parse(await request.json());
-      const candidate = { ...config.values, ...mutation.values };
-      for (const key of mutation.unsetKeys) {
-        if (key in candidate) {
-          candidate[key as keyof typeof candidate] = defaultFor(key as keyof typeof runtimeConfig);
-        }
-      }
-      const success = !!(
-        candidate.TRAKT_CLIENT_ID &&
-        candidate.TRAKT_CLIENT_SECRET &&
-        candidate.LIST_SERVICE_ENCRYPTION_KEY
-      );
+      const candidate = candidateConfig(mutation.values, mutation.unsetKeys);
+      const test = await probeConfig(candidate);
       return json(
         serviceConfigTestResultSchema.parse({
-          success,
+          success: test.success,
           mode: 'live',
-          message: success
-            ? 'Trakt configuration is valid'
-            : 'Required Trakt configuration is missing',
+          message: test.message,
         }),
-        success ? 200 : 400
+        test.success ? 200 : 400
       );
     }
     if (request.method === 'PUT' && path === '/configuration') {
       const mutation = serviceConfigMutationSchema.parse(await request.json());
+      const candidate = candidateConfig(mutation.values, mutation.unsetKeys);
+      const test = await probeConfig(candidate);
+      if (!test.success) {
+        return json(
+          serviceConfigApplyResultSchema.parse({
+            success: false,
+            reloaded: false,
+            test: { success: false, mode: 'live', message: test.message },
+          }),
+          400
+        );
+      }
       applyConfig(mutation.values, mutation.unsetKeys);
       return json(
         serviceConfigApplyResultSchema.parse({
           success: config.ready,
           reloaded: config.ready,
           test: {
-            success: config.ready,
+            success: true,
             mode: 'live',
-            message: config.ready ? 'Ready' : 'Required configuration is missing',
+            message: test.message,
           },
         }),
         config.ready ? 200 : 400
@@ -483,13 +409,9 @@ const handler = async (request: Request): Promise<Response> => {
       return json(definitions(url.searchParams.get('subjectId') ?? undefined));
     if (request.method === 'GET' && path.startsWith('/v1/lists/')) {
       const listId = decodeURIComponent(path.slice('/v1/lists/'.length));
-      return json(
-        await listPage(
-          listId,
-          url.searchParams.get('subjectId') ?? undefined,
-          Number(url.searchParams.get('page') ?? '1')
-        )
-      );
+      const page = parsePositivePage(url.searchParams.get('page'));
+      if (page === null) return json({ error: 'page must be a positive safe integer' }, 400);
+      return json(await listPage(listId, url.searchParams.get('subjectId') ?? undefined, page));
     }
     if (request.method === 'POST' && path === '/v1/connections/trakt/device') {
       const { subjectId } = z.object({ subjectId: z.string().min(1) }).parse(await request.json());

@@ -17,6 +17,8 @@ import type { CatalogClientService } from '@services/catalog/catalog-client.serv
 import type { ListClientService } from '@services/list/list-client.service';
 import { traced } from '@utils/tracing.util';
 
+export const DEFAULT_LIST_REFRESH_PAGES = 6;
+
 /** Local projection of provider-backed list membership. */
 export class ListService {
   private readonly mediaListRepository: MediaListRepository;
@@ -184,6 +186,7 @@ export class ListService {
         details.set(`${detail.mediaType}:${detail.mediaId}`, detail);
     } catch (error) {
       logger.warn('ListService', 'Catalog batch failed while projecting a list page', error);
+      throw error;
     }
     const resolved: Array<{ mediaType: MediaListItemType; mediaId: number }> = [];
     for (const media of medias) {
@@ -257,7 +260,7 @@ export class ListService {
   private async getListBySlug(slug: string, ownerKey = 'public'): Promise<MediaList> {
     const list = await this.getOrCreateList(slug, ownerKey);
     if (!list.activeGeneration) {
-      await this.refreshList(slug, 1, ownerKey);
+      await this.refreshList(slug, DEFAULT_LIST_REFRESH_PAGES, ownerKey);
       return this.getOrCreateList(slug, ownerKey);
     }
     return list;

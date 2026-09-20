@@ -35,11 +35,13 @@ export class TmdbProvider implements CatalogProvider {
 
   resolveExternal(ref: {
     mediaType: 'movie' | 'tv';
-    ids: { imdb?: string };
+    ids: { tmdb?: number; imdb?: string };
   }): Promise<number | null> {
-    return ref.ids.imdb
-      ? this.client.findByImdbId(ref.ids.imdb, ref.mediaType)
-      : Promise.resolve(null);
+    return ref.ids.tmdb !== undefined
+      ? Promise.resolve(ref.ids.tmdb)
+      : ref.ids.imdb
+        ? this.client.findByImdbId(ref.ids.imdb, ref.mediaType)
+        : Promise.resolve(null);
   }
 
   async getMovie(mediaId: number): Promise<ProviderMovie | null> {

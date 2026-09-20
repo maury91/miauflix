@@ -129,6 +129,32 @@ describe('TmdbClient', () => {
 });
 
 describe('TmdbProvider', () => {
+  it('returns a supplied TMDB identifier without an IMDb lookup', async () => {
+    const findByImdbId = jest.fn();
+    const provider = new TmdbProvider({ findByImdbId } as unknown as TmdbClient);
+
+    await expect(
+      provider.resolveExternal({ mediaType: 'movie', ids: { tmdb: 123 } })
+    ).resolves.toBe(123);
+    expect(findByImdbId).not.toHaveBeenCalled();
+  });
+
+  it('falls back to IMDb when no TMDB identifier is supplied', async () => {
+    const findByImdbId = jest.fn().mockResolvedValue(456);
+    const provider = new TmdbProvider({ findByImdbId } as unknown as TmdbClient);
+
+    await expect(
+      provider.resolveExternal({ mediaType: 'tv', ids: { imdb: 'tt1234567' } })
+    ).resolves.toBe(456);
+    expect(findByImdbId).toHaveBeenCalledWith('tt1234567', 'tv');
+  });
+
+  it('returns null when no external identifier is supplied', async () => {
+    const provider = new TmdbProvider({} as unknown as TmdbClient);
+
+    await expect(provider.resolveExternal({ mediaType: 'movie', ids: {} })).resolves.toBeNull();
+  });
+
   it('collects season changes from every valid page', async () => {
     const pages = new Map([
       [

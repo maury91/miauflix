@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from 'crypto';
+import { createHash, randomBytes, randomUUID } from 'crypto';
 import type { Context } from 'hono';
 
 import type { Database } from '@database/database';
@@ -38,6 +38,7 @@ export class QrLoginService {
       expiresAt,
       approvedAt: null,
       claimedAt: null,
+      claimLease: null,
     });
     return {
       requestId: request.id,
@@ -70,11 +71,24 @@ export class QrLoginService {
     return !!request && (await this.repository.reject(request.id));
   }
 
-  async claim(claimToken: string, expectedId?: string): Promise<QrLoginRequest | null> {
+  async beginClaim(
+    claimToken: string,
+    expectedId?: string
+  ): Promise<{ request: QrLoginRequest; lease: string } | null> {
     const request = await this.repository.findByClaimHash(hash(claimToken));
     if (expectedId && request?.id !== expectedId) return null;
     if (!request || request.expiresAt <= new Date() || request.state !== 'approved') return null;
-    return this.repository.claim(request.id);
+    const lease = randomUUID();
+    const claimed = await this.repository.beginClaim(request.id, lease);
+    return claimed ? { request: claimed, lease } : null;
+  }
+
+  completeClaim(id: string, lease: string): Promise<boolean> {
+    return this.repository.completeClaim(id, lease);
+  }
+
+  releaseClaim(id: string, lease: string): Promise<boolean> {
+    return this.repository.releaseClaim(id, lease);
   }
 
   async cleanup(): Promise<void> {

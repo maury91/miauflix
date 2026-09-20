@@ -219,12 +219,15 @@ Create a `.env` file in the project root directory and configure the required va
 TMDB_API_URL=https://api.themoviedb.org/3
 TMDB_API_ACCESS_TOKEN=your_tmdb_token
 
-# Optional list-service bootstrap (the standalone list service owns these)
+# List Service bootstrap (required when the default List Service is enabled)
 TRAKT_API_URL=https://api.trakt.tv
 TRAKT_CLIENT_ID=your_trakt_client_id
 TRAKT_CLIENT_SECRET=your_trakt_client_secret
 LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 ```
+
+The Trakt credentials and `LIST_SERVICE_ENCRYPTION_KEY` are optional only when
+the standalone List Service is disabled or unused.
 
 > **Note**: If running in a non-interactive environment, you'll need to set all required environment variables manually.
 
