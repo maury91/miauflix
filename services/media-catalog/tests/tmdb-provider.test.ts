@@ -104,26 +104,6 @@ describe('TmdbClient', () => {
     }
   });
 
-  it('uses the requested language in the list query and cache key', async () => {
-    const cacheKeys: string[] = [];
-    const requestUrls: string[] = [];
-    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
-      requestUrls.push(String(input));
-      return Response.json({ page: 2, total_pages: 1, total_results: 0, results: [] });
-    }) as unknown as typeof fetch;
-    const client = new TmdbClient(makeCache(cacheKeys), {
-      apiUrl: 'https://tmdb.example/3',
-      accessToken: 'token',
-    });
-
-    await client.popularMovies(2, 'it');
-
-    expect(cacheKeys).toEqual(['tmdb:v1:list:movies-popular:2:it']);
-    expect(requestUrls).toEqual([
-      'https://tmdb.example/3/discover/movie?include_adult=false&include_video=false&language=it&page=2&sort_by=popularity.desc&vote_count.gte=10',
-    ]);
-  });
-
   it('shares concurrent configuration requests and clears the flight afterward', async () => {
     const cacheKeys: string[] = [];
     let requests = 0;
@@ -149,33 +129,6 @@ describe('TmdbClient', () => {
 });
 
 describe('TmdbProvider', () => {
-  it('returns the requested-language list summaries', async () => {
-    const provider = new TmdbProvider({
-      popularMovies: async (_page: number, language: string) => ({
-        page: 1,
-        totalPages: 1,
-        totalItems: 1,
-        items: [
-          {
-            id: 1,
-            title: language === 'it' ? 'Italiano' : 'English',
-            overview: '',
-            poster_path: null,
-            backdrop_path: null,
-            genre_ids: [],
-            release_date: '',
-            popularity: 0,
-            vote_average: 0,
-          },
-        ],
-      }),
-    } as unknown as TmdbClient);
-
-    const page = await provider.getListPage('@@tmdb_movies_popular', 1, 'it');
-
-    expect(page.items[0]?.title).toBe('Italiano');
-  });
-
   it('collects season changes from every valid page', async () => {
     const pages = new Map([
       [

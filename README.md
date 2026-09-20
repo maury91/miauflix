@@ -85,7 +85,7 @@ To achieve this, Miauflix uses background processing, preloading, and priority q
 
 When idle, Miauflix searches for new content and preloads data needed for streaming.
 
-- Periodic synchronization of TMDB and Trakt.tv lists
+- Periodic synchronization of catalog metadata and Trakt-backed lists
 - Periodic source discovery of recently acquired content and re-discovery of older content
 - Pre-download of content marked as "continue watching" (e.g., new episode of a TV show)
 
@@ -165,7 +165,7 @@ First command runs the configuration wizard (TMDB API key, etc.), then start the
 - [Bun](https://bun.sh/) (for local development — runs the media-catalog service)
 - VPN subscription (for VPN functionality, currently only NordVPN is supported)
 - [TMDB API Access Token](https://developer.themoviedb.org/docs) (for media content — configured from the app UI/CLI; the media-catalog service consumes it)
-- [Trakt.tv API Client ID](https://trakt.tv/oauth/applications) (optional, for list synchronization)
+- [Trakt.tv OAuth application](https://trakt.tv/oauth/applications) (optional, for the standalone list service)
 
 ### Setup
 
@@ -219,9 +219,11 @@ Create a `.env` file in the project root directory and configure the required va
 TMDB_API_URL=https://api.themoviedb.org/3
 TMDB_API_ACCESS_TOKEN=your_tmdb_token
 
-# Optional for list synchronization
+# Optional list-service bootstrap (the standalone list service owns these)
 TRAKT_API_URL=https://api.trakt.tv
 TRAKT_CLIENT_ID=your_trakt_client_id
+TRAKT_CLIENT_SECRET=your_trakt_client_secret
+LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 ```
 
 > **Note**: If running in a non-interactive environment, you'll need to set all required environment variables manually.

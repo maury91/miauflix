@@ -1,7 +1,4 @@
-import {
-  useCheckDeviceLoginStatusMutation,
-  useDeviceLoginMutation,
-} from '@features/auth/api/auth.api';
+import { useClaimQrLoginMutation, useCreateQrLoginMutation } from '@features/auth/api/auth.api';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -10,41 +7,36 @@ import { QRDisplay } from './QRDisplay';
 import { LoginSection, SectionTitle } from './Sections';
 
 export const LoginWithQR: FC = () => {
-  const [
-    getDeviceCode,
-    { data: deviceCodeData, isLoading: isDeviceCodeLoading, isError: isDeviceCodeError },
-  ] = useDeviceLoginMutation();
-  const [checkAuthStatus] = useCheckDeviceLoginStatusMutation();
+  const [createQrLogin, { data: qrData, isLoading: isQrLoading, isError: isQrError }] =
+    useCreateQrLoginMutation();
+  const [claimQrLogin] = useClaimQrLoginMutation();
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const lastAuthStatusCheck = useRef<number>(0);
 
-  // Initialize device login on component mount
   useEffect(() => {
-    getDeviceCode();
-  }, [getDeviceCode]);
+    createQrLogin();
+  }, [createQrLogin]);
 
   useEffect(() => {
-    if (deviceCodeData) {
+    if (qrData) {
       const interval = setInterval(async () => {
-        const remainingTime = deviceCodeData
-          ? Math.max(
-              0,
-              Math.floor((new Date(deviceCodeData.expiresAt).getTime() - Date.now()) / 1000)
-            )
+        const remainingTime = qrData
+          ? Math.max(0, Math.floor((new Date(qrData.expiresAt).getTime() - Date.now()) / 1000))
           : 0;
         setTimeRemaining(remainingTime);
         if (remainingTime <= 0) {
           clearInterval(interval);
-        } else if (deviceCodeData) {
-          if (Date.now() - lastAuthStatusCheck.current > deviceCodeData.interval * 1000) {
+        } else if (qrData) {
+          if (Date.now() - lastAuthStatusCheck.current > qrData.pollInterval * 1000) {
             lastAuthStatusCheck.current = Date.now();
             try {
-              const authStatus = await checkAuthStatus({
-                deviceCode: deviceCodeData.deviceCode,
+              const authStatus = await claimQrLogin({
+                requestId: qrData.requestId,
+                claimToken: qrData.claimToken,
               }).unwrap();
-              if (authStatus.success) {
+              if ('session' in authStatus) {
                 clearInterval(interval);
-              } else if (new Date(deviceCodeData.expiresAt).getTime() - Date.now() < 0) {
+              } else if (new Date(qrData.expiresAt).getTime() - Date.now() < 0) {
                 clearInterval(interval);
               }
             } catch (error) {
@@ -59,18 +51,18 @@ export const LoginWithQR: FC = () => {
       };
     }
     return () => {};
-  }, [checkAuthStatus, deviceCodeData]);
+  }, [claimQrLogin, qrData]);
 
   return (
     <LoginSection>
       <SectionTitle>Sign in with QR</SectionTitle>
-      {isDeviceCodeError ? (
+      {isQrError ? (
         <ErrorMessage>Failed to generate QR code</ErrorMessage>
       ) : (
         <QRDisplay
-          codeUrl={deviceCodeData?.codeUrl}
-          userCode={deviceCodeData?.userCode}
-          isLoading={isDeviceCodeLoading}
+          codeUrl={qrData ? new URL(qrData.approvalPath, window.location.origin).toString() : ''}
+          userCode={qrData?.requestId}
+          isLoading={isQrLoading}
           timeRemaining={timeRemaining}
         />
       )}

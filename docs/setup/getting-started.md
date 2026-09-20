@@ -16,7 +16,7 @@ The first command clones the repository, the second runs the configuration wizar
 - [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
 - [Node.js](https://nodejs.org/) (for local development only)
 - [TMDB API Access Token](https://developer.themoviedb.org/docs) (required for media content)
-- [Trakt.tv API Client ID](https://trakt.tv/oauth/applications) (optional, for list synchronization)
+- [Trakt.tv OAuth application](https://trakt.tv/oauth/applications) (optional, for the standalone list service)
 - VPN subscription (optional)
 
 ## Installation Options

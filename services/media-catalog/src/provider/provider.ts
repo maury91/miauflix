@@ -1,4 +1,4 @@
-import type { ListDefinition, MediaType } from '../types';
+import type { MediaType } from '../types';
 
 /**
  * Catalog provider abstraction — the swap point for future catalog backends.
@@ -86,29 +86,9 @@ export interface ProviderSeason extends ProviderSeasonSummary {
   episodes: ProviderEpisode[];
 }
 
-export interface ProviderSummary {
-  mediaType: MediaType;
-  mediaId: number;
-  title: string;
-  overview: string;
-  poster: string;
-  backdrop: string;
-  genreIds: number[];
-  releaseDate: string;
-  popularity: number;
-  rating: number;
-}
-
 export interface ProviderGenre {
   id: number;
   name: string;
-}
-
-export interface ProviderListPage {
-  page: number;
-  totalPages: number;
-  totalItems: number;
-  items: ProviderSummary[];
 }
 
 export interface ProviderChangesPage {
@@ -138,8 +118,6 @@ export interface CatalogProvider {
   /** Live probe used by the configuration test / green-flag activation. */
   test(): Promise<boolean>;
 
-  listDefinitions(): ListDefinition[];
-
   /** Full movie details incl. translations. Null when unknown to the catalog. */
   getMovie(mediaId: number): Promise<ProviderMovie | null>;
 
@@ -149,7 +127,7 @@ export interface CatalogProvider {
   /** Season with episodes. */
   getSeason(tvMediaId: number, seasonNumber: number): Promise<ProviderSeason | null>;
 
-  getListPage(slug: string, page: number, language: string): Promise<ProviderListPage>;
+  resolveExternal(ref: { mediaType: MediaType; ids: { imdb?: string } }): Promise<number | null>;
 
   /** Merged genre set for the language (movie + tv). */
   getGenres(language: string): Promise<ProviderGenre[]>;

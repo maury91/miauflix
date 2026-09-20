@@ -309,9 +309,11 @@ describe('Service', () => {
 TMDB_API_ACCESS_TOKEN=your_tmdb_token
 TMDB_API_URL=https://api.themoviedb.org/3
 
-# Optional
+# Optional standalone list-service bootstrap
 TRAKT_CLIENT_ID=your_trakt_client_id
+TRAKT_CLIENT_SECRET=your_trakt_client_secret
 TRAKT_API_URL=https://api.trakt.tv
+LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 NORDVPN_PRIVATE_KEY=your_nordvpn_private_key
 
 # Development

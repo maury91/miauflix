@@ -1,12 +1,4 @@
-jest.mock('fs', () => ({
-  mkdirSync: jest.fn(),
-  readFileSync: jest.fn(),
-}));
-
-import { readFileSync } from 'fs';
-
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
-import { EncryptionService } from '@services/encryption/encryption.service';
 
 import { ConfigurationService } from './configuration.service';
 
@@ -54,42 +46,6 @@ function setupLiveCatalog() {
 }
 
 describe('ConfigurationService web configuration actions', () => {
-  it('decrypts encrypted values when loading config.json', () => {
-    const configuration = new ConfigurationService();
-    const encryption = new EncryptionService(Buffer.alloc(32, 1).toString('base64'));
-    const encryptedToken = encryption.encryptString('saved-trakt-client-id');
-    const readConfigFile = jest.mocked(readFileSync);
-    readConfigFile.mockReturnValue(
-      JSON.stringify({ TRAKT_CLIENT_ID: `enc:${encryptedToken}` }) as never
-    );
-    Reflect.set(configuration, '_filePath', '/tmp/config.json');
-    Reflect.set(configuration, '_encryptionService', encryption);
-
-    Reflect.apply(Reflect.get(configuration, 'loadConfigFile') as () => void, configuration, []);
-
-    const rawValues = Reflect.get(configuration, '_rawValues') as Map<string, string>;
-    expect(rawValues.get('TRAKT_CLIENT_ID')).toBe('saved-trakt-client-id');
-  });
-
-  it('ignores an encrypted value that cannot be decrypted', () => {
-    const configuration = new ConfigurationService();
-    const encryption = new EncryptionService(Buffer.alloc(32, 1).toString('base64'));
-    const differentEncryption = new EncryptionService(Buffer.alloc(32, 2).toString('base64'));
-    const encryptedToken = differentEncryption.encryptString('saved-trakt-client-id');
-    const readConfigFile = jest.mocked(readFileSync);
-    readConfigFile.mockReturnValue(
-      JSON.stringify({ TRAKT_CLIENT_ID: `enc:${encryptedToken}` }) as never
-    );
-    Reflect.set(configuration, '_filePath', '/tmp/config.json');
-    Reflect.set(configuration, '_encryptionService', encryption);
-    const rawValues = Reflect.get(configuration, '_rawValues') as Map<string, string>;
-    rawValues.set('TRAKT_CLIENT_ID', 'environment-token');
-
-    Reflect.apply(Reflect.get(configuration, 'loadConfigFile') as () => void, configuration, []);
-
-    expect(rawValues.get('TRAKT_CLIENT_ID')).toBe('environment-token');
-  });
-
   it('applies a non-empty default to an absent optional dynamic string', () => {
     const configuration = setupTest();
 

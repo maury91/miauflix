@@ -1,15 +1,12 @@
 import { logger } from '../../logger';
-import type { ListDefinition } from '../../types';
 import type { ApiCache } from '../../utils/api-cache';
 import type {
   CatalogProvider,
   ProviderChangesPage,
   ProviderEpisode,
   ProviderGenre,
-  ProviderListPage,
   ProviderMovie,
   ProviderSeason,
-  ProviderSummary,
   ProviderTVShow,
 } from '../provider';
 import { ProviderError } from '../provider';
@@ -22,24 +19,6 @@ const MAX_SEASON_CHANGE_PAGES = 100;
  * This is the only module in the service that knows about TMDB specifics —
  * swapping catalogs means adding a sibling `provider/<name>/` package.
  */
-
-export const TMDB_LIST_DEFINITIONS: ListDefinition[] = [
-  {
-    slug: '@@tmdb_movies_popular',
-    name: 'Popular Movies',
-    description: 'List of popular movies from the catalog',
-  },
-  {
-    slug: '@@tmdb_movies_top-rated',
-    name: 'Top Rated Movies',
-    description: 'List of top rated movies from the catalog',
-  },
-  {
-    slug: '@@tmdb_shows_popular',
-    name: 'Popular TV Shows',
-    description: 'List of popular TV shows from the catalog',
-  },
-];
 
 export class TmdbProvider implements CatalogProvider {
   readonly name = 'tmdb';
@@ -54,8 +33,13 @@ export class TmdbProvider implements CatalogProvider {
     return this.client.test();
   }
 
-  listDefinitions(): ListDefinition[] {
-    return TMDB_LIST_DEFINITIONS;
+  resolveExternal(ref: {
+    mediaType: 'movie' | 'tv';
+    ids: { imdb?: string };
+  }): Promise<number | null> {
+    return ref.ids.imdb
+      ? this.client.findByImdbId(ref.ids.imdb, ref.mediaType)
+      : Promise.resolve(null);
   }
 
   async getMovie(mediaId: number): Promise<ProviderMovie | null> {
@@ -102,19 +86,6 @@ export class TmdbProvider implements CatalogProvider {
       poster: data.poster_path ?? '',
       episodes,
     };
-  }
-
-  async getListPage(slug: string, page: number, language: string): Promise<ProviderListPage> {
-    switch (slug) {
-      case '@@tmdb_movies_popular':
-        return this.toSummaryPage(await this.client.popularMovies(page, language), 'movie');
-      case '@@tmdb_movies_top-rated':
-        return this.toSummaryPage(await this.client.topRatedMovies(page, language), 'movie');
-      case '@@tmdb_shows_popular':
-        return this.toSummaryPage(await this.client.popularShows(page, language), 'tv');
-      default:
-        throw new ProviderError(`List with slug ${slug} not found`);
-    }
   }
 
   async getGenres(language: string): Promise<ProviderGenre[]> {
@@ -173,44 +144,6 @@ export class TmdbProvider implements CatalogProvider {
       page++;
     }
     return [...seasonNumbers];
-  }
-
-  /* ----------------------------------------------------------------- internals */
-
-  private toSummaryPage(
-    page: {
-      page: number;
-      totalPages: number;
-      totalItems: number;
-      items: Array<{
-        id: number;
-        title?: string;
-        name?: string;
-        overview: string;
-        poster_path: string | null;
-        backdrop_path: string | null;
-        genre_ids: number[];
-        release_date?: string;
-        first_air_date?: string;
-        popularity: number;
-        vote_average: number;
-      }>;
-    },
-    mediaType: 'movie' | 'tv'
-  ): ProviderListPage {
-    const items: ProviderSummary[] = page.items.map(media => ({
-      mediaType,
-      mediaId: media.id,
-      title: media.title ?? media.name ?? '',
-      overview: media.overview,
-      poster: media.poster_path ?? '',
-      backdrop: media.backdrop_path ?? '',
-      genreIds: media.genre_ids,
-      releaseDate: media.release_date ?? media.first_air_date ?? '',
-      popularity: media.popularity,
-      rating: media.vote_average,
-    }));
-    return { page: page.page, totalPages: page.totalPages, totalItems: page.totalItems, items };
   }
 
   private async *changedPages(

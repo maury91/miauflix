@@ -7,7 +7,6 @@ import { describe, expect, it, spyOn } from 'bun:test';
 import { CatalogRuntime } from '../src/catalog/bootstrap';
 import { CatalogConfigService } from '../src/config/config.service';
 import { CatalogDatabase } from '../src/db/database';
-import { ListRepository } from '../src/db/list.repo';
 import type { ServiceContext } from '../src/service-context';
 import { CatalogWorkerManager } from '../src/workers/worker';
 
@@ -119,7 +118,7 @@ describe('catalog lifecycle', () => {
   });
 
   it('does not attach the catalog when a provider probe finishes after shutdown begins', async () => {
-    const { db, config, context, runtime, cleanup } = setup();
+    const { config, context, runtime, cleanup } = setup();
     const started = Promise.withResolvers<void>();
     const response = Promise.withResolvers<Response>();
     const originalFetch = globalThis.fetch;
@@ -137,7 +136,6 @@ describe('catalog lifecycle', () => {
       await stopping;
 
       expect(context.catalog).toBeNull();
-      expect(new ListRepository(db).listDefinitions()).toEqual([]);
     } finally {
       response.resolve(Response.json({}));
       globalThis.fetch = originalFetch;

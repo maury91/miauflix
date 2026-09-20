@@ -23,6 +23,7 @@ services:
       - BUNQUEUE_HOST=bunqueue
       - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://media-catalog:3001
+      - LIST_SERVICE_URL=http://list-service:3002
       - CATALOG__TMDB_API_URL=http://tmdb-mock/3
       # The initial-setup lane overrides E2E_CATALOG_TMDB_TOKEN with an empty
       # value so the browser must complete Catalog configuration through the UI.
@@ -64,10 +65,38 @@ services:
         condition: service_healthy
       trakt-mock:
         condition: service_healthy
+      list-service:
+        condition: service_healthy
       therarbg-mock:
         condition: service_healthy
 
   # Media catalog service (fronts the TMDB mock)
+  list-service:
+    build:
+      context: ../../
+      dockerfile: services/list-service/Dockerfile
+      target: development
+    environment:
+      - LIST_SERVICE_PORT=3002
+      - LIST_SERVICE_DATA_DIR=/app/data
+      - LIST_SERVICE_ENCRYPTION_KEY=e2e-list-service-key
+      - TRAKT_API_URL=http://trakt-mock
+      - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-mock-trakt-client-id}
+      - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}
+    volumes:
+      - list_service_data:/app/data
+    networks:
+      - test-network
+    healthcheck:
+      test: ['CMD', 'bun', '-e', "fetch('http://localhost:3002/health').then(r => { if (!r.ok) process.exit(1) })"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+    depends_on:
+      trakt-mock:
+        condition: service_healthy
+
   media-catalog:
     build:
       context: ../../
@@ -192,3 +221,5 @@ volumes:
     name: miauflix_test_bunqueue_data
   test_downloads:
     name: miauflix_test_downloads
+  list_service_data:
+    name: miauflix_test_list_service_data

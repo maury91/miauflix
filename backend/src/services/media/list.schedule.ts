@@ -10,7 +10,7 @@ export function listSchedules(
     job: 'list.refresh.plan',
     id: `refresh-${list.slug}`,
     intervalSeconds,
-    payload: { slug: list.slug, maxPages: 6 },
+    payload: { slug: list.slug, maxPages: 6, subjectId: 'public' },
     priority: 100,
     runOnStart: true,
   }));

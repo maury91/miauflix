@@ -57,17 +57,18 @@ TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
 
 ### External API Integration
 
-#### Trakt.tv (Optional)
+#### Trakt.tv list service (Optional)
 
 ```bash
-# Trakt.tv API - Optional for list synchronization and tracking
+# Trakt.tv credentials consumed by the standalone list service
 TRAKT_CLIENT_ID=your-client-id
 TRAKT_CLIENT_SECRET=your-client-secret
+LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 ```
 
 - **Description**: OAuth application credentials for Trakt.tv integration
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
-- **Required for**: User list synchronization, watch progress tracking
+- **Required for**: Public lists and user list/account association
 
 #### NordVPN (Optional)
 
@@ -241,7 +242,7 @@ WWW_DOMAIN=www.yourdomain.com
 
 ### Enhanced Features (Optional)
 
-1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET** - User lists and tracking
+1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + LIST_SERVICE_ENCRYPTION_KEY** - Standalone Trakt list service
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
 3. **ENABLE_FLARESOLVERR + FLARESOLVERR_URL** - Cloudflare bypass for protected content sources
 

@@ -28,4 +28,3 @@ export type * from './routes/movie.types';
 export type * from './routes/progress.types';
 export type * from './routes/show.types';
 export type * from './routes/stream.types';
-export type * from './routes/trakt.types';

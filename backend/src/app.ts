@@ -8,6 +8,7 @@ import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/aut
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import { AuthService } from '@services/auth/auth.service';
+import { QrLoginService } from '@services/auth/qr-login.service';
 import { registerBackgroundJobHandlers } from '@services/background-job/background-job.handlers';
 import { BackgroundJobService } from '@services/background-job/background-job.service';
 import { BackgroundJobWorker } from '@services/background-job/background-job.worker';
@@ -15,8 +16,8 @@ import { ServiceScheduleCoordinator } from '@services/background-job/service-sch
 import { CacheService } from '@services/cache/cache.service';
 import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import { ConfigurationService } from '@services/configuration/configuration.service';
-import { TraktService } from '@services/content-catalog/trakt/trakt.service';
 import { DownloadService } from '@services/download/download.service';
+import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
 import { RequestService } from '@services/request/request.service';
@@ -58,11 +59,12 @@ try {
   // Remote services
   const catalogClient = new CatalogClientService(configurationService);
   await catalogClient.initialize();
+  const listClient = new ListClientService(configurationService);
+  await listClient.initialize();
 
   // Initialize DB
   const db = new Database(configurationService);
   await db.initialize();
-  await db.getMediaListRepository().backfillLegacyLists();
 
   // Create ( and initialize ) all the services
   const cacheService = new CacheService(configurationService);
@@ -71,11 +73,11 @@ try {
   const vpnDetectionService = new VpnDetectionService(configurationService);
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
-  const traktService = new TraktService(db, authService, configurationService);
+  const qrLoginService = new QrLoginService(db);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
-  const listService = new ListService(db, catalogClient, backgroundJobs);
+  const listService = new ListService(db, catalogClient, listClient, backgroundJobs);
   const storageService = new StorageService(db, configurationService);
   const downloadService = new DownloadService(storageService, requestService, configurationService);
   const contentDirectoryService = new ContentDirectoryService(
@@ -118,6 +120,7 @@ try {
   };
   configurationService.registerService('SERVER', serverService);
   configurationService.registerService('CATALOG', catalogClient);
+  configurationService.registerService('LIST', listClient);
 
   // Run the configuration setup, if the environment is interactive the setup will guide the user into configuring all the unconfigured services
   // if it is not, it will still be possible through the frontend
@@ -142,7 +145,8 @@ try {
     backgroundJobs,
     configurationService,
     catalogClient,
-    listService
+    listService,
+    listClient
   );
   if (disableBackgroundTasks) {
     logger.info('App', 'Background tasks disabled - running in on-demand mode only');
@@ -169,6 +173,7 @@ try {
 
     await scheduleCoordinator.stop();
     catalogClient.stop();
+    listClient.stop();
     await backgroundWorker.stop();
     backgroundJobs.close();
 
@@ -191,10 +196,11 @@ try {
     mediaService,
     sourceService,
     listService,
+    listClient,
     vpnDetectionService,
     contentDirectoryService,
     magnetService,
-    traktService,
+    qrLoginService,
     downloadService,
     streamService,
     requestService,

@@ -5,7 +5,7 @@ import { QRDisplay } from './QRDisplay';
 
 describe('QRDisplay', () => {
   const defaultProps = {
-    codeUrl: 'https://miauflix.local/auth/device?code=ABC123DEF456',
+    codeUrl: 'https://miauflix.local/auth/qr/approval-token',
     userCode: 'ABC123DEF456',
     timeRemaining: 600,
   };

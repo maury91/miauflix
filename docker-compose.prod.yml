@@ -45,6 +45,23 @@ services:
     network_mode: service:nordvpn # Reach the catalog provider through NordVPN
     restart: unless-stopped
 
+  list-service:
+    image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}-list-service:${MIAUFLIX_VERSION:-latest}
+    container_name: miauflix-list-service
+    depends_on:
+      nordvpn:
+        condition: service_started
+    environment:
+      - LIST_SERVICE_DATA_DIR=/app/data
+      - TRAKT_API_URL=${TRAKT_API_URL:-https://api.trakt.tv}
+      - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-}
+      - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-}
+      - LIST_SERVICE_ENCRYPTION_KEY=${LIST_SERVICE_ENCRYPTION_KEY:-}
+    volumes:
+      - ./data/list-service:/app/data
+    network_mode: service:nordvpn
+    restart: unless-stopped
+
   backend:
     image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}:${MIAUFLIX_VERSION:-latest}
     container_name: miauflix-backend
@@ -55,12 +72,15 @@ services:
         condition: service_healthy
       media-catalog:
         condition: service_started
+      list-service:
+        condition: service_started
     environment:
       - DATA_DIR=/usr/data
       - DEBUG=SourceService,App,MovieSync,ListService,Cache,MagnetService
       - BUNQUEUE_HOST=127.0.0.1
       - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://localhost:3001 # Same network namespace as media-catalog
+      - LIST_SERVICE_URL=http://localhost:3002 # Same network namespace as list-service
     volumes:
       - ./data:/usr/data/
     network_mode: service:nordvpn # Route traffic through NordVPN

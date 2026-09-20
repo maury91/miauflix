@@ -10,6 +10,22 @@ export interface LoginResponse {
   user: UserDto;
 }
 
+export interface QrLoginResponse {
+  requestId: string;
+  claimToken: string;
+  approvalPath: string;
+  expiresAt: string;
+  pollInterval: number;
+}
+
+export interface QrLoginClaimPending {
+  state: 'pending';
+}
+
+export interface QrLoginClaimResponse extends LoginResponse {
+  state?: 'claimed';
+}
+
 export interface RefreshResponse {
   user: UserDto;
 }
