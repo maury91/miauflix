@@ -6,7 +6,7 @@ The backend includes an assisted configuration system that helps manage environm
 
 - **Environment Variable Validation**: Automatically validates required environment variables at startup
 - **Interactive Configuration**: Prompts for missing configuration values in an interactive terminal
-- **Service-Specific Configuration**: Handles configuration for different services (TMDB, Trakt.tv)
+- **Service-Specific Configuration**: Handles configuration for the catalog and standalone list services
 - **Configuration Testing**: Tests service connections with provided credentials
 - **Default Values**: Provides sensible defaults for optional configuration
 - **Error Reporting**: Clear error messages when configuration is missing or invalid

@@ -259,8 +259,17 @@ export class RemoteServiceManager {
           }
         }
       } catch (error) {
-        if (!controller.signal.aborted)
-          this.setStatus({ status: 'error', errorMessage: String(error), error });
+        if (!controller.signal.aborted) {
+          // The event stream is an optimization for prompt status updates. Its
+          // transport can fail independently of the service itself (for
+          // example, when a proxy closes an idle SSE connection), so retain
+          // the last status and let the regular status poll remain authoritative.
+          logger.debug(
+            'RemoteService',
+            `${this.descriptor.serviceName} status stream disconnected; reconnecting`,
+            error
+          );
+        }
       } finally {
         this.streamAbort = null;
         if (!this.stopped)

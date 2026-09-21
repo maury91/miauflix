@@ -50,8 +50,8 @@ type Story = StoryObj<typeof meta>;
 export const Interactive: Story = {
   args: {
     isLoading: false,
-    codeUrl: 'https://miauflix.local/auth/device?code=ABC123DEF456',
-    userCode: 'ABC123DEF456',
+    codeUrl: 'https://miauflix.local/auth/qr/approval-token',
+    userCode: 'Scan with your Miauflix app',
     timeRemaining: 600, // 10 minutes
     qrSize: 140,
     instructions: 'Scan with phone to sign in',

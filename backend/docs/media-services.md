@@ -10,7 +10,7 @@ The backend provides comprehensive media information and content discovery servi
 - **Periodic updates**: Automated synchronization to keep content fresh
 - **Multi-language support**: Content available in multiple languages with fallback mechanisms
 - **Genre categorization**: Automatic genre assignment and management
-- **List management**: Integration with TMDB lists for content organization
+- **List metadata**: Catalog metadata only; provider-backed lists are owned by the standalone list service
 
 ### TV Shows
 
@@ -27,20 +27,13 @@ The backend provides comprehensive media information and content discovery servi
 - **Error handling**: Robust error handling with retry mechanisms
 - **Data validation**: Comprehensive validation of incoming TMDB data
 
-## Trakt.tv Integration
+## List Service and Trakt association
 
-### Current Implementation
-
-- **API Client**: Configured Trakt.tv API client with authentication
-- **OAuth2 Setup**: Ready for user authentication with Trakt.tv
-- **Configuration Management**: Environment-based configuration for API keys
-
-### Planned Features
-
-- **List Synchronization**: Sync user lists between Miauflix and Trakt.tv
-- **Watch History**: Import and sync viewing history
-- **Ratings Integration**: Sync user ratings and reviews
-- **Recommendations**: Use Trakt.tv data for personalized recommendations
+Trakt is owned by the standalone List Service. It provides public Trakt lists and
+authenticated personal lists, and stores encrypted Trakt credentials there. A user
+can associate a Trakt account from an authenticated Miauflix session through
+`/api/integrations/trakt/*`; Trakt credentials never create or authenticate a
+Miauflix session.
 
 ## Content Discovery
 
@@ -64,10 +57,9 @@ The backend provides comprehensive media information and content discovery servi
 
 ### Lists
 
-- **User Lists**: Personal content lists for users
-- **TMDB List Sync**: Synchronization with TMDB public lists
-- **List Sharing**: Ability to share lists between users (planned)
-- **Smart Lists**: Dynamic lists based on criteria (planned)
+- **Public lists**: Trakt-backed popular and trending lists
+- **Personal lists**: Trakt watchlists, favorites, and history after account association
+- **Local projection**: Backend stores only resolved membership needed for playback
 
 ### Search
 
@@ -102,10 +94,11 @@ The backend provides comprehensive media information and content discovery servi
 ### Lists
 
 - `GET /api/lists` - Get user lists
-- `POST /api/lists` - Create new list
-- `PUT /api/lists/:id` - Update list
-- `DELETE /api/lists/:id` - Delete list
-- `POST /api/lists/:id/items` - Add items to list
+- `GET /api/list/:slug` - Read a projected list page
+- `POST /api/integrations/trakt/authorization` - Start authenticated Trakt association
+- `POST /api/integrations/trakt/authorization/:authorizationId/check` - Poll association
+- `GET /api/integrations/trakt/association` - Inspect association
+- `DELETE /api/integrations/trakt/association` - Disconnect Trakt
 
 ### Search
 
@@ -123,10 +116,8 @@ TMDB_API_KEY=your-tmdb-api-key
 TMDB_BASE_URL=https://api.themoviedb.org/3
 TMDB_LANGUAGE=en-US
 
-# Trakt.tv Configuration
-TRAKT_CLIENT_ID=your-trakt-client-id
-TRAKT_CLIENT_SECRET=your-trakt-client-secret
-TRAKT_REDIRECT_URI=your-redirect-uri
+# Trakt.tv configuration is owned by the standalone list service.
+# Configure it through the list-service container/environment, not the backend.
 
 # YTS Configuration
 YTS_BASE_URL=https://yts.mx/api/v2

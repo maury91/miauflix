@@ -33,8 +33,8 @@ export function registerBackgroundJobHandlers({
   worker.register('list.refresh.plan', {
     concurrency: 1,
     leaseMs: 2 * 60 * 1000,
-    run: async ({ maxPages, slug }) => {
-      const plan = await listService.createRefreshPlan(slug, maxPages);
+    run: async ({ maxPages, slug, subjectId }) => {
+      const plan = await listService.createRefreshPlan(slug, maxPages, subjectId);
       const pages = Array.from({ length: plan.pageCount }, (_, index) => ({
         type: 'list.page.stage' as const,
         dedupeKey: `${plan.generation}:${index + 1}`,
@@ -44,6 +44,7 @@ export function registerBackgroundJobHandlers({
           generation: plan.generation,
           page: index + 1,
           pageSize: plan.pageSize,
+          subjectId,
         },
         options: { priority: 60 },
       }));
@@ -68,7 +69,8 @@ export function registerBackgroundJobHandlers({
         payload.listId,
         payload.generation,
         payload.page,
-        payload.pageSize
+        payload.pageSize,
+        payload.subjectId
       ),
   });
   worker.register('list.generation.activate', {

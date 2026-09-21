@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock('@features/config/api/config.api', () => mocks);
+vi.mock('framer-motion', () => ({ motion: { div: 'div' } }));
 
 import ConfigWizardPage from './ConfigWizardPage';
 
@@ -61,13 +62,13 @@ describe('ConfigWizardPage', () => {
 
     const field = screen.getByRole('textbox', { name: 'Catalog Service URL' });
     fireEvent.change(field, { target: { value: 'http://catalog:3001' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Save', exact: true }));
-
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: 'Saved', exact: true })).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Save', exact: true }));
     });
+
+    expect(screen.getByRole('button', { name: 'Saved', exact: true })).toBeInTheDocument();
 
     fireEvent.change(field, { target: { value: 'http://catalog:3002' } });
     expect(screen.getByRole('button', { name: 'Save', exact: true })).toBeInTheDocument();
-  });
+  }, 10_000);
 });

@@ -236,6 +236,7 @@ The test environment requires the same environment variables as production:
 - `TMDB_API_ACCESS_TOKEN`: Used by TMDB mock for data generation
 - `TRAKT_CLIENT_ID`: Used by Trakt mock for authentication simulation
 - `TRAKT_CLIENT_SECRET`: Used by Trakt mock for token validation
+- `TRAKT_REDIRECT_URI`: Redirect URI supplied to the List Service token refresh flow
 - `JWT_SECRET`: Used by backend for authentication
 - `REFRESH_TOKEN_SECRET`: Used by backend for token refresh
 

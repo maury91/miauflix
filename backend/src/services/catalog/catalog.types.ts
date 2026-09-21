@@ -1,8 +1,7 @@
 export type {
   BatchResponse,
   EpisodeDetail,
-  ListDefinition,
-  ListPage,
+  ExternalMediaLookup,
   LocalizedGenre,
   MediaRef,
   MediaSummary,

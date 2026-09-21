@@ -10,10 +10,9 @@ import { CatalogService, type CatalogValues } from '../src/catalog/catalog.servi
 import { CatalogSynchronizer } from '../src/catalog/catalog.syncer';
 import { SYNC_STATE_MOVIES, SYNC_STATE_TV_SHOWS } from '../src/db/catalog-db.types';
 import { CatalogDatabase } from '../src/db/database';
-import { ListRepository } from '../src/db/list.repo';
 import { LocalizationRepository } from '../src/db/localization.repo';
 import { MovieRepository } from '../src/db/movie.repo';
-import { episodes, listPages, movies, tvShows } from '../src/db/schema';
+import { episodes, movies, tvShows } from '../src/db/schema';
 import { SyncStateRepository } from '../src/db/sync-state.repo';
 import { TVShowRepository } from '../src/db/tv-show.repo';
 import { HttpError } from '../src/errors';
@@ -22,14 +21,11 @@ import type {
   CatalogProvider,
   ProviderChangesPage,
   ProviderGenre,
-  ProviderListPage,
   ProviderMovie,
   ProviderSeason,
-  ProviderSummary,
   ProviderTVShow,
 } from '../src/provider/provider';
 import { ProviderError } from '../src/provider/provider';
-import type { ListDefinition } from '../src/types';
 
 const VALUES: CatalogValues = { hydrationTtlMs: 24 * 60 * 60 * 1000, episodeSyncMode: 'GREEDY' };
 
@@ -91,7 +87,6 @@ class FakeProvider implements CatalogProvider {
   movies = new Map<number, ProviderMovie>();
   failingMovies = new Set<number>();
   movieCalls = 0;
-  listCalls = 0;
   genreCalls = 0;
   seasonCalls = 0;
   changedMovieCalls = 0;
@@ -103,8 +98,8 @@ class FakeProvider implements CatalogProvider {
     return true;
   }
 
-  listDefinitions(): ListDefinition[] {
-    return [{ slug: 'fake-list', name: 'Fake List', description: '' }];
+  async resolveExternal(): Promise<number | null> {
+    return null;
   }
 
   async getMovie(mediaId: number): Promise<ProviderMovie | null> {
@@ -120,23 +115,6 @@ class FakeProvider implements CatalogProvider {
   async getSeason(tvMediaId: number, seasonNumber: number): Promise<ProviderSeason | null> {
     this.seasonCalls++;
     return this.seasons.get(`${tvMediaId}:${seasonNumber}`) ?? null;
-  }
-
-  async getListPage(slug: string, page: number): Promise<ProviderListPage> {
-    this.listCalls++;
-    const items: ProviderSummary[] = [...this.movies.values()].map(movie => ({
-      mediaType: 'movie',
-      mediaId: movie.mediaId,
-      title: movie.title,
-      overview: movie.overview,
-      poster: movie.poster,
-      backdrop: movie.backdrop,
-      genreIds: movie.genreIds,
-      releaseDate: movie.releaseDate,
-      popularity: movie.popularity,
-      rating: movie.rating,
-    }));
-    return { page, totalPages: 1, totalItems: items.length, items };
   }
 
   async getGenres(language: string): Promise<ProviderGenre[]> {
@@ -166,7 +144,6 @@ const setup = () => {
     movies: new MovieRepository(db),
     tvShows: new TVShowRepository(db),
     localization: new LocalizationRepository(db),
-    lists: new ListRepository(db),
     syncState: new SyncStateRepository(db),
   };
   const provider = new FakeProvider();
@@ -174,7 +151,6 @@ const setup = () => {
     repo.movies,
     repo.tvShows,
     repo.localization,
-    repo.lists,
     repo.syncState,
     provider,
     VALUES
@@ -518,21 +494,6 @@ describe('CatalogService', () => {
     }
   });
 
-  it('caches list pages and serves definitions', async () => {
-    const { repo, provider, service, cleanup } = setup();
-    provider.movies.set(603, makeMovie(603));
-    repo.lists.upsertListDefinitions(provider.listDefinitions(), provider.name);
-
-    const first = await service.getListPage('fake-list', 1, 'en');
-    expect(first.totalItems).toBe(1);
-    await service.getListPage('fake-list', 1, 'en');
-    expect(provider.listCalls).toBe(1); // second read served from cache
-
-    const definitions = await service.listDefinitions();
-    expect(definitions).toEqual([{ slug: 'fake-list', name: 'Fake List', description: '' }]);
-    cleanup();
-  });
-
   it('reuses persisted genres when every known genre has the requested translation', async () => {
     const { repo, provider, service, cleanup } = setup();
     try {
@@ -555,35 +516,6 @@ describe('CatalogService', () => {
       expect(await service.getGenres('it')).toEqual([{ id: 28, name: 'Azione' }]);
       expect(provider.genreCalls).toBe(1);
     } finally {
-      cleanup();
-    }
-  });
-
-  it('removes expired list pages on writes while retaining fresh pages from other locales', async () => {
-    const { db, repo, provider, service, cleanup } = setup();
-    const clock = spyOn(Date, 'now').mockReturnValue(10_000_000);
-    try {
-      repo.lists.upsertListDefinitions(provider.listDefinitions(), provider.name);
-      const page = { items: [], totalPages: 3, totalItems: 0 };
-      repo.lists.putCachedListPage('fake-list', 1, 'en', page);
-      clock.mockReturnValue(10_000_001);
-      repo.lists.putCachedListPage('fake-list', 1, 'it', page);
-      clock.mockReturnValue(13_600_000);
-
-      await service.getListPage('fake-list', 2, 'en');
-
-      expect(
-        db.db
-          .select({ page: listPages.page, language: listPages.language })
-          .from(listPages)
-          .orderBy(listPages.page)
-          .all()
-      ).toEqual([
-        { page: 1, language: 'it' },
-        { page: 2, language: 'en' },
-      ]);
-    } finally {
-      clock.mockRestore();
       cleanup();
     }
   });
@@ -694,7 +626,6 @@ describe('CatalogService', () => {
       repo.movies,
       repo.tvShows,
       repo.localization,
-      repo.lists,
       repo.syncState,
       provider,
       {
@@ -717,7 +648,6 @@ describe('CatalogService', () => {
       repo.movies,
       repo.tvShows,
       repo.localization,
-      repo.lists,
       repo.syncState,
       provider,
       VALUES

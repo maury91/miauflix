@@ -21,13 +21,13 @@ Miauflix uses a **secure, cookie-based authentication system** with rotating opa
 
 ## Authentication Flow
 
-| Flow                        | Endpoint(s)                                                         | Notes                                                                  |
-| --------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| **E-mail + Password login** | `POST /api/auth/login`                                              | Returns access token + session + user info, sets session-scoped cookie |
-| **Token refresh**           | `POST /api/auth/refresh/:session`                                   | No body required - uses session-scoped cookie                          |
-| **Token validation**        | `POST /api/auth/refresh/:session?dry_run=true`                      | Validates token without rotation (for profile management)              |
-| **Logout**                  | `POST /api/auth/logout/:session`                                    | Clears session-scoped cookie, deletes refresh token                    |
-| **Trakt device-code link**  | `POST /api/trakt/auth/device` → `POST /api/trakt/auth/device/check` | Returns tokens + sets HttpOnly cookie                                  |
+| Flow                        | Endpoint(s)                                                                                 | Notes                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| **E-mail + Password login** | `POST /api/auth/login`                                                                      | Returns access token + session + user info, sets session-scoped cookie                   |
+| **Token refresh**           | `POST /api/auth/refresh/:session`                                                           | No body required - uses session-scoped cookie                                            |
+| **Token validation**        | `POST /api/auth/refresh/:session?dry_run=true`                                              | Validates token without rotation (for profile management)                                |
+| **Logout**                  | `POST /api/auth/logout/:session`                                                            | Clears session-scoped cookie, deletes refresh token                                      |
+| **Miauflix QR login**       | `POST /api/auth/qr` → scan `/auth/qr/:approvalToken` → `POST /api/auth/qr/:requestId/claim` | The authenticated phone approves a Miauflix session; Trakt is never an identity provider |
 
 **Account creation** – only an **admin** may create users via `POST /auth/users`; self-registration is disabled.
 
@@ -49,9 +49,8 @@ app.get('/api/secure', authGuard(), c => c.json({ ok: true }));
 ```
 
 **Public endpoints** (no guard):  
-`POST /auth/login`, `/auth/refresh`, `/auth/logout`,  
-`POST /trakt/auth/device`, `/trakt/auth/device/check`,  
-`GET /health`.
+`POST /auth/login`, `/auth/refresh`, `/auth/logout`, `/auth/qr`, `/auth/qr/:requestId/claim`,
+`GET /auth/qr/:approvalToken`, `GET /health`.
 
 All other routes must opt-in to `authGuard` if they need authentication.
 

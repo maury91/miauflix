@@ -25,6 +25,25 @@ services:
       - ./services/media-catalog/src:/workspace/services/media-catalog/src
       - ./data:/app/data
 
+  list-service:
+    build:
+      context: .
+      dockerfile: services/list-service/Dockerfile
+      target: development
+    environment:
+      LIST_SERVICE_DATA_DIR: /app/data
+      LIST_SERVICE_PORT: '3002'
+      TRAKT_API_URL: ${TRAKT_API_URL:-https://api.trakt.tv}
+      TRAKT_CLIENT_ID: ${TRAKT_CLIENT_ID:-}
+      TRAKT_CLIENT_SECRET: ${TRAKT_CLIENT_SECRET:-}
+      TRAKT_REDIRECT_URI: ${TRAKT_REDIRECT_URI:-}
+      LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
+    ports:
+      - '127.0.0.1:3002:3002'
+    volumes:
+      - ./services/list-service/src:/workspace/services/list-service/src
+      - ./data/list-service:/app/data
+
   backend:
     build:
       context: .
@@ -44,10 +63,13 @@ services:
       BUNQUEUE_HOST: bunqueue
       BUNQUEUE_PORT: '6789'
       CATALOG_SERVICE_URL: http://media-catalog:3001
+      LIST_SERVICE_URL: http://list-service:3002
     depends_on:
       bunqueue:
         condition: service_healthy
       media-catalog:
+        condition: service_started
+      list-service:
         condition: service_started
     ports:
       - '127.0.0.1:5000:3000'
