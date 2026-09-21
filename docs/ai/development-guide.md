@@ -313,6 +313,7 @@ TMDB_API_URL=https://api.themoviedb.org/3
 TRAKT_CLIENT_ID=your_trakt_client_id
 TRAKT_CLIENT_SECRET=your_trakt_client_secret
 TRAKT_API_URL=https://api.trakt.tv
+TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
 LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 NORDVPN_PRIVATE_KEY=your_nordvpn_private_key
 

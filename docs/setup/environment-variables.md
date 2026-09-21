@@ -63,10 +63,11 @@ TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
 # Trakt.tv credentials consumed by the standalone list service
 TRAKT_CLIENT_ID=your-client-id
 TRAKT_CLIENT_SECRET=your-client-secret
+TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
 LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 ```
 
-- **Description**: OAuth application credentials for Trakt.tv integration
+- **Description**: OAuth application credentials and the exact redirect URI configured for the Trakt.tv integration
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
 - **Required for**: Public lists and user list/account association when the List Service is enabled
 - **Optional when**: The standalone List Service is disabled or unused
@@ -243,7 +244,7 @@ WWW_DOMAIN=www.yourdomain.com
 
 ### Enhanced Features (Optional)
 
-1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + LIST_SERVICE_ENCRYPTION_KEY** - Standalone Trakt list service, required when that service is enabled
+1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + TRAKT_REDIRECT_URI + LIST_SERVICE_ENCRYPTION_KEY** - Standalone Trakt list service, required when that service is enabled
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
 3. **ENABLE_FLARESOLVERR + FLARESOLVERR_URL** - Cloudflare bypass for protected content sources
 
@@ -270,7 +271,7 @@ WWW_DOMAIN=www.yourdomain.com
 **Trakt.tv connection fails**
 
 - Double-check client ID and secret from your [Trakt.tv application](https://trakt.tv/oauth/applications)
-- Ensure the standalone List Service has valid `TRAKT_CLIENT_ID` and `TRAKT_CLIENT_SECRET` values
+- Ensure the standalone List Service has valid `TRAKT_CLIENT_ID`, `TRAKT_CLIENT_SECRET`, and `TRAKT_REDIRECT_URI` values
 
 **VPN docker container not starting**
 

@@ -101,6 +101,12 @@ const schema = {
       testRelevant: true,
     },
     {
+      key: 'TRAKT_REDIRECT_URI',
+      description: 'Redirect URI configured for the Trakt OAuth application',
+      required: true,
+      inputType: 'text',
+    },
+    {
       key: 'LIST_SERVICE_ENCRYPTION_KEY',
       description: 'Encryption key for provider credentials',
       required: true,
@@ -114,6 +120,7 @@ const runtimeConfig = {
   TRAKT_API_URL: DEFAULT_API_URL,
   TRAKT_CLIENT_ID: process.env.TRAKT_CLIENT_ID ?? '',
   TRAKT_CLIENT_SECRET: process.env.TRAKT_CLIENT_SECRET ?? '',
+  TRAKT_REDIRECT_URI: process.env.TRAKT_REDIRECT_URI ?? '',
   LIST_SERVICE_ENCRYPTION_KEY: process.env.LIST_SERVICE_ENCRYPTION_KEY ?? '',
 };
 const config = {
@@ -142,6 +149,7 @@ const applyConfig = (values: Record<string, string>, unsetKeys: string[] = []) =
   config.ready = !!(
     config.values.TRAKT_CLIENT_ID &&
     config.values.TRAKT_CLIENT_SECRET &&
+    config.values.TRAKT_REDIRECT_URI &&
     config.values.LIST_SERVICE_ENCRYPTION_KEY
   );
 };
@@ -151,7 +159,8 @@ const client = () =>
   new TraktClient(
     config.values.TRAKT_CLIENT_ID,
     config.values.TRAKT_CLIENT_SECRET,
-    config.values.TRAKT_API_URL
+    config.values.TRAKT_API_URL,
+    config.values.TRAKT_REDIRECT_URI
   );
 
 const candidateConfig = (values: Record<string, string>, unsetKeys: string[]) => {
@@ -167,6 +176,7 @@ const probeConfig = async (candidate: typeof config.values) => {
   const hasRequiredValues = !!(
     candidate.TRAKT_CLIENT_ID &&
     candidate.TRAKT_CLIENT_SECRET &&
+    candidate.TRAKT_REDIRECT_URI &&
     candidate.LIST_SERVICE_ENCRYPTION_KEY
   );
   if (!hasRequiredValues) {
@@ -176,7 +186,8 @@ const probeConfig = async (candidate: typeof config.values) => {
     await new TraktClient(
       candidate.TRAKT_CLIENT_ID,
       candidate.TRAKT_CLIENT_SECRET,
-      candidate.TRAKT_API_URL
+      candidate.TRAKT_API_URL,
+      candidate.TRAKT_REDIRECT_URI
     ).test();
     return {
       success: true,
@@ -335,7 +346,12 @@ const handler = async (request: Request): Promise<Response> => {
           state: config.ready ? 'ready' : 'standby',
           missingConfiguration: config.ready
             ? undefined
-            : ['TRAKT_CLIENT_ID', 'TRAKT_CLIENT_SECRET', 'LIST_SERVICE_ENCRYPTION_KEY'],
+            : [
+                'TRAKT_CLIENT_ID',
+                'TRAKT_CLIENT_SECRET',
+                'TRAKT_REDIRECT_URI',
+                'LIST_SERVICE_ENCRYPTION_KEY',
+              ],
           details: {
             provider: 'trakt',
             connectedAccounts: Number(

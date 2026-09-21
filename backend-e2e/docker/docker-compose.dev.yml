@@ -75,6 +75,7 @@ services:
       - TRAKT_API_URL=http://trakt-mock
       - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-mock-trakt-client-id}
       - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}
+      - TRAKT_REDIRECT_URI=${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}
     volumes:
       - ../../services/list-service/src:/workspace/services/list-service/src
       - list_service_data:/app/data

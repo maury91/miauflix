@@ -20,7 +20,13 @@ describe('TraktClient', () => {
         );
       })) as unknown as typeof fetch;
 
-    const request = new TraktClient('client', 'secret', 'https://trakt.example', 5).test();
+    const request = new TraktClient(
+      'client',
+      'secret',
+      'https://trakt.example',
+      'https://app.example/trakt/callback',
+      5
+    ).test();
 
     try {
       await request;
@@ -36,12 +42,47 @@ describe('TraktClient', () => {
       new Response('unauthorized', { status: 401 })) as unknown as typeof fetch;
 
     try {
-      await new TraktClient('client', 'secret', 'https://trakt.example').test();
+      await new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback'
+      ).test();
       throw new Error('expected HTTP error');
     } catch (error) {
       expect(error).toBeInstanceOf(TraktProviderError);
       expect((error as TraktProviderError).status).toBe(401);
     }
+  });
+
+  it('sends the configured redirect URI when refreshing a token', async () => {
+    let requestBody: Record<string, string> | undefined;
+    globalThis.fetch = (async (
+      _input: Parameters<typeof fetch>[0],
+      init: Parameters<typeof fetch>[1]
+    ) => {
+      requestBody = JSON.parse(String(init?.body)) as Record<string, string>;
+      return Response.json({
+        access_token: 'access',
+        refresh_token: 'refresh-2',
+        expires_in: 3600,
+      });
+    }) as unknown as typeof fetch;
+
+    await new TraktClient(
+      'client',
+      'secret',
+      'https://trakt.example',
+      'https://app.example/trakt/callback'
+    ).refreshToken('refresh-1');
+
+    expect(requestBody).toMatchObject({
+      refresh_token: 'refresh-1',
+      client_id: 'client',
+      client_secret: 'secret',
+      redirect_uri: 'https://app.example/trakt/callback',
+      grant_type: 'refresh_token',
+    });
   });
 
   it('bounds a stalled response body', async () => {
@@ -64,7 +105,13 @@ describe('TraktClient', () => {
       })) as unknown as typeof fetch;
 
     try {
-      await new TraktClient('client', 'secret', 'https://trakt.example', 5).test();
+      await new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback',
+        5
+      ).test();
       throw new Error('expected body to time out');
     } catch (error) {
       expect(error).toBeInstanceOf(TraktProviderError);
@@ -76,7 +123,12 @@ describe('TraktClient', () => {
     globalThis.fetch = (async () => Response.json({ device_code: 'device' })) as typeof fetch;
 
     await expect(
-      new TraktClient('client', 'secret', 'https://trakt.example').deviceCode()
+      new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback'
+      ).deviceCode()
     ).rejects.toMatchObject({
       message: 'Trakt API returned an invalid response',
       status: 502,
@@ -85,7 +137,12 @@ describe('TraktClient', () => {
     globalThis.fetch = (async () => Response.json({ access_token: 'access' })) as typeof fetch;
 
     await expect(
-      new TraktClient('client', 'secret', 'https://trakt.example').deviceToken('device-code')
+      new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback'
+      ).deviceToken('device-code')
     ).rejects.toMatchObject({
       message: 'Trakt API returned an invalid response',
       status: 502,
@@ -95,7 +152,12 @@ describe('TraktClient', () => {
       Response.json({ username: 'miauflix', ids: {} })) as typeof fetch;
 
     await expect(
-      new TraktClient('client', 'secret', 'https://trakt.example').profile('access-token')
+      new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback'
+      ).profile('access-token')
     ).rejects.toMatchObject({
       message: 'Trakt API returned an invalid response',
       status: 502,
@@ -113,7 +175,12 @@ describe('TraktClient', () => {
       })) as typeof fetch;
 
     await expect(
-      new TraktClient('client', 'secret', 'https://trakt.example').page('/movies/popular')
+      new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback'
+      ).page('/movies/popular')
     ).rejects.toMatchObject({
       message: 'Trakt API returned an invalid page',
       status: 502,
@@ -123,7 +190,12 @@ describe('TraktClient', () => {
       new Response(JSON.stringify([]), { status: 200 })) as typeof fetch;
 
     await expect(
-      new TraktClient('client', 'secret', 'https://trakt.example').page('/movies/popular')
+      new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback'
+      ).page('/movies/popular')
     ).rejects.toMatchObject({
       message: 'Trakt API returned an invalid X-Pagination-Page-Count header',
       status: 502,

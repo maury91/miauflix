@@ -33,6 +33,7 @@ export class TraktClient {
     private readonly clientId: string,
     private readonly clientSecret: string,
     private readonly apiUrl: string,
+    private readonly redirectUri: string,
     private readonly requestTimeoutMs = DEFAULT_REQUEST_TIMEOUT_MS
   ) {}
 
@@ -118,6 +119,7 @@ export class TraktClient {
         refresh_token: refreshToken,
         client_id: this.clientId,
         client_secret: this.clientSecret,
+        redirect_uri: this.redirectUri,
         grant_type: 'refresh_token',
       }),
     });
