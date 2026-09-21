@@ -1,9 +1,8 @@
 import type {
-  DeviceAuthCheckPending,
-  DeviceAuthCheckSuccess,
-  DeviceAuthResponse,
   LoginRequest,
   LoginResponse,
+  QrLoginClaimPending,
+  QrLoginResponse,
   RefreshResponse,
 } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
@@ -105,23 +104,27 @@ export const authApi = createApi({
       },
     }),
 
-    deviceLogin: builder.mutation<DeviceAuthResponse, void>({
+    createQrLogin: builder.mutation<QrLoginResponse, void>({
       async queryFn() {
-        return handleAuthRequest<DeviceAuthResponse>(
-          () => backendClient.api.auth.device.trakt.$post(),
-          'Device login failed'
+        return handleAuthRequest<QrLoginResponse>(
+          () => backendClient.api.auth.qr.$post(),
+          'QR login failed'
         );
       },
     }),
 
-    checkDeviceLoginStatus: builder.mutation<
-      DeviceAuthCheckPending | DeviceAuthCheckSuccess,
-      { deviceCode: string }
+    claimQrLogin: builder.mutation<
+      LoginResponse | QrLoginClaimPending,
+      { requestId: string; claimToken: string }
     >({
-      async queryFn({ deviceCode }) {
-        return handleAuthRequest<DeviceAuthCheckPending | DeviceAuthCheckSuccess>(
-          () => backendClient.api.trakt.auth.device.check.$post({ json: { deviceCode } }),
-          'Device login check failed'
+      async queryFn({ requestId, claimToken }) {
+        return handleAuthRequest<LoginResponse | QrLoginClaimPending>(
+          () =>
+            backendClient.api.auth.qr[':requestId'].claim.$post({
+              param: { requestId },
+              json: { claimToken },
+            }),
+          'QR login check failed'
         );
       },
     }),
@@ -133,6 +136,6 @@ export const {
   useRefreshMutation,
   useLogoutMutation,
   useListSessionsQuery,
-  useDeviceLoginMutation,
-  useCheckDeviceLoginStatusMutation,
+  useCreateQrLoginMutation,
+  useClaimQrLoginMutation,
 } = authApi;

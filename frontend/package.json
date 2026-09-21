@@ -40,6 +40,7 @@
     "@dicebear/collection": "9.2.4",
     "@dicebear/core": "9.2.4",
     "@miauflix/backend": "*",
+    "@miauflix/service-contracts": "*",
     "@noriginmedia/norigin-spatial-navigation": "2.3.0",
     "@reduxjs/toolkit": "2.10.1",
     "framer-motion": "12.23.24",

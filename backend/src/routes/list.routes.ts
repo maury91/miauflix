@@ -13,7 +13,8 @@ export const createListRoutes = ({ auditLogService, configurationService, listSe
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
   return new Hono()
     .get('/lists', rateLimitGuard(5), authGuard(), async c => {
-      const lists = await listService.getLists();
+      const { user } = c.get('sessionInfo');
+      const lists = await listService.getLists(user.id);
       return c.json(
         lists.map(
           (list): ListDto => ({
@@ -46,9 +47,16 @@ export const createListRoutes = ({ auditLogService, configurationService, listSe
       async c => {
         const slug = c.req.valid('param').slug;
         const { lang, limit, page } = c.req.valid('query');
+        const { user } = c.get('sessionInfo');
         const pageSize = limit ?? 20;
         const currentPage = page ?? 0;
-        const { medias, total } = await listService.getListPage(slug, lang, currentPage, pageSize);
+        const { medias, total } = await listService.getListPage(
+          slug,
+          lang,
+          currentPage,
+          pageSize,
+          user.id
+        );
         return c.json({
           results: medias.map(serializeMedia),
           total,

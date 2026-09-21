@@ -30,25 +30,25 @@ describe('sortServiceGroups', () => {
   it('puts services with an unhealthy status before healthy services', () => {
     const groups = sortServiceGroups(
       {
-        TRAKT: [entry(false, true)],
+        LIST: [entry(false, true)],
         CATALOG: [entry(false, true)],
       },
-      { CATALOG: { status: 'error' }, TRAKT: { status: 'ready' } }
+      { CATALOG: { status: 'error' }, LIST: { status: 'ready' } }
     );
 
-    expect(groups.map(([service]) => service)).toEqual(['CATALOG', 'TRAKT']);
+    expect(groups.map(([service]) => service)).toEqual(['CATALOG', 'LIST']);
   });
 
   it('prioritizes broken services over services with missing values', () => {
     const groups = sortServiceGroups(
       {
-        TRAKT: [entry(true, false)],
+        LIST: [entry(true, false)],
         CATALOG: [entry(true, true)],
       },
-      { CATALOG: { status: 'error' }, TRAKT: { status: 'needs_configuration' } }
+      { CATALOG: { status: 'error' }, LIST: { status: 'needs_configuration' } }
     );
 
-    expect(groups.map(([service]) => service)).toEqual(['CATALOG', 'TRAKT']);
+    expect(groups.map(([service]) => service)).toEqual(['CATALOG', 'LIST']);
   });
 });
 
@@ -56,12 +56,12 @@ describe('preserveInitialServiceOrder', () => {
   it('keeps the first-render order when service configuration changes', () => {
     const initiallySorted = sortServiceGroups({
       CATALOG: [entry(true, false)],
-      TRAKT: [entry(true, false)],
+      LIST: [entry(true, false)],
       SERVER: [entry(false, true)],
     });
     const afterSave = sortServiceGroups({
       CATALOG: [entry(true, true)],
-      TRAKT: [entry(true, false)],
+      LIST: [entry(true, false)],
       SERVER: [entry(false, true)],
     });
 
@@ -70,6 +70,6 @@ describe('preserveInitialServiceOrder', () => {
         afterSave,
         initiallySorted.map(([name]) => name)
       ).map(([name]) => name)
-    ).toEqual(['CATALOG', 'TRAKT', 'SERVER']);
+    ).toEqual(['CATALOG', 'LIST', 'SERVER']);
   });
 });

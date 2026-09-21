@@ -14,6 +14,7 @@ COPY package.json package-lock.json turbo.json tsconfig.json ./
 COPY backend/package.json backend/tsconfig.json ./backend/
 COPY frontend/package.json ./frontend/
 COPY services/media-catalog/package.json ./services/media-catalog/
+COPY services/list-service/package.json ./services/list-service/
 
 # Copy the packages that backend depends on
 COPY packages/ ./packages/

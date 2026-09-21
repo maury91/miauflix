@@ -4,6 +4,7 @@ import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
+import QrApprovalPage from '@pages/qr/QrApprovalPage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
 import { Logo } from '@shared/ui/logo/Logo';
@@ -71,6 +72,9 @@ export function AppShell() {
   }, [appState, isAdmin, isAuthenticated]);
 
   const renderPage = () => {
+    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/auth/qr/')) {
+      return <QrApprovalPage key="qr-approval" />;
+    }
     if (configurationWizardActive) {
       return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
     }

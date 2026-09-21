@@ -1,5 +1,4 @@
 import type { CatalogConfigService, ConfigProber } from '../config/config.service';
-import { ListRepository } from '../db/list.repo';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
@@ -27,7 +26,6 @@ export class CatalogRuntime {
   private readonly movies: MovieRepository;
   private readonly tvShows: TVShowRepository;
   private readonly localization: LocalizationRepository;
-  private readonly lists: ListRepository;
   private readonly syncState: SyncStateRepository;
   private readonly apiCache: ApiCache;
   private workerManager: CatalogWorkerManager;
@@ -40,7 +38,6 @@ export class CatalogRuntime {
     this.movies = new MovieRepository(ctx.db);
     this.tvShows = new TVShowRepository(ctx.db);
     this.localization = new LocalizationRepository(ctx.db);
-    this.lists = new ListRepository(ctx.db);
     this.syncState = new SyncStateRepository(ctx.db);
     this.apiCache = new ApiCache(ctx.db);
     this.workerManager = new CatalogWorkerManager(ctx.env, () => ctx.catalog);
@@ -99,12 +96,10 @@ export class CatalogRuntime {
 
       if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
 
-      this.lists.upsertListDefinitions(provider.listDefinitions(), provider.name);
       this.ctx.catalog = new CatalogService(
         this.movies,
         this.tvShows,
         this.localization,
-        this.lists,
         this.syncState,
         provider,
         this.catalogValues(values)

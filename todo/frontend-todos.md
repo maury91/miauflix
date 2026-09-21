@@ -37,10 +37,9 @@
 
 ## Environment Variables Reference
 
-| Variable             | Required | Default | Description                 |
-| -------------------- | -------- | ------- | --------------------------- |
-| VITE_API_BASE_URL    | Yes      | -       | Backend API endpoint        |
-| VITE_TRAKT_CLIENT_ID | No       | -       | Trakt integration client ID |
+| Variable          | Required | Default | Description          |
+| ----------------- | -------- | ------- | -------------------- |
+| VITE_API_BASE_URL | Yes      | -       | Backend API endpoint |
 
 ---
 
@@ -291,7 +290,7 @@ Auto‑play next episode after 5 s countdown with user control.
 
 ### Goal
 
-UI flow for optional Trakt account link via device code / QR with user management.
+UI flow for optional Trakt account association from an authenticated Miauflix session.
 
 ### Files
 
@@ -304,14 +303,14 @@ src/components/TraktProfile.tsx
 ### Flow
 
 1. User clicks **"Link Trakt"** in Account page.
-2. Modal makes `POST /trakt/auth/device` → `{ userCode, verification_url, interval }`.
+2. Modal makes `POST /integrations/trakt/authorization` → `{ authorizationId, userCode, verificationUrl, interval }`.
 3. Display:
-   - **QRCode** (`react-qr-code`) of `verification_url`.
+   - **QRCode** (`react-qr-code`) of Trakt's `verificationUrl`.
    - 6‑digit `userCode`.
    - Countdown (`interval` × 40) seconds.
 
-4. Start polling `POST /trakt/auth/device/check` every `interval` seconds.
-5. On `{ success:true, username }` close modal and show linked username.
+4. Start polling `POST /integrations/trakt/authorization/:authorizationId/check` every `interval` seconds.
+5. On `connected` close modal and show linked username.
 6. Account management and unlinking functionality
 
 ### Dependencies
@@ -320,7 +319,7 @@ src/components/TraktProfile.tsx
 
 ### Acceptance
 
-- After linking, call `GET /trakt/association` → returns username.
+- After linking, call `GET /integrations/trakt/association` → returns username.
 - Re‑opening modal shows "Already linked as <name>".
 - Users can unlink and relink accounts
 
