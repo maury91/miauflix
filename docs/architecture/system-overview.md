@@ -2,6 +2,9 @@
 
 Miauflix is a production-ready self-hosted streaming platform built with modern web technologies and designed for scalability, security, and performance.
 
+For the current service boundaries, data ownership, authentication, list ingestion, streaming, and
+deployment topology, see [Miauflix Architecture Diagrams](diagrams.md).
+
 ## Technology Stack
 
 | **Layer**          | **Technology**                                 | **Purpose**                          | **Key Components**                          |

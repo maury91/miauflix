@@ -92,17 +92,28 @@ export const mediaSummarySchema = z.object({
   popularity: z.number(),
   rating: z.number(),
 });
-export const listDefinitionSchema = z.object({
-  slug: z.string(),
-  name: z.string(),
-  description: z.string(),
+export const externalMediaLookupSchema = z.object({
+  mediaType: mediaTypeSchema,
+  ids: z
+    .object({
+      tmdb: z.number().int().positive().optional(),
+      imdb: z
+        .string()
+        .regex(/^tt\d+$/)
+        .optional(),
+    })
+    .refine(ids => ids.tmdb !== undefined || ids.imdb !== undefined),
 });
-export const listPageSchema = z.object({
-  slug: z.string(),
-  page: z.number().int().positive(),
-  totalPages: z.number().int().nonnegative(),
-  totalItems: z.number().int().nonnegative(),
-  items: z.array(mediaSummarySchema),
+export const externalMediaResolveRequestSchema = z.object({
+  items: z.array(externalMediaLookupSchema).max(50),
+});
+export const externalMediaResolveResponseSchema = z.object({
+  items: z.array(
+    z.object({
+      requested: externalMediaLookupSchema,
+      media: mediaRefSchema.nullable(),
+    })
+  ),
 });
 export const batchRequestSchema = z.object({
   items: z.array(mediaRefSchema).max(50),
@@ -138,8 +149,9 @@ export type TVShowDetail = z.infer<typeof tvShowDetailSchema>;
 export type EpisodeDetail = z.infer<typeof episodeDetailSchema>;
 export type SeasonDetail = z.infer<typeof seasonDetailSchema>;
 export type MediaSummary = z.infer<typeof mediaSummarySchema>;
-export type ListDefinition = z.infer<typeof listDefinitionSchema>;
-export type ListPage = z.infer<typeof listPageSchema>;
+export type ExternalMediaLookup = z.infer<typeof externalMediaLookupSchema>;
+export type ExternalMediaResolveRequest = z.infer<typeof externalMediaResolveRequestSchema>;
+export type ExternalMediaResolveResponse = z.infer<typeof externalMediaResolveResponseSchema>;
 export type BatchError = z.infer<typeof batchErrorSchema>;
 export type BatchResponse = z.infer<typeof batchResponseSchema>;
 export type CatalogStatusDetails = z.infer<typeof catalogStatusDetailsSchema>;

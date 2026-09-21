@@ -5,7 +5,7 @@ import { QRDisplay } from './QRDisplay';
 
 describe('QRDisplay', () => {
   const defaultProps = {
-    codeUrl: 'https://miauflix.local/auth/device?code=ABC123DEF456',
+    codeUrl: 'https://miauflix.local/auth/qr/approval-token',
     userCode: 'ABC123DEF456',
     timeRemaining: 600,
   };
@@ -44,6 +44,13 @@ describe('QRDisplay', () => {
 
     expect(screen.getByText('Code expired')).toBeInTheDocument();
     expect(screen.queryByText(/Expires in/)).not.toBeInTheDocument();
+  });
+
+  it('should render expiry without an opaque user code', () => {
+    render(<QRDisplay codeUrl={defaultProps.codeUrl} timeRemaining={600} />);
+
+    expect(screen.getByText(/Expires in/)).toBeInTheDocument();
+    expect(screen.queryByText('ABC1 23DEF456')).not.toBeInTheDocument();
   });
 
   it('should display custom instructions', () => {

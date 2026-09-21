@@ -77,6 +77,28 @@ services:
     network_mode: service:vpn # Reach the catalog provider through NordVPN
     restart: unless-stopped
 
+  list-service:
+    build:
+      context: .
+      dockerfile: services/list-service/Dockerfile
+    image: miauflix-list-service
+    container_name: miauflix-list-service
+    depends_on:
+      vpn:
+        condition: service_healthy
+    environment:
+      - LIST_SERVICE_DATA_DIR=/app/data
+      - LIST_SERVICE_PORT=3002
+      - TRAKT_API_URL=${TRAKT_API_URL:-https://api.trakt.tv}
+      - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-}
+      - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-}
+      - TRAKT_REDIRECT_URI=${TRAKT_REDIRECT_URI:-}
+      - LIST_SERVICE_ENCRYPTION_KEY=${LIST_SERVICE_ENCRYPTION_KEY:-}
+    volumes:
+      - ./data/list-service:/app/data
+    network_mode: service:vpn
+    restart: unless-stopped
+
   miauflix:
     build:
       context: .
@@ -93,6 +115,8 @@ services:
       jaeger:
         condition: service_started
       media-catalog:
+        condition: service_started
+      list-service:
         condition: service_started
     environment:
       - DATA_DIR=/usr/data
@@ -111,6 +135,7 @@ services:
       - BUNQUEUE_HOST=127.0.0.1
       - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://localhost:3001 # Same network namespace as media-catalog
+      - LIST_SERVICE_URL=http://localhost:3002 # Same network namespace as list-service
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
       interval: 30s

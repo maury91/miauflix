@@ -3,10 +3,8 @@ import {
   batchResponseSchema,
   CATALOG_CAPABILITY,
   CATALOG_CAPABILITY_VERSION,
-  type ListDefinition,
-  listDefinitionSchema,
-  type ListPage,
-  listPageSchema,
+  type ExternalMediaLookup,
+  externalMediaResolveResponseSchema,
   type MediaRef,
   type MovieDetail,
   movieDetailSchema,
@@ -90,20 +88,27 @@ export class CatalogClientService implements ConfigurableService {
     );
   }
 
-  async getListPage(slug: string, page: number): Promise<ListPage> {
-    return this.get(listPageSchema, `/lists/${encodeURIComponent(slug)}`, { page: String(page) });
-  }
-
-  async getListDefinitions(): Promise<ListDefinition[]> {
-    return this.get(listDefinitionSchema.array(), '/lists');
-  }
-
   async batch(items: MediaRef[], language: string): Promise<BatchResponse> {
     return this.remote.requestCapability(batchResponseSchema, this.path('/media/batch'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items, language }),
     });
+  }
+
+  async resolveExternal(
+    items: ExternalMediaLookup[]
+  ): Promise<Array<{ requested: ExternalMediaLookup; media: MediaRef | null }>> {
+    const response = await this.remote.requestCapability(
+      externalMediaResolveResponseSchema,
+      this.path('/media/resolve'),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      }
+    );
+    return response.items;
   }
 
   async setWatching(mediaIds: number[]): Promise<void> {

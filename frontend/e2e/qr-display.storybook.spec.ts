@@ -79,7 +79,7 @@ test.describe('QRDisplay - Visual Tests', () => {
         };
 
         if (!state.isLoading) {
-          const codeUrl = `https://miauflix.local/auth/device?code=${state.userCode}`;
+          const codeUrl = `https://miauflix.local/auth/qr/${state.userCode}`;
           args.timeRemaining = state.timeRemaining;
           args.userCode = state.userCode;
           args.codeUrl = codeUrl;

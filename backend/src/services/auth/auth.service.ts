@@ -273,6 +273,10 @@ export class AuthService {
     };
   }
 
+  async revokeSession(userId: string, session: string): Promise<boolean> {
+    return this.refreshTokenRepository.deleteByUserAndSession(userId, session);
+  }
+
   @traced('AuthService')
   private async generateAccessToken(user: User): Promise<string> {
     const now = Math.floor(Date.now() / 1000);

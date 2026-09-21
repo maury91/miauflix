@@ -13,7 +13,7 @@ COPY tsconfig.json ./
 COPY turbo.json ./
 
 # Create package directories and copy ONLY their package.json files for dependency resolution
-RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer packages/service-contracts backend frontend services/media-catalog
+RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer packages/service-contracts backend frontend services/media-catalog services/list-service
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
@@ -21,6 +21,7 @@ COPY packages/yts-sanitizer/package.json ./packages/yts-sanitizer/
 COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
 COPY packages/service-contracts/package.json ./packages/service-contracts/
 COPY services/media-catalog/package.json ./services/media-catalog/
+COPY services/list-service/package.json ./services/list-service/
 
 # Temporarily remove problematic prepare scripts that require source code
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true

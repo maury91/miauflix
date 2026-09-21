@@ -7,3 +7,8 @@ export const apiCache = sqliteTable(
 );
 
 export const meta = sqliteTable('meta', { key: text().primaryKey(), value: text().notNull() });
+
+export const syncState = sqliteTable('sync_state', {
+  name: text().primaryKey(),
+  lastSync: integer('last_sync'),
+});

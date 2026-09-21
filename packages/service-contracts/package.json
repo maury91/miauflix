@@ -17,6 +17,10 @@
     "./catalog/v1": {
       "types": "./src/catalog/v1.ts",
       "default": "./dist/catalog/v1.js"
+    },
+    "./list/v1": {
+      "types": "./src/list/v1.ts",
+      "default": "./dist/list/v1.js"
     }
   },
   "scripts": {

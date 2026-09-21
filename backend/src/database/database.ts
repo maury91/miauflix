@@ -10,11 +10,11 @@ import { MediaList, MediaListItem } from '@entities/list.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
 import { Progress } from '@entities/progress.entity';
+import { QrLoginRequest } from '@entities/qr-login-request.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
 import { StreamingKey } from '@entities/streaming-key.entity';
-import { TraktUser } from '@entities/trakt-user.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
 import { AuditLogRepository } from '@repositories/audit-log.repository';
@@ -22,10 +22,10 @@ import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { ProgressRepository } from '@repositories/progress.repository';
+import { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { StorageRepository } from '@repositories/storage.repository';
 import { StreamingKeyRepository } from '@repositories/streaming-key.repository';
-import { TraktUserRepository } from '@repositories/trakt-user.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
@@ -85,7 +85,7 @@ export class Database {
   private userRepository: UserRepository;
   private refreshTokenRepository: RefreshTokenRepository;
   private auditLogRepository: AuditLogRepository;
-  private traktUserRepository: TraktUserRepository;
+  private qrLoginRequestRepository: QrLoginRequestRepository;
   private storageRepository: StorageRepository;
   private streamingKeyRepository: StreamingKeyRepository;
   private progressRepository: ProgressRepository;
@@ -117,7 +117,7 @@ export class Database {
         RefreshToken,
         AuditLog,
         BackgroundJob,
-        TraktUser,
+        QrLoginRequest,
         Storage,
         StreamingKey,
         Progress,
@@ -138,7 +138,7 @@ export class Database {
     this.userRepository = new UserRepository(this.dataSource);
     this.refreshTokenRepository = new RefreshTokenRepository(this.dataSource);
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
-    this.traktUserRepository = new TraktUserRepository(this.dataSource);
+    this.qrLoginRequestRepository = new QrLoginRequestRepository(this.dataSource);
     this.storageRepository = new StorageRepository(this);
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this.dataSource);
@@ -190,8 +190,8 @@ export class Database {
     return this.movieSourceRepository;
   }
 
-  public getTraktUserRepository() {
-    return this.traktUserRepository;
+  public getQrLoginRequestRepository() {
+    return this.qrLoginRequestRepository;
   }
 
   public getStorageRepository() {

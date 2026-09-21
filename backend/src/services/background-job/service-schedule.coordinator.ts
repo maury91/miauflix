@@ -4,6 +4,7 @@ import { cacheSchedules } from '@services/cache/cache.schedule';
 import { catalogSchedules, LEGACY_CATALOG_SCHEDULES } from '@services/catalog/catalog.schedule';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
+import type { ListClientService } from '@services/list/list-client.service';
 import { listSchedules } from '@services/media/list.schedule';
 import type { ListService } from '@services/media/list.service';
 import { sourceSchedules } from '@services/source/source.schedule';
@@ -21,6 +22,7 @@ export class ServiceScheduleCoordinator {
   private enabled = true;
   private revision = 0;
   private unsubscribe: (() => void) | null = null;
+  private unsubscribeList: (() => void) | null = null;
   private unsubscribeConfig: (() => void) | null = null;
   private retryTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -28,13 +30,15 @@ export class ServiceScheduleCoordinator {
     private readonly jobs: BackgroundJobService,
     private readonly config: ConfigurationService,
     private readonly catalog: CatalogClientService,
-    private readonly lists: ListService
+    private readonly lists: ListService,
+    private readonly listClient?: ListClientService
   ) {}
 
   start(enabled = true): void {
     if (this.unsubscribe) return;
     this.enabled = enabled;
     this.unsubscribe = this.catalog.subscribeStatus(() => this.reconcile());
+    this.unsubscribeList = this.listClient?.subscribeStatus(() => this.reconcile()) ?? null;
     this.unsubscribeConfig = this.config.subscribeChanges(() => this.reconcile());
     this.reconcile();
   }
@@ -44,6 +48,8 @@ export class ServiceScheduleCoordinator {
     this.revision++;
     this.unsubscribe?.();
     this.unsubscribe = null;
+    this.unsubscribeList?.();
+    this.unsubscribeList = null;
     this.unsubscribeConfig?.();
     this.unsubscribeConfig = null;
     this.clearRetryTimer();
@@ -85,13 +91,22 @@ export class ServiceScheduleCoordinator {
       return;
     }
 
-    if (revision !== this.revision || !this.catalog.isReady()) {
+    if (
+      revision !== this.revision ||
+      !this.catalog.isReady() ||
+      (this.listClient && !this.listClient.isReady())
+    ) {
       await this.removeCatalogSchedules();
       return;
     }
 
     const lists = await this.lists.getLists();
-    if (this.stopped || revision !== this.revision || !this.catalog.isReady()) {
+    if (
+      this.stopped ||
+      revision !== this.revision ||
+      !this.catalog.isReady() ||
+      (this.listClient && !this.listClient.isReady())
+    ) {
       await this.removeCatalogSchedules();
       return;
     }

@@ -11,12 +11,12 @@ import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 import { createAuthRoutes } from './auth.routes';
 import type { Deps } from './common.types';
 import { createConfigRoutes } from './config.routes';
+import { createIntegrationRoutes } from './integrations.routes';
 import { createListRoutes } from './list.routes';
 import { createMovieRoutes } from './movie.routes';
 import { createProgressRoutes } from './progress.routes';
 import { createShowRoutes } from './show.routes';
 import { createStreamRoutes } from './stream.routes';
-import { createTraktRoutes } from './trakt.routes';
 
 function createApiRoutes(deps: Deps) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(
@@ -48,10 +48,10 @@ function createApiRoutes(deps: Deps) {
     })
     .route('/auth', createAuthRoutes(deps))
     .route('/config', createConfigRoutes(deps))
+    .route('/integrations', createIntegrationRoutes(deps))
     .route('/movies', createMovieRoutes(deps))
     .route('/shows', createShowRoutes(deps))
     .route('/stream', createStreamRoutes(deps))
-    .route('/trakt', createTraktRoutes(deps))
     .route('/progress', createProgressRoutes(deps))
     .route('/', createListRoutes(deps));
 }

@@ -79,7 +79,14 @@ describe('BackgroundJobService', () => {
     const stage = {
       type: 'list.page.stage' as const,
       dedupeKey: 'popular:1:0',
-      payload: { slug: 'popular', listId: 1, generation: 'gen-1', page: 0, pageSize: 20 },
+      payload: {
+        slug: 'popular',
+        listId: 1,
+        generation: 'gen-1',
+        page: 0,
+        pageSize: 20,
+        subjectId: 'public',
+      },
     };
     const activate = {
       type: 'list.generation.activate' as const,

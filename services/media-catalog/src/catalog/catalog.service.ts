@@ -1,4 +1,3 @@
-import { ListRepository } from '../db/list.repo';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
@@ -6,20 +5,11 @@ import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
 import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
-import type {
-  BatchResponse,
-  ListDefinition,
-  ListPage,
-  MediaRef,
-  MovieDetail,
-  SeasonDetail,
-  TVShowDetail,
-} from '../types';
+import type { BatchResponse, MediaRef, MovieDetail, SeasonDetail, TVShowDetail } from '../types';
 import { CatalogHydrator } from './catalog.hydrator';
 import { CatalogLocalizer } from './catalog.localizer';
 import { CatalogSynchronizer } from './catalog.syncer';
 
-const oneHourMs = 36e5;
 const SCOPE = 'CatalogService';
 
 export interface CatalogValues {
@@ -45,7 +35,6 @@ export class CatalogService {
     private readonly movies: MovieRepository,
     private readonly tvShows: TVShowRepository,
     private readonly localization: LocalizationRepository,
-    private readonly lists: ListRepository,
     private readonly syncState: SyncStateRepository,
     private readonly provider: CatalogProvider,
     private readonly values: CatalogValues
@@ -125,38 +114,12 @@ export class CatalogService {
     };
   }
 
-  /* --------------------------------------------------------------------- lists */
-
-  async listDefinitions(): Promise<ListDefinition[]> {
-    return this.lists.listDefinitions();
-  }
-
-  async getListPage(slug: string, page: number, language: string): Promise<ListPage> {
-    const cached = this.lists.getCachedListPage(slug, page, language, oneHourMs);
-    if (cached) {
-      return {
-        slug,
-        page,
-        totalPages: cached.totalPages,
-        totalItems: cached.totalItems,
-        items: cached.items as ListPage['items'],
-      };
-    }
-    const fetched = await this.provider.getListPage(slug, page, language);
-    this.lists.putCachedListPage(
-      slug,
-      page,
-      language,
-      { items: fetched.items, totalPages: fetched.totalPages, totalItems: fetched.totalItems },
-      oneHourMs
-    );
-    return {
-      slug,
-      page: fetched.page,
-      totalPages: fetched.totalPages,
-      totalItems: fetched.totalItems,
-      items: fetched.items,
-    };
+  async resolveExternal(ref: {
+    mediaType: 'movie' | 'tv';
+    ids: { imdb?: string };
+  }): Promise<MediaRef | null> {
+    const mediaId = await this.provider.resolveExternal(ref);
+    return mediaId === null ? null : { mediaType: ref.mediaType, mediaId };
   }
 
   /* -------------------------------------------------------------------- genres */

@@ -1,5 +1,3 @@
-import type { ListDefinition } from '../types';
-
 export interface MovieRow {
   media_id: number;
   imdb_id: string | null;
@@ -126,4 +124,3 @@ export const inBatches = (ids: number[]): number[][] => {
     batches.push(ids.slice(index, index + IN_CLAUSE_BATCH));
   return batches;
 };
-export type { ListDefinition };

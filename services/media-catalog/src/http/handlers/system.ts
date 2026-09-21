@@ -30,6 +30,8 @@ const SCOPES: Record<string, string> = {
   tv_shows: 'lastShowSync',
 };
 
+const STATUS_HEARTBEAT_INTERVAL_MS = 5_000;
+
 const count = (
   db: CatalogDatabase,
   table: typeof movies | typeof tvShows | typeof seasons | typeof episodes
@@ -137,7 +139,7 @@ export const registerSystemRoutes = (router: Router, ctx: ServiceContext): void 
         unsubscribe = ctx.config.subscribe(() => send(buildStatus(ctx)));
         heartbeat = setInterval(() => {
           if (!closed) controller.enqueue(encoder.encode(': heartbeat\n\n'));
-        }, 15_000);
+        }, STATUS_HEARTBEAT_INTERVAL_MS);
         req.signal.addEventListener(
           'abort',
           () => {

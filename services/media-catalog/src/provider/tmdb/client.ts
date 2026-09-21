@@ -21,28 +21,6 @@ interface TmdbPaged {
   total_pages: number;
   total_results: number;
 }
-interface TmdbMovieSummary {
-  id: number;
-  title: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  genre_ids: number[];
-  release_date: string;
-  popularity: number;
-  vote_average: number;
-}
-interface TmdbTVShowSummary {
-  id: number;
-  name: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  genre_ids: number[];
-  first_air_date: string;
-  popularity: number;
-  vote_average: number;
-}
 interface TmdbMovieDetails {
   id: number;
   imdb_id: string | null;
@@ -113,6 +91,10 @@ interface TmdbSeason {
 }
 interface TmdbChanges extends TmdbPaged {
   results: Array<{ id: number }>;
+}
+interface TmdbFindResponse {
+  movie_results: Array<{ id: number }>;
+  tv_results: Array<{ id: number }>;
 }
 
 const oneHourMs = 36e5;
@@ -189,6 +171,16 @@ export class TmdbClient {
   async test(): Promise<boolean> {
     await this.request('/configuration');
     return true;
+  }
+
+  async findByImdbId(imdbId: string, mediaType: 'movie' | 'tv'): Promise<number | null> {
+    const data = await this.cached<TmdbFindResponse>(
+      `find:${imdbId}:${mediaType}`,
+      oneHourMs,
+      `/find/${encodeURIComponent(imdbId)}?external_source=imdb_id`
+    );
+    const result = mediaType === 'movie' ? data.movie_results[0] : data.tv_results[0];
+    return result?.id ?? null;
   }
 
   private configuration(): Promise<TmdbConfiguration> {
@@ -304,59 +296,6 @@ export class TmdbClient {
         overview: translation.data.overview,
         tagline: translation.data.tagline,
       })),
-    };
-  }
-
-  /* ------------------------------------------------------------------- lists */
-
-  async popularMovies(page: number, language = this.language) {
-    return this.list(
-      `list:movies-popular:${page}:${language}`,
-      `/discover/movie?include_adult=false&include_video=false&language=${language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
-    );
-  }
-
-  async topRatedMovies(page: number, language = this.language) {
-    return this.list(
-      `list:movies-top-rated:${page}:${language}`,
-      `/movie/top_rated?language=${language}&page=${page}`
-    );
-  }
-
-  async popularShows(page: number, language = this.language) {
-    return this.list(
-      `list:shows-popular:${page}:${language}`,
-      `/discover/tv?include_adult=false&include_null_first_air_dates=false&language=${language}&page=${page}&sort_by=popularity.desc&vote_count.gte=10`
-    );
-  }
-
-  private async list(
-    cacheKey: string,
-    path: string
-  ): Promise<{
-    page: number;
-    totalPages: number;
-    totalItems: number;
-    items: Array<TmdbMovieSummary | TmdbTVShowSummary>;
-  }> {
-    const response = await this.cached<{
-      page: number;
-      total_pages: number;
-      total_results: number;
-      results: Array<TmdbMovieSummary | TmdbTVShowSummary>;
-    }>(cacheKey, oneHourMs, path);
-    const items = await Promise.all(
-      response.results.map(async media => ({
-        ...media,
-        poster_path: await this.imageUrl(media.poster_path),
-        backdrop_path: await this.imageUrl(media.backdrop_path),
-      }))
-    );
-    return {
-      page: response.page,
-      totalPages: response.total_pages,
-      totalItems: response.total_results,
-      items,
     };
   }
 

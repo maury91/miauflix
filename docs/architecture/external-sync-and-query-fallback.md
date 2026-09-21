@@ -63,49 +63,47 @@ sequenceDiagram
   end
 ```
 
-## TmdbService Layering
+## Catalog and list service layering
 
-Within the content-catalog module, the **ContentCatalogService** owns the TMDB-facing call chain used by higher-level services: it sits between `MediaService` / `ListService` and `TmdbService`, while `TmdbService` sits in front of `TMDBApi`. This keeps orchestration at the catalog boundary and preserves the hybrid query approach (DB first, fallback to TMDB API).
+The standalone **media-catalog** service owns TMDB metadata and exposes the catalog capability over HTTP. The standalone **list-service** owns Trakt list definitions, pagination, and account associations. The backend consumes both capabilities and keeps only the local indexes/projections needed for playback.
 
 ```mermaid
 flowchart TB
   Routes[Routes]
   MediaService[MediaService]
   ListService[ListService]
-  ContentCatalogService[ContentCatalogService]
-  TmdbService[TmdbService]
-  TMDBApi[TMDBApi]
+  CatalogClient[CatalogClientService]
+  ListClient[ListClientService]
+  CatalogService[media-catalog service]
+  ListProvider[List Service]
   Repos[Repositories]
   DB[(DB)]
 
   Routes --> MediaService
   Routes --> ListService
-  MediaService --> ContentCatalogService
-  ListService --> ContentCatalogService
-  ContentCatalogService --> TmdbService
-  TmdbService --> TMDBApi
-  TmdbService --> Repos
+  MediaService --> CatalogClient
+  ListService --> CatalogClient
+  ListService --> ListClient
+  CatalogClient --> CatalogService
+  ListClient --> ListProvider
   Repos --> DB
 ```
 
-- **TMDBApi**: Low-level HTTP/rate-limited client. Domain services do not call it directly for reads or sync.
-- **TmdbService**: Owns sync state, repositories, and the “read from DB → on miss/stale call API → persist → return” logic for movies, TV shows, seasons, and list content.
-- **ContentCatalogService**: Owns the orchestration boundary for content-catalog calls and forwards TMDB-specific operations from higher-level services to `TmdbService`.
-- **MediaService / ListService**: Enter the TMDB flow through `ContentCatalogService` rather than talking to `TMDBApi` directly.
-
-Implementation: `backend/src/services/content-catalog/tmdb/tmdb.service.ts` (via `backend/src/services/content-catalog/content-catalog.service.ts`).
+- **CatalogClientService**: Typed HTTP adapter for the media-catalog capability.
+- **ListClientService**: Typed HTTP adapter for list pages and authenticated Trakt association operations.
+- **ListService**: Projects external list references into the backend's local playback indexes after catalog resolution.
 
 ## Progressive ingestion and durable work
 
 Catalog synchronization is progressive and database-backed:
 
-- List pages are ingested as summary rows first. Full movie/show details are represented by a
+- List pages are ingested as external references first. Full movie/show details are represented by a
   nullable `detailsSyncedAt` timestamp and hydrated later by prioritized `media.hydrate` jobs.
 - Lists use ordered snapshot generations. A refresh builds a staging generation page by page and
   changes `activeGeneration` only after the complete snapshot succeeds. A new installation may
   publish a first-page bootstrap generation while the full snapshot is built.
-- List API pagination happens in SQLite; only the requested media rows, genres, and translations
-  are loaded.
+- Backend list API pagination happens over the local projection; only the requested media rows are
+  loaded while the list service remains the source of provider membership.
 - Episodes are hydrated per season when requested instead of polling all incomplete seasons.
 - Catalog, list, source, source-metadata, source-statistics, and cache work use Bunqueue's
   separate SQLite-backed broker. Typed queues are deduplicated, prioritized, leased with
@@ -115,11 +113,11 @@ Catalog synchronization is progressive and database-backed:
 - Workers execute bounded entity/page jobs. List refreshes use a page fan-out followed by an
   activation fan-in, and movie summaries use an ordered hydration-to-source-discovery flow.
   Independent source metadata and statistics jobs are submitted in bulk rather than coupled.
-- HTTP cache misses never wait for queue execution: TMDB data, first-list bootstrap data, source
+- HTTP cache misses never wait for queue execution: catalog data, first-list bootstrap data, source
   discovery, and source metadata required for streaming are resolved inline. Broker failures only
   postpone follow-up enrichment and do not take request-time hydration offline.
-- TMDB list summaries keep discovery data current. Full details use a 24-hour TTL, eliminating the
-  global TMDB changes-feed scan and its per-ID database probes.
+- List-service pages keep provider membership current. Catalog details are resolved through the
+  catalog capability and mirrored locally only when needed for playback.
 
-The legacy list junctions, sync cursors, and interval configuration remain temporarily for an
-additive SQLite rollout, but runtime reads and background execution use snapshots and jobs.
+Legacy catalog list tables and Trakt authentication storage are intentionally absent from the new
+pre-production baseline. Reset local development databases when upgrading to this extraction.

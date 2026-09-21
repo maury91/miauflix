@@ -23,24 +23,6 @@ CREATE TABLE `genres` (
 	`id` integer PRIMARY KEY NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `list_pages` (
-	`slug` text NOT NULL,
-	`page` integer NOT NULL,
-	`language` text NOT NULL,
-	`items_json` text NOT NULL,
-	`total_pages` integer NOT NULL,
-	`total_items` integer NOT NULL,
-	`fetched_at` integer NOT NULL,
-	PRIMARY KEY(`slug`, `page`, `language`)
-);
---> statement-breakpoint
-CREATE TABLE `lists` (
-	`slug` text PRIMARY KEY NOT NULL,
-	`name` text NOT NULL,
-	`description` text DEFAULT '' NOT NULL,
-	`provider` text DEFAULT 'tmdb' NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE `media_genres` (
 	`media_type` text NOT NULL,
 	`media_id` integer NOT NULL,
