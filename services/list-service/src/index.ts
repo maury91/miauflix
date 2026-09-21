@@ -178,7 +178,11 @@ const probeConfig = async (candidate: typeof config.values) => {
       candidate.TRAKT_CLIENT_SECRET,
       candidate.TRAKT_API_URL
     ).test();
-    return { success: true, message: 'Trakt configuration is valid' };
+    return {
+      success: true,
+      message:
+        'Trakt API is reachable and the client ID is accepted; the client secret is verified during account authorization',
+    };
   } catch (error) {
     return {
       success: false,
@@ -248,15 +252,7 @@ const accessToken = async (subjectId: string): Promise<string> => {
   const record = association(subjectId);
   if (!record) throw new Error('Trakt account is not connected');
   if (record.expires_at > Date.now() + 5 * 60 * 1000) return open(record.access_token);
-  const refreshed = (await client().request('/oauth/token', {
-    method: 'POST',
-    body: JSON.stringify({
-      refresh_token: open(record.refresh_token),
-      client_id: config.values.TRAKT_CLIENT_ID,
-      client_secret: config.values.TRAKT_CLIENT_SECRET,
-      grant_type: 'refresh_token',
-    }),
-  })) as { access_token: string; refresh_token: string; expires_in: number };
+  const refreshed = await client().refreshToken(open(record.refresh_token));
   database
     .query(
       'UPDATE associations SET access_token = ?1, refresh_token = ?2, expires_at = ?3 WHERE subject_id = ?4'

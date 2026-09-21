@@ -1,5 +1,7 @@
 jest.mock('@database/database');
 
+import { configureFakerSeed } from '@__test-utils__/utils';
+
 import { Database } from '@database/database';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
@@ -7,45 +9,68 @@ import type { ListClientService } from '@services/list/list-client.service';
 
 import { DEFAULT_LIST_REFRESH_PAGES, ListService } from './list.service';
 
+const publicDefinition = {
+  id: 'trakt-movies-popular',
+  slug: 'trakt-movies-popular',
+  name: 'Popular Movies',
+  description: '',
+  provider: 'trakt',
+  scope: 'public' as const,
+  requiresConnection: false,
+};
+
+const setupTest = () => {
+  const database = new Database({} as never) as jest.Mocked<Database>;
+  const mediaListRepository = database.getMediaListRepository() as jest.Mocked<MediaListRepository>;
+  const listClient = {
+    getDefinitions: jest.fn().mockResolvedValue([publicDefinition]),
+    getPage: jest.fn().mockResolvedValue({
+      listId: publicDefinition.id,
+      page: 1,
+      totalPages: 1,
+      totalItems: 0,
+      items: [],
+    }),
+  } as unknown as jest.Mocked<ListClientService>;
+  const catalogClient = {
+    batch: jest.fn().mockResolvedValue({ items: [] }),
+  } as unknown as jest.Mocked<CatalogClientService>;
+  mediaListRepository.discardGeneration = jest.fn().mockResolvedValue(undefined);
+  mediaListRepository.stagePage = jest.fn().mockResolvedValue(undefined);
+  mediaListRepository.activateGeneration = jest.fn().mockResolvedValue(undefined);
+  database.getMovieRepository().findListItemsByMediaIds = jest.fn().mockResolvedValue([]);
+  database.getTVShowRepository().findListItemsByMediaIds = jest.fn().mockResolvedValue([]);
+  return {
+    database,
+    mediaListRepository,
+    listClient,
+    catalogClient,
+    service: new ListService(database, catalogClient, listClient),
+  };
+};
+
 describe('ListService refresh safety', () => {
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('discards a failed generation without activating it', async () => {
-    const database = new Database({} as never) as jest.Mocked<Database>;
-    const mediaListRepository =
-      database.getMediaListRepository() as jest.Mocked<MediaListRepository>;
-    const listClient = {
-      getDefinitions: jest.fn().mockResolvedValue([
-        {
-          id: 'trakt-movies-popular',
-          slug: 'trakt-movies-popular',
-          name: 'Popular Movies',
-          description: '',
-          provider: 'trakt',
-          scope: 'public',
-          requiresConnection: false,
-        },
-      ]),
-      getPage: jest.fn().mockResolvedValue({
-        listId: 'trakt-movies-popular',
-        page: 1,
-        totalPages: 1,
-        totalItems: 1,
-        items: [{ key: 'movie-1', rank: 0, media: { mediaType: 'movie', ids: { tmdb: 1 } } }],
-      }),
-    } as unknown as jest.Mocked<ListClientService>;
-    const catalogClient = {
-      batch: jest.fn().mockRejectedValue(new Error('catalog unavailable')),
-    } as unknown as jest.Mocked<CatalogClientService>;
+    const { catalogClient, mediaListRepository, service } = setupTest();
     const mediaList = {
       id: 1,
       activeGeneration: 'previous-generation',
     } as never;
 
+    catalogClient.batch.mockRejectedValueOnce(new Error('catalog unavailable'));
     mediaListRepository.findBySlug = jest.fn().mockResolvedValue(mediaList);
-    mediaListRepository.discardGeneration = jest.fn().mockResolvedValue(undefined);
-    mediaListRepository.stagePage = jest.fn().mockResolvedValue(undefined);
-    mediaListRepository.activateGeneration = jest.fn().mockResolvedValue(undefined);
-
-    const service = new ListService(database, catalogClient, listClient);
 
     await expect(service.refreshList('trakt-movies-popular', 1)).rejects.toThrow(
       'catalog unavailable'
@@ -54,10 +79,8 @@ describe('ListService refresh safety', () => {
     expect(mediaListRepository.activateGeneration).not.toHaveBeenCalled();
   });
 
-  it('hydrates the configured page window for a first personal-list read', async () => {
-    const database = new Database({} as never) as jest.Mocked<Database>;
-    const mediaListRepository =
-      database.getMediaListRepository() as jest.Mocked<MediaListRepository>;
+  it('hydrates every configured page for a personal list', async () => {
+    const { listClient, mediaListRepository, service } = setupTest();
     const definition = {
       id: 'personal-list',
       slug: 'personal-list',
@@ -67,27 +90,22 @@ describe('ListService refresh safety', () => {
       scope: 'personal' as const,
       requiresConnection: true,
     };
-    const listClient = {
-      getDefinitions: jest.fn().mockResolvedValue([definition]),
-    } as unknown as jest.Mocked<ListClientService>;
-    const catalogClient = {
-      batch: jest.fn().mockResolvedValue({ items: [] }),
-    } as unknown as jest.Mocked<CatalogClientService>;
-    const activeList = { id: 1, activeGeneration: 'generation-1' } as never;
+    listClient.getDefinitions.mockResolvedValueOnce([definition]);
+    listClient.getPage.mockImplementation(async (_subjectId, _slug, page) => ({
+      listId: definition.id,
+      page,
+      totalPages: 2,
+      totalItems: 0,
+      items: [],
+    }));
     mediaListRepository.findBySlug = jest
       .fn()
-      .mockResolvedValueOnce({ id: 1, activeGeneration: null } as never)
-      .mockResolvedValueOnce(activeList);
-    mediaListRepository.getPage = jest.fn().mockResolvedValue([]);
-    mediaListRepository.countItems = jest.fn().mockResolvedValue(0);
-    database.getMovieRepository().findListItemsByMediaIds = jest.fn().mockResolvedValue([]);
-    database.getTVShowRepository().findListItemsByMediaIds = jest.fn().mockResolvedValue([]);
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
 
-    const service = new ListService(database, catalogClient, listClient);
-    const refreshList = jest.spyOn(service, 'refreshList').mockResolvedValue(undefined);
+    await service.refreshList('personal-list', DEFAULT_LIST_REFRESH_PAGES, 'user-1');
 
-    await service.getListPage('personal-list', 'en', 0, 20, 'user-1');
-
-    expect(refreshList).toHaveBeenCalledWith('personal-list', DEFAULT_LIST_REFRESH_PAGES, 'user-1');
+    expect(listClient.getPage).toHaveBeenNthCalledWith(1, 'user-1', 'personal-list', 1);
+    expect(listClient.getPage).toHaveBeenNthCalledWith(2, 'user-1', 'personal-list', 2);
+    expect(mediaListRepository.activateGeneration).toHaveBeenCalledWith(1, expect.any(String));
   });
 });

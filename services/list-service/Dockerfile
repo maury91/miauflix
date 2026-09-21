@@ -26,14 +26,18 @@ COPY --from=runtime /workspace /workspace
 WORKDIR /workspace/services/list-service
 CMD ["bun", "--watch", "src/index.ts"]
 
+FROM runtime AS production-dependencies
+RUN npm prune --omit=dev --ignore-scripts
+
 FROM bun-runtime AS production
 WORKDIR /app
-COPY --from=runtime /workspace/node_modules /app/node_modules
+COPY --from=production-dependencies /workspace/node_modules /app/node_modules
 COPY --from=runtime /workspace/packages/service-contracts /app/packages/service-contracts
 COPY --from=runtime /workspace/services/list-service /app/services/list-service
 ENV LIST_SERVICE_DATA_DIR=/app/data
-RUN mkdir -p /app/data
+RUN mkdir -p /app/data && chown bun:bun /app/data
 VOLUME /app/data
 EXPOSE 3002
+USER bun
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=5 CMD bun -e "fetch('http://localhost:3002/health').then(r => { if (!r.ok) process.exit(1) })"
 CMD ["bun", "run", "/app/services/list-service/src/index.ts"]

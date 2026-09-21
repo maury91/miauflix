@@ -1,5 +1,7 @@
 jest.mock('@database/database');
 
+import { configureFakerSeed } from '@__test-utils__/utils';
+
 import { Database } from '@database/database';
 import type { QrLoginRequest } from '@entities/qr-login-request.entity';
 import type { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
@@ -24,6 +26,18 @@ const request = (overrides: Partial<QrLoginRequest> = {}): QrLoginRequest =>
   }) as QrLoginRequest;
 
 describe('QrLoginService claim leases', () => {
+  beforeAll(() => {
+    configureFakerSeed();
+  });
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   const setupTest = () => {
     const database = new Database({} as never) as jest.Mocked<Database>;
     const repository =

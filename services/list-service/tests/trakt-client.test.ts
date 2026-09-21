@@ -71,4 +71,62 @@ describe('TraktClient', () => {
       expect((error as TraktProviderError).status).toBe(504);
     }
   });
+
+  it('rejects malformed OAuth and profile responses', async () => {
+    globalThis.fetch = (async () => Response.json({ device_code: 'device' })) as typeof fetch;
+
+    await expect(
+      new TraktClient('client', 'secret', 'https://trakt.example').deviceCode()
+    ).rejects.toMatchObject({
+      message: 'Trakt API returned an invalid response',
+      status: 502,
+    });
+
+    globalThis.fetch = (async () => Response.json({ access_token: 'access' })) as typeof fetch;
+
+    await expect(
+      new TraktClient('client', 'secret', 'https://trakt.example').deviceToken('device-code')
+    ).rejects.toMatchObject({
+      message: 'Trakt API returned an invalid response',
+      status: 502,
+    });
+
+    globalThis.fetch = (async () =>
+      Response.json({ username: 'miauflix', ids: {} })) as typeof fetch;
+
+    await expect(
+      new TraktClient('client', 'secret', 'https://trakt.example').profile('access-token')
+    ).rejects.toMatchObject({
+      message: 'Trakt API returned an invalid response',
+      status: 502,
+    });
+  });
+
+  it('rejects malformed paginated responses and pagination headers', async () => {
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify({ items: [] }), {
+        status: 200,
+        headers: {
+          'X-Pagination-Page-Count': '1',
+          'X-Pagination-Item-Count': '0',
+        },
+      })) as typeof fetch;
+
+    await expect(
+      new TraktClient('client', 'secret', 'https://trakt.example').page('/movies/popular')
+    ).rejects.toMatchObject({
+      message: 'Trakt API returned an invalid page',
+      status: 502,
+    });
+
+    globalThis.fetch = (async () =>
+      new Response(JSON.stringify([]), { status: 200 })) as typeof fetch;
+
+    await expect(
+      new TraktClient('client', 'secret', 'https://trakt.example').page('/movies/popular')
+    ).rejects.toMatchObject({
+      message: 'Trakt API returned an invalid X-Pagination-Page-Count header',
+      status: 502,
+    });
+  });
 });

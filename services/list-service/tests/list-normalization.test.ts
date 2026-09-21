@@ -31,4 +31,9 @@ describe('Trakt list normalization', () => {
   it('rejects nested items without a media object', () => {
     expect(() => normalizeListItems([{}], 'movie', false)).toThrow();
   });
+
+  it('rejects items with the wrong media field for the requested list type', () => {
+    expect(() => normalizeListItems([{ show: { ids: { trakt: 3 } } }], 'movie', false)).toThrow();
+    expect(() => normalizeListItems([{ movie: { ids: { trakt: 3 } } }], 'tv', false)).toThrow();
+  });
 });

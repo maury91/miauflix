@@ -194,6 +194,29 @@ test('completes first-run admin and required configuration through the UI', asyn
     services: [expect.objectContaining({ service: 'CATALOG', success: true })],
   });
 
+  await expect(page.getByRole('heading', { name: 'LIST' })).toBeVisible({
+    timeout: 5_000,
+  });
+  await expect(page.getByText('3 missing')).toBeVisible();
+  await page.getByRole('textbox', { name: 'List Trakt Client ID' }).fill('mock-trakt-client-id');
+  await page
+    .getByRole('textbox', { name: 'List Trakt Client Secret' })
+    .fill('mock-trakt-client-secret');
+  await page
+    .getByRole('textbox', { name: 'List Service Encryption Key' })
+    .fill('e2e-list-service-key');
+
+  const listSaveResponsePromise = page.waitForResponse(response => {
+    return response.url().endsWith('/api/config/LIST') && response.request().method() === 'PUT';
+  });
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  const listSaveResponse = await listSaveResponsePromise;
+  expect(listSaveResponse.ok()).toBeTruthy();
+  await expect(listSaveResponse.json()).resolves.toMatchObject({
+    success: true,
+    services: [expect.objectContaining({ service: 'LIST', success: true })],
+  });
+
   await expect(page.getByRole('heading', { name: 'Optional settings' })).toBeVisible({
     timeout: 5_000,
   });

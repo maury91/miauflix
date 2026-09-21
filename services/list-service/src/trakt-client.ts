@@ -1,4 +1,23 @@
+import { z } from 'zod';
+
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
+
+const deviceCodeSchema = z.object({
+  device_code: z.string().min(1),
+  user_code: z.string().min(1),
+  verification_url: z.string().url(),
+  expires_in: z.number().int().positive(),
+  interval: z.number().int().positive(),
+});
+const tokenSchema = z.object({
+  access_token: z.string().min(1),
+  refresh_token: z.string().min(1),
+  expires_in: z.number().int().positive(),
+});
+const profileSchema = z.object({
+  username: z.string().min(1),
+  ids: z.object({ slug: z.string().min(1) }),
+});
 
 export class TraktProviderError extends Error {
   constructor(
@@ -17,16 +36,11 @@ export class TraktClient {
     private readonly requestTimeoutMs = DEFAULT_REQUEST_TIMEOUT_MS
   ) {}
 
-  async request<T>(path: string, init: RequestInit = {}, accessToken?: string): Promise<T> {
-    const { data } = await this.requestWithHeaders<T>(path, init, accessToken);
-    return data;
-  }
-
-  private async requestWithHeaders<T>(
+  private async requestWithHeaders(
     path: string,
     init: RequestInit = {},
     accessToken?: string
-  ): Promise<{ data: T; headers: Headers }> {
+  ): Promise<{ data: unknown; headers: Headers }> {
     try {
       const response = await fetch(`${this.apiUrl}${path}`, {
         ...init,
@@ -43,7 +57,16 @@ export class TraktClient {
         const body = await response.text();
         throw new TraktProviderError(`Trakt API ${response.status}: ${body}`, response.status);
       }
-      return { data: (await response.json()) as T, headers: response.headers };
+      try {
+        return { data: await response.json(), headers: response.headers };
+      } catch (error) {
+        if (
+          error instanceof Error &&
+          (error.name === 'AbortError' || error.name === 'TimeoutError')
+        )
+          throw error;
+        throw new TraktProviderError('Trakt API returned invalid JSON', 502);
+      }
     } catch (error) {
       if (error instanceof TraktProviderError) throw error;
       if (
@@ -56,38 +79,56 @@ export class TraktClient {
     }
   }
 
-  test(): Promise<unknown> {
-    return this.request('/movies/popular?limit=1');
+  private async request<T>(
+    path: string,
+    schema: z.ZodType<T>,
+    init: RequestInit = {},
+    accessToken?: string
+  ): Promise<T> {
+    const { data } = await this.requestWithHeaders(path, init, accessToken);
+    try {
+      return schema.parse(data);
+    } catch {
+      throw new TraktProviderError('Trakt API returned an invalid response', 502);
+    }
   }
 
-  deviceCode(): Promise<{
-    device_code: string;
-    user_code: string;
-    verification_url: string;
-    expires_in: number;
-    interval: number;
-  }> {
-    return this.request('/oauth/device/code', {
+  test(): Promise<unknown[]> {
+    return this.request('/movies/popular?limit=1', z.array(z.unknown()));
+  }
+
+  deviceCode(): Promise<z.infer<typeof deviceCodeSchema>> {
+    return this.request('/oauth/device/code', deviceCodeSchema, {
       method: 'POST',
       body: JSON.stringify({ client_id: this.clientId }),
     });
   }
 
-  deviceToken(
-    code: string
-  ): Promise<{ access_token: string; refresh_token: string; expires_in: number }> {
-    return this.request('/oauth/device/token', {
+  deviceToken(code: string): Promise<z.infer<typeof tokenSchema>> {
+    return this.request('/oauth/device/token', tokenSchema, {
       method: 'POST',
       body: JSON.stringify({ code, client_id: this.clientId, client_secret: this.clientSecret }),
     });
   }
 
-  profile(accessToken: string): Promise<{ username: string; ids: { slug: string } }> {
-    return this.request('/users/me', {}, accessToken);
+  refreshToken(refreshToken: string): Promise<z.infer<typeof tokenSchema>> {
+    return this.request('/oauth/token', tokenSchema, {
+      method: 'POST',
+      body: JSON.stringify({
+        refresh_token: refreshToken,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        grant_type: 'refresh_token',
+      }),
+    });
+  }
+
+  profile(accessToken: string): Promise<z.infer<typeof profileSchema>> {
+    return this.request('/users/me', profileSchema, {}, accessToken);
   }
 
   revoke(accessToken: string): Promise<unknown> {
-    return this.request('/oauth/revoke', {
+    return this.request('/oauth/revoke', z.unknown(), {
       method: 'POST',
       body: JSON.stringify({
         token: accessToken,
@@ -101,13 +142,24 @@ export class TraktClient {
     path: string,
     accessToken?: string
   ): Promise<{ items: T[]; totalPages: number; totalItems: number }> {
-    const response = await this.requestWithHeaders<T[]>(path, {}, accessToken);
-    const totalPages = Number(response.headers.get('X-Pagination-Page-Count') ?? '0');
-    const totalItems = Number(response.headers.get('X-Pagination-Item-Count') ?? '0');
+    const response = await this.requestWithHeaders(path, {}, accessToken);
+    const items = z.array(z.unknown()).safeParse(response.data);
+    if (!items.success) throw new TraktProviderError('Trakt API returned an invalid page', 502);
+    const parsePaginationHeader = (name: string, minimum: number) => {
+      const value = response.headers.get(name);
+      if (!value || !/^\d+$/.test(value))
+        throw new TraktProviderError(`Trakt API returned an invalid ${name} header`, 502);
+      const parsed = Number(value);
+      if (!Number.isSafeInteger(parsed) || parsed < minimum)
+        throw new TraktProviderError(`Trakt API returned an invalid ${name} header`, 502);
+      return parsed;
+    };
+    const totalPages = parsePaginationHeader('X-Pagination-Page-Count', 1);
+    const totalItems = parsePaginationHeader('X-Pagination-Item-Count', 0);
     return {
-      items: response.data,
-      totalPages: Number.isSafeInteger(totalPages) && totalPages >= 0 ? totalPages : 0,
-      totalItems: Number.isSafeInteger(totalItems) && totalItems >= 0 ? totalItems : 0,
+      items: items.data as T[],
+      totalPages,
+      totalItems,
     };
   }
 }

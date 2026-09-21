@@ -14,12 +14,8 @@ const traktIdsSchema = z.object({
     .optional(),
 });
 const bareTraktItemSchema = z.object({ ids: traktIdsSchema });
-const nestedTraktItemSchema = z
-  .object({
-    movie: bareTraktItemSchema.optional(),
-    show: bareTraktItemSchema.optional(),
-  })
-  .refine(item => !!item.movie || !!item.show, 'Trakt list item has no media object');
+const nestedMovieItemSchema = z.object({ movie: bareTraktItemSchema });
+const nestedShowItemSchema = z.object({ show: bareTraktItemSchema });
 
 export const normalizeListItems = (
   items: unknown[],
@@ -32,7 +28,7 @@ export const normalizeListItems = (
       .parse(items)
       .map(item => ({ [mediaType]: item }));
   }
-  return z.array(nestedTraktItemSchema).parse(items);
+  return z.array(mediaType === 'movie' ? nestedMovieItemSchema : nestedShowItemSchema).parse(items);
 };
 
 export const mapItems = (items: TraktItem[], mediaType: 'movie' | 'tv') =>

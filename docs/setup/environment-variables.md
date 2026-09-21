@@ -270,7 +270,7 @@ WWW_DOMAIN=www.yourdomain.com
 **Trakt.tv connection fails**
 
 - Double-check client ID and secret from your [Trakt.tv application](https://trakt.tv/oauth/applications)
-- Ensure redirect URI matches your domain
+- Ensure the standalone List Service has valid `TRAKT_CLIENT_ID` and `TRAKT_CLIENT_SECRET` values
 
 **VPN docker container not starting**
 
