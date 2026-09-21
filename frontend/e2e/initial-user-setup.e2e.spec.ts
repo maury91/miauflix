@@ -197,11 +197,14 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(page.getByRole('heading', { name: 'LIST' })).toBeVisible({
     timeout: 5_000,
   });
-  await expect(page.getByText('3 missing')).toBeVisible();
+  await expect(page.getByText('4 missing')).toBeVisible();
   await page.getByRole('textbox', { name: 'List Trakt Client ID' }).fill('mock-trakt-client-id');
   await page
     .getByRole('textbox', { name: 'List Trakt Client Secret' })
     .fill('mock-trakt-client-secret');
+  await page
+    .getByRole('textbox', { name: 'List Trakt Redirect URI' })
+    .fill('https://app.example/trakt/callback');
   await page
     .getByRole('textbox', { name: 'List Service Encryption Key' })
     .fill('e2e-list-service-key');
