@@ -39,12 +39,12 @@ const UserCodeText = styled.div`
   color: white;
 `;
 
-const UserCode = styled.div`
+const UserCode = styled.div<{ $hasCode: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 240px;
-  justify-content: space-between;
+  justify-content: ${props => (props.$hasCode ? 'space-between' : 'center')};
   border: 1px solid #555;
   border-radius: 8px;
   padding: 8px 16px;
@@ -145,8 +145,8 @@ export const QRDisplay: FC<QRDisplayProps> = props => {
         <QRCode value={codeUrl} size={qrSize} level="M" aria-label="Login QR code" />
       </QRCodeContainer>
       <QRInstructions>{instructions}</QRInstructions>
-      <UserCode>
-        <UserCodeText>{formatCode(userCode)}</UserCodeText>
+      <UserCode $hasCode={Boolean(userCode)}>
+        {userCode ? <UserCodeText>{formatCode(userCode)}</UserCodeText> : null}
         <ExpiryText>
           {timeRemaining > 0 ? (
             <>

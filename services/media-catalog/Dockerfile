@@ -14,6 +14,7 @@ COPY packages/yts-sanitizer/package.json packages/yts-sanitizer/package.json
 COPY packages/therarbg-sanitizer/package.json packages/therarbg-sanitizer/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
+COPY services/list-service/package.json services/list-service/package.json
 
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 RUN npm ci --ignore-scripts

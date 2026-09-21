@@ -63,10 +63,18 @@ ensure_data_dir() {
   local project_dir="${1:-$(pwd)}"
   local data_dir="${project_dir}/data"
   local catalog_data_dir="${project_dir}/data/media-catalog"
+  local list_service_data_dir="${project_dir}/data/list-service"
 
   if ! mkdir -p "$catalog_data_dir" 2>/dev/null; then
     if ! command_exists sudo || ! sudo mkdir -p "$catalog_data_dir"; then
       print_error "Cannot create ${catalog_data_dir}."
+      return 1
+    fi
+  fi
+
+  if ! mkdir -p "$list_service_data_dir" 2>/dev/null; then
+    if ! command_exists sudo || ! sudo mkdir -p "$list_service_data_dir"; then
+      print_error "Cannot create ${list_service_data_dir}."
       return 1
     fi
   fi
@@ -79,6 +87,25 @@ ensure_data_dir() {
       if ! command_exists sudo || ! sudo chown -R 911:911 "$catalog_data_dir"; then
         print_warning "Could not assign ${catalog_data_dir} to catalog UID/GID 911:911; continuing with shared directory permissions."
       fi
+    fi
+  fi
+
+  local list_service_owner
+  list_service_owner=$(stat -c '%u:%g' "$list_service_data_dir" 2>/dev/null || stat -f '%u:%g' "$list_service_data_dir" 2>/dev/null) || list_service_owner=""
+
+  if [ "$list_service_owner" != "1000:1000" ]; then
+    if ! chown -R 1000:1000 "$list_service_data_dir" 2>/dev/null; then
+      if ! command_exists sudo || ! sudo chown -R 1000:1000 "$list_service_data_dir"; then
+        print_error "Cannot assign ${list_service_data_dir} to List Service UID/GID 1000:1000."
+        return 1
+      fi
+    fi
+  fi
+
+  if ! chmod 0770 "$list_service_data_dir" 2>/dev/null; then
+    if ! command_exists sudo || ! sudo chmod 0770 "$list_service_data_dir"; then
+      print_error "Cannot make ${list_service_data_dir} writable for the List Service."
+      return 1
     fi
   fi
 

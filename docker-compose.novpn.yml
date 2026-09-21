@@ -46,6 +46,25 @@ services:
       - ./data/media-catalog:/app/data
     restart: unless-stopped
 
+  list-service:
+    build:
+      context: .
+      dockerfile: services/list-service/Dockerfile
+    image: miauflix-list-service
+    container_name: miauflix-list-service
+    environment:
+      - LIST_SERVICE_DATA_DIR=/app/data
+      - TRAKT_API_URL=${TRAKT_API_URL:-https://api.trakt.tv}
+      - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-}
+      - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-}
+      - TRAKT_REDIRECT_URI=${TRAKT_REDIRECT_URI:-}
+      - LIST_SERVICE_ENCRYPTION_KEY=${LIST_SERVICE_ENCRYPTION_KEY:-}
+    ports:
+      - '127.0.0.1:3002:3002'
+    volumes:
+      - ./data/list-service:/app/data
+    restart: unless-stopped
+
   miauflix:
     build:
       context: .
@@ -60,6 +79,8 @@ services:
       jaeger:
         condition: service_started
       media-catalog:
+        condition: service_started
+      list-service:
         condition: service_started
     environment:
       - DATA_DIR=/usr/data
@@ -78,6 +99,7 @@ services:
       - BUNQUEUE_HOST=bunqueue
       - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://media-catalog:3001
+      - LIST_SERVICE_URL=http://list-service:3002
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
       interval: 30s

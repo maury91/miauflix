@@ -90,9 +90,9 @@ export const authSlice = createSlice({
       // If sessions belong to multiple users, state remains as is so the user can choose or log in.
     });
 
-    // Device login successful - set session and user
-    builder.addMatcher(authApi.endpoints.checkDeviceLoginStatus.matchFulfilled, (state, action) => {
-      if (action.payload.success === true) {
+    // QR login successful - set session and user
+    builder.addMatcher(authApi.endpoints.claimQrLogin.matchFulfilled, (state, action) => {
+      if ('session' in action.payload) {
         state.currentSessionId = action.payload.session;
         state.currentUser = action.payload.user;
       }

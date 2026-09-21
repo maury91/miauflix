@@ -15,10 +15,10 @@ import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
 import type { MovieSourceRepository } from '@repositories/movie-source.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
+import type { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import type { StorageRepository } from '@repositories/storage.repository';
 import type { StreamingKeyRepository } from '@repositories/streaming-key.repository';
-import type { TraktUserRepository } from '@repositories/trakt-user.repository';
 import type { TVShowRepository } from '@repositories/tvshow.repository';
 import type { UserRepository } from '@repositories/user.repository';
 import type { MovieDetail } from '@services/catalog/catalog.types';
@@ -226,7 +226,7 @@ export class Database {
   private userRepository: jest.Mocked<UserRepository>;
   private refreshTokenRepository: jest.Mocked<RefreshTokenRepository>;
   private auditLogRepository: jest.Mocked<AuditLogRepository>;
-  private traktUserRepository: jest.Mocked<TraktUserRepository>;
+  private qrLoginRequestRepository: jest.Mocked<QrLoginRequestRepository>;
   private storageRepository: jest.Mocked<StorageRepository>;
   private streamingKeyRepository: jest.Mocked<StreamingKeyRepository>;
 
@@ -240,7 +240,7 @@ export class Database {
   public getUserRepository: jest.Mock;
   public getRefreshTokenRepository: jest.Mock;
   public getAuditLogRepository: jest.Mock;
-  public getTraktUserRepository: jest.Mock;
+  public getQrLoginRequestRepository: jest.Mock;
   public getStorageRepository: jest.Mock;
   public getStreamingKeyRepository: jest.Mock;
 
@@ -255,7 +255,7 @@ export class Database {
     this.userRepository = createMockUserRepository();
     this.refreshTokenRepository = createMockRefreshTokenRepository();
     this.auditLogRepository = {} as jest.Mocked<AuditLogRepository>;
-    this.traktUserRepository = {} as jest.Mocked<TraktUserRepository>;
+    this.qrLoginRequestRepository = {} as jest.Mocked<QrLoginRequestRepository>;
     this.storageRepository = createMockStorageRepository();
     this.streamingKeyRepository = createMockStreamingKeyRepository();
 
@@ -269,7 +269,7 @@ export class Database {
     this.getUserRepository = jest.fn(() => this.userRepository);
     this.getRefreshTokenRepository = jest.fn(() => this.refreshTokenRepository);
     this.getAuditLogRepository = jest.fn(() => this.auditLogRepository);
-    this.getTraktUserRepository = jest.fn(() => this.traktUserRepository);
+    this.getQrLoginRequestRepository = jest.fn(() => this.qrLoginRequestRepository);
     this.getStorageRepository = jest.fn(() => this.storageRepository);
     this.getStreamingKeyRepository = jest.fn(() => this.streamingKeyRepository);
   }

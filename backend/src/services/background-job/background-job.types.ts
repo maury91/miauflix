@@ -1,13 +1,14 @@
 import type { CatalogJobPayloads } from '@miauflix/service-contracts';
 
 export interface BackgroundJobPayloads {
-  'list.refresh.plan': { slug: string; maxPages: number };
+  'list.refresh.plan': { slug: string; maxPages: number; subjectId: string };
   'list.page.stage': {
     slug: string;
     listId: number;
     generation: string;
     page: number;
     pageSize: number;
+    subjectId: string;
   };
   'list.generation.activate': { listId: number; generation: string };
   'source.discover': { movieId?: number; movieMediaId?: number };

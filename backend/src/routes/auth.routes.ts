@@ -17,13 +17,12 @@ import type {
   SessionResponse,
 } from './auth.types';
 import type { Deps, ErrorResponse } from './common.types';
-import type { DeviceAuthResponse } from './trakt.types';
 
 export const createAuthRoutes = ({
   authService,
   auditLogService,
   configurationService,
-  traktService,
+  qrLoginService,
 }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
@@ -204,59 +203,77 @@ export const createAuthRoutes = ({
         );
       }
     )
-    .post('/device/trakt', rateLimitGuard(2), async context => {
-      try {
-        const deviceAuth = await traktService.initiateDeviceAuth();
-
-        return context.json(deviceAuth satisfies DeviceAuthResponse);
-      } catch (error) {
-        console.error('Trakt device auth initiation failed:', error);
-        return context.json(
-          {
-            error: 'Failed to initiate Trakt authentication',
-          } satisfies ErrorResponse,
-          500
-        );
+    .post('/qr', rateLimitGuard(2), async context => {
+      return context.json(await qrLoginService.create(context));
+    })
+    .get('/qr/:approvalToken', rateLimitGuard(10), async context => {
+      const request = await qrLoginService.getApproval(context.req.param('approvalToken'));
+      if (!request) return context.json({ error: 'QR login request not found' }, 404);
+      if (request.expiresAt <= new Date()) {
+        return context.json({ state: 'expired', expiresAt: request.expiresAt.toISOString() });
       }
+      return context.json({
+        state: request.state,
+        expiresAt: request.expiresAt.toISOString(),
+        device: { userAgent: request.userAgent },
+      });
+    })
+    .post('/qr/:approvalToken/approve', rateLimitGuard(1), authGuard(), async context => {
+      const { user } = context.get('sessionInfo');
+      const request = await qrLoginService.approve(context.req.param('approvalToken'), user.id);
+      if (!request) return context.json({ error: 'QR login request is no longer pending' }, 409);
+      return context.json({ state: 'approved' as const });
+    })
+    .post('/qr/:approvalToken/reject', rateLimitGuard(1), authGuard(), async context => {
+      const rejected = await qrLoginService.reject(context.req.param('approvalToken'));
+      return rejected
+        ? context.json({ state: 'rejected' as const })
+        : context.json({ error: 'QR login request is no longer pending' }, 409);
     })
     .post(
-      '/login/trakt',
+      '/qr/:requestId/claim',
       rateLimitGuard(1),
-      zValidator(
-        'json',
-        z.object({
-          deviceCode: z.string().min(1),
-        })
-      ),
+      zValidator('json', z.object({ claimToken: z.string().min(32) })),
       async context => {
-        const { deviceCode } = context.req.valid('json');
-
-        try {
-          const user = await traktService.checkDeviceLogin(deviceCode);
-          if (!user) {
-            return context.json(
-              { error: 'Trakt account not associated with a user' } satisfies ErrorResponse,
-              401
-            );
-          }
-
-          // Generate tokens
-          const authResult = await authService.generateTokens(user, context);
-
-          // Set authentication cookies
-          setCookies(context, authService.getCookies(authResult));
-
-          return context.json({
-            session: authResult.session,
-            user: authResult.user,
-          } satisfies LoginResponse);
-        } catch (error) {
-          console.error('Trakt device auth check failed:', error);
-          return context.json(
-            { error: 'Failed to check Trakt authentication status' } satisfies ErrorResponse,
-            401
-          );
+        const { claimToken } = context.req.valid('json');
+        const claim = await qrLoginService.beginClaim(claimToken, context.req.param('requestId'));
+        if (!claim) {
+          return context.json({ state: 'pending' as const }, 202);
         }
+        const { request, lease } = claim;
+        let authResult!: Awaited<ReturnType<typeof authService.generateTokens>>;
+        try {
+          if (!request.approvedUserId) {
+            await qrLoginService.releaseClaim(request.id, lease);
+            return context.json({ error: 'QR login request has no approving user' }, 409);
+          }
+          const user = await authService.getUserById(request.approvedUserId);
+          if (!user) {
+            await qrLoginService.releaseClaim(request.id, lease);
+            return context.json({ error: 'Approving user no longer exists' }, 409);
+          }
+          authResult = await authService.generateTokens(user, context);
+          const completed = await qrLoginService.completeClaim(request.id, lease);
+          if (!completed) {
+            await authService.revokeSession(user.id, authResult.session);
+            await qrLoginService.releaseClaim(request.id, lease);
+            return context.json({ state: 'pending' as const }, 202);
+          }
+        } catch (error) {
+          try {
+            if (authResult) {
+              await authService.revokeSession(authResult.user.id, authResult.session);
+            }
+          } finally {
+            await qrLoginService.releaseClaim(request.id, lease);
+          }
+          throw error;
+        }
+        setCookies(context, authService.getCookies(authResult));
+        return context.json({
+          session: authResult.session,
+          user: authResult.user,
+        } satisfies LoginResponse);
       }
     )
     .get(

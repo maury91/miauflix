@@ -1,8 +1,8 @@
 import {
   batchRequestSchema,
   batchResponseSchema,
-  listDefinitionSchema,
-  listPageSchema,
+  externalMediaResolveRequestSchema,
+  externalMediaResolveResponseSchema,
   localizedGenreSchema,
   movieDetailSchema,
   okResponseSchema,
@@ -34,10 +34,6 @@ const parseSeasonNumber = (raw: string): number => {
 };
 
 const parseLanguage = (url: URL): string => url.searchParams.get('language') ?? 'en';
-
-const parsePage = (url: URL): number => {
-  return parseDecimalSafeInteger(url.searchParams.get('page') ?? '1', 1, 'page');
-};
 
 /**
  * Data endpoints. All of them require the service to be `ready` — a standby or
@@ -93,18 +89,16 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
     return json(batchResponseSchema.parse(await catalog.batch(body.items, body.language)));
   });
 
-  router.add('GET', `${BASE_PATH}/lists`, async ({ json }) => {
+  router.add('POST', `${BASE_PATH}/media/resolve`, async ({ req, json }) => {
+    const body = externalMediaResolveRequestSchema.parse(await req.json().catch(() => null));
     const catalog = dataPlane();
-    return json(listDefinitionSchema.array().parse(await catalog.listDefinitions()));
-  });
-
-  router.add('GET', `${BASE_PATH}/lists/:slug`, async ({ params, url, json }) => {
-    const catalog = dataPlane();
-    return json(
-      listPageSchema.parse(
-        await catalog.getListPage(params.slug, parsePage(url), parseLanguage(url))
-      )
+    const items = await Promise.all(
+      body.items.map(async requested => ({
+        requested,
+        media: await catalog.resolveExternal(requested),
+      }))
     );
+    return json(externalMediaResolveResponseSchema.parse({ items }));
   });
 
   router.add('GET', `${BASE_PATH}/genres`, async ({ url, json }) => {

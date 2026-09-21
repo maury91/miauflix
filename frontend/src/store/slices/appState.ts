@@ -30,8 +30,8 @@ export const appStateSlice = createSlice({
     builder.addMatcher(authApi.endpoints.login.matchFulfilled, state => {
       state.configDismissed = false;
     });
-    builder.addMatcher(authApi.endpoints.checkDeviceLoginStatus.matchFulfilled, (state, action) => {
-      if (action.payload.success) {
+    builder.addMatcher(authApi.endpoints.claimQrLogin.matchFulfilled, (state, action) => {
+      if ('session' in action.payload) {
         state.configDismissed = false;
       }
     });

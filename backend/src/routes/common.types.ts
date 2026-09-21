@@ -1,8 +1,9 @@
 import type { AuthService } from '@services/auth/auth.service';
+import type { QrLoginService } from '@services/auth/qr-login.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
-import type { TraktService } from '@services/content-catalog/trakt/trakt.service';
 import type { DownloadService } from '@services/download/download.service';
+import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
 import type { RequestService } from '@services/request/request.service';
@@ -24,13 +25,14 @@ export interface Deps {
   contentDirectoryService: ContentDirectoryService;
   downloadService: DownloadService;
   listService: ListService;
+  listClient: ListClientService;
   magnetService: SourceMetadataFileService;
   mediaService: MediaService;
   requestService: RequestService;
   sourceService: SourceService;
   statsService: StatsService;
   streamService: StreamService;
-  traktService: TraktService;
+  qrLoginService: QrLoginService;
   vpnDetectionService: VpnDetectionService;
 }
 
