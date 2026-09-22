@@ -74,7 +74,9 @@ function proxyCookieRewriteConfigure(
 
 const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
-const devCertificateDir = process.env.MIAUFLIX_DEV_CERT_DIR || path.resolve(__dirname, '../.certs');
+const devCertificateRoot =
+  process.env.MIAUFLIX_DEV_CERT_DIR || path.resolve(__dirname, '../.certs');
+const devCertificateDir = path.join(devCertificateRoot, 'server');
 const devCertificateKeyPath = path.join(devCertificateDir, 'localhost-key.pem');
 const devCertificatePath = path.join(devCertificateDir, 'localhost.pem');
 const trustedDevHttps =

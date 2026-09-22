@@ -101,7 +101,7 @@ services:
       - '127.0.0.1:4173:4173'
     volumes:
       - ./.env:/usr/src/app/.env:ro
-      - ./.certs:/usr/src/app/.certs:ro
+      - ${MIAUFLIX_DEV_CERT_DIR:-./.certs}/server:/usr/src/app/.certs/server:ro
       - ./frontend:/usr/src/app/frontend
 
 volumes:

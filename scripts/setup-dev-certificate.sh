@@ -2,23 +2,27 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cert_dir="${MIAUFLIX_DEV_CERT_DIR:-$repo_root/.certs}"
-ca_key="$cert_dir/miauflix-local-ca.key"
-ca_cert="$cert_dir/miauflix-local-ca.pem"
-server_key="$cert_dir/localhost-key.pem"
-server_csr="$cert_dir/localhost.csr"
-server_cert="$cert_dir/localhost.pem"
-serial_file="$cert_dir/miauflix-local-ca.srl"
+cert_root="${MIAUFLIX_DEV_CERT_DIR:-$repo_root/.certs}"
+ca_dir="$cert_root/ca"
+server_dir="$cert_root/server"
+ca_key="$ca_dir/miauflix-local-ca.key"
+ca_cert="$ca_dir/miauflix-local-ca.pem"
+server_key="$server_dir/localhost-key.pem"
+server_csr="$server_dir/localhost.csr"
+server_cert="$server_dir/localhost.pem"
+serial_file="$server_dir/miauflix-local-ca.srl"
 
-mkdir -p "$cert_dir"
+mkdir -p "$ca_dir" "$server_dir"
 
+ca_was_regenerated=false
 if [[ ! -f "$ca_key" || ! -f "$ca_cert" ]]; then
   openssl genrsa -out "$ca_key" 4096
   openssl req -x509 -new -nodes -key "$ca_key" -sha256 -days 825 \
     -out "$ca_cert" -subj '/CN=Miauflix Local Development CA'
+  ca_was_regenerated=true
 fi
 
-if [[ ! -f "$server_key" || ! -f "$server_cert" ]]; then
+if [[ "$ca_was_regenerated" == true || ! -f "$server_key" || ! -f "$server_cert" ]]; then
   openssl genrsa -out "$server_key" 2048
   openssl req -new -key "$server_key" -out "$server_csr" -subj '/CN=localhost'
   openssl x509 -req -in "$server_csr" -CA "$ca_cert" -CAkey "$ca_key" \
