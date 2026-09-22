@@ -101,6 +101,7 @@ services:
       - '127.0.0.1:4173:4173'
     volumes:
       - ./.env:/usr/src/app/.env:ro
+      - ./.certs:/usr/src/app/.certs:ro
       - ./frontend:/usr/src/app/frontend
 
 volumes:
