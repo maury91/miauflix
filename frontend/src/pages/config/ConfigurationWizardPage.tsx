@@ -281,7 +281,8 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
         Object.fromEntries(
           Object.entries(groups).filter(([name, group]) => {
             const status = serviceStatuses[name]?.status;
-            const hasMissingRequiredValue = group.some(entry => entry.required && !entry.hasValue);
+            const hasMissingRequiredValue =
+              status !== 'ready' && group.some(entry => entry.required && !entry.hasValue);
             return hasMissingRequiredValue || (status !== undefined && status !== 'ready');
           })
         ),

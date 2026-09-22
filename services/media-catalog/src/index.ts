@@ -22,7 +22,7 @@ const SCOPE = 'MediaCatalog';
 
 const env = loadEnv();
 const db = new CatalogDatabase(env.dataDir);
-const config = new CatalogConfigService(env.dataDir);
+const config = new CatalogConfigService(env.dataDir, process.env, env.configFile, env.keyFile);
 
 const context: ServiceContext = {
   env,

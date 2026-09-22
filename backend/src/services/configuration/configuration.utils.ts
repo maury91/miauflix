@@ -483,6 +483,7 @@ export function buildAllConfigs(rawValues: Map<VariableName, string>): ConfigEnt
         serviceDescription: service.description,
         description: varInfo.description,
         label: varInfo.label,
+        defaultValueSource: varInfo.defaultValueSource,
         required: varInfo.required,
         advanced: varInfo.advanced,
         warning: varInfo.warning,

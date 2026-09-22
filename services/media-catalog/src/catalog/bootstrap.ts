@@ -1,4 +1,6 @@
-import type { CatalogConfigService, ConfigProber } from '../config/config.service';
+import type { ConfigurationProbe } from '@miauflix/service-configuration';
+
+import type { CatalogConfigService } from '../config/config.service';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
@@ -72,7 +74,7 @@ export class CatalogRuntime {
     };
   }
 
-  private prober: ConfigProber = {
+  private prober: ConfigurationProbe = {
     test: async values => {
       const provider = this.buildProvider(values);
       try {

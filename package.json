@@ -6,7 +6,7 @@
   "scripts": {
     "build:backend": "turbo run build build:client --filter=@miauflix/backend...",
     "build:frontend": "turbo run build --filter='./frontend'",
-    "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer' --filter='./packages/service-contracts'",
+    "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer' --filter='./packages/service-contracts' --filter='./packages/service-configuration'",
     "build": "turbo run build",
     "check:ts": "turbo run check:ts",
     "config-only": "npm run start:backend -- --only-config",

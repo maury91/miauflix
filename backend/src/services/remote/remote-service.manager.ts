@@ -97,17 +97,18 @@ export class RemoteServiceManager {
 
   async reload(): Promise<void> {
     if (!this.manifest) await this.discover();
-    await this.pushConfiguration();
     await this.refreshStatus();
   }
 
   /**
    * Probe the remote service with the current (possibly draft) values without
-   * applying them. This is intentionally separate from reload(), which pushes
-   * configuration and activates the service.
+   * applying them. This is intentionally separate from reload(), which only
+   * refreshes discovery metadata and lifecycle status.
    */
-  async testConfiguration(): Promise<ServiceConfigTestResult> {
-    if (!this.manifest) await this.discover({ applyConfiguration: false });
+  async testConfiguration(
+    entries: { key: string; value: string }[] = []
+  ): Promise<ServiceConfigTestResult> {
+    if (!this.manifest) await this.discover();
     if (!this.manifest) throw new Error('Remote service has not been discovered');
     return this.request(
       serviceConfigTestResultSchema,
@@ -115,9 +116,34 @@ export class RemoteServiceManager {
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.configurationMutation()),
+        body: JSON.stringify(this.configurationMutation(entries)),
       }
     );
+  }
+
+  async applyConfiguration(
+    entries: { key: string; value: string }[]
+  ): Promise<{ success: boolean; message?: string }> {
+    if (!this.manifest) await this.discover();
+    if (!this.manifest) throw new Error('Remote service has not been discovered');
+    const result = await this.request(
+      serviceConfigApplyResultSchema,
+      this.manifest.management.configurationApplyPath,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.configurationMutation(entries)),
+      }
+    );
+    if (result.success) await this.refreshStatus();
+    return {
+      success: result.success,
+      message:
+        result.test?.message ??
+        (result.invalidKeys?.length
+          ? `Rejected keys: ${result.invalidKeys.join(', ')}`
+          : undefined),
+    };
   }
 
   async request<T>(
@@ -173,7 +199,7 @@ export class RemoteServiceManager {
     }
   }
 
-  private async discover(options: { applyConfiguration?: boolean } = {}): Promise<void> {
+  private async discover(): Promise<void> {
     const manifest = await this.request(serviceManifestSchema, SERVICE_MANIFEST_PATH);
     if (manifest.managementProtocolVersion !== MANAGEMENT_PROTOCOL_VERSION) {
       throw new Error(
@@ -199,17 +225,6 @@ export class RemoteServiceManager {
     this.configuration.registerDynamicVariables(variables, this.descriptor.serviceName);
     replaceServiceVariables(this.descriptor.serviceName, variables);
     this.remoteKeys = remoteKeys;
-    if (options.applyConfiguration ?? true) {
-      try {
-        await this.pushConfiguration();
-      } catch (error) {
-        logger.debug(
-          'RemoteService',
-          `${this.descriptor.serviceName} configuration is not ready yet`,
-          error
-        );
-      }
-    }
     await this.refreshStatus();
     this.startStatusStream();
     logger.info(
@@ -296,31 +311,17 @@ export class RemoteServiceManager {
     return response;
   }
 
-  private async pushConfiguration(): Promise<void> {
-    if (!this.manifest) throw new Error('Remote service has not been discovered');
-    const result = await this.request(
-      serviceConfigApplyResultSchema,
-      this.manifest.management.configurationApplyPath,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.configurationMutation()),
-      }
-    );
-    if (!result.success) {
-      throw new Error(
-        result.test?.message ?? `Rejected keys: ${(result.invalidKeys ?? []).join(', ')}`
-      );
-    }
-  }
-
-  private configurationMutation(): { values: Record<string, string>; unsetKeys: string[] } {
+  private configurationMutation(entries: { key: string; value: string }[]): {
+    values: Record<string, string>;
+    unsetKeys: string[];
+  } {
     const values: Record<string, string> = {};
     const unsetKeys: string[] = [];
-    for (const [localKey, remoteKey] of this.remoteKeys) {
-      const value = this.configuration.getDynamic(localKey);
-      if (value === undefined || value === null || value === '') unsetKeys.push(remoteKey);
-      else values[remoteKey] = String(value);
+    for (const entry of entries) {
+      const remoteKey = this.remoteKeys.get(entry.key);
+      if (!remoteKey) continue;
+      if (entry.value.length > 0) values[remoteKey] = entry.value;
+      else unsetKeys.push(remoteKey);
     }
     return { values, unsetKeys };
   }
@@ -342,7 +343,10 @@ export class RemoteServiceManager {
   private toVariableInfo(entry: ConfigVariable): VariableInfo {
     const common = {
       description: entry.description,
+      label: entry.label,
       required: entry.required,
+      advanced: entry.advanced,
+      defaultValueSource: entry.defaultValueSource,
       example: entry.example,
       link: entry.link,
       linkLabel: entry.linkLabel,
@@ -352,6 +356,14 @@ export class RemoteServiceManager {
     };
     switch (entry.inputType) {
       case 'password':
+        if (entry.skipUserInteraction && entry.defaultValue) {
+          return variable({
+            ...common,
+            password: true,
+            defaultValue: entry.defaultValue,
+            skipUserInteraction: true,
+          });
+        }
         return variable({ ...common, password: true });
       case 'select':
         return variable({

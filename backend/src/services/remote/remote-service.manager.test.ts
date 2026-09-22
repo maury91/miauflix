@@ -96,12 +96,66 @@ describe('RemoteServiceManager', () => {
     );
   });
 
+  it('preserves remote presentation metadata and generated secret defaults', async () => {
+    const { configuration, manager } = setupTest();
+    jest.spyOn(global, 'fetch').mockImplementation(async input => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') {
+        return Response.json({
+          name: 'Media Catalog',
+          description: 'Catalog settings',
+          variables: [
+            {
+              key: 'REDIRECT_URI',
+              label: 'Redirect URI',
+              description: 'Registered callback URI',
+              required: true,
+              inputType: 'text',
+              advanced: true,
+              defaultValueSource: 'browser-origin',
+            },
+            {
+              key: 'ENCRYPTION_KEY',
+              description: 'Generated key',
+              required: true,
+              inputType: 'password',
+              skipUserInteraction: true,
+              defaultValue: 'generated-secret',
+            },
+          ],
+        });
+      }
+      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/status') return Response.json({ state: 'ready' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    manager.stop();
+
+    const variables = configuration.registerDynamicVariables.mock.calls[0]?.[0] as Record<
+      string,
+      Record<string, unknown>
+    >;
+    expect(variables.CATALOG__REDIRECT_URI).toMatchObject({
+      label: 'Redirect URI',
+      advanced: true,
+      defaultValueSource: 'browser-origin',
+    });
+    expect(variables.CATALOG__ENCRYPTION_KEY).toMatchObject({
+      password: true,
+      skipUserInteraction: true,
+      defaultValue: 'generated-secret',
+    });
+  });
+
   it('reports incompatible capability versions as a service error', async () => {
     const { manager } = setupTest();
     jest.spyOn(global, 'fetch').mockResolvedValue(
       Response.json({
         ...manifest,
-        capabilities: { catalog: { version: 2, basePath: '/v2/catalog' } },
+        capabilities: { catalog: { version: 2, basePath: '/v1/catalog' } },
       })
     );
 
@@ -152,7 +206,6 @@ describe('RemoteServiceManager', () => {
   it('keeps the previous discovery state when a rediscovered schema is invalid', async () => {
     const { manager } = setupTest();
     let schemaRequests = 0;
-    let manifestRequests = 0;
     jest.spyOn(global, 'fetch').mockImplementation(async input => {
       const path = new URL(String(input)).pathname;
       if (path === SERVICE_MANIFEST_PATH) {
@@ -161,7 +214,7 @@ describe('RemoteServiceManager', () => {
           capabilities: {
             catalog: {
               version: 1,
-              basePath: manifestRequests++ === 0 ? '/v1/catalog' : '/v2/catalog',
+              basePath: '/v1/catalog',
             },
           },
         });
@@ -238,10 +291,7 @@ describe('RemoteServiceManager', () => {
     await manager.reload();
     manager.stop();
 
-    expect(requests.filter(request => request.path === '/configuration').at(-1)).toEqual({
-      path: '/configuration',
-      body: { values: {}, unsetKeys: ['API_TOKEN'] },
-    });
+    expect(requests.filter(request => request.path === '/configuration')).toEqual([]);
     expect(
       Object.keys(configuration.registerDynamicVariables.mock.calls.at(-1)?.[0] ?? {})
     ).toEqual(['CATALOG__API_TOKEN']);
@@ -358,7 +408,7 @@ describe('RemoteServiceManager', () => {
   });
 
   it('uses the remote observational configuration test endpoint without applying values', async () => {
-    const { configuration, manager } = setupTest();
+    const { manager } = setupTest();
     const requests: Array<{ path: string; method: string; body?: unknown }> = [];
     jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
       const path = new URL(String(input)).pathname;
@@ -397,10 +447,8 @@ describe('RemoteServiceManager', () => {
 
     await manager.initialize();
     requests.length = 0;
-    (configuration.getDynamic as jest.Mock).mockReturnValueOnce('draft-token');
-
     await expect(
-      (manager as unknown as { testConfiguration(): Promise<unknown> }).testConfiguration()
+      manager.testConfiguration([{ key: 'CATALOG__API_TOKEN', value: 'draft-token' }])
     ).resolves.toEqual({ success: true, mode: 'live', message: 'Catalog provider is reachable' });
     manager.stop();
 

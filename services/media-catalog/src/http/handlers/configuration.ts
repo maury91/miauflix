@@ -40,7 +40,7 @@ export const registerConfigurationRoutes = (router: Router, ctx: ServiceContext)
   // Live probe with candidate values, without persisting anything.
   router.add('POST', CONFIGURATION_TEST_PATH, async ({ req, json }) => {
     const mutation = await readMutation(req);
-    const result = await ctx.config.test(mutation.values);
+    const result = await ctx.config.test(mutation.values, mutation.unsetKeys);
     return json(serviceConfigTestResultSchema.parse(result), result.success ? 200 : 400);
   });
 };

@@ -28,6 +28,7 @@ export interface ConfigEntryView {
   hasValue: boolean;
   inputType: 'boolean' | 'number' | 'select' | 'size' | 'text' | 'time';
   booleanStateDescriptions?: { true: string; false: string };
+  defaultValueSource?: 'browser-origin';
   numberOptions?: {
     min?: number;
     max?: number;

@@ -2,19 +2,20 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync 
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
+import type { ConfigurationProbe } from '@miauflix/service-configuration';
 import { describe, expect, it } from 'bun:test';
 
 import { CatalogRuntime } from '../src/catalog/bootstrap';
-import { CatalogConfigService, type ConfigProber } from '../src/config/config.service';
+import { CatalogConfigService } from '../src/config/config.service';
 import { CatalogDatabase } from '../src/db/database';
 import type { ServiceContext } from '../src/service-context';
 
-const prober = (ok: boolean): ConfigProber => ({
+const prober = (ok: boolean): ConfigurationProbe => ({
   test: async () => ({ success: ok, message: ok ? 'provider ready' : 'probe failed' }),
 });
 
 const makeConfig = (
-  prober: ConfigProber,
+  prober: ConfigurationProbe,
   env: Record<string, string | undefined> = {}
 ): { config: CatalogConfigService; dataDir: string } => {
   const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
@@ -45,23 +46,16 @@ describe('CatalogConfigService', () => {
     rmSync(dataDir, { recursive: true, force: true });
   });
 
-  it('falls through empty pushed and environment candidates to persisted values', () => {
+  it('loads owned values from the shared configuration file', () => {
     const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
     writeFileSync(
-      join(dataDir, 'catalog.config.json'),
+      join(dataDir, 'config.json'),
       JSON.stringify({
-        values: {
-          TMDB_API_URL: 'https://file.example/3',
-          TMDB_API_ACCESS_TOKEN: 'file-token',
-        },
+        CATALOG__TMDB_API_URL: 'https://file.example/3',
+        CATALOG__TMDB_API_ACCESS_TOKEN: 'file-token',
       })
     );
     const config = new CatalogConfigService(dataDir, { TMDB_API_URL: '' });
-
-    // An empty pushed candidate must never hide the persisted fallback either.
-    (config as unknown as { pushedValues: Record<string, string> }).pushedValues[
-      'TMDB_API_ACCESS_TOKEN'
-    ] = '';
 
     expect(config.resolve('TMDB_API_URL')).toBe('https://file.example/3');
     expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('file-token');
@@ -81,9 +75,9 @@ describe('CatalogConfigService', () => {
     expect(config.state).toBe('ready');
     expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('pushed-token');
 
-    const persisted = JSON.parse(readFileSync(join(dataDir, 'catalog.config.json'), 'utf8'));
-    expect(persisted.values.TMDB_API_ACCESS_TOKEN).toBe('pushed-token');
-    expect(statSync(join(dataDir, 'catalog.config.json')).mode & 0o777).toBe(0o600);
+    const persisted = JSON.parse(readFileSync(join(dataDir, 'config.json'), 'utf8'));
+    expect(persisted.CATALOG__TMDB_API_ACCESS_TOKEN).toMatch(/^enc:/);
+    expect(statSync(join(dataDir, 'config.json')).mode & 0o777).toBe(0o600);
     rmSync(dataDir, { recursive: true, force: true });
   });
 
@@ -103,13 +97,13 @@ describe('CatalogConfigService', () => {
     });
 
     await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'known-good-token' });
-    const persistedBefore = readFileSync(join(dataDir, 'catalog.config.json'), 'utf8');
+    const persistedBefore = readFileSync(join(dataDir, 'config.json'), 'utf8');
 
     const result = await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'bad-token' });
 
     expect(result).toMatchObject({ success: false, reloaded: false });
     expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('known-good-token');
-    expect(readFileSync(join(dataDir, 'catalog.config.json'), 'utf8')).toBe(persistedBefore);
+    expect(readFileSync(join(dataDir, 'config.json'), 'utf8')).toBe(persistedBefore);
     expect(activeToken).toBe('known-good-token');
     expect(config.state).toBe('ready');
     rmSync(dataDir, { recursive: true, force: true });
@@ -120,28 +114,23 @@ describe('CatalogConfigService', () => {
     const config = new CatalogConfigService(dataDir, {});
     config.registerProber(prober(true));
     await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'known-good-token' });
-    const previousFile = readFileSync(join(dataDir, 'catalog.config.json'), 'utf8');
+    const previousFile = readFileSync(join(dataDir, 'config.json'), 'utf8');
     let fileDuringActivation = '';
 
     config.registerProber({
       test: async () => ({ success: true, message: 'provider ready' }),
       activate: async () => {
-        fileDuringActivation = readFileSync(join(dataDir, 'catalog.config.json'), 'utf8');
+        fileDuringActivation = readFileSync(join(dataDir, 'config.json'), 'utf8');
         return { success: true, message: 'provider ready' };
       },
     });
 
     await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'candidate-token' });
 
-    expect(fileDuringActivation).toBe(previousFile);
-    expect(JSON.parse(readFileSync(join(dataDir, 'catalog.config.json'), 'utf8')).values).toEqual({
-      TMDB_API_ACCESS_TOKEN: 'candidate-token',
-    });
-
-    writeFileSync(
-      join(dataDir, 'catalog.config.json.pending'),
-      JSON.stringify({ values: { TMDB_API_ACCESS_TOKEN: 'stale-candidate' } })
-    );
+    expect(fileDuringActivation).not.toBe(previousFile);
+    expect(
+      JSON.parse(readFileSync(join(dataDir, 'config.json'), 'utf8')).CATALOG__TMDB_API_ACCESS_TOKEN
+    ).toMatch(/^enc:/);
     const restarted = new CatalogConfigService(dataDir, {});
     expect(restarted.resolve('TMDB_API_ACCESS_TOKEN')).toBe('candidate-token');
     rmSync(dataDir, { recursive: true, force: true });
@@ -151,9 +140,12 @@ describe('CatalogConfigService', () => {
     const dataPath = join(tmpdir(), `catalog-config-file-${Date.now()}`);
     writeFileSync(dataPath, 'not a directory');
     let activated = false;
-    const config = new CatalogConfigService(dataPath, {
-      TMDB_API_ACCESS_TOKEN: 'env-token',
-    });
+    const config = new CatalogConfigService(
+      dataPath,
+      { TMDB_API_ACCESS_TOKEN: 'env-token' },
+      dataPath,
+      join(tmpdir(), `catalog-key-${Date.now()}`)
+    );
     config.registerProber({
       test: async () => ({ success: true, message: 'provider ready' }),
       activate: async () => {
@@ -162,11 +154,10 @@ describe('CatalogConfigService', () => {
       },
     });
 
-    await expect(
-      config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'candidate-token' })
-    ).rejects.toThrow();
+    const result = await config.applyRemote({ TMDB_API_ACCESS_TOKEN: 'candidate-token' });
+    expect(result.success).toBe(false);
     expect(activated).toBe(false);
-    expect(config.state).toBe('standby');
+    expect(config.state).toBe('error');
     expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('env-token');
     rmSync(dataPath, { force: true });
   });
@@ -266,7 +257,7 @@ describe('CatalogConfigService', () => {
     expect(result.mode).toBe('live');
     expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('');
     expect(config.state).toBe('standby');
-    expect(existsSync(join(dataDir, 'catalog.config.json'))).toBe(false);
+    expect(existsSync(join(dataDir, 'config.json'))).toBe(false);
     rmSync(dataDir, { recursive: true, force: true });
   });
 
@@ -279,6 +270,8 @@ describe('CatalogConfigService', () => {
         host: '127.0.0.1',
         port: 3001,
         dataDir,
+        configFile: join(dataDir, 'config.json'),
+        keyFile: join(dataDir, '.catalog-key'),
         disableBackgroundTasks: true,
         bunqueue: { host: '127.0.0.1', port: 6789 },
       },

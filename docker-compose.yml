@@ -66,14 +66,14 @@ services:
         condition: service_healthy
     environment:
       - DATA_DIR=/app/data
+      - CATALOG_CONFIG_FILE=/shared/config.json
       - BUNQUEUE_HOST=127.0.0.1
       - BUNQUEUE_PORT=6789
-      # Optional bootstrap fallback only — the main app pushes the authoritative
-      # catalog configuration (including this token) once it has read config.json.
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-}
       - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
     volumes:
       - ./data:/app/data/
+      - ./data:/shared
     network_mode: service:vpn # Reach the catalog provider through NordVPN
     restart: unless-stopped
 
@@ -88,14 +88,15 @@ services:
         condition: service_healthy
     environment:
       - LIST_SERVICE_DATA_DIR=/app/data
+      - LIST_SERVICE_CONFIG_FILE=/shared/config.json
       - LIST_SERVICE_PORT=3002
       - TRAKT_API_URL=${TRAKT_API_URL:-https://api.trakt.tv}
       - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-}
       - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-}
       - TRAKT_REDIRECT_URI=${TRAKT_REDIRECT_URI:-}
-      - LIST_SERVICE_ENCRYPTION_KEY=${LIST_SERVICE_ENCRYPTION_KEY:-}
     volumes:
       - ./data/list-service:/app/data
+      - ./data:/shared
     network_mode: service:vpn
     restart: unless-stopped
 

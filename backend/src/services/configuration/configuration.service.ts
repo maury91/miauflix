@@ -1,6 +1,7 @@
 import { logger } from '@logger';
+import { ConfigStore } from '@miauflix/service-contracts';
 import chalk from 'chalk';
-import { mkdirSync, readFileSync } from 'fs';
+import { mkdirSync } from 'fs';
 import path from 'path';
 
 import { ConfigurationServiceError } from '@errors/configuration.errors';
@@ -29,11 +30,9 @@ import {
   configureService,
   getDefaultValue,
   handlerFromInstance,
-  isFileDataEntry,
   isNonInteractiveMode,
   isServiceName,
   isValidConfigUpdate,
-  persistConfigFile,
   resolveVariableInfo,
   saveToEnvFile,
   validateExistingConfiguration,
@@ -55,9 +54,12 @@ export class ConfigurationService {
   /** On-disk representation of config.json (secrets have enc: prefix) */
   private _fileData: Partial<Record<VariableName, string>> = {};
   private _filePath: string | null = null;
+  private _configStore: ConfigStore | null = null;
   /** Raw string values: env snapshot + auto-generated + file-loaded + runtime set */
   private _rawValues = new Map<VariableName, string>();
   private _variablesInfo = new Map<VariableName, ExtendedVariableInfo>();
+  /** Variables whose values are owned and interpreted by this Backend process. */
+  private readonly _localVariableNames = new Set<VariableName>();
   /** Names currently published by each runtime-registered service. */
   private _dynamicVariableNames = new Map<ServiceName, Set<VariableName>>();
   /** Services that have self-registered with their live instance */
@@ -74,6 +76,7 @@ export class ConfigurationService {
           ...variableConfig,
           serviceName,
         });
+        this._localVariableNames.add(variableName);
       }
     }
   }
@@ -114,6 +117,7 @@ export class ConfigurationService {
 
     mkdirSync(dataDir, { recursive: true });
     this._filePath = path.join(dataDir, 'config.json');
+    this._configStore = new ConfigStore({ filePath: this._filePath });
 
     this.loadConfigFile();
     this.precomputeValues();
@@ -121,9 +125,9 @@ export class ConfigurationService {
 
   /**
    * Registers runtime-declared variables (e.g. a remote service's published
-   * schema) after init(): snapshots env for them, re-reads persisted values from
-   * config.json — loadConfigFile skips unknown keys, so dynamic keys need a second
-   * pass once they are known — and precomputes their transforms.
+   * schema) after init(). Remote values are deliberately not loaded: the remote
+   * service owns and decrypts them. The schema is retained for wizard metadata
+   * and request routing only.
    */
   registerDynamicVariables(
     variables: Record<string, VariableInfo>,
@@ -142,16 +146,11 @@ export class ConfigurationService {
       }
     }
 
-    const registeredVariableNames: VariableName[] = [];
     for (const [name, info] of Object.entries(variables)) {
       const variableName = name as VariableName;
       this._variablesInfo.set(variableName, { ...info, serviceName });
-      registeredVariableNames.push(variableName);
     }
     this._dynamicVariableNames.set(serviceName, nextVariableNames);
-    this.autoConfigureDefaults(registeredVariableNames);
-    this.loadConfigFile();
-    this.precomputeValues();
   }
 
   /**
@@ -193,7 +192,9 @@ export class ConfigurationService {
    */
   private precomputeValues(): void {
     const cv = this._computedValues as Record<keyof EnvironmentVariableTypes, unknown>;
-    for (const [varName, varInfo] of this._variablesInfo) {
+    for (const varName of this._localVariableNames) {
+      const varInfo = this._variablesInfo.get(varName);
+      if (!varInfo) continue;
       const raw = this._rawValues.get(varName) ?? '';
       try {
         cv[varName] = applyTransform(varName, varInfo, raw);
@@ -248,52 +249,36 @@ export class ConfigurationService {
   }
 
   private loadConfigFile(): void {
-    if (!this._filePath || !this._encryptionService) return;
-    try {
-      const content = readFileSync(this._filePath, 'utf-8');
-      const fileData = JSON.parse(content);
-      this._fileData = {};
-      if (typeof fileData !== 'object' || !fileData) {
-        throw new ConfigurationServiceError(
-          'configuration file does not contain the right format',
-          'invalid_config_file'
-        );
-      }
-      for (const fileDataEntry of Object.entries(fileData)) {
-        if (isFileDataEntry(fileDataEntry)) {
-          const [key, raw] = fileDataEntry;
-          let value = raw;
-          if (raw.startsWith(ENC_PREFIX)) {
-            try {
-              value = this._encryptionService.decryptString(
-                raw.slice(ENC_PREFIX.length),
-                true,
-                false
-              );
-            } catch {
-              logger.warn(
-                'Config',
-                `${key}: saved encrypted value cannot be decrypted; ignoring it and keeping the current value`
-              );
-              continue;
-            }
-          }
-          this._rawValues.set(key, value);
-          this._fileData[key] = raw; // keep on-disk form (enc:... for secrets, plain otherwise)
+    if (!this._configStore || !this._encryptionService) return;
+    this._fileData = {};
+    const fileData = this._configStore.readSync(this._localVariableNames);
+    for (const [key, raw] of Object.entries(fileData)) {
+      this._fileData[key as VariableName] = raw;
+      let value = raw;
+      if (raw.startsWith(ENC_PREFIX)) {
+        try {
+          value = this._encryptionService.decryptString(raw.slice(ENC_PREFIX.length), true, false);
+        } catch {
+          logger.warn(
+            'Config',
+            `${key}: saved encrypted value cannot be decrypted; ignoring it and keeping the current value`
+          );
+          continue;
         }
       }
-    } catch (err) {
-      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
-        // file doesn't exist yet — start empty
-        return;
-      }
-      throw err;
+      this._rawValues.set(key as VariableName, value);
     }
   }
 
-  private saveConfigFile(): void {
-    if (!this._filePath) return;
-    persistConfigFile(this._filePath, this._fileData);
+  private async saveConfigFile(): Promise<void> {
+    if (!this._configStore) return;
+    const values = Object.fromEntries(
+      [...this._localVariableNames]
+        .map(key => [key, this._fileData[key]])
+        .filter((entry): entry is [VariableName, string] => typeof entry[1] === 'string')
+    );
+    const stored = await this._configStore.update(this._localVariableNames, { values });
+    for (const [key, value] of Object.entries(stored)) this._fileData[key as VariableName] = value;
   }
 
   /**
@@ -324,7 +309,7 @@ export class ConfigurationService {
       this._fileData[key] = isSecret
         ? ENC_PREFIX + this._encryptionService.encryptString(value)
         : value;
-      this.saveConfigFile();
+      await this.saveConfigFile();
     }
     return true;
   }
@@ -350,9 +335,14 @@ export class ConfigurationService {
       objectKeys(services).forEach(k => servicesNeedingConfiguration.add(k));
     } else {
       for (const [serviceKey, service] of objectEntries(services)) {
-        const missingRequiredVars = objectEntries(service.variables)
-          .filter(([varName, varInfo]) => varInfo.required && !this._rawValues.get(varName))
-          .map(([varName]) => varName);
+        const remoteReady =
+          this._registeredServices.get(serviceKey)?.applyConfiguration &&
+          this._registeredServices.get(serviceKey)?.getStatus().status === 'ready';
+        const missingRequiredVars = remoteReady
+          ? []
+          : objectEntries(service.variables)
+              .filter(([varName, varInfo]) => varInfo.required && !this._rawValues.get(varName))
+              .map(([varName]) => varName);
 
         if (missingRequiredVars.length > 0) {
           servicesNeedingConfiguration.add(serviceKey);
@@ -437,6 +427,14 @@ export class ConfigurationService {
           const configuredValues = await configureService(service, {
             currentValues,
             applyValues: async values => {
+              if (registeredInstance?.applyConfiguration) {
+                const result = await registeredInstance.applyConfiguration(
+                  Object.entries(values).map(([key, value]) => ({ key, value: String(value) }))
+                );
+                if (!result.success)
+                  throw new Error(result.message ?? `${serviceKey} configuration failed`);
+                return;
+              }
               for (const [varName, value] of objectEntries(values)) {
                 await this.setValue(varName, value);
               }
@@ -459,6 +457,10 @@ export class ConfigurationService {
 
     // Persist any auto-configured vars that haven't been saved to file yet
     for (const key of changedVarKeys) {
+      const owner = this._variablesInfo.get(key)?.serviceName;
+      if (owner && this._registeredServices.get(owner)?.applyConfiguration) {
+        continue;
+      }
       const varKey = key;
       const value = this._rawValues.get(varKey);
       if (value) {
@@ -569,6 +571,8 @@ export class ConfigurationService {
   }
 
   getMissingVarsForGroup(group: keyof typeof services): string[] {
+    const instance = this._registeredServices.get(group);
+    if (instance?.testable && instance.getStatus().status === 'ready') return [];
     return computeMissingVarsForGroup(group, this._rawValues);
   }
 
@@ -800,7 +804,7 @@ export class ConfigurationService {
       const needsProcessRestart: ServiceName[] = [];
       let applyingService: ServiceName | undefined;
       try {
-        if (changedServices.size > 0) this.saveConfigFile();
+        if (changedServices.size > 0) await this.saveConfigFile();
         for (const serviceName of changedServices) {
           applyingService = serviceName;
           if (services[serviceName].restartable === false) {
@@ -833,7 +837,7 @@ export class ConfigurationService {
         this._rawValues = rawSnapshot;
         this._computedValues = computedSnapshot;
         this._fileData = fileSnapshot;
-        this.saveConfigFile();
+        await this.saveConfigFile();
         await this.restoreRuntimeServices(changedServices);
         const failedService = applyingService ?? [...changedServices][0];
         if (failedService) {
@@ -881,6 +885,10 @@ export class ConfigurationService {
     serviceName: ServiceName,
     entries: { key: string; value: string }[]
   ): Promise<TestConfigsResult> {
+    const remote = this._registeredServices.get(serviceName);
+    if (remote?.testConfiguration && remote.applyConfiguration) {
+      return this.runRemoteConfigAction(serviceName, entries, false);
+    }
     return this.runConfigAction(entries, [serviceName], false) as Promise<TestConfigsResult>;
   }
 
@@ -888,6 +896,10 @@ export class ConfigurationService {
     serviceName: ServiceName,
     entries: { key: string; value: string }[]
   ): Promise<SaveConfigsResult> {
+    const remote = this._registeredServices.get(serviceName);
+    if (remote?.testConfiguration && remote.applyConfiguration) {
+      return this.runRemoteConfigAction(serviceName, entries, true) as Promise<SaveConfigsResult>;
+    }
     return this.runConfigAction(entries, [serviceName], true) as Promise<SaveConfigsResult>;
   }
 
@@ -898,7 +910,92 @@ export class ConfigurationService {
     const serviceNames = entries
       .map(entry => this._variablesInfo.get(entry.key)?.serviceName)
       .filter((serviceName): serviceName is ServiceName => Boolean(serviceName));
-    return this.runConfigAction(entries, serviceNames, true) as Promise<SaveConfigsResult>;
+    if (
+      serviceNames.every(
+        serviceName => !this._registeredServices.get(serviceName)?.applyConfiguration
+      )
+    ) {
+      return this.runConfigAction(
+        entries,
+        [...new Set(serviceNames)],
+        true
+      ) as Promise<SaveConfigsResult>;
+    }
+    const grouped = new Map<ServiceName, { key: string; value: string }[]>();
+    for (const entry of entries) {
+      const serviceName = this._variablesInfo.get(entry.key)?.serviceName;
+      if (!serviceName) continue;
+      grouped.set(serviceName, [...(grouped.get(serviceName) ?? []), entry]);
+    }
+    const results = await Promise.all(
+      [...grouped.entries()].map(([serviceName, serviceEntries]) =>
+        this._registeredServices.get(serviceName)?.applyConfiguration
+          ? this.runRemoteConfigAction(serviceName, serviceEntries, true)
+          : this.runConfigAction(serviceEntries, [serviceName], true)
+      )
+    );
+    const services = results.flatMap(result => result.services);
+    return {
+      success: results.every(result => result.success),
+      services,
+      restarted: results.flatMap(result => ('restarted' in result ? result.restarted : [])),
+      needsProcessRestart: results.flatMap(result =>
+        'needsProcessRestart' in result ? result.needsProcessRestart : []
+      ),
+      changed: results.flatMap(result => ('changed' in result ? result.changed : [])),
+      recovered: results.flatMap(result => ('recovered' in result ? result.recovered : [])),
+    };
+  }
+
+  private async runRemoteConfigAction(
+    serviceName: ServiceName,
+    entries: { key: string; value: string }[],
+    save: boolean
+  ): Promise<SaveConfigsResult | TestConfigsResult> {
+    const instance = this._registeredServices.get(serviceName);
+    if (!instance?.testConfiguration || !instance.applyConfiguration) {
+      throw new ConfigurationServiceError(
+        `Service '${serviceName}' does not support remote configuration`,
+        'service_not_registered'
+      );
+    }
+    try {
+      const result = save
+        ? await instance.applyConfiguration(entries)
+        : await instance.testConfiguration(entries);
+      const serviceResult = {
+        service: serviceName,
+        success: result.success,
+        testMode: 'live' as const,
+        message: result.message ?? `${serviceName} configuration ${save ? 'saved' : 'tested'}.`,
+      };
+      if (!save) return { success: result.success, services: [serviceResult] };
+      return {
+        success: result.success,
+        services: [serviceResult],
+        restarted: result.success ? [serviceName] : [],
+        needsProcessRestart: [],
+        changed: result.success ? [serviceName] : [],
+        recovered: [],
+      };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      const serviceResult = {
+        service: serviceName,
+        success: false,
+        testMode: 'live' as const,
+        message,
+      };
+      if (!save) return { success: false, services: [serviceResult] };
+      return {
+        success: false,
+        services: [serviceResult],
+        restarted: [],
+        needsProcessRestart: [],
+        changed: [],
+        recovered: [],
+      };
+    }
   }
 
   async updateConfigs(entries: { key: string; value: string }[]): Promise<UpdateConfigsResult> {

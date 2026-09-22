@@ -79,7 +79,6 @@ services:
     environment:
       - LIST_SERVICE_PORT=3002
       - LIST_SERVICE_DATA_DIR=/app/data
-      - LIST_SERVICE_ENCRYPTION_KEY=e2e-list-service-key
       - TRAKT_API_URL=http://trakt-mock
       - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-mock-trakt-client-id}
       - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}

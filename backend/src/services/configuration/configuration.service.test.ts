@@ -46,7 +46,7 @@ function setupLiveCatalog() {
 }
 
 describe('ConfigurationService web configuration actions', () => {
-  it('applies a non-empty default to an absent optional dynamic string', () => {
+  it('keeps remote defaults out of Backend runtime values', () => {
     const configuration = setupTest();
 
     configuration.registerDynamicVariables(
@@ -60,7 +60,7 @@ describe('ConfigurationService web configuration actions', () => {
       'CATALOG'
     );
 
-    expect(configuration.getDynamic(dynamicVariableName)).toBe('dynamic-default');
+    expect(configuration.getDynamic(dynamicVariableName)).toBeUndefined();
   });
 
   it('removes dynamic variables omitted from a rediscovered schema', () => {
@@ -78,7 +78,7 @@ describe('ConfigurationService web configuration actions', () => {
       'CATALOG'
     );
 
-    expect(configuration.getDynamic('CATALOG__RETAINED')).toBe('yes');
+    expect(configuration.getDynamic('CATALOG__RETAINED')).toBeUndefined();
     expect(configuration.getDynamic('CATALOG__REMOVED')).toBeUndefined();
   });
 

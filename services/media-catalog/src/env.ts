@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 /**
  * Environment knobs of the media-catalog service.
  *
@@ -10,6 +12,8 @@ export interface ServiceEnv {
   host: string;
   port: number;
   dataDir: string;
+  configFile?: string;
+  keyFile?: string;
   disableBackgroundTasks: boolean;
   bunqueue: { host: string; port: number; token?: string };
 }
@@ -23,10 +27,13 @@ const int = (value: string | undefined, fallback: number): number => {
 };
 
 export function loadEnv(env: Record<string, string | undefined> = process.env): ServiceEnv {
+  const dataDir = env.CATALOG_DATA_DIR ?? env.DATA_DIR ?? './data';
   return {
     host: env.CATALOG_HOST ?? '0.0.0.0',
     port: int(env.CATALOG_PORT, 3001),
-    dataDir: env.CATALOG_DATA_DIR ?? env.DATA_DIR ?? './data',
+    dataDir,
+    configFile: env.CATALOG_CONFIG_FILE ?? join(dataDir, 'config.json'),
+    keyFile: env.CATALOG_KEY_FILE ?? join(dataDir, '.catalog-key'),
     disableBackgroundTasks: bool(
       env.CATALOG_DISABLE_BACKGROUND_TASKS ?? env.DISABLE_BACKGROUND_TASKS
     ),

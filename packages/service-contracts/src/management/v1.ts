@@ -51,10 +51,14 @@ export const configInputTypeSchema = z.enum(['boolean', 'number', 'password', 's
 export const configVariableSchema = z.object({
   key: z.string().regex(/^[A-Z][A-Z0-9_]*$/),
   description: z.string(),
+  label: z.string().optional(),
   required: z.boolean(),
+  advanced: z.boolean().optional(),
+  skipUserInteraction: z.boolean().optional(),
   secret: z.boolean().optional(),
   inputType: configInputTypeSchema,
   defaultValue: z.string().optional(),
+  defaultValueSource: z.enum(['browser-origin']).optional(),
   example: z.string().optional(),
   options: z.record(z.string(), z.string()).optional(),
   numberOptions: z

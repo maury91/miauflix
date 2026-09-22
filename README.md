@@ -224,11 +224,11 @@ TRAKT_API_URL=https://api.trakt.tv
 TRAKT_CLIENT_ID=your_trakt_client_id
 TRAKT_CLIENT_SECRET=your_trakt_client_secret
 TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
-LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 ```
 
-The Trakt credentials and `LIST_SERVICE_ENCRYPTION_KEY` are optional only when
-the standalone List Service is disabled or unused.
+The Trakt credentials are optional only when the standalone List Service is
+disabled or unused. The List Service generates and persists its encryption key
+automatically in its data directory.
 
 > **Note**: If running in a non-interactive environment, you'll need to set all required environment variables manually.
 

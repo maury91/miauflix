@@ -54,6 +54,36 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
+# Docker Desktop accesses bind-mount sources through the logged-in macOS user.
+# Service directories still need their container UID/GID ownership, so grant
+# the host user an inheritable ACL instead of weakening their POSIX modes.
+ensure_docker_desktop_access() {
+  local target_dir="$1"
+
+  if [ "$(uname -s)" != "Darwin" ]; then
+    return 0
+  fi
+
+  if [ -r "$target_dir" ] && [ -w "$target_dir" ] && [ -x "$target_dir" ]; then
+    return 0
+  fi
+
+  local host_user
+  host_user=$(id -un)
+  local host_acl="user:${host_user} allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit"
+
+  if chmod +a "$host_acl" "$target_dir" 2>/dev/null; then
+    return 0
+  fi
+
+  if command_exists sudo && sudo chmod +a "$host_acl" "$target_dir"; then
+    return 0
+  fi
+
+  print_error "Cannot grant ${host_user} access to ${target_dir} for Docker Desktop."
+  return 1
+}
+
 # Prepare the host-visible data directories used by the Docker services.
 # The catalog image runs as linuxserver (UID/GID 911) in production, while the
 # development compose stack shares the parent directory with the backend. Do
@@ -111,35 +141,40 @@ ensure_data_dir() {
 
   # Keep the host owner for the backend and share the directory with the
   # catalog's fixed UID/GID without granting access to every local account.
+  local service_access_ready=false
   if chgrp 911 "$data_dir" "$catalog_data_dir" 2>/dev/null && \
     chmod 2770 "$data_dir" 2>/dev/null && chmod 0770 "$catalog_data_dir" 2>/dev/null; then
-    return 0
-  fi
-
-  if command_exists sudo && \
+    service_access_ready=true
+  elif command_exists sudo && \
     sudo chgrp 911 "$data_dir" "$catalog_data_dir" && \
     sudo chmod 2770 "$data_dir" && sudo chmod 0770 "$catalog_data_dir"; then
-    return 0
+    service_access_ready=true
   fi
 
-  # Some host systems do not expose the catalog GID to the invoking user.
-  # Grant only UID 911 access through the host ACL instead of opening the
-  # directories to every local account.
-  chmod 0700 "$data_dir" "$catalog_data_dir" 2>/dev/null || true
-  if command_exists setfacl && \
-    setfacl -m u:911:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-    setfacl -d -m u:911:rwx "$catalog_data_dir" 2>/dev/null; then
-    return 0
+  if [ "$service_access_ready" != "true" ]; then
+    # Some host systems do not expose the catalog GID to the invoking user.
+    # Grant only UID 911 access through the host ACL instead of opening the
+    # directories to every local account.
+    chmod 0700 "$data_dir" "$catalog_data_dir" 2>/dev/null || true
+    if command_exists setfacl && \
+      setfacl -m u:911:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+      setfacl -d -m u:911:rwx "$catalog_data_dir" 2>/dev/null; then
+      service_access_ready=true
+    elif [ "$(uname -s)" = "Darwin" ] && \
+      chmod +a "user:911 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null; then
+      service_access_ready=true
+    fi
   fi
 
-  if [ "$(uname -s)" = "Darwin" ] && \
-    chmod +a "user:911 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null; then
-    return 0
+  if [ "$service_access_ready" != "true" ]; then
+    print_error "Cannot make ${data_dir} writable for the Docker services."
+    print_status "Run: sudo chgrp 911 ${data_dir} ${catalog_data_dir} && sudo chmod 2770 ${data_dir} && sudo chmod 0770 ${catalog_data_dir}"
+    return 1
   fi
 
-  print_error "Cannot make ${data_dir} writable for the Docker services."
-  print_status "Run: sudo chgrp 911 ${data_dir} ${catalog_data_dir} && sudo chmod 2770 ${data_dir} && sudo chmod 0770 ${catalog_data_dir}"
-  return 1
+  ensure_docker_desktop_access "$data_dir" && \
+    ensure_docker_desktop_access "$catalog_data_dir" && \
+    ensure_docker_desktop_access "$list_service_data_dir"
 }
 
 # Function to get the appropriate docker compose command

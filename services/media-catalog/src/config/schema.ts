@@ -12,7 +12,7 @@ export const CATALOG_CONFIG_SCHEMA: CatalogConfigSchema = {
   name: 'Media Catalog',
   description:
     'Media catalog provider credentials and metadata freshness. ' +
-    'Values are stored by the main app and pushed to the catalog service.',
+    'Values are stored and activated by the catalog service.',
   variables: [
     {
       key: 'TMDB_API_URL',

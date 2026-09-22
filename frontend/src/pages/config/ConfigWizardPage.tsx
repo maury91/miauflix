@@ -213,9 +213,12 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
 
   const missingGroups = useMemo(() => {
     return Object.entries(groupedEntries)
-      .filter(([, entries]) => entries.some(e => e.required && !e.hasValue))
+      .filter(([group, entries]) => {
+        if (serviceStatuses[group]?.status === 'ready') return false;
+        return entries.some(e => e.required && !e.hasValue);
+      })
       .map(([group]) => group);
-  }, [groupedEntries]);
+  }, [groupedEntries, serviceStatuses]);
 
   const initiallySortedGroups = useMemo(
     () => sortServiceGroups(groupedEntries, serviceStatuses),

@@ -42,8 +42,9 @@ before it is configured:
 CATALOG_SERVICE_URL=http://localhost:3001
 ```
 
-Optional bootstrap fallback for the catalog service container itself (used only
-until the backend pushes the authoritative configuration):
+Catalog provider configuration is stored by the catalog service in the shared
+`data/config.json` file. The environment variable below is an optional
+standalone bootstrap value:
 
 ```bash
 # The Movie Database API access token - Required for movie/TV metadata
@@ -53,7 +54,7 @@ TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
 - **Description**: Access token for the catalog provider API (TMDB v3 today)
 - **Get from**: [TMDB API Settings](https://www.themoviedb.org/settings/api)
 - **Format**: JWT token starting with `eyJ`
-- **Precedence in the service**: backend push > environment > service-local file > default
+- **Precedence in the service**: shared config file > environment > default
 
 ### External API Integration
 
@@ -64,7 +65,6 @@ TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
 TRAKT_CLIENT_ID=your-client-id
 TRAKT_CLIENT_SECRET=your-client-secret
 TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
-LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 ```
 
 - **Description**: OAuth application credentials and the exact redirect URI configured for the Trakt.tv integration
@@ -244,13 +244,13 @@ WWW_DOMAIN=www.yourdomain.com
 
 ### Enhanced Features (Optional)
 
-1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + TRAKT_REDIRECT_URI + LIST_SERVICE_ENCRYPTION_KEY** - Standalone Trakt list service, required when that service is enabled
+1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + TRAKT_REDIRECT_URI** - Standalone Trakt list service, required when that service is enabled
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
 3. **ENABLE_FLARESOLVERR + FLARESOLVERR_URL** - Cloudflare bypass for protected content sources
 
 ### Advanced Configuration (Auto-configured)
 
-- JWT secrets and backend encryption keys are automatically generated; the List Service encryption key is service-owned and must be supplied separately
+- JWT, backend, catalog, and List Service encryption keys are generated automatically and persisted in the service data directories
 - Server settings use sensible defaults
 - Content source settings are optimized automatically
 

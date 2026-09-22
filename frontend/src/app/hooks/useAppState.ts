@@ -16,7 +16,10 @@ export function hasConfigurationIssue(
   configEntries: ConfigEntryView[] | undefined,
   serviceStatuses: ServiceStatuses | undefined
 ): boolean {
-  const hasMissingRequiredValue = configEntries?.some(entry => entry.required && !entry.hasValue);
+  const hasMissingRequiredValue = configEntries?.some(
+    entry =>
+      entry.required && !entry.hasValue && serviceStatuses?.[entry.serviceGroup]?.status !== 'ready'
+  );
   const hasMisconfiguredService = Object.values(serviceStatuses ?? {}).some(({ status }) =>
     ['needs_configuration', 'degraded', 'error'].includes(status)
   );

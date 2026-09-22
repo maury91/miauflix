@@ -314,7 +314,6 @@ TRAKT_CLIENT_ID=your_trakt_client_id
 TRAKT_CLIENT_SECRET=your_trakt_client_secret
 TRAKT_API_URL=https://api.trakt.tv
 TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
-LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
 NORDVPN_PRIVATE_KEY=your_nordvpn_private_key
 
 # Development
@@ -322,7 +321,7 @@ NODE_ENV=development
 LOG_LEVEL=debug
 ```
 
-These Trakt values are optional only when the List Service is disabled or unused. The service-owned encryption key must be supplied explicitly; the backend configuration wizard does not generate it.
+These Trakt values are optional only when the List Service is disabled or unused. The List Service generates and persists its encryption key automatically.
 
 ### Development Commands
 

@@ -1,6 +1,17 @@
 import { z } from 'zod';
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
+let traktCooldownUntil = 0;
+let cooldownWait: Promise<void> = Promise.resolve();
+
+const waitForCooldown = async (): Promise<void> => {
+  const remaining = traktCooldownUntil - Date.now();
+  if (remaining <= 0) return;
+  cooldownWait = cooldownWait.then(
+    () => new Promise<void>(resolve => setTimeout(resolve, Math.min(remaining, 30_000)))
+  );
+  await cooldownWait;
+};
 
 const deviceCodeSchema = z.object({
   device_code: z.string().min(1),
@@ -43,6 +54,7 @@ export class TraktClient {
     accessToken?: string
   ): Promise<{ data: unknown; headers: Headers }> {
     try {
+      await waitForCooldown();
       const response = await fetch(`${this.apiUrl}${path}`, {
         ...init,
         signal: init.signal ?? AbortSignal.timeout(this.requestTimeoutMs),
@@ -56,6 +68,14 @@ export class TraktClient {
       });
       if (!response.ok) {
         const body = await response.text();
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('retry-after');
+          const seconds = retryAfter && /^\d+$/.test(retryAfter) ? Number(retryAfter) : 5;
+          traktCooldownUntil = Math.max(
+            traktCooldownUntil,
+            Date.now() + Math.min(seconds, 30) * 1000
+          );
+        }
         throw new TraktProviderError(`Trakt API ${response.status}: ${body}`, response.status);
       }
       try {

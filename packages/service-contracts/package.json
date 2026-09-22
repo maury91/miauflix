@@ -27,7 +27,7 @@
     "build": "tsc -p tsconfig.json",
     "check:ts": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint src/",
-    "test": "npm run build && node --test dist/contracts.test.js",
+    "test": "npm run build && node --test dist/*.test.js",
     "clean": "rm -rf dist"
   },
   "dependencies": {
