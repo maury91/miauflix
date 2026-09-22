@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
-import { access, constants, mkdir } from 'fs/promises';
+import { access, constants, mkdir, rm } from 'fs/promises';
 import MemoryChunkStore from 'memory-chunk-store';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
@@ -47,8 +47,17 @@ export interface DownloadProgress {
   isComplete: boolean;
 }
 
+export interface WarmupResult {
+  sourceId: number;
+  targetBytes: number;
+  firstPiece: number;
+  lastPiece: number;
+}
+
 export class DownloadService {
   public readonly client: WebTorrent;
+  private activeStreams = 0;
+  private readonly activeSourceCounts = new Map<number, number>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -86,8 +95,9 @@ export class DownloadService {
     config.registerService('DOWNLOAD', this);
     void this.init();
 
-    // Subscribe to storageService 'delete' events
-    this.storageService.on('delete', async storage => {
+    const cleanupStorage = async (storage: Storage, strict: boolean): Promise<void> => {
+      const marker = storage as Storage & { physicalCleanupDone?: boolean };
+      if (marker.physicalCleanupDone) return;
       // Get the hash from the associated MovieSource
       const hash = storage.movieSource?.hash;
       if (!hash) {
@@ -95,18 +105,33 @@ export class DownloadService {
           'DownloadService',
           `No hash found for storage ${storage.id}, cannot remove torrent`
         );
+        if (strict) throw new Error(`No hash found for storage ${storage.id}`);
         return;
       }
 
       const torrent = await this.client.get(hash);
       if (torrent) {
-        this.client.remove(torrent, { destroyStore: true });
+        await Promise.resolve(this.client.remove(torrent, { destroyStore: true }));
         logger.info('DownloadService', `Removed torrent for deleted storage: ${storage.location}`);
       }
-    });
+      await rm(storage.location, { recursive: true, force: true });
+      marker.physicalCleanupDone = true;
+    };
+
+    // StorageService invokes the strict handler before deleting its database
+    // row. Keep the event hook for existing observers and unit-level callers.
+    this.storageService.registerDeleteHandler(storage => cleanupStorage(storage, true));
+    this.storageService.on('delete', storage => cleanupStorage(storage, false));
   }
 
   testable = true;
+  hasActivePlayback(): boolean {
+    return this.activeStreams > 0;
+  }
+
+  isPlaybackActive(sourceId: number): boolean {
+    return (this.activeSourceCounts.get(sourceId) ?? 0) > 0;
+  }
   getStatus(): ServiceInstanceStatus {
     return this._initStatus;
   }
@@ -281,7 +306,14 @@ export class DownloadService {
    * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
    */
   @traced('DownloadService')
-  async startDownload(source: MovieSource): Promise<GreedyDownload> {
+  async startDownload(
+    source: MovieSource,
+    options: {
+      retentionClass?: 'speculative' | 'watched';
+      reservedBytes?: number;
+      speculativeExpiresAt?: Date | null;
+    } = {}
+  ): Promise<GreedyDownload> {
     try {
       logger.info('DownloadService', `Starting download for source ${source.id}`);
 
@@ -294,6 +326,9 @@ export class DownloadService {
         size: source.size || 0,
         downloadedPieces: new Uint8Array(0),
         totalPieces: 0,
+        retentionClass: options.retentionClass,
+        reservedBytes: options.reservedBytes,
+        speculativeExpiresAt: options.speculativeExpiresAt,
       });
 
       // Add torrent with priority-specific configuration
@@ -306,6 +341,13 @@ export class DownloadService {
         totalPieces: torrent.numPieces,
         size: torrent.length,
       });
+      await this.storageService.updateTorrentLayout(
+        source.id,
+        torrent.numPieces,
+        torrent.pieceLength,
+        torrent.length
+      );
+      await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
       this.setupBitfieldTracking(torrent, source.id);
@@ -333,6 +375,52 @@ export class DownloadService {
         'greedy_download_failed'
       );
     }
+  }
+
+  /**
+   * Add a torrent without selecting the complete file. WebTorrent selection is
+   * piece-based, so the selected range is the smallest piece-aligned prefix
+   * that covers the initial playback target.
+   */
+  async warmSource(
+    source: MovieSource,
+    targetBytes: number,
+    speculativeExpiresAt: Date | null = null
+  ): Promise<WarmupResult> {
+    const target = Math.max(1, Math.min(Math.floor(targetBytes), source.size || targetBytes));
+    const download = await this.startDownload(source, {
+      retentionClass: 'speculative',
+      reservedBytes: target,
+      speculativeExpiresAt,
+    });
+    const file = getVideoFile(download.torrent);
+    const pieceLength = download.torrent.pieceLength;
+    const fileOffset = Number(file.offset ?? 0);
+    const firstPiece = Math.max(0, Math.floor(fileOffset / pieceLength));
+    const lastPiece = Math.min(
+      download.torrent.numPieces - 1,
+      Math.max(
+        firstPiece,
+        Math.ceil((fileOffset + Math.min(target, file.length)) / pieceLength) - 1
+      )
+    );
+
+    file.deselect();
+    download.torrent.select(firstPiece, lastPiece, 1);
+    return { sourceId: source.id, targetBytes: target, firstPiece, lastPiece };
+  }
+
+  async pauseSource(sourceId: number): Promise<boolean> {
+    return this.pauseDownload(sourceId);
+  }
+
+  /** Promote the already-added source; no source ranking or replacement occurs. */
+  async promoteSource(source: MovieSource): Promise<boolean> {
+    const download = await this.startDownload(source, { retentionClass: 'watched' });
+    const file = getVideoFile(download.torrent);
+    file.select();
+    await this.storageService.markAsAccessed(source.id);
+    return true;
   }
 
   /**
@@ -627,6 +715,12 @@ export class DownloadService {
         // Autofind the correct file
         const file = getVideoFile(torrent);
         file.select();
+        this.activeStreams += 1;
+        this.activeSourceCounts.set(
+          movieSource.id,
+          (this.activeSourceCounts.get(movieSource.id) ?? 0) + 1
+        );
+        await this.storageService.setPlaybackActive(movieSource.id, true);
 
         const headers: Record<string, string> = {
           'Accept-Ranges': 'bytes',
@@ -653,7 +747,7 @@ export class DownloadService {
         }
 
         const webReadableStream = new ReadableStream({
-          async start(controller) {
+          start: async controller => {
             try {
               const iterator = file[Symbol.asyncIterator](range || {});
 
@@ -689,6 +783,12 @@ export class DownloadService {
               }
             } catch (error) {
               controller.error(error);
+            } finally {
+              this.activeStreams = Math.max(0, this.activeStreams - 1);
+              const remaining = (this.activeSourceCounts.get(movieSource.id) ?? 1) - 1;
+              if (remaining > 0) this.activeSourceCounts.set(movieSource.id, remaining);
+              else this.activeSourceCounts.delete(movieSource.id);
+              await this.storageService.setPlaybackActive(movieSource.id, false);
             }
           },
 

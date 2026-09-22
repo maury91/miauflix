@@ -74,6 +74,13 @@ export class StorageRepository {
     await this.repository.update(id, updateData);
   }
 
+  async updateAccounting(
+    id: number,
+    accounting: Pick<Storage, 'allocatedBytes' | 'logicalBytes' | 'reservedBytes' | 'verifiedBytes'>
+  ): Promise<void> {
+    await this.repository.update(id, accounting);
+  }
+
   /**
    * Find storage records that haven't been accessed recently for cleanup
    */
@@ -119,6 +126,16 @@ export class StorageRepository {
     const result = await this.repository
       .createQueryBuilder('storage')
       .select('SUM(storage.size)', 'totalSize')
+      .getRawOne<{ totalSize: string }>();
+
+    return BigInt(result?.totalSize || 0);
+  }
+
+  /** Application charge: physical allocation, or the reservation until measured. */
+  async getChargedStorageUsage(): Promise<bigint> {
+    const result = await this.repository
+      .createQueryBuilder('storage')
+      .select('SUM(MAX(storage.allocatedBytes, storage.reservedBytes))', 'totalSize')
       .getRawOne<{ totalSize: string }>();
 
     return BigInt(result?.totalSize || 0);

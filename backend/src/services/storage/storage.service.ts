@@ -1,3 +1,6 @@
+import { randomUUID } from 'node:crypto';
+import { mkdir, open, readdir, stat, statfs, unlink } from 'node:fs/promises';
+
 import { logger } from '@logger';
 import { EventEmitter } from 'events';
 import type TypedEmitter from 'typed-emitter';
@@ -21,6 +24,9 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   private readonly storageRepository: StorageRepository;
   private maxStorageBytes: bigint;
   private readonly config: ConfigService;
+  private admissionTail: Promise<void> = Promise.resolve();
+  private allocationMode: AllocationMode = 'unknown';
+  private readonly deleteHandlers: Array<(storage: Storage) => Promise<void> | void> = [];
 
   constructor(db: Database, config: ConfigService) {
     super();
@@ -28,11 +34,17 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     this.storageRepository = db.getStorageRepository();
     this.maxStorageBytes = config.getOrThrow('STORAGE_THRESHOLD');
     config.registerService('STORAGE', this);
+    void this.probeAllocationMode();
   }
 
   testable = false;
   async reload(): Promise<void> {
     this.maxStorageBytes = this.config.getOrThrow('STORAGE_THRESHOLD');
+    await this.probeAllocationMode();
+  }
+
+  registerDeleteHandler(handler: (storage: Storage) => Promise<void> | void): void {
+    this.deleteHandlers.push(handler);
   }
 
   /**
@@ -46,8 +58,26 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     size: number;
     downloadedPieces?: Uint8Array;
     totalPieces?: number;
+    pieceLength?: number;
+    retentionClass?: 'speculative' | 'watched';
+    reservedBytes?: number;
+    speculativeExpiresAt?: Date | null;
   }): Promise<Storage> {
-    const { movieSourceId, location, size, downloadedPieces, totalPieces } = params;
+    const {
+      movieSourceId,
+      location,
+      size,
+      downloadedPieces,
+      totalPieces,
+      pieceLength,
+      retentionClass = 'watched',
+      reservedBytes = 0,
+      speculativeExpiresAt = null,
+    } = params;
+    const reservation =
+      reservedBytes > 0 && this.allocationMode !== 'sparse'
+        ? Math.max(reservedBytes, size)
+        : reservedBytes;
 
     // If a storage record already exists for this movieSourceId, return it
     const existing = await this.storageRepository.findByMovieSourceId(movieSourceId);
@@ -61,6 +91,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
 
     // Cleanup before creating new storage
     await this.cleanup(true);
+    if (reservation > 0) await this.assertAdmission(reservation);
 
     // Create empty bitfield if not provided
     const bitfield = downloadedPieces || new Uint8Array(0);
@@ -77,6 +108,16 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       size,
       downloadedPieces: bitfield,
       downloaded,
+      logicalBytes: size,
+      verifiedBytes: 0,
+      allocatedBytes: 0,
+      reservedBytes: reservation,
+      totalPieces: totalPieces ?? 0,
+      pieceLength: pieceLength ?? 0,
+      retentionClass,
+      lastInterestAt: new Date(),
+      speculativeExpiresAt,
+      activeStreams: 0,
       lastAccessAt: null,
       lastWriteAt: null,
     };
@@ -112,10 +153,36 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       size
     );
 
+    const verifiedBytes = size
+      ? Math.min(size, Math.round((downloaded / 10000) * size))
+      : storage.verifiedBytes;
+    await this.storageRepository.updateAccounting(storage.id, {
+      logicalBytes: size ?? storage.logicalBytes ?? storage.size,
+      verifiedBytes,
+      allocatedBytes: storage.allocatedBytes ?? 0,
+      reservedBytes: storage.reservedBytes ?? 0,
+    });
+
     logger.debug(
       'StorageService',
       `Updated download progress for movie source ${movieSourceId}: ${(downloaded / 100).toFixed(2)}%`
     );
+  }
+
+  async updateTorrentLayout(
+    movieSourceId: number,
+    totalPieces: number,
+    pieceLength: number,
+    logicalBytes: number
+  ): Promise<void> {
+    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    if (!storage) return;
+    await this.storageRepository.update(storage.id, {
+      totalPieces,
+      pieceLength,
+      logicalBytes,
+      size: logicalBytes,
+    });
   }
 
   /**
@@ -129,6 +196,11 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       return;
     }
 
+    await this.storageRepository.update(storage.id, {
+      lastInterestAt: new Date(),
+      retentionClass: 'watched',
+      speculativeExpiresAt: null,
+    });
     await this.storageRepository.updateLastAccess(storage.id);
 
     logger.debug('StorageService', `Updated last access time for storage ${storage.id}`);
@@ -162,9 +234,29 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       return 0;
     }
 
+    if ((storage.activeStreams ?? 0) > 0) {
+      logger.warn(
+        'StorageService',
+        `Refusing to remove active storage for source ${movieSourceId}`
+      );
+      return 0;
+    }
+
+    try {
+      await Promise.all(this.deleteHandlers.map(handler => handler(storage)));
+    } catch (error) {
+      logger.warn(
+        'StorageService',
+        `Physical cleanup failed for movie source ${movieSourceId}; keeping the database record`,
+        error
+      );
+      return 0;
+    }
+
     const success = await this.storageRepository.deleteByMovieSourceId(movieSourceId);
 
     if (success) {
+      (storage as Storage & { physicalCleanupDone?: boolean }).physicalCleanupDone = true;
       logger.info(
         'StorageService',
         `Removed storage record for movie source ${movieSourceId} at ${storage.location}`
@@ -181,6 +273,104 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   @traced('StorageService')
   async getTotalStorageUsage(): Promise<bigint> {
     return this.storageRepository.getTotalStorageUsage();
+  }
+
+  async getChargedStorageUsage(): Promise<bigint> {
+    return this.storageRepository.getChargedStorageUsage();
+  }
+
+  getAllocationMode(): AllocationMode {
+    return this.allocationMode;
+  }
+
+  async reconcileAllocation(movieSourceId: number): Promise<Storage | null> {
+    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    if (!storage) return null;
+    const allocatedBytes = await this.measureAllocatedBytes(storage.location);
+    await this.storageRepository.updateAccounting(storage.id, {
+      logicalBytes: storage.logicalBytes || storage.size,
+      verifiedBytes: storage.verifiedBytes || 0,
+      allocatedBytes,
+      reservedBytes: 0,
+    });
+    return this.storageRepository.findByMovieSourceId(movieSourceId);
+  }
+
+  async setPlaybackActive(movieSourceId: number, active: boolean): Promise<boolean> {
+    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    if (!storage) return false;
+    const activeStreams = Math.max(0, (storage.activeStreams ?? 0) + (active ? 1 : -1));
+    await this.storageRepository.update(storage.id, { activeStreams, lastInterestAt: new Date() });
+    return true;
+  }
+
+  private async assertAdmission(bytes: number): Promise<void> {
+    const run = this.admissionTail.then(async () => {
+      const charged = await this.storageRepository.getChargedStorageUsage();
+      if (charged + BigInt(bytes) > this.maxStorageBytes) {
+        throw new Error('Insufficient storage capacity');
+      }
+
+      try {
+        const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
+        const filesystem = await statfs(downloadPath);
+        const reserve = 256n * 1024n * 1024n;
+        if (BigInt(filesystem.bavail) * BigInt(filesystem.bsize) < BigInt(bytes) + reserve) {
+          throw new Error('Insufficient filesystem capacity');
+        }
+      } catch (error) {
+        if (error instanceof Error && error.message.startsWith('Insufficient')) throw error;
+        // A failed probe is conservative: application threshold still applies,
+        // and the backing store will be reconciled after it is opened.
+      }
+    });
+    this.admissionTail = run.then(
+      () => undefined,
+      () => undefined
+    );
+    await run;
+  }
+
+  private async probeAllocationMode(): Promise<void> {
+    let probePath: string | undefined;
+    let handle: Awaited<ReturnType<typeof open>> | undefined;
+    try {
+      const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
+      await mkdir(downloadPath, { recursive: true });
+      probePath = `${downloadPath}/.allocation-probe-${randomUUID()}`;
+      const logicalSize = 64 * 1024 * 1024;
+      handle = await open(probePath, 'w+');
+      await handle.truncate(logicalSize);
+      const block = Buffer.alloc(4096);
+      await handle.write(block, 0, block.length, 0);
+      await handle.write(block, 0, block.length, logicalSize - block.length);
+      const measured = await stat(probePath);
+      const allocated = measured.blocks > 0 ? measured.blocks * 512 : measured.size;
+      this.allocationMode = allocated < logicalSize / 2 ? 'sparse' : 'full';
+    } catch {
+      this.allocationMode = 'unknown';
+    } finally {
+      await handle?.close().catch(() => undefined);
+      if (probePath) await unlink(probePath).catch(() => undefined);
+    }
+  }
+
+  private async measureAllocatedBytes(location: string): Promise<number> {
+    const visit = async (path: string): Promise<number> => {
+      let entry;
+      try {
+        entry = await stat(path);
+      } catch {
+        return 0;
+      }
+      if (!entry.isDirectory()) {
+        return entry.blocks > 0 ? entry.blocks * 512 : entry.size;
+      }
+      const children = await readdir(path);
+      const sizes = await Promise.all(children.map(child => visit(`${path}/${child}`)));
+      return sizes.reduce((sum, value) => sum + value, 0);
+    };
+    return visit(location);
   }
 
   /**
@@ -323,3 +513,5 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     }
   }
 }
+
+export type AllocationMode = 'full' | 'sparse' | 'unknown';
