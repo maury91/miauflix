@@ -1,3 +1,5 @@
+import type { ServiceConfigSchema } from '@miauflix/service-contracts';
+
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
 
 import { ConfigurationService } from './configuration.service';
@@ -10,17 +12,15 @@ const catalogEntries = (url: string) => [
   { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '60000' },
 ];
 
-const dynamicVariableName = 'DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST';
-let restoreDynamicVariable: (() => void) | undefined;
-
 const setupTest = () => {
-  restoreDynamicVariable = clearEnvironmentVariable(dynamicVariableName);
+  clearEnvironmentVariable('DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST')();
   return new ConfigurationService();
 };
 
 afterEach(() => {
-  restoreDynamicVariable?.();
-  restoreDynamicVariable = undefined;
+  // Dynamic schema registration updates a process-wide presentation registry.
+  new ConfigurationService().registerRemoteConfiguration('CATALOG', { groups: [] });
+  new ConfigurationService().registerRemoteConfiguration('LIST', { groups: [] });
 });
 
 function setupLiveCatalog() {
@@ -46,40 +46,269 @@ function setupLiveCatalog() {
 }
 
 describe('ConfigurationService web configuration actions', () => {
-  it('keeps remote defaults out of Backend runtime values', () => {
+  it('registers discovered canonical keys and builds complete remote snapshots', () => {
     const configuration = setupTest();
 
-    configuration.registerDynamicVariables(
-      {
-        [dynamicVariableName]: {
-          description: 'Optional dynamic string',
-          required: false,
-          defaultValue: 'dynamic-default',
+    const schema: ServiceConfigSchema = {
+      groups: [
+        {
+          id: 'DYNAMIC_TEST_GROUP',
+          name: 'Dynamic test',
+          description: 'Test settings',
+          variables: [
+            {
+              key: 'DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST',
+              description: 'Optional dynamic string',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'dynamic-default',
+            },
+          ],
         },
-      },
-      'CATALOG'
-    );
+      ],
+    };
+    configuration.registerRemoteConfiguration('CATALOG', schema);
 
-    expect(configuration.getDynamic(dynamicVariableName)).toBeUndefined();
+    expect(configuration.getDynamic('DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST')).toBe(
+      'dynamic-default'
+    );
+    expect(configuration.getServiceConfigSnapshot('CATALOG')).toEqual({
+      DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST: 'dynamic-default',
+    });
   });
 
-  it('removes dynamic variables omitted from a rediscovered schema', () => {
+  it('removes omitted group variables from presentation on rediscovery without discarding stored values', async () => {
     const configuration = setupTest();
 
-    configuration.registerDynamicVariables(
-      {
-        CATALOG__RETAINED: { description: 'Retained', required: false, defaultValue: 'yes' },
-        CATALOG__REMOVED: { description: 'Removed', required: false, defaultValue: 'no' },
-      },
-      'CATALOG'
-    );
-    configuration.registerDynamicVariables(
-      { CATALOG__RETAINED: { description: 'Retained', required: false, defaultValue: 'yes' } },
-      'CATALOG'
-    );
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'DYNAMIC_TEST_GROUP',
+          name: 'Dynamic test',
+          description: 'Test settings',
+          variables: [
+            {
+              key: 'DYNAMIC_RETAINED_TEST',
+              description: 'Retained',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'yes',
+            },
+            {
+              key: 'DYNAMIC_REMOVED_TEST',
+              description: 'Removed',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'no',
+            },
+          ],
+        },
+      ],
+    });
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'DYNAMIC_TEST_GROUP',
+          name: 'Dynamic test',
+          description: 'Test settings',
+          variables: [
+            {
+              key: 'DYNAMIC_RETAINED_TEST',
+              description: 'Retained',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'yes',
+            },
+          ],
+        },
+      ],
+    });
 
-    expect(configuration.getDynamic('CATALOG__RETAINED')).toBeUndefined();
-    expect(configuration.getDynamic('CATALOG__REMOVED')).toBeUndefined();
+    const entries = await configuration.getAllConfigs();
+    expect(entries.some(entry => entry.key === 'DYNAMIC_RETAINED_TEST')).toBe(true);
+    expect(entries.some(entry => entry.key === 'DYNAMIC_REMOVED_TEST')).toBe(false);
+    expect(configuration.getServiceConfigSnapshot('CATALOG')).toEqual({
+      DYNAMIC_RETAINED_TEST: 'yes',
+    });
+  });
+
+  it('tests and applies one canonical Trakt snapshot to every declared consumer', async () => {
+    const configuration = setupTest();
+    const schema: ServiceConfigSchema = {
+      groups: [
+        {
+          id: 'TRAKT',
+          name: 'Trakt',
+          description: 'Shared Trakt application settings.',
+          variables: [
+            { key: 'TRAKT_CLIENT_ID', description: 'Client ID', required: true, inputType: 'text' },
+            {
+              key: 'TRAKT_CLIENT_SECRET',
+              description: 'Client secret',
+              required: true,
+              inputType: 'password',
+              secret: true,
+            },
+          ],
+        },
+      ],
+    };
+    configuration.registerRemoteConfiguration('CATALOG', schema);
+    configuration.registerRemoteConfiguration('LIST', schema);
+    await configuration.setValue('TRAKT_CLIENT_SECRET' as never, 'saved-secret');
+    expect(configuration.getMissingVarsForGroup('CATALOG')).toEqual(['TRAKT_CLIENT_ID']);
+
+    const testedSnapshots: Record<string, string>[] = [];
+    const appliedSnapshots: Record<string, string>[] = [];
+    for (const service of ['CATALOG', 'LIST'] as const) {
+      configuration.registerService(service, {
+        testable: true,
+        getStatus: () => ({ status: 'ready' }),
+        reload: jest.fn().mockResolvedValue(undefined),
+        testConfiguration: jest.fn(async entries => {
+          testedSnapshots.push(
+            Object.fromEntries((entries ?? []).map(({ key, value }) => [key, value]))
+          );
+          return { success: true, message: 'validated' };
+        }),
+        applyConfiguration: jest.fn(async entries => {
+          appliedSnapshots.push(Object.fromEntries(entries.map(({ key, value }) => [key, value])));
+          return { success: true };
+        }),
+      });
+    }
+
+    const test = await configuration.testServiceConfigs('TRAKT', [
+      { key: 'TRAKT_CLIENT_ID', value: 'new-client-id' },
+    ]);
+    expect(test.success).toBe(true);
+    expect(testedSnapshots).toEqual([
+      { TRAKT_CLIENT_ID: 'new-client-id', TRAKT_CLIENT_SECRET: 'saved-secret' },
+      { TRAKT_CLIENT_ID: 'new-client-id', TRAKT_CLIENT_SECRET: 'saved-secret' },
+    ]);
+    expect(appliedSnapshots).toEqual([]);
+    expect(
+      (await configuration.getAllConfigs()).find(entry => entry.key === 'TRAKT_CLIENT_SECRET')
+    ).toMatchObject({
+      isSecret: true,
+      hasValue: true,
+      value: expect.not.stringContaining('saved-secret'),
+    });
+
+    const saved = await configuration.saveServiceConfigs('TRAKT', [
+      { key: 'TRAKT_CLIENT_ID', value: 'new-client-id' },
+    ]);
+    expect(saved.success).toBe(true);
+    expect(saved.restarted).toEqual(['CATALOG', 'LIST']);
+    expect(appliedSnapshots).toEqual([
+      { TRAKT_CLIENT_ID: 'new-client-id', TRAKT_CLIENT_SECRET: 'saved-secret' },
+      { TRAKT_CLIENT_ID: 'new-client-id', TRAKT_CLIENT_SECRET: 'saved-secret' },
+    ]);
+  });
+
+  it('rejects a conflicting duplicate key instead of replacing the first declaration', async () => {
+    const configuration = setupTest();
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'TRAKT',
+          name: 'Trakt',
+          description: 'Shared Trakt settings.',
+          variables: [
+            {
+              key: 'TRAKT_CLIENT_ID',
+              description: 'Client ID',
+              required: true,
+              inputType: 'select',
+              options: { APP: 'First application' },
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(() =>
+      configuration.registerRemoteConfiguration('LIST', {
+        groups: [
+          {
+            id: 'TRAKT',
+            name: 'Trakt',
+            description: 'Shared Trakt settings.',
+            variables: [
+              {
+                key: 'TRAKT_CLIENT_ID',
+                description: 'Client ID',
+                required: true,
+                inputType: 'select',
+                options: { APP: 'Different application' },
+              },
+            ],
+          },
+        ],
+      })
+    ).toThrow("Configuration key 'TRAKT_CLIENT_ID' has conflicting declarations");
+
+    const clientId = (await configuration.getAllConfigs()).find(
+      entry => entry.key === 'TRAKT_CLIENT_ID'
+    );
+    expect(clientId?.description).toBe('Client ID');
+  });
+
+  it('returns already-applied consumers to standby when a first save cannot activate every consumer', async () => {
+    const configuration = setupTest();
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'TRAKT',
+          name: 'Trakt',
+          description: 'Shared Trakt settings.',
+          variables: [
+            { key: 'TRAKT_CLIENT_ID', description: 'Client ID', required: true, inputType: 'text' },
+          ],
+        },
+      ],
+    });
+    configuration.registerRemoteConfiguration('LIST', {
+      groups: [
+        {
+          id: 'TRAKT',
+          name: 'Trakt',
+          description: 'Shared Trakt settings.',
+          variables: [
+            { key: 'TRAKT_CLIENT_ID', description: 'Client ID', required: true, inputType: 'text' },
+          ],
+        },
+      ],
+    });
+    const clearConfiguration = jest.fn().mockResolvedValue({ success: true });
+    for (const service of ['CATALOG', 'LIST'] as const) {
+      configuration.registerService(service, {
+        testable: true,
+        getStatus: () => ({ status: 'ready' }),
+        reload: jest.fn().mockResolvedValue(undefined),
+        testConfiguration: jest.fn().mockResolvedValue({ success: true, message: 'validated' }),
+        applyConfiguration: jest
+          .fn()
+          .mockResolvedValue(
+            service === 'LIST'
+              ? { success: false, message: 'activation failed' }
+              : { success: true }
+          ),
+        clearConfiguration,
+      });
+    }
+
+    const result = await configuration.saveServiceConfigs('TRAKT', [
+      { key: 'TRAKT_CLIENT_ID', value: 'first-client' },
+    ]);
+
+    expect(result.success).toBe(false);
+    expect(result.services.find(item => item.service === 'LIST')).toMatchObject({
+      success: false,
+      message: 'activation failed',
+    });
+    expect(clearConfiguration).toHaveBeenCalledTimes(2);
+    expect(configuration.getDynamic('TRAKT_CLIENT_ID')).toBeUndefined();
   });
 
   it('tests values transiently and restores the previous runtime configuration', async () => {

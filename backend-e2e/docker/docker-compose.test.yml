@@ -24,12 +24,15 @@ services:
       - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://media-catalog:3001
       - LIST_SERVICE_URL=http://list-service:3002
-      - CATALOG__TMDB_API_URL=http://tmdb-mock/3
+      - TMDB_API_URL=http://tmdb-mock/3
       # The initial-setup lane overrides E2E_CATALOG_TMDB_TOKEN with an empty
       # value so the browser must complete Catalog configuration through the UI.
-      - CATALOG__TMDB_API_ACCESS_TOKEN=${E2E_CATALOG_TMDB_TOKEN-e2e-dummy-token}
-      - YTS_API_URL=http://yts-mock
+      - TMDB_API_ACCESS_TOKEN=${E2E_CATALOG_TMDB_TOKEN-e2e-dummy-token}
       - TRAKT_API_URL=http://trakt-mock
+      - TRAKT_CLIENT_ID=${E2E_TRAKT_CLIENT_ID-${TRAKT_CLIENT_ID:-mock-trakt-client-id}}
+      - TRAKT_CLIENT_SECRET=${E2E_TRAKT_CLIENT_SECRET-${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}}
+      - TRAKT_REDIRECT_URI=${E2E_TRAKT_REDIRECT_URI-${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}}
+      - YTS_API_URL=http://yts-mock
       - THE_RARBG_API_URL=http://therarbg-mock
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
@@ -79,16 +82,18 @@ services:
     environment:
       - LIST_SERVICE_PORT=3002
       - LIST_SERVICE_DATA_DIR=/app/data
-      - TRAKT_API_URL=http://trakt-mock
-      - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-mock-trakt-client-id}
-      - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}
-      - TRAKT_REDIRECT_URI=${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}
     volumes:
       - list_service_data:/app/data
     networks:
       - test-network
     healthcheck:
-      test: ['CMD', 'bun', '-e', "fetch('http://localhost:3002/health').then(r => { if (!r.ok) process.exit(1) })"]
+      test:
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "fetch('http://localhost:3002/health').then(r => { if (!r.ok) process.exit(1) })",
+        ]
       interval: 2s
       timeout: 5s
       retries: 30
@@ -103,8 +108,6 @@ services:
       dockerfile: services/media-catalog/Dockerfile
     environment:
       - CATALOG_DATA_DIR=/app/data
-      - TMDB_API_URL=http://tmdb-mock/3
-      - TMDB_API_ACCESS_TOKEN=${E2E_CATALOG_TMDB_TOKEN-e2e-dummy-token}
       - CATALOG_DISABLE_BACKGROUND_TASKS=true
       - DEBUG=*
     networks:

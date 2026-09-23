@@ -174,7 +174,7 @@ export class ConfigStore {
     }
   }
 
-  private readAllSync(): Record<string, string> {
+  readAllSync(): Record<string, string> {
     try {
       const parsed = JSON.parse(readFileSync(this.options.filePath, 'utf8')) as unknown;
       if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {

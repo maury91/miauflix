@@ -305,15 +305,10 @@ describe('Service', () => {
 ### Environment Variables
 
 ```bash
-# Required
+# Optional backend seed values; configure these in the Miauflix UI for normal use
 TMDB_API_ACCESS_TOKEN=your_tmdb_token
-TMDB_API_URL=https://api.themoviedb.org/3
-
-# Standalone list-service bootstrap (required when the service is enabled)
 TRAKT_CLIENT_ID=your_trakt_client_id
 TRAKT_CLIENT_SECRET=your_trakt_client_secret
-TRAKT_API_URL=https://api.trakt.tv
-TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
 NORDVPN_PRIVATE_KEY=your_nordvpn_private_key
 
 # Development

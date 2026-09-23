@@ -15,7 +15,6 @@ import {
   serviceConfigApplyResultSchema,
   serviceConfigMutationSchema,
   serviceConfigSchemaSchema,
-  serviceConfigStateSchema,
   serviceConfigTestResultSchema,
   serviceManifestSchema,
   ServiceSecretCodec,
@@ -31,9 +30,7 @@ import { TraktClient } from './trakt-client';
 
 const PORT = Number(process.env.LIST_SERVICE_PORT ?? 3002);
 const HOST = process.env.LIST_SERVICE_HOST ?? '0.0.0.0';
-const DEFAULT_API_URL = process.env.TRAKT_API_URL ?? 'https://api.trakt.tv';
 const DATA_DIR = process.env.LIST_SERVICE_DATA_DIR ?? process.env.DATA_DIR ?? './data';
-const CONFIG_FILE = process.env.LIST_SERVICE_CONFIG_FILE ?? join(DATA_DIR, 'config.json');
 const KEY_FILE = process.env.LIST_SERVICE_KEY_FILE ?? join(DATA_DIR, '.list-service-key');
 const configuredEncryptionKey = process.env.LIST_SERVICE_ENCRYPTION_KEY;
 const encryptionKey = configuredEncryptionKey
@@ -91,7 +88,7 @@ const seal = (value: string): string => {
 };
 const open = (value: string): string => decrypt(value);
 
-const config = new ListConfigService(DATA_DIR, process.env, CONFIG_FILE, KEY_FILE, DEFAULT_API_URL);
+const config = new ListConfigService();
 
 const client = () =>
   new TraktClient(
@@ -302,7 +299,6 @@ const handler = async (request: Request): Promise<Response> => {
           management: {
             statusPath: '/status',
             configurationSchemaPath: '/configuration/schema',
-            configurationStatePath: '/configuration',
             configurationTestPath: '/configuration/test',
             configurationApplyPath: '/configuration',
           },
@@ -334,16 +330,28 @@ const handler = async (request: Request): Promise<Response> => {
       );
     if (request.method === 'GET' && path === '/configuration/schema')
       return json(serviceConfigSchemaSchema.parse(config.schema));
-    if (request.method === 'GET' && path === '/configuration')
-      return json(serviceConfigStateSchema.parse(config.getValues()));
     if (request.method === 'POST' && path === '/configuration/test') {
       const mutation = serviceConfigMutationSchema.parse(await request.json());
-      const test = await config.test(mutation.values, mutation.unsetKeys);
+      if ('clear' in mutation) {
+        return json(
+          {
+            success: false,
+            mode: 'validation',
+            message: 'A clear operation cannot be tested.',
+            invalidKeys: [],
+          },
+          400
+        );
+      }
+      const test = await config.test(mutation.values);
       return json(serviceConfigTestResultSchema.parse(test), test.success ? 200 : 400);
     }
     if (request.method === 'PUT' && path === '/configuration') {
       const mutation = serviceConfigMutationSchema.parse(await request.json());
-      const result = await config.applyRemote(mutation.values, mutation.unsetKeys);
+      const result =
+        'clear' in mutation
+          ? await config.clearRemote()
+          : await config.applyRemote(mutation.values);
       return json(serviceConfigApplyResultSchema.parse(result), result.success ? 200 : 400);
     }
     serviceReady();

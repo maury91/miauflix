@@ -1,5 +1,6 @@
 # Temporary
 frontend-legacy
+legacy
 
 # Dependencies
 node_modules
@@ -21,6 +22,8 @@ coverage
 frontend/test-results
 frontend/test-results-e2e
 frontend/playwright-report
+frontend/test-results-initial-setup
+frontend/playwright-report-initial-setup
 
 # Environment files
 .env

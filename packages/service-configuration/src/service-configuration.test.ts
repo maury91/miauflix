@@ -1,7 +1,4 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
 import test from 'node:test';
 
 import type { ServiceConfigSchema } from '@miauflix/service-contracts';
@@ -9,98 +6,102 @@ import type { ServiceConfigSchema } from '@miauflix/service-contracts';
 import { ServiceConfiguration } from './service-configuration.js';
 
 const schema: ServiceConfigSchema = {
-  name: 'Test Service',
-  description: 'Configuration test fixture',
-  variables: [
+  groups: [
     {
-      key: 'API_URL',
-      description: 'Provider URL',
-      required: false,
-      inputType: 'text',
-      defaultValue: 'https://default.example',
-    },
-    {
-      key: 'API_TOKEN',
-      description: 'Provider token',
-      required: true,
-      inputType: 'password',
-      secret: true,
+      id: 'PROVIDER',
+      name: 'Provider',
+      description: 'Configuration test fixture',
+      variables: [
+        {
+          key: 'API_URL',
+          description: 'Provider URL',
+          required: false,
+          inputType: 'text',
+          defaultValue: 'https://default.example',
+        },
+        {
+          key: 'API_TOKEN',
+          description: 'Provider token',
+          required: true,
+          inputType: 'password',
+          secret: true,
+        },
+      ],
     },
   ],
 };
 
-const fixture = async () => {
-  const dataDir = await mkdtemp(join(tmpdir(), 'miauflix-service-config-'));
-  return {
-    dataDir,
-    configFilePath: join(dataDir, 'config.json'),
-    keyFilePath: join(dataDir, '.key'),
-  };
-};
+test('tests complete snapshots without changing active in-memory configuration', async () => {
+  const config = new ServiceConfiguration({ schema });
+  config.registerProber({ test: async () => ({ success: true, message: 'ok' }) });
 
-test('resolves defaults and environment values without persisting test candidates', async () => {
-  const paths = await fixture();
-  try {
-    const config = new ServiceConfiguration({
-      schema,
-      prefix: 'TEST',
-      ...paths,
-      env: { API_TOKEN: 'env-token', API_URL: 'https://env.example' },
-    });
-    config.registerProber({ test: async () => ({ success: true, message: 'ok' }) });
+  const result = await config.test({ API_URL: 'https://test.example', API_TOKEN: 'candidate' });
 
-    assert.equal(config.resolve('API_URL'), 'https://env.example');
-    assert.deepEqual(config.missingVars(), []);
-    assert.equal((await config.test({ API_TOKEN: 'candidate' })).success, true);
-    await assert.rejects(readFile(paths.configFilePath, 'utf8'), { code: 'ENOENT' });
-  } finally {
-    await rm(paths.dataDir, { recursive: true, force: true });
-  }
+  assert.equal(result.success, true);
+  assert.equal(result.mode, 'live');
+  assert.equal(config.resolve('API_TOKEN'), '');
+  assert.equal(config.state, 'standby');
 });
 
-test('applies encrypted values and reloads them across instances', async () => {
-  const paths = await fixture();
-  try {
-    const config = new ServiceConfiguration({ schema, prefix: 'TEST', ...paths, env: {} });
-    config.registerProber({
-      test: async () => ({ success: true, message: 'ok' }),
-      activate: async () => ({ success: true, message: 'activated' }),
-    });
+test('activates backend snapshots in memory and becomes ready', async () => {
+  const config = new ServiceConfiguration({ schema });
+  config.registerProber({
+    test: async () => ({ success: true, message: 'tested' }),
+    activate: async () => ({ success: true, message: 'activated' }),
+  });
 
-    const result = await config.applyRemote({ API_TOKEN: 'secret-token' });
-    assert.deepEqual(result, {
-      success: true,
-      reloaded: true,
-      test: { success: true, mode: 'live', message: 'activated' },
-    });
-    assert.match(await readFile(paths.configFilePath, 'utf8'), /TEST__API_TOKEN.*enc:/s);
+  const result = await config.applyRemote({ API_URL: 'https://api.example', API_TOKEN: 'secret' });
 
-    const restarted = new ServiceConfiguration({ schema, prefix: 'TEST', ...paths, env: {} });
-    assert.equal(restarted.resolve('API_TOKEN'), 'secret-token');
-  } finally {
-    await rm(paths.dataDir, { recursive: true, force: true });
-  }
+  assert.deepEqual(result, {
+    success: true,
+    activated: true,
+    test: { success: true, mode: 'live', message: 'activated' },
+  });
+  assert.equal(config.resolve('API_TOKEN'), 'secret');
+  assert.equal(config.ready, true);
 });
 
-test('restores the previous value when activation rejects a candidate', async () => {
-  const paths = await fixture();
-  try {
-    const config = new ServiceConfiguration({ schema, prefix: 'TEST', ...paths, env: {} });
-    config.registerProber({
-      test: async () => ({ success: true, message: 'tested' }),
-      activate: async values =>
-        values.API_TOKEN === 'bad-token'
-          ? { success: false, message: 'rejected' }
-          : { success: true, message: 'activated' },
-    });
+test('clears active values and returns to standby for rollback to an unconfigured state', async () => {
+  const config = new ServiceConfiguration({ schema });
+  config.registerProber({
+    test: async () => ({ success: true, message: 'tested' }),
+    activate: async () => ({ success: true, message: 'activated' }),
+  });
+  await config.applyRemote({ API_URL: 'https://api.example', API_TOKEN: 'secret' });
 
-    await config.applyRemote({ API_TOKEN: 'good-token' });
-    const persistedBefore = await readFile(paths.configFilePath, 'utf8');
-    const rejected = await config.applyRemote({ API_TOKEN: 'bad-token' });
-    assert.equal(rejected.success, false);
-    assert.equal(config.resolve('API_TOKEN'), 'good-token');
-    assert.equal(await readFile(paths.configFilePath, 'utf8'), persistedBefore);
-  } finally {
-    await rm(paths.dataDir, { recursive: true, force: true });
-  }
+  assert.deepEqual(await config.clearRemote(), { success: true, activated: false });
+  assert.deepEqual(config.values, {});
+  assert.equal(config.state, 'standby');
+});
+
+test('retains the previous active snapshot when a candidate activation fails', async () => {
+  const config = new ServiceConfiguration({ schema });
+  config.registerProber({
+    test: async () => ({ success: true, message: 'tested' }),
+    activate: async values =>
+      values.API_TOKEN === 'bad-token'
+        ? { success: false, message: 'rejected' }
+        : { success: true, message: 'activated' },
+  });
+
+  await config.applyRemote({ API_URL: 'https://api.example', API_TOKEN: 'good-token' });
+  const rejected = await config.applyRemote({
+    API_URL: 'https://api.example',
+    API_TOKEN: 'bad-token',
+  });
+
+  assert.equal(rejected.success, false);
+  assert.equal(config.resolve('API_TOKEN'), 'good-token');
+  assert.equal(config.state, 'ready');
+});
+
+test('rejects missing required configuration before probing', async () => {
+  const config = new ServiceConfiguration({ schema });
+  const probe = { test: async () => ({ success: true, message: 'ok' }) };
+  config.registerProber(probe);
+
+  const result = await config.applyRemote({ API_URL: 'https://api.example' });
+
+  assert.equal(result.success, false);
+  assert.deepEqual(result.test?.invalidKeys, ['API_TOKEN']);
 });

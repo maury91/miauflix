@@ -1,14 +1,8 @@
-import { join } from 'node:path';
-
 import {
-  ConfigStore,
-  type ConfigVariable,
   type ServiceConfigApplyResult,
   type ServiceConfigSchema,
-  type ServiceConfigState,
   type ServiceConfigTestResult,
   type ServiceLifecycleState,
-  ServiceSecretCodec,
 } from '@miauflix/service-contracts';
 
 export type ConfigurationProbeResult = { success: boolean; message: string };
@@ -16,21 +10,15 @@ export type ConfigurationProbeResult = { success: boolean; message: string };
 export interface ConfigurationProbe {
   test(values: Record<string, string>): Promise<ConfigurationProbeResult>;
   activate?(values: Record<string, string>): Promise<ConfigurationProbeResult>;
+  deactivate?(): Promise<ConfigurationProbeResult>;
 }
 
 export interface ServiceConfigurationOptions {
   schema: ServiceConfigSchema;
-  prefix: string;
-  dataDir: string;
-  env?: Record<string, string | undefined>;
-  configFilePath?: string;
-  keyFilePath?: string;
-  encryptionKey?: string;
   notWiredMessage?: string;
-  onLoadError?: (message: string) => void;
 }
 
-/** Serializes configuration reads, probes, writes, and activations. */
+/** Serializes probes and activation while keeping backend-owned values in memory. */
 export class OperationQueue {
   private tail: Promise<unknown> = Promise.resolve();
 
@@ -41,86 +29,34 @@ export class OperationQueue {
   }
 }
 
-/**
- * Shared configuration mechanics for standalone services.
- *
- * Provider probing and lifecycle consumers remain service-owned through the
- * registered probe. The persisted format is intentionally prefix-scoped so
- * multiple services can safely share one JSON file.
- */
+/** Runtime view of configuration pushed by the backend. This class never reads or writes files. */
 export class ServiceConfiguration {
-  private readonly storageKeys: ReadonlySet<string>;
-  private readonly fileValues: Record<string, string> = {};
   private readonly operations = new OperationQueue();
-  private readonly store: ConfigStore;
-  private readonly codec: ServiceSecretCodec;
   private readonly listeners = new Set<() => void>();
-  private readonly env: Record<string, string | undefined>;
   private readonly notWiredMessage: string;
-  private readonly onLoadError?: (message: string) => void;
   private prober: ConfigurationProbe | null = null;
-  private loadError: string | null = null;
+  private activeValues: Record<string, string> = {};
   private _state: ServiceLifecycleState = 'standby';
   private _errorMessage: string | null = null;
 
   constructor(private readonly options: ServiceConfigurationOptions) {
-    this.env = options.env ?? process.env;
     this.notWiredMessage = options.notWiredMessage ?? 'Configuration provider is not wired yet';
-    this.onLoadError = options.onLoadError;
-    this.storageKeys = new Set(
-      options.schema.variables.map(variable => `${options.prefix}__${variable.key}`)
-    );
-    const configFilePath =
-      options.configFilePath ??
-      this.env[`${options.prefix}_CONFIG_FILE`] ??
-      join(options.dataDir, 'config.json');
-    const keyFilePath =
-      options.keyFilePath ??
-      this.env[`${options.prefix}_KEY_FILE`] ??
-      join(options.dataDir, '.service-key');
-    this.store = new ConfigStore({ filePath: configFilePath });
-    this.codec = new ServiceSecretCodec({
-      filePath: keyFilePath,
-      encryptionKey: options.encryptionKey,
-    });
-    this.loadFile();
   }
 
   getSchema(): ServiceConfigSchema {
     return this.options.schema;
   }
 
-  getValues(): ServiceConfigState {
-    return {
-      configuredKeys: this.options.schema.variables
-        .filter(variable => Boolean(this.resolve(variable.key)))
-        .map(variable => variable.key),
-    };
+  get values(): Record<string, string> {
+    return { ...this.activeValues };
   }
 
   resolve(key: string): string {
-    const variable = this.variable(key);
-    return (
-      [this.fileValues[key], this.env[key], variable?.defaultValue].find(
-        value => value !== undefined && value.length > 0
-      ) ?? ''
-    );
+    return this.activeValues[key] ?? '';
   }
 
-  resolvedValues(): Record<string, string> {
-    return Object.fromEntries(
-      this.options.schema.variables.map(variable => [variable.key, this.resolve(variable.key)])
-    );
-  }
-
-  variable(key: string): ConfigVariable | undefined {
-    return this.options.schema.variables.find(candidate => candidate.key === key);
-  }
-
-  missingVars(): string[] {
-    return this.options.schema.variables
-      .filter(variable => variable.required && !this.resolve(variable.key))
-      .map(variable => variable.key);
+  get ready(): boolean {
+    return this.missingVars(this.activeValues).length === 0 && this._state === 'ready';
   }
 
   get state(): ServiceLifecycleState {
@@ -128,7 +64,7 @@ export class ServiceConfiguration {
   }
 
   get errorMessage(): string | null {
-    return this._errorMessage ?? (this._state === 'error' ? this.loadError : null);
+    return this._errorMessage;
   }
 
   registerProber(prober: ConfigurationProbe): void {
@@ -140,10 +76,23 @@ export class ServiceConfiguration {
     return () => this.listeners.delete(listener);
   }
 
+  missingVars(values: Record<string, string> = this.activeValues): string[] {
+    return this.options.schema.groups.flatMap(group =>
+      group.variables
+        .filter(variable => variable.required && !values[variable.key])
+        .map(variable => variable.key)
+    );
+  }
+
   validate(values: Record<string, string>): string[] {
     const invalidKeys: string[] = [];
+    const variables = new Map(
+      this.options.schema.groups.flatMap(group =>
+        group.variables.map(variable => [variable.key, variable] as const)
+      )
+    );
     for (const [key, value] of Object.entries(values)) {
-      const variable = this.variable(key);
+      const variable = variables.get(key);
       if (!variable) {
         invalidKeys.push(key);
         continue;
@@ -151,21 +100,17 @@ export class ServiceConfiguration {
       if (!value) continue;
       if (variable.inputType === 'select' && variable.options && !(value in variable.options)) {
         invalidKeys.push(key);
-        continue;
-      }
-      if (variable.inputType === 'number') {
+      } else if (variable.inputType === 'number') {
         const parsed = Number(value);
         const { min, max, integer } = variable.numberOptions ?? {};
-        if (!Number.isFinite(parsed)) {
+        if (
+          !Number.isFinite(parsed) ||
+          (integer && !Number.isInteger(parsed)) ||
+          (min !== undefined && parsed < min) ||
+          (max !== undefined && parsed > max)
+        )
           invalidKeys.push(key);
-          continue;
-        }
-        if (integer && !Number.isInteger(parsed)) invalidKeys.push(key);
-        if (min !== undefined && parsed < min) invalidKeys.push(key);
-        if (max !== undefined && parsed > max) invalidKeys.push(key);
-        continue;
-      }
-      if (variable.inputType === 'text' && key.endsWith('_URL')) {
+      } else if (variable.inputType === 'text' && key.endsWith('_URL')) {
         try {
           new URL(value);
         } catch {
@@ -176,118 +121,62 @@ export class ServiceConfiguration {
     return invalidKeys;
   }
 
-  applyRemote(
-    values: Record<string, string>,
-    unsetKeys: string[] = []
-  ): Promise<ServiceConfigApplyResult> {
+  applyRemote(values: Record<string, string>): Promise<ServiceConfigApplyResult> {
     return this.operations.run(async () => {
-      const invalidKeys = [
-        ...this.validate(values),
-        ...unsetKeys.filter(key => !this.variable(key)),
-      ];
-      if (invalidKeys.length > 0) return { success: false, reloaded: false, invalidKeys };
-
-      try {
-        const previous = this.resolvedValues();
-        const previousStored = this.store.readSync(this.storageKeys);
-        const candidate = this.candidateValues(values, unsetKeys);
-        const test = await this.probe(candidate, { mutateState: false });
-        if (!test.success) return { success: false, reloaded: false, test };
-
-        await this.store.update(this.storageKeys, {
-          values: Object.fromEntries(
-            Object.entries(values)
-              .filter(([, value]) => value.length > 0)
-              .map(([key, value]) => [
-                this.storageKey(key),
-                this.isSecret(key) ? this.codec.encrypt(value) : value,
-              ])
-          ),
-          unsetKeys: unsetKeys.map(key => this.storageKey(key)),
-        });
-        this.replaceValues(candidate);
-
-        const activated = await this.probe(candidate, { mutateState: true, activate: true });
-        if (!activated.success) {
-          await this.store.update(this.storageKeys, {
-            values: previousStored,
-            unsetKeys: [...this.storageKeys],
-          });
-          this.replaceValues(previous);
-          await this.probe(previous, { mutateState: true, activate: true });
-          return { success: false, reloaded: false, test: activated };
-        }
-        return { success: true, reloaded: true, test: activated };
-      } catch (error) {
+      const test = await this.probe(values, false);
+      if (!test.success) return { success: false, activated: false, test };
+      const previous = this.activeValues;
+      const activated = await this.activate(values);
+      if (!activated.success) {
+        if (Object.keys(previous).length) await this.activate(previous);
         return {
           success: false,
-          reloaded: false,
-          test: {
-            success: false,
-            mode: 'live',
-            message: error instanceof Error ? error.message : String(error),
-          },
+          activated: false,
+          test: { success: false, mode: 'live', message: activated.message },
         };
       }
+      this.activeValues = { ...values };
+      this.transition('ready', null);
+      return {
+        success: true,
+        activated: true,
+        test: { success: true, mode: 'live', message: activated.message },
+      };
     });
   }
 
-  test(
-    values: Record<string, string> = {},
-    unsetKeys: string[] = []
-  ): Promise<ServiceConfigTestResult> {
+  clearRemote(): Promise<ServiceConfigApplyResult> {
     return this.operations.run(async () => {
-      const invalidKeys = [
-        ...this.validate(values),
-        ...unsetKeys.filter(key => !this.variable(key)),
-      ];
-      if (invalidKeys.length > 0) {
-        return {
-          success: false,
-          mode: 'validation',
-          message: `Invalid values for: ${invalidKeys.join(', ')}`,
-          invalidKeys,
-        };
+      if (this.prober?.deactivate) {
+        const result = await this.prober.deactivate();
+        if (!result.success) {
+          return {
+            success: false,
+            activated: false,
+            test: { success: false, mode: 'live', message: result.message },
+          };
+        }
       }
-      return this.probe(this.candidateValues(values, unsetKeys), { mutateState: false });
+      this.activeValues = {};
+      this.transition('standby', null);
+      return { success: true, activated: false };
     });
+  }
+
+  test(values: Record<string, string>): Promise<ServiceConfigTestResult> {
+    return this.operations.run(() => this.probe(values, false));
   }
 
   reload(): Promise<boolean> {
     return this.operations.run(async () => {
-      this.loadFile();
-      const result = await this.probe(this.resolvedValues());
+      if (Object.keys(this.activeValues).length === 0) {
+        this.transition('standby', null);
+        return false;
+      }
+      const result = await this.activate(this.activeValues);
+      this.transition(result.success ? 'ready' : 'error', result.success ? null : result.message);
       return result.success;
     });
-  }
-
-  private storageKey(key: string): string {
-    return `${this.options.prefix}__${key}`;
-  }
-
-  private candidateValues(
-    values: Record<string, string>,
-    unsetKeys: string[]
-  ): Record<string, string> {
-    const candidate = this.resolvedValues();
-    for (const key of unsetKeys) {
-      const variable = this.variable(key);
-      candidate[key] = this.env[key] ?? variable?.defaultValue ?? '';
-    }
-    for (const [key, value] of Object.entries(values)) {
-      if (value.length > 0) candidate[key] = value;
-    }
-    return candidate;
-  }
-
-  private isSecret(key: string): boolean {
-    const variable = this.variable(key);
-    return variable?.secret === true || variable?.inputType === 'password';
-  }
-
-  private replaceValues(values: Record<string, string>): void {
-    for (const key of Object.keys(this.fileValues)) delete this.fileValues[key];
-    Object.assign(this.fileValues, values);
   }
 
   private transition(state: ServiceLifecycleState, errorMessage: string | null): void {
@@ -299,59 +188,50 @@ export class ServiceConfiguration {
 
   private async probe(
     values: Record<string, string>,
-    options: { mutateState?: boolean; activate?: boolean } = {}
+    mutateState: boolean
   ): Promise<ServiceConfigTestResult> {
-    const mutateState = options.mutateState ?? true;
-    const missing = this.options.schema.variables
-      .filter(variable => variable.required && !values[variable.key])
-      .map(variable => variable.key);
-    if (missing.length > 0) {
-      if (mutateState) this.transition('standby', null);
+    const invalidKeys = this.validate(values);
+    if (invalidKeys.length) {
+      return {
+        success: false,
+        mode: 'validation',
+        message: `Invalid values for: ${invalidKeys.join(', ')}`,
+        invalidKeys,
+      };
+    }
+    const missing = this.missingVars(values);
+    if (missing.length) {
       return {
         success: false,
         mode: 'validation',
         message: `Missing required configuration: ${missing.join(', ')}`,
+        invalidKeys: missing,
       };
     }
     if (!this.prober) {
       if (mutateState) this.transition('configuring', null);
       return { success: false, mode: 'live', message: this.notWiredMessage };
     }
-    if (mutateState) this.transition('configuring', null);
     try {
-      const result =
-        (options.activate ?? mutateState) && this.prober.activate
-          ? await this.prober.activate(values)
-          : await this.prober.test(values);
-      if (mutateState)
-        this.transition(result.success ? 'ready' : 'error', result.success ? null : result.message);
+      const result = await this.prober.test(values);
       return { success: result.success, mode: 'live', message: result.message };
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      if (mutateState) this.transition('error', message);
-      return { success: false, mode: 'live', message };
+      return {
+        success: false,
+        mode: 'live',
+        message: error instanceof Error ? error.message : String(error),
+      };
     }
   }
 
-  private loadFile(): void {
+  private async activate(values: Record<string, string>): Promise<ConfigurationProbeResult> {
+    if (!this.prober) return { success: false, message: this.notWiredMessage };
     try {
-      const stored = this.store.readSync(this.storageKeys);
-      const values: Record<string, string> = {};
-      for (const variable of this.options.schema.variables) {
-        const storedValue = stored[this.storageKey(variable.key)];
-        if (storedValue === undefined) continue;
-        values[variable.key] = this.isSecret(variable.key)
-          ? this.codec.decrypt(storedValue)
-          : storedValue;
-      }
-      this.replaceValues(values);
-      this.loadError = null;
+      return this.prober.activate
+        ? await this.prober.activate(values)
+        : await this.prober.test(values);
     } catch (error) {
-      this.loadError = error instanceof Error ? error.message : String(error);
-      this.replaceValues({});
-      this._state = 'error';
-      this._errorMessage = this.loadError;
-      this.onLoadError?.(this.loadError);
+      return { success: false, message: error instanceof Error ? error.message : String(error) };
     }
   }
 }

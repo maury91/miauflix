@@ -159,6 +159,9 @@ if [[ "$INITIAL_SETUP" == "true" ]]; then
     # configuration to be completed through the first-run UI.
     export E2E_CATALOG_TMDB_TOKEN=''
     export TMDB_API_ACCESS_TOKEN='e2e-dummy-token'
+    export E2E_TRAKT_CLIENT_ID=''
+    export E2E_TRAKT_CLIENT_SECRET=''
+    export E2E_TRAKT_REDIRECT_URI=''
 fi
 
 # Export VERBOSE for subscripts

@@ -100,14 +100,13 @@ test('completes first-run admin and required configuration through the UI', asyn
     user: { email: admin.email, role: 'admin' },
   });
 
-  await expect(page.getByRole('heading', { name: 'Catalog' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'TMDB' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Optional settings' })).toHaveCount(0);
 
-  const tokenInput = page.locator('#CATALOG__TMDB_API_ACCESS_TOKEN');
+  const tokenInput = page.locator('#TMDB_API_ACCESS_TOKEN');
   const nextButton = page.getByRole('button', { name: 'Next step' });
   const testButton = page.getByRole('button', { name: 'Test', exact: true });
   const saveButton = page.getByRole('button', { name: 'Save', exact: true });
-  const optionalSettingsButton = page.getByRole('button', { name: /^Optional settings/ });
 
   await expect(page.getByText('1 missing')).toBeVisible();
   await expect(tokenInput).toBeVisible();
@@ -117,7 +116,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(page).toHaveScreenshot('catalog-required-desktop.png', screenshotOptions);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.getByRole('heading', { name: 'Catalog' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'TMDB' })).toBeVisible();
   await expect(page).toHaveScreenshot('catalog-required-mobile.png', screenshotOptions);
   await page.setViewportSize({ width: 1920, height: 1080 });
 
@@ -127,7 +126,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   expect(configBeforeTest).toEqual(
     expect.arrayContaining([
       expect.objectContaining({
-        key: 'CATALOG__TMDB_API_ACCESS_TOKEN',
+        key: 'TMDB_API_ACCESS_TOKEN',
         isSecret: true,
         required: true,
         hasValue: false,
@@ -144,14 +143,13 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(saveButton).toBeEnabled();
   await expect(nextButton).toBeDisabled();
 
-  await optionalSettingsButton.click();
-  const catalogUrlInput = page.locator('#CATALOG__TMDB_API_URL');
+  const catalogUrlInput = page.locator('#TMDB_API_URL');
   await expect(catalogUrlInput).toBeVisible();
   await catalogUrlInput.fill('not-a-url');
 
   const invalidTestResponsePromise = page.waitForResponse(response => {
     return (
-      response.url().endsWith('/api/config/CATALOG/test') && response.request().method() === 'POST'
+      response.url().endsWith('/api/config/TMDB/test') && response.request().method() === 'POST'
     );
   });
   await testButton.click();
@@ -168,7 +166,7 @@ test('completes first-run admin and required configuration through the UI', asyn
     ],
   });
 
-  await expect(page.getByText('Failed to test Catalog')).toBeVisible();
+  await expect(page.getByText('Failed to test TMDB')).toBeVisible();
   await expect(catalogUrlInput.locator('xpath=..')).toHaveAttribute('data-test-failure', 'true');
   await expect(nextButton).toBeDisabled();
   await expect(page).toHaveScreenshot('catalog-test-failure.png', screenshotOptions);
@@ -178,13 +176,13 @@ test('completes first-run admin and required configuration through the UI', asyn
   const configAfterTest = (await configAfterTestResponse.json()) as ConfigEntry[];
   expect(configAfterTest).toEqual(
     expect.arrayContaining([
-      expect.objectContaining({ key: 'CATALOG__TMDB_API_ACCESS_TOKEN', hasValue: false }),
+      expect.objectContaining({ key: 'TMDB_API_ACCESS_TOKEN', hasValue: false }),
     ])
   );
 
   await catalogUrlInput.fill('http://tmdb-mock/3');
   const saveResponsePromise = page.waitForResponse(response => {
-    return response.url().endsWith('/api/config/CATALOG') && response.request().method() === 'PUT';
+    return response.url().endsWith('/api/config/TMDB') && response.request().method() === 'PUT';
   });
   await saveButton.click();
   const saveResponse = await saveResponsePromise;
@@ -194,23 +192,17 @@ test('completes first-run admin and required configuration through the UI', asyn
     services: [expect.objectContaining({ service: 'CATALOG', success: true })],
   });
 
-  await expect(page.getByRole('heading', { name: 'LIST' })).toBeVisible({
+  await expect(page.getByRole('heading', { name: 'Trakt' })).toBeVisible({
     timeout: 5_000,
   });
-  await expect(page.getByText('4 missing')).toBeVisible();
-  await page.getByRole('textbox', { name: 'List Trakt Client ID' }).fill('mock-trakt-client-id');
+  await expect(page.getByText('3 missing')).toBeVisible();
+  await page.getByRole('textbox', { name: 'Trakt Client ID' }).fill('mock-trakt-client-id');
+  await page.getByRole('textbox', { name: 'Trakt Client Secret' }).fill('mock-trakt-client-secret');
   await page
-    .getByRole('textbox', { name: 'List Trakt Client Secret' })
-    .fill('mock-trakt-client-secret');
-  await page
-    .getByRole('textbox', { name: 'List Trakt Redirect URI' })
+    .getByRole('textbox', { name: 'Trakt Redirect URI' })
     .fill('https://app.example/trakt/callback');
-  await page
-    .getByRole('textbox', { name: 'List Service Encryption Key' })
-    .fill('e2e-list-service-key');
-
   const listSaveResponsePromise = page.waitForResponse(response => {
-    return response.url().endsWith('/api/config/LIST') && response.request().method() === 'PUT';
+    return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
   });
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   const listSaveResponse = await listSaveResponsePromise;
@@ -229,7 +221,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   const configAfterSaveResponse = await api.get('/api/config', { headers: sessionHeaders });
   expect(configAfterSaveResponse.status()).toBe(200);
   const configAfterSave = (await configAfterSaveResponse.json()) as ConfigEntry[];
-  const savedToken = configAfterSave.find(entry => entry.key === 'CATALOG__TMDB_API_ACCESS_TOKEN');
+  const savedToken = configAfterSave.find(entry => entry.key === 'TMDB_API_ACCESS_TOKEN');
   expect(savedToken).toMatchObject({ hasValue: true, isSecret: true });
   expect(savedToken?.value).not.toBe('e2e-dummy-token');
 

@@ -16,10 +16,7 @@ export function hasConfigurationIssue(
   configEntries: ConfigEntryView[] | undefined,
   serviceStatuses: ServiceStatuses | undefined
 ): boolean {
-  const hasMissingRequiredValue = configEntries?.some(
-    entry =>
-      entry.required && !entry.hasValue && serviceStatuses?.[entry.serviceGroup]?.status !== 'ready'
-  );
+  const hasMissingRequiredValue = configEntries?.some(entry => entry.required && !entry.hasValue);
   const hasMisconfiguredService = Object.values(serviceStatuses ?? {}).some(({ status }) =>
     ['needs_configuration', 'degraded', 'error'].includes(status)
   );
@@ -75,10 +72,7 @@ export function useAppState(): AppState {
 
   // 6. The setup flag only governs first-admin registration. The wizard is
   // exclusively driven by missing configuration or a degraded/error service.
-  const hasMissingRequiredValue = configData?.some(
-    entry =>
-      entry.required && !entry.hasValue && serviceStatuses?.[entry.serviceGroup]?.status !== 'ready'
-  );
+  const hasMissingRequiredValue = configData?.some(entry => entry.required && !entry.hasValue);
   if (hasMissingRequiredValue && !configDismissed) {
     return 'config_wizard';
   }

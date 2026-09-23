@@ -34,17 +34,13 @@ services:
     container_name: miauflix-media-catalog
     environment:
       - DATA_DIR=/app/data
-      - CATALOG_CONFIG_FILE=/shared/config.json
-      - CATALOG_SERVICE_ENCRYPTION_KEY=${CATALOG_SERVICE_ENCRYPTION_KEY:-}
       - BUNQUEUE_HOST=bunqueue
       - BUNQUEUE_PORT=6789
-      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-}
       - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
     ports:
       - '127.0.0.1:3001:3001'
     volumes:
       - ./data/media-catalog:/app/data
-      - ./data:/shared
     restart: unless-stopped
 
   list-service:
@@ -55,17 +51,11 @@ services:
     container_name: miauflix-list-service
     environment:
       - LIST_SERVICE_DATA_DIR=/app/data
-      - LIST_SERVICE_CONFIG_FILE=/shared/config.json
       - LIST_SERVICE_ENCRYPTION_KEY=${LIST_SERVICE_ENCRYPTION_KEY:-}
-      - TRAKT_API_URL=${TRAKT_API_URL:-https://api.trakt.tv}
-      - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-}
-      - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-}
-      - TRAKT_REDIRECT_URI=${TRAKT_REDIRECT_URI:-}
     ports:
       - '127.0.0.1:3002:3002'
     volumes:
       - ./data/list-service:/app/data
-      - ./data:/shared
     restart: unless-stopped
 
   miauflix:

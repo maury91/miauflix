@@ -1,4 +1,5 @@
 import { logger } from '@logger';
+import type { ConfigVariable, ServiceConfigSchema } from '@miauflix/service-contracts';
 import { ConfigStore } from '@miauflix/service-contracts';
 import chalk from 'chalk';
 import { mkdirSync } from 'fs';
@@ -7,8 +8,15 @@ import path from 'path';
 import { ConfigurationServiceError } from '@errors/configuration.errors';
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { VariableInfo } from '@mytypes/configuration';
-import { ALL_VAR_NAMES, services } from '@services/configuration/configuration.consts';
+import {
+  ALL_VAR_NAMES,
+  type ConfigurationGroup,
+  configurationGroups,
+  replaceRemoteServiceGroups,
+  services,
+} from '@services/configuration/configuration.consts';
 import { EncryptionService } from '@services/encryption/encryption.service';
+import { transforms, variable } from '@utils/config';
 import { hasKey, objectEntries, objectFromEntries, objectKeys } from '@utils/object.util';
 
 import type {
@@ -58,10 +66,13 @@ export class ConfigurationService {
   /** Raw string values: env snapshot + auto-generated + file-loaded + runtime set */
   private _rawValues = new Map<VariableName, string>();
   private _variablesInfo = new Map<VariableName, ExtendedVariableInfo>();
+  private _variableGroups = new Map<VariableName, string>();
   /** Variables whose values are owned and interpreted by this Backend process. */
   private readonly _localVariableNames = new Set<VariableName>();
+  private readonly _managedVariableNames = new Set<VariableName>();
   /** Names currently published by each runtime-registered service. */
   private _dynamicVariableNames = new Map<ServiceName, Set<VariableName>>();
+  private _remoteSchemas = new Map<ServiceName, ServiceConfigSchema>();
   /** Services that have self-registered with their live instance */
   private _registeredServices = new Map<ServiceName, ConfigurableService>();
   /** Serializes temporary config overlays so concurrent requests cannot see each other's drafts. */
@@ -76,7 +87,9 @@ export class ConfigurationService {
           ...variableConfig,
           serviceName,
         });
+        this._variableGroups.set(variableName, serviceName);
         this._localVariableNames.add(variableName);
+        this._managedVariableNames.add(variableName);
       }
     }
   }
@@ -129,28 +142,137 @@ export class ConfigurationService {
    * service owns and decrypts them. The schema is retained for wizard metadata
    * and request routing only.
    */
-  registerDynamicVariables(
-    variables: Record<string, VariableInfo>,
-    serviceName: ServiceName
-  ): void {
-    const nextVariableNames = new Set(Object.keys(variables) as VariableName[]);
-    const previousVariableNames = this._dynamicVariableNames.get(serviceName) ?? new Set();
-
-    // Keep raw values and _fileData so a removed variable can recover its saved
-    // value if the remote service publishes it again later. It must not remain
-    // in either active metadata or computed values while absent from the schema.
-    for (const variableName of previousVariableNames) {
-      if (!nextVariableNames.has(variableName)) {
-        this._variablesInfo.delete(variableName);
-        delete (this._computedValues as Record<string, unknown>)[variableName];
+  registerRemoteConfiguration(serviceName: ServiceName, schema: ServiceConfigSchema): void {
+    const groups: Record<string, ConfigurationGroup> = {};
+    for (const group of schema.groups) {
+      groups[group.id] = {
+        name: group.name,
+        description: group.description,
+        variables: Object.fromEntries(
+          group.variables.map(item => [item.key, this.remoteVariableInfo(item)])
+        ),
+      };
+    }
+    replaceRemoteServiceGroups(serviceName, groups);
+    this._remoteSchemas.set(serviceName, schema);
+    const keys = new Set(
+      schema.groups.flatMap(group => group.variables.map(item => item.key as VariableName))
+    );
+    for (const key of keys) {
+      this._managedVariableNames.add(key);
+      const group = schema.groups.find(candidate =>
+        candidate.variables.some(item => item.key === key)
+      )!;
+      const item = group.variables.find(candidate => candidate.key === key)!;
+      const existing = this._variablesInfo.get(key);
+      this._variablesInfo.set(key, {
+        ...this.remoteVariableInfo(item),
+        serviceName,
+      });
+      this._variableGroups.set(key, group.id);
+      if (!this._rawValues.has(key)) {
+        const envValue = process.env[key];
+        const defaultValue = item.defaultValue ?? '';
+        const value = envValue || defaultValue;
+        if (value) this._rawValues.set(key, value);
+      }
+      if (!existing && this._rawValues.has(key)) {
+        const info = this._variablesInfo.get(key)!;
+        (this._computedValues as Record<string, unknown>)[key] = applyTransform(
+          key as never,
+          info,
+          this._rawValues.get(key)!
+        );
       }
     }
-
-    for (const [name, info] of Object.entries(variables)) {
-      const variableName = name as VariableName;
-      this._variablesInfo.set(variableName, { ...info, serviceName });
+    const previous = this._dynamicVariableNames.get(serviceName) ?? new Set<VariableName>();
+    const active = new Set(keys);
+    for (const key of previous) {
+      if (
+        !active.has(key) &&
+        ![...this._remoteSchemas.entries()].some(
+          ([owner, candidate]) =>
+            owner !== serviceName &&
+            candidate.groups.some(group => group.variables.some(item => item.key === key))
+        )
+      ) {
+        this._variablesInfo.delete(key);
+        delete (this._computedValues as Record<string, unknown>)[key];
+      }
     }
-    this._dynamicVariableNames.set(serviceName, nextVariableNames);
+    this._dynamicVariableNames.set(serviceName, keys);
+  }
+
+  getServiceConfigSnapshot(
+    serviceName: ServiceName,
+    overrides: Record<string, string> = {}
+  ): Record<string, string> | undefined {
+    const schema = this._remoteSchemas.get(serviceName);
+    if (!schema) return undefined;
+    const variables = schema.groups.flatMap(group => group.variables);
+    const values = Object.fromEntries(
+      variables.map(item => [
+        item.key,
+        overrides[item.key] ??
+          this._rawValues.get(item.key as VariableName) ??
+          item.defaultValue ??
+          '',
+      ])
+    );
+    if (variables.some(item => item.required && !values[item.key])) return undefined;
+    return values;
+  }
+
+  private remoteVariableInfo(item: ConfigVariable): VariableInfo {
+    const common = {
+      description: item.description,
+      label: item.label,
+      required: item.required,
+      advanced: item.advanced,
+      defaultValueSource: item.defaultValueSource,
+      example: item.example,
+      link: item.link,
+      linkLabel: item.linkLabel,
+      testRelevant: item.testRelevant,
+      testFailureHelp: item.testFailureHelp,
+      booleanStateDescriptions: item.booleanStateDescriptions,
+    };
+    switch (item.inputType) {
+      case 'password':
+        return item.skipUserInteraction && item.defaultValue
+          ? variable({
+              ...common,
+              password: true,
+              defaultValue: item.defaultValue,
+              skipUserInteraction: true,
+            })
+          : variable({ ...common, password: true });
+      case 'select':
+        return variable({
+          ...common,
+          defaultValue: item.defaultValue,
+          options: item.options ?? {},
+          transform: transforms.enum({ values: Object.keys(item.options ?? {}) }),
+        });
+      case 'boolean':
+        return variable({
+          ...common,
+          defaultValue: item.defaultValue ?? 'false',
+          transform: transforms.boolean(),
+        });
+      case 'number':
+        return variable({
+          ...common,
+          defaultValue: item.defaultValue ?? '0',
+          transform: transforms.number(item.numberOptions ?? {}),
+        });
+      default:
+        return variable({
+          ...common,
+          defaultValue: item.defaultValue ?? '',
+          transform: transforms.string(),
+        });
+    }
   }
 
   /**
@@ -251,7 +373,7 @@ export class ConfigurationService {
   private loadConfigFile(): void {
     if (!this._configStore || !this._encryptionService) return;
     this._fileData = {};
-    const fileData = this._configStore.readSync(this._localVariableNames);
+    const fileData = this._configStore.readAllSync();
     for (const [key, raw] of Object.entries(fileData)) {
       this._fileData[key as VariableName] = raw;
       let value = raw;
@@ -273,15 +395,18 @@ export class ConfigurationService {
   private async saveConfigFile(): Promise<void> {
     if (!this._configStore) return;
     const values = Object.fromEntries(
-      [...this._localVariableNames]
+      [...this._managedVariableNames]
         .map(key => [key, this._fileData[key]])
         .filter(
           (entry): entry is [VariableName, string] =>
             typeof entry[1] === 'string' && entry[1].length > 0
         )
     );
-    const unsetKeys = [...this._localVariableNames].filter(key => !(key in values));
-    const stored = await this._configStore.update(this._localVariableNames, { values, unsetKeys });
+    const unsetKeys = [...this._managedVariableNames].filter(key => !(key in values));
+    const stored = await this._configStore.update(this._managedVariableNames, {
+      values,
+      unsetKeys,
+    });
     for (const key of unsetKeys) delete this._fileData[key];
     for (const [key, value] of Object.entries(stored)) this._fileData[key as VariableName] = value;
   }
@@ -327,27 +452,25 @@ export class ConfigurationService {
   async runSetup(options: {
     forceReconfigure?: boolean;
     configOnly?: boolean;
-  }): Promise<{ servicesNeedingConfiguration: Set<ServiceName> }> {
+  }): Promise<{ servicesNeedingConfiguration: Set<string> }> {
     const { forceReconfigure = false, configOnly = false } = options;
-    const servicesNeedingConfiguration = new Set<ServiceName>();
+    const servicesNeedingConfiguration = new Set<string>();
     const allMissingRequiredVars = new Set<string>();
     const changedVarKeys = new Set<VariableName>();
-    const servicesWithMissingVars = new Set<ServiceName>();
-    const missingVarsByService = new Map<ServiceName, string[]>();
-    let validationErrorsByService: Array<{ serviceKey: ServiceName; error: string }> = [];
+    const servicesWithMissingVars = new Set<string>();
+    const missingVarsByService = new Map<string, string[]>();
+    let validationErrorsByService: Array<{ serviceKey: string; error: string }> = [];
 
     if (forceReconfigure) {
-      objectKeys(services).forEach(k => servicesNeedingConfiguration.add(k));
+      Object.keys(configurationGroups).forEach(k => servicesNeedingConfiguration.add(k));
     } else {
-      for (const [serviceKey, service] of objectEntries(services)) {
-        const remoteReady =
-          this._registeredServices.get(serviceKey)?.applyConfiguration &&
-          this._registeredServices.get(serviceKey)?.getStatus().status === 'ready';
-        const missingRequiredVars = remoteReady
-          ? []
-          : objectEntries(service.variables)
-              .filter(([varName, varInfo]) => varInfo.required && !this._rawValues.get(varName))
-              .map(([varName]) => varName);
+      for (const [serviceKey, service] of objectEntries(configurationGroups)) {
+        const missingRequiredVars = objectEntries(service.variables)
+          .filter(
+            ([varName, varInfo]) =>
+              varInfo.required && !this._rawValues.get(varName as VariableName)
+          )
+          .map(([varName]) => varName);
 
         if (missingRequiredVars.length > 0) {
           servicesNeedingConfiguration.add(serviceKey);
@@ -420,32 +543,35 @@ export class ConfigurationService {
         console.log(chalk.cyan("Let's set up your configuration for each service."));
 
         for (const serviceKey of servicesNeedingConfiguration) {
-          const service = services[serviceKey];
+          const service = configurationGroups[serviceKey];
 
           const currentValues = objectFromEntries(
-            [...this._variablesInfo.entries()]
-              .filter(([, info]) => info.serviceName === serviceKey)
+            [...this._variableGroups.entries()]
+              .filter(([, groupName]) => groupName === serviceKey)
               .map(([varName]) => [varName, this._rawValues.get(varName) ?? ''])
           );
 
-          const registeredInstance = this._registeredServices.get(serviceKey);
+          const registeredInstance = isServiceName(serviceKey)
+            ? this._registeredServices.get(serviceKey)
+            : undefined;
           const configuredValues = await configureService(service, {
             currentValues,
             applyValues: async values => {
-              if (registeredInstance?.applyConfiguration) {
-                const result = await registeredInstance.applyConfiguration(
-                  Object.entries(values).map(([key, value]) => ({ key, value: String(value) }))
-                );
-                if (!result.success)
-                  throw new Error(result.message ?? `${serviceKey} configuration failed`);
-                return;
-              }
-              for (const [varName, value] of objectEntries(values)) {
-                await this.setValue(varName, value);
-              }
+              const result = await this.saveServiceConfigs(
+                serviceKey,
+                Object.entries(values).map(([key, value]) => ({ key, value: String(value) }))
+              );
+              if (!result.success)
+                throw new Error(result.services.map(item => item.message).join('; '));
             },
-            handler: registeredInstance ? handlerFromInstance(registeredInstance) : undefined,
-            testable: registeredInstance?.testable,
+            handler:
+              registeredInstance && this.remoteConsumersForGroup(serviceKey).length === 0
+                ? handlerFromInstance(registeredInstance)
+                : undefined,
+            testable:
+              registeredInstance && this.remoteConsumersForGroup(serviceKey).length === 0
+                ? registeredInstance.testable
+                : undefined,
           });
 
           for (const [varName, prevValue] of objectEntries(currentValues)) {
@@ -462,8 +588,8 @@ export class ConfigurationService {
 
     // Persist any auto-configured vars that haven't been saved to file yet
     for (const key of changedVarKeys) {
-      const owner = this._variablesInfo.get(key)?.serviceName;
-      if (owner && this._registeredServices.get(owner)?.applyConfiguration) {
+      const owner = this._variableGroups.get(key);
+      if (owner && this.remoteConsumersForGroup(owner).length) {
         continue;
       }
       const varKey = key;
@@ -576,8 +702,16 @@ export class ConfigurationService {
   }
 
   getMissingVarsForGroup(group: keyof typeof services): string[] {
-    const instance = this._registeredServices.get(group);
-    if (instance?.testable && instance.getStatus().status === 'ready') return [];
+    const remoteSchema = this._remoteSchemas.get(group);
+    if (remoteSchema) {
+      return remoteSchema.groups
+        .flatMap(remoteGroup => remoteGroup.variables)
+        .filter(
+          item =>
+            item.required && !this._rawValues.get(item.key as VariableName) && !item.defaultValue
+        )
+        .map(item => item.key);
+    }
     return computeMissingVarsForGroup(group, this._rawValues);
   }
 
@@ -649,8 +783,8 @@ export class ConfigurationService {
 
       const uniqueServices = [...new Set(requestedServices)];
       for (const { key } of entries) {
-        const serviceName = this._variablesInfo.get(key)?.serviceName;
-        if (!serviceName || !uniqueServices.includes(serviceName)) {
+        const serviceName = this._variableGroups.get(key);
+        if (!serviceName || !uniqueServices.includes(serviceName as ServiceName)) {
           throw new ConfigurationServiceError(
             `Configuration key '${key}' does not belong to the requested service`,
             'unknown_config_key',
@@ -887,24 +1021,42 @@ export class ConfigurationService {
   }
 
   async testServiceConfigs(
-    serviceName: ServiceName,
+    serviceName: string,
     entries: { key: string; value: string }[]
   ): Promise<TestConfigsResult> {
-    const remote = this._registeredServices.get(serviceName);
-    if (remote?.testConfiguration && remote.applyConfiguration) {
-      return this.runRemoteConfigAction(serviceName, entries, false);
+    const consumers = this.remoteConsumersForGroup(serviceName);
+    if (consumers.length) {
+      return this.runRemoteGroupConfigAction(
+        serviceName,
+        entries,
+        false
+      ) as Promise<TestConfigsResult>;
     }
+    if (!isServiceName(serviceName))
+      throw new ConfigurationServiceError(
+        `Configuration group '${serviceName}' does not exist`,
+        'service_not_found'
+      );
     return this.runConfigAction(entries, [serviceName], false) as Promise<TestConfigsResult>;
   }
 
   async saveServiceConfigs(
-    serviceName: ServiceName,
+    serviceName: string,
     entries: { key: string; value: string }[]
   ): Promise<SaveConfigsResult> {
-    const remote = this._registeredServices.get(serviceName);
-    if (remote?.testConfiguration && remote.applyConfiguration) {
-      return this.runRemoteConfigAction(serviceName, entries, true) as Promise<SaveConfigsResult>;
+    const consumers = this.remoteConsumersForGroup(serviceName);
+    if (consumers.length) {
+      return this.runRemoteGroupConfigAction(
+        serviceName,
+        entries,
+        true
+      ) as Promise<SaveConfigsResult>;
     }
+    if (!isServiceName(serviceName))
+      throw new ConfigurationServiceError(
+        `Configuration group '${serviceName}' does not exist`,
+        'service_not_found'
+      );
     return this.runConfigAction(entries, [serviceName], true) as Promise<SaveConfigsResult>;
   }
 
@@ -913,30 +1065,40 @@ export class ConfigurationService {
       return this.runConfigAction(entries, [], true) as Promise<SaveConfigsResult>;
     }
     const serviceNames = entries
-      .map(entry => this._variablesInfo.get(entry.key)?.serviceName)
-      .filter((serviceName): serviceName is ServiceName => Boolean(serviceName));
+      .map(entry => this._variableGroups.get(entry.key))
+      .filter((groupName): groupName is string => Boolean(groupName));
     if (
       serviceNames.every(
-        serviceName => !this._registeredServices.get(serviceName)?.applyConfiguration
+        serviceName =>
+          this.remoteConsumersForGroup(serviceName).length === 0 && isServiceName(serviceName)
       )
     ) {
       return this.runConfigAction(
         entries,
-        [...new Set(serviceNames)],
+        [...new Set(serviceNames.filter(isServiceName))],
         true
       ) as Promise<SaveConfigsResult>;
     }
-    const grouped = new Map<ServiceName, { key: string; value: string }[]>();
+    const grouped = new Map<string, { key: string; value: string }[]>();
     for (const entry of entries) {
-      const serviceName = this._variablesInfo.get(entry.key)?.serviceName;
-      if (!serviceName) continue;
-      grouped.set(serviceName, [...(grouped.get(serviceName) ?? []), entry]);
+      const groupName = this._variableGroups.get(entry.key);
+      if (!groupName) continue;
+      grouped.set(groupName, [...(grouped.get(groupName) ?? []), entry]);
     }
     const results = await Promise.all(
-      [...grouped.entries()].map(([serviceName, serviceEntries]) =>
-        this._registeredServices.get(serviceName)?.applyConfiguration
-          ? this.runRemoteConfigAction(serviceName, serviceEntries, true)
-          : this.runConfigAction(serviceEntries, [serviceName], true)
+      [...grouped.entries()].map(([groupName, groupEntries]) =>
+        this.remoteConsumersForGroup(groupName).length
+          ? this.runRemoteGroupConfigAction(groupName, groupEntries, true)
+          : isServiceName(groupName)
+            ? this.runConfigAction(groupEntries, [groupName], true)
+            : Promise.resolve({
+                success: false,
+                services: [],
+                restarted: [],
+                needsProcessRestart: [],
+                changed: [],
+                recovered: [],
+              })
       )
     );
     const services = results.flatMap(result => result.services);
@@ -953,54 +1115,246 @@ export class ConfigurationService {
   }
 
   private async runRemoteConfigAction(
-    serviceName: ServiceName,
+    groupName: string,
     entries: { key: string; value: string }[],
     save: boolean
   ): Promise<SaveConfigsResult | TestConfigsResult> {
-    const instance = this._registeredServices.get(serviceName);
-    if (!instance?.testConfiguration || !instance.applyConfiguration) {
-      throw new ConfigurationServiceError(
-        `Service '${serviceName}' does not support remote configuration`,
-        'service_not_registered'
+    return this.runRemoteGroupConfigAction(groupName, entries, save);
+  }
+
+  private remoteConsumersForGroup(groupName: string): ServiceName[] {
+    return [...this._remoteSchemas.entries()]
+      .filter(([, schema]) => schema.groups.some(group => group.id === groupName))
+      .map(([serviceName]) => serviceName);
+  }
+
+  private async runRemoteGroupConfigAction(
+    groupName: string,
+    entries: { key: string; value: string }[],
+    save: boolean
+  ): Promise<SaveConfigsResult | TestConfigsResult> {
+    return this.withConfigLock(async () => {
+      const group = configurationGroups[groupName];
+      const consumers = this.remoteConsumersForGroup(groupName);
+      if (!group || consumers.length === 0) {
+        throw new ConfigurationServiceError(
+          `Configuration group '${groupName}' does not exist`,
+          'service_not_found'
+        );
+      }
+      const invalidKeys = entries.filter(({ key }) => !group.variables[key]).map(({ key }) => key);
+      for (const { key, value } of entries) {
+        if (invalidKeys.includes(key) || !value) continue;
+        try {
+          applyTransform(key as never, group.variables[key], value);
+        } catch {
+          invalidKeys.push(key);
+        }
+      }
+      if (invalidKeys.length) {
+        return save
+          ? {
+              success: false,
+              services: [],
+              restarted: [],
+              needsProcessRestart: [],
+              changed: [],
+              recovered: [],
+              invalidKeys,
+            }
+          : { success: false, services: [], invalidKeys };
+      }
+
+      const overrides = Object.fromEntries(entries.map(({ key, value }) => [key, value]));
+      const snapshots = new Map<ServiceName, Record<string, string>>();
+      const previousSnapshots = new Map<ServiceName, Record<string, string> | undefined>();
+      for (const consumer of consumers) {
+        previousSnapshots.set(consumer, this.getServiceConfigSnapshot(consumer));
+        const snapshot = this.getServiceConfigSnapshot(consumer, overrides);
+        if (!snapshot) {
+          const missing = this._remoteSchemas
+            .get(consumer)!
+            .groups.flatMap(candidate =>
+              candidate.variables
+                .filter(
+                  item =>
+                    item.required &&
+                    !(
+                      overrides[item.key] ??
+                      this._rawValues.get(item.key as VariableName) ??
+                      item.defaultValue
+                    )
+                )
+                .map(item => item.key)
+            );
+          const result = {
+            service: consumer,
+            success: false,
+            testMode: 'validation' as const,
+            message: `Missing required values: ${missing.join(', ')}`,
+          };
+          return save
+            ? {
+                success: false,
+                services: [result],
+                restarted: [],
+                needsProcessRestart: [],
+                changed: [],
+                recovered: [],
+              }
+            : { success: false, services: [result] };
+        }
+        snapshots.set(consumer, snapshot);
+      }
+
+      const serviceResults: TestConfigsResult['services'] = [];
+      for (const consumer of consumers) {
+        const instance = this._registeredServices.get(consumer);
+        if (!instance?.testConfiguration || !instance.applyConfiguration) {
+          serviceResults.push({
+            service: consumer,
+            success: false,
+            testMode: 'live',
+            message: `${consumer} is unavailable for configuration testing`,
+          });
+          continue;
+        }
+        try {
+          const test = await instance.testConfiguration(
+            Object.entries(snapshots.get(consumer)!).map(([key, value]) => ({ key, value }))
+          );
+          serviceResults.push({
+            service: consumer,
+            success: test.success,
+            testMode: test.mode ?? 'live',
+            message: test.message,
+          });
+        } catch (error) {
+          serviceResults.push({
+            service: consumer,
+            success: false,
+            testMode: 'live',
+            message: error instanceof Error ? error.message : String(error),
+          });
+        }
+      }
+      const success =
+        serviceResults.length === consumers.length &&
+        serviceResults.every(result => result.success);
+      if (!success || !save) {
+        return save
+          ? {
+              success,
+              services: serviceResults,
+              restarted: [],
+              needsProcessRestart: [],
+              changed: [],
+              recovered: [],
+            }
+          : { success, services: serviceResults };
+      }
+
+      const changed = entries.filter(
+        ({ key, value }) => this._rawValues.get(key as VariableName) !== value
       );
-    }
-    try {
-      const result = save
-        ? await instance.applyConfiguration(entries)
-        : await instance.testConfiguration(entries);
-      const serviceResult = {
-        service: serviceName,
-        success: result.success,
-        testMode: 'live' as const,
-        message: result.message ?? `${serviceName} configuration ${save ? 'saved' : 'tested'}.`,
-      };
-      if (!save) return { success: result.success, services: [serviceResult] };
+      if (!changed.length) {
+        return {
+          success: true,
+          services: serviceResults,
+          restarted: [],
+          needsProcessRestart: [],
+          changed: [],
+          recovered: [],
+        };
+      }
+      const rawSnapshot = new Map(this._rawValues);
+      const computedSnapshot = { ...this._computedValues };
+      const fileSnapshot = { ...this._fileData };
+      for (const { key, value } of changed) {
+        const variableName = key as VariableName;
+        this._rawValues.set(variableName, value);
+        (this._computedValues as Record<string, unknown>)[key] = applyTransform(
+          key as never,
+          this._variablesInfo.get(variableName) ?? group.variables[key],
+          value
+        );
+        if (value) {
+          const { isSecret } = this.findVariableInfo(variableName);
+          this._fileData[variableName] = isSecret
+            ? ENC_PREFIX + this._encryptionService!.encryptString(value)
+            : value;
+        } else delete this._fileData[variableName];
+      }
+
+      const attempted: ServiceName[] = [];
+      let applying: ServiceName | undefined;
+      try {
+        await this.saveConfigFile();
+        for (const consumer of consumers) {
+          applying = consumer;
+          // A lost response can happen after the remote service activated the
+          // snapshot, so include the in-flight consumer in rollback attempts.
+          attempted.push(consumer);
+          const instance = this._registeredServices.get(consumer)!;
+          const result = await instance.applyConfiguration!(
+            Object.entries(snapshots.get(consumer)!).map(([key, value]) => ({ key, value }))
+          );
+          if (!result.success)
+            throw new Error(result.message ?? `${consumer} rejected configuration`);
+        }
+      } catch (error) {
+        this._rawValues = rawSnapshot;
+        this._computedValues = computedSnapshot;
+        this._fileData = fileSnapshot;
+        await this.saveConfigFile();
+        for (const consumer of attempted.reverse()) {
+          const previous = previousSnapshots.get(consumer);
+          try {
+            const instance = this._registeredServices.get(consumer);
+            const restored = previous
+              ? await instance?.applyConfiguration?.(
+                  Object.entries(previous).map(([key, value]) => ({ key, value }))
+                )
+              : await instance?.clearConfiguration?.();
+            if (!restored?.success) {
+              throw new Error(restored?.message ?? `${consumer} did not accept the rollback`);
+            }
+          } catch (rollbackError) {
+            const message =
+              rollbackError instanceof Error ? rollbackError.message : String(rollbackError);
+            logger.error('Config', `Failed to restore ${consumer} configuration`, rollbackError);
+            const failedConsumer = serviceResults.find(result => result.service === consumer);
+            if (failedConsumer) {
+              failedConsumer.success = false;
+              failedConsumer.message = `${failedConsumer.message}; rollback failed: ${message}`;
+            }
+          }
+        }
+        const failed = serviceResults.find(result => result.service === applying);
+        if (failed) {
+          failed.success = false;
+          failed.message = error instanceof Error ? error.message : String(error);
+        }
+        return {
+          success: false,
+          services: serviceResults,
+          restarted: [],
+          needsProcessRestart: [],
+          changed: [],
+          recovered: [],
+        };
+      }
+
+      this.notifyChanges();
       return {
-        success: result.success,
-        services: [serviceResult],
-        restarted: result.success ? [serviceName] : [],
+        success: true,
+        services: serviceResults,
+        restarted: consumers,
         needsProcessRestart: [],
-        changed: result.success ? [serviceName] : [],
+        changed: [groupName],
         recovered: [],
       };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      const serviceResult = {
-        service: serviceName,
-        success: false,
-        testMode: 'live' as const,
-        message,
-      };
-      if (!save) return { success: false, services: [serviceResult] };
-      return {
-        success: false,
-        services: [serviceResult],
-        restarted: [],
-        needsProcessRestart: [],
-        changed: [],
-        recovered: [],
-      };
-    }
+    });
   }
 
   async updateConfigs(entries: { key: string; value: string }[]): Promise<UpdateConfigsResult> {

@@ -29,21 +29,21 @@ export const catalogConfigurationDefinition = serviceConfiguration({
       advanced: true,
       transform: transforms.number({ min: 1000, integer: true }),
     }),
-    CATALOG__CATALOG_MOVIE_SYNC_INTERVAL: variable({
+    CATALOG_MOVIE_SYNC_INTERVAL: variable({
       description: 'Interval in seconds between catalog movie change scans',
       defaultValue: '5400',
       required: false,
       advanced: true,
       transform: transforms.number({ min: 1 }),
     }),
-    CATALOG__CATALOG_SHOW_SYNC_INTERVAL: variable({
+    CATALOG_SHOW_SYNC_INTERVAL: variable({
       description: 'Interval in seconds between catalog TV show change scans',
       defaultValue: '5400',
       required: false,
       advanced: true,
       transform: transforms.number({ min: 1 }),
     }),
-    CATALOG__CATALOG_SEASON_SYNC_INTERVAL: variable({
+    CATALOG_SEASON_SYNC_INTERVAL: variable({
       description: 'Interval in seconds between incomplete season sync seeds',
       defaultValue: '5',
       required: false,

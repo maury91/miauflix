@@ -9,12 +9,11 @@ const manifest = {
   name: 'Media Catalog',
   description: 'Catalog',
   version: '1.0.0',
-  managementProtocolVersion: 1,
+  managementProtocolVersion: 2,
   capabilities: { catalog: { version: 1, basePath: '/v1/catalog' } },
   management: {
     statusPath: '/status',
     configurationSchemaPath: '/configuration/schema',
-    configurationStatePath: '/configuration',
     configurationTestPath: '/configuration/test',
     configurationApplyPath: '/configuration',
   },
@@ -27,12 +26,8 @@ const setupTest = () => {
   };
   const configuration = {
     getDynamic: jest.fn((key: string) => values[key]),
-    registerDynamicVariables: jest.fn((variables: Record<string, unknown>) => {
-      Object.assign(
-        values,
-        Object.fromEntries(Object.keys(variables).map(key => [key, undefined]))
-      );
-    }),
+    registerRemoteConfiguration: jest.fn(),
+    getServiceConfigSnapshot: jest.fn(),
   };
   const manager = new RemoteServiceManager(configuration as never, {
     serviceName: 'CATALOG',
@@ -65,21 +60,26 @@ describe('RemoteServiceManager', () => {
       if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
       if (path === '/configuration/schema') {
         return Response.json({
-          name: 'Media Catalog',
-          description: 'Catalog settings',
-          variables: [
+          groups: [
             {
-              key: 'API_TOKEN',
-              description: 'Provider token',
-              required: true,
-              secret: true,
-              inputType: 'password',
+              id: 'TMDB',
+              name: 'TMDB',
+              description: 'Catalog settings',
+              variables: [
+                {
+                  key: 'API_TOKEN',
+                  description: 'Provider token',
+                  required: true,
+                  secret: true,
+                  inputType: 'password',
+                },
+              ],
             },
           ],
         });
       }
       if (path === '/configuration') {
-        return Response.json({ success: true, reloaded: true });
+        return Response.json({ success: true, activated: true });
       }
       if (path === '/status') return Response.json({ state: 'ready' });
       throw new Error(`Unexpected request ${path}`);
@@ -90,10 +90,45 @@ describe('RemoteServiceManager', () => {
 
     expect(manager.capabilityBasePath).toBe('/v1/catalog');
     expect(manager.getStatus()).toEqual({ status: 'ready' });
-    expect(configuration.registerDynamicVariables).toHaveBeenCalledWith(
-      expect.objectContaining({ CATALOG__API_TOKEN: expect.any(Object) }),
-      'CATALOG'
+    expect(configuration.registerRemoteConfiguration).toHaveBeenCalledWith(
+      'CATALOG',
+      expect.objectContaining({ groups: [expect.objectContaining({ id: 'TMDB' })] })
     );
+  });
+
+  it('reapplies the complete backend snapshot when a running service returns to standby', async () => {
+    const { configuration, manager } = setupTest();
+    configuration.getServiceConfigSnapshot.mockReturnValue({
+      TMDB_API_ACCESS_TOKEN: 'backend-owned-token',
+    });
+    let statusRequests = 0;
+    const applyRequests: unknown[] = [];
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') return Response.json({ groups: [] });
+      if (path === '/configuration' && init?.method === 'PUT') {
+        applyRequests.push(JSON.parse(String(init.body)));
+        return Response.json({ success: true, activated: true });
+      }
+      if (path === '/status') {
+        statusRequests += 1;
+        return Response.json({ state: statusRequests === 2 ? 'standby' : 'ready' });
+      }
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
+
+    await jest.advanceTimersByTimeAsync(15_000);
+    manager.stop();
+
+    expect(applyRequests).toEqual([
+      { values: { TMDB_API_ACCESS_TOKEN: 'backend-owned-token' } },
+      { values: { TMDB_API_ACCESS_TOKEN: 'backend-owned-token' } },
+    ]);
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
   });
 
   it('preserves remote presentation metadata and generated secret defaults', async () => {
@@ -103,30 +138,35 @@ describe('RemoteServiceManager', () => {
       if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
       if (path === '/configuration/schema') {
         return Response.json({
-          name: 'Media Catalog',
-          description: 'Catalog settings',
-          variables: [
+          groups: [
             {
-              key: 'REDIRECT_URI',
-              label: 'Redirect URI',
-              description: 'Registered callback URI',
-              required: true,
-              inputType: 'text',
-              advanced: true,
-              defaultValueSource: 'browser-origin',
-            },
-            {
-              key: 'ENCRYPTION_KEY',
-              description: 'Generated key',
-              required: true,
-              inputType: 'password',
-              skipUserInteraction: true,
-              defaultValue: 'generated-secret',
+              id: 'TMDB',
+              name: 'TMDB',
+              description: 'Catalog settings',
+              variables: [
+                {
+                  key: 'REDIRECT_URI',
+                  label: 'Redirect URI',
+                  description: 'Registered callback URI',
+                  required: true,
+                  inputType: 'text',
+                  advanced: true,
+                  defaultValueSource: 'browser-origin',
+                },
+                {
+                  key: 'ENCRYPTION_KEY',
+                  description: 'Generated key',
+                  required: true,
+                  inputType: 'password',
+                  skipUserInteraction: true,
+                  defaultValue: 'generated-secret',
+                },
+              ],
             },
           ],
         });
       }
-      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
       if (path === '/status') return Response.json({ state: 'ready' });
       throw new Error(`Unexpected request ${path}`);
     });
@@ -134,17 +174,19 @@ describe('RemoteServiceManager', () => {
     await manager.initialize();
     manager.stop();
 
-    const variables = configuration.registerDynamicVariables.mock.calls[0]?.[0] as Record<
-      string,
-      Record<string, unknown>
-    >;
-    expect(variables.CATALOG__REDIRECT_URI).toMatchObject({
+    const schema = configuration.registerRemoteConfiguration.mock.calls[0]?.[1] as {
+      groups: Array<{ variables: Array<Record<string, unknown>> }>;
+    };
+    const variables = Object.fromEntries(
+      schema.groups.flatMap(group => group.variables.map(variable => [variable.key, variable]))
+    );
+    expect(variables.REDIRECT_URI).toMatchObject({
       label: 'Redirect URI',
       advanced: true,
       defaultValueSource: 'browser-origin',
     });
-    expect(variables.CATALOG__ENCRYPTION_KEY).toMatchObject({
-      password: true,
+    expect(variables.ENCRYPTION_KEY).toMatchObject({
+      inputType: 'password',
       skipUserInteraction: true,
       defaultValue: 'generated-secret',
     });
@@ -180,12 +222,10 @@ describe('RemoteServiceManager', () => {
         schemaRequests += 1;
         if (schemaRequests === 1) throw new Error('schema unavailable');
         return Response.json({
-          name: 'Media Catalog',
-          description: 'Catalog settings',
-          variables: [],
+          groups: [],
         });
       }
-      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
       if (path === '/status') return Response.json({ state: 'ready' });
       throw new Error(`Unexpected request ${path}`);
     });
@@ -200,7 +240,7 @@ describe('RemoteServiceManager', () => {
 
     expect(schemaRequests).toBe(2);
     expect(manager.getStatus()).toEqual({ status: 'ready' });
-    expect(configuration.registerDynamicVariables).toHaveBeenCalledTimes(1);
+    expect(configuration.registerRemoteConfiguration).toHaveBeenCalledTimes(1);
   });
 
   it('keeps the previous discovery state when a rediscovered schema is invalid', async () => {
@@ -223,14 +263,12 @@ describe('RemoteServiceManager', () => {
         schemaRequests += 1;
         if (schemaRequests === 1) {
           return Response.json({
-            name: 'Media Catalog',
-            description: 'Catalog settings',
-            variables: [],
+            groups: [],
           });
         }
         throw new Error('schema unavailable');
       }
-      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
       if (path === '/status') return Response.json({ state: 'ready' });
       throw new Error(`Unexpected request ${path}`);
     });
@@ -258,29 +296,34 @@ describe('RemoteServiceManager', () => {
       if (path === '/configuration/schema') {
         discovery += 1;
         return Response.json({
-          name: 'Media Catalog',
-          description: 'Catalog settings',
-          variables: [
+          groups: [
             {
-              key: 'API_TOKEN',
-              description: 'Provider token',
-              required: true,
-              inputType: 'password',
+              id: 'TMDB',
+              name: 'TMDB',
+              description: 'Catalog settings',
+              variables: [
+                {
+                  key: 'API_TOKEN',
+                  description: 'Provider token',
+                  required: true,
+                  inputType: 'password',
+                },
+                ...(discovery === 1
+                  ? [
+                      {
+                        key: 'REMOVED_KEY',
+                        description: 'Removed later',
+                        required: false,
+                        inputType: 'string',
+                      },
+                    ]
+                  : []),
+              ],
             },
-            ...(discovery === 1
-              ? [
-                  {
-                    key: 'REMOVED_KEY',
-                    description: 'Removed later',
-                    required: false,
-                    inputType: 'string',
-                  },
-                ]
-              : []),
           ],
         });
       }
-      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
       if (path === '/status') return Response.json({ state: 'ready' });
       throw new Error(`Unexpected request ${path}`);
     });
@@ -293,8 +336,10 @@ describe('RemoteServiceManager', () => {
 
     expect(requests.filter(request => request.path === '/configuration')).toEqual([]);
     expect(
-      Object.keys(configuration.registerDynamicVariables.mock.calls.at(-1)?.[0] ?? {})
-    ).toEqual(['CATALOG__API_TOKEN']);
+      configuration.registerRemoteConfiguration.mock.calls
+        .at(-1)?.[1]
+        .groups[0]?.variables.map((v: { key: string }) => v.key)
+    ).toEqual(['API_TOKEN']);
   });
 
   it('retains a rejected remote fetch error instead of treating it as missing configuration', async () => {
@@ -343,9 +388,9 @@ describe('RemoteServiceManager', () => {
       const path = new URL(String(input)).pathname;
       if (path === SERVICE_MANIFEST_PATH) return Response.json(eventManifest);
       if (path === '/configuration/schema') {
-        return Response.json({ name: 'Catalog', description: 'Catalog', variables: [] });
+        return Response.json({ groups: [] });
       }
-      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
       if (path === '/status') return Response.json({ state: 'ready' });
       if (path === '/events') {
         const body = new ReadableStream({
@@ -383,9 +428,9 @@ describe('RemoteServiceManager', () => {
       const path = new URL(String(input)).pathname;
       if (path === SERVICE_MANIFEST_PATH) return Response.json(eventManifest);
       if (path === '/configuration/schema') {
-        return Response.json({ name: 'Catalog', description: 'Catalog', variables: [] });
+        return Response.json({ groups: [] });
       }
-      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
       if (path === '/status') return Response.json({ state: 'ready' });
       if (path === '/events') {
         const body = new ReadableStream({
@@ -420,20 +465,25 @@ describe('RemoteServiceManager', () => {
       if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
       if (path === '/configuration/schema') {
         return Response.json({
-          name: 'Media Catalog',
-          description: 'Catalog settings',
-          variables: [
+          groups: [
             {
-              key: 'API_TOKEN',
-              description: 'Provider token',
-              required: true,
-              secret: true,
-              inputType: 'password',
+              id: 'TMDB',
+              name: 'TMDB',
+              description: 'Catalog settings',
+              variables: [
+                {
+                  key: 'API_TOKEN',
+                  description: 'Provider token',
+                  required: true,
+                  secret: true,
+                  inputType: 'password',
+                },
+              ],
             },
           ],
         });
       }
-      if (path === '/configuration') return Response.json({ success: true, reloaded: true });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
       if (path === '/configuration/test') {
         return Response.json({
           success: true,
@@ -448,7 +498,7 @@ describe('RemoteServiceManager', () => {
     await manager.initialize();
     requests.length = 0;
     await expect(
-      manager.testConfiguration([{ key: 'CATALOG__API_TOKEN', value: 'draft-token' }])
+      manager.testConfiguration([{ key: 'API_TOKEN', value: 'draft-token' }])
     ).resolves.toEqual({ success: true, mode: 'live', message: 'Catalog provider is reachable' });
     manager.stop();
 
@@ -456,7 +506,7 @@ describe('RemoteServiceManager', () => {
       {
         path: '/configuration/test',
         method: 'POST',
-        body: { values: { API_TOKEN: 'draft-token' }, unsetKeys: [] },
+        body: { values: { API_TOKEN: 'draft-token' } },
       },
     ]);
   });

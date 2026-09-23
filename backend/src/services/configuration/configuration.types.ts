@@ -75,7 +75,7 @@ export type UpdateConfigsResult =
 export type ConfigTestMode = 'live' | 'validation';
 
 export type ConfigServiceActionResult = {
-  service: ServiceName;
+  service: string;
   success: boolean;
   testMode: ConfigTestMode;
   message: string;
@@ -94,6 +94,6 @@ export type ServiceRecovery = {
 export type SaveConfigsResult = TestConfigsResult & {
   restarted: ServiceName[];
   needsProcessRestart: ServiceName[];
-  changed: ServiceName[];
+  changed: string[];
   recovered: ServiceRecovery[];
 };

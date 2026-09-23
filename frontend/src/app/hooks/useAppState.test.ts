@@ -20,8 +20,8 @@ describe('hasConfigurationIssue', () => {
     expect(hasConfigurationIssue([entry()], { CATALOG: { status: 'error' } })).toBe(true);
   });
 
-  it('trusts a ready remote service when its opaque required values are not exposed', () => {
-    expect(hasConfigurationIssue([entry()], { CATALOG: { status: 'ready' } })).toBe(false);
+  it('prompts for backend-owned required values even when a remote reports ready', () => {
+    expect(hasConfigurationIssue([entry()], { CATALOG: { status: 'ready' } })).toBe(true);
   });
 
   it.each(['needs_configuration', 'degraded', 'error'])(

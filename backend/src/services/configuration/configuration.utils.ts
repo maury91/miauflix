@@ -12,7 +12,13 @@ import type {
 } from '@mytypes/configuration';
 import { objectEntries, objectFromEntries } from '@utils/object.util';
 
-import { ALL_SERVICE_NAMES, ALL_VAR_NAMES, services } from './configuration.consts';
+import {
+  ALL_CONFIG_GROUP_NAMES,
+  ALL_SERVICE_NAMES,
+  ALL_VAR_NAMES,
+  configurationGroups,
+  services,
+} from './configuration.consts';
 import type {
   ConfigEntryView,
   ConfiguredServiceValues,
@@ -441,6 +447,10 @@ export function isServiceName(name: string): name is ServiceName {
   return ALL_SERVICE_NAMES.has(name as ServiceName);
 }
 
+export function isConfigGroupName(name: string): boolean {
+  return ALL_CONFIG_GROUP_NAMES.has(name);
+}
+
 export function isFileDataEntry(entry: [string, unknown]): entry is [VariableName, string] {
   return ALL_VAR_NAMES.has(entry[0] as VariableName) && typeof entry[1] === 'string';
 }
@@ -455,25 +465,25 @@ export function persistConfigFile(
 }
 
 export function computeMissingVarsForGroup(
-  group: keyof typeof services,
+  group: string,
   rawValues: Map<VariableName, string>
 ): string[] {
-  const service = services[group];
+  const service = configurationGroups[group];
   if (!service) return [];
   return objectEntries(service.variables)
     .filter(([varName, varInfo]) => {
       if ('skipUserInteraction' in varInfo && varInfo.skipUserInteraction) return false;
       if (!varInfo.required) return false;
-      return !rawValues.get(varName);
+      return !rawValues.get(varName as VariableName);
     })
     .map(([varName]) => varName);
 }
 
 export function buildAllConfigs(rawValues: Map<VariableName, string>): ConfigEntryView[] {
   const result: ConfigEntryView[] = [];
-  for (const [groupKey, service] of objectEntries(services)) {
+  for (const [groupKey, service] of objectEntries(configurationGroups)) {
     for (const [varName, varInfo] of objectEntries(service.variables)) {
-      const rawValue = rawValues.get(varName) ?? '';
+      const rawValue = rawValues.get(varName as VariableName) ?? '';
       const isSecret = isSecretVariable(varInfo);
       result.push({
         key: varName,

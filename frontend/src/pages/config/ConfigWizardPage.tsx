@@ -1,7 +1,5 @@
 import {
-  type ServiceStatuses,
   useGetConfigQuery,
-  useGetServiceStatusesQuery,
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
   useUpdateConfigMutation,
@@ -149,31 +147,8 @@ interface ConfigWizardPageProps {
   onDismiss: () => void;
 }
 
-function statusFailureResult(
-  service: string,
-  serviceStatuses: ServiceStatuses
-): ConfigServiceActionResult | undefined {
-  const status = serviceStatuses[service];
-  if (!status || !['degraded', 'error', 'needs_configuration'].includes(status.status)) {
-    return undefined;
-  }
-
-  return {
-    service: service as ConfigServiceActionResult['service'],
-    success: false,
-    testMode: 'live',
-    message:
-      status.errorMessage ??
-      status.reason ??
-      status.details ??
-      `The service status is ${status.status.replace(/_/g, ' ')}.`,
-  };
-}
-
 const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
   const { data: configEntries = [], isLoading: isConfigLoading } = useGetConfigQuery(undefined);
-  const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =
-    useGetServiceStatusesQuery(undefined);
   const [updateConfig, { isLoading: isSaving }] = useUpdateConfigMutation();
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
@@ -213,17 +188,13 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
 
   const missingGroups = useMemo(() => {
     return Object.entries(groupedEntries)
-      .filter(([group, entries]) => {
-        if (serviceStatuses[group]?.status === 'ready') return false;
+      .filter(([, entries]) => {
         return entries.some(e => e.required && !e.hasValue);
       })
       .map(([group]) => group);
-  }, [groupedEntries, serviceStatuses]);
+  }, [groupedEntries]);
 
-  const initiallySortedGroups = useMemo(
-    () => sortServiceGroups(groupedEntries, serviceStatuses),
-    [groupedEntries, serviceStatuses]
-  );
+  const initiallySortedGroups = useMemo(() => sortServiceGroups(groupedEntries), [groupedEntries]);
 
   useEffect(() => {
     if (initialGroupOrder === null && initiallySortedGroups.length > 0) {
@@ -276,14 +247,21 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
       });
       try {
         const response = await testServiceConfig({ service, entries: getServiceEntries(service) });
-        const result =
-          'data' in response
-            ? response.data?.services.find(item => item.service === service)
-            : undefined;
+        const results = 'data' in response ? (response.data?.services ?? []) : [];
+        const result = results.length
+          ? {
+              service,
+              success: response.data?.success ?? false,
+              testMode: results.some(item => item.testMode === 'validation')
+                ? ('validation' as const)
+                : ('live' as const),
+              message: results.map(item => `${item.service}: ${item.message}`).join(' · '),
+            }
+          : undefined;
         setServiceResults(current => ({
           ...current,
           [service]: result ?? {
-            service: service as ConfigServiceActionResult['service'],
+            service,
             success: false,
             testMode: 'validation',
             message:
@@ -313,7 +291,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
           setServiceResults(current => ({
             ...current,
             [service]: {
-              service: service as ConfigServiceActionResult['service'],
+              service,
               success: false,
               testMode: 'validation',
               message: errorMessage(response.error, `Failed to save ${service}.`),
@@ -321,21 +299,36 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
           }));
           return;
         }
-        const result = response.data.services.find(item => item.service === service);
-        if (result) {
-          const savedResult =
-            response.data.success && !response.data.changed.includes(service as never)
+        if (response.data.services.length) {
+          const savedResult = {
+            service,
+            success: response.data.success,
+            testMode: response.data.services.some(item => item.testMode === 'validation')
+              ? ('validation' as const)
+              : ('live' as const),
+            message: response.data.services
+              .map(item => `${item.service}: ${item.message}`)
+              .concat(
+                response.data.restarted.length
+                  ? [`Reactivated: ${response.data.restarted.join(', ')}`]
+                  : []
+              )
+              .join(' · '),
+          };
+          const finalResult =
+            response.data.success && !response.data.changed.includes(service)
               ? {
-                  ...result,
+                  ...savedResult,
                   message: `${service} configuration is valid. No changes to save.`,
                 }
-              : result;
-          setServiceResults(current => ({ ...current, [service]: savedResult }));
+              : savedResult;
+          setServiceResults(current => ({ ...current, [service]: finalResult }));
         }
         setServiceNotices(current => ({
           ...current,
           [service]: {
-            restarted: response.data.restarted.includes(service as never),
+            restarted:
+              response.data.changed.includes(service) && response.data.restarted.length > 0,
             needsProcessRestart: response.data.needsProcessRestart.includes(service as never),
           },
         }));
@@ -392,14 +385,16 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
       setGlobalResult({
         success: result.data.success,
         message: result.data.success
-          ? 'Configuration saved successfully.'
+          ? result.data.restarted.length
+            ? `Configuration saved successfully. Reactivated: ${result.data.restarted.join(', ')}.`
+            : 'Configuration saved successfully.'
           : 'No changes were saved because one or more services failed testing.',
       });
       if (result.data.success) servicesBeingSaved.forEach(markServiceSaved);
     }
   }, [dirtyServices, getSubmittableEntries, markServiceSaved, updateConfig]);
 
-  if (isConfigLoading || isServiceStatusesLoading) {
+  if (isConfigLoading) {
     return (
       <PageContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <ContentWrapper>
@@ -446,7 +441,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             hasChanges={dirtyServices.has(groupName)}
             activeAction={serviceActions[groupName]}
             disabled={isSaving}
-            result={serviceResults[groupName] ?? statusFailureResult(groupName, serviceStatuses)}
+            result={serviceResults[groupName]}
             restarted={serviceNotices[groupName]?.restarted}
             needsProcessRestart={serviceNotices[groupName]?.needsProcessRestart}
           />

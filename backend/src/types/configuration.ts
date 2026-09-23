@@ -91,10 +91,11 @@ export type ConfigurableService = {
   /** Optional non-mutating probe used for draft configuration validation. */
   testConfiguration?(
     entries?: { key: string; value: string }[]
-  ): Promise<{ success: boolean; message: string }>;
+  ): Promise<{ success: boolean; mode?: 'live' | 'validation'; message: string }>;
   applyConfiguration?(
     entries: { key: string; value: string }[]
   ): Promise<{ success: boolean; message?: string }>;
+  clearConfiguration?(): Promise<{ success: boolean; message?: string }>;
 };
 
 export type ConfigService = {

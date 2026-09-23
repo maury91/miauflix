@@ -1,6 +1,5 @@
 import { logger } from '@logger';
 import {
-  type ConfigVariable,
   MANAGEMENT_PROTOCOL_VERSION,
   SERVICE_MANIFEST_PATH,
   serviceConfigApplyResultSchema,
@@ -15,11 +14,9 @@ import {
 import type { ZodType } from 'zod';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
-import type { ServiceInstanceStatus, VariableInfo } from '@mytypes/configuration';
-import { replaceServiceVariables } from '@services/configuration/configuration.consts';
+import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import type { ServiceName } from '@services/configuration/configuration.types';
-import { transforms, variable } from '@utils/config';
 
 const POLL_INTERVAL_MS = 15_000;
 
@@ -40,7 +37,6 @@ export class RemoteServiceManager {
     details: 'Discovering remote service',
     startedAt: Date.now(),
   };
-  private remoteKeys = new Map<string, string>();
   private timer: ReturnType<typeof setTimeout> | null = null;
   private stopped = false;
   private streamAbort: AbortController | null = null;
@@ -96,8 +92,17 @@ export class RemoteServiceManager {
   }
 
   async reload(): Promise<void> {
-    if (!this.manifest) await this.discover();
-    await this.refreshStatus();
+    if (!this.manifest) {
+      // Discovery itself pushes the complete snapshot before reporting status.
+      await this.discover();
+      return;
+    }
+    const snapshot = this.configuration.getServiceConfigSnapshot(this.descriptor.serviceName);
+    if (snapshot)
+      await this.applyConfiguration(
+        Object.entries(snapshot).map(([key, value]) => ({ key, value }))
+      );
+    else await this.refreshStatus();
   }
 
   /**
@@ -116,7 +121,9 @@ export class RemoteServiceManager {
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.configurationMutation(entries)),
+        body: JSON.stringify({
+          values: Object.fromEntries(entries.map(({ key, value }) => [key, value])),
+        }),
       }
     );
   }
@@ -132,7 +139,9 @@ export class RemoteServiceManager {
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.configurationMutation(entries)),
+        body: JSON.stringify({
+          values: Object.fromEntries(entries.map(({ key, value }) => [key, value])),
+        }),
       }
     );
     if (result.success) await this.refreshStatus();
@@ -144,6 +153,22 @@ export class RemoteServiceManager {
           ? `Rejected keys: ${result.invalidKeys.join(', ')}`
           : undefined),
     };
+  }
+
+  async clearConfiguration(): Promise<{ success: boolean; message?: string }> {
+    if (!this.manifest) await this.discover();
+    if (!this.manifest) throw new Error('Remote service has not been discovered');
+    const result = await this.request(
+      serviceConfigApplyResultSchema,
+      this.manifest.management.configurationApplyPath,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clear: true }),
+      }
+    );
+    if (result.success) await this.refreshStatus();
+    return { success: result.success, message: result.test?.message };
   }
 
   async request<T>(
@@ -221,10 +246,13 @@ export class RemoteServiceManager {
     );
     this.manifest = manifest;
     this.statusEventsPath = manifest.management.statusEventsPath ?? null;
-    const { variables, remoteKeys } = this.toVariableInfos(schema.variables);
-    this.configuration.registerDynamicVariables(variables, this.descriptor.serviceName);
-    replaceServiceVariables(this.descriptor.serviceName, variables);
-    this.remoteKeys = remoteKeys;
+    this.configuration.registerRemoteConfiguration(this.descriptor.serviceName, schema);
+    const snapshot = this.configuration.getServiceConfigSnapshot(this.descriptor.serviceName);
+    if (snapshot) {
+      await this.applyConfiguration(
+        Object.entries(snapshot).map(([key, value]) => ({ key, value }))
+      );
+    }
     await this.refreshStatus();
     this.startStatusStream();
     logger.info(
@@ -237,6 +265,15 @@ export class RemoteServiceManager {
     if (!this.manifest) return;
     const remote = await this.request(serviceStatusSchema, this.manifest.management.statusPath);
     this.setStatus(this.toLocalStatus(remote));
+    // A service process restart returns it to standby while this manager remains
+    // alive. Re-deliver its complete backend-owned snapshot before the next poll.
+    if (remote.state === 'standby') {
+      const snapshot = this.configuration.getServiceConfigSnapshot(this.descriptor.serviceName);
+      if (snapshot)
+        await this.applyConfiguration(
+          Object.entries(snapshot).map(([key, value]) => ({ key, value }))
+        );
+    }
   }
 
   private setStatus(status: ServiceInstanceStatus): void {
@@ -309,88 +346,6 @@ export class RemoteServiceManager {
     if (!response.ok)
       throw new Error(`${this.descriptor.serviceName} status stream failed: ${response.status}`);
     return response;
-  }
-
-  private configurationMutation(entries: { key: string; value: string }[]): {
-    values: Record<string, string>;
-    unsetKeys: string[];
-  } {
-    const values: Record<string, string> = {};
-    const unsetKeys: string[] = [];
-    for (const entry of entries) {
-      const remoteKey = this.remoteKeys.get(entry.key);
-      if (!remoteKey) continue;
-      if (entry.value.length > 0) values[remoteKey] = entry.value;
-      else unsetKeys.push(remoteKey);
-    }
-    return { values, unsetKeys };
-  }
-
-  private toVariableInfos(entries: ConfigVariable[]): {
-    variables: Record<string, VariableInfo>;
-    remoteKeys: Map<string, string>;
-  } {
-    const result: Record<string, VariableInfo> = {};
-    const remoteKeys = new Map<string, string>();
-    for (const entry of entries) {
-      const localKey = `${this.descriptor.serviceName}__${entry.key}`;
-      remoteKeys.set(localKey, entry.key);
-      result[localKey] = this.toVariableInfo(entry);
-    }
-    return { variables: result, remoteKeys };
-  }
-
-  private toVariableInfo(entry: ConfigVariable): VariableInfo {
-    const common = {
-      description: entry.description,
-      label: entry.label,
-      required: entry.required,
-      advanced: entry.advanced,
-      defaultValueSource: entry.defaultValueSource,
-      example: entry.example,
-      link: entry.link,
-      linkLabel: entry.linkLabel,
-      testRelevant: entry.testRelevant,
-      testFailureHelp: entry.testFailureHelp,
-      booleanStateDescriptions: entry.booleanStateDescriptions,
-    };
-    switch (entry.inputType) {
-      case 'password':
-        if (entry.skipUserInteraction && entry.defaultValue) {
-          return variable({
-            ...common,
-            password: true,
-            defaultValue: entry.defaultValue,
-            skipUserInteraction: true,
-          });
-        }
-        return variable({ ...common, password: true });
-      case 'select':
-        return variable({
-          ...common,
-          defaultValue: entry.defaultValue,
-          options: entry.options ?? {},
-          transform: transforms.enum({ values: Object.keys(entry.options ?? {}) } as never),
-        });
-      case 'boolean':
-        return variable({
-          ...common,
-          defaultValue: entry.defaultValue,
-          transform: transforms.boolean(),
-        });
-      case 'number':
-        return variable({
-          ...common,
-          defaultValue: entry.defaultValue,
-          transform: transforms.number(entry.numberOptions ?? {}),
-        });
-      default:
-        return variable({
-          ...common,
-          defaultValue: entry.defaultValue,
-          transform: transforms.string(),
-        });
-    }
   }
 
   private toLocalStatus(remote: ServiceStatus): ServiceInstanceStatus {
