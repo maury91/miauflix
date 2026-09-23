@@ -141,43 +141,6 @@ export const catalogStatusDetailsSchema = z.object({
   lastShowSync: z.string().nullable(),
 });
 
-export const catalogReadModeSchema = z.enum([
-  'cache-only',
-  'stale-while-revalidate',
-  'require-fresh',
-]);
-export const catalogWorkClassSchema = z.enum(['interactive', 'foreground', 'maintenance']);
-
-export const mediaSummaryBatchRequestSchema = z.object({
-  items: z.array(mediaRefSchema).max(50),
-  language: z.string().min(2).max(16),
-  mode: catalogReadModeSchema,
-  workClass: catalogWorkClassSchema,
-});
-
-export const browseMediaSummarySchema = z.object({
-  mediaType: mediaTypeSchema,
-  mediaId: z.number().int().positive(),
-  title: z.string(),
-  overview: z.string(),
-  poster: z.string(),
-  backdrop: z.string(),
-  logo: z.string(),
-  genres: z.array(localizedGenreSchema),
-  releaseDate: z.string(),
-  runtime: z.number().optional(),
-  popularity: z.number(),
-  rating: z.number(),
-  detailsSyncedAt: z.string().nullable(),
-});
-
-export const mediaSummaryBatchResponseSchema = z.object({
-  items: z.array(browseMediaSummarySchema),
-  pending: z.array(mediaRefSchema),
-  missing: z.array(mediaRefSchema),
-  errors: z.array(batchErrorSchema),
-});
-
 export type MediaType = z.infer<typeof mediaTypeSchema>;
 export type MediaRef = z.infer<typeof mediaRefSchema>;
 export type LocalizedGenre = z.infer<typeof localizedGenreSchema>;
@@ -193,8 +156,3 @@ export type ExternalMediaResolveResponse = z.infer<typeof externalMediaResolveRe
 export type BatchError = z.infer<typeof batchErrorSchema>;
 export type BatchResponse = z.infer<typeof batchResponseSchema>;
 export type CatalogStatusDetails = z.infer<typeof catalogStatusDetailsSchema>;
-export type CatalogReadMode = z.infer<typeof catalogReadModeSchema>;
-export type CatalogWorkClass = z.infer<typeof catalogWorkClassSchema>;
-export type MediaSummaryBatchRequest = z.infer<typeof mediaSummaryBatchRequestSchema>;
-export type BrowseMediaSummary = z.infer<typeof browseMediaSummarySchema>;
-export type MediaSummaryBatchResponse = z.infer<typeof mediaSummaryBatchResponseSchema>;

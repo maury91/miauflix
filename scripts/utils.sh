@@ -157,11 +157,17 @@ ensure_data_dir() {
     # directories to every local account.
     chmod 0700 "$data_dir" "$catalog_data_dir" 2>/dev/null || true
     if command_exists setfacl && \
-      setfacl -m u:911:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-      setfacl -d -m u:911:rwx "$catalog_data_dir" 2>/dev/null; then
+      setfacl -m u:911:rwx,u:1000:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+      setfacl -d -m u:911:rwx,u:1000:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+      { [ ! -f "$data_dir/config.json" ] || setfacl -m u:911:rw,u:1000:rw "$data_dir/config.json" 2>/dev/null; }; then
       service_access_ready=true
     elif [ "$(uname -s)" = "Darwin" ] && \
-      chmod +a "user:911 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null; then
+      chmod +a "user:911 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+      chmod +a "user:1000 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+      { [ ! -f "$data_dir/config.json" ] || { \
+        chmod +a "user:911 allow read,write" "$data_dir/config.json" 2>/dev/null && \
+        chmod +a "user:1000 allow read,write" "$data_dir/config.json" 2>/dev/null; \
+      }; }; then
       service_access_ready=true
     fi
   fi

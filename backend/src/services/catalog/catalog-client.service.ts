@@ -3,13 +3,9 @@ import {
   batchResponseSchema,
   CATALOG_CAPABILITY,
   CATALOG_CAPABILITY_VERSION,
-  type CatalogReadMode,
-  type CatalogWorkClass,
   type ExternalMediaLookup,
   externalMediaResolveResponseSchema,
   type MediaRef,
-  type MediaSummaryBatchResponse,
-  mediaSummaryBatchResponseSchema,
   type MovieDetail,
   movieDetailSchema,
   okResponseSchema,
@@ -106,31 +102,6 @@ export class CatalogClientService implements ConfigurableService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items, language }),
     });
-  }
-
-  /**
-   * Reserved for the future intent-aware preloading flow.
-   *
-   * The future catalog contract will use this for nearby navigation targets so it
-   * can prefer cache-only or stale-while-revalidate reads instead of hydrating
-   * full details. It is intentionally dormant and is not part of the active v1
-   * catalog path; keep it until the preloading flow is implemented.
-   */
-  async summaries(
-    items: MediaRef[],
-    language: string,
-    mode: CatalogReadMode,
-    workClass: CatalogWorkClass
-  ): Promise<MediaSummaryBatchResponse> {
-    return this.remote.requestCapability(
-      mediaSummaryBatchResponseSchema,
-      this.path('/media/summaries'),
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, language, mode, workClass }),
-      }
-    );
   }
 
   async resolveExternal(

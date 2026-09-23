@@ -16,6 +16,7 @@ services:
     environment:
       DATA_DIR: /app/data
       CATALOG_CONFIG_FILE: /shared/config.json
+      CATALOG_SERVICE_ENCRYPTION_KEY: ${CATALOG_SERVICE_ENCRYPTION_KEY:-}
       BUNQUEUE_HOST: bunqueue
       BUNQUEUE_PORT: '6789'
       DEBUG: '*'
@@ -35,6 +36,7 @@ services:
     environment:
       LIST_SERVICE_DATA_DIR: /app/data
       LIST_SERVICE_CONFIG_FILE: /shared/config.json
+      LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
       LIST_SERVICE_PORT: '3002'
       TRAKT_API_URL: ${TRAKT_API_URL:-https://api.trakt.tv}
       TRAKT_CLIENT_ID: ${TRAKT_CLIENT_ID:-}

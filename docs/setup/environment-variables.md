@@ -65,12 +65,19 @@ TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
 TRAKT_CLIENT_ID=your-client-id
 TRAKT_CLIENT_SECRET=your-client-secret
 TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
+LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
+CATALOG_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 ```
 
 - **Description**: OAuth application credentials and the exact redirect URI configured for the Trakt.tv integration
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
 - **Required for**: Public lists and user list/account association when the List Service is enabled
 - **Optional when**: The standalone List Service is disabled or unused
+- **Encryption key**: `LIST_SERVICE_ENCRYPTION_KEY` is optional. If set, keep it stable and store it in deployment secrets; the service uses it directly and does not create a key file. Otherwise, it generates a key in its data directory. Losing or changing the active key makes encrypted associations, pending authorizations, and cached pages unreadable.
+
+#### Media Catalog encryption
+
+- **Encryption key**: `CATALOG_SERVICE_ENCRYPTION_KEY` is optional. If set, keep it stable and store it in deployment secrets; it is used directly and no catalog key file is created. If omitted, the service generates a key in its data directory. Losing or changing the active key makes encrypted catalog configuration unreadable.
 
 #### NordVPN (Optional)
 

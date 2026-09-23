@@ -275,9 +275,14 @@ export class ConfigurationService {
     const values = Object.fromEntries(
       [...this._localVariableNames]
         .map(key => [key, this._fileData[key]])
-        .filter((entry): entry is [VariableName, string] => typeof entry[1] === 'string')
+        .filter(
+          (entry): entry is [VariableName, string] =>
+            typeof entry[1] === 'string' && entry[1].length > 0
+        )
     );
-    const stored = await this._configStore.update(this._localVariableNames, { values });
+    const unsetKeys = [...this._localVariableNames].filter(key => !(key in values));
+    const stored = await this._configStore.update(this._localVariableNames, { values, unsetKeys });
+    for (const key of unsetKeys) delete this._fileData[key];
     for (const [key, value] of Object.entries(stored)) this._fileData[key as VariableName] = value;
   }
 

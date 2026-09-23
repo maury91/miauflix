@@ -20,6 +20,7 @@ export class CatalogConfigService extends ServiceConfiguration {
       env,
       configFilePath,
       keyFilePath,
+      encryptionKey: env.CATALOG_SERVICE_ENCRYPTION_KEY,
       notWiredMessage: 'Catalog provider is not wired yet',
       onLoadError: message =>
         logger.error('CatalogConfig', `Could not load owned configuration: ${message}`),

@@ -224,11 +224,23 @@ TRAKT_API_URL=https://api.trakt.tv
 TRAKT_CLIENT_ID=your_trakt_client_id
 TRAKT_CLIENT_SECRET=your_trakt_client_secret
 TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
+# Optional external key for encrypting List Service tokens and cached data
+LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
+# Optional external key for encrypting Media Catalog configuration secrets
+CATALOG_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 ```
 
 The Trakt credentials are optional only when the standalone List Service is
-disabled or unused. The List Service generates and persists its encryption key
-automatically in its data directory.
+disabled or unused. Set `LIST_SERVICE_ENCRYPTION_KEY` to keep the List Service
+data encryption key in deployment secrets; when set, it is used directly and no
+List Service key file is created. When omitted, the service generates and
+persists a key in its data directory. Keep the same value across restarts and
+backups when using the environment variable.
+
+Set `CATALOG_SERVICE_ENCRYPTION_KEY` to keep Media Catalog configuration
+encryption in deployment secrets; when omitted, it generates and persists a key
+in its data directory. When set, this environment key is used directly and no
+catalog key file is created.
 
 > **Note**: If running in a non-interactive environment, you'll need to set all required environment variables manually.
 

@@ -2,15 +2,13 @@ import { z } from 'zod';
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 let traktCooldownUntil = 0;
-let cooldownWait: Promise<void> = Promise.resolve();
 
 const waitForCooldown = async (): Promise<void> => {
-  const remaining = traktCooldownUntil - Date.now();
-  if (remaining <= 0) return;
-  cooldownWait = cooldownWait.then(
-    () => new Promise<void>(resolve => setTimeout(resolve, Math.min(remaining, 30_000)))
-  );
-  await cooldownWait;
+  while (true) {
+    const remaining = traktCooldownUntil - Date.now();
+    if (remaining <= 0) return;
+    await new Promise<void>(resolve => setTimeout(resolve, Math.min(remaining, 30_000)));
+  }
 };
 
 const deviceCodeSchema = z.object({

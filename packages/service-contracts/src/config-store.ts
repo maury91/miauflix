@@ -1,4 +1,4 @@
-import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
+import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
 import {
   chmodSync,
   closeSync,
@@ -25,16 +25,20 @@ export type ConfigStoreOptions = {
 
 export type ServiceKeyOptions = {
   filePath: string;
+  encryptionKey?: string;
 };
 
-/** A service-owned key generated once and reused for all of its encrypted state. */
+/** Encrypts with a deployment key when provided, otherwise a persistent service key. */
 export class ServiceSecretCodec {
   readonly key: string;
   private readonly keyBytes: Buffer;
 
   constructor(options: ServiceKeyOptions) {
-    this.key = loadOrCreateServiceKey(options.filePath);
-    this.keyBytes = Buffer.from(this.key, 'base64');
+    const configuredKey = options.encryptionKey;
+    this.keyBytes = configuredKey
+      ? createHash('sha256').update(configuredKey).digest()
+      : Buffer.from(loadOrCreateServiceKey(options.filePath), 'base64');
+    this.key = this.keyBytes.toString('base64');
     if (this.keyBytes.length !== 32) throw new Error('Service key must contain 32 bytes');
   }
 

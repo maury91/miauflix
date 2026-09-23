@@ -3,8 +3,6 @@ import test from 'node:test';
 
 import {
   batchResponseSchema,
-  mediaSummaryBatchRequestSchema,
-  mediaSummaryBatchResponseSchema,
   serviceConfigMutationSchema,
   serviceManifestSchema,
   serviceStatusSchema,
@@ -97,23 +95,4 @@ test('status and explicit configuration clearing are runtime validated', () => {
 test('catalog responses reject drifted media shapes', () => {
   const drifted = { items: [{ mediaType: 'movie', mediaId: 1 }], missing: [] };
   assert.equal(batchResponseSchema.safeParse(drifted).success, false);
-});
-
-test('catalog v1 summary contract carries read policy and partial results', () => {
-  const request = mediaSummaryBatchRequestSchema.parse({
-    items: [{ mediaType: 'movie', mediaId: 1 }],
-    language: 'en',
-    mode: 'cache-only',
-    workClass: 'foreground',
-  });
-  assert.equal(request.mode, 'cache-only');
-  assert.equal(
-    mediaSummaryBatchResponseSchema.safeParse({
-      items: [],
-      pending: [{ mediaType: 'movie', mediaId: 1 }],
-      missing: [],
-      errors: [],
-    }).success,
-    true
-  );
 });

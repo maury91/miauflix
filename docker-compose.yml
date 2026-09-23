@@ -67,6 +67,7 @@ services:
     environment:
       - DATA_DIR=/app/data
       - CATALOG_CONFIG_FILE=/shared/config.json
+      - CATALOG_SERVICE_ENCRYPTION_KEY=${CATALOG_SERVICE_ENCRYPTION_KEY:-}
       - BUNQUEUE_HOST=127.0.0.1
       - BUNQUEUE_PORT=6789
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-}
@@ -90,6 +91,7 @@ services:
       - LIST_SERVICE_DATA_DIR=/app/data
       - LIST_SERVICE_CONFIG_FILE=/shared/config.json
       - LIST_SERVICE_PORT=3002
+      - LIST_SERVICE_ENCRYPTION_KEY=${LIST_SERVICE_ENCRYPTION_KEY:-}
       - TRAKT_API_URL=${TRAKT_API_URL:-https://api.trakt.tv}
       - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-}
       - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-}

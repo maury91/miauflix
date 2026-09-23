@@ -1,5 +1,4 @@
-import { ServiceConfiguration } from '@miauflix/service-configuration';
-import type { ConfigurationProbe } from '@miauflix/service-configuration';
+import { type ConfigurationProbe, ServiceConfiguration } from '@miauflix/service-configuration';
 import type { ServiceConfigSchema } from '@miauflix/service-contracts';
 
 import { createListConfigSchema } from './schema';

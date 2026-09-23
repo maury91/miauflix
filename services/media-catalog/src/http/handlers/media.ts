@@ -1,12 +1,9 @@
 import {
   batchRequestSchema,
   batchResponseSchema,
-  browseMediaSummarySchema,
   externalMediaResolveRequestSchema,
   externalMediaResolveResponseSchema,
   localizedGenreSchema,
-  mediaSummaryBatchRequestSchema,
-  mediaSummaryBatchResponseSchema,
   movieDetailSchema,
   okResponseSchema,
   seasonDetailSchema,
@@ -90,37 +87,6 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
     const body = batchRequestSchema.parse(await req.json().catch(() => null));
     const catalog = dataPlane();
     return json(batchResponseSchema.parse(await catalog.batch(body.items, body.language)));
-  });
-
-  router.add('POST', `${BASE_PATH}/media/summaries`, async ({ req, json }) => {
-    const body = mediaSummaryBatchRequestSchema.parse(await req.json().catch(() => null));
-    const catalog = dataPlane();
-    const batch = await catalog.batch(body.items, body.language);
-    const items = batch.items.map(detail =>
-      browseMediaSummarySchema.parse({
-        mediaType: detail.mediaType,
-        mediaId: detail.mediaId,
-        title: detail.mediaType === 'movie' ? detail.title : detail.name,
-        overview: detail.overview,
-        poster: detail.poster,
-        backdrop: detail.backdrop,
-        logo: detail.logo,
-        genres: detail.genres,
-        releaseDate: detail.mediaType === 'movie' ? detail.releaseDate : detail.firstAirDate,
-        runtime: detail.mediaType === 'movie' ? detail.runtime : detail.episodeRunTime[0],
-        popularity: detail.popularity,
-        rating: detail.rating,
-        detailsSyncedAt: detail.detailsSyncedAt,
-      })
-    );
-    return json(
-      mediaSummaryBatchResponseSchema.parse({
-        items,
-        pending: [],
-        missing: batch.missing,
-        errors: batch.errors,
-      })
-    );
   });
 
   router.add('POST', `${BASE_PATH}/media/resolve`, async ({ req, json }) => {

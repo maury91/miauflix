@@ -25,6 +25,7 @@ export interface ServiceConfigurationOptions {
   env?: Record<string, string | undefined>;
   configFilePath?: string;
   keyFilePath?: string;
+  encryptionKey?: string;
   notWiredMessage?: string;
   onLoadError?: (message: string) => void;
 }
@@ -78,7 +79,10 @@ export class ServiceConfiguration {
       this.env[`${options.prefix}_KEY_FILE`] ??
       join(options.dataDir, '.service-key');
     this.store = new ConfigStore({ filePath: configFilePath });
-    this.codec = new ServiceSecretCodec({ filePath: keyFilePath });
+    this.codec = new ServiceSecretCodec({
+      filePath: keyFilePath,
+      encryptionKey: options.encryptionKey,
+    });
     this.loadFile();
   }
 

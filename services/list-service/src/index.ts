@@ -35,9 +35,20 @@ const DEFAULT_API_URL = process.env.TRAKT_API_URL ?? 'https://api.trakt.tv';
 const DATA_DIR = process.env.LIST_SERVICE_DATA_DIR ?? process.env.DATA_DIR ?? './data';
 const CONFIG_FILE = process.env.LIST_SERVICE_CONFIG_FILE ?? join(DATA_DIR, 'config.json');
 const KEY_FILE = process.env.LIST_SERVICE_KEY_FILE ?? join(DATA_DIR, '.list-service-key');
-const secretCodec = new ServiceSecretCodec({ filePath: KEY_FILE });
+const configuredEncryptionKey = process.env.LIST_SERVICE_ENCRYPTION_KEY;
+const encryptionKey = configuredEncryptionKey
+  ? createHash('sha256').update(configuredEncryptionKey).digest()
+  : createHash('sha256')
+      .update(new ServiceSecretCodec({ filePath: KEY_FILE }).key)
+      .digest();
 mkdirSync(DATA_DIR, { recursive: true });
-const encryptionKey = (): Buffer => createHash('sha256').update(secretCodec.key).digest();
+
+const decrypt = (value: string): string => {
+  const [iv, tag, ciphertext] = value.split('.').map(part => Buffer.from(part, 'base64url'));
+  const decipher = createDecipheriv('aes-256-gcm', encryptionKey, iv);
+  decipher.setAuthTag(tag);
+  return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8');
+};
 
 const database = new Database(`${DATA_DIR}/list-service.sqlite`);
 database.run(`
@@ -74,16 +85,11 @@ database.run(`
 
 const seal = (value: string): string => {
   const iv = randomBytes(12);
-  const cipher = createCipheriv('aes-256-gcm', encryptionKey(), iv);
+  const cipher = createCipheriv('aes-256-gcm', encryptionKey, iv);
   const ciphertext = Buffer.concat([cipher.update(value, 'utf8'), cipher.final()]);
   return `${iv.toString('base64url')}.${cipher.getAuthTag().toString('base64url')}.${ciphertext.toString('base64url')}`;
 };
-const open = (value: string): string => {
-  const [iv, tag, ciphertext] = value.split('.').map(part => Buffer.from(part, 'base64url'));
-  const decipher = createDecipheriv('aes-256-gcm', encryptionKey(), iv);
-  decipher.setAuthTag(tag);
-  return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8');
-};
+const open = (value: string): string => decrypt(value);
 
 const config = new ListConfigService(DATA_DIR, process.env, CONFIG_FILE, KEY_FILE, DEFAULT_API_URL);
 

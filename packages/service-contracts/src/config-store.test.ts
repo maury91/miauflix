@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -90,6 +91,26 @@ test('service secret keys are generated once and decrypt across instances', asyn
     const second = new ServiceSecretCodec({ filePath: keyPath });
     assert.equal(second.key, first.key);
     assert.equal(second.decrypt(encrypted), 'provider-secret');
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test('service secret codecs use a deployment key without creating a key file', async () => {
+  const { directory } = await fixture();
+  try {
+    const keyPath = join(directory, '.service-key');
+    const first = new ServiceSecretCodec({
+      filePath: keyPath,
+      encryptionKey: 'deployment-secret',
+    });
+    const encrypted = first.encrypt('provider-secret');
+    const second = new ServiceSecretCodec({
+      filePath: keyPath,
+      encryptionKey: 'deployment-secret',
+    });
+    assert.equal(second.decrypt(encrypted), 'provider-secret');
+    assert.equal(existsSync(keyPath), false);
   } finally {
     await rm(directory, { recursive: true, force: true });
   }

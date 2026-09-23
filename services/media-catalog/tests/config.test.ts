@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import type { ConfigurationProbe } from '@miauflix/service-configuration';
+import { ServiceSecretCodec } from '@miauflix/service-contracts';
 import { describe, expect, it } from 'bun:test';
 
 import { CatalogRuntime } from '../src/catalog/bootstrap';
@@ -59,6 +60,30 @@ describe('CatalogConfigService', () => {
 
     expect(config.resolve('TMDB_API_URL')).toBe('https://file.example/3');
     expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('file-token');
+    rmSync(dataDir, { recursive: true, force: true });
+  });
+
+  it('uses the deployment key for configuration secrets without creating a key file', () => {
+    const dataDir = mkdtempSync(join(tmpdir(), 'catalog-config-'));
+    const keyFile = join(dataDir, '.catalog-key');
+    const encryptionKey = 'deployment-secret';
+    const env = { CATALOG_SERVICE_ENCRYPTION_KEY: encryptionKey };
+    const codec = new ServiceSecretCodec({ filePath: keyFile, encryptionKey });
+    const sharedConfig = join(dataDir, 'config.json');
+    writeFileSync(
+      sharedConfig,
+      JSON.stringify({
+        CATALOG__TMDB_API_ACCESS_TOKEN: codec.encrypt('catalog-secret'),
+        LIST__TRAKT_CLIENT_ID: 'preserve-this',
+      })
+    );
+
+    const config = new CatalogConfigService(dataDir, env);
+    expect(config.resolve('TMDB_API_ACCESS_TOKEN')).toBe('catalog-secret');
+    expect(JSON.parse(readFileSync(sharedConfig, 'utf8')).LIST__TRAKT_CLIENT_ID).toBe(
+      'preserve-this'
+    );
+    expect(existsSync(keyFile)).toBe(false);
     rmSync(dataDir, { recursive: true, force: true });
   });
 
