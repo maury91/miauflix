@@ -146,6 +146,49 @@ describe('ConfigurationService web configuration actions', () => {
     for (const clear of clearKeys) clear();
   });
 
+  it('falls back from invalid seeded remote values without losing discovery', () => {
+    const restoreDefault = clearEnvironmentVariable('DYNAMIC_INVALID_DEFAULT_TEST');
+    const restoreRequired = clearEnvironmentVariable('DYNAMIC_INVALID_REQUIRED_TEST');
+    process.env.DYNAMIC_INVALID_DEFAULT_TEST = 'INVALID';
+    process.env.DYNAMIC_INVALID_REQUIRED_TEST = 'INVALID';
+    try {
+      const configuration = setupTest();
+      expect(() =>
+        configuration.registerRemoteConfiguration('CATALOG', {
+          groups: [
+            {
+              id: 'DYNAMIC_INVALID_GROUP',
+              name: 'Invalid seed test',
+              description: 'Invalid seed test',
+              variables: [
+                {
+                  key: 'DYNAMIC_INVALID_DEFAULT_TEST',
+                  description: 'With default',
+                  required: true,
+                  inputType: 'select',
+                  options: { VALID: 'Valid' },
+                  defaultValue: 'VALID',
+                },
+                {
+                  key: 'DYNAMIC_INVALID_REQUIRED_TEST',
+                  description: 'Without default',
+                  required: true,
+                  inputType: 'select',
+                  options: { VALID: 'Valid' },
+                },
+              ],
+            },
+          ],
+        })
+      ).not.toThrow();
+      expect(configuration.getDynamic('DYNAMIC_INVALID_DEFAULT_TEST')).toBe('VALID');
+      expect(configuration.getServiceConfigSnapshot('CATALOG')).toBeUndefined();
+    } finally {
+      restoreDefault();
+      restoreRequired();
+    }
+  });
+
   it('removes omitted group variables from presentation on rediscovery without discarding stored values', async () => {
     const configuration = setupTest();
 
@@ -744,6 +787,44 @@ describe('ConfigurationService web configuration actions', () => {
     expect(test).toHaveBeenCalledTimes(1);
     expect(apply).toHaveBeenCalledTimes(1);
     expect(configuration.getDynamic('CATALOG_TOKEN_TEST')).toBe('catalog-token');
+  });
+
+  it('probes remote values through the candidate service URL before saving', async () => {
+    const configuration = setupTest();
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'CATALOG_PROVIDER',
+          name: 'Catalog provider',
+          description: 'Settings',
+          variables: [
+            { key: 'CATALOG_TOKEN_TEST', description: 'Token', required: true, inputType: 'text' },
+          ],
+        },
+      ],
+    });
+    const seenUrls: unknown[] = [];
+    configuration.registerService('CATALOG', {
+      testable: true,
+      getStatus: () => ({ status: 'ready' }),
+      reload: jest.fn().mockResolvedValue(undefined),
+      testConfiguration: jest.fn().mockImplementation(async () => {
+        seenUrls.push(configuration.get('CATALOG_SERVICE_URL'));
+        return { success: true, message: 'valid' };
+      }),
+      applyConfiguration: jest.fn().mockResolvedValue({ success: true }),
+    });
+    jest
+      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'CATALOG_SERVICE_URL', value: 'http://candidate:3001' },
+      { key: 'CATALOG_TOKEN_TEST', value: 'candidate-token' },
+    ]);
+
+    expect(result.success).toBe(true);
+    expect(seenUrls).toEqual(['http://candidate:3001']);
   });
 
   it('reports unknown and unsupported keys before probing any service', async () => {

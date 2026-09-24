@@ -91,6 +91,8 @@ done
 playwright_args=(--config=playwright.config.initial-setup.ts)
 if [[ "$snapshot_mode" == "--update-snapshots" ]]; then
   playwright_args+=(--update-snapshots)
+else
+  playwright_args+=(--update-snapshots=none)
 fi
 
 docker run --rm \

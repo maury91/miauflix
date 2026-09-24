@@ -204,18 +204,20 @@ export class TVShowRepository {
       status: '',
       ...tvShow,
     });
-    await this.tvShowRepository
-      .createQueryBuilder()
-      .insert()
-      .into(TVShow)
-      .values(created)
-      .orUpdate(
-        ['name', 'overview', 'firstAirDate', 'poster', 'backdrop', 'popularity', 'rating'],
-        // orUpdate expects database column names; the column predates the mediaId rename.
-        ['tmdbId']
-      )
-      .updateEntity(false)
-      .execute();
+    await this.database.write(() =>
+      this.tvShowRepository
+        .createQueryBuilder()
+        .insert()
+        .into(TVShow)
+        .values(created)
+        .orUpdate(
+          ['name', 'overview', 'firstAirDate', 'poster', 'backdrop', 'popularity', 'rating'],
+          // orUpdate expects database column names; the column predates the mediaId rename.
+          ['tmdbId']
+        )
+        .updateEntity(false)
+        .execute()
+    );
     const stored = await this.tvShowRepository.findOneBy({ mediaId: created.mediaId });
     if (!stored) {
       throw new RepositoryError('Failed to persist TV show summary', 'retrieve_failed');

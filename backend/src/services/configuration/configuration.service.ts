@@ -175,11 +175,28 @@ export class ConfigurationService {
       const raw = this._rawValues.get(key);
       if (raw === undefined) continue;
       const info = this._variablesInfo.get(key)!;
-      (this._computedValues as Record<string, unknown>)[key] = applyTransform(
-        key as never,
-        info,
-        raw
-      );
+      try {
+        (this._computedValues as Record<string, unknown>)[key] = applyTransform(
+          key as never,
+          info,
+          raw
+        );
+      } catch {
+        const defaultRaw =
+          'defaultValue' in info && info.defaultValue ? getDefaultValue(info.defaultValue) : '';
+        try {
+          const fallback = applyTransform(key as never, info, defaultRaw);
+          this._rawValues.set(key, defaultRaw);
+          (this._computedValues as Record<string, unknown>)[key] = fallback;
+          logger.warn('Config', `${key}: invalid remote value, reverted to default`);
+        } catch {
+          // Keep an explicit empty raw value so a malformed schema default is
+          // not reintroduced by getServiceConfigSnapshot().
+          this._rawValues.set(key, '');
+          delete (this._computedValues as Record<string, unknown>)[key];
+          logger.warn('Config', `${key}: invalid remote value and no valid default`);
+        }
+      }
     }
     const previous = this._dynamicVariableNames.get(serviceName) ?? new Set<VariableName>();
     const active = new Set(keys);
@@ -1182,35 +1199,42 @@ export class ConfigurationService {
 
       // Probe every remote service without applying its candidate. Local services
       // are temporarily reloaded against the candidate, then restored before save.
-      for (const [consumer, snapshot] of remoteSnapshots) {
-        const instance = this._registeredServices.get(consumer);
-        if (!instance?.testConfiguration || !instance.applyConfiguration) {
-          results.push({
-            service: consumer,
-            success: false,
-            testMode: 'live',
-            message: `${consumer} is unavailable for configuration testing`,
-          });
-          continue;
+      this._rawValues = candidateRaw;
+      this._computedValues = candidateComputed;
+      try {
+        for (const [consumer, snapshot] of remoteSnapshots) {
+          const instance = this._registeredServices.get(consumer);
+          if (!instance?.testConfiguration || !instance.applyConfiguration) {
+            results.push({
+              service: consumer,
+              success: false,
+              testMode: 'live',
+              message: `${consumer} is unavailable for configuration testing`,
+            });
+            continue;
+          }
+          try {
+            const test = await instance.testConfiguration(
+              Object.entries(snapshot).map(([key, value]) => ({ key, value }))
+            );
+            results.push({
+              service: consumer,
+              success: test.success,
+              testMode: test.mode ?? 'live',
+              message: test.message,
+            });
+          } catch (error) {
+            results.push({
+              service: consumer,
+              success: false,
+              testMode: 'live',
+              message: error instanceof Error ? error.message : String(error),
+            });
+          }
         }
-        try {
-          const test = await instance.testConfiguration(
-            Object.entries(snapshot).map(([key, value]) => ({ key, value }))
-          );
-          results.push({
-            service: consumer,
-            success: test.success,
-            testMode: test.mode ?? 'live',
-            message: test.message,
-          });
-        } catch (error) {
-          results.push({
-            service: consumer,
-            success: false,
-            testMode: 'live',
-            message: error instanceof Error ? error.message : String(error),
-          });
-        }
+      } finally {
+        this._rawValues = rawSnapshot;
+        this._computedValues = computedSnapshot;
       }
 
       const locallyTested: ServiceName[] = [];

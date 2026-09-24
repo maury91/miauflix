@@ -1,12 +1,13 @@
-import { type DataSource, LessThan, MoreThan, type Repository } from 'typeorm';
+import { LessThan, MoreThan, type Repository } from 'typeorm';
 
+import type { Database } from '@database/database';
 import { QrLoginRequest } from '@entities/qr-login-request.entity';
 
 export class QrLoginRequestRepository {
   private readonly repository: Repository<QrLoginRequest>;
 
-  constructor(dataSource: DataSource) {
-    this.repository = dataSource.getRepository(QrLoginRequest);
+  constructor(database: Database) {
+    this.repository = database.getRepository(QrLoginRequest);
   }
 
   create(values: Partial<QrLoginRequest>): Promise<QrLoginRequest> {

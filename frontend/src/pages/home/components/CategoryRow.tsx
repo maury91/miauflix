@@ -100,7 +100,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   const current = useGetListQuery(
     nearby ? { category: category.slug, page, limit: PAGE_SIZE } : skipToken
   );
-  const total = current.data?.total ?? 0;
+  const total = current.currentData?.total ?? current.data?.total ?? 0;
   const radius = mediaPerPage + 4;
   const first = Math.max(0, selectedIndex - radius);
   const last = Math.min(total - 1, selectedIndex + radius);
@@ -121,14 +121,14 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
 
   const mediaByIndex = useMemo(() => {
     const result = new Map<number, MediaDto>();
-    for (const response of [previousPage.data, nextPage.data, current.data]) {
+    for (const response of [previousPage.currentData, nextPage.currentData, current.currentData]) {
       if (response?.page === undefined || response.pageSize === undefined) continue;
       response.results.forEach((media, index) =>
         result.set(response.page! * response.pageSize! + index, media)
       );
     }
     return result;
-  }, [current.data, nextPage.data, previousPage.data]);
+  }, [current.currentData, nextPage.currentData, previousPage.currentData]);
 
   const selectIndex = useCallback(
     (requested: number, focus = true) => {
@@ -217,12 +217,12 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   }, [active, categoryIndex, mediaByIndex, onActive, selectedIndex]);
 
   useEffect(() => {
-    if (current.data && selectedIndex >= current.data.total) {
-      selectIndex(Math.max(0, current.data.total - 1), false);
+    if (current.currentData && selectedIndex >= current.currentData.total) {
+      selectIndex(Math.max(0, current.currentData.total - 1), false);
     }
-  }, [current.data, selectIndex, selectedIndex]);
+  }, [current.currentData, selectIndex, selectedIndex]);
 
-  if (current.isLoading && !current.data) {
+  if ((current.isLoading || current.isFetching) && !current.currentData) {
     return (
       <RowContainer>
         <CategoryTitle>{category.name}</CategoryTitle>
@@ -232,7 +232,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       </RowContainer>
     );
   }
-  if (current.isError && !current.data) {
+  if (current.isError && !current.currentData) {
     return (
       <RowContainer>
         <CategoryTitle>{category.name}</CategoryTitle>

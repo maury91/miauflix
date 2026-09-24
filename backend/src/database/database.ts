@@ -83,6 +83,22 @@ class DatabaseLogger extends AbstractLogger {
   }
 }
 
+const repositoryWrites = new Set<PropertyKey>([
+  'save',
+  'insert',
+  'update',
+  'upsert',
+  'delete',
+  'remove',
+  'softDelete',
+  'softRemove',
+  'restore',
+  'recover',
+  'increment',
+  'decrement',
+  'clear',
+]);
+
 export class Database {
   private readonly dataSource: DataSource;
   private transactionQueue: Promise<void> = Promise.resolve();
@@ -144,9 +160,9 @@ export class Database {
     this.movieRepository = new MovieRepository(this);
     this.tvShowRepository = new TVShowRepository(this);
     this.userRepository = new UserRepository(this);
-    this.refreshTokenRepository = new RefreshTokenRepository(this.dataSource);
-    this.auditLogRepository = new AuditLogRepository(this.dataSource);
-    this.qrLoginRequestRepository = new QrLoginRequestRepository(this.dataSource);
+    this.refreshTokenRepository = new RefreshTokenRepository(this);
+    this.auditLogRepository = new AuditLogRepository(this);
+    this.qrLoginRequestRepository = new QrLoginRequestRepository(this);
     this.storageRepository = new StorageRepository(this);
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this.dataSource);
@@ -159,17 +175,34 @@ export class Database {
   }
 
   public getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
-    return this.dataSource.getRepository<T>(entity);
+    const repository = this.dataSource.getRepository<T>(entity);
+    // Direct mutations enter the same lane as transactions. Query-builder
+    // mutations must call write() around execute(); transaction callbacks use
+    // their EntityManager directly to avoid waiting on their own queue entry.
+    return new Proxy(repository, {
+      get: (target, property, receiver) => {
+        const value = Reflect.get(target, property, receiver);
+        if (typeof value !== 'function') return value;
+        if (repositoryWrites.has(property))
+          return (...args: unknown[]) => this.write(() => value.apply(target, args));
+        return value.bind(target);
+      },
+    });
   }
 
-  /** Serialize SQLite transactions because TypeORM's SQLite driver shares one connection. */
-  public transaction<T>(operation: (manager: EntityManager) => Promise<T>): Promise<T> {
-    const result = this.transactionQueue.then(() => this.dataSource.transaction(operation));
+  /** Keep writes outside another operation's SQLite transaction. */
+  public write<T>(operation: () => Promise<T>): Promise<T> {
+    const result = this.transactionQueue.then(operation);
     this.transactionQueue = result.then(
       () => undefined,
       () => undefined
     );
     return result;
+  }
+
+  /** Serialize SQLite transactions because TypeORM's SQLite driver shares one connection. */
+  public transaction<T>(operation: (manager: EntityManager) => Promise<T>): Promise<T> {
+    return this.write(() => this.dataSource.transaction(operation));
   }
 
   public getMovieRepository() {
@@ -181,11 +214,11 @@ export class Database {
   }
 
   public getSeasonRepository() {
-    return this.dataSource.getRepository(Season);
+    return this.getRepository(Season);
   }
 
   public getEpisodeRepository() {
-    return this.dataSource.getRepository(Episode);
+    return this.getRepository(Episode);
   }
 
   public getMediaListRepository() {

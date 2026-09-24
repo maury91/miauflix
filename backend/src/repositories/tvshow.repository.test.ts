@@ -5,6 +5,8 @@ import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { createMockSeasonDetail, createMockTVShowDetail } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed } from '@__test-utils__/utils';
 
+import { MediaListItem } from '@entities/list.entity';
+
 describe('TVShowRepository season snapshots', () => {
   type TestDbHelper = ReturnType<typeof createTestDatabase>;
   let cleanupHelper: TestDbHelper | undefined;
@@ -139,5 +141,67 @@ describe('TVShowRepository season snapshots', () => {
     await expect(
       repository.upsertTVShowDetail(createMockTVShowDetail({ mediaId: 799 }))
     ).resolves.toBeTruthy();
+  });
+
+  it('keeps a staged page outside an unrelated transaction rollback', async () => {
+    jest.useRealTimers();
+    const { database } = await setupTest();
+    const lists = database.getMediaListRepository();
+    const list = await lists.createMediaList('Rollback isolation', '', 'rollback-isolation');
+    let release!: () => void;
+    let started!: () => void;
+    const gate = new Promise<void>(resolve => {
+      release = resolve;
+    });
+    const entered = new Promise<void>(resolve => {
+      started = resolve;
+    });
+    const transaction = database.transaction(async () => {
+      started();
+      await gate;
+      throw new Error('unrelated rollback');
+    });
+    const rejected = expect(transaction).rejects.toThrow('unrelated rollback');
+    await entered;
+    const stage = lists.stagePage(list.id, 'kept', 0, [{ mediaType: 'tv', mediaId: 901 }]);
+    await new Promise(resolve => setTimeout(resolve, 10));
+    release();
+    await rejected;
+    await stage;
+    expect(await lists.countItems(list.id, 'kept')).toBe(1);
+  });
+
+  it('serializes a direct repository save behind a failing transaction', async () => {
+    jest.useRealTimers();
+    const { database } = await setupTest();
+    const lists = database.getMediaListRepository();
+    const list = await lists.createMediaList('Direct write', '', 'direct-write');
+    let release!: () => void;
+    let started!: () => void;
+    const gate = new Promise<void>(resolve => {
+      release = resolve;
+    });
+    const entered = new Promise<void>(resolve => {
+      started = resolve;
+    });
+    const transaction = database.transaction(async () => {
+      started();
+      await gate;
+      throw new Error('rollback');
+    });
+    const rejected = expect(transaction).rejects.toThrow('rollback');
+    await entered;
+    const save = database.getRepository(MediaListItem).save({
+      listId: list.id,
+      generation: 'kept',
+      position: 0,
+      mediaType: 'tv',
+      mediaId: 902,
+    });
+    await new Promise(resolve => setTimeout(resolve, 10));
+    release();
+    await rejected;
+    await save;
+    expect(await lists.countItems(list.id, 'kept')).toBe(1);
   });
 });

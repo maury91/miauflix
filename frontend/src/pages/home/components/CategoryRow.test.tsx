@@ -46,7 +46,12 @@ describe('CategoryRow page window', () => {
     useGetListQuery.mockImplementation((query: unknown) => {
       if (query === skipToken) return { data: undefined, isLoading: false, isError: false };
       const { page } = query as { page: number };
-      return { data: response(page), isLoading: false, isError: false };
+      return {
+        data: response(page),
+        currentData: response(page),
+        isLoading: false,
+        isError: false,
+      };
     });
   });
 
@@ -74,7 +79,12 @@ describe('CategoryRow page window', () => {
     useGetListQuery.mockImplementation((query: unknown) => {
       if (query === skipToken) return { data: undefined, isLoading: false, isError: false };
       const { page } = query as { page: number };
-      return { data: response(page, 25), isLoading: false, isError: false };
+      return {
+        data: response(page, 25),
+        currentData: response(page, 25),
+        isLoading: false,
+        isError: false,
+      };
     });
     render(<CategoryRow {...makeProps(24)} />);
 
@@ -106,5 +116,26 @@ describe('CategoryRow page window', () => {
       skipToken,
       skipToken,
     ]);
+  });
+
+  it('shows a failed current page instead of rendering retained data from another page', () => {
+    useGetListQuery.mockImplementation((query: unknown) => {
+      if (query === skipToken)
+        return { data: undefined, currentData: undefined, isLoading: false, isError: false };
+      const { page } = query as { page: number };
+      if (page === 1)
+        return { data: response(0), currentData: undefined, isLoading: false, isError: true };
+      return {
+        data: response(page),
+        currentData: response(page),
+        isLoading: false,
+        isError: false,
+      };
+    });
+
+    render(<CategoryRow {...makeProps(20)} />);
+
+    expect(screen.getByText('Failed to load content.')).toBeInTheDocument();
+    expect(screen.queryByTestId('media-19')).not.toBeInTheDocument();
   });
 });

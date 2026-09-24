@@ -45,21 +45,23 @@ export class MediaListRepository {
     items: Array<{ mediaType: MediaListItemType; mediaId: number }>
   ): Promise<void> {
     if (!items.length) return;
-    await this.itemRepository
-      .createQueryBuilder()
-      .insert()
-      .into(MediaListItem)
-      .values(
-        items.map((item, index) => ({
-          listId,
-          generation,
-          position: offset + index,
-          mediaType: item.mediaType,
-          mediaId: item.mediaId,
-        }))
-      )
-      .orIgnore()
-      .execute();
+    await this.database.write(() =>
+      this.itemRepository
+        .createQueryBuilder()
+        .insert()
+        .into(MediaListItem)
+        .values(
+          items.map((item, index) => ({
+            listId,
+            generation,
+            position: offset + index,
+            mediaType: item.mediaType,
+            mediaId: item.mediaId,
+          }))
+        )
+        .orIgnore()
+        .execute()
+    );
   }
 
   async activateGeneration(listId: number, generation: string): Promise<void> {
