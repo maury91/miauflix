@@ -131,6 +131,22 @@ docker compose exec miauflix npm run dev
 docker compose exec miauflix npm run start:frontend
 ```
 
+### Trusted Local HTTPS
+
+On macOS, create and trust the local development certificate before starting the Docker development stack:
+
+```bash
+./scripts/setup-dev-certificate.sh
+npm run start:backend:docker:dev
+```
+
+To store certificates outside the default `.certs` directory, set `MIAUFLIX_DEV_CERT_DIR` for both commands. Relative paths are resolved from the repository root; absolute paths are used as provided.
+
+```bash
+MIAUFLIX_DEV_CERT_DIR=./dev-certs ./scripts/setup-dev-certificate.sh
+MIAUFLIX_DEV_CERT_DIR=./dev-certs npm run start:backend:docker:dev
+```
+
 ### Testing Environment
 
 ```bash

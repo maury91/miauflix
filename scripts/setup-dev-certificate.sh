@@ -3,6 +3,9 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cert_root="${MIAUFLIX_DEV_CERT_DIR:-$repo_root/.certs}"
+if [[ "$cert_root" != /* ]]; then
+  cert_root="$repo_root/$cert_root"
+fi
 ca_dir="$cert_root/ca"
 server_dir="$cert_root/server"
 ca_key="$ca_dir/miauflix-local-ca.key"
