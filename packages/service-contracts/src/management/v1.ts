@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const MANAGEMENT_PROTOCOL_VERSION = 1 as const;
+export const MANAGEMENT_PROTOCOL_VERSION = 2 as const;
 export const SERVICE_MANIFEST_PATH = '/service' as const;
 
 const relativePathSchema = z
@@ -24,7 +24,6 @@ export const serviceManifestSchema = z.object({
     statusPath: relativePathSchema,
     statusEventsPath: relativePathSchema.optional(),
     configurationSchemaPath: relativePathSchema,
-    configurationStatePath: relativePathSchema,
     configurationTestPath: relativePathSchema,
     configurationApplyPath: relativePathSchema,
   }),
@@ -51,10 +50,14 @@ export const configInputTypeSchema = z.enum(['boolean', 'number', 'password', 's
 export const configVariableSchema = z.object({
   key: z.string().regex(/^[A-Z][A-Z0-9_]*$/),
   description: z.string(),
+  label: z.string().optional(),
   required: z.boolean(),
+  advanced: z.boolean().optional(),
+  skipUserInteraction: z.boolean().optional(),
   secret: z.boolean().optional(),
   inputType: configInputTypeSchema,
   defaultValue: z.string().optional(),
+  defaultValueSource: z.enum(['browser-origin']).optional(),
   example: z.string().optional(),
   options: z.record(z.string(), z.string()).optional(),
   numberOptions: z
@@ -71,20 +74,26 @@ export const configVariableSchema = z.object({
   testFailureHelp: z.string().optional(),
 });
 
-export const serviceConfigSchemaSchema = z.object({
+export const serviceConfigGroupSchema = z.object({
+  id: z.string().regex(/^[A-Z][A-Z0-9_]*$/),
   name: z.string().min(1),
   description: z.string(),
   variables: z.array(configVariableSchema),
 });
 
-export const serviceConfigStateSchema = z.object({
-  configuredKeys: z.array(z.string()),
+export const serviceConfigSchemaSchema = z.object({
+  groups: z.array(serviceConfigGroupSchema),
 });
 
-export const serviceConfigMutationSchema = z.object({
+/** Complete application configuration snapshot for one remote service. */
+export const serviceConfigSnapshotSchema = z.object({
   values: z.record(z.string(), z.string()),
-  unsetKeys: z.array(z.string()).default([]),
 });
+
+export const serviceConfigMutationSchema = z.union([
+  serviceConfigSnapshotSchema,
+  z.object({ clear: z.literal(true) }),
+]);
 
 export const serviceConfigTestResultSchema = z.object({
   success: z.boolean(),
@@ -95,7 +104,7 @@ export const serviceConfigTestResultSchema = z.object({
 
 export const serviceConfigApplyResultSchema = z.object({
   success: z.boolean(),
-  reloaded: z.boolean(),
+  activated: z.boolean(),
   invalidKeys: z.array(z.string()).optional(),
   test: serviceConfigTestResultSchema.optional(),
 });
@@ -110,8 +119,8 @@ export type ServiceManifest = z.infer<typeof serviceManifestSchema>;
 export type ServiceLifecycleState = z.infer<typeof serviceLifecycleStateSchema>;
 export type ServiceStatus = z.infer<typeof serviceStatusSchema>;
 export type ConfigVariable = z.infer<typeof configVariableSchema>;
+export type ServiceConfigGroup = z.infer<typeof serviceConfigGroupSchema>;
 export type ServiceConfigSchema = z.infer<typeof serviceConfigSchemaSchema>;
-export type ServiceConfigState = z.infer<typeof serviceConfigStateSchema>;
 export type ServiceConfigMutation = z.input<typeof serviceConfigMutationSchema>;
 export type ServiceConfigTestResult = z.infer<typeof serviceConfigTestResultSchema>;
 export type ServiceConfigApplyResult = z.infer<typeof serviceConfigApplyResultSchema>;

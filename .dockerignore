@@ -100,6 +100,7 @@ database.sqlite
 *.sqlite
 *.sqlite-journal
 downloads/
+data/
 test-assets/
 assets/tmp/
 backend/data/

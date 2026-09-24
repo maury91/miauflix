@@ -1,5 +1,6 @@
-import type { DataSource, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
+import type { Database } from '@database/database';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import type { User } from '@entities/user.entity';
 import { hashToken, verifyToken } from '@utils/token-hash.util';
@@ -7,8 +8,8 @@ import { hashToken, verifyToken } from '@utils/token-hash.util';
 export class RefreshTokenRepository {
   private readonly repository: Repository<RefreshToken>;
 
-  constructor(datasource: DataSource) {
-    this.repository = datasource.getRepository(RefreshToken);
+  constructor(private readonly database: Database) {
+    this.repository = database.getRepository(RefreshToken);
   }
 
   async findById(id: string): Promise<RefreshToken | null> {
@@ -68,11 +69,9 @@ export class RefreshTokenRepository {
 
   async deleteExpired(): Promise<number> {
     const now = new Date();
-    const result = await this.repository
-      .createQueryBuilder()
-      .delete()
-      .where('expiresAt < :now', { now })
-      .execute();
+    const result = await this.database.write(() =>
+      this.repository.createQueryBuilder().delete().where('expiresAt < :now', { now }).execute()
+    );
 
     return result.affected || 0;
   }
@@ -105,19 +104,21 @@ export class RefreshTokenRepository {
       updateFields.userAgent = userAgent;
     }
 
-    const result = await this.repository
-      .createQueryBuilder()
-      .update(RefreshToken)
-      .set({
-        ...updateFields,
-        accessCount: () => 'accessCount + 1',
-      })
-      .where('tokenHash = :oldTokenHash AND userId = :userId AND session = :session', {
-        oldTokenHash: existingToken.tokenHash,
-        userId,
-        session,
-      })
-      .execute();
+    const result = await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(RefreshToken)
+        .set({
+          ...updateFields,
+          accessCount: () => 'accessCount + 1',
+        })
+        .where('tokenHash = :oldTokenHash AND userId = :userId AND session = :session', {
+          oldTokenHash: existingToken.tokenHash,
+          userId,
+          session,
+        })
+        .execute()
+    );
 
     return result.affected ? result.affected > 0 : false;
   }

@@ -21,7 +21,6 @@ import {
   BASE_PATH,
   CONFIGURATION_APPLY_PATH,
   CONFIGURATION_SCHEMA_PATH,
-  CONFIGURATION_STATE_PATH,
   CONFIGURATION_TEST_PATH,
 } from './consts.ts';
 
@@ -106,7 +105,6 @@ export const registerSystemRoutes = (router: Router, ctx: ServiceContext): void 
           statusPath: STATUS_PATH,
           statusEventsPath: '/status/events',
           configurationSchemaPath: CONFIGURATION_SCHEMA_PATH,
-          configurationStatePath: CONFIGURATION_STATE_PATH,
           configurationTestPath: CONFIGURATION_TEST_PATH,
           configurationApplyPath: CONFIGURATION_APPLY_PATH,
         },

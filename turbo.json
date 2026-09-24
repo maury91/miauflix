@@ -57,6 +57,9 @@
       "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
       "cache": true
     },
+    "@miauflix/frontend#check:ts": {
+      "dependsOn": ["@miauflix/backend#build:client"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": [

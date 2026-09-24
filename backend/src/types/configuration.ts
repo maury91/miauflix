@@ -4,6 +4,8 @@ export type BaseVariableInfo = {
   description: string;
   /** Optional concise label for configuration UIs; falls back to a humanized key. */
   label?: string;
+  /** Optional browser-derived value suggestion for configuration UIs. */
+  defaultValueSource?: 'browser-origin';
   /** Whether this value should be grouped under advanced settings in configuration UIs. */
   advanced?: boolean;
   /** Important consequence to show before changing this value. */
@@ -26,6 +28,12 @@ type VariableOptions<T> = Record<Extract<T, string>, string>;
 type PasswordVariableInfo = BaseVariableInfo & {
   password: true;
   skipUserInteraction?: false;
+};
+
+type GeneratedPasswordVariableInfo = BaseVariableInfo & {
+  password: true;
+  defaultValue: string | (() => string);
+  skipUserInteraction: true;
 };
 
 export type DefaultVariableInfo = BaseVariableInfo & {
@@ -58,6 +66,7 @@ type BaseVariableInfoWithTransform<T> = BaseVariableInfo & {
 export type UnTypedVariableInfo =
   | BaseVariableInfo
   | DefaultVariableInfo
+  | GeneratedPasswordVariableInfo
   | PasswordVariableInfo
   | SkipUserInteractionVariableInfo;
 
@@ -80,7 +89,13 @@ export type ConfigurableService = {
   getStatus(): ServiceInstanceStatus;
   reload(): Promise<void>;
   /** Optional non-mutating probe used for draft configuration validation. */
-  testConfiguration?(): Promise<{ success: boolean; message: string }>;
+  testConfiguration?(
+    entries?: { key: string; value: string }[]
+  ): Promise<{ success: boolean; mode?: 'live' | 'validation'; message: string }>;
+  applyConfiguration?(
+    entries: { key: string; value: string }[]
+  ): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }>;
+  clearConfiguration?(): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }>;
 };
 
 export type ConfigService = {

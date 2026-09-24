@@ -9,39 +9,67 @@ import { apiCache } from '../db/schema';
  * Replaces the backend's `@Cacheable` + CacheService pair for this service.
  */
 export class ApiCache {
+  private readonly staleRetentionMs = 7 * 24 * 60 * 60 * 1000;
+
   constructor(private readonly db: CatalogDatabase) {}
 
-  get<T>(key: string): T | undefined {
+  private lookup<T>(key: string): CacheLookup<T> {
     const row = this.db.db.select().from(apiCache).where(eq(apiCache.key, key)).get();
-    if (!row) return undefined;
-    if (row.expiresAt <= Date.now()) {
-      this.db.db.delete(apiCache).where(eq(apiCache.key, key)).run();
-      return undefined;
-    }
-    return JSON.parse(row.value) as T;
+    if (!row || row.staleUntil <= Date.now()) return { state: 'missing' };
+    const value = JSON.parse(row.value) as T;
+    return row.expiresAt > Date.now()
+      ? { state: 'fresh', value, expiresAt: row.expiresAt }
+      : { state: 'stale', value, expiresAt: row.expiresAt };
+  }
+
+  get<T>(key: string): T | undefined {
+    const cached = this.lookup<T>(key);
+    return cached.state === 'missing' ? undefined : cached.value;
   }
 
   set(key: string, value: unknown, ttlMs: number): void {
+    const now = Date.now();
     this.db.db
       .insert(apiCache)
-      .values({ key, value: JSON.stringify(value), expiresAt: Date.now() + ttlMs })
+      .values({
+        key,
+        value: JSON.stringify(value),
+        expiresAt: now + ttlMs,
+        staleUntil: now + ttlMs + this.staleRetentionMs,
+      })
       .onConflictDoUpdate({
         target: apiCache.key,
-        set: { value: JSON.stringify(value), expiresAt: Date.now() + ttlMs },
+        set: {
+          value: JSON.stringify(value),
+          expiresAt: now + ttlMs,
+          staleUntil: now + ttlMs + this.staleRetentionMs,
+        },
       })
       .run();
   }
 
   /** Cache-or-fetch helper. */
   async wrap<T>(key: string, ttlMs: number, fetch: () => Promise<T>): Promise<T> {
-    const cached = this.get<T>(key);
-    if (cached !== undefined) return cached;
-    const value = await fetch();
-    this.set(key, value, ttlMs);
-    return value;
+    const cached = this.lookup<T>(key);
+    if (cached.state === 'fresh') return cached.value;
+    try {
+      const value = await fetch();
+      this.set(key, value, ttlMs);
+      return value;
+    } catch (error) {
+      // We allow stale values to be returned when we have an error
+      // loading a fresh one
+      if (cached.state === 'stale') return cached.value;
+      throw error;
+    }
   }
 
   cleanup(): void {
-    this.db.db.delete(apiCache).where(lte(apiCache.expiresAt, Date.now())).run();
+    this.db.db.delete(apiCache).where(lte(apiCache.staleUntil, Date.now())).run();
   }
 }
+
+export type CacheLookup<T> =
+  | { state: 'fresh'; value: T; expiresAt: number }
+  | { state: 'stale'; value: T; expiresAt: number }
+  | { state: 'missing' };
