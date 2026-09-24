@@ -1,33 +1,35 @@
 import type { MediaDto } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
-import { forwardRef, type KeyboardEvent } from 'react';
+import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 import { getImageUrl, getMediaTitle } from '../media.utils';
 
-const Card = styled.button<{ $backdrop: string; $width: number }>`
+const Card = styled.button<{
+  $backdrop: string;
+  $logo?: string;
+  $width: number;
+  $selected: boolean;
+}>`
   flex: 0 0 ${({ $width }) => $width}px;
   width: ${({ $width }) => $width}px;
   position: relative;
   aspect-ratio: 16 / 9;
   padding: 0;
-  border: 0;
-  border-radius: 6px;
+  border: 0.6vh solid ${({ $selected }) => ($selected ? PALETTE.color.interactive : 'transparent')};
+  border-radius: 0.7vh;
   overflow: hidden;
-  background: url(${props => props.$backdrop}) center / cover no-repeat;
+  background: ${({ $backdrop, $logo }) =>
+    $logo
+      ? `url(${$logo}) 10% 10% / 60% auto no-repeat, url(${$backdrop}) center / cover no-repeat`
+      : `url(${$backdrop}) center / cover no-repeat`};
   background-color: ${PALETTE.background.surface2};
   color: ${PALETTE.text.primary};
   cursor: pointer;
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease;
+  outline: none;
 
-  &:hover,
   &:focus-visible {
-    transform: scale(1.045);
-    box-shadow: 0 0 0 3px ${PALETTE.color.interactive};
-    outline: none;
-    z-index: 2;
+    box-shadow: 0 0 0 0.35vh ${PALETTE.color.interactive};
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -35,31 +37,33 @@ const Card = styled.button<{ $backdrop: string; $width: number }>`
   }
 `;
 
-const TitleOverlay = styled.span`
+const TitleOverlay = styled.span<{ $hasLogo: boolean }>`
   position: absolute;
   inset: auto 0 0;
-  padding: 18px 10px 8px;
+  padding: 2.2vh 1vh 0.8vh;
   background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
   font:
-    600 0.85rem 'Poppins',
+    600 1.8vh 'Poppins',
     sans-serif;
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  opacity: ${({ $hasLogo }) => ($hasLogo ? 0 : 1)};
 `;
 
 interface MediaCardProps {
   media: MediaDto;
   width: number;
+  selected: boolean;
   tabIndex: number;
   onFocus: () => void;
   onHover: () => void;
-  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
+  onSelect: () => void;
 }
 
 export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function MediaCard(
-  { media, onFocus, onHover, onKeyDown, tabIndex, width },
+  { media, onFocus, onHover, onSelect, selected, tabIndex, width },
   ref
 ) {
   const title = getMediaTitle(media);
@@ -68,15 +72,17 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
       ref={ref}
       type="button"
       $backdrop={getImageUrl(media.backdrop)}
+      $logo={media.logo ? getImageUrl(media.logo) : undefined}
+      $selected={selected}
       $width={width}
       aria-label={title}
+      aria-current={selected ? 'true' : undefined}
       tabIndex={tabIndex}
       onFocus={onFocus}
       onMouseEnter={onHover}
-      onClick={onFocus}
-      onKeyDown={onKeyDown}
+      onClick={onSelect}
     >
-      <TitleOverlay>{title}</TitleOverlay>
+      <TitleOverlay $hasLogo={Boolean(media.logo)}>{title}</TitleOverlay>
     </Card>
   );
 });

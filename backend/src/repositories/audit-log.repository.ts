@@ -1,14 +1,15 @@
-import type { DataSource, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 import { Between } from 'typeorm';
 
+import type { Database } from '@database/database';
 import type { AuditEventSeverity, AuditEventType } from '@entities/audit-log.entity';
 import { AuditLog } from '@entities/audit-log.entity';
 
 export class AuditLogRepository {
   private readonly repository: Repository<AuditLog>;
 
-  constructor(datasource: DataSource) {
-    this.repository = datasource.getRepository(AuditLog);
+  constructor(database: Database) {
+    this.repository = database.getRepository(AuditLog);
   }
 
   async findById(id: string): Promise<AuditLog | null> {

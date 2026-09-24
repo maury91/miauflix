@@ -22,7 +22,7 @@ const SCOPE = 'MediaCatalog';
 
 const env = loadEnv();
 const db = new CatalogDatabase(env.dataDir);
-const config = new CatalogConfigService(env.dataDir);
+const config = new CatalogConfigService();
 
 const context: ServiceContext = {
   env,
@@ -31,10 +31,7 @@ const context: ServiceContext = {
   catalog: null,
 };
 
-// Self-activation: without the main app, the service can become ready from its own
-// env / last-known-good configuration (standalone mode).
 const runtime = new CatalogRuntime(context, config);
-void runtime.tryActivate();
 
 const router = new Router();
 registerSystemRoutes(router, context);

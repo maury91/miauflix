@@ -23,10 +23,11 @@ const int = (value: string | undefined, fallback: number): number => {
 };
 
 export function loadEnv(env: Record<string, string | undefined> = process.env): ServiceEnv {
+  const dataDir = env.CATALOG_DATA_DIR ?? env.DATA_DIR ?? './data';
   return {
     host: env.CATALOG_HOST ?? '0.0.0.0',
     port: int(env.CATALOG_PORT, 3001),
-    dataDir: env.CATALOG_DATA_DIR ?? env.DATA_DIR ?? './data',
+    dataDir,
     disableBackgroundTasks: bool(
       env.CATALOG_DISABLE_BACKGROUND_TASKS ?? env.DISABLE_BACKGROUND_TASKS
     ),

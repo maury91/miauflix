@@ -6,7 +6,7 @@
   "scripts": {
     "build:backend": "turbo run build build:client --filter=@miauflix/backend...",
     "build:frontend": "turbo run build --filter='./frontend'",
-    "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer' --filter='./packages/service-contracts'",
+    "build:libs": "turbo run build --only --filter='./packages/source-metadata-extractor' --filter='./packages/yts-sanitizer' --filter='./packages/therarbg-sanitizer' --filter='./packages/service-contracts' --filter='./packages/service-configuration'",
     "build": "turbo run build",
     "check:ts": "turbo run check:ts",
     "config-only": "npm run start:backend -- --only-config",
@@ -50,6 +50,7 @@
     "test:frontend:e2e:dev": "npm -w frontend run test:e2e",
     "test:frontend:e2e:initial-setup": "backend-e2e/scripts/env.sh test --initial-setup",
     "test:frontend:e2e:initial-setup:update": "backend-e2e/scripts/update-initial-user-snapshots.sh",
+    "test:frontend:e2e:initial-setup:check": "backend-e2e/scripts/update-initial-user-snapshots.sh --check",
     "test:frontend:e2e:docker:update": "npm -w frontend run test:e2e:docker:update",
     "test:frontend:e2e:docker": "npm -w frontend run test:e2e:docker",
     "test:frontend:e2e": "backend-e2e/scripts/env.sh test --frontend-only",

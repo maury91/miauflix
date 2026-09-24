@@ -17,6 +17,10 @@ const entry = (overrides: Partial<ConfigEntryView> = {}): ConfigEntryView => ({
 
 describe('hasConfigurationIssue', () => {
   it('requires the configuration wizard for a missing required value', () => {
+    expect(hasConfigurationIssue([entry()], { CATALOG: { status: 'error' } })).toBe(true);
+  });
+
+  it('prompts for backend-owned required values even when a remote reports ready', () => {
     expect(hasConfigurationIssue([entry()], { CATALOG: { status: 'ready' } })).toBe(true);
   });
 
