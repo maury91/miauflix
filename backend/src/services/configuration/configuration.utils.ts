@@ -466,7 +466,7 @@ export function persistConfigFile(
 
 export function computeMissingVarsForGroup(
   group: string,
-  rawValues: Map<VariableName, string>
+  rawValues: ReadonlyMap<VariableName, string>
 ): string[] {
   const service = configurationGroups[group];
   if (!service) return [];

@@ -20,7 +20,7 @@ import { MediaCard } from './MediaCard';
 const PAGE_SIZE = 20;
 
 const RowContainer = styled.section`
-  margin-bottom: 10vh;
+  margin-bottom: 5vh;
   scroll-margin-block: 7vh 8vh;
 `;
 
@@ -96,7 +96,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   forwardedRef
 ) {
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(() => Math.floor(Math.max(0, initialIndex) / PAGE_SIZE));
   const current = useGetListQuery(
     nearby ? { category: category.slug, page, limit: PAGE_SIZE } : skipToken
   );

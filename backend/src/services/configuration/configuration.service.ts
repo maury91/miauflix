@@ -1,3 +1,5 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 import { logger } from '@logger';
 import type { ConfigVariable, ServiceConfigSchema } from '@miauflix/service-contracts';
 import { ConfigStore } from '@miauflix/service-contracts';
@@ -48,6 +50,12 @@ import {
 
 const ENC_PREFIX = 'enc:';
 
+type ConfigurationReadView = {
+  active: boolean;
+  rawValues: ReadonlyMap<VariableName, string>;
+  computedValues: Readonly<Partial<EnvironmentVariableTypes>>;
+};
+
 /*
   Variable source precedence, from higher to lower
   - JSON file
@@ -77,6 +85,7 @@ export class ConfigurationService {
   private _registeredServices = new Map<ServiceName, ConfigurableService>();
   /** Serializes temporary config overlays so concurrent requests cannot see each other's drafts. */
   private _configOperation: Promise<void> = Promise.resolve();
+  private readonly _configurationReadView = new AsyncLocalStorage<ConfigurationReadView>();
   private readonly _changeListeners = new Set<() => void>();
 
   constructor() {
@@ -223,13 +232,11 @@ export class ConfigurationService {
     const schema = this._remoteSchemas.get(serviceName);
     if (!schema) return undefined;
     const variables = schema.groups.flatMap(group => group.variables);
+    const rawValues = this.readRawValues();
     const values = Object.fromEntries(
       variables.map(item => [
         item.key,
-        overrides[item.key] ??
-          this._rawValues.get(item.key as VariableName) ??
-          item.defaultValue ??
-          '',
+        overrides[item.key] ?? rawValues.get(item.key as VariableName) ?? item.defaultValue ?? '',
       ])
     );
     if (variables.some(item => item.required && !values[item.key])) return undefined;
@@ -295,7 +302,7 @@ export class ConfigurationService {
   get<K extends keyof EnvironmentVariableTypes>(
     variable: K
   ): EnvironmentVariableTypes[K] | undefined {
-    return this._computedValues[variable];
+    return this.readComputedValues()[variable];
   }
 
   /**
@@ -316,7 +323,7 @@ export class ConfigurationService {
 
   /** Runtime lookup for namespaced variables published by remote services. */
   getDynamic(variable: string): unknown {
-    return (this._computedValues as Record<string, unknown>)[variable];
+    return (this.readComputedValues() as Record<string, unknown>)[variable];
   }
 
   /**
@@ -432,6 +439,13 @@ export class ConfigurationService {
     key: K,
     value: string
   ): Promise<boolean> {
+    return this.withConfigLock(() => this.setValueUnlocked(key, value));
+  }
+
+  private async setValueUnlocked<K extends keyof EnvironmentVariableTypes>(
+    key: K,
+    value: string
+  ): Promise<boolean> {
     const previousValue = this._rawValues.get(key);
     if (previousValue === value) {
       return false;
@@ -442,7 +456,7 @@ export class ConfigurationService {
       ? applyTransform(key, varInfo, value)
       : (value as EnvironmentVariableTypes[K]);
 
-    if (this.get(key) === transformedValue) {
+    if (this._computedValues[key] === transformedValue) {
       return false;
     }
 
@@ -716,17 +730,42 @@ export class ConfigurationService {
   }
 
   getMissingVarsForGroup(group: keyof typeof services): string[] {
+    const rawValues = this.readRawValues();
     const remoteSchema = this._remoteSchemas.get(group);
     if (remoteSchema) {
       return remoteSchema.groups
         .flatMap(remoteGroup => remoteGroup.variables)
         .filter(
-          item =>
-            item.required && !this._rawValues.get(item.key as VariableName) && !item.defaultValue
+          item => item.required && !rawValues.get(item.key as VariableName) && !item.defaultValue
         )
         .map(item => item.key);
     }
-    return computeMissingVarsForGroup(group, this._rawValues);
+    return computeMissingVarsForGroup(group, rawValues);
+  }
+
+  private readRawValues(): ReadonlyMap<VariableName, string> {
+    const view = this._configurationReadView.getStore();
+    return view?.active ? view.rawValues : this._rawValues;
+  }
+
+  private readComputedValues(): Readonly<Partial<EnvironmentVariableTypes>> {
+    const view = this._configurationReadView.getStore();
+    return view?.active ? view.computedValues : this._computedValues;
+  }
+
+  private withConfigurationReadView<T>(
+    rawValues: ReadonlyMap<VariableName, string>,
+    computedValues: Readonly<Partial<EnvironmentVariableTypes>>,
+    operation: () => Promise<T>
+  ): Promise<T> {
+    const view: ConfigurationReadView = { active: true, rawValues, computedValues };
+    return this._configurationReadView.run(view, async () => {
+      try {
+        return await operation();
+      } finally {
+        view.active = false;
+      }
+    });
   }
 
   private async withConfigLock<T>(operation: () => Promise<T>): Promise<T> {
@@ -858,80 +897,78 @@ export class ConfigurationService {
         }
       }
 
-      this._rawValues = candidateRaw;
-      this._computedValues = candidateComputed;
       const liveTested = new Set<ServiceName>();
       const previousStatuses = new Map<ServiceName, ServiceInstanceStatus['status']>();
 
-      for (const serviceName of uniqueServices) {
-        if (!validServices.has(serviceName)) continue;
-        const instance = this._registeredServices.get(serviceName);
-        if (!instance?.testable) {
-          results.push({
-            service: serviceName,
-            success: true,
-            testMode: 'validation',
-            message: `${serviceName} values are valid. A live test is not available for this service.`,
-          });
-          continue;
-        }
+      await this.withConfigurationReadView(candidateRaw, candidateComputed, async () => {
+        for (const serviceName of uniqueServices) {
+          if (!validServices.has(serviceName)) continue;
+          const instance = this._registeredServices.get(serviceName);
+          if (!instance?.testable) {
+            results.push({
+              service: serviceName,
+              success: true,
+              testMode: 'validation',
+              message: `${serviceName} values are valid. A live test is not available for this service.`,
+            });
+            continue;
+          }
 
-        try {
-          const observationalTest = !save ? instance.testConfiguration : undefined;
-          let ready: boolean;
-          let message: string | undefined;
-          if (observationalTest) {
-            logger.info(
-              'Config',
-              `Testing ${serviceName} configuration without applying the draft`
-            );
-            const test = await observationalTest.call(instance);
-            ready = test.success;
-            message = test.message;
-          } else {
-            liveTested.add(serviceName);
-            const previousStatus = instance.getStatus().status;
-            previousStatuses.set(serviceName, previousStatus);
-            logger.info(
-              'Config',
-              save
-                ? `Restarting ${serviceName} to validate the saved configuration (previous status: ${previousStatus})`
-                : `Testing ${serviceName} configuration (previous status: ${previousStatus})`
-            );
-            await instance.reload();
-            ready = instance.getStatus().status === 'ready';
-            message = ready ? undefined : this.serviceStatusMessage(serviceName);
+          try {
+            const observationalTest = !save ? instance.testConfiguration : undefined;
+            let ready: boolean;
+            let message: string | undefined;
+            if (observationalTest) {
+              logger.info(
+                'Config',
+                `Testing ${serviceName} configuration without applying the draft`
+              );
+              const test = await observationalTest.call(instance);
+              ready = test.success;
+              message = test.message;
+            } else {
+              liveTested.add(serviceName);
+              const previousStatus = instance.getStatus().status;
+              previousStatuses.set(serviceName, previousStatus);
+              logger.info(
+                'Config',
+                save
+                  ? `Restarting ${serviceName} to validate the saved configuration (previous status: ${previousStatus})`
+                  : `Testing ${serviceName} configuration (previous status: ${previousStatus})`
+              );
+              await instance.reload();
+              ready = instance.getStatus().status === 'ready';
+              message = ready ? undefined : this.serviceStatusMessage(serviceName);
+            }
+            if (ready) {
+              logger.info('Config', `${serviceName} configuration restart completed: ready`);
+            } else {
+              logger.warn(
+                'Config',
+                `${serviceName} configuration test failed: ${message ?? this.serviceStatusMessage(serviceName)}`
+              );
+            }
+            results.push({
+              service: serviceName,
+              success: ready,
+              testMode: 'live',
+              message: ready
+                ? (message ?? `${serviceName} test successful.`)
+                : (message ?? this.serviceStatusMessage(serviceName)),
+            });
+          } catch (error) {
+            results.push({
+              service: serviceName,
+              success: false,
+              testMode: 'live',
+              message: error instanceof Error ? error.message : String(error),
+            });
           }
-          if (ready) {
-            logger.info('Config', `${serviceName} configuration restart completed: ready`);
-          } else {
-            logger.warn(
-              'Config',
-              `${serviceName} configuration test failed: ${message ?? this.serviceStatusMessage(serviceName)}`
-            );
-          }
-          results.push({
-            service: serviceName,
-            success: ready,
-            testMode: 'live',
-            message: ready
-              ? (message ?? `${serviceName} test successful.`)
-              : (message ?? this.serviceStatusMessage(serviceName)),
-          });
-        } catch (error) {
-          results.push({
-            service: serviceName,
-            success: false,
-            testMode: 'live',
-            message: error instanceof Error ? error.message : String(error),
-          });
         }
-      }
+      });
 
       const success = results.every(result => result.success);
       if (!save || !success) {
-        this._rawValues = rawSnapshot;
-        this._computedValues = computedSnapshot;
         await this.restoreRuntimeServices(liveTested);
         return save
           ? {
@@ -957,6 +994,9 @@ export class ConfigurationService {
             : value;
         }
       }
+
+      this._rawValues = candidateRaw;
+      this._computedValues = candidateComputed;
 
       const restarted: ServiceName[] = [];
       const needsProcessRestart: ServiceName[] = [];
@@ -1199,9 +1239,8 @@ export class ConfigurationService {
 
       // Probe every remote service without applying its candidate. Local services
       // are temporarily reloaded against the candidate, then restored before save.
-      this._rawValues = candidateRaw;
-      this._computedValues = candidateComputed;
-      try {
+      const locallyTested: ServiceName[] = [];
+      await this.withConfigurationReadView(candidateRaw, candidateComputed, async () => {
         for (const [consumer, snapshot] of remoteSnapshots) {
           const instance = this._registeredServices.get(consumer);
           if (!instance?.testConfiguration || !instance.applyConfiguration) {
@@ -1232,51 +1271,41 @@ export class ConfigurationService {
             });
           }
         }
-      } finally {
-        this._rawValues = rawSnapshot;
-        this._computedValues = computedSnapshot;
-      }
 
-      const locallyTested: ServiceName[] = [];
-      let failedProbeRestorations: ServiceName[] = [];
-      this._rawValues = candidateRaw;
-      this._computedValues = candidateComputed;
-      try {
-        for (const serviceName of localGroups) {
-          const instance = this._registeredServices.get(serviceName);
-          if (!instance?.testable) {
+        try {
+          for (const serviceName of localGroups) {
+            const instance = this._registeredServices.get(serviceName);
+            if (!instance?.testable) {
+              results.push({
+                service: serviceName,
+                success: true,
+                testMode: 'validation',
+                message: `${serviceName} values are valid. A live test is not available for this service.`,
+              });
+              continue;
+            }
+            locallyTested.push(serviceName);
+            await instance.reload();
+            const ready = instance.getStatus().status === 'ready';
             results.push({
               service: serviceName,
-              success: true,
-              testMode: 'validation',
-              message: `${serviceName} values are valid. A live test is not available for this service.`,
+              success: ready,
+              testMode: 'live',
+              message: ready
+                ? `${serviceName} test successful.`
+                : this.serviceStatusMessage(serviceName),
             });
-            continue;
           }
-          locallyTested.push(serviceName);
-          await instance.reload();
-          const ready = instance.getStatus().status === 'ready';
+        } catch (error) {
           results.push({
-            service: serviceName,
-            success: ready,
+            service: locallyTested.at(-1) ?? localGroups[0],
+            success: false,
             testMode: 'live',
-            message: ready
-              ? `${serviceName} test successful.`
-              : this.serviceStatusMessage(serviceName),
+            message: error instanceof Error ? error.message : String(error),
           });
         }
-      } catch (error) {
-        results.push({
-          service: locallyTested.at(-1) ?? localGroups[0],
-          success: false,
-          testMode: 'live',
-          message: error instanceof Error ? error.message : String(error),
-        });
-      } finally {
-        this._rawValues = rawSnapshot;
-        this._computedValues = computedSnapshot;
-        failedProbeRestorations = await this.restoreRuntimeServices(locallyTested);
-      }
+      });
+      const failedProbeRestorations = await this.restoreRuntimeServices(locallyTested);
       if (failedProbeRestorations.length) {
         for (const serviceName of failedProbeRestorations) {
           results.push({
@@ -1656,58 +1685,60 @@ export class ConfigurationService {
   }
 
   async updateConfigs(entries: { key: string; value: string }[]): Promise<UpdateConfigsResult> {
-    if (!isValidConfigUpdate(entries)) {
-      const unknownKeys = entries
-        .map(e => e.key)
-        .filter(key => !ALL_VAR_NAMES.has(key as VariableName));
-      throw new ConfigurationServiceError(
-        `Unknown configuration keys: ${unknownKeys.join(', ')}`,
-        'unknown_config_key'
-      );
-    }
-
-    // Save values and collect services whose keys actually changed
-    const changedServices = new Set<ServiceName>();
-    const invalidKeys: string[] = [];
-    for (const { key, value } of entries) {
-      try {
-        const result = await this.setValue(key, value);
-        if (result) {
-          const info = this._variablesInfo.get(key);
-          if (info) {
-            changedServices.add(info.serviceName);
-          }
-        }
-      } catch (error) {
-        console.warn(
-          `[Config] ${key}: invalid value — ${error instanceof Error ? error.message : error}`
+    return this.withConfigLock(async () => {
+      if (!isValidConfigUpdate(entries)) {
+        const unknownKeys = entries
+          .map(e => e.key)
+          .filter(key => !ALL_VAR_NAMES.has(key as VariableName));
+        throw new ConfigurationServiceError(
+          `Unknown configuration keys: ${unknownKeys.join(', ')}`,
+          'unknown_config_key'
         );
-        invalidKeys.push(key);
       }
-    }
-    if (invalidKeys.length > 0) {
-      return { success: false, invalidKeys };
-    }
 
-    // Restart each affected service
-    const restarted: ServiceName[] = [];
-    const needsProcessRestart: ServiceName[] = [];
-
-    for (const serviceName of changedServices) {
-      if (services[serviceName].restartable === false) {
-        needsProcessRestart.push(serviceName);
-        continue;
+      // Save values and collect services whose keys actually changed
+      const changedServices = new Set<ServiceName>();
+      const invalidKeys: string[] = [];
+      for (const { key, value } of entries) {
+        try {
+          const result = await this.setValueUnlocked(key, value);
+          if (result) {
+            const info = this._variablesInfo.get(key);
+            if (info) {
+              changedServices.add(info.serviceName);
+            }
+          }
+        } catch (error) {
+          console.warn(
+            `[Config] ${key}: invalid value — ${error instanceof Error ? error.message : error}`
+          );
+          invalidKeys.push(key);
+        }
       }
-      const instance = this._registeredServices.get(serviceName);
-      if (!instance) {
-        // Not yet initialized — persisted value will be used on next init
-        continue;
+      if (invalidKeys.length > 0) {
+        return { success: false, invalidKeys };
       }
-      await instance.reload();
-      restarted.push(serviceName);
-    }
 
-    return { success: true, restarted, needsProcessRestart };
+      // Restart each affected service
+      const restarted: ServiceName[] = [];
+      const needsProcessRestart: ServiceName[] = [];
+
+      for (const serviceName of changedServices) {
+        if (services[serviceName].restartable === false) {
+          needsProcessRestart.push(serviceName);
+          continue;
+        }
+        const instance = this._registeredServices.get(serviceName);
+        if (!instance) {
+          // Not yet initialized — persisted value will be used on next init
+          continue;
+        }
+        await instance.reload();
+        restarted.push(serviceName);
+      }
+
+      return { success: true, restarted, needsProcessRestart };
+    });
   }
 
   async getAllConfigs(): Promise<ConfigEntryView[]> {

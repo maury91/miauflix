@@ -10,7 +10,7 @@ const Hero = styled.header<{ $backdrop: string }>`
   inset: 0 0 auto;
   z-index: 1;
   height: 55vh;
-  padding: 15vh 5vw 9vh 7vw;
+  padding: 10vh 5vw 9vh 7vw;
   display: flex;
   align-items: flex-end;
   background:

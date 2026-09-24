@@ -30,8 +30,8 @@ const Content = styled.div<{ $margin: number }>`
   inset: 42vh 0 0;
   z-index: 2;
   overflow: hidden auto;
-  padding: 0 ${({ $margin }) => $margin}px 8vh;
-  mask-image: linear-gradient(180deg, transparent 0, #000 8vh);
+  padding: 6vh ${({ $margin }) => $margin}px 8vh;
+  mask-image: linear-gradient(180deg, transparent 5vh, #000 8vh);
   scrollbar-width: none;
 
   &::-webkit-scrollbar {

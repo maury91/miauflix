@@ -97,6 +97,8 @@ const repositoryWrites = new Set<PropertyKey>([
   'increment',
   'decrement',
   'clear',
+  'updateAll',
+  'deleteAll',
 ]);
 
 export class Database {

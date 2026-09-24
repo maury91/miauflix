@@ -27,28 +27,42 @@ const response = (page: number, total = 40): ListResponse =>
     })),
   }) as ListResponse;
 
-const makeProps = (initialIndex: number, nearby = true) => ({
-  category: { id: 1, name: 'Popular', slug: 'popular' } as never,
-  categoryIndex: 0,
-  initialIndex,
-  nearby,
-  mediaWidth: 180,
-  mediaPerPage: 1,
-  gap: 12,
-  active: false,
-  onActive: vi.fn(),
-  onSelect: vi.fn(),
-});
+let queryTotal = 40;
+
+const makeProps = (
+  initialIndex: number,
+  nearby = true,
+  overrides: Partial<{
+    categoryIndex: number;
+    active: boolean;
+    total: number;
+  }> = {}
+) => {
+  if (overrides.total !== undefined) queryTotal = overrides.total;
+  return {
+    category: { id: 1, name: 'Popular', slug: 'popular' } as never,
+    categoryIndex: overrides.categoryIndex ?? 0,
+    initialIndex,
+    nearby,
+    mediaWidth: 180,
+    mediaPerPage: 1,
+    gap: 12,
+    active: overrides.active ?? false,
+    onActive: vi.fn(),
+    onSelect: vi.fn(),
+  };
+};
 
 describe('CategoryRow page window', () => {
   beforeEach(() => {
+    queryTotal = 40;
     useGetListQuery.mockReset();
     useGetListQuery.mockImplementation((query: unknown) => {
       if (query === skipToken) return { data: undefined, isLoading: false, isError: false };
       const { page } = query as { page: number };
       return {
-        data: response(page),
-        currentData: response(page),
+        data: response(page, queryTotal),
+        currentData: response(page, queryTotal),
         isLoading: false,
         isError: false,
       };
@@ -60,6 +74,18 @@ describe('CategoryRow page window', () => {
 
     await waitFor(() => expect(screen.getByTestId('media-20')).toBeInTheDocument());
     expect(useGetListQuery).toHaveBeenCalledWith({ category: 'popular', page: 1, limit: 20 });
+  });
+
+  it('loads the saved page and renders a restored selection on remount', async () => {
+    render(<CategoryRow {...makeProps(45, true, { categoryIndex: 1, active: true, total: 60 })} />);
+
+    await waitFor(() => expect(screen.getByTestId('media-45')).toBeInTheDocument());
+    expect(useGetListQuery).toHaveBeenCalledWith({ category: 'popular', page: 2, limit: 20 });
+    expect(useGetListQuery).not.toHaveBeenCalledWith({
+      category: 'popular',
+      page: 0,
+      limit: 20,
+    });
   });
 
   it('loads the previous page when the window crosses back from index 20', async () => {

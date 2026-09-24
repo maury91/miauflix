@@ -5,8 +5,10 @@ import { QrLoginRequest } from '@entities/qr-login-request.entity';
 
 export class QrLoginRequestRepository {
   private readonly repository: Repository<QrLoginRequest>;
+  private readonly database: Database;
 
   constructor(database: Database) {
+    this.database = database;
     this.repository = database.getRepository(QrLoginRequest);
   }
 
@@ -23,11 +25,15 @@ export class QrLoginRequestRepository {
   }
 
   async approve(id: string, userId: string): Promise<boolean> {
-    const result = await this.repository.update(
-      { id, state: 'pending', expiresAt: MoreThan(new Date()) },
-      { state: 'approved', approvedUserId: userId, approvedAt: new Date() }
-    );
-    return !!result.affected;
+    return this.database.transaction(async manager => {
+      const repository = manager.getRepository(QrLoginRequest);
+      const now = new Date();
+      const result = await repository.update(
+        { id, state: 'pending', expiresAt: MoreThan(now) },
+        { state: 'approved', approvedUserId: userId, approvedAt: now }
+      );
+      return !!result.affected;
+    });
   }
 
   async reject(id: string): Promise<boolean> {
@@ -41,20 +47,28 @@ export class QrLoginRequestRepository {
   }
 
   async beginClaim(id: string, lease: string): Promise<QrLoginRequest | null> {
-    const result = await this.repository.update(
-      { id, state: 'approved', expiresAt: MoreThan(new Date()) },
-      { state: 'claiming', claimedAt: new Date(), claimLease: lease }
-    );
-    if (!result.affected) return null;
-    return this.repository.findOne({ where: { id } });
+    return this.database.transaction(async manager => {
+      const repository = manager.getRepository(QrLoginRequest);
+      const now = new Date();
+      const result = await repository.update(
+        { id, state: 'approved', expiresAt: MoreThan(now) },
+        { state: 'claiming', claimedAt: now, claimLease: lease }
+      );
+      if (!result.affected) return null;
+      return repository.findOne({ where: { id } });
+    });
   }
 
   async completeClaim(id: string, lease: string): Promise<boolean> {
-    const result = await this.repository.update(
-      { id, state: 'claiming', claimLease: lease },
-      { state: 'claimed', claimLease: null }
-    );
-    return !!result.affected;
+    return this.database.transaction(async manager => {
+      const repository = manager.getRepository(QrLoginRequest);
+      const now = new Date();
+      const result = await repository.update(
+        { id, state: 'claiming', claimLease: lease, expiresAt: MoreThan(now) },
+        { state: 'claimed', claimLease: null }
+      );
+      return !!result.affected;
+    });
   }
 
   async releaseClaim(id: string, lease: string): Promise<boolean> {

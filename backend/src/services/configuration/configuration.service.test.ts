@@ -47,6 +47,37 @@ function setupLiveCatalog() {
   return { configuration, instance };
 }
 
+const registerCatalogProvider = (
+  configuration: ConfigurationService,
+  testConfiguration: ConfigurableService['testConfiguration'],
+  applyConfiguration = jest.fn().mockResolvedValue({ success: true })
+) => {
+  configuration.registerRemoteConfiguration('CATALOG', {
+    groups: [
+      {
+        id: 'CATALOG_PROVIDER_ISOLATION_TEST',
+        name: 'Catalog provider',
+        description: 'Catalog provider settings',
+        variables: [
+          {
+            key: 'DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST',
+            description: 'Provider token',
+            required: true,
+            inputType: 'text',
+          },
+        ],
+      },
+    ],
+  });
+  configuration.registerService('CATALOG', {
+    testable: true,
+    getStatus: () => ({ status: 'ready' }),
+    reload: jest.fn().mockResolvedValue(undefined),
+    testConfiguration,
+    applyConfiguration,
+  });
+};
+
 describe('ConfigurationService web configuration actions', () => {
   it('registers discovered canonical keys and builds complete remote snapshots', () => {
     const configuration = setupTest();
@@ -825,6 +856,134 @@ describe('ConfigurationService web configuration actions', () => {
 
     expect(result.success).toBe(true);
     expect(seenUrls).toEqual(['http://candidate:3001']);
+  });
+
+  it('isolates candidate reads to the probe async context', async () => {
+    const configuration = setupTest();
+    await configuration.setValue('CATALOG_SERVICE_URL', 'http://catalog-original:3001');
+    await configuration.setValue('CATALOG_SERVICE_TIMEOUT_MS', '1000');
+    await configuration.setValue(
+      'DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST' as never,
+      'stored-provider-token'
+    );
+    let release!: () => void;
+    let entered!: () => void;
+    const probeEntered = new Promise<void>(resolve => {
+      entered = resolve;
+    });
+    const probeGate = new Promise<void>(resolve => {
+      release = resolve;
+    });
+    const testConfiguration = jest.fn(async () => {
+      expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog-candidate:3001');
+      expect(configuration.getDynamic('DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST')).toBe(
+        'candidate-provider-token'
+      );
+      expect(configuration.getServiceConfigSnapshot('CATALOG')).toEqual({
+        DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST: 'candidate-provider-token',
+      });
+      entered();
+      await probeGate;
+      return { success: true, message: 'validated' };
+    });
+    registerCatalogProvider(configuration, testConfiguration);
+
+    const save = configuration.testAndSaveConfigs([
+      { key: 'CATALOG_SERVICE_URL', value: 'http://catalog-candidate:3001' },
+      { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '2000' },
+      { key: 'DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST', value: 'candidate-provider-token' },
+    ]);
+    await probeEntered;
+
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog-original:3001');
+    expect(configuration.getDynamic('DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST')).toBe(
+      'stored-provider-token'
+    );
+    expect(configuration.getServiceConfigSnapshot('CATALOG')).toEqual({
+      DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST: 'stored-provider-token',
+    });
+
+    release();
+    await expect(save).resolves.toMatchObject({ success: true });
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog-candidate:3001');
+    expect(configuration.getDynamic('DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST')).toBe(
+      'candidate-provider-token'
+    );
+  });
+
+  it('serializes a later direct mutation behind a pending configuration probe', async () => {
+    const configuration = setupTest();
+    await configuration.setValue('CATALOG_SERVICE_URL', 'http://catalog-original:3001');
+    await configuration.setValue('CATALOG_SERVICE_TIMEOUT_MS', '1000');
+    await configuration.setValue(
+      'DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST' as never,
+      'stored-provider-token'
+    );
+    let release!: () => void;
+    let entered!: () => void;
+    const probeEntered = new Promise<void>(resolve => {
+      entered = resolve;
+    });
+    const probeGate = new Promise<void>(resolve => {
+      release = resolve;
+    });
+    registerCatalogProvider(
+      configuration,
+      jest.fn(async () => {
+        entered();
+        await probeGate;
+        return { success: true, message: 'validated' };
+      })
+    );
+
+    const save = configuration.testAndSaveConfigs([
+      { key: 'CATALOG_SERVICE_URL', value: 'http://catalog-candidate:3001' },
+      { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '2000' },
+      { key: 'DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST', value: 'candidate-provider-token' },
+    ]);
+    await probeEntered;
+
+    let laterMutationSettled = false;
+    const laterMutation = configuration
+      .setValue('CATALOG_SERVICE_URL', 'http://catalog-later:3001')
+      .then(() => {
+        laterMutationSettled = true;
+      });
+    await Promise.resolve();
+    expect(laterMutationSettled).toBe(false);
+
+    release();
+    await save;
+    await laterMutation;
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog-later:3001');
+  });
+
+  it('does not publish or persist a failed candidate probe', async () => {
+    const configuration = setupTest();
+    await configuration.setValue(
+      'DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST' as never,
+      'stored-provider-token'
+    );
+    const applyConfiguration = jest.fn().mockResolvedValue({ success: true });
+    const testConfiguration = jest.fn().mockResolvedValue({
+      success: false,
+      message: 'provider rejected candidate',
+    });
+    registerCatalogProvider(configuration, testConfiguration, applyConfiguration);
+    const saveConfigFile = jest
+      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST', value: 'candidate-provider-token' },
+    ]);
+
+    expect(result.success).toBe(false);
+    expect(configuration.getDynamic('DYNAMIC_CATALOG_ISOLATION_TOKEN_TEST')).toBe(
+      'stored-provider-token'
+    );
+    expect(saveConfigFile).not.toHaveBeenCalled();
+    expect(applyConfiguration).not.toHaveBeenCalled();
   });
 
   it('reports unknown and unsupported keys before probing any service', async () => {
