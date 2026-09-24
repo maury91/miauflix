@@ -1,9 +1,10 @@
-import type { CatalogConfigService, ConfigProber } from '../config/config.service';
+import type { ConfigurationProbe } from '@miauflix/service-configuration';
+
+import type { CatalogConfigService } from '../config/config.service';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
 import { TVShowRepository } from '../db/tv-show.repo';
-import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
 import { TmdbProvider } from '../provider/tmdb/tmdb.provider';
 import type { ServiceContext } from '../service-context';
@@ -12,14 +13,11 @@ import { CatalogWorkerManager } from '../workers/worker';
 import type { CatalogValues } from './catalog.service';
 import { CatalogService } from './catalog.service';
 
-const SCOPE = 'CatalogBootstrap';
-
 /**
  * Wires the catalog data plane to the service lifecycle:
  * - registers the configuration prober (the live provider probe behind
  *   `POST /configuration/test` and the main app's config push)
- * - activates the provider + data plane only after an applied or reloaded
- *   configuration succeeds
+ * - activates the provider + data plane only after a backend configuration push succeeds
  * - installs the queue workers once activation attaches the data plane
  */
 export class CatalogRuntime {
@@ -44,18 +42,15 @@ export class CatalogRuntime {
     config.registerProber(this.prober);
   }
 
-  /** Boot self-activation: become ready from env/file config without the main app. */
-  async tryActivate(): Promise<void> {
-    const result = await this.config.reload();
-    if (result) {
-      logger.info(SCOPE, 'Catalog activated from local configuration (standalone mode)');
-    }
-  }
-
   async stop(): Promise<void> {
     this.stopped = true;
     await this.workerManager.stop();
     this.ctx.catalog = null;
+  }
+
+  private async deactivate(): Promise<void> {
+    this.ctx.catalog = null;
+    await this.workerManager.pause();
   }
 
   private buildProvider(values: Record<string, string>): CatalogProvider {
@@ -72,7 +67,7 @@ export class CatalogRuntime {
     };
   }
 
-  private prober: ConfigProber = {
+  private prober: ConfigurationProbe = {
     test: async values => {
       const provider = this.buildProvider(values);
       try {
@@ -106,6 +101,11 @@ export class CatalogRuntime {
       );
       this.workerManager.start();
       return { success: true, message: `Catalog provider '${provider.name}' is ready` };
+    },
+
+    deactivate: async () => {
+      await this.deactivate();
+      return { success: true, message: 'Catalog runtime returned to standby' };
     },
   };
 }

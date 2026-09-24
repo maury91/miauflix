@@ -32,12 +32,8 @@ services:
       target: development
     environment:
       LIST_SERVICE_DATA_DIR: /app/data
-      LIST_SERVICE_PORT: '3002'
-      TRAKT_API_URL: ${TRAKT_API_URL:-https://api.trakt.tv}
-      TRAKT_CLIENT_ID: ${TRAKT_CLIENT_ID:-}
-      TRAKT_CLIENT_SECRET: ${TRAKT_CLIENT_SECRET:-}
-      TRAKT_REDIRECT_URI: ${TRAKT_REDIRECT_URI:-}
       LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
+      LIST_SERVICE_PORT: '3002'
     ports:
       - '127.0.0.1:3002:3002'
     volumes:

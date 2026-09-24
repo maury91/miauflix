@@ -72,7 +72,7 @@ services/media-catalog/                           // Standalone Bun catalog serv
 
 ### **Configuration**
 
-- **Config Variable**: `EPISODE_SYNC_MODE` (owned by the media-catalog service; configurable from the app UI/CLI)
+- **Config Variable**: `EPISODE_SYNC_MODE` (published by media-catalog; values are stored by the backend and pushed to the service)
 - **Values**: `GREEDY` (sync all episodes) or `ON_DEMAND` (sync only watched shows)
 - **Default**: `ON_DEMAND`
 
