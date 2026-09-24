@@ -62,4 +62,23 @@ describe('CatalogClientService contract validation', () => {
     await client.getMovie(603, 'en');
     expect(remote.request).toHaveBeenCalledTimes(2);
   });
+
+  it('preserves omitted test entries and forwards clear operations', async () => {
+    const { client, remote } = setupTest();
+    const testConfiguration = jest.spyOn(remote, 'testConfiguration').mockResolvedValue({
+      success: true,
+      mode: 'live',
+      message: 'valid',
+    });
+    const clearConfiguration = jest.spyOn(remote, 'clearConfiguration').mockResolvedValue({
+      success: true,
+    });
+
+    await client.testConfiguration();
+    await client.testConfiguration([]);
+    await expect(client.clearConfiguration()).resolves.toEqual({ success: true });
+
+    expect(testConfiguration.mock.calls).toEqual([[undefined], [[]]]);
+    expect(clearConfiguration).toHaveBeenCalledTimes(1);
+  });
 });

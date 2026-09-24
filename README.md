@@ -201,12 +201,12 @@ docker compose run --rm miauflix npm run start:backend
 
 The application includes a sophisticated configuration system that will:
 
-- ✅ Automatically detect missing environment variables
+- ✅ Automatically detect missing required settings
 - 🧙‍♂️ Guide you through an interactive setup process
 - 🔄 Test API credentials in real-time as you enter them
 - 📝 Provide helpful guidance on how to obtain required tokens
-- 🔍 Verify configuration before starting the application
-- 💾 Save all settings to a `.env` file when completed
+- 🔍 Verify configurations with their consuming services
+- 💾 Store application settings in the backend config store, encrypting secrets at rest
 
 </details>
 
@@ -215,20 +215,16 @@ The application includes a sophisticated configuration system that will:
 Create a `.env` file in the project root directory and configure the required variables:
 
 ```bash
-# Required for media content
-TMDB_API_URL=https://api.themoviedb.org/3
-TMDB_API_ACCESS_TOKEN=your_tmdb_token
-
-# List Service bootstrap (required when the default List Service is enabled)
-TRAKT_API_URL=https://api.trakt.tv
-TRAKT_CLIENT_ID=your_trakt_client_id
-TRAKT_CLIENT_SECRET=your_trakt_client_secret
-TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
-LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
+# TMDB and Trakt app settings are configured in Miauflix and stored encrypted
+# by the backend. This key is for service-owned Trakt account data only.
+LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 ```
 
-The Trakt credentials and `LIST_SERVICE_ENCRYPTION_KEY` are optional only when
-the standalone List Service is disabled or unused.
+Set `LIST_SERVICE_ENCRYPTION_KEY` to keep the List Service
+data encryption key in deployment secrets; when set, it is used directly and no
+List Service key file is created. When omitted, the service generates and
+persists a key in its data directory. Keep the same value across restarts and
+backups when using the environment variable.
 
 > **Note**: If running in a non-interactive environment, you'll need to set all required environment variables manually.
 

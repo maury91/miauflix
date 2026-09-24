@@ -21,6 +21,8 @@ export default [
       '**/node_modules/**',
       'frontend/storybook-static/**',
       'frontend/.next/**',
+      'frontend/playwright-report*/**',
+      'frontend/test-results*/**',
       'packages/**/dist/**',
       'backend-e2e/docker/**',
       'backend-e2e/scripts/**',

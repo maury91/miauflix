@@ -8,6 +8,13 @@
       "when": 1788375633183,
       "tag": "0000_burly_starjammers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790176313862,
+      "tag": "0001_cache_stale_retention",
+      "breakpoints": true
     }
   ]
 }

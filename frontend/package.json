@@ -13,7 +13,7 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "start": "npm run dev",
     "preview": "dotenvx run --env-file=../.env -- vite preview",
-    "test": "vitest run --project=unit",
+    "test": "vitest run --project=unit --maxWorkers=2",
     "test:watch": "vitest --project=unit",
     "test:coverage": "vitest run --project=unit --coverage",
     "test:visual": "docker run --rm --ipc=host --network=host -v $PWD/..:/workspace -w /workspace/frontend -e CI=$CI mcr.microsoft.com/playwright:v1.56.1-jammy npx playwright test --project=storybook-chromium $([ \"$CI\" = \"true\" ] && echo \"--reporter=list\" || echo \"\")",

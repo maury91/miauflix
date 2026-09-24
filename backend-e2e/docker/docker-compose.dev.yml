@@ -12,10 +12,13 @@ services:
       - RATE_LIMIT_TEST_MODE=true
       - CATALOG_SERVICE_URL=http://media-catalog:3001
       - LIST_SERVICE_URL=http://list-service:3002
-      - CATALOG__TMDB_API_URL=http://tmdb-mock/3
-      - CATALOG__TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
-      - YTS_API_URL=http://yts-mock
+      - TMDB_API_URL=http://tmdb-mock/3
+      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
       - TRAKT_API_URL=http://trakt-mock
+      - TRAKT_CLIENT_ID=${E2E_TRAKT_CLIENT_ID-${TRAKT_CLIENT_ID:-mock-trakt-client-id}}
+      - TRAKT_CLIENT_SECRET=${E2E_TRAKT_CLIENT_SECRET-${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}}
+      - TRAKT_REDIRECT_URI=${E2E_TRAKT_REDIRECT_URI-${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}}
+      - YTS_API_URL=http://yts-mock
       - THE_RARBG_API_URL=http://therarbg-mock
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
@@ -71,18 +74,19 @@ services:
     environment:
       - LIST_SERVICE_PORT=3002
       - LIST_SERVICE_DATA_DIR=/app/data
-      - LIST_SERVICE_ENCRYPTION_KEY=e2e-list-service-key
-      - TRAKT_API_URL=http://trakt-mock
-      - TRAKT_CLIENT_ID=${TRAKT_CLIENT_ID:-mock-trakt-client-id}
-      - TRAKT_CLIENT_SECRET=${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}
-      - TRAKT_REDIRECT_URI=${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}
     volumes:
       - ../../services/list-service/src:/workspace/services/list-service/src
       - list_service_data:/app/data
     networks:
       - test-network
     healthcheck:
-      test: ['CMD', 'bun', '-e', "fetch('http://localhost:3002/health').then(r => { if (!r.ok) process.exit(1) })"]
+      test:
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "fetch('http://localhost:3002/health').then(r => { if (!r.ok) process.exit(1) })",
+        ]
       interval: 2s
       timeout: 5s
       retries: 30
@@ -98,8 +102,6 @@ services:
       target: development
     environment:
       - CATALOG_DATA_DIR=/app/data
-      - TMDB_API_URL=http://tmdb-mock/3
-      - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
       - CATALOG_DISABLE_BACKGROUND_TASKS=true
       - DEBUG=*,-require-in-the-middle
     volumes:

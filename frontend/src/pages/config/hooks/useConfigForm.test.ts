@@ -29,6 +29,39 @@ describe('useConfigForm', () => {
     expect(result.current.values.URL).toBe('https://example.com');
   });
 
+  it('suggests the current browser origin for an unset redirect URI', () => {
+    const { result } = renderHook(() =>
+      useConfigForm([
+        entry({
+          key: 'REDIRECT_URI',
+          value: '',
+          hasValue: false,
+          defaultValueSource: 'browser-origin',
+        }),
+      ])
+    );
+
+    expect(result.current.values.REDIRECT_URI).toBe(window.location.origin);
+    expect(result.current.getSubmittableEntries()).toEqual([
+      { key: 'REDIRECT_URI', value: window.location.origin },
+    ]);
+  });
+
+  it('does not replace a saved redirect URI with the browser origin', () => {
+    const { result } = renderHook(() =>
+      useConfigForm([
+        entry({
+          key: 'REDIRECT_URI',
+          value: 'https://registered.example/callback',
+          defaultValueSource: 'browser-origin',
+        }),
+      ])
+    );
+
+    expect(result.current.values.REDIRECT_URI).toBe('https://registered.example/callback');
+    expect(result.current.getSubmittableEntries()).toEqual([]);
+  });
+
   it('builds service payloads without blank configured secrets and clears saved dirty state', () => {
     const entries = [
       entry({ key: 'URL', value: 'https://old.example.com' }),

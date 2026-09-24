@@ -1,9 +1,18 @@
 #!/bin/bash
 
-# Update the initial-user setup visual baseline in the Linux Playwright image.
-# Usage: npm run test:frontend:e2e:initial-setup:update
+# Run the initial-user setup E2E flow in the Linux Playwright image.
+# Usage: npm run test:frontend:e2e:initial-setup:update or :check
 
 set -euo pipefail
+
+snapshot_mode="${1:---update-snapshots}"
+case "$snapshot_mode" in
+  --update-snapshots|--check) ;;
+  *)
+    echo "Usage: $0 [--update-snapshots|--check]" >&2
+    exit 2
+    ;;
+esac
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 backend_e2e_dir=$(dirname "$script_dir")
@@ -20,6 +29,9 @@ export PORT
 export ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true
 export E2E_CATALOG_TMDB_TOKEN=''
 export TMDB_API_ACCESS_TOKEN='e2e-dummy-token'
+export E2E_TRAKT_CLIENT_ID=''
+export E2E_TRAKT_CLIENT_SECRET=''
+export E2E_TRAKT_REDIRECT_URI=''
 export USER_ID=$(id -u)
 export GROUP_ID=$(id -g)
 
@@ -37,7 +49,7 @@ cleanup() {
   status=$?
 
   docker compose -p "$project_name" -f "$backend_e2e_dir/$compose_file" down -v --remove-orphans || true
-rm -rf "$docker_dist_dir"
+  rm -rf "$docker_dist_dir"
 
   if [[ -f "$env_test_backup" ]]; then
     mv "$env_test_backup" "$env_test_file"
@@ -76,6 +88,13 @@ for attempt in {1..60}; do
   sleep 2
 done
 
+playwright_args=(--config=playwright.config.initial-setup.ts)
+if [[ "$snapshot_mode" == "--update-snapshots" ]]; then
+  playwright_args+=(--update-snapshots)
+else
+  playwright_args+=(--update-snapshots=none)
+fi
+
 docker run --rm \
   --ipc=host \
   --network=host \
@@ -84,6 +103,4 @@ docker run --rm \
   -e CI=true \
   -e BACKEND_URL="http://127.0.0.1:$PORT" \
   "$playwright_image" \
-  npx playwright test \
-    --config=playwright.config.initial-setup.ts \
-    --update-snapshots
+  npx playwright test "${playwright_args[@]}"

@@ -12,14 +12,17 @@ COPY packages/source-metadata-extractor/package.json packages/source-metadata-ex
 COPY packages/yts-sanitizer/package.json packages/yts-sanitizer/package.json
 COPY packages/therarbg-sanitizer/package.json packages/therarbg-sanitizer/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
 COPY services/list-service/package.json services/list-service/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 RUN npm ci --ignore-scripts
 
 COPY packages/service-contracts packages/service-contracts
+COPY packages/service-configuration packages/service-configuration
 COPY services/list-service services/list-service
-RUN npm run build --workspace @miauflix/service-contracts
+RUN npm run build --workspace @miauflix/service-contracts && \
+    npm run build --workspace @miauflix/service-configuration
 
 FROM runtime AS development
 COPY --from=runtime /workspace /workspace
@@ -33,6 +36,7 @@ FROM bun-runtime AS production
 WORKDIR /app
 COPY --from=production-dependencies /workspace/node_modules /app/node_modules
 COPY --from=runtime /workspace/packages/service-contracts /app/packages/service-contracts
+COPY --from=runtime /workspace/packages/service-configuration /app/packages/service-configuration
 COPY --from=runtime /workspace/services/list-service /app/services/list-service
 ENV LIST_SERVICE_DATA_DIR=/app/data
 RUN mkdir -p /app/data && chown bun:bun /app/data

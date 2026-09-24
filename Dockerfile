@@ -20,6 +20,7 @@ COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-
 COPY packages/yts-sanitizer/package.json ./packages/yts-sanitizer/
 COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
 COPY packages/service-contracts/package.json ./packages/service-contracts/
+COPY packages/service-configuration/package.json ./packages/service-configuration/
 COPY services/media-catalog/package.json ./services/media-catalog/
 COPY services/list-service/package.json ./services/list-service/
 

@@ -21,7 +21,7 @@ const directories: string[] = [];
 const setupTest = () => {
   const dataDir = mkdtempSync(join(tmpdir(), 'catalog-http-contract-'));
   directories.push(dataDir);
-  const config = new CatalogConfigService(dataDir, {});
+  const config = new CatalogConfigService();
   const db = {
     db: {
       select: () => ({

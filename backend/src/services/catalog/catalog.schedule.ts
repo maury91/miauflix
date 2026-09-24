@@ -12,7 +12,7 @@ export function catalogSchedules(config: ConfigService): BackgroundJobSchedule[]
     {
       job: 'catalog.movie-changes.scan',
       id: 'catalog-movie-changes',
-      intervalSeconds: Number(config.getOrThrow('CATALOG__CATALOG_MOVIE_SYNC_INTERVAL')),
+      intervalSeconds: Number(config.getOrThrow('CATALOG_MOVIE_SYNC_INTERVAL')),
       payload: {},
       priority: 10,
       runOnStart: true,
@@ -20,7 +20,7 @@ export function catalogSchedules(config: ConfigService): BackgroundJobSchedule[]
     {
       job: 'catalog.show-changes.scan',
       id: 'catalog-show-changes',
-      intervalSeconds: Number(config.getOrThrow('CATALOG__CATALOG_SHOW_SYNC_INTERVAL')),
+      intervalSeconds: Number(config.getOrThrow('CATALOG_SHOW_SYNC_INTERVAL')),
       payload: {},
       priority: 10,
       runOnStart: true,
@@ -28,7 +28,7 @@ export function catalogSchedules(config: ConfigService): BackgroundJobSchedule[]
     {
       job: 'catalog.season-sync.seed',
       id: 'catalog-season-sync',
-      intervalSeconds: Number(config.getOrThrow('CATALOG__CATALOG_SEASON_SYNC_INTERVAL')),
+      intervalSeconds: Number(config.getOrThrow('CATALOG_SEASON_SYNC_INTERVAL')),
       payload: {},
       priority: 20,
       runOnStart: true,

@@ -6,8 +6,8 @@ import { StreamingKey } from '@entities/streaming-key.entity';
 export class StreamingKeyRepository {
   private readonly streamingKeyRepository: Repository<StreamingKey>;
 
-  constructor(db: Database) {
-    this.streamingKeyRepository = db.getRepository(StreamingKey);
+  constructor(private readonly database: Database) {
+    this.streamingKeyRepository = database.getRepository(StreamingKey);
   }
 
   async create(
@@ -28,11 +28,13 @@ export class StreamingKeyRepository {
   }
 
   async deleteExpired(): Promise<number> {
-    const result = await this.streamingKeyRepository
-      .createQueryBuilder()
-      .delete()
-      .where('expiresAt < :now', { now: new Date() })
-      .execute();
+    const result = await this.database.write(() =>
+      this.streamingKeyRepository
+        .createQueryBuilder()
+        .delete()
+        .where('expiresAt < :now', { now: new Date() })
+        .execute()
+    );
 
     return result.affected || 0;
   }

@@ -15,8 +15,8 @@ import type { MovieDetail } from '@services/catalog/catalog.types';
 export class MovieRepository {
   private readonly movieRepository: Repository<Movie>;
 
-  constructor(db: Database) {
-    this.movieRepository = db.getRepository(Movie);
+  constructor(private readonly database: Database) {
+    this.movieRepository = database.getRepository(Movie);
   }
 
   async findByIds(ids: number[]): Promise<Movie[]> {
@@ -67,28 +67,30 @@ export class MovieRepository {
       title: detail.title,
       mediaId: detail.mediaId,
     });
-    await this.movieRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Movie)
-      .values(created)
-      .orUpdate(
-        [
-          'title',
-          'overview',
-          'popularity',
-          'releaseDate',
-          'poster',
-          'backdrop',
-          'runtime',
-          'rating',
-          'imdbId',
-        ],
-        // orUpdate expects database column names; the column predates the mediaId rename.
-        ['tmdbId']
-      )
-      .updateEntity(false)
-      .execute();
+    await this.database.write(() =>
+      this.movieRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Movie)
+        .values(created)
+        .orUpdate(
+          [
+            'title',
+            'overview',
+            'popularity',
+            'releaseDate',
+            'poster',
+            'backdrop',
+            'runtime',
+            'rating',
+            'imdbId',
+          ],
+          // orUpdate expects database column names; the column predates the mediaId rename.
+          ['tmdbId']
+        )
+        .updateEntity(false)
+        .execute()
+    );
     const stored = await this.movieRepository.findOneBy({ mediaId: detail.mediaId });
     if (!stored) {
       throw new RepositoryError('Failed to persist movie index entry', 'retrieve_failed');
@@ -114,18 +116,20 @@ export class MovieRepository {
       title: '',
       ...movie,
     });
-    await this.movieRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Movie)
-      .values(created)
-      .orUpdate(
-        ['title', 'overview', 'popularity', 'releaseDate', 'poster', 'backdrop'],
-        // orUpdate expects database column names; the column predates the mediaId rename.
-        ['tmdbId']
-      )
-      .updateEntity(false)
-      .execute();
+    await this.database.write(() =>
+      this.movieRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Movie)
+        .values(created)
+        .orUpdate(
+          ['title', 'overview', 'popularity', 'releaseDate', 'poster', 'backdrop'],
+          // orUpdate expects database column names; the column predates the mediaId rename.
+          ['tmdbId']
+        )
+        .updateEntity(false)
+        .execute()
+    );
     const stored = await this.movieRepository.findOneBy({ mediaId: created.mediaId });
     if (!stored) {
       throw new RepositoryError('Failed to persist movie summary', 'retrieve_failed');

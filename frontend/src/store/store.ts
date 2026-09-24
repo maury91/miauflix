@@ -1,6 +1,7 @@
 import { authApi } from '@features/auth/api/auth.api';
 import { configApi } from '@features/config/api/config.api';
 import { listsApi } from '@features/media/api/lists.api';
+import { mediaApi } from '@features/media/api/media.api';
 import { setupApi } from '@features/setup/api/setup.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { appStateSlice } from '@store/slices/appState';
@@ -10,6 +11,7 @@ export const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [listsApi.reducerPath]: listsApi.reducer,
+    [mediaApi.reducerPath]: mediaApi.reducer,
     [configApi.reducerPath]: configApi.reducer,
     [setupApi.reducerPath]: setupApi.reducer,
     [authSlice.name]: authSlice.reducer,
@@ -19,6 +21,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       authApi.middleware,
       listsApi.middleware,
+      mediaApi.middleware,
       configApi.middleware,
       setupApi.middleware
     ),

@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const CATALOG_CAPABILITY = 'catalog' as const;
 export const CATALOG_CAPABILITY_VERSION = 1 as const;
+export const BASE_PATH = '/v1/catalog' as const;
 
 export const mediaTypeSchema = z.enum(['movie', 'tv']);
 export const mediaRefSchema = z.object({

@@ -16,9 +16,9 @@ npm run config-only
 
 The configuration wizard will:
 
-- ✅ Detect missing required variables
+- ✅ Detect missing required settings
 - 🧪 Test API credentials in real-time
-- 💾 Save settings to `.env` file automatically
+- 💾 Store application values in the backend config store, with secrets encrypted at rest
 - 🔗 Provide links to obtain API keys
 
 See [Configuration Guide](../../backend/docs/configuration.md) for detailed wizard documentation.
@@ -42,35 +42,38 @@ before it is configured:
 CATALOG_SERVICE_URL=http://localhost:3001
 ```
 
-Optional bootstrap fallback for the catalog service container itself (used only
-until the backend pushes the authoritative configuration):
+TMDB and Trakt application values are configured in the Miauflix setup or admin
+configuration UI. The backend stores them encrypted and pushes complete
+snapshots to each consuming service. Backend environment variables can seed
+initial values when needed.
 
 ```bash
-# The Movie Database API access token - Required for movie/TV metadata
-TMDB_API_ACCESS_TOKEN=eyJhbGciOiJIUzI1NiJ9...
+# Optional backend bootstrap value for the TMDB API access token
+TMDB_API_ACCESS_TOKEN=your-tmdb-token
 ```
 
 - **Description**: Access token for the catalog provider API (TMDB v3 today)
 - **Get from**: [TMDB API Settings](https://www.themoviedb.org/settings/api)
 - **Format**: JWT token starting with `eyJ`
-- **Precedence in the service**: backend push > environment > service-local file > default
+- **Configuration**: Prefer the app UI; the backend reads this environment variable as an initial value.
 
 ### External API Integration
 
 #### Trakt.tv list service
 
 ```bash
-# Trakt.tv credentials consumed by the standalone list service
+# Optional backend bootstrap values; normally configure these once in the `TRAKT` group
 TRAKT_CLIENT_ID=your-client-id
 TRAKT_CLIENT_SECRET=your-client-secret
 TRAKT_REDIRECT_URI=https://your.example.com/trakt/callback
-LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-random-secret
+LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 ```
 
 - **Description**: OAuth application credentials and the exact redirect URI configured for the Trakt.tv integration
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
-- **Required for**: Public lists and user list/account association when the List Service is enabled
-- **Optional when**: The standalone List Service is disabled or unused
+- **Required for**: Trakt features that consume the shared Trakt application credentials
+- **Configuration**: The backend stores these values encrypted and shares them with every declared consumer.
+- **Encryption key**: `LIST_SERVICE_ENCRYPTION_KEY` is optional. If set, keep it stable and store it in deployment secrets; the service uses it directly and does not create a key file. Otherwise, it generates a key in its data directory. Losing or changing the active key makes encrypted associations, pending authorizations, and cached pages unreadable.
 
 #### NordVPN (Optional)
 
@@ -240,17 +243,17 @@ WWW_DOMAIN=www.yourdomain.com
 
 ### Essential Setup (Required)
 
-1. **TMDB_API_ACCESS_TOKEN** - Required for all movie/TV data
+1. **TMDB API access token** - Required for movie/TV metadata; configure it in the app
 
 ### Enhanced Features (Optional)
 
-1. **TRAKT_CLIENT_ID + TRAKT_CLIENT_SECRET + TRAKT_REDIRECT_URI + LIST_SERVICE_ENCRYPTION_KEY** - Standalone Trakt list service, required when that service is enabled
+1. **Trakt client ID + client secret + redirect URI** - Configure once in `TRAKT` for all consumers
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
 3. **ENABLE_FLARESOLVERR + FLARESOLVERR_URL** - Cloudflare bypass for protected content sources
 
 ### Advanced Configuration (Auto-configured)
 
-- JWT secrets and backend encryption keys are automatically generated; the List Service encryption key is service-owned and must be supplied separately
+- JWT, backend, and List Service data-encryption keys are generated automatically and persisted in their data directories
 - Server settings use sensible defaults
 - Content source settings are optimized automatically
 
@@ -271,7 +274,7 @@ WWW_DOMAIN=www.yourdomain.com
 **Trakt.tv connection fails**
 
 - Double-check client ID and secret from your [Trakt.tv application](https://trakt.tv/oauth/applications)
-- Ensure the standalone List Service has valid `TRAKT_CLIENT_ID`, `TRAKT_CLIENT_SECRET`, and `TRAKT_REDIRECT_URI` values
+- Configure a valid Trakt client ID, client secret, and redirect URI in `TRAKT`
 
 **VPN docker container not starting**
 

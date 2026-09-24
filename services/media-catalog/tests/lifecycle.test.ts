@@ -13,7 +13,7 @@ import { CatalogWorkerManager } from '../src/workers/worker';
 const setup = () => {
   const dataDir = mkdtempSync(join(tmpdir(), 'catalog-lifecycle-'));
   const db = new CatalogDatabase(dataDir);
-  const config = new CatalogConfigService(dataDir, { TMDB_API_ACCESS_TOKEN: 'test-token' });
+  const config = new CatalogConfigService();
   const context: ServiceContext = {
     env: {
       host: '127.0.0.1',
@@ -128,7 +128,14 @@ describe('catalog lifecycle', () => {
     }) as unknown as typeof fetch;
     let activation: Promise<boolean> | undefined;
     try {
-      activation = config.reload();
+      activation = config
+        .applyRemote({
+          TMDB_API_URL: 'https://api.themoviedb.org/3',
+          TMDB_API_ACCESS_TOKEN: 'test-token',
+          EPISODE_SYNC_MODE: 'ON_DEMAND',
+          CATALOG_HYDRATION_TTL_MS: '86400000',
+        })
+        .then(result => result.success);
       await started.promise;
       const stopping = runtime.stop();
       response.resolve(Response.json({ images: { secure_base_url: 'https://image.test/' } }));

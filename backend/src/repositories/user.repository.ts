@@ -1,13 +1,14 @@
-import type { DataSource, EntityManager, Repository } from 'typeorm';
+import type { EntityManager, Repository } from 'typeorm';
 
+import type { Database } from '@database/database';
 import type { UserRole } from '@entities/user.entity';
 import { User } from '@entities/user.entity';
 
 export class UserRepository {
   private readonly repository: Repository<User>;
 
-  constructor(datasource: DataSource) {
-    this.repository = datasource.getRepository(User);
+  constructor(private readonly database: Database) {
+    this.repository = database.getRepository(User);
   }
 
   async findById(id: string): Promise<User | null> {
@@ -54,7 +55,7 @@ export class UserRepository {
    * Returns the new User, or null if an admin already existed.
    */
   async createAdminIfNone(user: Partial<User>): Promise<User | null> {
-    return this.repository.manager.transaction(async (em: EntityManager) => {
+    return this.database.transaction(async (em: EntityManager) => {
       const existing = await em.findOne(User, { where: { role: user.role } });
       if (existing) {
         return null;

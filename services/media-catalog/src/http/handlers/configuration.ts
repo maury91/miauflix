@@ -2,7 +2,6 @@ import {
   serviceConfigApplyResultSchema,
   serviceConfigMutationSchema,
   serviceConfigSchemaSchema,
-  serviceConfigStateSchema,
   serviceConfigTestResultSchema,
 } from '@miauflix/service-contracts';
 
@@ -11,7 +10,6 @@ import type { Router } from '../router';
 import {
   CONFIGURATION_APPLY_PATH,
   CONFIGURATION_SCHEMA_PATH,
-  CONFIGURATION_STATE_PATH,
   CONFIGURATION_TEST_PATH,
 } from './consts.ts';
 
@@ -25,21 +23,29 @@ export const registerConfigurationRoutes = (router: Router, ctx: ServiceContext)
     json(serviceConfigSchemaSchema.parse(ctx.config.getSchema()))
   );
 
-  // Password fields are masked; a masked round-trip never overwrites the stored secret.
-  router.add('GET', CONFIGURATION_STATE_PATH, ({ json }) =>
-    json(serviceConfigStateSchema.parse(ctx.config.getValues()))
-  );
-
   // The main app's push — the service's "green flag".
   router.add('PUT', CONFIGURATION_APPLY_PATH, async ({ req, json }) => {
     const mutation = await readMutation(req);
-    const result = await ctx.config.applyRemote(mutation.values, mutation.unsetKeys);
+    const result =
+      'clear' in mutation
+        ? await ctx.config.clearRemote()
+        : await ctx.config.applyRemote(mutation.values);
     return json(serviceConfigApplyResultSchema.parse(result), result.success ? 200 : 400);
   });
 
   // Live probe with candidate values, without persisting anything.
   router.add('POST', CONFIGURATION_TEST_PATH, async ({ req, json }) => {
     const mutation = await readMutation(req);
+    if ('clear' in mutation)
+      return json(
+        {
+          success: false,
+          mode: 'validation',
+          message: 'A clear operation cannot be tested.',
+          invalidKeys: [],
+        },
+        400
+      );
     const result = await ctx.config.test(mutation.values);
     return json(serviceConfigTestResultSchema.parse(result), result.success ? 200 : 400);
   });

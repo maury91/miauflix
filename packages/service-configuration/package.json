@@ -1,0 +1,26 @@
+{
+  "name": "@miauflix/service-configuration",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check:ts": "tsc --noEmit -p tsconfig.json",
+    "test": "npm run build && node --test dist/*.test.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@miauflix/service-contracts": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
