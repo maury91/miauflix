@@ -60,7 +60,16 @@ export class TorrentWarmupController {
   ): Promise<WarmSlot> {
     return this.withTransition(async () => {
       if (this.driver.hasActivePlayback()) {
-        if (this.slot) return { ...this.slot, state: 'paused' };
+        if (this.slot) {
+          if (
+            this.slot.state !== 'paused' &&
+            !this.driver.isPlaybackActive(this.slot.sourceId) &&
+            (await this.driver.pauseSource(this.slot.sourceId))
+          ) {
+            this.slot = { ...this.slot, state: 'paused' };
+          }
+          return this.getState()!;
+        }
         return {
           generation: this.generation,
           leaseKey,

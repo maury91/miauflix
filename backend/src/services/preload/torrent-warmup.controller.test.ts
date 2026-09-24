@@ -81,6 +81,44 @@ describe('TorrentWarmupController', () => {
     expect(driver.warmSource).not.toHaveBeenCalled();
   });
 
+  it('pauses and persists an existing speculative slot while playback is active', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'lease-a', 'm:1');
+    driver.hasActivePlayback.mockReturnValue(true);
+
+    const state = await controller.warm(source(2), 'lease-b', 'm:2');
+
+    expect(driver.pauseSource).toHaveBeenCalledWith(1);
+    expect(state).toMatchObject({ sourceId: 1, state: 'paused' });
+    expect(controller.getState()).toMatchObject({ sourceId: 1, state: 'paused' });
+    expect(driver.warmSource).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not pause a slot whose source is the active playback', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'lease-a', 'm:1');
+    driver.hasActivePlayback.mockReturnValue(true);
+    driver.isPlaybackActive.mockImplementation(sourceId => sourceId === 1);
+
+    const state = await controller.warm(source(2), 'lease-b', 'm:2');
+
+    expect(driver.pauseSource).not.toHaveBeenCalled();
+    expect(state).toMatchObject({ sourceId: 1, state: 'warming' });
+    expect(controller.getState()).toMatchObject({ sourceId: 1, state: 'warming' });
+  });
+
+  it('keeps the slot warming when pausing it fails', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'lease-a', 'm:1');
+    driver.hasActivePlayback.mockReturnValue(true);
+    driver.pauseSource.mockResolvedValueOnce(false);
+
+    const state = await controller.warm(source(2), 'lease-b', 'm:2');
+
+    expect(state).toMatchObject({ sourceId: 1, state: 'warming' });
+    expect(controller.getState()).toMatchObject({ sourceId: 1, state: 'warming' });
+  });
+
   it('warms the same lease again after it was paused', async () => {
     const { controller, driver } = setupTest();
     await controller.warm(source(1), 'm:1', 'm:1');

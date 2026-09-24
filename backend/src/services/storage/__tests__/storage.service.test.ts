@@ -556,6 +556,27 @@ describe('StorageService', () => {
       expect(updatedStorage?.lastAccessAt).toBeInstanceOf(Date);
     });
 
+    it('should not promote speculative storage when marked as accessed', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+      const speculativeExpiresAt = new Date(Date.now() + 60_000);
+      await storageService.createStorage({
+        movieSourceId: movieSource.id,
+        location: '/tmp/test/speculative-access-test.mkv',
+        size: 1_000_000,
+        retentionClass: 'speculative',
+        speculativeExpiresAt,
+      });
+
+      await storageService.markAsAccessed(movieSource.id);
+
+      const updatedStorage = await storageService.getStorageByMovieSource(movieSource.id);
+      expect(updatedStorage?.retentionClass).toBe('speculative');
+      expect(updatedStorage?.speculativeExpiresAt?.getTime()).toBe(speculativeExpiresAt.getTime());
+      expect(updatedStorage?.lastAccessAt).toBeInstanceOf(Date);
+    });
+
     it('should get total storage usage', async () => {
       // Arrange
       const { storageService } = setupTest();

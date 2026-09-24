@@ -210,8 +210,6 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
 
     await this.storageRepository.update(storage.id, {
       lastInterestAt: new Date(),
-      retentionClass: 'watched',
-      speculativeExpiresAt: null,
     });
     await this.storageRepository.updateLastAccess(storage.id);
 
