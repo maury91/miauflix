@@ -3,6 +3,7 @@
 // import { AssetGlob } from '@nx/js/src/utils/assets/assets';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
+import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 // Phase 0 Bootstrap: Comment out NX-specific imports for now
 // TODO: Re-enable in future phases when NX workspace is properly configured
@@ -73,6 +74,20 @@ function proxyCookieRewriteConfigure(
 
 const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+const devCertificateRootOverride = process.env.MIAUFLIX_DEV_CERT_DIR;
+const devCertificateRoot = devCertificateRootOverride
+  ? path.resolve(__dirname, '..', devCertificateRootOverride)
+  : path.resolve(__dirname, '../.certs');
+const devCertificateDir = path.join(devCertificateRoot, 'server');
+const devCertificateKeyPath = path.join(devCertificateDir, 'localhost-key.pem');
+const devCertificatePath = path.join(devCertificateDir, 'localhost.pem');
+const trustedDevHttps =
+  existsSync(devCertificateKeyPath) && existsSync(devCertificatePath)
+    ? {
+        key: readFileSync(devCertificateKeyPath),
+        cert: readFileSync(devCertificatePath),
+      }
+    : undefined;
 
 export default defineConfig({
   root: __dirname,
@@ -80,6 +95,7 @@ export default defineConfig({
   server: {
     port: 4173,
     host: 'localhost',
+    https: trustedDevHttps,
     proxy: {
       '/api': {
         target: devBackendUrl,
@@ -193,10 +209,14 @@ export default defineConfig({
     // nxViteTsPaths(),
     // nxCopyAssetsPlugin(assets),
     // ...(tizenBuild ? tizenPlugins : []),
-    basicSsl({
-      /** name of certification */
-      name: 'miauflix-vite',
-    }),
+    ...(trustedDevHttps
+      ? []
+      : [
+          basicSsl({
+            /** name of certification */
+            name: 'miauflix-vite',
+          }),
+        ]),
   ],
   // Uncomment this if you are using workers.
   // worker: {
