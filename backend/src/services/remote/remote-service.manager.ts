@@ -111,10 +111,21 @@ export class RemoteServiceManager {
    * refreshes discovery metadata and lifecycle status.
    */
   async testConfiguration(
-    entries: { key: string; value: string }[] = []
+    entries?: { key: string; value: string }[]
   ): Promise<ServiceConfigTestResult> {
     if (!this.manifest) await this.discover();
     if (!this.manifest) throw new Error('Remote service has not been discovered');
+    const values = entries
+      ? Object.fromEntries(entries.map(({ key, value }) => [key, value]))
+      : this.configuration.getServiceConfigSnapshot(this.descriptor.serviceName);
+    if (!values) {
+      return {
+        success: false,
+        mode: 'validation',
+        message: `Stored configuration snapshot for ${this.descriptor.serviceName} is unavailable`,
+        invalidKeys: [],
+      };
+    }
     return this.request(
       serviceConfigTestResultSchema,
       this.manifest.management.configurationTestPath,
@@ -122,7 +133,7 @@ export class RemoteServiceManager {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          values: Object.fromEntries(entries.map(({ key, value }) => [key, value])),
+          values,
         }),
       }
     );

@@ -24,7 +24,8 @@ import { Database } from 'bun:sqlite';
 import { z } from 'zod';
 
 import { ListConfigService } from './config/config.service';
-import { mapItems, normalizeListItems, type TraktItem } from './list-normalization';
+import { disconnectAssociation, replaceAssociation } from './association-store';
+import { listPage } from './list-page-cache';
 import { parsePositivePage } from './request-validation';
 import { TraktClient } from './trakt-client';
 
@@ -55,7 +56,8 @@ database.run(`
     username TEXT,
     access_token TEXT NOT NULL,
     refresh_token TEXT NOT NULL,
-    expires_at INTEGER NOT NULL
+    expires_at INTEGER NOT NULL,
+    connection_id TEXT NOT NULL DEFAULT ''
   )
 `);
 database.run(`
@@ -69,6 +71,19 @@ database.run(`
     expires_at INTEGER NOT NULL
   )
 `);
+const associationColumns = database.query('PRAGMA table_info(associations)').all() as Array<{
+  name: string;
+}>;
+if (!associationColumns.some(column => column.name === 'connection_id')) {
+  database.run("ALTER TABLE associations ADD COLUMN connection_id TEXT NOT NULL DEFAULT ''");
+}
+for (const record of database
+  .query("SELECT subject_id FROM associations WHERE connection_id = ''")
+  .all() as Array<{ subject_id: string }>) {
+  database
+    .query('UPDATE associations SET connection_id = ?1 WHERE subject_id = ?2')
+    .run(crypto.randomUUID(), record.subject_id);
+}
 database.run(`
   CREATE TABLE IF NOT EXISTS list_pages (
     subject_id TEXT NOT NULL,
@@ -126,10 +141,6 @@ config.registerProber({
   activate: async () => ({ success: true, message: lastProbeMessage }),
 });
 
-const pageFlights = new Map<string, Promise<unknown>>();
-const PUBLIC_PAGE_TTL_MS = 15 * 60 * 1000;
-const PERSONAL_PAGE_TTL_MS = 2 * 60 * 1000;
-
 const publicDefinitions = [
   ['trakt-movies-popular', 'Popular Movies', 'Popular movies from Trakt', 'movies/popular'],
   ['trakt-movies-trending', 'Trending Movies', 'Trending movies from Trakt', 'movies/trending'],
@@ -185,93 +196,29 @@ const association = (subjectId: string) =>
     access_token: string;
     refresh_token: string;
     expires_at: number;
+    connection_id: string;
   } | null;
 
-const accessToken = async (subjectId: string): Promise<string> => {
+const accessToken = async (subjectId: string, connectionId: string): Promise<string> => {
   const record = association(subjectId);
-  if (!record) throw new Error('Trakt account is not connected');
+  if (!record || record.connection_id !== connectionId)
+    throw new Error('Trakt account connection changed');
   if (record.expires_at > Date.now() + 5 * 60 * 1000) return open(record.access_token);
   const refreshed = await client().refreshToken(open(record.refresh_token));
-  database
+  const update = database
     .query(
-      'UPDATE associations SET access_token = ?1, refresh_token = ?2, expires_at = ?3 WHERE subject_id = ?4'
+      'UPDATE associations SET access_token = ?1, refresh_token = ?2, expires_at = ?3 WHERE subject_id = ?4 AND connection_id = ?5'
     )
     .run(
       seal(refreshed.access_token),
       seal(refreshed.refresh_token),
       Date.now() + refreshed.expires_in * 1000,
-      subjectId
+      subjectId,
+      connectionId
     );
+  if (!update.changes || association(subjectId)?.connection_id !== connectionId)
+    throw new Error('Trakt account connection changed');
   return refreshed.access_token;
-};
-
-const listPage = async (listId: string, subjectId: string | undefined, page: number) => {
-  const cacheSubject = subjectId ?? '';
-  const cacheKey = `${cacheSubject}:${listId}:${page}`;
-  const cached = database
-    .query(
-      'SELECT payload, fetched_at FROM list_pages WHERE subject_id = ?1 AND list_id = ?2 AND page = ?3'
-    )
-    .get(cacheSubject, listId, page) as { payload: string; fetched_at: number } | null;
-  const parseCached = () => listServicePageSchema.parse(JSON.parse(open(cached!.payload)));
-  const ttl = subjectId ? PERSONAL_PAGE_TTL_MS : PUBLIC_PAGE_TTL_MS;
-  if (cached && cached.fetched_at + ttl > Date.now()) return parseCached();
-  const flight = pageFlights.get(cacheKey);
-  if (flight) return flight as Promise<ReturnType<typeof listServicePageSchema.parse>>;
-
-  const refresh = (async () => {
-    try {
-      let path: string;
-      const mediaType: 'movie' | 'tv' = listId.includes('shows') ? 'tv' : 'movie';
-      let token: string | undefined;
-      if (listId === 'trakt-movies-popular') path = '/movies/popular?limit=50';
-      else if (listId === 'trakt-movies-trending') path = '/movies/trending?limit=50';
-      else if (listId === 'trakt-shows-popular') path = '/shows/popular?limit=50';
-      else if (listId === 'trakt-shows-trending') path = '/shows/trending?limit=50';
-      else {
-        if (!subjectId) throw new Error('subjectId is required');
-        token = await accessToken(subjectId);
-        if (listId === 'trakt-watchlist-movies') path = '/sync/watchlist/movies?limit=50';
-        else if (listId === 'trakt-watchlist-shows') path = '/sync/watchlist/shows?limit=50';
-        else if (listId === 'trakt-favorites-movies') path = '/users/me/favorites/movies?limit=50';
-        else if (listId === 'trakt-favorites-shows') path = '/users/me/favorites/shows?limit=50';
-        else if (listId === 'trakt-history-movies') path = '/sync/history/movies?limit=50';
-        else if (listId === 'trakt-history-shows') path = '/sync/history/shows?limit=50';
-        else throw new Error('List not found');
-      }
-      path = path.replace('limit=50', `page=${page}&limit=50`);
-      const result = await client().page<TraktItem>(path, token);
-      const bare = listId.endsWith('-popular');
-      const items = mapItems(normalizeListItems(result.items, mediaType, bare), mediaType);
-      const parsed = listServicePageSchema.parse({
-        listId,
-        page,
-        totalPages: result.totalPages,
-        totalItems: result.totalItems,
-        items,
-      });
-      database
-        .query(
-          `INSERT INTO list_pages (subject_id, list_id, page, payload, fetched_at)
-           VALUES (?1, ?2, ?3, ?4, ?5)
-           ON CONFLICT(subject_id, list_id, page) DO UPDATE SET payload = excluded.payload, fetched_at = excluded.fetched_at`
-        )
-        .run(cacheSubject, listId, page, seal(JSON.stringify(parsed)), Date.now());
-      return parsed;
-    } catch (error) {
-      if (cached) {
-        console.warn(`Serving stale list page ${listId}/${page}:`, error);
-        return parseCached();
-      }
-      throw error;
-    }
-  })();
-  pageFlights.set(cacheKey, refresh);
-  try {
-    return await refresh;
-  } finally {
-    pageFlights.delete(cacheKey);
-  }
 };
 
 const json = (body: unknown, status = 200) => Response.json(body, { status });
@@ -361,7 +308,19 @@ const handler = async (request: Request): Promise<Response> => {
       const listId = decodeURIComponent(path.slice('/v1/lists/'.length));
       const page = parsePositivePage(url.searchParams.get('page'));
       if (page === null) return json({ error: 'page must be a positive safe integer' }, 400);
-      return json(await listPage(listId, url.searchParams.get('subjectId') ?? undefined, page));
+      return json(
+        await listPage({
+          database,
+          listId,
+          subjectId: url.searchParams.get('subjectId') ?? undefined,
+          page,
+          association,
+          accessToken,
+          fetchPage: (path, token) => client().page(path, token),
+          seal,
+          open,
+        }).then(value => listServicePageSchema.parse(value))
+      );
     }
     if (request.method === 'POST' && path === '/v1/connections/trakt/device') {
       const { subjectId } = z.object({ subjectId: z.string().min(1) }).parse(await request.json());
@@ -401,19 +360,15 @@ const handler = async (request: Request): Promise<Response> => {
       try {
         const token = await client().deviceToken(open(pending.device_code));
         const profile = await client().profile(token.access_token);
-        database
-          .query('DELETE FROM associations WHERE subject_id = ?1 OR account_id = ?2')
-          .run(subjectId, profile.ids.slug);
-        database
-          .query('INSERT INTO associations VALUES (?1, ?2, ?3, ?4, ?5, ?6)')
-          .run(
-            subjectId,
-            profile.ids.slug,
-            profile.username,
-            seal(token.access_token),
-            seal(token.refresh_token),
-            Date.now() + token.expires_in * 1000
-          );
+        replaceAssociation(database, {
+          subjectId,
+          accountId: profile.ids.slug,
+          username: profile.username,
+          accessToken: seal(token.access_token),
+          refreshToken: seal(token.refresh_token),
+          expiresAt: Date.now() + token.expires_in * 1000,
+          connectionId: crypto.randomUUID(),
+        });
         database.query('DELETE FROM authorizations WHERE id = ?1').run(authorizationId);
         return json(
           connectionResultSchema.parse({
@@ -451,7 +406,7 @@ const handler = async (request: Request): Promise<Response> => {
           await client()
             .revoke(open(record.access_token))
             .catch(() => undefined);
-        database.query('DELETE FROM associations WHERE subject_id = ?1').run(subjectId);
+        disconnectAssociation(database, subjectId);
         return json({ connected: false, provider: 'trakt', accountId: null, username: null });
       }
     }

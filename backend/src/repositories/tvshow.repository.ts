@@ -1,6 +1,7 @@
-import type { DataSource, EntityManager, Repository } from 'typeorm';
+import type { EntityManager, Repository } from 'typeorm';
 import { In } from 'typeorm';
 
+import type { Database } from '@database/database';
 import { Episode } from '@entities/episode.entity';
 import { Season } from '@entities/season.entity';
 import { TVShow } from '@entities/tvshow.entity';
@@ -17,10 +18,10 @@ export class TVShowRepository {
   private readonly seasonRepository: Repository<Season>;
   private readonly episodeRepository: Repository<Episode>;
 
-  constructor(private readonly dataSource: DataSource) {
-    this.tvShowRepository = dataSource.getRepository(TVShow);
-    this.seasonRepository = dataSource.getRepository(Season);
-    this.episodeRepository = dataSource.getRepository(Episode);
+  constructor(private readonly database: Database) {
+    this.tvShowRepository = database.getRepository(TVShow);
+    this.seasonRepository = database.getRepository(Season);
+    this.episodeRepository = database.getRepository(Episode);
   }
 
   async findByIds(ids: number[]): Promise<TVShow[]> {
@@ -59,7 +60,7 @@ export class TVShowRepository {
 
   /** Mirrors a catalog tv show detail into the local index (upsert by mediaId). */
   async upsertTVShowDetail(detail: TVShowDetail): Promise<TVShow> {
-    return this.dataSource.transaction(async manager => {
+    return this.database.transaction(async manager => {
       const tvShowRepo = manager.getRepository(TVShow);
       const existing = await tvShowRepo.findOneBy({ mediaId: detail.mediaId });
       const payload = {
@@ -117,7 +118,7 @@ export class TVShowRepository {
 
   /** Mirrors a catalog season (with episodes) into the local index. */
   async upsertSeasonDetail(detail: SeasonDetail): Promise<Season> {
-    return this.dataSource.transaction(async manager => {
+    return this.database.transaction(async manager => {
       const tvShowRepo = manager.getRepository(TVShow);
       const show = await tvShowRepo.findOneBy({ mediaId: detail.tvMediaId });
       if (!show) {

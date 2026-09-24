@@ -50,6 +50,7 @@
     "test:frontend:e2e:dev": "npm -w frontend run test:e2e",
     "test:frontend:e2e:initial-setup": "backend-e2e/scripts/env.sh test --initial-setup",
     "test:frontend:e2e:initial-setup:update": "backend-e2e/scripts/update-initial-user-snapshots.sh",
+    "test:frontend:e2e:initial-setup:check": "backend-e2e/scripts/update-initial-user-snapshots.sh --check",
     "test:frontend:e2e:docker:update": "npm -w frontend run test:e2e:docker:update",
     "test:frontend:e2e:docker": "npm -w frontend run test:e2e:docker",
     "test:frontend:e2e": "backend-e2e/scripts/env.sh test --frontend-only",

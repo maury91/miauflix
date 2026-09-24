@@ -164,26 +164,22 @@ export class ConfigurationService {
         candidate.variables.some(item => item.key === key)
       )!;
       const item = group.variables.find(candidate => candidate.key === key)!;
-      const existing = this._variablesInfo.get(key);
       this._variablesInfo.set(key, {
         ...this.remoteVariableInfo(item),
         serviceName,
       });
       this._variableGroups.set(key, group.id);
-      if (!this._rawValues.has(key)) {
-        const envValue = process.env[key];
-        const defaultValue = item.defaultValue ?? '';
-        const value = envValue || defaultValue;
-        if (value) this._rawValues.set(key, value);
-      }
-      if (!existing && this._rawValues.has(key)) {
-        const info = this._variablesInfo.get(key)!;
-        (this._computedValues as Record<string, unknown>)[key] = applyTransform(
-          key as never,
-          info,
-          this._rawValues.get(key)!
-        );
-      }
+    }
+    this.autoConfigureDefaults(keys, false);
+    for (const key of keys) {
+      const raw = this._rawValues.get(key);
+      if (raw === undefined) continue;
+      const info = this._variablesInfo.get(key)!;
+      (this._computedValues as Record<string, unknown>)[key] = applyTransform(
+        key as never,
+        info,
+        raw
+      );
     }
     const previous = this._dynamicVariableNames.get(serviceName) ?? new Set<VariableName>();
     const active = new Set(keys);
@@ -343,7 +339,8 @@ export class ConfigurationService {
    * Called once at the top of init(), before anything else.
    */
   private autoConfigureDefaults(
-    variableNames: Iterable<VariableName> = this._variablesInfo.keys()
+    variableNames: Iterable<VariableName> = this._variablesInfo.keys(),
+    persistGeneratedDefaults = true
   ) {
     const autoConfigured = new Set<VariableName>();
     for (const varName of variableNames) {
@@ -358,7 +355,7 @@ export class ConfigurationService {
         this._rawValues.set(varName, getDefaultValue(varInfo.defaultValue));
         // Variables with `skipUserInteraction` must be saved after being created with a default value
         // these variables are usually random generated passwords or similar, so they must be saved to avoid them changing at every run
-        if (varInfo.skipUserInteraction) {
+        if (persistGeneratedDefaults && varInfo.skipUserInteraction) {
           autoConfigured.add(varName);
         }
       }

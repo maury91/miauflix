@@ -1,6 +1,13 @@
 import { logger } from '@logger';
 import path from 'path';
-import type { EntityTarget, LogLevel, LogMessage, ObjectLiteral, Repository } from 'typeorm';
+import type {
+  EntityManager,
+  EntityTarget,
+  LogLevel,
+  LogMessage,
+  ObjectLiteral,
+  Repository,
+} from 'typeorm';
 import { AbstractLogger, DataSource } from 'typeorm';
 
 import { AuditLog } from '@entities/audit-log.entity';
@@ -78,6 +85,7 @@ class DatabaseLogger extends AbstractLogger {
 
 export class Database {
   private readonly dataSource: DataSource;
+  private transactionQueue: Promise<void> = Promise.resolve();
   private mediaListRepository: MediaListRepository;
   private movieRepository: MovieRepository;
   private movieSourceRepository: MovieSourceRepository;
@@ -134,8 +142,8 @@ export class Database {
     this.mediaListRepository = new MediaListRepository(this);
     this.movieSourceRepository = new MovieSourceRepository(this);
     this.movieRepository = new MovieRepository(this);
-    this.tvShowRepository = new TVShowRepository(this.dataSource);
-    this.userRepository = new UserRepository(this.dataSource);
+    this.tvShowRepository = new TVShowRepository(this);
+    this.userRepository = new UserRepository(this);
     this.refreshTokenRepository = new RefreshTokenRepository(this.dataSource);
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
     this.qrLoginRequestRepository = new QrLoginRequestRepository(this.dataSource);
@@ -152,6 +160,16 @@ export class Database {
 
   public getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
     return this.dataSource.getRepository<T>(entity);
+  }
+
+  /** Serialize SQLite transactions because TypeORM's SQLite driver shares one connection. */
+  public transaction<T>(operation: (manager: EntityManager) => Promise<T>): Promise<T> {
+    const result = this.transactionQueue.then(() => this.dataSource.transaction(operation));
+    this.transactionQueue = result.then(
+      () => undefined,
+      () => undefined
+    );
+    return result;
   }
 
   public getMovieRepository() {

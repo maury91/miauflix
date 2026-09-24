@@ -1,6 +1,8 @@
-import type { ServiceConfigSchema } from '@miauflix/service-contracts';
+import { SERVICE_MANIFEST_PATH, type ServiceConfigSchema } from '@miauflix/service-contracts';
 
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
+import * as configurationUtils from '@services/configuration/configuration.utils';
+import { RemoteServiceManager } from '@services/remote/remote-service.manager';
 
 import { ConfigurationService } from './configuration.service';
 
@@ -75,6 +77,73 @@ describe('ConfigurationService web configuration actions', () => {
     expect(configuration.getServiceConfigSnapshot('CATALOG')).toEqual({
       DYNAMIC_OPTIONAL_STRING_DEFAULT_TEST: 'dynamic-default',
     });
+  });
+
+  it('seeds remote values through defaults without persisting remote generated defaults', async () => {
+    const keys = [
+      'DYNAMIC_REMOTE_STORED_TEST',
+      'DYNAMIC_REMOTE_ENV_TEST',
+      'DYNAMIC_REMOTE_DEFAULT_TEST',
+      'DYNAMIC_REMOTE_GENERATED_TEST',
+    ];
+    const clearKeys = keys.map(clearEnvironmentVariable);
+    for (const clear of clearKeys) clear();
+    process.env.DYNAMIC_REMOTE_ENV_TEST = 'environment-value';
+    const saveDefaults = jest.spyOn(configurationUtils, 'saveToEnvFile');
+    const configuration = setupTest();
+    await configuration.setValue('DYNAMIC_REMOTE_STORED_TEST' as never, 'stored-value');
+
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'REMOTE_SEED_TEST',
+          name: 'Remote seed test',
+          description: 'Remote defaults',
+          variables: [
+            {
+              key: 'DYNAMIC_REMOTE_STORED_TEST',
+              description: 'Stored value',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'ignored-default',
+            },
+            {
+              key: 'DYNAMIC_REMOTE_ENV_TEST',
+              description: 'Environment value',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'ignored-default',
+            },
+            {
+              key: 'DYNAMIC_REMOTE_DEFAULT_TEST',
+              description: 'Schema default',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'schema-default',
+            },
+            {
+              key: 'DYNAMIC_REMOTE_GENERATED_TEST',
+              description: 'Generated secret',
+              required: true,
+              inputType: 'password',
+              secret: true,
+              skipUserInteraction: true,
+              defaultValue: 'generated-secret',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(configuration.getServiceConfigSnapshot('CATALOG')).toEqual({
+      DYNAMIC_REMOTE_STORED_TEST: 'stored-value',
+      DYNAMIC_REMOTE_ENV_TEST: 'environment-value',
+      DYNAMIC_REMOTE_DEFAULT_TEST: 'schema-default',
+      DYNAMIC_REMOTE_GENERATED_TEST: 'generated-secret',
+    });
+    expect(saveDefaults).not.toHaveBeenCalled();
+    saveDefaults.mockRestore();
+    for (const clear of clearKeys) clear();
   });
 
   it('removes omitted group variables from presentation on rediscovery without discarding stored values', async () => {
@@ -204,6 +273,87 @@ describe('ConfigurationService web configuration actions', () => {
       { TRAKT_CLIENT_ID: 'new-client-id', TRAKT_CLIENT_SECRET: 'saved-secret' },
       { TRAKT_CLIENT_ID: 'new-client-id', TRAKT_CLIENT_SECRET: 'saved-secret' },
     ]);
+  });
+
+  it('tests a draft remote endpoint with its stored provider snapshot without saving either draft', async () => {
+    const configuration = setupTest();
+    await configuration.setValue('CATALOG_SERVICE_URL', 'http://catalog-original:3001');
+    await configuration.setValue('CATALOG_SERVICE_TIMEOUT_MS', '1000');
+    await configuration.setValue('DYNAMIC_CATALOG_TOKEN_TEST' as never, 'stored-provider-token');
+    const testRequests: Array<{ url: string; body: unknown }> = [];
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const url = new URL(String(input));
+      if (url.pathname === SERVICE_MANIFEST_PATH) {
+        return Response.json({
+          id: 'media-catalog',
+          name: 'Media Catalog',
+          description: 'Catalog',
+          version: '1.0.0',
+          managementProtocolVersion: 2,
+          capabilities: { catalog: { version: 1, basePath: '/v1/catalog' } },
+          management: {
+            statusPath: '/status',
+            configurationSchemaPath: '/configuration/schema',
+            configurationTestPath: '/configuration/test',
+            configurationApplyPath: '/configuration',
+          },
+        });
+      }
+      if (url.pathname === '/configuration/schema') {
+        return Response.json({
+          groups: [
+            {
+              id: 'TMDB',
+              name: 'TMDB',
+              description: 'Provider',
+              variables: [
+                {
+                  key: 'DYNAMIC_CATALOG_TOKEN_TEST',
+                  description: 'Provider token',
+                  required: true,
+                  inputType: 'password',
+                  secret: true,
+                },
+              ],
+            },
+          ],
+        });
+      }
+      if (url.pathname === '/configuration')
+        return Response.json({ success: true, activated: true });
+      if (url.pathname === '/status') return Response.json({ state: 'ready' });
+      if (url.pathname === '/configuration/test') {
+        testRequests.push({ url: url.origin, body: JSON.parse(String(init?.body)) });
+        return Response.json({ success: true, mode: 'live', message: 'provider valid' });
+      }
+      throw new Error(`Unexpected request ${url.pathname}`);
+    });
+
+    const manager = new RemoteServiceManager(configuration, {
+      serviceName: 'CATALOG',
+      urlKey: 'CATALOG_SERVICE_URL',
+      timeoutKey: 'CATALOG_SERVICE_TIMEOUT_MS',
+      capability: 'catalog',
+      capabilityVersion: 1,
+    });
+    configuration.registerService('CATALOG', manager);
+    await manager.initialize();
+    const result = await configuration.testServiceConfigs('CATALOG', [
+      { key: 'CATALOG_SERVICE_URL', value: 'http://catalog-candidate:3001' },
+      { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '2000' },
+    ]);
+    manager.stop();
+
+    expect(result.success).toBe(true);
+    expect(testRequests).toEqual([
+      {
+        url: 'http://catalog-candidate:3001',
+        body: { values: { DYNAMIC_CATALOG_TOKEN_TEST: 'stored-provider-token' } },
+      },
+    ]);
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog-original:3001');
+    expect(configuration.get('CATALOG_SERVICE_TIMEOUT_MS')).toBe(1000);
+    expect(configuration.getDynamic('DYNAMIC_CATALOG_TOKEN_TEST')).toBe('stored-provider-token');
   });
 
   it('rejects a conflicting duplicate key instead of replacing the first declaration', async () => {

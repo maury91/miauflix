@@ -100,7 +100,31 @@ test('completes first-run admin and required configuration through the UI', asyn
     user: { email: admin.email, role: 'admin' },
   });
 
+  const configBeforeTestResponse = await api.get('/api/config', { headers: sessionHeaders });
+  expect(configBeforeTestResponse.status()).toBe(200);
+  const configBeforeTest = (await configBeforeTestResponse.json()) as ConfigEntry[];
+  expect(configBeforeTest).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        key: 'TMDB_API_ACCESS_TOKEN',
+        isSecret: true,
+        required: true,
+        hasValue: false,
+      }),
+      ...['TRAKT_CLIENT_ID', 'TRAKT_CLIENT_SECRET', 'TRAKT_REDIRECT_URI'].map(key =>
+        expect.objectContaining({
+          key,
+          required: true,
+          hasValue: false,
+        })
+      ),
+    ])
+  );
+
   await expect(page.getByRole('heading', { name: 'TMDB' })).toBeVisible();
+  await expect(
+    page.getByRole('list', { name: 'Required configuration steps' }).getByText('Trakt')
+  ).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Optional settings' })).toHaveCount(0);
 
   const tokenInput = page.locator('#TMDB_API_ACCESS_TOKEN');
@@ -119,20 +143,6 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(page.getByRole('heading', { name: 'TMDB' })).toBeVisible();
   await expect(page).toHaveScreenshot('catalog-required-mobile.png', screenshotOptions);
   await page.setViewportSize({ width: 1920, height: 1080 });
-
-  const configBeforeTestResponse = await api.get('/api/config', { headers: sessionHeaders });
-  expect(configBeforeTestResponse.status()).toBe(200);
-  const configBeforeTest = (await configBeforeTestResponse.json()) as ConfigEntry[];
-  expect(configBeforeTest).toEqual(
-    expect.arrayContaining([
-      expect.objectContaining({
-        key: 'TMDB_API_ACCESS_TOKEN',
-        isSecret: true,
-        required: true,
-        hasValue: false,
-      }),
-    ])
-  );
 
   const statusBeforeTestResponse = await api.get('/api/status');
   expect(statusBeforeTestResponse.status()).toBe(200);
@@ -195,12 +205,12 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(page.getByRole('heading', { name: 'Trakt' })).toBeVisible({
     timeout: 5_000,
   });
-  await expect(page.getByText('3 missing')).toBeVisible();
+  await expect(page.getByText('2 missing')).toBeVisible();
   await page.getByRole('textbox', { name: 'Trakt Client ID' }).fill('mock-trakt-client-id');
   await page.getByRole('textbox', { name: 'Trakt Client Secret' }).fill('mock-trakt-client-secret');
-  await page
-    .getByRole('textbox', { name: 'Trakt Redirect URI' })
-    .fill('https://app.example/trakt/callback');
+  const redirectUriInput = page.getByRole('textbox', { name: 'Trakt Redirect URI' });
+  await expect(redirectUriInput).toHaveValue(new URL(page.url()).origin);
+  await redirectUriInput.fill('https://app.example/trakt/callback');
   const listSaveResponsePromise = page.waitForResponse(response => {
     return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
   });

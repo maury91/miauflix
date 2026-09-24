@@ -510,4 +510,57 @@ describe('RemoteServiceManager', () => {
       },
     ]);
   });
+
+  it('uses the stored snapshot only when test entries are omitted', async () => {
+    const { configuration, manager } = setupTest();
+    configuration.getServiceConfigSnapshot.mockReturnValue({ API_TOKEN: 'stored-token' });
+    const requests: unknown[] = [];
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') return Response.json({ groups: [] });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
+      if (path === '/status') return Response.json({ state: 'ready' });
+      if (path === '/configuration/test') {
+        requests.push(JSON.parse(String(init?.body)));
+        return Response.json({ success: true, mode: 'live', message: 'valid' });
+      }
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    requests.length = 0;
+    await manager.testConfiguration();
+    await manager.testConfiguration([]);
+    await manager.testConfiguration([{ key: 'API_TOKEN', value: 'draft-token' }]);
+    manager.stop();
+
+    expect(requests).toEqual([
+      { values: { API_TOKEN: 'stored-token' } },
+      { values: {} },
+      { values: { API_TOKEN: 'draft-token' } },
+    ]);
+  });
+
+  it('returns a validation result when an omitted snapshot is unavailable', async () => {
+    const { manager } = setupTest();
+    jest.spyOn(global, 'fetch').mockImplementation(async input => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') return Response.json({ groups: [] });
+      if (path === '/configuration') return Response.json({ success: true, activated: true });
+      if (path === '/status') return Response.json({ state: 'ready' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    const result = await manager.testConfiguration();
+    manager.stop();
+    expect(result).toEqual({
+      success: false,
+      mode: 'validation',
+      message: 'Stored configuration snapshot for CATALOG is unavailable',
+      invalidKeys: [],
+    });
+  });
 });

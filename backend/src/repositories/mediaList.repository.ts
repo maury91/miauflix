@@ -7,7 +7,8 @@ export class MediaListRepository {
   private readonly repository: Repository<MediaList>;
   private readonly itemRepository: Repository<MediaListItem>;
 
-  constructor(db: Database) {
+  constructor(private readonly database: Database) {
+    const db = database;
     this.repository = db.getRepository(MediaList);
     this.itemRepository = db.getRepository(MediaListItem);
   }
@@ -62,7 +63,7 @@ export class MediaListRepository {
   }
 
   async activateGeneration(listId: number, generation: string): Promise<void> {
-    await this.repository.manager.transaction(async manager => {
+    await this.database.transaction(async manager => {
       await manager
         .getRepository(MediaList)
         .update(listId, { activeGeneration: generation, lastSyncedAt: new Date() });
