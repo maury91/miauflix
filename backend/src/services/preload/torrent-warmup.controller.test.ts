@@ -43,6 +43,32 @@ describe('TorrentWarmupController', () => {
     await expect(controller.promote(source(1), 'm:1')).resolves.toBe(true);
     expect(driver.promoteSource).toHaveBeenCalledWith(source(1));
     expect(driver.pauseSource).not.toHaveBeenCalled();
+    expect(controller.getState()).toBeNull();
+  });
+
+  it('keeps the slot when promotion returns false or rejects', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'm:1', 'm:1');
+    const slot = controller.getState();
+
+    driver.promoteSource.mockResolvedValueOnce(false);
+    await expect(controller.promote(source(1), 'm:1')).resolves.toBe(false);
+    expect(controller.getState()).toEqual(slot);
+
+    driver.promoteSource.mockRejectedValueOnce(new Error('promotion failed'));
+    await expect(controller.promote(source(1), 'm:1')).rejects.toThrow('promotion failed');
+    expect(controller.getState()).toEqual(slot);
+  });
+
+  it('keeps a different source slot when promoting another source', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'm:1', 'm:1');
+    const slot = controller.getState();
+
+    await expect(controller.promote(source(2), 'm:2')).resolves.toBe(true);
+
+    expect(controller.getState()).toEqual(slot);
+    expect(driver.pauseSource).not.toHaveBeenCalled();
   });
 
   it('does not start speculative payload work while playback is active', async () => {
@@ -53,5 +79,31 @@ describe('TorrentWarmupController', () => {
 
     expect(state.state).toBe('paused');
     expect(driver.warmSource).not.toHaveBeenCalled();
+  });
+
+  it('warms the same lease again after it was paused', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'm:1', 'm:1');
+    await controller.pause('m:1');
+
+    const resumed = await controller.warm(source(1), 'm:1', 'm:1');
+
+    expect(driver.warmSource).toHaveBeenCalledTimes(2);
+    expect(resumed.state).toBe('warming');
+    expect(resumed.generation).toBeGreaterThan(1);
+  });
+
+  it('retries the same lease after its previous warm attempt failed', async () => {
+    const { controller, driver } = setupTest();
+    driver.warmSource.mockRejectedValueOnce(new Error('temporary torrent failure'));
+
+    await expect(controller.warm(source(1), 'm:1', 'm:1')).rejects.toThrow(
+      'temporary torrent failure'
+    );
+    const retried = await controller.warm(source(1), 'm:1', 'm:1');
+
+    expect(driver.warmSource).toHaveBeenCalledTimes(2);
+    expect(retried.state).toBe('warming');
+    expect(retried.generation).toBeGreaterThan(1);
   });
 });

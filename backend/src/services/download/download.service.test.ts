@@ -352,6 +352,102 @@ describe('DownloadService', () => {
     });
   });
 
+  describe('stream cancellation', () => {
+    it('releases stream activity once when cancellation interrupts a pending read', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as {
+        ready: boolean;
+        add: jest.Mock;
+        torrents: unknown[];
+      };
+      const storage = {
+        id: 1,
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+        size: 10,
+      };
+      webtorrent.ready = true;
+      mockStorageService.withSourceLock.mockImplementation(async (_sourceId, operation) =>
+        operation()
+      );
+      mockStorageService.createStorage.mockResolvedValue(storage as never);
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+
+      let resolveRead!: (value: IteratorResult<Uint8Array>) => void;
+      const returnIterator = jest.fn(async () => ({ done: true, value: undefined }));
+      const file = {
+        name: 'movie.mkv',
+        length: 10,
+        offset: 0,
+        select: jest.fn(),
+        [Symbol.asyncIterator]: () => ({
+          next: () => new Promise<IteratorResult<Uint8Array>>(resolve => (resolveRead = resolve)),
+          return: returnIterator,
+        }),
+      };
+      const torrent = {
+        bitfield: undefined,
+        numPieces: 1,
+        pieceLength: 10,
+        length: 10,
+        files: [file],
+        on: jest.fn(),
+        off: jest.fn(),
+      };
+      webtorrent.torrents = [];
+      webtorrent.add.mockImplementation((_input, _options, callback) => {
+        queueMicrotask(() => callback?.(torrent as never));
+        return torrent as never;
+      });
+
+      const response = await service.streamFile({
+        id: 1,
+        size: 10,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+        file: null,
+      } as never);
+      const cancel = response.body!.cancel();
+      await cancel;
+
+      expect(service.hasActivePlayback()).toBe(false);
+      expect(service.isPlaybackActive(1)).toBe(false);
+      expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(1, 1, true);
+      expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(2, 1, false);
+      expect(returnIterator).toHaveBeenCalledTimes(1);
+
+      // Settle the underlying read after cancellation to ensure it is ignored.
+      resolveRead({ done: true, value: undefined });
+    });
+  });
+
+  describe('source promotion', () => {
+    it('starts the watched download with a reservation and marks the selected file accessed', async () => {
+      const { service, mockStorageService } = setupTest();
+      const file = { name: 'movie.mkv', length: 10, select: jest.fn() };
+      const download = { torrent: { files: [file] } };
+      const startDownload = jest
+        .spyOn(service, 'startDownload')
+        .mockResolvedValue(download as never);
+      const source = {
+        id: 12,
+        size: 100,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+      } as never;
+
+      await expect(service.promoteSource(source)).resolves.toBe(true);
+
+      expect(startDownload).toHaveBeenCalledWith(source, {
+        retentionClass: 'watched',
+        reservedBytes: 100,
+      });
+      expect(mockStorageService.reserveStorage).not.toHaveBeenCalled();
+      expect(file.select).toHaveBeenCalledTimes(1);
+      expect(mockStorageService.markAsAccessed).toHaveBeenCalledWith(12);
+    });
+  });
+
   //   describe('getSourceMetadataFile', () => {
   //     beforeEach(() => {
   //       mockRequestService.request.mockResolvedValue(

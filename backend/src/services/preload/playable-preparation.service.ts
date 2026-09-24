@@ -83,8 +83,11 @@ export class PlayablePreparationService {
     source: MovieSource,
     options: PreparationOptions
   ): Promise<PreparedPlayable> {
-    if (options.through !== 'warm' || !this.warmup) {
+    if (options.through !== 'warm') {
       return { playable, source, state: 'ready' };
+    }
+    if (!this.warmup) {
+      return { playable, source, state: 'cold' };
     }
     let slot: Awaited<ReturnType<TorrentWarmupController['warm']>>;
     try {
@@ -98,13 +101,21 @@ export class PlayablePreparationService {
       if (options.signal?.aborted) throw error;
       // Payload warming is optional. Keep the exact prepared source available
       // so Watch can use the normal cold streaming path.
-      return { playable, source, state: 'ready' };
+      return { playable, source, state: 'cold' };
     }
     if (options.signal?.aborted) {
       await this.warmup.pause(options.ownerKey ?? playableKey(playable));
       this.throwIfAborted(options.signal);
     }
-    return { playable, source, state: slot.state === 'ready' ? 'ready' : 'warming' };
+    if (slot.state === 'ready') return { playable, source, state: 'ready' };
+    if (
+      slot.state === 'warming' ||
+      slot.state === 'adding_torrent' ||
+      slot.state === 'resolving_store'
+    ) {
+      return { playable, source, state: 'warming' };
+    }
+    return { playable, source, state: 'cold' };
   }
 
   private select(sources: MovieSource[], preferences: PlaybackPreferences): MovieSource | null {

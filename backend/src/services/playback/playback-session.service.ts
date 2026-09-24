@@ -90,7 +90,8 @@ export class PlaybackSessionService {
         watchers: prepared.source.watchers ?? null,
       },
       preparation: {
-        state: prepared.state === 'ready' ? 'warm' : 'warming',
+        state:
+          prepared.state === 'ready' ? 'warm' : prepared.state === 'warming' ? 'warming' : 'cold',
         verifiedBytes: storage?.verifiedBytes ?? 0,
         allocatedBytes: storage?.allocatedBytes ?? 0,
       },

@@ -72,7 +72,11 @@ export class TorrentWarmupController {
           startedAt: Date.now(),
         };
       }
-      if (this.slot?.sourceId === source.id && this.slot.leaseKey === leaseKey) {
+      if (
+        this.slot?.sourceId === source.id &&
+        this.slot.leaseKey === leaseKey &&
+        ['adding_torrent', 'resolving_store', 'warming', 'ready'].includes(this.slot.state)
+      ) {
         return this.getState()!;
       }
 
@@ -135,13 +139,9 @@ export class TorrentWarmupController {
       if (this.slot && this.slot.playableKey === playableKey && this.slot.sourceId !== source.id) {
         return false;
       }
-      if (this.slot && this.slot.sourceId !== source.id && this.slot.state === 'warming') {
-        if (!this.driver.isPlaybackActive(this.slot.sourceId)) {
-          await this.driver.pauseSource(this.slot.sourceId);
-        }
-        this.slot = { ...this.slot, state: 'paused' };
-      }
-      return this.driver.promoteSource(source);
+      const promoted = await this.driver.promoteSource(source);
+      if (promoted && this.slot?.sourceId === source.id) this.slot = null;
+      return promoted;
     });
   }
 

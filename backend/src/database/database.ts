@@ -144,6 +144,7 @@ export class Database {
     this.auditLogRepository = new AuditLogRepository(this.dataSource);
     this.qrLoginRequestRepository = new QrLoginRequestRepository(this.dataSource);
     this.storageRepository = new StorageRepository(this);
+    await this.storageRepository.resetActiveStreams();
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this.dataSource);
     this.playbackGrantRepository = new PlaybackGrantRepository(this);

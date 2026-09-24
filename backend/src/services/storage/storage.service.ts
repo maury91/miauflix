@@ -27,6 +27,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   private admissionTail: Promise<void> = Promise.resolve();
   private allocationMode: AllocationMode = 'unknown';
   private readonly deleteHandlers: Array<(storage: Storage) => Promise<void> | void> = [];
+  private readonly sourceTails = new Map<number, Promise<void>>();
 
   constructor(db: Database, config: ConfigService) {
     super();
@@ -71,27 +72,14 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       totalPieces,
       pieceLength,
       retentionClass = 'watched',
-      reservedBytes = 0,
+      reservedBytes,
       speculativeExpiresAt = null,
     } = params;
+    const requestedReservation = reservedBytes ?? (retentionClass === 'watched' ? size : 0);
     const reservation =
-      reservedBytes > 0 && this.allocationMode !== 'sparse'
-        ? Math.max(reservedBytes, size)
-        : reservedBytes;
-
-    // If a storage record already exists for this movieSourceId, return it
-    const existing = await this.storageRepository.findByMovieSourceId(movieSourceId);
-    if (existing) {
-      logger.debug(
-        'StorageService',
-        `Storage record already exists for movie source ${movieSourceId}, returning existing record.`
-      );
-      return existing;
-    }
-
-    // Cleanup before creating new storage
-    await this.cleanup(true);
-    if (reservation > 0) await this.assertAdmission(reservation);
+      requestedReservation > 0 && this.allocationMode !== 'sparse'
+        ? Math.max(requestedReservation, size)
+        : requestedReservation;
 
     // Create empty bitfield if not provided
     const bitfield = downloadedPieces || new Uint8Array(0);
@@ -122,7 +110,32 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       lastWriteAt: null,
     };
 
-    return this.storageRepository.create(storageData);
+    return this.withAdmission(async () => {
+      const current = await this.storageRepository.findByMovieSourceId(movieSourceId);
+      const currentCharge = current
+        ? Math.max(current.allocatedBytes ?? 0, current.reservedBytes ?? 0)
+        : 0;
+      const nextReservation = Math.max(current?.reservedBytes ?? 0, reservation);
+      const nextCharge = Math.max(current?.allocatedBytes ?? 0, nextReservation);
+      const delta = nextCharge - currentCharge;
+
+      if (delta > 0 && retentionClass === 'watched') {
+        await this.cleanupWithinAdmission(true, delta, movieSourceId);
+      }
+      if (delta > 0) await this.assertCapacity(delta);
+
+      if (current) {
+        await this.storageRepository.update(current.id, {
+          reservedBytes: nextReservation,
+          retentionClass,
+          speculativeExpiresAt,
+          lastInterestAt: new Date(),
+        });
+        return (await this.storageRepository.findByMovieSourceId(movieSourceId)) ?? current;
+      }
+
+      return this.storageRepository.create(storageData);
+    });
   }
 
   /**
@@ -159,8 +172,6 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     await this.storageRepository.updateAccounting(storage.id, {
       logicalBytes: size ?? storage.logicalBytes ?? storage.size,
       verifiedBytes,
-      allocatedBytes: storage.allocatedBytes ?? 0,
-      reservedBytes: storage.reservedBytes ?? 0,
     });
 
     logger.debug(
@@ -228,6 +239,10 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    */
   @traced('StorageService')
   async removeStorage(movieSourceId: number): Promise<number> {
+    return this.withSourceLock(movieSourceId, () => this.removeStorageLocked(movieSourceId));
+  }
+
+  private async removeStorageLocked(movieSourceId: number): Promise<number> {
     const storage = await this.storageRepository.findByMovieSourceIdWithRelation(movieSourceId);
     if (!storage) {
       logger.warn('StorageService', `Storage record not found for movie source ${movieSourceId}`);
@@ -287,48 +302,81 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
     if (!storage) return null;
     const allocatedBytes = await this.measureAllocatedBytes(storage.location);
-    await this.storageRepository.updateAccounting(storage.id, {
-      logicalBytes: storage.logicalBytes || storage.size,
-      verifiedBytes: storage.verifiedBytes || 0,
-      allocatedBytes,
-      reservedBytes: 0,
-    });
+    await this.storageRepository.reconcileAllocation(storage.id, allocatedBytes);
     return this.storageRepository.findByMovieSourceId(movieSourceId);
   }
 
   async setPlaybackActive(movieSourceId: number, active: boolean): Promise<boolean> {
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
     if (!storage) return false;
-    const activeStreams = Math.max(0, (storage.activeStreams ?? 0) + (active ? 1 : -1));
-    await this.storageRepository.update(storage.id, { activeStreams, lastInterestAt: new Date() });
-    return true;
+    return this.storageRepository.changeActiveStreams(storage.id, active ? 1 : -1);
   }
 
-  private async assertAdmission(bytes: number): Promise<void> {
-    const run = this.admissionTail.then(async () => {
-      const charged = await this.storageRepository.getChargedStorageUsage();
-      if (charged + BigInt(bytes) > this.maxStorageBytes) {
-        throw new Error('Insufficient storage capacity');
-      }
+  /** Serialize a source's stream startup against cleanup and removal. */
+  async withSourceLock<T>(movieSourceId: number, operation: () => Promise<T>): Promise<T> {
+    const previous = this.sourceTails.get(movieSourceId) ?? Promise.resolve();
+    let release!: () => void;
+    const current = new Promise<void>(resolve => (release = resolve));
+    this.sourceTails.set(movieSourceId, current);
+    await previous;
+    try {
+      return await operation();
+    } finally {
+      release();
+      if (this.sourceTails.get(movieSourceId) === current) this.sourceTails.delete(movieSourceId);
+    }
+  }
 
-      try {
-        const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
-        const filesystem = await statfs(downloadPath);
-        const reserve = 256n * 1024n * 1024n;
-        if (BigInt(filesystem.bavail) * BigInt(filesystem.bsize) < BigInt(bytes) + reserve) {
-          throw new Error('Insufficient filesystem capacity');
-        }
-      } catch (error) {
-        if (error instanceof Error && error.message.startsWith('Insufficient')) throw error;
-        // A failed probe is conservative: application threshold still applies,
-        // and the backing store will be reconciled after it is opened.
+  /** Increase a row's reservation before promoting speculative storage. */
+  async reserveStorage(movieSourceId: number, bytes: number): Promise<void> {
+    await this.withAdmission(async () => {
+      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+      if (!storage) throw new Error(`Storage not found for movie source ${movieSourceId}`);
+      const requested = Math.max(0, Math.floor(bytes));
+      const nextReservation = Math.max(storage.reservedBytes ?? 0, requested);
+      const currentCharge = Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0);
+      const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
+      const delta = nextCharge - currentCharge;
+      if (delta > 0) {
+        await this.cleanupWithinAdmission(true, delta, movieSourceId);
+        await this.assertCapacity(delta);
       }
+      await this.storageRepository.update(storage.id, {
+        reservedBytes: nextReservation,
+        retentionClass: 'watched',
+        speculativeExpiresAt: null,
+        lastInterestAt: new Date(),
+      });
     });
+  }
+
+  private async withAdmission<T>(operation: () => Promise<T>): Promise<T> {
+    const run = this.admissionTail.then(operation);
     this.admissionTail = run.then(
       () => undefined,
       () => undefined
     );
-    await run;
+    return run;
+  }
+
+  private async assertCapacity(bytes: number): Promise<void> {
+    const charged = await this.storageRepository.getChargedStorageUsage();
+    if (charged + BigInt(bytes) > this.maxStorageBytes) {
+      throw new Error('Insufficient storage capacity');
+    }
+
+    try {
+      const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
+      const filesystem = await statfs(downloadPath);
+      const reserve = 256n * 1024n * 1024n;
+      if (BigInt(filesystem.bavail) * BigInt(filesystem.bsize) < BigInt(bytes) + reserve) {
+        throw new Error('Insufficient filesystem capacity');
+      }
+    } catch (error) {
+      if (error instanceof Error && error.message.startsWith('Insufficient')) throw error;
+      // A failed probe is conservative: application threshold still applies,
+      // and the backing store will be reconciled after it is opened.
+    }
   }
 
   private async probeAllocationMode(): Promise<void> {
@@ -438,8 +486,18 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    */
   @traced('StorageService')
   async cleanup(canCleanEverything = false): Promise<void> {
-    let currentUsage = await this.storageRepository.getTotalStorageUsage();
-    if (currentUsage <= this.maxStorageBytes) {
+    await this.withAdmission(() => this.cleanupWithinAdmission(canCleanEverything, 0));
+  }
+
+  private async cleanupWithinAdmission(
+    canCleanEverything: boolean,
+    additionalBytes: number,
+    excludeMovieSourceId?: number
+  ): Promise<void> {
+    let currentUsage = await this.storageRepository.getChargedStorageUsage();
+    const requested = BigInt(additionalBytes);
+    if (requested > this.maxStorageBytes) throw new Error('Insufficient storage capacity');
+    if (currentUsage + requested <= this.maxStorageBytes) {
       return; // No cleanup needed
     }
 
@@ -452,8 +510,12 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     let cleanupAttempts = 0;
     let totalCleanedUp = 0n;
 
-    while (currentUsage > this.maxStorageBytes && cleanupAttempts < maxCleanupAttempts) {
-      const removalCandidate = await this.storageRepository.findMostStaleStorage();
+    while (
+      currentUsage + requested > this.maxStorageBytes &&
+      cleanupAttempts < maxCleanupAttempts
+    ) {
+      const removalCandidate =
+        await this.storageRepository.findMostStaleStorage(excludeMovieSourceId);
       if (!removalCandidate) {
         logger.warn('StorageService', 'No storage records found');
         break;
@@ -482,7 +544,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         );
 
         // Recalculate current usage to get accurate state
-        currentUsage = await this.storageRepository.getTotalStorageUsage();
+        currentUsage = await this.storageRepository.getChargedStorageUsage();
       } else {
         logger.warn(
           'StorageService',
@@ -500,7 +562,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         'StorageService',
         `Storage cleanup stopped after ${maxCleanupAttempts} attempts. Current usage: ${humanReadableBytes(currentUsage)}`
       );
-    } else if (currentUsage <= this.maxStorageBytes) {
+    } else if (currentUsage + requested <= this.maxStorageBytes) {
       logger.info(
         'StorageService',
         `Storage cleanup completed successfully. Cleaned up ${humanReadableBytes(totalCleanedUp)}, current usage: ${humanReadableBytes(currentUsage)}`

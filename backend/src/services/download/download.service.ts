@@ -58,6 +58,8 @@ export class DownloadService {
   public readonly client: WebTorrent;
   private activeStreams = 0;
   private readonly activeSourceCounts = new Map<number, number>();
+  private readonly allocationReconcileAt = new Map<number, number>();
+  private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -327,7 +329,8 @@ export class DownloadService {
         downloadedPieces: new Uint8Array(0),
         totalPieces: 0,
         retentionClass: options.retentionClass,
-        reservedBytes: options.reservedBytes,
+        reservedBytes:
+          options.reservedBytes ?? (options.retentionClass === 'speculative' ? 0 : source.size),
         speculativeExpiresAt: options.speculativeExpiresAt,
       });
 
@@ -347,6 +350,9 @@ export class DownloadService {
         torrent.pieceLength,
         torrent.length
       );
+      if (options.retentionClass !== 'speculative') {
+        await this.storageService.reserveStorage(source.id, torrent.length);
+      }
       await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
@@ -416,7 +422,10 @@ export class DownloadService {
 
   /** Promote the already-added source; no source ranking or replacement occurs. */
   async promoteSource(source: MovieSource): Promise<boolean> {
-    const download = await this.startDownload(source, { retentionClass: 'watched' });
+    const download = await this.startDownload(source, {
+      retentionClass: 'watched',
+      reservedBytes: source.size,
+    });
     const file = getVideoFile(download.torrent);
     file.select();
     await this.storageService.markAsAccessed(source.id);
@@ -680,6 +689,7 @@ export class DownloadService {
           totalPieces: torrent.numPieces,
           size: torrent.length,
         });
+        await this.reconcileAllocationIfDue(movieSourceId);
       } catch (error) {
         logger.warn(
           'DownloadService',
@@ -691,6 +701,7 @@ export class DownloadService {
 
     torrent.on('done', async () => {
       try {
+        await this.reconcileAllocationIfDue(movieSourceId, true);
         await this.storageService.markAsAccessed(movieSourceId);
         logger.info('DownloadService', `Download completed for movie source ${movieSourceId}`);
       } catch (error) {
@@ -703,24 +714,49 @@ export class DownloadService {
     });
   }
 
+  private async reconcileAllocationIfDue(movieSourceId: number, force = false): Promise<void> {
+    const inFlight = this.allocationReconcileInFlight.get(movieSourceId);
+    if (inFlight) return inFlight;
+    const now = Date.now();
+    if (!force && now - (this.allocationReconcileAt.get(movieSourceId) ?? 0) < 1_000) return;
+    const reconcile = this.storageService
+      .reconcileAllocation(movieSourceId)
+      .then(() => {
+        this.allocationReconcileAt.set(movieSourceId, Date.now());
+      })
+      .finally(() => {
+        if (this.allocationReconcileInFlight.get(movieSourceId) === reconcile) {
+          this.allocationReconcileInFlight.delete(movieSourceId);
+        }
+      });
+    this.allocationReconcileInFlight.set(movieSourceId, reconcile);
+    return reconcile;
+  }
+
   /**
    * Stream a file from a torrent with range request support
    * Based on WebTorrent server implementation
    */
   @traced('DownloadService')
   async streamFile(movieSource: MovieSource, rangeHeader?: string): Promise<Response> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const handleRequest = async () => {
-        const { torrent } = await this.startDownload(movieSource);
-        // Autofind the correct file
+        const { torrent } = await this.startDownload(movieSource, {
+          retentionClass: 'watched',
+          reservedBytes: movieSource.size,
+        });
         const file = getVideoFile(torrent);
-        file.select();
-        this.activeStreams += 1;
-        this.activeSourceCounts.set(
-          movieSource.id,
-          (this.activeSourceCounts.get(movieSource.id) ?? 0) + 1
-        );
-        await this.storageService.setPlaybackActive(movieSource.id, true);
+        await this.storageService.withSourceLock(movieSource.id, async () => {
+          if (!(await this.storageService.setPlaybackActive(movieSource.id, true))) {
+            throw new Error(`Storage not found for movie source ${movieSource.id}`);
+          }
+          file.select();
+          this.activeStreams += 1;
+          this.activeSourceCounts.set(
+            movieSource.id,
+            (this.activeSourceCounts.get(movieSource.id) ?? 0) + 1
+          );
+        });
 
         const headers: Record<string, string> = {
           'Accept-Ranges': 'bytes',
@@ -746,55 +782,77 @@ export class DownloadService {
           headers['Content-Length'] = String(file.length);
         }
 
-        const webReadableStream = new ReadableStream({
+        let iterator: AsyncIterator<Uint8Array> | undefined;
+        let iteratorReturned = false;
+        let cancelled = false;
+        let resolveCancellation!: () => void;
+        const cancellation = new Promise<void>(
+          resolveCancel => (resolveCancellation = resolveCancel)
+        );
+        const returnIterator = () => {
+          if (iteratorReturned) return;
+          iteratorReturned = true;
+          void iterator?.return?.().catch(() => undefined);
+        };
+        let releasePromise: Promise<void> | undefined;
+        const release = (): Promise<void> => {
+          if (releasePromise) return releasePromise;
+          this.activeStreams = Math.max(0, this.activeStreams - 1);
+          const remaining = (this.activeSourceCounts.get(movieSource.id) ?? 1) - 1;
+          if (remaining > 0) this.activeSourceCounts.set(movieSource.id, remaining);
+          else this.activeSourceCounts.delete(movieSource.id);
+          releasePromise = this.storageService.withSourceLock(movieSource.id, async () => {
+            await this.storageService.setPlaybackActive(movieSource.id, false);
+          });
+          return releasePromise;
+        };
+
+        const webReadableStream = new ReadableStream<Uint8Array>({
           start: async controller => {
             try {
-              const iterator = file[Symbol.asyncIterator](range || {});
+              iterator = file[Symbol.asyncIterator](range || {});
 
-              while (true) {
-                const result = await iterator.next();
+              while (!cancelled) {
+                const next = await Promise.race([
+                  iterator.next().then(result => ({ type: 'read' as const, result })),
+                  cancellation.then(() => ({ type: 'cancel' as const })),
+                ]);
+                if (next.type === 'cancel' || cancelled) break;
+                const { result } = next;
 
                 if (result.done) {
                   controller.close();
                   break;
                 }
 
-                // Check if the stream has been cancelled
-                if (controller.desiredSize === null) {
-                  break;
-                }
-
                 // Wait for backpressure to clear if needed
-                if (controller.desiredSize !== null && controller.desiredSize <= 0) {
-                  await new Promise(resolve => {
-                    const checkBackpressure = () => {
-                      const desiredSize = controller.desiredSize;
-                      if (desiredSize !== null && desiredSize > 0) {
-                        resolve(undefined);
-                      } else {
-                        setTimeout(checkBackpressure, 10);
-                      }
-                    };
-                    checkBackpressure();
-                  });
+                while (
+                  !cancelled &&
+                  controller.desiredSize !== null &&
+                  controller.desiredSize <= 0
+                ) {
+                  await Promise.race([
+                    new Promise<void>(resolveWait => setTimeout(resolveWait, 10)),
+                    cancellation,
+                  ]);
                 }
-
+                if (cancelled) break;
                 controller.enqueue(result.value);
               }
             } catch (error) {
-              controller.error(error);
+              if (!cancelled) controller.error(error);
             } finally {
-              this.activeStreams = Math.max(0, this.activeStreams - 1);
-              const remaining = (this.activeSourceCounts.get(movieSource.id) ?? 1) - 1;
-              if (remaining > 0) this.activeSourceCounts.set(movieSource.id, remaining);
-              else this.activeSourceCounts.delete(movieSource.id);
-              await this.storageService.setPlaybackActive(movieSource.id, false);
+              if (cancelled) returnIterator();
+              if (!releasePromise) await release();
             }
           },
 
-          cancel() {
-            // Clean up if the stream is cancelled
+          async cancel() {
+            cancelled = true;
+            resolveCancellation();
+            returnIterator();
             logger.debug('DownloadService', 'Stream cancelled by client');
+            await release();
           },
         });
 
@@ -808,9 +866,9 @@ export class DownloadService {
       };
 
       if (this.client.ready) {
-        handleRequest();
+        handleRequest().catch(reject);
       } else {
-        this.client.once('ready', handleRequest);
+        this.client.once('ready', () => handleRequest().catch(reject));
       }
     });
   }
