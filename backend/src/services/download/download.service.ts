@@ -411,8 +411,13 @@ export class DownloadService {
       )
     );
 
-    file.deselect();
-    download.torrent.select(firstPiece, lastPiece, 1);
+    if (download.storage.retentionClass === 'watched') {
+      // A watched row may survive a torrent restart, so restore its full selection.
+      file.select();
+    } else {
+      file.deselect();
+      download.torrent.select(firstPiece, lastPiece, 1);
+    }
     return { sourceId: source.id, targetBytes: target, firstPiece, lastPiece };
   }
 

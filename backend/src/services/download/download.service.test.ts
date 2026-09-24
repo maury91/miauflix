@@ -446,6 +446,43 @@ describe('DownloadService', () => {
       expect(file.select).toHaveBeenCalledTimes(1);
       expect(mockStorageService.markAsAccessed).toHaveBeenCalledWith(12);
     });
+
+    it.each(['watched', 'speculative'] as const)(
+      'preserves %s torrent selection when warming the source',
+      async retentionClass => {
+        const { service } = setupTest();
+        const file = {
+          name: 'movie.mkv',
+          offset: 0,
+          length: 10,
+          select: jest.fn(),
+          deselect: jest.fn(),
+        };
+        const torrent = {
+          files: [file],
+          pieceLength: 2,
+          numPieces: 5,
+          select: jest.fn(),
+        };
+        jest.spyOn(service, 'startDownload').mockResolvedValue({
+          torrent,
+          storage: { retentionClass },
+        } as never);
+        const source = { id: 12, size: 10 } as never;
+
+        await service.warmSource(source, 4);
+
+        if (retentionClass === 'watched') {
+          expect(file.select).toHaveBeenCalledTimes(1);
+          expect(file.deselect).not.toHaveBeenCalled();
+          expect(torrent.select).not.toHaveBeenCalled();
+        } else {
+          expect(file.select).not.toHaveBeenCalled();
+          expect(file.deselect).toHaveBeenCalledTimes(1);
+          expect(torrent.select).toHaveBeenCalledWith(0, 1, 1);
+        }
+      }
+    );
   });
 
   //   describe('getSourceMetadataFile', () => {

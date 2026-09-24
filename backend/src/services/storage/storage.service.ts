@@ -125,10 +125,11 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       if (delta > 0) await this.assertCapacity(delta);
 
       if (current) {
+        const keepWatched = current.retentionClass === 'watched';
         await this.storageRepository.update(current.id, {
           reservedBytes: nextReservation,
-          retentionClass,
-          speculativeExpiresAt,
+          retentionClass: keepWatched ? 'watched' : retentionClass,
+          speculativeExpiresAt: keepWatched ? null : speculativeExpiresAt,
           lastInterestAt: new Date(),
         });
         return (await this.storageRepository.findByMovieSourceId(movieSourceId)) ?? current;

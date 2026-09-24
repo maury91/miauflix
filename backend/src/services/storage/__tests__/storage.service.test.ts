@@ -114,6 +114,27 @@ describe('StorageService', () => {
       expect(foundStorage?.movieSourceId).toBe(movieSource.id);
     });
 
+    it('keeps watched retention when the same source is warmed again', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const location = '/tmp/test/watched-rewarm.mkv';
+      await storageService.createStorage({ movieSourceId: source.id, location, size: 1000 });
+
+      const warmed = await storageService.createStorage({
+        movieSourceId: source.id,
+        location,
+        size: 1000,
+        retentionClass: 'speculative',
+        reservedBytes: 100,
+        speculativeExpiresAt: new Date(Date.now() + 15_000),
+      });
+
+      expect(warmed.retentionClass).toBe('watched');
+      expect(warmed.speculativeExpiresAt).toBeNull();
+      expect(warmed.reservedBytes).toBe(1000);
+    });
+
     it('should find storage by ID', async () => {
       // Arrange
       const { storageService } = setupTest();
