@@ -93,6 +93,7 @@ services:
     environment:
       BACKEND_URL: http://backend:3000
       VITE_API_URL: /
+      MIAUFLIX_DEV_CERT_DIR: /usr/src/app/.certs
       # Docker Desktop bind mounts can miss filesystem events without polling.
       CHOKIDAR_USEPOLLING: 'true'
     depends_on:
@@ -101,6 +102,7 @@ services:
       - '127.0.0.1:4173:4173'
     volumes:
       - ./.env:/usr/src/app/.env:ro
+      - ${MIAUFLIX_DEV_CERT_DIR:-./.certs}/server:/usr/src/app/.certs/server:ro
       - ./frontend:/usr/src/app/frontend
 
 volumes:
