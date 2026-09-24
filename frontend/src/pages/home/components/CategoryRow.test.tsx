@@ -1,6 +1,7 @@
 import type { ListResponse } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { render, screen, waitFor } from '@testing-library/react';
+import { createRef } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { useGetListQuery } = vi.hoisted(() => ({ useGetListQuery: vi.fn() }));
@@ -163,5 +164,45 @@ describe('CategoryRow page window', () => {
 
     expect(screen.getByText('Failed to load content.')).toBeInTheDocument();
     expect(screen.queryByTestId('media-19')).not.toBeInTheDocument();
+  });
+
+  it('reports empty only after a loaded zero-total response', () => {
+    const ref = createRef<import('./CategoryRow').CategoryRowHandle>();
+    const { rerender } = render(<CategoryRow ref={ref} {...makeProps(0, false, { total: 0 })} />);
+
+    expect(ref.current?.isEmpty()).toBe(false);
+
+    rerender(<CategoryRow ref={ref} {...makeProps(0, true, { total: 0 })} />);
+
+    expect(ref.current?.isEmpty()).toBe(true);
+  });
+
+  it('does not report a loading row as empty', () => {
+    useGetListQuery.mockImplementation((query: unknown) =>
+      query === skipToken
+        ? { data: undefined, isLoading: false, isError: false }
+        : {
+            data: undefined,
+            currentData: undefined,
+            isLoading: true,
+            isFetching: true,
+            isError: false,
+          }
+    );
+    const ref = createRef<import('./CategoryRow').CategoryRowHandle>();
+
+    render(<CategoryRow ref={ref} {...makeProps(0, true)} />);
+
+    expect(ref.current?.isEmpty()).toBe(false);
+  });
+
+  it('honors a pending focus request after the row data arrives', async () => {
+    const ref = createRef<import('./CategoryRow').CategoryRowHandle>();
+    const { rerender } = render(<CategoryRow ref={ref} {...makeProps(7, false)} />);
+
+    expect(ref.current?.focusIndex(7)).toBe(false);
+    rerender(<CategoryRow ref={ref} {...makeProps(7, true)} />);
+
+    await waitFor(() => expect(screen.getByTestId('media-7')).toBeInTheDocument());
   });
 });

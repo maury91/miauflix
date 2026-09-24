@@ -1051,4 +1051,52 @@ describe('ConfigurationService web configuration actions', () => {
     expect(configuration.getDynamic('CATALOG_TOKEN_TEST')).toBeUndefined();
     expect(configuration.getDynamic('LIST_TOKEN_TEST')).toBeUndefined();
   });
+
+  it('continues remote consumer rollback when restoring the config file fails', async () => {
+    const configuration = setupTest();
+    const key = 'REMOTE_GROUP_ROLLBACK_TOKEN_TEST';
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'REMOTE_GROUP_ROLLBACK',
+          name: 'Remote rollback',
+          description: 'Remote rollback settings',
+          variables: [{ key, description: 'Token', required: true, inputType: 'text' }],
+        },
+      ],
+    });
+    const clearConfiguration = jest.fn().mockResolvedValue({ success: true });
+    const applyConfiguration = jest.fn().mockResolvedValue({
+      success: false,
+      message: 'candidate rejected after activation attempt',
+    });
+    configuration.registerService('CATALOG', {
+      testable: true,
+      getStatus: () => ({ status: 'ready' }),
+      reload: jest.fn().mockResolvedValue(undefined),
+      testConfiguration: jest.fn().mockResolvedValue({ success: true }),
+      applyConfiguration,
+      clearConfiguration,
+    });
+    const saveConfigFile = jest
+      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .mockResolvedValueOnce(undefined)
+      .mockRejectedValueOnce(new Error('disk restore failed'));
+
+    const result = await configuration.saveServiceConfigs('REMOTE_GROUP_ROLLBACK', [
+      { key, value: 'candidate-token' },
+    ]);
+
+    expect(result.success).toBe(false);
+    expect(result.services[0]).toEqual(
+      expect.objectContaining({
+        service: 'CATALOG',
+        success: false,
+        message: 'candidate rejected after activation attempt',
+      })
+    );
+    expect(saveConfigFile).toHaveBeenCalledTimes(2);
+    expect(clearConfiguration).toHaveBeenCalledTimes(1);
+    expect(configuration.getDynamic(key as never)).toBeUndefined();
+  });
 });

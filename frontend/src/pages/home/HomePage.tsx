@@ -64,6 +64,7 @@ const HomePage: FC = () => {
   const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const detailsRef = useRef<MediaDetailsHandle>(null);
+  const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
 
   useEffect(() => {
     if (!sessionId || !selectedMedia) return;
@@ -102,6 +103,7 @@ const HomePage: FC = () => {
         const row = rowRefs.current.get(nextCategory);
         const selectedIndex = selectedByCategory[categories[nextCategory].slug] ?? 0;
         if (row?.focusIndex(selectedIndex)) break;
+        if (!row || !row.isEmpty()) break;
         nextCategory += delta;
       }
       if (nextCategory < 0 || nextCategory >= categories.length) return;
@@ -113,13 +115,25 @@ const HomePage: FC = () => {
   );
 
   const returnToBrowse = useCallback(() => {
+    const categoryIndex = activeCategoryRef.current;
+    const category = categories?.[categoryIndex];
+    pendingBrowseFocus.current = {
+      categoryIndex,
+      mediaIndex: category ? (selectedByCategory[category.slug] ?? 0) : 0,
+    };
     setView('browse');
     setActiveRegion('carousel');
-    const category = categories?.[activeCategory];
-    rowRefs.current
-      .get(activeCategory)
-      ?.focusIndex(category ? (selectedByCategory[category.slug] ?? 0) : 0);
-  }, [activeCategory, categories, selectedByCategory]);
+  }, [categories, selectedByCategory]);
+
+  useEffect(() => {
+    if (view !== 'browse') return;
+    const pending = pendingBrowseFocus.current;
+    if (!pending) return;
+    const row = rowRefs.current.get(pending.categoryIndex);
+    if (!row) return;
+    row.focusIndex(pending.mediaIndex);
+    pendingBrowseFocus.current = null;
+  }, [view]);
 
   const handleSidebarAction = useCallback(
     (action: HomeAction): NavigationOutcome => {

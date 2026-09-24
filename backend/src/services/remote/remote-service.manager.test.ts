@@ -423,6 +423,139 @@ describe('RemoteServiceManager', () => {
     await expect(manager.request(z.object({}), '/health')).rejects.toBe(transportError);
   });
 
+  it('probes an undiscovered service without performing stateful discovery', async () => {
+    const { configuration, manager } = setupTest();
+    const requests: string[] = [];
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      requests.push(`${init?.method ?? 'GET'} ${path}`);
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/test')
+        return Response.json({ success: true, mode: 'live', message: 'valid' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await expect(
+      manager.testConfiguration([{ key: 'API_TOKEN', value: 'draft-token' }])
+    ).resolves.toEqual({ success: true, mode: 'live', message: 'valid' });
+
+    expect(requests).toEqual([`GET ${SERVICE_MANIFEST_PATH}`, 'POST /configuration/test']);
+    expect(configuration.registerRemoteConfiguration).not.toHaveBeenCalled();
+    expect(configuration.getServiceConfigSnapshot).not.toHaveBeenCalled();
+    manager.stop();
+  });
+
+  it('returns a structured negative result for a rejected configuration probe', async () => {
+    const { manager } = setupTest();
+    jest.spyOn(global, 'fetch').mockImplementation(async input => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/test')
+        return Response.json(
+          {
+            success: false,
+            mode: 'validation',
+            message: 'Provider token is invalid',
+            invalidKeys: ['API_TOKEN'],
+          },
+          { status: 400 }
+        );
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await expect(
+      manager.testConfiguration([{ key: 'API_TOKEN', value: 'invalid-token' }])
+    ).resolves.toEqual({
+      success: false,
+      mode: 'validation',
+      message: 'Provider token is invalid',
+      invalidKeys: ['API_TOKEN'],
+    });
+    manager.stop();
+  });
+
+  it('surfaces a rejected snapshot during reload without refreshing the old status', async () => {
+    const { configuration, manager } = setupTest();
+    let statusRequests = 0;
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') return Response.json({ groups: [] });
+      if (path === '/status') {
+        statusRequests += 1;
+        return Response.json({ state: 'ready' });
+      }
+      if (path === '/configuration' && init?.method === 'PUT')
+        return Response.json(
+          {
+            success: false,
+            activated: false,
+            test: { success: false, mode: 'validation', message: 'Provider token is invalid' },
+          },
+          { status: 400 }
+        );
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    configuration.getServiceConfigSnapshot.mockReturnValue({ API_TOKEN: 'invalid-token' });
+    await expect(manager.reload()).rejects.toThrow('Provider token is invalid');
+    expect(statusRequests).toBe(1);
+    manager.stop();
+  });
+
+  it('surfaces a rejected snapshot after rediscovery completes its housekeeping', async () => {
+    const { configuration, manager } = setupTest();
+    configuration.getServiceConfigSnapshot.mockReturnValue({ API_TOKEN: 'invalid-token' });
+    let schemaRequests = 0;
+    let statusRequests = 0;
+    const requests: string[] = [];
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      requests.push(`${init?.method ?? 'GET'} ${path}`);
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') {
+        schemaRequests += 1;
+        if (schemaRequests === 1) throw new Error('schema unavailable');
+        return Response.json({ groups: [] });
+      }
+      if (path === '/configuration' && init?.method === 'PUT')
+        return Response.json(
+          {
+            success: false,
+            activated: false,
+            invalidKeys: ['API_TOKEN'],
+            test: { success: false, mode: 'validation', message: 'Provider token is invalid' },
+          },
+          { status: 400 }
+        );
+      if (path === '/status') {
+        statusRequests += 1;
+        return Response.json({ state: 'ready' });
+      }
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    expect(manager.getStatus()).toEqual(
+      expect.objectContaining({ status: 'error', errorMessage: 'schema unavailable' })
+    );
+
+    await expect(manager.reload()).rejects.toThrow('Provider token is invalid');
+    expect(configuration.registerRemoteConfiguration).toHaveBeenCalledTimes(1);
+    expect(statusRequests).toBe(1);
+    expect(requests).toEqual([
+      `GET ${SERVICE_MANIFEST_PATH}`,
+      `GET /configuration/schema`,
+      `GET ${SERVICE_MANIFEST_PATH}`,
+      `GET /configuration/schema`,
+      'PUT /configuration',
+      'GET /status',
+    ]);
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
+    manager.stop();
+  });
+
   it('times out while consuming a remote response body and clears its timer', async () => {
     const { configuration, manager } = setupTest();
     (configuration.getDynamic as jest.Mock).mockImplementation((key: string) =>

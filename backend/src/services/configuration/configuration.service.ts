@@ -1633,7 +1633,13 @@ export class ConfigurationService {
         this._rawValues = rawSnapshot;
         this._computedValues = computedSnapshot;
         this._fileData = fileSnapshot;
-        await this.saveConfigFile();
+        await this.saveConfigFile().catch(rollbackError => {
+          logger.error(
+            'Config',
+            'Failed to restore the remote-group configuration file; continuing consumer rollback',
+            rollbackError
+          );
+        });
         for (const consumer of attempted.reverse()) {
           const previous = previousSnapshots.get(consumer);
           try {

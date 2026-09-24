@@ -167,7 +167,7 @@ export class Database {
     this.qrLoginRequestRepository = new QrLoginRequestRepository(this);
     this.storageRepository = new StorageRepository(this);
     this.streamingKeyRepository = new StreamingKeyRepository(this);
-    this.progressRepository = new ProgressRepository(this.dataSource);
+    this.progressRepository = new ProgressRepository(this);
   }
 
   public async close(): Promise<void> {

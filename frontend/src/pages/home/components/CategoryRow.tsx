@@ -59,6 +59,7 @@ const State = styled.div`
 
 export interface CategoryRowHandle {
   focusIndex: (index: number) => boolean;
+  isEmpty: () => boolean;
   handleAction: (action: HomeAction) => NavigationOutcome;
   getNavigationContext: () => {
     selected: MediaDto | null;
@@ -186,10 +187,11 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
         selectIndex(index);
         return total > 0;
       },
+      isEmpty: () => current.currentData?.total === 0,
       handleAction,
       getNavigationContext,
     }),
-    [getNavigationContext, handleAction, selectIndex, total]
+    [current.currentData?.total, getNavigationContext, handleAction, selectIndex, total]
   );
 
   useEffect(() => {
