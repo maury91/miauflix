@@ -94,8 +94,8 @@ export type ConfigurableService = {
   ): Promise<{ success: boolean; mode?: 'live' | 'validation'; message: string }>;
   applyConfiguration?(
     entries: { key: string; value: string }[]
-  ): Promise<{ success: boolean; message?: string }>;
-  clearConfiguration?(): Promise<{ success: boolean; message?: string }>;
+  ): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }>;
+  clearConfiguration?(): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }>;
 };
 
 export type ConfigService = {

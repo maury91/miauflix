@@ -35,7 +35,7 @@ docker compose run --rm miauflix npm run config-only
 
 This will run the configuration wizard, which will ask you for the required environment variables, and guide you on how to obtain them.
 
-The default Compose topology starts the standalone List Service. Configure the Trakt OAuth credentials during setup, or disable the service if you do not use lists. Each service creates and persists its own encryption key in `data/.catalog-key` or `data/list-service/.list-service-key`; these keys are never user-configured.
+The default Compose topology starts the standalone List Service. Configure the Trakt OAuth credentials during setup, or disable the service if you do not use lists. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
 
 #### 2. [Optional] Set up VPN
 

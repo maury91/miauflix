@@ -122,12 +122,85 @@ describe('RemoteServiceManager', () => {
     expect(manager.getStatus()).toEqual({ status: 'ready' });
 
     await jest.advanceTimersByTimeAsync(15_000);
-    manager.stop();
-
     expect(applyRequests).toEqual([
       { values: { TMDB_API_ACCESS_TOKEN: 'backend-owned-token' } },
       { values: { TMDB_API_ACCESS_TOKEN: 'backend-owned-token' } },
     ]);
+    expect(manager.getStatus()).toMatchObject({ status: 'initializing' });
+
+    await jest.advanceTimersByTimeAsync(15_000);
+    manager.stop();
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
+  });
+
+  it('retains discovery and keeps polling after a stored snapshot is rejected with structured validation', async () => {
+    const { configuration, manager } = setupTest();
+    configuration.getServiceConfigSnapshot.mockReturnValue({ API_TOKEN: 'invalid-token' });
+    let statusRequests = 0;
+    let applyRequests = 0;
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') return Response.json({ groups: [] });
+      if (path === '/configuration' && init?.method === 'PUT') {
+        applyRequests += 1;
+        return Response.json(
+          {
+            success: false,
+            activated: false,
+            invalidKeys: ['API_TOKEN'],
+            test: { success: false, mode: 'validation', message: 'Provider token is invalid' },
+          },
+          { status: 400 }
+        );
+      }
+      if (path === '/status') {
+        statusRequests += 1;
+        return Response.json({ state: statusRequests === 2 ? 'standby' : 'ready' });
+      }
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    expect(manager.capabilityBasePath).toBe('/v1/catalog');
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
+    await expect(
+      manager.applyConfiguration([{ key: 'API_TOKEN', value: 'invalid-token' }])
+    ).resolves.toEqual({
+      success: false,
+      message: 'Provider token is invalid',
+      invalidKeys: ['API_TOKEN'],
+    });
+
+    await jest.advanceTimersByTimeAsync(15_000);
+    expect(manager.getStatus()).toMatchObject({ status: 'initializing' });
+    expect(statusRequests).toBe(2);
+    expect(applyRequests).toBe(3);
+
+    await jest.advanceTimersByTimeAsync(15_000);
+    manager.stop();
+    expect(statusRequests).toBe(3);
+    expect(applyRequests).toBe(3);
+    expect(manager.getStatus()).toEqual({ status: 'ready' });
+  });
+
+  it('keeps a valid manifest when applying its initial snapshot has a transport failure', async () => {
+    const { configuration, manager } = setupTest();
+    configuration.getServiceConfigSnapshot.mockReturnValue({ API_TOKEN: 'stored-token' });
+    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') return Response.json({ groups: [] });
+      if (path === '/configuration' && init?.method === 'PUT')
+        throw new Error('connection refused');
+      if (path === '/status') return Response.json({ state: 'ready' });
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    manager.stop();
+
+    expect(manager.capabilityBasePath).toBe('/v1/catalog');
     expect(manager.getStatus()).toEqual({ status: 'ready' });
   });
 

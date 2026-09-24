@@ -141,7 +141,14 @@ export class RemoteServiceManager {
 
   async applyConfiguration(
     entries: { key: string; value: string }[]
-  ): Promise<{ success: boolean; message?: string }> {
+  ): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }> {
+    return this.applyConfigurationSnapshot(entries, true);
+  }
+
+  private async applyConfigurationSnapshot(
+    entries: { key: string; value: string }[],
+    refreshStatus: boolean
+  ): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }> {
     if (!this.manifest) await this.discover();
     if (!this.manifest) throw new Error('Remote service has not been discovered');
     const result = await this.request(
@@ -153,6 +160,36 @@ export class RemoteServiceManager {
         body: JSON.stringify({
           values: Object.fromEntries(entries.map(({ key, value }) => [key, value])),
         }),
+        acceptConfigurationRejection: true,
+      }
+    );
+    if (result.success && refreshStatus) await this.refreshStatus();
+    return {
+      success: result.success,
+      message:
+        result.test?.message ??
+        (result.invalidKeys?.length
+          ? `Rejected keys: ${result.invalidKeys.join(', ')}`
+          : undefined),
+      invalidKeys: result.invalidKeys,
+    };
+  }
+
+  async clearConfiguration(): Promise<{
+    success: boolean;
+    message?: string;
+    invalidKeys?: string[];
+  }> {
+    if (!this.manifest) await this.discover();
+    if (!this.manifest) throw new Error('Remote service has not been discovered');
+    const result = await this.request(
+      serviceConfigApplyResultSchema,
+      this.manifest.management.configurationApplyPath,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clear: true }),
+        acceptConfigurationRejection: true,
       }
     );
     if (result.success) await this.refreshStatus();
@@ -163,31 +200,19 @@ export class RemoteServiceManager {
         (result.invalidKeys?.length
           ? `Rejected keys: ${result.invalidKeys.join(', ')}`
           : undefined),
+      invalidKeys: result.invalidKeys,
     };
-  }
-
-  async clearConfiguration(): Promise<{ success: boolean; message?: string }> {
-    if (!this.manifest) await this.discover();
-    if (!this.manifest) throw new Error('Remote service has not been discovered');
-    const result = await this.request(
-      serviceConfigApplyResultSchema,
-      this.manifest.management.configurationApplyPath,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clear: true }),
-      }
-    );
-    if (result.success) await this.refreshStatus();
-    return { success: result.success, message: result.test?.message };
   }
 
   async request<T>(
     schema: ZodType<T>,
     path: string,
-    options: RequestInit & { notFound?: () => T } = {}
+    options: RequestInit & {
+      notFound?: () => T;
+      acceptConfigurationRejection?: boolean;
+    } = {}
   ): Promise<T> {
-    const { notFound, ...requestOptions } = options;
+    const { notFound, acceptConfigurationRejection, ...requestOptions } = options;
     const baseUrl = String(this.configuration.getDynamic(this.descriptor.urlKey) ?? '').replace(
       /\/+$/,
       ''
@@ -211,7 +236,7 @@ export class RemoteServiceManager {
         throw new ServiceNotConfiguredError(this.descriptor.serviceName);
       }
       const body = await response.json().catch(() => null);
-      if (!response.ok) {
+      if (!response.ok && !(acceptConfigurationRejection && response.status === 400)) {
         throw new Error(
           `${this.descriptor.serviceName} request failed: ${response.status} ${JSON.stringify(body)}`
         );
@@ -260,9 +285,19 @@ export class RemoteServiceManager {
     this.configuration.registerRemoteConfiguration(this.descriptor.serviceName, schema);
     const snapshot = this.configuration.getServiceConfigSnapshot(this.descriptor.serviceName);
     if (snapshot) {
-      await this.applyConfiguration(
-        Object.entries(snapshot).map(([key, value]) => ({ key, value }))
-      );
+      try {
+        const applied = await this.applyConfigurationSnapshot(
+          Object.entries(snapshot).map(([key, value]) => ({ key, value })),
+          false
+        );
+        if (!applied.success) this.logConfigurationRejection(applied);
+      } catch (error) {
+        logger.warn(
+          'RemoteService',
+          `${this.descriptor.serviceName} could not apply its stored configuration during discovery`,
+          error
+        );
+      }
     }
     await this.refreshStatus();
     this.startStatusStream();
@@ -280,11 +315,29 @@ export class RemoteServiceManager {
     // alive. Re-deliver its complete backend-owned snapshot before the next poll.
     if (remote.state === 'standby') {
       const snapshot = this.configuration.getServiceConfigSnapshot(this.descriptor.serviceName);
-      if (snapshot)
-        await this.applyConfiguration(
-          Object.entries(snapshot).map(([key, value]) => ({ key, value }))
-        );
+      if (snapshot) {
+        try {
+          const applied = await this.applyConfigurationSnapshot(
+            Object.entries(snapshot).map(([key, value]) => ({ key, value })),
+            false
+          );
+          if (!applied.success) this.logConfigurationRejection(applied);
+        } catch (error) {
+          logger.warn(
+            'RemoteService',
+            `${this.descriptor.serviceName} rejected its stored configuration during standby recovery`,
+            error
+          );
+        }
+      }
     }
+  }
+
+  private logConfigurationRejection(result: { message?: string; invalidKeys?: string[] }): void {
+    logger.warn(
+      'RemoteService',
+      `${this.descriptor.serviceName} rejected its stored configuration${result.invalidKeys?.length ? ` (${result.invalidKeys.join(', ')})` : ''}: ${result.message ?? 'configuration validation failed'}`
+    );
   }
 
   private setStatus(status: ServiceInstanceStatus): void {

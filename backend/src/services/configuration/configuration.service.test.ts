@@ -511,6 +511,69 @@ describe('ConfigurationService web configuration actions', () => {
     expect(instance.reload).not.toHaveBeenCalled();
   });
 
+  it('observationally tests CATALOG and LIST draft endpoints with stored provider snapshots', async () => {
+    const configuration = setupTest();
+    await configuration.setValue('CATALOG_SERVICE_URL', 'http://catalog-original:3001');
+    await configuration.setValue('CATALOG_SERVICE_TIMEOUT_MS', '1000');
+    await configuration.setValue('LIST_SERVICE_URL', 'http://list-original:3002');
+    await configuration.setValue('LIST_SERVICE_TIMEOUT_MS', '1000');
+    for (const [service, group, key, value] of [
+      ['CATALOG', 'CATALOG_PROVIDER_TEST', 'CATALOG_PROVIDER_TOKEN_TEST', 'catalog-token'],
+      ['LIST', 'LIST_PROVIDER_TEST', 'LIST_PROVIDER_TOKEN_TEST', 'list-token'],
+    ] as const) {
+      configuration.registerRemoteConfiguration(service, {
+        groups: [
+          {
+            id: group,
+            name: group,
+            description: group,
+            variables: [{ key, description: key, required: true, inputType: 'text' }],
+          },
+        ],
+      });
+      await configuration.setValue(key as never, value);
+    }
+    const tested: Array<{ endpoint: unknown; snapshot: Record<string, string> | undefined }> = [];
+    for (const service of ['CATALOG', 'LIST'] as const) {
+      configuration.registerService(service, {
+        testable: true,
+        getStatus: () => ({ status: 'ready' }),
+        reload: jest.fn().mockResolvedValue(undefined),
+        testConfiguration: jest.fn(async () => {
+          tested.push({
+            endpoint: configuration.get(`${service}_SERVICE_URL` as never),
+            snapshot: configuration.getServiceConfigSnapshot(service),
+          });
+          return { success: true, message: 'provider valid' };
+        }),
+      });
+    }
+
+    const catalogTest = await configuration.testServiceConfigs('CATALOG', [
+      { key: 'CATALOG_SERVICE_URL', value: 'http://catalog-draft:3001' },
+      { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '2000' },
+    ]);
+    const listTest = await configuration.testServiceConfigs('LIST', [
+      { key: 'LIST_SERVICE_URL', value: 'http://list-draft:3002' },
+      { key: 'LIST_SERVICE_TIMEOUT_MS', value: '3000' },
+    ]);
+
+    expect(catalogTest.success).toBe(true);
+    expect(listTest.success).toBe(true);
+    expect(tested).toEqual([
+      {
+        endpoint: 'http://catalog-draft:3001',
+        snapshot: { CATALOG_PROVIDER_TOKEN_TEST: 'catalog-token' },
+      },
+      {
+        endpoint: 'http://list-draft:3002',
+        snapshot: { LIST_PROVIDER_TOKEN_TEST: 'list-token' },
+      },
+    ]);
+    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog-original:3001');
+    expect(configuration.get('LIST_SERVICE_URL')).toBe('http://list-original:3002');
+  });
+
   it('keeps successful saved values active without restoring the draft', async () => {
     const { configuration, instance } = setupLiveCatalog();
     const changed = jest.fn();
@@ -592,5 +655,160 @@ describe('ConfigurationService web configuration actions', () => {
     expect(result.changed).toEqual([]);
     expect(configuration.get('CATALOG_SERVICE_URL')).toBeUndefined();
     expect(configuration.get('STORAGE_THRESHOLD')).toBeUndefined();
+  });
+
+  it('tests all groups before persisting or applying a multi-group save', async () => {
+    const configuration = setupTest();
+    const makeSchema = (id: string, key: string): ServiceConfigSchema => ({
+      groups: [
+        {
+          id,
+          name: id,
+          description: `${id} settings`,
+          variables: [{ key, description: key, required: true, inputType: 'text' }],
+        },
+      ],
+    });
+    configuration.registerRemoteConfiguration(
+      'CATALOG',
+      makeSchema('CATALOG_PROVIDER', 'CATALOG_TOKEN_TEST')
+    );
+    configuration.registerRemoteConfiguration(
+      'LIST',
+      makeSchema('LIST_PROVIDER', 'LIST_TOKEN_TEST')
+    );
+    const catalogApply = jest.fn().mockResolvedValue({ success: true });
+    const listApply = jest.fn().mockResolvedValue({ success: true });
+    for (const [service, apply, test] of [
+      ['CATALOG', catalogApply, jest.fn().mockResolvedValue({ success: true })],
+      ['LIST', listApply, jest.fn().mockResolvedValue({ success: false, message: 'rejected' })],
+    ] as const) {
+      configuration.registerService(service, {
+        testable: true,
+        getStatus: () => ({ status: 'ready' }),
+        reload: jest.fn().mockResolvedValue(undefined),
+        testConfiguration: test,
+        applyConfiguration: apply,
+      });
+    }
+    const saveConfigFile = jest
+      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'CATALOG_TOKEN_TEST', value: 'catalog-token' },
+      { key: 'LIST_TOKEN_TEST', value: 'list-token' },
+    ]);
+
+    expect(result.success).toBe(false);
+    expect(saveConfigFile).not.toHaveBeenCalled();
+    expect(catalogApply).not.toHaveBeenCalled();
+    expect(listApply).not.toHaveBeenCalled();
+    expect(configuration.getDynamic('CATALOG_TOKEN_TEST')).toBeUndefined();
+  });
+
+  it('persists once and applies after every group probe passes', async () => {
+    const configuration = setupTest();
+    configuration.registerRemoteConfiguration('CATALOG', {
+      groups: [
+        {
+          id: 'CATALOG_PROVIDER',
+          name: 'Catalog provider',
+          description: 'Catalog settings',
+          variables: [
+            { key: 'CATALOG_TOKEN_TEST', description: 'Token', required: true, inputType: 'text' },
+          ],
+        },
+      ],
+    });
+    const apply = jest.fn().mockResolvedValue({ success: true });
+    const test = jest.fn().mockResolvedValue({ success: true, mode: 'live', message: 'valid' });
+    configuration.registerService('CATALOG', {
+      testable: true,
+      getStatus: () => ({ status: 'ready' }),
+      reload: jest.fn().mockResolvedValue(undefined),
+      testConfiguration: test,
+      applyConfiguration: apply,
+    });
+    const saveConfigFile = jest
+      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'CATALOG_TOKEN_TEST', value: 'catalog-token' },
+    ]);
+
+    expect(result.success).toBe(true);
+    expect(result.changed).toEqual(['CATALOG_PROVIDER']);
+    expect(saveConfigFile).toHaveBeenCalledTimes(1);
+    expect(test).toHaveBeenCalledTimes(1);
+    expect(apply).toHaveBeenCalledTimes(1);
+    expect(configuration.getDynamic('CATALOG_TOKEN_TEST')).toBe('catalog-token');
+  });
+
+  it('reports unknown and unsupported keys before probing any service', async () => {
+    const configuration = setupTest();
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'UNKNOWN_CONFIG_KEY', value: 'value' },
+    ]);
+
+    expect(result.success).toBe(false);
+    expect(result.invalidKeys).toEqual(['UNKNOWN_CONFIG_KEY']);
+    expect(result.services).toEqual([
+      expect.objectContaining({
+        success: false,
+        message: 'Unknown or unsupported configuration keys: UNKNOWN_CONFIG_KEY',
+      }),
+    ]);
+  });
+
+  it('rolls back every attempted remote on a lost multi-group apply response', async () => {
+    const configuration = setupTest();
+    const makeSchema = (id: string, key: string): ServiceConfigSchema => ({
+      groups: [
+        {
+          id,
+          name: id,
+          description: `${id} settings`,
+          variables: [{ key, description: key, required: true, inputType: 'text' }],
+        },
+      ],
+    });
+    configuration.registerRemoteConfiguration(
+      'CATALOG',
+      makeSchema('CATALOG_PROVIDER', 'CATALOG_TOKEN_TEST')
+    );
+    configuration.registerRemoteConfiguration(
+      'LIST',
+      makeSchema('LIST_PROVIDER', 'LIST_TOKEN_TEST')
+    );
+    const catalogClear = jest.fn().mockResolvedValue({ success: true });
+    const listClear = jest.fn().mockResolvedValue({ success: true });
+    const catalogApply = jest.fn().mockResolvedValue({ success: true });
+    const listApply = jest.fn().mockRejectedValue(new Error('connection lost after apply'));
+    for (const [service, apply, clear] of [
+      ['CATALOG', catalogApply, catalogClear],
+      ['LIST', listApply, listClear],
+    ] as const) {
+      configuration.registerService(service, {
+        testable: true,
+        getStatus: () => ({ status: 'ready' }),
+        reload: jest.fn().mockResolvedValue(undefined),
+        testConfiguration: jest.fn().mockResolvedValue({ success: true }),
+        applyConfiguration: apply,
+        clearConfiguration: clear,
+      });
+    }
+
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'CATALOG_TOKEN_TEST', value: 'catalog-token' },
+      { key: 'LIST_TOKEN_TEST', value: 'list-token' },
+    ]);
+
+    expect(result.success).toBe(false);
+    expect(catalogClear).toHaveBeenCalledTimes(1);
+    expect(listClear).toHaveBeenCalledTimes(1);
+    expect(configuration.getDynamic('CATALOG_TOKEN_TEST')).toBeUndefined();
+    expect(configuration.getDynamic('LIST_TOKEN_TEST')).toBeUndefined();
   });
 });

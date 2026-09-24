@@ -96,4 +96,5 @@ export type SaveConfigsResult = TestConfigsResult & {
   needsProcessRestart: ServiceName[];
   changed: string[];
   recovered: ServiceRecovery[];
+  invalidKeys?: string[];
 };

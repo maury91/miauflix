@@ -100,22 +100,35 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   const current = useGetListQuery(
     nearby ? { category: category.slug, page, limit: PAGE_SIZE } : skipToken
   );
+  const total = current.data?.total ?? 0;
+  const radius = mediaPerPage + 4;
+  const first = Math.max(0, selectedIndex - radius);
+  const last = Math.min(total - 1, selectedIndex + radius);
+  const previousPage = useGetListQuery(
+    nearby && page > 0 && first < page * PAGE_SIZE
+      ? { category: category.slug, page: page - 1, limit: PAGE_SIZE }
+      : skipToken
+  );
+  const nextPage = useGetListQuery(
+    nearby && (page + 1) * PAGE_SIZE < total && last >= (page + 1) * PAGE_SIZE
+      ? { category: category.slug, page: page + 1, limit: PAGE_SIZE }
+      : skipToken
+  );
   const cardRefs = useRef(new Map<number, HTMLButtonElement>());
   const rowRef = useRef<HTMLElement>(null);
   const shouldFocus = useRef(categoryIndex === 0);
   const pendingIndex = useRef<number | null>(categoryIndex === 0 ? initialIndex : null);
-  const total = current.data?.total ?? 0;
 
   const mediaByIndex = useMemo(() => {
     const result = new Map<number, MediaDto>();
-    const response = current.data;
-    if (response?.page !== undefined && response.pageSize !== undefined) {
+    for (const response of [previousPage.data, nextPage.data, current.data]) {
+      if (response?.page === undefined || response.pageSize === undefined) continue;
       response.results.forEach((media, index) =>
         result.set(response.page! * response.pageSize! + index, media)
       );
     }
     return result;
-  }, [current.data]);
+  }, [current.data, nextPage.data, previousPage.data]);
 
   const selectIndex = useCallback(
     (requested: number, focus = true) => {
@@ -229,9 +242,6 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   }
   if (!total) return null;
 
-  const radius = mediaPerPage + 4;
-  const first = Math.max(0, selectedIndex - radius);
-  const last = Math.min(total - 1, selectedIndex + radius);
   const indices = Array.from({ length: last - first + 1 }, (_, offset) => first + offset);
   const step = mediaWidth + gap;
 

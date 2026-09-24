@@ -58,16 +58,18 @@ export class ListClientService {
     return this.remote.subscribeStatus(listener);
   }
 
-  testConfiguration(
-    entries: { key: string; value: string }[] = []
-  ): Promise<ServiceConfigTestResult> {
+  testConfiguration(entries?: { key: string; value: string }[]): Promise<ServiceConfigTestResult> {
     return this.remote.testConfiguration(entries);
   }
 
   applyConfiguration(
     entries: { key: string; value: string }[]
-  ): Promise<{ success: boolean; message?: string }> {
+  ): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }> {
     return this.remote.applyConfiguration(entries);
+  }
+
+  clearConfiguration(): Promise<{ success: boolean; message?: string; invalidKeys?: string[] }> {
+    return this.remote.clearConfiguration();
   }
 
   getDefinitions(subjectId: string): Promise<ListServiceDefinition[]> {
