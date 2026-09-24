@@ -60,6 +60,7 @@ export class DownloadService {
   private readonly activeSourceCounts = new Map<number, number>();
   private readonly allocationReconcileAt = new Map<number, number>();
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
+  private readonly bitfieldTrackedTorrents = new WeakSet<Torrent>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -356,7 +357,10 @@ export class DownloadService {
       await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
-      this.setupBitfieldTracking(torrent, source.id);
+      if (!this.bitfieldTrackedTorrents.has(torrent)) {
+        this.bitfieldTrackedTorrents.add(torrent);
+        this.setupBitfieldTracking(torrent, source.id);
+      }
 
       const greedyDownload: GreedyDownload = {
         movieSourceId: source.id,
@@ -721,7 +725,11 @@ export class DownloadService {
 
   private async reconcileAllocationIfDue(movieSourceId: number, force = false): Promise<void> {
     const inFlight = this.allocationReconcileInFlight.get(movieSourceId);
-    if (inFlight) return inFlight;
+    if (inFlight) {
+      if (!force) return inFlight;
+      await inFlight.catch(() => undefined);
+      return this.reconcileAllocationIfDue(movieSourceId, true);
+    }
     const now = Date.now();
     if (!force && now - (this.allocationReconcileAt.get(movieSourceId) ?? 0) < 1_000) return;
     const reconcile = this.storageService

@@ -485,6 +485,89 @@ describe('DownloadService', () => {
     );
   });
 
+  describe('download tracking and allocation reconciliation', () => {
+    it('sets up bitfield tracking once when a torrent is reused', async () => {
+      const { service, mockStorageService } = setupTest();
+      const torrent = {
+        bitfield: undefined,
+        numPieces: 1,
+        pieceLength: 10,
+        length: 10,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+      const source = {
+        id: 1,
+        size: 10,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+      } as never;
+
+      await service.startDownload(source);
+      await service.startDownload(source);
+
+      expect(torrent.on).toHaveBeenCalledTimes(2);
+      expect(torrent.on).toHaveBeenNthCalledWith(1, 'verified', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(2, 'done', expect.any(Function));
+    });
+
+    it('joins an in-flight reconciliation for non-forced calls', async () => {
+      const { service, mockStorageService } = setupTest();
+      let resolveReconcile!: (value: null) => void;
+      const pending = new Promise<null>(resolve => {
+        resolveReconcile = resolve;
+      });
+      mockStorageService.reconcileAllocation.mockReturnValueOnce(pending);
+      const reconcile = (
+        service as unknown as {
+          reconcileAllocationIfDue: (movieSourceId: number, force?: boolean) => Promise<void>;
+        }
+      ).reconcileAllocationIfDue.bind(service);
+
+      const firstCall = reconcile(1);
+      const joinedCall = reconcile(1);
+      expect(mockStorageService.reconcileAllocation).toHaveBeenCalledTimes(1);
+
+      resolveReconcile(null);
+      await expect(firstCall).resolves.toBeUndefined();
+      await expect(joinedCall).resolves.toBeUndefined();
+    });
+
+    it('runs a fresh forced reconciliation after an in-flight call rejects', async () => {
+      const { service, mockStorageService } = setupTest();
+      let rejectReconcile!: (error: Error) => void;
+      const pending = new Promise<null>((_resolve, reject) => {
+        rejectReconcile = reject;
+      });
+      mockStorageService.reconcileAllocation
+        .mockReturnValueOnce(pending)
+        .mockResolvedValueOnce(null);
+      const reconcile = (
+        service as unknown as {
+          reconcileAllocationIfDue: (movieSourceId: number, force?: boolean) => Promise<void>;
+        }
+      ).reconcileAllocationIfDue.bind(service);
+
+      const firstCall = reconcile(1);
+      const forcedCall = reconcile(1, true);
+      expect(mockStorageService.reconcileAllocation).toHaveBeenCalledTimes(1);
+      rejectReconcile(new Error('initial reconciliation failed'));
+
+      await expect(firstCall).rejects.toThrow('initial reconciliation failed');
+      await expect(forcedCall).resolves.toBeUndefined();
+      expect(mockStorageService.reconcileAllocation).toHaveBeenCalledTimes(2);
+    });
+  });
+
   //   describe('getSourceMetadataFile', () => {
   //     beforeEach(() => {
   //       mockRequestService.request.mockResolvedValue(
