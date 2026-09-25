@@ -6,6 +6,10 @@ import type { TorrentWarmupController } from './torrent-warmup.controller';
 
 const LEASE_TTL_MS = 15_000;
 
+type PreparationEntry =
+  | { state: 'complete' }
+  | { state: 'pending'; controller: AbortController; timer: ReturnType<typeof setTimeout> };
+
 export interface PreloadLease {
   key: IntentLeaseKey;
   userId: string;
@@ -32,10 +36,7 @@ export interface PreloadIntentResult {
  */
 export class PreloadIntentService {
   private readonly leases = new Map<IntentLeaseKey, PreloadLease>();
-  private readonly preparations = new Map<
-    string,
-    { controller: AbortController; timer: ReturnType<typeof setTimeout> }
-  >();
+  private readonly preparations = new Map<string, PreparationEntry>();
   private readonly cleanupTimer: ReturnType<typeof setInterval>;
 
   constructor(
@@ -103,8 +104,10 @@ export class PreloadIntentService {
   close(): void {
     clearInterval(this.cleanupTimer);
     for (const preparation of this.preparations.values()) {
-      clearTimeout(preparation.timer);
-      preparation.controller.abort();
+      if (preparation.state === 'pending') {
+        clearTimeout(preparation.timer);
+        preparation.controller.abort();
+      }
     }
     this.warmup?.close();
     this.preparations.clear();
@@ -139,8 +142,10 @@ export class PreloadIntentService {
 
     for (const [key, preparation] of this.preparations) {
       if (!wanted.has(key)) {
-        clearTimeout(preparation.timer);
-        preparation.controller.abort();
+        if (preparation.state === 'pending') {
+          clearTimeout(preparation.timer);
+          preparation.controller.abort();
+        }
         void this.warmup?.pause(key);
         this.preparations.delete(key);
       }
@@ -166,15 +171,22 @@ export class PreloadIntentService {
               ownerKey: key,
               signal: controller.signal,
             })
-            .catch(() => undefined)
-            .finally(() => {
+            .then(() => {
               const current = this.preparations.get(key);
-              if (current?.controller === controller) this.preparations.delete(key);
+              if (current?.state === 'pending' && current.controller === controller) {
+                this.preparations.set(key, { state: 'complete' });
+              }
+            })
+            .catch(() => {
+              const current = this.preparations.get(key);
+              if (current?.state === 'pending' && current.controller === controller) {
+                this.preparations.delete(key);
+              }
             });
         },
         target.view === 'player' ? 0 : 350
       );
-      this.preparations.set(key, { controller, timer });
+      this.preparations.set(key, { state: 'pending', controller, timer });
     }
     void now;
   }

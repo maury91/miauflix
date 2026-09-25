@@ -50,4 +50,41 @@ describe('PreloadIntentService', () => {
       service.close();
     }
   });
+
+  it('keeps a completed preparation while its playable remains wanted', async () => {
+    jest.useFakeTimers();
+    const prepare = jest.fn().mockResolvedValue({});
+    const service = new PreloadIntentService({ prepare } as never);
+    try {
+      service.update('user', 'session', 'client', intent(1), 1_000);
+      await jest.advanceTimersByTimeAsync(350);
+
+      service.update('user', 'session', 'client', intent(2), 1_100);
+      await jest.advanceTimersByTimeAsync(350);
+
+      expect(prepare).toHaveBeenCalledTimes(1);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('allows a failed preparation to retry on the next reconcile', async () => {
+    jest.useFakeTimers();
+    const prepare = jest
+      .fn()
+      .mockRejectedValueOnce(new Error('preparation failed'))
+      .mockResolvedValueOnce({});
+    const service = new PreloadIntentService({ prepare } as never);
+    try {
+      service.update('user', 'session', 'client', intent(1), 1_000);
+      await jest.advanceTimersByTimeAsync(350);
+
+      service.update('user', 'session', 'client', intent(2), 1_100);
+      await jest.advanceTimersByTimeAsync(350);
+
+      expect(prepare).toHaveBeenCalledTimes(2);
+    } finally {
+      service.close();
+    }
+  });
 });

@@ -6,8 +6,8 @@ import { Storage } from '@entities/storage.entity';
 export class StorageRepository {
   private readonly repository: Repository<Storage>;
 
-  constructor(db: Database) {
-    this.repository = db.getRepository(Storage);
+  constructor(private readonly database: Database) {
+    this.repository = database.getRepository(Storage);
   }
 
   async findById(id: number): Promise<Storage | null> {
@@ -82,17 +82,19 @@ export class StorageRepository {
   }
 
   async reconcileAllocation(id: number, allocatedBytes: number): Promise<void> {
-    await this.repository
-      .createQueryBuilder()
-      .update(Storage)
-      .set({
-        allocatedBytes,
-        reservedBytes: () =>
-          'CASE WHEN :measuredAllocatedBytes >= reservedBytes THEN 0 ELSE reservedBytes END',
-      })
-      .where('id = :id', { id })
-      .setParameter('measuredAllocatedBytes', allocatedBytes)
-      .execute();
+    await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(Storage)
+        .set({
+          allocatedBytes,
+          reservedBytes: () =>
+            'CASE WHEN :measuredAllocatedBytes >= reservedBytes THEN 0 ELSE reservedBytes END',
+        })
+        .where('id = :id', { id })
+        .setParameter('measuredAllocatedBytes', allocatedBytes)
+        .execute()
+    );
   }
 
   async changeActiveStreams(id: number, delta: -1 | 1): Promise<boolean> {
@@ -100,22 +102,26 @@ export class StorageRepository {
       delta === 1
         ? 'activeStreams + 1'
         : 'CASE WHEN activeStreams > 0 THEN activeStreams - 1 ELSE 0 END';
-    const result = await this.repository
-      .createQueryBuilder()
-      .update(Storage)
-      .set({ activeStreams: () => expression, lastInterestAt: new Date() })
-      .where('id = :id', { id })
-      .execute();
+    const result = await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(Storage)
+        .set({ activeStreams: () => expression, lastInterestAt: new Date() })
+        .where('id = :id', { id })
+        .execute()
+    );
     return (result.affected ?? 0) > 0;
   }
 
   async resetActiveStreams(): Promise<void> {
-    await this.repository
-      .createQueryBuilder()
-      .update(Storage)
-      .set({ activeStreams: 0 })
-      .where('activeStreams > 0')
-      .execute();
+    await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(Storage)
+        .set({ activeStreams: 0 })
+        .where('activeStreams > 0')
+        .execute()
+    );
   }
 
   /**
