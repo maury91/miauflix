@@ -1,0 +1,1052 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19421",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"30f400de799e104d8590eaa9ae6f7365\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/x0J0OMKwnX1eeVRQWeb2D05yd3K.jpg",
+    "belongs_to_collection": null,
+    "budget": 70000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/the-faculty-line",
+    "id": 1265063,
+    "imdb_id": "tt32159989",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Faculty Line",
+    "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+    "popularity": 14.6294,
+    "poster_path": "/ryF8QPGUGlo8gRB4OYKb4J0r3aJ.jpg",
+    "production_companies": [
+      {
+        "id": 46344,
+        "logo_path": "/qpSdIjnGHiz6UNIQWGIJkDnG79l.png",
+        "name": "Glass Hall Films",
+        "origin_country": "IT"
+      },
+      {
+        "id": 23,
+        "logo_path": "/bJOFo2ufq7iFC1F4qZm8aLxF5aS.png",
+        "name": "Glass Hall Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 6831,
+        "logo_path": "/fWSI4EjIDEEzCNJC8OTPX9Pdbxv.png",
+        "name": "Glass Hall Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 210099,
+        "logo_path": "/g5oRCNCi8kNVb8gEoSoIcqkhjmR.png",
+        "name": "Glass Hall Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "IT",
+        "name": "Italy"
+      }
+    ],
+    "release_date": "2025-10-09",
+    "revenue": 9426825,
+    "runtime": 139,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Every side has something to hide.",
+    "title": "The Faculty Line",
+    "video": false,
+    "vote_average": 5.68,
+    "vote_count": 529,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 139,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 139,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 139,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 139,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 139,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 139,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 140,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "eu",
+          "name": "euskera",
+          "english_name": "Basque",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 140,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "gl",
+          "name": "Galego",
+          "english_name": "Galician",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "kn",
+          "name": "?????",
+          "english_name": "Kannada",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 140,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-faculty-line",
+            "overview": "A respected professor's world shifts when a star student accuses a colleague of misconduct. As the campus closes ranks, an old secret from the professor's own life threatens to reshape how she understands the case—and herself.",
+            "runtime": 0,
+            "tagline": "Every side has something to hide.",
+            "title": "The Faculty Line"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q5vX9C3uM5KmHg6GOjuqFRTCk4l.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 8.607,
+          "height": 400,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ltFilFjebDBdJOLlhkHJNVsm9PO.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3443
+        },
+        {
+          "aspect_ratio": 21,
+          "height": 157,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4XxhvaWBgcI5BAyThJYJakUtlj6.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3297
+        },
+        {
+          "aspect_ratio": 1.701,
+          "height": 558,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yJFgPtJr9mDAYyAwKLzOPRcBnX3.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 949
+        },
+        {
+          "aspect_ratio": 1.487,
+          "height": 638,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pVErav5xbHCcSiqujTGsmejmgH5.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 949
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ryF8QPGUGlo8gRB4OYKb4J0r3aJ.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mshLA4kWmtWUbORgfQS3gQeH3kt.jpg",
+          "vote_average": 7.542,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oZSCoalgac07gBdCz7fR50ZLcob.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1425,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h41lwCTr5sPOGnAefW8GCrECwfj.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 950
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ggZKnAKUUQunX5MFBQexW0JzhNo.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1533,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5VbVh7dolDVkfG08yjM0IucoQqx.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1022
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vv1gNj5tmoQZAy8TW28MX5ejub8.jpg",
+          "vote_average": 3.214,
+          "vote_count": 21,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1486,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/raqN96LJpc3evuoxFhm32MQueU4.jpg",
+          "vote_average": 3.09,
+          "vote_count": 22,
+          "width": 991
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/56M1l2vOWwuuU9DoEgU7a3AoN6o.jpg",
+          "vote_average": 2.66,
+          "vote_count": 22,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vkrChpEVnztnPDJbqVnU1ANcexK.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9DtHpOsPSeDWgZpD2N0q2qvb35h.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nwyD6WKqtKYqHiDJnr2HOlbfztr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1140,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/23V5hwhHfvA0wPy9GE9Nx3biucl.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 760
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r9W6Txwp7UveXkVS0yPjOldTN35.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wA2rd6laQMv1E217GTDvJvX2gzQ.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1486,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/leYlUheFotQi9CME7gj0cqJU5K2.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 991
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jXQt5JXjPP5nFtO8nuhyaLSlXUl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iNq4sGxRvgHnbUhwVNVpP3pyj79.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nPYHYMiAymmvTDlz2i9zbdwylHk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rbthtohcbRqTrvgAx6ONPWj8bvH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/crvfSP1Bl9YwAVs7ypDImllPCAW.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qyhgfrk1QswpCAZ8wjMSoBJPCaF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bX4eCnHxOKCPrYFp7do4eEyd0HJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wZCG5N2p7wOChmkSCNdh7HrGaiC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qpRZBSmlj2pq5ucr14MovUTyTh6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e6AcxLE6QiLyOltnp19ONekfTOm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

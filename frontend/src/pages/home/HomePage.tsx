@@ -1,11 +1,11 @@
-import { useGetListsQuery } from '@features/media/api/lists.api';
+import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
 import { mediaApi } from '@features/media/api/media.api';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { AppDispatch, RootState } from '@store/store';
-import { type FC, useCallback, useEffect, useRef, useState } from 'react';
+import { type FC, type UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -54,8 +54,22 @@ type HomeRegion = 'sidebar' | 'carousel' | 'details';
 const HomePage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
-  const { data: categories, isLoading, isError } = useGetListsQuery();
-  const { mediaWidth, mediaPerPage, gap, margin } = useMediaBoxSizes();
+  const { data: fixedCategories, isLoading, isError } = useGetListsQuery();
+  const {
+    data: popularPages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetPopularListsInfiniteQuery({ limit: 20 });
+  const categories = useMemo(
+    () => [
+      ...(fixedCategories ?? []),
+      ...(popularPages?.pages.flatMap(page => page.results) ?? []),
+    ],
+    [fixedCategories, popularPages]
+  );
+  const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
+  const pageRef = useRef<HTMLElement>(null);
   const [view, setView] = useState<HomeView>('browse');
   const [activeRegion, setActiveRegion] = useState<HomeRegion>('carousel');
   const [activeCategory, setActiveCategory] = useState(0);
@@ -65,6 +79,49 @@ const HomePage: FC = () => {
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const detailsRef = useRef<MediaDetailsHandle>(null);
   const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
+  const pendingCategoryAdvance = useRef(false);
+  const categoryCount = categories.length;
+
+  const rowLoadState = useMemo(() => {
+    const visible = new Set(
+      [activeCategory, activeCategory + 1].filter(index => index >= 0 && index < categoryCount)
+    );
+    const prefetch = Array.from({ length: categoryCount }, (_, index) => index)
+      .filter(index => !visible.has(index))
+      .sort((left, right) => {
+        const distance = (index: number) =>
+          index < activeCategory ? activeCategory - index : index - (activeCategory + 1);
+        return distance(left) - distance(right) || right - left;
+      })
+      .slice(0, 4);
+    return { visible, prefetch: new Set(prefetch) };
+  }, [activeCategory, categoryCount]);
+
+  useEffect(() => {
+    if (!hasNextPage || isFetchingNextPage || categories.length === 0) return;
+    if (activeCategoryRef.current >= categories.length - 3) void fetchNextPage();
+  }, [activeCategory, categories.length, fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(() => {
+    if (!pendingCategoryAdvance.current || activeCategoryRef.current + 1 >= categories.length)
+      return;
+    pendingCategoryAdvance.current = false;
+    activeCategoryRef.current += 1;
+    setActiveCategory(activeCategoryRef.current);
+  }, [categories.length]);
+
+  const handleContentScroll = useCallback(
+    (event: UIEvent<HTMLDivElement>) => {
+      if (!hasNextPage || isFetchingNextPage) return;
+      const element = event.currentTarget;
+      if (
+        element.scrollTop + element.clientHeight >=
+        element.scrollHeight - element.clientHeight * 2
+      )
+        void fetchNextPage();
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage]
+  );
 
   useEffect(() => {
     if (!sessionId || !selectedMedia) return;
@@ -99,10 +156,17 @@ const HomePage: FC = () => {
     (delta: -1 | 1) => {
       if (!categories?.length) return;
       let nextCategory = activeCategoryRef.current + delta;
+      if (nextCategory >= categories.length && delta === 1 && hasNextPage) {
+        pendingCategoryAdvance.current = true;
+        if (!isFetchingNextPage) void fetchNextPage();
+        return;
+      }
+      let destinationPending = false;
       while (nextCategory >= 0 && nextCategory < categories.length) {
         const row = rowRefs.current.get(nextCategory);
         const selectedIndex = selectedByCategory[categories[nextCategory].slug] ?? 0;
         if (row?.focusIndex(selectedIndex)) break;
+        destinationPending = true;
         if (!row || !row.isEmpty()) break;
         nextCategory += delta;
       }
@@ -110,8 +174,11 @@ const HomePage: FC = () => {
       if (nextCategory === activeCategoryRef.current) return;
       activeCategoryRef.current = nextCategory;
       setActiveCategory(nextCategory);
+      if (destinationPending) {
+        pageRef.current?.focus({ preventScroll: true });
+      }
     },
-    [categories, selectedByCategory]
+    [categories, fetchNextPage, hasNextPage, isFetchingNextPage, selectedByCategory]
   );
 
   const returnToBrowse = useCallback(() => {
@@ -195,7 +262,7 @@ const HomePage: FC = () => {
       </PageContainer>
     );
   }
-  if (isError || !categories) {
+  if (isError || !fixedCategories) {
     return (
       <PageContainer>
         <FullPageState>Failed to load categories.</FullPageState>
@@ -204,11 +271,11 @@ const HomePage: FC = () => {
   }
 
   return (
-    <PageContainer tabIndex={-1} onKeyDown={handleKeyDown}>
+    <PageContainer ref={pageRef} tabIndex={-1} onKeyDown={handleKeyDown}>
       {view === 'browse' ? (
         <>
           <MediaHero media={selectedMedia} />
-          <Content $margin={margin}>
+          <Content $margin={margin} onScroll={handleContentScroll}>
             {categories.map((category, index) => (
               <CategoryRow
                 key={category.slug}
@@ -219,10 +286,18 @@ const HomePage: FC = () => {
                 category={category}
                 categoryIndex={index}
                 initialIndex={selectedByCategory[category.slug] ?? 0}
-                nearby={Math.abs(index - activeCategory) <= 1}
+                loadIntent={
+                  rowLoadState.visible.has(index)
+                    ? 'visible'
+                    : rowLoadState.prefetch.has(index)
+                      ? 'prefetch'
+                      : 'dormant'
+                }
+                visible={rowLoadState.visible.has(index)}
                 mediaWidth={mediaWidth}
                 mediaPerPage={mediaPerPage}
                 gap={gap}
+                peekWidth={peekWidth}
                 active={activeRegion === 'carousel' && activeCategory === index}
                 onActive={handleActive}
                 onSelect={openDetails}

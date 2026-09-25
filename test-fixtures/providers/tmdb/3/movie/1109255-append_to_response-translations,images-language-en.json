@@ -1,0 +1,711 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13680",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9f64c7c4304aa718320c6a8dd76799e1\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fBUaeRfD2mu6T9vNZ1IR3yhccdP.jpg",
+    "belongs_to_collection": null,
+    "budget": 32000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/born-of-the-bay",
+    "id": 1109255,
+    "imdb_id": "tt23853982",
+    "origin_country": [
+      "IT"
+    ],
+    "original_language": "it",
+    "original_title": "Born of the Bay",
+    "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+    "popularity": 8.6258,
+    "poster_path": "/k3BL39ca5pliALDTzUdC9ZIB9gk.jpg",
+    "production_companies": [
+      {
+        "id": 128344,
+        "logo_path": "/zNBa6RAZ5TKWZUEhxx6sxc9tdrr.png",
+        "name": "Lemon Veil Cinema",
+        "origin_country": "IT"
+      },
+      {
+        "id": 7981,
+        "logo_path": "/6Yv1gIAuGkHS5Vis4UjnqHhCPWV.png",
+        "name": "Lemon Veil Cinema",
+        "origin_country": "FR"
+      },
+      {
+        "id": 207505,
+        "logo_path": "/4ze8MU9ehNgWlVqTVTsWZo3iFmn.png",
+        "name": "Lemon Veil Cinema",
+        "origin_country": "IT"
+      },
+      {
+        "id": 237344,
+        "logo_path": "/3fFS8oipevuYlXVbOaqmHYUTyBx.png",
+        "name": "Lemon Veil Cinema",
+        "origin_country": "FR"
+      },
+      {
+        "id": 228664,
+        "logo_path": "/rKNzL97WA26KnyeUUycdJDggxLq.png",
+        "name": "Lemon Veil Cinema",
+        "origin_country": "IT"
+      },
+      {
+        "id": 209127,
+        "logo_path": "/6kby8aYYQX7RqPGs0DPIGMtG2Sg.png",
+        "name": "Lemon Veil Cinema",
+        "origin_country": "FR"
+      },
+      {
+        "id": 139680,
+        "logo_path": "/kfmKLkXqqrScA5l7aYcROQSqeTz.png",
+        "name": "Lemon Veil Cinema",
+        "origin_country": "FR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      },
+      {
+        "iso_3166_1": "IT",
+        "name": "Italy"
+      }
+    ],
+    "release_date": "2024-10-24",
+    "revenue": 10361110,
+    "runtime": 137,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Italian",
+        "iso_639_1": "it",
+        "name": "Italiano"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The sea gives nothing without a price.",
+    "title": "Born of the Bay",
+    "video": false,
+    "vote_average": 6.7,
+    "vote_count": 792,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 137,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 137,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 137,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 137,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 137,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 136,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/born-of-the-bay",
+            "overview": "Born by the sea near Naples in 1950, a brilliant and enigmatic young woman draws admirers wherever she goes. As she moves through the city's artistic and intellectual circles, she discovers that the beauty everyone prizes can become its own burden.",
+            "runtime": 0,
+            "tagline": "The sea gives nothing without a price.",
+            "title": "Born of the Bay"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mxQdp8koc2LtN7MphNX22HQlOnN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 9.662,
+          "height": 207,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i1kUZO0Pli9gSoAzw5nMcanUnWB.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k3BL39ca5pliALDTzUdC9ZIB9gk.jpg",
+          "vote_average": 5.786,
+          "vote_count": 8,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1828,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uhMIPArCsAzMKRMtLj2VDqAd6ZO.jpg",
+          "vote_average": 3.468,
+          "vote_count": 16,
+          "width": 1219
+        },
+        {
+          "aspect_ratio": 0.664,
+          "height": 2767,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qgtkXnE9fPg4IOkJb61J6EXfk7Y.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1837
+        },
+        {
+          "aspect_ratio": 0.699,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2fTOTovrGuYCPB29XBwXJCpQjwx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1259
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t2QvNQfI0CKRoH2PdZPNoQwcVHb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7Z3w9KgXePsnLGh8CDszE0ZyZPt.jpg",
+          "vote_average": 1.222,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vrYPH5tlqXUmhcQ4UVrBcqb5kND.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y1ROFlaqRKc55uL4oWPpS8canNy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sDA5JvyH5rWJq54xDTfiWrp2ANu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9U4SIoBMgeRQLyPRrit33xeZIcW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

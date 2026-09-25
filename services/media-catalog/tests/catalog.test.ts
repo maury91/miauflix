@@ -636,7 +636,12 @@ describe('CatalogService', () => {
     await onDemand.syncIncompleteSeasons();
     expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(0);
 
+    // An explicit list-triggered job targets this show even when it is not watched.
+    await onDemand.syncIncompleteSeasons(100);
+    expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(1);
+
     // Mark watching → the season gets its episodes.
+    repo.tvShows.markSeasonUnsynced(100, 1);
     db.setWatching([100]);
     await onDemand.syncIncompleteSeasons();
     const synced = repo.tvShows.getSeasonWithEpisodes(100, 1);

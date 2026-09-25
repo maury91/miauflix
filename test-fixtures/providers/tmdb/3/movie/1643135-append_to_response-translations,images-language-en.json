@@ -1,0 +1,237 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10749",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"40d6a022b4cc9ae256e8ac116bf9eb3a\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5LINHN9KrzfYZxogKlTCcvR1Gki.jpg",
+    "belongs_to_collection": {
+      "id": 1689945,
+      "name": "Run, Hide, Resist Collection",
+      "poster_path": null,
+      "backdrop_path": null
+    },
+    "budget": 5000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/run-hide-resist",
+    "id": 1643135,
+    "imdb_id": "tt40231163",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Run, Hide, Resist",
+    "overview": "When an armed cell seizes a campus protest, students and a veteran guard improvise a rescue before security forces arrive.",
+    "popularity": 19.7987,
+    "poster_path": "/gkVq1Pd46NF7AP5XQZfRHjQfCXX.jpg",
+    "production_companies": [
+      {
+        "id": 120143,
+        "logo_path": "/pdT5BouPe8OGeQH9x08cAKsE22R.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 148930,
+        "logo_path": "/5vQU9dfSiYNQyTuciY8T3tUfI4a.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 163476,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-09-15",
+    "revenue": 0,
+    "runtime": 129,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The lecture hall becomes a battlefield.",
+    "title": "Run, Hide, Resist",
+    "video": false,
+    "vote_average": 5.9,
+    "vote_count": 8,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/run-hide-resist",
+            "overview": "When an armed cell seizes a campus protest, students and a veteran guard improvise a rescue before security forces arrive.",
+            "runtime": 129,
+            "tagline": "The lecture hall becomes a battlefield.",
+            "title": "Run, Hide, Resist"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/run-hide-resist",
+            "overview": "When an armed cell seizes a campus protest, students and a veteran guard improvise a rescue before security forces arrive.",
+            "runtime": 0,
+            "tagline": "The lecture hall becomes a battlefield.",
+            "title": "Run, Hide, Resist"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/run-hide-resist",
+            "overview": "When an armed cell seizes a campus protest, students and a veteran guard improvise a rescue before security forces arrive.",
+            "runtime": 0,
+            "tagline": "The lecture hall becomes a battlefield.",
+            "title": "Run, Hide, Resist"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/run-hide-resist",
+            "overview": "When an armed cell seizes a campus protest, students and a veteran guard improvise a rescue before security forces arrive.",
+            "runtime": 0,
+            "tagline": "The lecture hall becomes a battlefield.",
+            "title": "Run, Hide, Resist"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/run-hide-resist",
+            "overview": "When an armed cell seizes a campus protest, students and a veteran guard improvise a rescue before security forces arrive.",
+            "runtime": 0,
+            "tagline": "The lecture hall becomes a battlefield.",
+            "title": "Run, Hide, Resist"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/run-hide-resist",
+            "overview": "When an armed cell seizes a campus protest, students and a veteran guard improvise a rescue before security forces arrive.",
+            "runtime": 0,
+            "tagline": "The lecture hall becomes a battlefield.",
+            "title": "Run, Hide, Resist"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cc2uZ4S72ZxdJ8rGoQFT33DT6UB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bBEF3aczGB2YR4WqvDa50NLVmun.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.16,
+          "height": 756,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b57TMCh4LkBCFTjgQJaXWvr6irT.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 877
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gkVq1Pd46NF7AP5XQZfRHjQfCXX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f3iZCUxaTj8zAZRWQZLQZhUIRTl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jgzPUk2AGIDuTdXKnuGzhNThCAe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

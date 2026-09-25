@@ -282,12 +282,18 @@ export class TVShowRepository {
       tx.delete(episodes).where(inArray(episodes.mediaId, batch)).run();
   }
 
-  findIncompleteSeason(watchingOnly: boolean): SeasonRow | undefined {
+  findIncompleteSeason(watchingOnly: boolean, tvMediaId?: number): SeasonRow | undefined {
     const rows = this.db
       .select({ season: seasons })
       .from(seasons)
       .leftJoin(tvShows, eq(tvShows.mediaId, seasons.tvMediaId))
-      .where(and(eq(seasons.synced, 0), watchingOnly ? eq(tvShows.watching, 1) : undefined))
+      .where(
+        and(
+          eq(seasons.synced, 0),
+          tvMediaId === undefined ? undefined : eq(seasons.tvMediaId, tvMediaId),
+          watchingOnly ? eq(tvShows.watching, 1) : undefined
+        )
+      )
       .orderBy(seasons.seasonNumber)
       .limit(1)
       .all();

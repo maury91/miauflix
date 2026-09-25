@@ -1,6 +1,7 @@
 import { compare, hash } from 'bcrypt';
 import { randomBytes } from 'crypto';
 import type { Context } from 'hono';
+import { deleteCookie } from 'hono/cookie';
 import { parse } from 'hono/utils/cookie';
 import type { JWTPayload } from 'jose';
 import { jwtVerify, SignJWT } from 'jose';
@@ -541,11 +542,20 @@ export class AuthService {
         session: name.substring(refreshTokenPrefix.length),
         token: value,
       }))
-      .filter(({ session, token }) => session && token);
+      .filter(({ session, token }) => session && token)
+      .sort((left, right) => {
+        const leftHasAccessToken = Boolean(
+          cookies[`${this.accessTokenCookieName}_${left.session}`]
+        );
+        const rightHasAccessToken = Boolean(
+          cookies[`${this.accessTokenCookieName}_${right.session}`]
+        );
+        return Number(rightHasAccessToken) - Number(leftHasAccessToken);
+      });
 
     // Validate each refresh token and collect valid sessions
     const verifiedSessions = await Promise.all(
-      // Limit to maximum 5 cookies to prevent DoS attacks
+      // Keep validation work bounded while prioritizing the currently active browser sessions.
       refreshTokenCookies.slice(0, 5).map(async ({ session, token }) => {
         try {
           const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
@@ -562,8 +572,11 @@ export class AuthService {
             };
           }
         } catch {
+          this.clearCookies(context, session);
           return null;
         }
+
+        this.clearCookies(context, session);
         return null;
       })
     );
@@ -599,6 +612,28 @@ export class AuthService {
       maxAge: Math.floor(this.accessTokenTTL / 1000), // Convert milliseconds to seconds
       path: `/`, // Available on all paths
     };
+  }
+
+  clearCookies(context: Context, session: string): void {
+    const {
+      name: refreshCookieName,
+      domain: refreshCookieDomain,
+      path: refreshCookiePath,
+    } = this.getCookieConfig(session);
+    const {
+      name: accessCookieName,
+      domain: accessCookieDomain,
+      path: accessCookiePath,
+    } = this.getAccessTokenCookieConfig(session);
+
+    deleteCookie(context, refreshCookieName, {
+      domain: refreshCookieDomain,
+      path: refreshCookiePath,
+    });
+    deleteCookie(context, accessCookieName, {
+      domain: accessCookieDomain,
+      path: accessCookiePath,
+    });
   }
 
   /**

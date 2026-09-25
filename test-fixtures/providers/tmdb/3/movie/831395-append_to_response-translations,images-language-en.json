@@ -1,0 +1,632 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14597",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"70c46952d537e8076a95ac2d51ca893e\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ebmY8j6bfTsxUdhVtTaoNITch6u.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/wednesdays-bird",
+    "id": 831395,
+    "imdb_id": "tt14682800",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Wednesday's Bird",
+    "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+    "popularity": 4.7274,
+    "poster_path": "/zrd6blans3SqghHSxPAl7tqnaOf.jpg",
+    "production_companies": [
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Blue Thistle Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 288,
+        "logo_path": "/aW0IpM9d4Zjj978EqgDVSxXXhTj.png",
+        "name": "Blue Thistle Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 12219,
+        "logo_path": "/brOqEF7bpecJ4Jn1EmcRgoJTMZz.png",
+        "name": "Blue Thistle Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 144389,
+        "logo_path": "/zsI5xHQQvu15sSSA5VkoC8XDRxi.png",
+        "name": "Blue Thistle Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 174231,
+        "logo_path": "/pzVptQBeICpxnz0j7C3sLQaqwtI.png",
+        "name": "Blue Thistle Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 7281,
+        "logo_path": "/iI7qdR1OFPo0U41BlpKBLD3xesh.png",
+        "name": "Blue Thistle Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 182380,
+        "logo_path": "/kKEKB70wXqeXXqaYhm95Epfyuzu.png",
+        "name": "Blue Thistle Pictures",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2024-06-07",
+    "revenue": 637590,
+    "runtime": 110,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Some visitors change everything.",
+    "title": "Wednesday's Bird",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 117,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 110,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 111,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 111,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 111,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 110,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 110,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/wednesdays-bird",
+            "overview": "A mother and her teenage daughter face an impossible visitor when Death arrives in the form of a remarkable talking bird, forcing them to reckon with love, illness, and the time they have left together.",
+            "runtime": 0,
+            "tagline": "Some visitors change everything.",
+            "title": "Wednesday's Bird"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f3XV5P4UHNPB0mOHJllvuGTQOqh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5K71luX7fWfsbFjjim32OwAoIGD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.691,
+          "height": 2022,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1RFI4O8QuPFhDeRt4Xa8WDNUOVC.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 7463
+        },
+        {
+          "aspect_ratio": 3.691,
+          "height": 2022,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cbx8DceAHibVVUSSILKUX6GXcxm.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 7463
+        },
+        {
+          "aspect_ratio": 3.693,
+          "height": 485,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eDWsHG0hfHr0aD0m38DhlMYXKpW.svg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1791
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zrd6blans3SqghHSxPAl7tqnaOf.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/XgnHhhjKeLWpA9q2rH3bmgTe5P.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xCZPf29rq0mDNILHFHEzM07VRe0.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2998,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aGswn6g4PtZJdHIoFiuJFCW68yY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/837nHMvamHp7FyskfUbHzLvLVs7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dBIrRfHRQd50LwDt7Qdtt1O0w24.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yGm5zvskqRT7dr2jBWpJUfWyyg0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -27,6 +27,15 @@ const profileSchema = z.object({
   username: z.string().min(1),
   ids: z.object({ slug: z.string().min(1) }),
 });
+const popularListSchema = z.object({
+  list: z.object({
+    name: z.string(),
+    description: z.string(),
+    item_count: z.number().int().nonnegative(),
+    user: z.object({ ids: z.object({ slug: z.string().min(1) }) }),
+    ids: z.object({ trakt: z.number().int().positive(), slug: z.string().min(1) }),
+  }),
+});
 
 export class TraktProviderError extends Error {
   constructor(
@@ -145,6 +154,22 @@ export class TraktClient {
 
   profile(accessToken: string): Promise<z.infer<typeof profileSchema>> {
     return this.request('/users/me', profileSchema, {}, accessToken);
+  }
+
+  popularLists(
+    page: number,
+    limit: number
+  ): Promise<{
+    items: z.infer<typeof popularListSchema>[];
+    totalPages: number;
+    totalItems: number;
+  }> {
+    return this.page<unknown>(`/lists/popular?page=${page}&limit=${limit}`).then(result => {
+      const parsed = z.array(popularListSchema).safeParse(result.items);
+      if (!parsed.success)
+        throw new TraktProviderError('Trakt API returned invalid popular lists', 502);
+      return { ...result, items: parsed.data };
+    });
   }
 
   revoke(accessToken: string): Promise<unknown> {

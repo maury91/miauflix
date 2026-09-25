@@ -1,0 +1,1224 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:show:1389,resource:show:1429,resource:show:1388,resource:show:1099,resource:show:1391,resource:show:455,resource:show:6318,resource:show:1656,resource:show:1909,resource:show:2211,resource:show:2368,resource:show:1390,resource:show:497,resource:show:1902,resource:show:686,resource:show:913,resource:show:1907,resource:show:252,resource:show:4522,resource:show:140,resource:show:2976,resource:show:32820,resource:show:1397,resource:show:4254,resource:show:2927,resource:show:1657,resource:show:4565,resource:show:4063,resource:show:846,resource:show:2247,resource:show:501,resource:show:2712,resource:show:2177,resource:show:4584,resource:show:1096,resource:show:548,resource:show:1415,resource:show:94,resource:show:4583,resource:show:1405,resource:show:4415,resource:show:193,resource:show:46263,resource:show:868,resource:show:1959,resource:show:2942,resource:show:949,resource:show:2302,resource:show:2237,resource:show:4564,resource:list:2748259",
+    "content-security-policy-report-only": "script-src 'unsafe-inline' 'unsafe-eval'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=KKUE2suk5wa8U9_FG.eAD5N.8myxtVDEewYwZ8iORqs-1790604585.769882-1.0.1.1-kpeIYtpjmPYo4c_IiDG3q0bUANnl9MZ_ILWQyZhTGLCVdxp8Hl4c_ky5uZbrzNJmMi8xOGOsEsTsTqerBJMBFen2n2u0a5Y66T7pXVxONbP8TW7iv8aGfsV4fyQicaCLskF0TwD77rb68MFK2jCZRbYvH70h11tj3tW526jvRqk; report-to cf-csp-endpoint",
+    "content-type": "application/json; charset=utf-8",
+    "reporting-endpoints": "cf-csp-endpoint=\"https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=KKUE2suk5wa8U9_FG.eAD5N.8myxtVDEewYwZ8iORqs-1790604585.769882-1.0.1.1-kpeIYtpjmPYo4c_IiDG3q0bUANnl9MZ_ILWQyZhTGLCVdxp8Hl4c_ky5uZbrzNJmMi8xOGOsEsTsTqerBJMBFen2n2u0a5Y66T7pXVxONbP8TW7iv8aGfsV4fyQicaCLskF0TwD77rb68MFK2jCZRbYvH70h11tj3tW526jvRqk\"",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "100",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "2",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "rank",
+    "x-sort-how": "asc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0141842",
+          "plex": {
+            "guid": "5d9c086c46115600200aa302",
+            "slug": "the-north-jersey-circle"
+          },
+          "slug": "the-north-jersey-circle",
+          "tmdb": 1398,
+          "tvdb": 75299,
+          "trakt": 1389
+        },
+        "year": 1999,
+        "title": "The North Jersey Circle",
+        "aired_episodes": 86
+      },
+      "rank": 1,
+      "id": 120284222,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0306414",
+          "plex": {
+            "guid": "5d9c086c7d06d9001ffd27ae",
+            "slug": "blue-crown-fox-hollow"
+          },
+          "slug": "blue-crown-fox-hollow",
+          "tmdb": 1438,
+          "tvdb": 79126,
+          "trakt": 1429
+        },
+        "year": 2002,
+        "title": "Blue Crown: Fox Hollow",
+        "aired_episodes": 60
+      },
+      "rank": 2,
+      "id": 120284223,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0903747",
+          "plex": {
+            "guid": "5d9c083402391c001f583d09",
+            "slug": "amber-echo-northbridge"
+          },
+          "slug": "amber-echo-northbridge",
+          "tmdb": 1396,
+          "tvdb": 81189,
+          "trakt": 1388
+        },
+        "year": 2008,
+        "title": "Amber Echo: Northbridge",
+        "aired_episodes": 62
+      },
+      "rank": 3,
+      "id": 120284224,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0804503",
+          "plex": {
+            "guid": "5d9c086b1cae62001f74c4c2",
+            "slug": "silver-crown-bellhaven"
+          },
+          "slug": "silver-crown-bellhaven",
+          "tmdb": 1104,
+          "tvdb": 80337,
+          "trakt": 1099
+        },
+        "year": 2007,
+        "title": "Silver Crown: Bellhaven",
+        "aired_episodes": 92
+      },
+      "rank": 4,
+      "id": 120284225,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0098904",
+          "plex": {
+            "guid": "5d9c086c46115600200aa30e",
+            "slug": "brass-harbor-cedar-point"
+          },
+          "slug": "brass-harbor-cedar-point",
+          "tmdb": 1400,
+          "tvdb": 79169,
+          "trakt": 1391
+        },
+        "year": 1989,
+        "title": "Brass Harbor: Cedar Point",
+        "aired_episodes": 180
+      },
+      "rank": 5,
+      "id": 120284226,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0096697",
+          "plex": {
+            "guid": "5d9c080d3c3f87001f3460e8",
+            "slug": "the-springfield-neighbors"
+          },
+          "slug": "the-springfield-neighbors",
+          "tmdb": 456,
+          "tvdb": 71663,
+          "trakt": 455
+        },
+        "year": 1989,
+        "title": "The Springfield Neighbors",
+        "aired_episodes": 802
+      },
+      "rank": 6,
+      "id": 120284227,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0052520",
+          "plex": {
+            "guid": "5d9c08732df347001e3b32d0",
+            "slug": "amber-beacon-alder-bay"
+          },
+          "slug": "amber-beacon-alder-bay",
+          "tmdb": 6357,
+          "tvdb": 73587,
+          "trakt": 6318
+        },
+        "year": 1959,
+        "title": "Amber Beacon: Alder Bay",
+        "aired_episodes": 156
+      },
+      "rank": 7,
+      "id": 120284228,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0072562",
+          "plex": {
+            "guid": "5d9c086d2192ba001f310238",
+            "slug": "saturday-at-the-spotlight"
+          },
+          "slug": "saturday-at-the-spotlight",
+          "tmdb": 1667,
+          "tvdb": 76177,
+          "trakt": 1656
+        },
+        "year": 1975,
+        "title": "Saturday at the Spotlight",
+        "aired_episodes": 1010
+      },
+      "rank": 8,
+      "id": 120284229,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0066626",
+          "plex": {
+            "guid": "5d9c087108fddd001f29b22e",
+            "slug": "golden-crown-stonehaven"
+          },
+          "slug": "golden-crown-stonehaven",
+          "tmdb": 1922,
+          "tvdb": 72741,
+          "trakt": 1909
+        },
+        "year": 1971,
+        "title": "Golden Crown: Stonehaven",
+        "aired_episodes": 210
+      },
+      "rank": 9,
+      "id": 120284230,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0115147",
+          "plex": {
+            "guid": "5d9c0872ffd9ef001e995749",
+            "slug": "golden-station-bellhaven"
+          },
+          "slug": "golden-station-bellhaven",
+          "tmdb": 2224,
+          "tvdb": 71256,
+          "trakt": 2211
+        },
+        "year": 1996,
+        "title": "Golden Station: Bellhaven",
+        "aired_episodes": 4566
+      },
+      "rank": 10,
+      "id": 120284231,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0193676",
+          "plex": {
+            "guid": "5d9c08757b5c2e001e65cad4",
+            "slug": "hidden-harbor-cedar-point"
+          },
+          "slug": "hidden-harbor-cedar-point",
+          "tmdb": 2382,
+          "tvdb": 76321,
+          "trakt": 2368
+        },
+        "year": 1999,
+        "title": "Hidden Harbor: Cedar Point",
+        "aired_episodes": 18
+      },
+      "rank": 11,
+      "id": 120284232,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0944947",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2fe",
+            "slug": "crowns-of-the-shattered-realm"
+          },
+          "slug": "crowns-of-the-shattered-realm",
+          "tmdb": 1399,
+          "tvdb": 121361,
+          "trakt": 1390
+        },
+        "year": 2011,
+        "title": "Crowns of the Shattered Realm",
+        "aired_episodes": 73
+      },
+      "rank": 12,
+      "id": 120284233,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0106053",
+          "plex": {
+            "guid": "5d9c0816d4f2a9001f7fdd6c",
+            "slug": "last-compass-alder-bay"
+          },
+          "slug": "last-compass-alder-bay",
+          "tmdb": 498,
+          "tvdb": 75088,
+          "trakt": 497
+        },
+        "year": 1993,
+        "title": "Last Compass: Alder Bay",
+        "aired_episodes": 4255
+      },
+      "rank": 13,
+      "id": 120284234,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0103466",
+          "plex": {
+            "guid": "5d9c0871e264b7001fc44351",
+            "slug": "quiet-voyage-moonridge"
+          },
+          "slug": "quiet-voyage-moonridge",
+          "tmdb": 1915,
+          "tvdb": 73007,
+          "trakt": 1902
+        },
+        "year": 1992,
+        "title": "Quiet Voyage: Moonridge",
+        "aired_episodes": 90
+      },
+      "rank": 14,
+      "id": 120284235,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0200276",
+          "plex": {
+            "guid": "5d9c081affd9ef001e98cfea",
+            "slug": "bright-passage-queensport"
+          },
+          "slug": "bright-passage-queensport",
+          "tmdb": 688,
+          "tvdb": 72521,
+          "trakt": 686
+        },
+        "year": 1999,
+        "title": "Bright Passage: Queensport",
+        "aired_episodes": 154
+      },
+      "rank": 15,
+      "id": 120284236,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0068098",
+          "plex": {
+            "guid": "5d9c081e2192ba001f308037",
+            "slug": "quiet-station-highwater"
+          },
+          "slug": "quiet-station-highwater",
+          "tmdb": 918,
+          "tvdb": 70994,
+          "trakt": 913
+        },
+        "year": 1972,
+        "title": "Quiet Station: Highwater",
+        "aired_episodes": 251
+      },
+      "rank": 16,
+      "id": 120284237,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0098936",
+          "plex": {
+            "guid": "5d9c0871cb3ffa001f1b534b",
+            "slug": "ivory-bridge-willow-reach"
+          },
+          "slug": "ivory-bridge-willow-reach",
+          "tmdb": 1920,
+          "tvdb": 70533,
+          "trakt": 1907
+        },
+        "year": 1990,
+        "title": "Ivory Bridge: Willow Reach",
+        "aired_episodes": 48
+      },
+      "rank": 17,
+      "id": 120284238,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0060028",
+          "plex": {
+            "guid": "5d9c0802ba2e21001f18d19a",
+            "slug": "quiet-passage-highwater"
+          },
+          "slug": "quiet-passage-highwater",
+          "tmdb": 253,
+          "tvdb": 77526,
+          "trakt": 252
+        },
+        "year": 1966,
+        "title": "Quiet Passage: Highwater",
+        "aired_episodes": 79
+      },
+      "rank": 18,
+      "id": 120284239,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0264235",
+          "plex": {
+            "guid": "5d9c086b4eefaa001f5dcd8b",
+            "slug": "northern-window-westmere"
+          },
+          "slug": "northern-window-westmere",
+          "tmdb": 4546,
+          "tvdb": 76203,
+          "trakt": 4522
+        },
+        "year": 2000,
+        "title": "Northern Window: Westmere",
+        "aired_episodes": 120
+      },
+      "rank": 19,
+      "id": 120284240,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0083399",
+          "plex": {
+            "guid": "5d9c080008fddd001f28f9ab",
+            "slug": "the-rabbit-at-midnight"
+          },
+          "slug": "the-rabbit-at-midnight",
+          "tmdb": 141,
+          "tvdb": 77623,
+          "trakt": 140
+        },
+        "year": 1982,
+        "title": "The Rabbit at Midnight",
+        "aired_episodes": 270
+      },
+      "rank": 20,
+      "id": 120284241,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0290978",
+          "plex": {
+            "guid": "5d9c08762192ba001f311efc",
+            "slug": "midnight-archive-bellhaven"
+          },
+          "slug": "midnight-archive-bellhaven",
+          "tmdb": 2996,
+          "tvdb": 78107,
+          "trakt": 2976
+        },
+        "year": 2001,
+        "title": "Midnight Archive: Bellhaven",
+        "aired_episodes": 12
+      },
+      "rank": 21,
+      "id": 120284242,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt1492966",
+          "plex": {
+            "guid": "5d9c07f7ef619b002047ba63",
+            "slug": "blue-signal-bellhaven"
+          },
+          "slug": "blue-signal-bellhaven",
+          "tmdb": 32962,
+          "tvdb": 155201,
+          "trakt": 32820
+        },
+        "year": 2010,
+        "title": "Blue Signal: Bellhaven",
+        "aired_episodes": 61
+      },
+      "rank": 22,
+      "id": 120284243,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0348914",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f2",
+            "slug": "falling-beacon-juniper-vale"
+          },
+          "slug": "falling-beacon-juniper-vale",
+          "tmdb": 1406,
+          "tvdb": 72023,
+          "trakt": 1397
+        },
+        "year": 2004,
+        "title": "Falling Beacon: Juniper Vale",
+        "aired_episodes": 36
+      },
+      "rank": 23,
+      "id": 120284244,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0758745",
+          "plex": {
+            "guid": "5d9c0814170e24001f2a75d1",
+            "slug": "brass-compass-larkspur"
+          },
+          "slug": "brass-compass-larkspur",
+          "tmdb": 4278,
+          "tvdb": 79337,
+          "trakt": 4254
+        },
+        "year": 2006,
+        "title": "Brass Compass: Larkspur",
+        "aired_episodes": 76
+      },
+      "rank": 24,
+      "id": 120284245,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt1759761",
+          "plex": {
+            "guid": "5d9c081b7b5c2e001e654a03",
+            "slug": "velvet-signal-willow-reach"
+          },
+          "slug": "velvet-signal-willow-reach",
+          "tmdb": 2947,
+          "tvdb": 237831,
+          "trakt": 2927
+        },
+        "year": 2012,
+        "title": "Velvet Signal: Willow Reach",
+        "aired_episodes": 65
+      },
+      "rank": 25,
+      "id": 120284246,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0108778",
+          "plex": {
+            "guid": "5d9c086d2192ba001f3101c6",
+            "slug": "six-on-the-landing"
+          },
+          "slug": "six-on-the-landing",
+          "tmdb": 1668,
+          "tvdb": 79168,
+          "trakt": 1657
+        },
+        "year": 1994,
+        "title": "Six on the Landing",
+        "aired_episodes": 228
+      },
+      "rank": 26,
+      "id": 120284247,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0367279",
+          "plex": {
+            "guid": "5d9c086f2df347001e3b27b0",
+            "slug": "emerald-garden-moonridge"
+          },
+          "slug": "emerald-garden-moonridge",
+          "tmdb": 4589,
+          "tvdb": 72173,
+          "trakt": 4565
+        },
+        "year": 2003,
+        "title": "Emerald Garden: Moonridge",
+        "aired_episodes": 84
+      },
+      "rank": 27,
+      "id": 120284248,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0106179",
+          "plex": {
+            "guid": "5d9c0806e264b7001fc3a3a8",
+            "slug": "silent-harbor-glassford"
+          },
+          "slug": "silent-harbor-glassford",
+          "tmdb": 4087,
+          "tvdb": 77398,
+          "trakt": 4063
+        },
+        "year": 1993,
+        "title": "Silent Harbor: Glassford",
+        "aired_episodes": 218
+      },
+      "rank": 28,
+      "id": 120284249,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0063929",
+          "plex": {
+            "guid": "5d9c081a0aaccd001f8ed7a4",
+            "slug": "hidden-valley-cedar-point"
+          },
+          "slug": "hidden-valley-cedar-point",
+          "tmdb": 849,
+          "tvdb": 75853,
+          "trakt": 846
+        },
+        "year": 1969,
+        "title": "Hidden Valley: Cedar Point",
+        "aired_episodes": 45
+      },
+      "rank": 29,
+      "id": 120284250,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0055708",
+          "plex": {
+            "guid": "5d9c0871cb3ffa001f1b5357",
+            "slug": "distant-orchard-glassford"
+          },
+          "slug": "distant-orchard-glassford",
+          "tmdb": 2261,
+          "tvdb": 70334,
+          "trakt": 2247
+        },
+        "year": 1962,
+        "title": "Distant Orchard: Glassford",
+        "aired_episodes": 5876
+      },
+      "rank": 30,
+      "id": 120284251,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0063951",
+          "plex": {
+            "guid": "5d9c08172192ba001f3071b9",
+            "slug": "falling-orchard-juniper-vale"
+          },
+          "slug": "falling-orchard-juniper-vale",
+          "tmdb": 502,
+          "tvdb": 78419,
+          "trakt": 501
+        },
+        "year": 1969,
+        "title": "Falling Orchard: Juniper Vale",
+        "aired_episodes": 3590
+      },
+      "rank": 31,
+      "id": 120284252,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0043208",
+          "plex": {
+            "guid": "5fc698165c7239002d374d20",
+            "slug": "emerald-garden-queensport"
+          },
+          "slug": "emerald-garden-queensport",
+          "tmdb": 2730,
+          "tvdb": 70584,
+          "trakt": 2712
+        },
+        "year": 1951,
+        "title": "Emerald Garden: Queensport",
+        "aired_episodes": 180
+      },
+      "rank": 32,
+      "id": 120284253,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0121955",
+          "plex": {
+            "guid": "5d9c08742192ba001f311a5d",
+            "slug": "four-corners-one-small-town"
+          },
+          "slug": "four-corners-one-small-town",
+          "tmdb": 2190,
+          "tvdb": 75897,
+          "trakt": 2177
+        },
+        "year": 1997,
+        "title": "Four Corners, One Small Town",
+        "aired_episodes": 332
+      },
+      "rank": 33,
+      "id": 120284254,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0496424",
+          "plex": {
+            "guid": "5d9c086fffd9ef001e994da8",
+            "slug": "silver-station-kingswell"
+          },
+          "slug": "silver-station-kingswell",
+          "tmdb": 4608,
+          "tvdb": 79488,
+          "trakt": 4584
+        },
+        "year": 2006,
+        "title": "Silver Station: Kingswell",
+        "aired_episodes": 138
+      },
+      "rank": 34,
+      "id": 120284255,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0108872",
+          "plex": {
+            "guid": "5d9c086b705e7a001e6dbd9b",
+            "slug": "brass-window-glassford"
+          },
+          "slug": "brass-window-glassford",
+          "tmdb": 1101,
+          "tvdb": 78644,
+          "trakt": 1096
+        },
+        "year": 1994,
+        "title": "Brass Window: Glassford",
+        "aired_episodes": 19
+      },
+      "rank": 35,
+      "id": 120284256,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0098844",
+          "plex": {
+            "guid": "5d9c0819e264b7001fc3c03a",
+            "slug": "midnight-garden-stonehaven"
+          },
+          "slug": "midnight-garden-stonehaven",
+          "tmdb": 549,
+          "tvdb": 72368,
+          "trakt": 548
+        },
+        "year": 1990,
+        "title": "Midnight Garden: Stonehaven",
+        "aired_episodes": 544
+      },
+      "rank": 36,
+      "id": 120284257,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt2372162",
+          "plex": {
+            "guid": "5d9c086c3c3f87001f34f634",
+            "slug": "amber-beacon-alder-bay"
+          },
+          "slug": "amber-beacon-alder-bay",
+          "tmdb": 1424,
+          "tvdb": 264586,
+          "trakt": 1415
+        },
+        "year": 2013,
+        "title": "Amber Beacon: Alder Bay",
+        "aired_episodes": 91
+      },
+      "rank": 37,
+      "id": 289366076,
+      "listed_at": "2017-09-30T22:19:44.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0118276",
+          "plex": {
+            "guid": "5d9c07fe4eefaa001f5d2d00",
+            "slug": "crimson-archive-oak-harbor"
+          },
+          "slug": "crimson-archive-oak-harbor",
+          "tmdb": 95,
+          "tvdb": 70327,
+          "trakt": 94
+        },
+        "year": 1997,
+        "title": "Crimson Archive: Oak Harbor",
+        "aired_episodes": 144
+      },
+      "rank": 38,
+      "id": 120284259,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0411008",
+          "plex": {
+            "guid": "5d9c086fe9d5a1001f4d9fe6",
+            "slug": "scarlet-beacon-eastmere"
+          },
+          "slug": "scarlet-beacon-eastmere",
+          "tmdb": 4607,
+          "tvdb": 73739,
+          "trakt": 4583
+        },
+        "year": 2004,
+        "title": "Scarlet Beacon: Eastmere",
+        "aired_episodes": 118
+      },
+      "rank": 39,
+      "id": 120284260,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0286486",
+          "plex": {
+            "guid": "5d9c086c02391c001f5891c3",
+            "slug": "ivory-voyage-willow-reach"
+          },
+          "slug": "ivory-voyage-willow-reach",
+          "tmdb": 1414,
+          "tvdb": 78261,
+          "trakt": 1405
+        },
+        "year": 2002,
+        "title": "Ivory Voyage: Willow Reach",
+        "aired_episodes": 88
+      },
+      "rank": 40,
+      "id": 120284261,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0042114",
+          "plex": {
+            "guid": "5d9c0830ba6eb9001fb9e179",
+            "slug": "quiet-signal-dunmere"
+          },
+          "slug": "quiet-signal-dunmere",
+          "tmdb": 4439,
+          "tvdb": 73923,
+          "trakt": 4415
+        },
+        "year": 1955,
+        "title": "Quiet Signal: Dunmere",
+        "aired_episodes": 39
+      },
+      "rank": 41,
+      "id": 120284262,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0106079",
+          "plex": {
+            "guid": "5d9c0801cb3ffa001f1b134a",
+            "slug": "emerald-horizon-highwater"
+          },
+          "slug": "emerald-horizon-highwater",
+          "tmdb": 194,
+          "tvdb": 73132,
+          "trakt": 193
+        },
+        "year": 1993,
+        "title": "Emerald Horizon: Highwater",
+        "aired_episodes": 261
+      },
+      "rank": 42,
+      "id": 120284263,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt2149175",
+          "plex": {
+            "guid": "5d9c0869e98e47001eb0ee17",
+            "slug": "northern-valley-glassford"
+          },
+          "slug": "northern-valley-glassford",
+          "tmdb": 46533,
+          "tvdb": 261690,
+          "trakt": 46263
+        },
+        "year": 2013,
+        "title": "Northern Valley: Glassford",
+        "aired_episodes": 75
+      },
+      "rank": 43,
+      "id": 120284264,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt1466074",
+          "plex": {
+            "guid": "5d9c081aec357c001f9a9e1e",
+            "slug": "emerald-passage-dunmere"
+          },
+          "slug": "emerald-passage-dunmere",
+          "tmdb": 873,
+          "tvdb": 70369,
+          "trakt": 868
+        },
+        "year": 1971,
+        "title": "Emerald Passage: Dunmere",
+        "aired_episodes": 67
+      },
+      "rank": 44,
+      "id": 120284265,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0407362",
+          "plex": {
+            "guid": "5d9c08cdba6eb9001fbaa78e",
+            "slug": "amber-valley-northbridge"
+          },
+          "slug": "amber-valley-northbridge",
+          "tmdb": 1972,
+          "tvdb": 73545,
+          "trakt": 1959
+        },
+        "year": 2004,
+        "title": "Amber Valley: Northbridge",
+        "aired_episodes": 73
+      },
+      "rank": 45,
+      "id": 120284266,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0065314",
+          "plex": {
+            "guid": "5d9c08757b5c2e001e65ccae",
+            "slug": "brass-harbor-pinewatch"
+          },
+          "slug": "brass-harbor-pinewatch",
+          "tmdb": 2962,
+          "tvdb": 77051,
+          "trakt": 2942
+        },
+        "year": 1970,
+        "title": "Brass Harbor: Pinewatch",
+        "aired_episodes": 168
+      },
+      "rank": 46,
+      "id": 120284267,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0071042",
+          "plex": {
+            "guid": "5d9c08276c3e37001ecd50d4",
+            "slug": "ivory-passage-highwater"
+          },
+          "slug": "ivory-passage-highwater",
+          "tmdb": 954,
+          "tvdb": 71219,
+          "trakt": 949
+        },
+        "year": 1974,
+        "title": "Ivory Passage: Highwater",
+        "aired_episodes": 122
+      },
+      "rank": 47,
+      "id": 120284268,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0386676",
+          "plex": {
+            "guid": "5d9c0873ef619b002047fda0",
+            "slug": "the-paper-supply-company"
+          },
+          "slug": "the-paper-supply-company",
+          "tmdb": 2316,
+          "tvdb": 73244,
+          "trakt": 2302
+        },
+        "year": 2005,
+        "title": "The Paper Supply Company",
+        "aired_episodes": 186
+      },
+      "rank": 48,
+      "id": 120284269,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0077089",
+          "plex": {
+            "guid": "5d9c08727b5c2e001e65c2a3",
+            "slug": "midnight-crown-oak-harbor"
+          },
+          "slug": "midnight-crown-oak-harbor",
+          "tmdb": 2251,
+          "tvdb": 71527,
+          "trakt": 2237
+        },
+        "year": 1978,
+        "title": "Midnight Crown: Oak Harbor",
+        "aired_episodes": 114
+      },
+      "rank": 49,
+      "id": 120284270,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0108757",
+          "plex": {
+            "guid": "5d9c086e3c3f87001f34fcfa",
+            "slug": "falling-echo-northbridge"
+          },
+          "slug": "falling-echo-northbridge",
+          "tmdb": 4588,
+          "tvdb": 70761,
+          "trakt": 4564
+        },
+        "year": 1994,
+        "title": "Falling Echo: Northbridge",
+        "aired_episodes": 331
+      },
+      "rank": 50,
+      "id": 120284271,
+      "listed_at": "2016-10-04T11:00:58.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

@@ -1,0 +1,474 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11095",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1eda860f7105534bcb3a090ce8cbeaaf\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/eW6CqrGSRUk6xMbdCjreMQiP5W8.jpg",
+    "created_by": [
+      {
+        "id": 1856374,
+        "credit_id": "6225671c95acf0004464de53",
+        "name": "Morgan Finch",
+        "original_name": "Morgan Finch",
+        "gender": 2,
+        "profile_path": "/uOFfEaWRxrlWcefcmZP1tBv15Mh.jpg"
+      },
+      {
+        "id": 3443779,
+        "credit_id": "6225672995acf0001c852f5c",
+        "name": "Casey Cross",
+        "original_name": "Casey Cross",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [
+      61
+    ],
+    "first_air_date": "2022-02-25",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/series/crimson-archive-bellhaven",
+    "id": 112833,
+    "in_production": false,
+    "languages": [
+      "ko"
+    ],
+    "last_air_date": "2022-02-25",
+    "last_episode_to_air": {
+      "id": 3525628,
+      "name": "Blue Crown",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.7,
+      "vote_count": 3,
+      "air_date": "2022-02-25",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 69,
+      "season_number": 1,
+      "show_id": 112833,
+      "still_path": "/4QP0II1diJOusLYOwhPEl0Lz4K5.jpg"
+    },
+    "name": "Crimson Archive: Bellhaven",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Bright Crown Network",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "KR"
+    ],
+    "original_language": "ko",
+    "original_name": "Crimson Archive: Bellhaven",
+    "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 9.5051,
+    "poster_path": "/xH2wTVlsUlYeFEOVGFDaamHkMCm.jpg",
+    "production_companies": [
+      {
+        "id": 125785,
+        "logo_path": "/mKggf3wW57fHdffiOr9ItObOFYD.png",
+        "name": "Falling Window Studios",
+        "origin_country": "KR"
+      },
+      {
+        "id": 116612,
+        "logo_path": "/8W2iPa0Cshd3fjMSeY4o8981Dbr.png",
+        "name": "Crimson Garden Studios",
+        "origin_country": "KR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-02-25",
+        "episode_count": 10,
+        "id": 168156,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/mXMtMWTKnZKqmqeIKVKOFUAwEVN.jpg",
+        "season_number": 1,
+        "vote_average": 8.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Korean",
+        "iso_639_1": "ko",
+        "name": "한국어/조선말"
+      }
+    ],
+    "status": "Canceled",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 8.1,
+    "vote_count": 265,
+    "external_ids": {
+      "imdb_id": "tt15553922",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 403495,
+      "tvrage_id": null,
+      "wikidata_id": "Q108688881",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Crimson Archive: Bellhaven",
+            "overview": "Crimson Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

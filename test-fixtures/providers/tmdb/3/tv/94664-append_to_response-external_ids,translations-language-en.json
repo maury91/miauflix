@@ -1,0 +1,667 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21304",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a4be68e4777136d24eb08b5214d77e95\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/j9fRIimor0AMFJR9kjZubXcABzZ.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2021-01-11",
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://example.test/films/the-jobless-mages-second-life",
+    "id": 94664,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-09-21",
+    "last_episode_to_air": {
+      "id": 7478568,
+      "name": "Bright Meridian",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.4,
+      "vote_count": 10,
+      "air_date": "2026-09-21",
+      "episode_number": 13,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 3,
+      "show_id": 94664,
+      "still_path": "/wL2RFJZOQKaaREKkv0DxifHgu43.jpg"
+    },
+    "name": "The Jobless Mage's Second Life",
+    "next_episode_to_air": {
+      "id": 7478569,
+      "name": "Copper Lantern",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 5,
+      "vote_count": 2,
+      "air_date": "2026-09-28",
+      "episode_number": 14,
+      "episode_type": "mid_season",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 3,
+      "show_id": 94664,
+      "still_path": "/wr6b0gP5nRqZNnjcRZt1rVQ0IZ8.jpg"
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Silent River Network",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "Last Harbor Network",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1137,
+        "logo_path": "/j12pSWPsDBxE1mmIpB7M8VRzk78.png",
+        "name": "Quiet Bridge Network",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 61,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "The Jobless Mage's Second Life",
+    "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+    "popularity": 281.4746,
+    "poster_path": "/1mFnzilCyj9Coa9jbN8vFYLEZdW.jpg",
+    "production_companies": [
+      {
+        "id": 124275,
+        "logo_path": "/b3gxPqVIVIeHDMLt1Lr0WvuxYwP.png",
+        "name": "Golden Meridian Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 95809,
+        "logo_path": "/5ac8LhghlxYKbPSwbXJkgrNfjGF.png",
+        "name": "Crimson Crown Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 142186,
+        "logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+        "name": "Northern Beacon Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 5809,
+        "logo_path": "/bViN2LqqtONjOTkYmPtnMNaVOtD.png",
+        "name": "Northern Lantern Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "Scarlet Sky Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162011,
+        "logo_path": "/bg6yrVhnmv6eNE8cMWehyE9wAeb.png",
+        "name": "Ivory Station Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 882,
+        "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+        "name": "Brass Orchard Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "Emerald Archive Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 151191,
+        "logo_path": "/wBA1v3dFtpRARIE7sYxc657x7rQ.png",
+        "name": "Hidden Echo Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-03-16",
+        "episode_count": 3,
+        "id": 219489,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/3ntv52qLbdAOmOIRUe3xkq9Xz2p.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2021-01-11",
+        "episode_count": 23,
+        "id": 134338,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/4vEel9ztoC3PtQFOkthVPtdlWQr.jpg",
+        "season_number": 1,
+        "vote_average": 5
+      },
+      {
+        "air_date": "2023-07-10",
+        "episode_count": 24,
+        "id": 334394,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/kVHnRfj5c7rzetzMPlRQXEZRzkH.jpg",
+        "season_number": 2,
+        "vote_average": 4.1
+      },
+      {
+        "air_date": "2026-07-04",
+        "episode_count": 14,
+        "id": 400493,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/tO5Fwg59DZkTB2VrC2UEIS2VrEk.jpg",
+        "season_number": 3,
+        "vote_average": 5.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "A second life is a chance to begin again.",
+    "type": "Scripted",
+    "vote_average": 8.423,
+    "vote_count": 1741,
+    "external_ids": {
+      "imdb_id": "tt13293588",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 371310,
+      "tvrage_id": null,
+      "wikidata_id": "Q102126892",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "mushokutensei_A"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "FO",
+          "iso_639_1": "fo",
+          "name": "",
+          "english_name": "Faroese",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "IS",
+          "iso_639_1": "is",
+          "name": "Íslenska",
+          "english_name": "Icelandic",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "The Jobless Mage's Second Life",
+            "overview": "A directionless man dies with regrets and awakens as a gifted child in a world of magic. Given a second chance, he studies, travels, and builds new bonds while trying not to repeat the mistakes that defined his first life.",
+            "homepage": "https://example.test/films/the-jobless-mages-second-life",
+            "tagline": "A second life is a chance to begin again."
+          }
+        }
+      ]
+    }
+  }
+}

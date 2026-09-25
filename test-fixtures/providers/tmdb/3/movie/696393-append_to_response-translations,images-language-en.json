@@ -1,0 +1,873 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10712",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"059e6c72eb9dcb8f3c9e539c5de4739c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/puqQGxK9HYITUKhCdREg3XOLlZd.jpg",
+    "belongs_to_collection": null,
+    "budget": 10000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/cold-storage-spore-shift",
+    "id": 696393,
+    "imdb_id": "tt8879928",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Cold Storage: Spore Shift",
+    "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+    "popularity": 14.1164,
+    "poster_path": "/3HA2iiq982e01EKXJvPFyfMADVM.jpg",
+    "production_companies": [
+      {
+        "id": 275988,
+        "logo_path": "/y4GU9rJyElzf58iSPtwhUSVegHU.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 113521,
+        "logo_path": "/fWQ9uEqIKuPukxrbZEUIrkPRrjs.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 218178,
+        "logo_path": "/fWQ9uEqIKuPukxrbZEUIrkPRrjs.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-01-22",
+    "revenue": 4048606,
+    "runtime": 99,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Clock out before it spreads.",
+    "title": "Cold Storage: Spore Shift",
+    "video": false,
+    "vote_average": 6.748,
+    "vote_count": 783,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 98,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 99,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/cold-storage-spore-shift",
+            "overview": "Two night workers and a veteran containment specialist battle an escaped fungus that mutates faster than the facility can seal it.",
+            "runtime": 0,
+            "tagline": "Clock out before it spreads.",
+            "title": "Cold Storage: Spore Shift"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/554aq6mO4D4mKhZC7umdHiDzgIV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6OscfK1YDrzWYl0FQJUyuWdak9a.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sBhVpX1DI7S61xpx0c8sBpo1lOP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c3SYkItGccj0xIYGSwANpSRYyqM.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dJKARKq2fLSpjNtvGTSkCQtzq7Y.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2rXpVOijwOTlDmWxAF0gqag037u.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.741,
+          "height": 1294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xZss9D0jknRteWrlXwK2JkgdTD3.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3547
+        },
+        {
+          "aspect_ratio": 2.755,
+          "height": 1608,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8WJOxBYXz3O0GrCsIOfWEIonmHq.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4430
+        },
+        {
+          "aspect_ratio": 2.739,
+          "height": 701,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g72Klrk7etavfTqYFan3rTRiZSW.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 2.735,
+          "height": 702,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9hJzqdl2wPx5VU1UJ7HSQcoPNQ3.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 9.465,
+          "height": 600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hrf0uAVVtjVTITfmN1ZsLJy59E9.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 5679
+        },
+        {
+          "aspect_ratio": 1.98,
+          "height": 200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/olCmxgNRXLzVxA8YENNKKZCTnfs.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 396
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3HA2iiq982e01EKXJvPFyfMADVM.jpg",
+          "vote_average": 6.722,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pfqkETJ2A3zXZJuNcufZbAJNnKA.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lKUetXahwNAAcQUCJMhfjIazz9X.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g2ghCRvyrDGTJZ5CGOqJxE2T3wA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gZgWy4SDBDr5qmn2ql6H0uO7hMY.jpg",
+          "vote_average": 2.278,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1KJDFsRxQWtbjIJoS4DCeCoEDQA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rHFqRBz9mMJGRNGGglZbYUT5noT.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cspe06anYq41h44nE0dLSGkTucC.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rLD0JfMSmDwdc0XNemKgAqp0ccp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1172,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cNk7Mko7IEqSJJ4ur6iogfzDQ27.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 791
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gGVAGx9nPSBi27NnjbBVVoKeBni.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/negFZF9FuMZqvhFxksr3UDHg3hj.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8pZ925dmQNJp5TniVSt4Yvy9BJx.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8EKa9iND9F2SHI2Blz0Qphu5dvO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2820,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aoECTFtIqnKeRkATLpWlCMPmCAn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1880
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 911,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eVdp5V4b0WUoGloi4LakB8RuQcd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 608
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pjEsXFZZqgCjYkhaFkSd8QqplN9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

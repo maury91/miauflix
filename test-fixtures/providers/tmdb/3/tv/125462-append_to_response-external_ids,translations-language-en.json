@@ -1,0 +1,539 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11136",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c92804ee50bc8b50226044d6c855bfdc\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gk59zeyg5nB3XXWZ4LuV3yI5VI2.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2023-04-05",
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+    "id": 125462,
+    "in_production": false,
+    "languages": [
+      "es"
+    ],
+    "last_air_date": "2023-04-05",
+    "last_episode_to_air": {
+      "id": 2946602,
+      "name": "Ivory Garden",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2023-04-05",
+      "episode_number": 8,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 22,
+      "season_number": 1,
+      "show_id": 125462,
+      "still_path": "/qlKQUl69PuI6QckrKLBKUR6f8Bh.jpg"
+    },
+    "name": "Crimson Horizon: Oak Harbor",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2739,
+        "logo_path": "/1edZOYAfoyZyZ3rklNSiUpXX30Q.png",
+        "name": "Copper Echo Network",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "MX"
+    ],
+    "original_language": "es",
+    "original_name": "Crimson Horizon: Oak Harbor",
+    "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 5.1359,
+    "poster_path": "/z0s0th8B0ccWfQ3bm3bqYnXsGoI.jpg",
+    "production_companies": [
+      {
+        "id": 120870,
+        "logo_path": "/dMYLtwOxqQWZGlNqO3Cefp7MEZU.png",
+        "name": "Scarlet Compass Studios",
+        "origin_country": "MX"
+      },
+      {
+        "id": 236852,
+        "logo_path": "/g63oayj2G9WUVccmvGwhdYU8LtD.png",
+        "name": "Brass Valley Studios",
+        "origin_country": "CO"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CO",
+        "name": "Colombia"
+      },
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-04-05",
+        "episode_count": 8,
+        "id": 194662,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/z0s0th8B0ccWfQ3bm3bqYnXsGoI.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 6.7,
+    "vote_count": 27,
+    "external_ids": {
+      "imdb_id": "tt15090858",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 424591,
+      "tvrage_id": null,
+      "wikidata_id": "Q117190125",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Crimson Horizon: Oak Harbor",
+            "overview": "Crimson Horizon: Oak Harbor follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-horizon-oak-harbor",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

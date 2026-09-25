@@ -12,6 +12,20 @@ set -e
 
 MODE="$1"
 
+# Preserve explicit provider-recording requests when the repository .env is loaded below.
+record_provider_fixtures_was_set=false
+record_provider_fixtures_requested=''
+if [[ -n "${RECORD_PROVIDER_FIXTURES+x}" ]]; then
+    record_provider_fixtures_was_set=true
+    record_provider_fixtures_requested="$RECORD_PROVIDER_FIXTURES"
+fi
+home_cross_load_was_set=false
+home_cross_load_requested=''
+if [[ -n "${E2E_HOME_CROSS_LOAD+x}" ]]; then
+    home_cross_load_was_set=true
+    home_cross_load_requested="$E2E_HOME_CROSS_LOAD"
+fi
+
 script_dir=$(dirname $(realpath "$0"))
 backend_e2e_dir=$(dirname "$script_dir")
 root_dir=$(dirname "$backend_e2e_dir")
@@ -144,13 +158,29 @@ export GROUP_ID=$(id -g)
 # Load environment variables if .env exists
 cd "$root_dir"
 if [[ -f ".env" ]]; then
-    export $(grep -v '^#' .env | xargs)
+    # Load dotenv assignments without tokenizing comments or quoted values.
+    set -a
+    source .env
+    set +a
     echo "🔧 Loaded environment variables from .env file"
 else
     echo "⚠️  No .env file found, using default environment variables"
     export TMDB_API_ACCESS_TOKEN="mock-tmdb-token-for-testing"
     export TRAKT_CLIENT_ID="mock-trakt-client-id"
     export TRAKT_CLIENT_SECRET="mock-trakt-client-secret"
+fi
+
+if [[ "$record_provider_fixtures_was_set" == "true" ]]; then
+    export RECORD_PROVIDER_FIXTURES="$record_provider_fixtures_requested"
+fi
+if [[ "$home_cross_load_was_set" == "true" ]]; then
+    export E2E_HOME_CROSS_LOAD="$home_cross_load_requested"
+fi
+
+# The background-priority E2E lane must be deterministic even when a developer's
+# local .env contains the normal disabled-worker setting.
+if [[ "${BACKGROUND_TASKS_ENABLED:-false}" == "true" ]]; then
+    export DISABLE_BACKGROUND_TASKS=false
 fi
 
 if [[ "$INITIAL_SETUP" == "true" ]]; then
@@ -370,7 +400,11 @@ else
             npm run test:e2e:update -w frontend || FRONTEND_TEST_PASSED=false
         else
             echo "🧪 Running frontend integration tests..."
-            npm run test:e2e -w frontend || FRONTEND_TEST_PASSED=false
+            if [[ "$FRONTEND_ONLY" == "true" && $# -gt 0 ]]; then
+                npm run test:e2e -w frontend -- "$@" || FRONTEND_TEST_PASSED=false
+            else
+                npm run test:e2e -w frontend || FRONTEND_TEST_PASSED=false
+            fi
         fi
     else
         echo "⏭️  Skipping frontend tests (--backend-only flag)"

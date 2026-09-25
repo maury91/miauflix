@@ -1,0 +1,873 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "2579",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,trending,movie",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 14:45:09 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "160",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "4",
+    "x-permitted-cross-domain-policies": "none",
+    "x-trending-user-count": "14648"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "watchers": 2010,
+      "movie": {
+        "ids": {
+          "imdb": "tt22526100",
+          "plex": {
+            "guid": "63431d1b569aac9831dcf041",
+            "slug": "a-theory-of-us"
+          },
+          "slug": "a-theory-of-us-2026",
+          "tmdb": 1032863,
+          "trakt": 830859
+        },
+        "year": 2026,
+        "title": "A Theory of Us"
+      }
+    },
+    {
+      "watchers": 1497,
+      "movie": {
+        "ids": {
+          "imdb": "tt27165187",
+          "plex": {
+            "guid": "641767e7638dfece82b97835",
+            "slug": "the-block-beyond"
+          },
+          "slug": "the-block-beyond-2026",
+          "tmdb": 1101383,
+          "trakt": 885985
+        },
+        "year": 2026,
+        "title": "The Block Beyond"
+      }
+    },
+    {
+      "watchers": 895,
+      "movie": {
+        "ids": {
+          "imdb": "tt35538033",
+          "plex": {
+            "guid": "67a23f4861078f9079534716",
+            "slug": "city-hospital-outbreak"
+          },
+          "slug": "city-hospital-outbreak-2026",
+          "tmdb": 1423191,
+          "trakt": 1164118
+        },
+        "year": 2026,
+        "title": "City Hospital: Outbreak"
+      }
+    },
+    {
+      "watchers": 594,
+      "movie": {
+        "ids": {
+          "imdb": "tt28014327",
+          "plex": {
+            "guid": "6488a8b8f542e5c273e5ae08",
+            "slug": "behind-the-lines"
+          },
+          "slug": "behind-the-lines-2026",
+          "tmdb": 1137844,
+          "trakt": 916057
+        },
+        "year": 2026,
+        "title": "Behind the Lines"
+      }
+    },
+    {
+      "watchers": 465,
+      "movie": {
+        "ids": {
+          "imdb": "tt29355505",
+          "plex": {
+            "guid": "63e52aa555e2324b6e9f5f6e",
+            "slug": "playtime-protocol"
+          },
+          "slug": "playtime-protocol-2026",
+          "tmdb": 1084244,
+          "trakt": 871500
+        },
+        "year": 2026,
+        "title": "Playtime Protocol"
+      }
+    },
+    {
+      "watchers": 392,
+      "movie": {
+        "ids": {
+          "imdb": "tt8820258",
+          "plex": {
+            "guid": "5e5d3afec63f3a003ef1a813",
+            "slug": "super-troopers-wedding-detail"
+          },
+          "slug": "super-troopers-wedding-detail-2026",
+          "tmdb": 675871,
+          "trakt": 509004
+        },
+        "year": 2026,
+        "title": "Super Troopers: Wedding Detail"
+      }
+    },
+    {
+      "watchers": 377,
+      "movie": {
+        "ids": {
+          "imdb": "tt1756855",
+          "plex": {
+            "guid": "5d77707b81ba41001faf1629",
+            "slug": "coyote-county-v-meridian-supply"
+          },
+          "slug": "coyote-county-v-meridian-supply-2026",
+          "tmdb": 1204680,
+          "trakt": 970531
+        },
+        "year": 2026,
+        "title": "Coyote County v. Meridian Supply"
+      }
+    },
+    {
+      "watchers": 376,
+      "movie": {
+        "ids": {
+          "imdb": "tt37971717",
+          "plex": {
+            "guid": "68c603c2bb8b7d207aec1efb",
+            "slug": "missile-lock"
+          },
+          "slug": "missile-lock-2026",
+          "tmdb": 1607127,
+          "trakt": 1335343
+        },
+        "year": 2026,
+        "title": "Missile Lock"
+      }
+    },
+    {
+      "watchers": 356,
+      "movie": {
+        "ids": {
+          "imdb": "tt6628920",
+          "plex": {
+            "guid": "5d776f5f47dd6e001f704cc4",
+            "slug": "two-drivers-and-a-detour"
+          },
+          "slug": "two-drivers-and-a-detour-2026",
+          "tmdb": 445466,
+          "trakt": 292262
+        },
+        "year": 2026,
+        "title": "Two Drivers and a Detour"
+      }
+    },
+    {
+      "watchers": 331,
+      "movie": {
+        "ids": {
+          "imdb": "tt4154796",
+          "plex": {
+            "guid": "5d776b37fb0d55001f56046d",
+            "slug": "the-final-equation"
+          },
+          "slug": "the-final-equation-2019",
+          "tmdb": 299534,
+          "trakt": 191798
+        },
+        "year": 2019,
+        "title": "The Final Equation"
+      }
+    },
+    {
+      "watchers": 331,
+      "movie": {
+        "ids": {
+          "imdb": "tt22084616",
+          "plex": {
+            "guid": "5ed8a6246e2d7200411126cf",
+            "slug": "the-unseen-threat"
+          },
+          "slug": "the-unseen-threat-2026",
+          "tmdb": 969681,
+          "trakt": 905132
+        },
+        "year": 2026,
+        "title": "The Unseen Threat"
+      }
+    },
+    {
+      "watchers": 331,
+      "movie": {
+        "ids": {
+          "imdb": "tt35298123",
+          "plex": {
+            "guid": "6780d7aa5d22e687d518cc07",
+            "slug": "camp-miasma-the-final-cut"
+          },
+          "slug": "camp-miasma-the-final-cut-2026",
+          "tmdb": 1240889,
+          "trakt": 1004362
+        },
+        "year": 2026,
+        "title": "Camp Miasma: The Final Cut"
+      }
+    },
+    {
+      "watchers": 328,
+      "movie": {
+        "ids": {
+          "imdb": "tt7526136",
+          "plex": {
+            "guid": "5f40d307bf3e560040d6b66e",
+            "slug": "white-fang-patrol"
+          },
+          "slug": "white-fang-patrol-2026",
+          "tmdb": 1263337,
+          "trakt": 1025172
+        },
+        "year": 2026,
+        "title": "White Fang Patrol"
+      }
+    },
+    {
+      "watchers": 277,
+      "movie": {
+        "ids": {
+          "imdb": "tt26657236",
+          "plex": {
+            "guid": "63e28b6d774d2d504b6ff241",
+            "slug": "the-door-below"
+          },
+          "slug": "the-door-below-2026",
+          "tmdb": 1083381,
+          "trakt": 870815
+        },
+        "year": 2026,
+        "title": "The Door Below"
+      }
+    },
+    {
+      "watchers": 275,
+      "movie": {
+        "ids": {
+          "imdb": "tt37287335",
+          "plex": {
+            "guid": "6856893830a4aaafd5c4291d",
+            "slug": "wishwood"
+          },
+          "slug": "wishwood-2026",
+          "tmdb": 1339713,
+          "trakt": 1095879
+        },
+        "year": 2026,
+        "title": "Wishwood"
+      }
+    },
+    {
+      "watchers": 262,
+      "movie": {
+        "ids": {
+          "imdb": "tt33095251",
+          "plex": {
+            "guid": "66bd8236aa2252647b024b81",
+            "slug": "kitchen-summer"
+          },
+          "slug": "kitchen-summer-2026",
+          "tmdb": 1329016,
+          "trakt": 1087296
+        },
+        "year": 2026,
+        "title": "Kitchen Summer"
+      }
+    },
+    {
+      "watchers": 257,
+      "movie": {
+        "ids": {
+          "imdb": "tt33764258",
+          "plex": {
+            "guid": "670cb74204e43056959bd4b3",
+            "slug": "the-long-return"
+          },
+          "slug": "the-long-return-2026",
+          "tmdb": 1368337,
+          "trakt": 1117351
+        },
+        "year": 2026,
+        "title": "The Long Return"
+      }
+    },
+    {
+      "watchers": 252,
+      "movie": {
+        "ids": {
+          "imdb": "tt32338669",
+          "plex": {
+            "guid": "66405eced4e4bace15d4a05a",
+            "slug": "cargo-of-lies"
+          },
+          "slug": "cargo-of-lies-2026",
+          "tmdb": 1288445,
+          "trakt": 1048396
+        },
+        "year": 2026,
+        "title": "Cargo of Lies"
+      }
+    },
+    {
+      "watchers": 251,
+      "movie": {
+        "ids": {
+          "imdb": "tt36893729",
+          "plex": {
+            "guid": "682f309ea2734ce4bb43505a",
+            "slug": "sundae-of-the-damned"
+          },
+          "slug": "sundae-of-the-damned-2026",
+          "tmdb": 1477712,
+          "trakt": 1211187
+        },
+        "year": 2026,
+        "title": "Sundae of the Damned"
+      }
+    },
+    {
+      "watchers": 243,
+      "movie": {
+        "ids": {
+          "imdb": "tt11561116",
+          "plex": {
+            "guid": "5f40987e1ae710004115f516",
+            "slug": "the-whispering-house"
+          },
+          "slug": "the-whispering-house-2026",
+          "tmdb": 860508,
+          "trakt": 688185
+        },
+        "year": 2026,
+        "title": "The Whispering House"
+      }
+    },
+    {
+      "watchers": 232,
+      "movie": {
+        "ids": {
+          "imdb": "tt9601292",
+          "plex": {
+            "guid": "5f40dd7d52f20000416e2888",
+            "slug": "the-last-score"
+          },
+          "slug": "the-last-score-2026",
+          "tmdb": 1228834,
+          "trakt": 993380
+        },
+        "year": 2026,
+        "title": "The Last Score"
+      }
+    },
+    {
+      "watchers": 229,
+      "movie": {
+        "ids": {
+          "imdb": "tt27419466",
+          "plex": {
+            "guid": "642d485ce8b269a4b9c8a4a8",
+            "slug": "beyond-the-blue-reef"
+          },
+          "slug": "beyond-the-blue-reef-2026",
+          "tmdb": 1108427,
+          "trakt": 891793
+        },
+        "year": 2026,
+        "title": "Beyond the Blue Reef"
+      }
+    },
+    {
+      "watchers": 226,
+      "movie": {
+        "ids": {
+          "imdb": "tt8814476",
+          "plex": {
+            "guid": "5d77707231d95e001f1a1b39",
+            "slug": "starborn-exile"
+          },
+          "slug": "starborn-exile-2026",
+          "tmdb": 1081003,
+          "trakt": 868842
+        },
+        "year": 2026,
+        "title": "Starborn Exile"
+      }
+    },
+    {
+      "watchers": 211,
+      "movie": {
+        "ids": {
+          "imdb": "tt4154756",
+          "plex": {
+            "guid": "5d776b377a53e9001e71e283",
+            "slug": "the-six-relics"
+          },
+          "slug": "the-six-relics-2018",
+          "tmdb": 299536,
+          "trakt": 191797
+        },
+        "year": 2018,
+        "title": "The Six Relics"
+      }
+    },
+    {
+      "watchers": 204,
+      "movie": {
+        "ids": {
+          "imdb": "tt12042730",
+          "plex": {
+            "guid": "5e91843e9bec79003fe50ffb",
+            "slug": "astra-the-last-question"
+          },
+          "slug": "astra-the-last-question-2026",
+          "tmdb": 687163,
+          "trakt": 531178
+        },
+        "year": 2026,
+        "title": "Astra: The Last Question"
+      }
+    },
+    {
+      "watchers": 195,
+      "movie": {
+        "ids": {
+          "imdb": "tt37853455",
+          "plex": {
+            "guid": "67ae386f3c22b1734388d86c",
+            "slug": "the-one-night-rule"
+          },
+          "slug": "the-one-night-rule-2026",
+          "tmdb": 1433367,
+          "trakt": 1172561
+        },
+        "year": 2026,
+        "title": "The One-Night Rule"
+      }
+    },
+    {
+      "watchers": 191,
+      "movie": {
+        "ids": {
+          "imdb": "tt16478058",
+          "plex": {
+            "guid": "61c5c4e50ed50814a3b88bc3",
+            "slug": "dance-team-in-formation"
+          },
+          "slug": "dance-team-in-formation-2026",
+          "tmdb": 1514863,
+          "trakt": 1242796
+        },
+        "year": 2026,
+        "title": "Dance Team in Formation"
+      }
+    },
+    {
+      "watchers": 186,
+      "movie": {
+        "ids": {
+          "imdb": "tt30825738",
+          "plex": {
+            "guid": "659eea0148cee3ee85e48609",
+            "slug": "the-wayward-stars"
+          },
+          "slug": "the-wayward-stars-2026",
+          "tmdb": 1228710,
+          "trakt": 993003
+        },
+        "year": 2026,
+        "title": "The Wayward Stars"
+      }
+    },
+    {
+      "watchers": 184,
+      "movie": {
+        "ids": {
+          "imdb": "tt27681354",
+          "plex": {
+            "guid": "6456bd77fc0430a14eb16a44",
+            "slug": "the-grey-ledger"
+          },
+          "slug": "the-grey-ledger-2026",
+          "tmdb": 1122573,
+          "trakt": 903398
+        },
+        "year": 2026,
+        "title": "The Grey Ledger"
+      }
+    },
+    {
+      "watchers": 177,
+      "movie": {
+        "ids": {
+          "imdb": "tt15047880",
+          "plex": {
+            "guid": "6652e893d51f897868580ae9",
+            "slug": "signal-in-the-storm"
+          },
+          "slug": "signal-in-the-storm-2026",
+          "tmdb": 1275779,
+          "trakt": 1036433
+        },
+        "year": 2026,
+        "title": "Signal in the Storm"
+      }
+    },
+    {
+      "watchers": 176,
+      "movie": {
+        "ids": {
+          "imdb": "tt14173636",
+          "plex": {
+            "guid": "60448df6bd881e002cb9471e",
+            "slug": "dinner-upstairs"
+          },
+          "slug": "dinner-upstairs-2026",
+          "tmdb": 950028,
+          "trakt": 763652
+        },
+        "year": 2026,
+        "title": "Dinner Upstairs"
+      }
+    },
+    {
+      "watchers": 168,
+      "movie": {
+        "ids": {
+          "imdb": "tt36073210",
+          "plex": {
+            "guid": "67f728f097f5a99d6f6ca577",
+            "slug": "the-bodyguard-s-promise"
+          },
+          "slug": "the-bodyguard-s-promise-2026",
+          "tmdb": 1440098,
+          "trakt": 1367885
+        },
+        "year": 2026,
+        "title": "The Bodyguard's Promise"
+      }
+    },
+    {
+      "watchers": 167,
+      "movie": {
+        "ids": {
+          "imdb": "tt0120791",
+          "plex": {
+            "guid": "5d77683085719b001f3a2a24",
+            "slug": "the-sisters-inheritance"
+          },
+          "slug": "the-sisters-inheritance-1998",
+          "tmdb": 6435,
+          "trakt": 3616
+        },
+        "year": 1998,
+        "title": "The Sisters’ Inheritance"
+      }
+    },
+    {
+      "watchers": 167,
+      "movie": {
+        "ids": {
+          "imdb": "tt32890033",
+          "plex": {
+            "guid": "6693e558bb02d52ce0523254",
+            "slug": "monster-mayhem"
+          },
+          "slug": "monster-mayhem-2026",
+          "tmdb": 1315772,
+          "trakt": 1075712
+        },
+        "year": 2026,
+        "title": "Monster Mayhem"
+      }
+    },
+    {
+      "watchers": 152,
+      "movie": {
+        "ids": {
+          "imdb": "tt34564059",
+          "plex": {
+            "guid": "6738e193d70f01a8cec05ff0",
+            "slug": "miles-to-midnight"
+          },
+          "slug": "miles-to-midnight-2026",
+          "tmdb": 1386315,
+          "trakt": 1132946
+        },
+        "year": 2026,
+        "title": "Miles to Midnight"
+      }
+    },
+    {
+      "watchers": 151,
+      "movie": {
+        "ids": {
+          "imdb": "tt33305867",
+          "plex": {
+            "guid": "66d6337df928152963ab2f21",
+            "slug": "steam-and-seltzer"
+          },
+          "slug": "steam-and-seltzer-2026",
+          "tmdb": 1341138,
+          "trakt": 1097178
+        },
+        "year": 2026,
+        "title": "Steam and Seltzer"
+      }
+    },
+    {
+      "watchers": 132,
+      "movie": {
+        "ids": {
+          "imdb": "tt33296751",
+          "plex": {
+            "guid": "66d3f92a96f3a722ecbd8f01",
+            "slug": "the-safecracker-s-ear"
+          },
+          "slug": "the-safecracker-s-ear-2026",
+          "tmdb": 1340206,
+          "trakt": 1096313
+        },
+        "year": 2026,
+        "title": "The Safecracker's Ear"
+      }
+    },
+    {
+      "watchers": 124,
+      "movie": {
+        "ids": {
+          "imdb": "tt32333324",
+          "plex": {
+            "guid": "664081d9987087a6b1b31b63",
+            "slug": "the-broken-city"
+          },
+          "slug": "the-broken-city-2026",
+          "tmdb": 1560520,
+          "trakt": 1281643
+        },
+        "year": 2026,
+        "title": "The Broken City"
+      }
+    },
+    {
+      "watchers": 123,
+      "movie": {
+        "ids": {
+          "imdb": "tt31170389",
+          "plex": {
+            "guid": "65c258d1c2bbf6a01e0af8a5",
+            "slug": "vows-in-the-dark"
+          },
+          "slug": "vows-in-the-dark-2026",
+          "tmdb": 1212763,
+          "trakt": 977901
+        },
+        "year": 2026,
+        "title": "Vows in the Dark"
+      }
+    },
+    {
+      "watchers": 119,
+      "movie": {
+        "ids": {
+          "imdb": "tt29356163",
+          "plex": {
+            "guid": "6519a4470dfdf4d7c165c84a",
+            "slug": "dino-island-rescue"
+          },
+          "slug": "dino-island-rescue-2026",
+          "tmdb": 1185806,
+          "trakt": 956219
+        },
+        "year": 2026,
+        "title": "Dino Island Rescue"
+      }
+    },
+    {
+      "watchers": 112,
+      "movie": {
+        "ids": {
+          "imdb": "tt27706593",
+          "plex": {
+            "guid": "645a8897ffc82a95af371638",
+            "slug": "honey-country"
+          },
+          "slug": "honey-country-2026",
+          "tmdb": 1124142,
+          "trakt": 904662
+        },
+        "year": 2026,
+        "title": "Honey Country"
+      }
+    },
+    {
+      "watchers": 109,
+      "movie": {
+        "ids": {
+          "imdb": "tt43617372",
+          "plex": {
+            "guid": "6a409ce26fe1c742e4e1056e",
+            "slug": "you-and-me-against-the-noise"
+          },
+          "slug": "you-and-me-against-the-noise-2026",
+          "tmdb": 1641629,
+          "trakt": 1396965
+        },
+        "year": 2026,
+        "title": "You and Me Against the Noise"
+      }
+    },
+    {
+      "watchers": 107,
+      "movie": {
+        "ids": {
+          "imdb": "tt34385135",
+          "plex": {
+            "guid": "672c9ca5e1cbea4d3571e67c",
+            "slug": "quarantine-at-the-summit"
+          },
+          "slug": "quarantine-at-the-summit-2026",
+          "tmdb": 1375646,
+          "trakt": 1123763
+        },
+        "year": 2026,
+        "title": "Quarantine at the Summit"
+      }
+    },
+    {
+      "watchers": 106,
+      "movie": {
+        "ids": {
+          "imdb": "tt0241527",
+          "plex": {
+            "guid": "5d77682785719b001f3a0d8e",
+            "slug": "the-lantern-key"
+          },
+          "slug": "the-lantern-key-2001",
+          "tmdb": 671,
+          "trakt": 545
+        },
+        "year": 2001,
+        "title": "The Lantern Key"
+      }
+    },
+    {
+      "watchers": 105,
+      "movie": {
+        "ids": {
+          "imdb": "tt34206385",
+          "plex": {
+            "guid": "67230da1ebb3c0191eb65296",
+            "slug": "the-hidden-camera-hour"
+          },
+          "slug": "the-hidden-camera-hour-2026",
+          "tmdb": 1375441,
+          "trakt": 1123558
+        },
+        "year": 2026,
+        "title": "The Hidden Camera Hour"
+      }
+    },
+    {
+      "watchers": 102,
+      "movie": {
+        "ids": {
+          "imdb": "tt32588798",
+          "plex": {
+            "guid": "66696dfc15c356a548795164",
+            "slug": "the-family-curse-returns"
+          },
+          "slug": "the-family-curse-returns-2026",
+          "tmdb": 1302904,
+          "trakt": 1062564
+        },
+        "year": 2026,
+        "title": "The Family Curse Returns"
+      }
+    },
+    {
+      "watchers": 101,
+      "movie": {
+        "ids": {
+          "imdb": "tt11378946",
+          "plex": {
+            "guid": "5e165a6310faa5004010238c",
+            "slug": "beyond-the-spotlight"
+          },
+          "slug": "beyond-the-spotlight-2026",
+          "tmdb": 936075,
+          "trakt": 751145
+        },
+        "year": 2026,
+        "title": "Beyond the Spotlight"
+      }
+    },
+    {
+      "watchers": 101,
+      "movie": {
+        "ids": {
+          "imdb": "tt33612209",
+          "plex": {
+            "guid": "668da3cd701c9385b944d19e",
+            "slug": "runway-the-next-issue"
+          },
+          "slug": "runway-the-next-issue-2026",
+          "tmdb": 1314481,
+          "trakt": 1074519
+        },
+        "year": 2026,
+        "title": "Runway: The Next Issue"
+      }
+    },
+    {
+      "watchers": 97,
+      "movie": {
+        "ids": {
+          "imdb": "tt0848228",
+          "plex": {
+            "guid": "5d77684d61141d001fb181b9",
+            "slug": "earth-s-last-call"
+          },
+          "slug": "earth-s-last-call-2012",
+          "tmdb": 24428,
+          "trakt": 14701
+        },
+        "year": 2012,
+        "title": "Earth’s Last Call"
+      }
+    },
+    {
+      "watchers": 94,
+      "movie": {
+        "ids": {
+          "imdb": "tt27543632",
+          "plex": {
+            "guid": "6444698339b14cd38176a513",
+            "slug": "the-live-in"
+          },
+          "slug": "the-live-in-2025",
+          "tmdb": 1368166,
+          "trakt": 1117195
+        },
+        "year": 2025,
+        "title": "The Live-In"
+      }
+    }
+  ]
+}

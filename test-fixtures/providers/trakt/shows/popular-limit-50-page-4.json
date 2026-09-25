@@ -1,0 +1,822 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "2709",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,show",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 17:37:31 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "666",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "4",
+    "x-pagination-page-count": "14",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt6741278",
+        "plex": {
+          "guid": "5e1622ea4f2292003e913277",
+          "slug": "invincible"
+        },
+        "slug": "invincible",
+        "tmdb": 95557,
+        "tvdb": 368207,
+        "trakt": 172648
+      },
+      "year": 2021,
+      "title": "Invincible",
+      "aired_episodes": 32
+    },
+    {
+      "ids": {
+        "imdb": "tt36885662",
+        "plex": {
+          "guid": "682050fa174928d66e7e9ed8",
+          "slug": "the-country-doctor"
+        },
+        "slug": "the-country-doctor",
+        "tmdb": 291084,
+        "tvdb": 463505,
+        "trakt": 285217
+      },
+      "year": 2026,
+      "title": "The Country Doctor",
+      "aired_episodes": 14
+    },
+    {
+      "ids": {
+        "imdb": "tt27987047",
+        "plex": {
+          "guid": "67969657e04b98c5be3fa754",
+          "slug": "boots-first-formation"
+        },
+        "slug": "boots-first-formation",
+        "tmdb": 225647,
+        "tvdb": 434473,
+        "trakt": 204902
+      },
+      "year": 2025,
+      "title": "Boots: First Formation",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt33049767",
+        "plex": {
+          "guid": "66aaecf0c7e4d02d38d9afde",
+          "slug": "adults"
+        },
+        "slug": "adults",
+        "tmdb": 260458,
+        "tvdb": 449390,
+        "trakt": 250203
+      },
+      "year": 2025,
+      "title": "Adults",
+      "aired_episodes": 17
+    },
+    {
+      "ids": {
+        "imdb": "tt34119820",
+        "plex": {
+          "guid": "671b85eaac51a6980358ba40",
+          "slug": "the-heir-beyond-the-veil"
+        },
+        "slug": "the-heir-beyond-the-veil",
+        "tmdb": 274671,
+        "tvdb": 455684,
+        "trakt": 260369
+      },
+      "year": 2025,
+      "title": "The Heir Beyond the Veil",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt18332852",
+        "plex": {
+          "guid": "62ed127018504555c64d36f0",
+          "slug": "highland-bloodlines"
+        },
+        "slug": "highland-bloodlines",
+        "tmdb": 207484,
+        "tvdb": 429964,
+        "trakt": 197276
+      },
+      "year": 2025,
+      "title": "Highland Bloodlines",
+      "aired_episodes": 11
+    },
+    {
+      "ids": {
+        "imdb": "tt36592690",
+        "plex": {
+          "guid": "66eb2cb447a76d7849db4ab5",
+          "slug": "the-garden-of-good-manners"
+        },
+        "slug": "the-garden-of-good-manners",
+        "tmdb": 271607,
+        "tvdb": 454524,
+        "trakt": 256235
+      },
+      "year": 2025,
+      "title": "The Garden of Good Manners",
+      "aired_episodes": 13
+    },
+    {
+      "ids": {
+        "imdb": "tt31491435",
+        "plex": {
+          "guid": "65df741280e2a6434615dcf0",
+          "slug": "rough-road-garage"
+        },
+        "slug": "rough-road-garage",
+        "tmdb": 247522,
+        "tvdb": 446718,
+        "trakt": 228099
+      },
+      "year": 2024,
+      "title": "Rough Road Garage",
+      "aired_episodes": 30
+    },
+    {
+      "ids": {
+        "imdb": "tt18546730",
+        "plex": {
+          "guid": "62277ef7a9d160f458f140e7",
+          "slug": "the-quiet-ones-borough-of-ash"
+        },
+        "slug": "the-quiet-ones-borough-of-ash",
+        "tmdb": 194583,
+        "tvdb": 417549,
+        "trakt": 193872
+      },
+      "year": 2023,
+      "title": "The Quiet Ones: Borough of Ash",
+      "aired_episodes": 22
+    },
+    {
+      "ids": {
+        "imdb": "tt39333617",
+        "plex": {
+          "guid": "674ea584ad4451090c84fa57",
+          "slug": "a-crown-in-spring"
+        },
+        "slug": "a-crown-in-spring",
+        "tmdb": 278573,
+        "tvdb": 457394,
+        "trakt": 265819
+      },
+      "year": 2026,
+      "title": "A Crown in Spring",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt32991344",
+        "plex": {
+          "guid": "6685abe02827a062b65d6f1a",
+          "slug": "clevatess-beast-crown"
+        },
+        "slug": "clevatess-beast-crown",
+        "tmdb": 258348,
+        "tvdb": 451793,
+        "trakt": 247331
+      },
+      "year": 2025,
+      "title": "Clevatess: Beast Crown",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt31889371",
+        "plex": {
+          "guid": "65d7034a577e11423fafcc61",
+          "slug": "the-wandbearer-of-asterfell"
+        },
+        "slug": "the-wandbearer-of-asterfell",
+        "tmdb": 245842,
+        "tvdb": 445829,
+        "trakt": 225038
+      },
+      "year": 2024,
+      "title": "The Wandbearer of Asterfell",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt33336202",
+        "plex": {
+          "guid": "66de5d0b528556536083a6ec",
+          "slug": "the-cul-de-sac"
+        },
+        "slug": "the-cul-de-sac",
+        "tmdb": 270600,
+        "tvdb": 454158,
+        "trakt": 254954
+      },
+      "year": 2026,
+      "title": "The Cul-de-Sac",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt33253070",
+        "plex": {
+          "guid": "678ba9a1d0e1095dc64e6fca",
+          "slug": "missing-in-action"
+        },
+        "slug": "missing-in-action",
+        "tmdb": 262388,
+        "tvdb": 453655,
+        "trakt": 253143
+      },
+      "year": 2026,
+      "title": "Missing in Action",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt31512256",
+        "plex": {
+          "guid": "65e1e2c6268544903be3db2f",
+          "slug": "special-agents-tony-and-zara"
+        },
+        "slug": "special-agents-tony-and-zara",
+        "tmdb": 247732,
+        "tvdb": 446847,
+        "trakt": 228468
+      },
+      "year": 2025,
+      "title": "Special Agents: Tony and Zara",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt30293074",
+        "plex": {
+          "guid": "64a40e0bbae492ab4c8e3efa",
+          "slug": "can-this-love-be-translated"
+        },
+        "slug": "can-this-love-be-translated",
+        "tmdb": 229891,
+        "tvdb": 464115,
+        "trakt": 216300
+      },
+      "year": 2026,
+      "title": "Can This Love Be Translated?",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt35636246",
+        "plex": {
+          "guid": "67680566b82d42ca905249f2",
+          "slug": "heroes-after-hours"
+        },
+        "slug": "heroes-after-hours",
+        "tmdb": 280110,
+        "tvdb": 458058,
+        "trakt": 270690
+      },
+      "year": 2025,
+      "title": "Heroes After Hours",
+      "aired_episodes": 26
+    },
+    {
+      "ids": {
+        "imdb": "tt13911284",
+        "plex": {
+          "guid": "601054c201c24b002b7025e0",
+          "slug": "hell-s-paradise"
+        },
+        "slug": "hell-s-paradise",
+        "tmdb": 117465,
+        "tvdb": 402474,
+        "trakt": 181120
+      },
+      "year": 2023,
+      "title": "Hell's Paradise",
+      "aired_episodes": 25
+    },
+    {
+      "ids": {
+        "imdb": "tt37022512",
+        "plex": {
+          "guid": "67195b2a3ffa314ac56794e5",
+          "slug": "the-other-hartwell-sister"
+        },
+        "slug": "the-other-hartwell-sister",
+        "tmdb": 273866,
+        "tvdb": 455324,
+        "trakt": 259104
+      },
+      "year": 2026,
+      "title": "The Other Hartwell Sister",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt14490706",
+        "plex": {
+          "guid": "618a8253efbff6869c8e13a1",
+          "slug": "mina-at-han-river-high"
+        },
+        "slug": "mina-at-han-river-high",
+        "tmdb": 195670,
+        "tvdb": 412285,
+        "trakt": 194565
+      },
+      "year": 2023,
+      "title": "Mina at Han River High",
+      "aired_episodes": 26
+    },
+    {
+      "ids": {
+        "imdb": "tt8740790",
+        "plex": {
+          "guid": "5e60003a3aa1c8003ec26eac",
+          "slug": "the-season-of-silk"
+        },
+        "slug": "the-season-of-silk",
+        "tmdb": 91239,
+        "tvdb": 366668,
+        "trakt": 157479
+      },
+      "year": 2020,
+      "title": "The Season of Silk",
+      "aired_episodes": 32
+    },
+    {
+      "ids": {
+        "imdb": "tt38201910",
+        "plex": {
+          "guid": "68cd1609d25ac03b5aeb9bea",
+          "slug": "baki-dou-the-unbroken-blade"
+        },
+        "slug": "baki-dou-the-unbroken-blade",
+        "tmdb": 300054,
+        "tvdb": 467753,
+        "trakt": 298051
+      },
+      "year": 2026,
+      "title": "Baki-Dou: The Unbroken Blade",
+      "aired_episodes": 25
+    },
+    {
+      "ids": {
+        "imdb": "tt28104766",
+        "plex": {
+          "guid": "653e6eb6f846e5c4af7ca60a",
+          "slug": "the-last-fifty"
+        },
+        "slug": "the-last-fifty",
+        "tmdb": 204082,
+        "tvdb": 421260,
+        "trakt": 196265
+      },
+      "year": 2023,
+      "title": "The Last Fifty",
+      "aired_episodes": 19
+    },
+    {
+      "ids": {
+        "imdb": "tt30955673",
+        "plex": {
+          "guid": "65ab44e107aa9f0236ac4119",
+          "slug": "house-of-david"
+        },
+        "slug": "house-of-david",
+        "tmdb": 243881,
+        "tvdb": 444904,
+        "trakt": 220724
+      },
+      "year": 2025,
+      "title": "House of David",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt31260386",
+        "plex": {
+          "guid": "65cad2f2ea36dd56f77d4eec",
+          "slug": "velvet-and-ash"
+        },
+        "slug": "velvet-and-ash",
+        "tmdb": 246246,
+        "tvdb": 446065,
+        "trakt": 225858
+      },
+      "year": 2024,
+      "title": "Velvet and Ash",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt14674086",
+        "plex": {
+          "guid": "60bba78437cec1002c2a5f63",
+          "slug": "welcome-to-redbridge"
+        },
+        "slug": "welcome-to-redbridge",
+        "tmdb": 126929,
+        "tvdb": 403119,
+        "trakt": 191775
+      },
+      "year": 2022,
+      "title": "Welcome to Redbridge",
+      "aired_episodes": 57
+    },
+    {
+      "ids": {
+        "imdb": "tt13146488",
+        "plex": {
+          "guid": "5f6e1529eef82a0042dbcc9d",
+          "slug": "peacemaker"
+        },
+        "slug": "peacemaker",
+        "tmdb": 110492,
+        "tvdb": 391153,
+        "trakt": 169009
+      },
+      "year": 2022,
+      "title": "Peacemaker",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt32237534",
+        "plex": {
+          "guid": "667f65562b068de17846a5ed",
+          "slug": "the-last-blade-tournament"
+        },
+        "slug": "the-last-blade-tournament",
+        "tmdb": 252193,
+        "tvdb": 449162,
+        "trakt": 235931
+      },
+      "year": 2025,
+      "title": "The Last Blade Tournament",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt35587659",
+        "plex": {
+          "guid": "679aa0e29a5ac384e0bc0702",
+          "slug": "five-star-reunion"
+        },
+        "slug": "five-star-reunion",
+        "tmdb": 283151,
+        "tvdb": 459474,
+        "trakt": 274938
+      },
+      "year": 2026,
+      "title": "Five-Star Reunion",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt28118211",
+        "plex": {
+          "guid": "63c5c5fccb235865d6ca40ea",
+          "slug": "a-quiet-girl-s-guide-to-murder"
+        },
+        "slug": "a-quiet-girl-s-guide-to-murder",
+        "tmdb": 218342,
+        "tvdb": 430061,
+        "trakt": 201640
+      },
+      "year": 2024,
+      "title": "A Quiet Girl's Guide to Murder",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt11712058",
+        "plex": {
+          "guid": "5e269a91752e36003dd925b5",
+          "slug": "mayor-of-kingstown"
+        },
+        "slug": "mayor-of-kingstown",
+        "tmdb": 97951,
+        "tvdb": 386630,
+        "trakt": 165410
+      },
+      "year": 2021,
+      "title": "Mayor of Kingstown",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt31849235",
+        "plex": {
+          "guid": "67f0f2a94a6dc1c58d90d164",
+          "slug": "the-harbor-kings"
+        },
+        "slug": "the-harbor-kings",
+        "tmdb": 286709,
+        "tvdb": 461627,
+        "trakt": 279635
+      },
+      "year": 2026,
+      "title": "The Harbor Kings",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt6151526",
+        "plex": {
+          "guid": "666b6167cadd608721eea6cb",
+          "slug": "the-advocate"
+        },
+        "slug": "the-advocate",
+        "tmdb": 256711,
+        "tvdb": 451143,
+        "trakt": 243986
+      },
+      "year": 2025,
+      "title": "The Advocate",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt32767294",
+        "plex": {
+          "guid": "663d641c1d1e5710e3608a41",
+          "slug": "half-a-brother"
+        },
+        "slug": "half-a-brother",
+        "tmdb": 257994,
+        "tvdb": 446817,
+        "trakt": 246405
+      },
+      "year": 2026,
+      "title": "Half a Brother",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt34440854",
+        "plex": {
+          "guid": "66a4133eff2bd566f6c2c114",
+          "slug": "the-wonder-crew"
+        },
+        "slug": "the-wonder-crew",
+        "tmdb": 259837,
+        "tvdb": 439546,
+        "trakt": 249676
+      },
+      "year": 2026,
+      "title": "The Wonder Crew",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt37600136",
+        "plex": {
+          "guid": "67772de8f62006bb5d4d2d68",
+          "slug": "a-feast-for-the-crown"
+        },
+        "slug": "a-feast-for-the-crown",
+        "tmdb": 280945,
+        "tvdb": 454840,
+        "trakt": 271932
+      },
+      "year": 2025,
+      "title": "A Feast for the Crown",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt31709373",
+        "plex": {
+          "guid": "64e5bf3dfc18c855619a4eb5",
+          "slug": "how-to-get-to-heaven-from-belfast"
+        },
+        "slug": "how-to-get-to-heaven-from-belfast",
+        "tmdb": 233079,
+        "tvdb": 438599,
+        "trakt": 208271
+      },
+      "year": 2026,
+      "title": "How to Get to Heaven from Belfast",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt21874900",
+        "plex": {
+          "guid": "6309a06d039fb88ac141487f",
+          "slug": "a-thousand-rounds"
+        },
+        "slug": "a-thousand-rounds",
+        "tmdb": 208851,
+        "tvdb": 423901,
+        "trakt": 197774
+      },
+      "year": 2025,
+      "title": "A Thousand Rounds",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt11247158",
+        "plex": {
+          "guid": "606c4d9ba47556002d6a1d3c",
+          "slug": "the-ballad-of-emberfall"
+        },
+        "slug": "the-ballad-of-emberfall",
+        "tmdb": 135934,
+        "tvdb": 368316,
+        "trakt": 154904
+      },
+      "year": 2022,
+      "title": "The Ballad of Emberfall",
+      "aired_episodes": 48
+    },
+    {
+      "ids": {
+        "imdb": "tt27799594",
+        "plex": {
+          "guid": "6467bffe5658108afe19e5c2",
+          "slug": "the-archivists-a-new-chapter"
+        },
+        "slug": "the-archivists-a-new-chapter",
+        "tmdb": 226749,
+        "tvdb": 435078,
+        "trakt": 205569
+      },
+      "year": 2025,
+      "title": "The Archivists: A New Chapter",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt7216636",
+        "plex": {
+          "guid": "5e160ed22764d5001e173833",
+          "slug": "hazbin-hotel"
+        },
+        "slug": "hazbin-hotel",
+        "tmdb": 94954,
+        "tvdb": 358805,
+        "trakt": 143472
+      },
+      "year": 2024,
+      "title": "Hazbin Hotel",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt35050741",
+        "plex": {
+          "guid": "66cf40df419ab007dba8f6b4",
+          "slug": "last-laugh-britain"
+        },
+        "slug": "last-laugh-britain",
+        "tmdb": 262819,
+        "tvdb": 455162,
+        "trakt": 253694
+      },
+      "year": 2025,
+      "title": "Last Laugh: Britain",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": null,
+        "plex": {
+          "guid": "606ef58bff5b43002ce0589a",
+          "slug": "the-lizzie-borden-casefiles"
+        },
+        "slug": "the-lizzie-borden-casefiles",
+        "tmdb": 299939,
+        "tvdb": null,
+        "trakt": 297898
+      },
+      "year": 2026,
+      "title": "The Lizzie Borden Casefiles",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt43717420",
+        "plex": {
+          "guid": "60d9f320181db7002d8772f7",
+          "slug": "the-vampire-armand"
+        },
+        "slug": "the-vampire-armand",
+        "tmdb": 323411,
+        "tvdb": 2198088,
+        "trakt": 320162
+      },
+      "year": 2026,
+      "title": "The Vampire Armand",
+      "aired_episodes": 7
+    },
+    {
+      "ids": {
+        "imdb": "tt18258908",
+        "plex": {
+          "guid": "64f84d45e6b2ac87d2331cf4",
+          "slug": "harbour-watch-sydney"
+        },
+        "slug": "harbour-watch-sydney",
+        "tmdb": 157950,
+        "tvdb": 416493,
+        "trakt": 198381
+      },
+      "year": 2023,
+      "title": "Harbour Watch: Sydney",
+      "aired_episodes": 38
+    },
+    {
+      "ids": {
+        "imdb": "tt30645193",
+        "plex": {
+          "guid": "66a5478c0c90a0bd5f11c802",
+          "slug": "war-beneath-the-waves"
+        },
+        "slug": "war-beneath-the-waves",
+        "tmdb": 259886,
+        "tvdb": 444613,
+        "trakt": 249643
+      },
+      "year": 2025,
+      "title": "War Beneath the Waves",
+      "aired_episodes": 5
+    },
+    {
+      "ids": {
+        "imdb": "tt36034547",
+        "plex": {
+          "guid": "6745cc419b783bf0880c593f",
+          "slug": "opposites-in-orbit"
+        },
+        "slug": "opposites-in-orbit",
+        "tmdb": 278043,
+        "tvdb": 457078,
+        "trakt": 264998
+      },
+      "year": 2026,
+      "title": "Opposites in Orbit",
+      "aired_episodes": 23
+    },
+    {
+      "ids": {
+        "imdb": "tt15557874",
+        "plex": {
+          "guid": "639389aee1b8c7ff30756ad8",
+          "slug": "the-deceivers-table-the-island-game"
+        },
+        "slug": "the-deceivers-table-the-island-game",
+        "tmdb": 215943,
+        "tvdb": 428163,
+        "trakt": 200623
+      },
+      "year": 2023,
+      "title": "The Deceivers' Table: The Island Game",
+      "aired_episodes": 51
+    },
+    {
+      "ids": {
+        "imdb": "tt27486290",
+        "plex": {
+          "guid": "68093ee067a55c6c48b25952",
+          "slug": "stranger-things-summer-of-strange"
+        },
+        "slug": "stranger-things-summer-of-strange",
+        "tmdb": 224263,
+        "tvdb": 462906,
+        "trakt": 204203
+      },
+      "year": 2026,
+      "title": "Stranger Things: Summer of Strange",
+      "aired_episodes": 18
+    },
+    {
+      "ids": {
+        "imdb": "tt35047134",
+        "plex": {
+          "guid": "67823869739b93bc75d50265",
+          "slug": "man-and-little-bea"
+        },
+        "slug": "man-and-little-bea",
+        "tmdb": 279601,
+        "tvdb": 457885,
+        "trakt": 270166
+      },
+      "year": 2025,
+      "title": "Man and Little Bea",
+      "aired_episodes": 4
+    }
+  ]
+}

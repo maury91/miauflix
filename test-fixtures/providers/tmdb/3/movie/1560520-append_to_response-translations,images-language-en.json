@@ -1,0 +1,559 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21875",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f7d38aa0d4568c93520b1e5aa0f864de\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/caBIySpwuFi2i7ynvHIlnxJLOdN.jpg",
+    "belongs_to_collection": {
+      "id": 1560779,
+      "name": "The Broken City Collection",
+      "poster_path": null,
+      "backdrop_path": null
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/the-broken-city",
+    "id": 1560520,
+    "imdb_id": "tt32333324",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Broken City",
+    "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+    "popularity": 70.0571,
+    "poster_path": "/360qdtu2hLnqMu8SVHMywn420w1.jpg",
+    "production_companies": [
+      {
+        "id": 2785,
+        "logo_path": "/l5zW8jjmQOCx2dFmvnmbYmqoBmL.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 429,
+        "logo_path": "/4Y00XuSMuP1gimd0jP6JT57QbCI.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-06-23",
+    "revenue": 0,
+    "runtime": 79,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The city is out of its cage.",
+    "title": "The Broken City",
+    "video": false,
+    "vote_average": 9.2,
+    "vote_count": 379,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 79,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 78,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 79,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 79,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 78,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-broken-city",
+            "overview": "With The asylum in ruins, The masked hero hunts escaped criminals while The relentless strongman's relentless campaign pushes the exhausted hero toward collapse.",
+            "runtime": 0,
+            "tagline": "The city is out of its cage.",
+            "title": "The Broken City"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dD9jGW6ucJTamWSEcwJKtCmj90u.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 722,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5gQ8EgzwFRbpg1QE6xWzlDLkgIz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1284
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a724AqbkJKxkx0yWkf4JJL31HA0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.125,
+          "height": 312,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yH9NHHGZx4H5Zt7dZtCJqbUdViN.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1599
+        },
+        {
+          "aspect_ratio": 4.044,
+          "height": 1068,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6JOdICESpejPcdmmbzLuwgxr6z2.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 3.958,
+          "height": 404,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vWvUkRxZE1JjDaCRQYMkypGML71.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1599
+        },
+        {
+          "aspect_ratio": 5.141,
+          "height": 389,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jK3puA6jO2h4zTG3nEDOS3uRjz1.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/360qdtu2hLnqMu8SVHMywn420w1.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2q1BdMFPmMJXStQdS2DNLoKmuB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.718,
+          "height": 1680,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uZswZZ3Th2ORyLOAbol9ZLuD8pr.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1206
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g19IoButQepcHPShmzfPGYOWfTq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9pKPTugulAt0EtH0g4gvJGffPSg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cpIqe4VAepjmFThvYTFwNmQ6eSZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1918
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lAGDxZHy2bnnByFvHMXsgvznwDW.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mEhTkSgp7mkWrBpAccrUyMkaYDW.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pdq2hZ8kjdMT0rWDyi2YgoHULfD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kgcvBCyk3cqxjozIqsemrynEGIb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Y4UZqibBnH800XTTm7VZU5en9w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

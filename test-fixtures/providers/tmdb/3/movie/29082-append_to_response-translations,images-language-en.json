@@ -1,0 +1,454 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"52451050f95a2ecdc83b6ea202031bbf\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2m95WiiqOQNfJQ2MWa5wlsOApGz.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-night-masks-of-paris",
+    "id": 29082,
+    "imdb_id": "tt0006206",
+    "origin_country": [
+      "FR"
+    ],
+    "original_language": "fr",
+    "original_title": "The Night Masks of Paris",
+    "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+    "popularity": 1.6459,
+    "poster_path": "/8jO0Zmd468zS9WRLHpwsKUowZAX.jpg",
+    "production_companies": [
+      {
+        "id": 9,
+        "logo_path": "/h4zSRszvKHr1tjqEp8voJVahuza.png",
+        "name": "Lantern Rue Films",
+        "origin_country": "FR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      }
+    ],
+    "release_date": "1915-11-13",
+    "revenue": 0,
+    "runtime": 422,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A new danger lurks around every corner.",
+    "title": "The Night Masks of Paris",
+    "video": false,
+    "vote_average": 7,
+    "vote_count": 126,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 422,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 0,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 0,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 0,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 0,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 0,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 0,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-night-masks-of-paris",
+            "overview": "Paris is terrorized by a hidden criminal society whose masked leaders seem beyond the reach of the police. Journalist Philippe Girard and his determined partner follow a trail of daring crimes, closing in on the elusive Grand Mask and his dangerous accomplice Irène Vautrin.",
+            "runtime": 0,
+            "tagline": "A new danger lurks around every corner.",
+            "title": "The Night Masks of Paris"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8jO0Zmd468zS9WRLHpwsKUowZAX.jpg",
+          "vote_average": 0.5,
+          "vote_count": 8,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AbbLK4u9N4ZVdag4gslvSmFljL6.jpg",
+          "vote_average": 10,
+          "vote_count": 9,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u9P30Fl7GhA1cKTLy4gEQ4tHKB2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hJo5kktupszGFmR42lEVCPWG7ox.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dNk9bMhHTFRUbj5dRU9DPzhxe13.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3xEv68XPhpxtiKM33PKHZHPGvaC.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6KbUxgHYCeLVs4nFSpppt6lNMvg.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7TT7kMVeegFZxUpMt7gNV0VOKqU.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vOJ3PJba5xHLCdDGKaGrTcQu1SG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1ZjYqu0qf68ix9gn35DcMQctCzu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/18XFK9CQ3uNFnLfFgxrjYGbENkj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/itW83fKELuPpMuMg61fSxa5niAH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eBXpP8IE7Du3y168t6G7CwZ57ev.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vKTVMPF7FdFmCcL3bdCirJsqOOQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        }
+      ]
+    }
+  }
+}

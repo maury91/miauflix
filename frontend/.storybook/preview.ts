@@ -1,4 +1,11 @@
+import '@shared/styles/global.css';
+
 import type { Preview } from '@storybook/react-vite';
+import { sb } from 'storybook/test';
+
+// Home stories replace the RTK Query hooks with deterministic story-local data.
+// Keeping this mock in Storybook leaves the production API module untouched.
+sb.mock(import('../src/features/media/api/lists.api.ts'), { spy: true });
 
 const preview: Preview = {
   parameters: {

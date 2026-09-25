@@ -41,6 +41,9 @@ RUN --mount=type=cache,target=/usr/src/app/.turbo \
 
 # Copy frontend sources and build the client bundle with Vite cache mount
 COPY frontend/ ./frontend/
+# The frontend TypeScript build includes Storybook fixtures under src/. Those
+# fixtures intentionally reuse the repository-level provider recordings.
+COPY test-fixtures/ ./test-fixtures/
 RUN --mount=type=cache,target=/usr/src/app/node_modules/.vite \
     VITE_API_URL=/ npm run build:frontend
 

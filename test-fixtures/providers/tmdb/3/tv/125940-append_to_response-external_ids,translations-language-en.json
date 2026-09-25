@@ -1,0 +1,487 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25842",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0aa77df16d6921af36dbb36a7ad19184\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fFeIBjX7Rk6eoEwGMq9jugrV2yP.jpg",
+    "created_by": [
+      {
+        "id": 166566,
+        "credit_id": "62d8b47c699fb70054e3ee8a",
+        "name": "Remy Finch",
+        "original_name": "Remy Finch",
+        "gender": 1,
+        "profile_path": "/ignfCe6NuP6aioyDACoaRX1WryO.jpg"
+      },
+      {
+        "id": 1214616,
+        "credit_id": "62d8b463f056d5004df0dde4",
+        "name": "Jordan Gray",
+        "original_name": "Jordan Gray",
+        "gender": 1,
+        "profile_path": "/kQeuOgZBKDs80W4Ssm91x6zAdWu.jpg"
+      }
+    ],
+    "episode_run_time": [
+      47
+    ],
+    "first_air_date": "2022-09-15",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://example.test/series/brass-orchard-glassford",
+    "id": 125940,
+    "in_production": false,
+    "languages": [
+      "en",
+      "es"
+    ],
+    "last_air_date": "2022-10-27",
+    "last_episode_to_air": {
+      "id": 3844883,
+      "name": "Brass Harbor",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2022-10-27",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 56,
+      "season_number": 1,
+      "show_id": 125940,
+      "still_path": "/k2qCRhV0qDOh259fTxMmHWcIVMM.jpg"
+    },
+    "name": "Brass Orchard: Glassford",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 3353,
+        "logo_path": "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png",
+        "name": "Golden Horizon Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Brass Orchard: Glassford",
+    "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 9.5237,
+    "poster_path": "/fVwWkJBbOtxM7VKg7PS1IkjYpQc.jpg",
+    "production_companies": [
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Silent Compass Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 34536,
+        "logo_path": null,
+        "name": "Velvet Bridge Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 90892,
+        "logo_path": null,
+        "name": "Last Beacon Studios",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-09-15",
+        "episode_count": 10,
+        "id": 195973,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/fVwWkJBbOtxM7VKg7PS1IkjYpQc.jpg",
+        "season_number": 1,
+        "vote_average": 6.2
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Canceled",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.5,
+    "vote_count": 209,
+    "external_ids": {
+      "imdb_id": "tt14689620",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 403187,
+      "tvrage_id": null,
+      "wikidata_id": "Q108672912",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "id": 125940,
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Brass Orchard: Glassford",
+            "overview": "Brass Orchard: Glassford follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-orchard-glassford",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

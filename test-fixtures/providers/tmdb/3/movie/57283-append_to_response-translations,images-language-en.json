@@ -1,0 +1,520 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16942",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8ca3c9030ab8d3459d18c9986d31bdd6\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gZwQip2KQRDNZZOEDe0Yi25tW9Z.jpg",
+    "belongs_to_collection": null,
+    "budget": 220000,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 36,
+        "name": "History"
+      }
+    ],
+    "homepage": "https://example.test/films/witchcraft-and-wonder",
+    "id": 57283,
+    "imdb_id": "tt0013257",
+    "origin_country": [
+      "DK",
+      "SE"
+    ],
+    "original_language": "sv",
+    "original_title": "Witchcraft and Wonder",
+    "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+    "popularity": 2.7974,
+    "poster_path": "/3LtaPLlwlA5HX2FjqAb8lsaBI8P.jpg",
+    "production_companies": [
+      {
+        "id": 78552,
+        "logo_path": null,
+        "name": "Candlewick Silent Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 6181,
+        "logo_path": "/gYyww91VI1jdH89xpZgFFc8zN3F.png",
+        "name": "Candlewick Silent Pictures",
+        "origin_country": "SE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "SE",
+        "name": "Sweden"
+      }
+    ],
+    "release_date": "1922-09-18",
+    "revenue": 0,
+    "runtime": 105,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Are old superstitions ever truly gone?",
+    "title": "Witchcraft and Wonder",
+    "video": false,
+    "vote_average": 7.6,
+    "vote_count": 456,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 106,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 95,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 105,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 105,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 104,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 104,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 105,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 104,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 106,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 105,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/witchcraft-and-wonder",
+            "overview": "A series of eerie tableaux—grave robbers, interrogations, possessed nuns, and a midnight witches' gathering—examines the idea that medieval witchcraft accusations grew from the same hysteria later diagnosed as illness. Its scholarly argument repeatedly gives way to macabre, mischievous spectacle.",
+            "runtime": 0,
+            "tagline": "Are old superstitions ever truly gone?",
+            "title": "Witchcraft and Wonder"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eMHJAmkt8yQD5GISGow9FVRRqR3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5TqIPddZaDsza8ID7X5HGwX2Txv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oIwCjq0DSjQiP9unMMzBBU2rsy4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.917,
+          "height": 1212,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/frjjdfOhRT2cUzexg3oZ7J1DF6Z.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 5960
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3LtaPLlwlA5HX2FjqAb8lsaBI8P.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.673,
+          "height": 1917,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A4ErFUf7FGNF3DFjp0CaRchxeNL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1290
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1491,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6uke82EziPVJuzm7NQvQj5f9uy7.jpg",
+          "vote_average": 2.278,
+          "vote_count": 2,
+          "width": 994
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8aC3s4idtSo6HTw4Yrrv4LPHb46.jpg",
+          "vote_average": 0.904,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tNp1gO89rgcVtGWrQeqfpwD2WZK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4huXy3fuG102WzsQWQsWlyudevg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l4hwkegcQLzey1F0SOpbNJJid0V.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 854
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hasq8Hzh445QOrggj0OAgyqn6ke.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ygyoQqEap1YG4Crx8qHw03WmDF5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1ZILGNPote7d7C8UNCISTdtELyW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/66HmxrHbSg0dDdnM1l23FfOR8GH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5An0XlxRtyffU86AklkbrmwCOnr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mIEtaWKpyy4QjJk6aLWzaStLwTZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1064,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/weLBu7Yd3VycZuXiWzvbxiPDzjS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 709
+        }
+      ]
+    }
+  }
+}

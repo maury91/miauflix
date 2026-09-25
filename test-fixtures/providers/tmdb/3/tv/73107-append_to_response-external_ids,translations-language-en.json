@@ -1,0 +1,620 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22010",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c92085a39b8f8aa0516613cfa1a4e93a\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/nfjqhuGFUWqJD14B4fxlSiZWfeR.jpg",
+    "created_by": [
+      {
+        "id": 57406,
+        "credit_id": "67bf1378dd0adec14d56244a",
+        "name": "Robin Reed",
+        "original_name": "Robin Reed",
+        "gender": 2,
+        "profile_path": "/8qCkqxlyxrSybMnUWf85XQ11qMB.jpg"
+      },
+      {
+        "id": 19278,
+        "credit_id": "67bf1383c3f8c5a804efc14f",
+        "name": "Jordan West",
+        "original_name": "Jordan West",
+        "gender": 2,
+        "profile_path": "/qyT50vQ9PQIEctE1IxDTEsBKstU.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2018-03-25",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/series/silver-voyage-kingswell",
+    "id": 73107,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2023-05-28",
+    "last_episode_to_air": {
+      "id": 4284143,
+      "name": "Distant Window",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.029,
+      "vote_count": 35,
+      "air_date": "2023-05-28",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 35,
+      "season_number": 4,
+      "show_id": 73107,
+      "still_path": "/zqi5vO1HflVd4Yw5qi2jlslZsfV.jpg"
+    },
+    "name": "Silver Voyage: Kingswell",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Amber Valley Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 32,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Silver Voyage: Kingswell",
+    "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 31.4421,
+    "poster_path": "/j1XpwD11f0BAEI7pX6UdMhUVX2F.jpg",
+    "production_companies": [
+      {
+        "id": 105859,
+        "logo_path": null,
+        "name": "Hidden Echo Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 105860,
+        "logo_path": null,
+        "name": "Brass Echo Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Velvet Passage Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2018-03-25",
+        "episode_count": 8,
+        "id": 90990,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/4x3qLPbpI7TYWLvMnWHmw0NtAdO.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2019-03-31",
+        "episode_count": 8,
+        "id": 119315,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/eH8YB1FrH7h9PYPJT9z5n1xNCda.jpg",
+        "season_number": 2,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2022-04-24",
+        "episode_count": 8,
+        "id": 244092,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/j1XpwD11f0BAEI7pX6UdMhUVX2F.jpg",
+        "season_number": 3,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2023-04-16",
+        "episode_count": 8,
+        "id": 331625,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/71hZ4j3PDFZdwu2Hh374PbeK23R.jpg",
+        "season_number": 4,
+        "vote_average": 7.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.9,
+    "vote_count": 1224,
+    "external_ids": {
+      "imdb_id": "tt5348176",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 333072,
+      "tvrage_id": null,
+      "wikidata_id": "Q26812664",
+      "facebook_id": "barryhbo",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Silver Voyage: Kingswell",
+            "overview": "Silver Voyage: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-voyage-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

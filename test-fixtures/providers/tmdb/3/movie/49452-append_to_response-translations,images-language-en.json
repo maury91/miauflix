@@ -1,0 +1,229 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20964",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ef1a2c98573658379f4ee3c3bc385e9d\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8M0AmkFWK4lnbNeqa3poxohDk7l.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/madame-vautrins-smile",
+    "id": 49452,
+    "imdb_id": "tt0013626",
+    "origin_country": [
+      "FR"
+    ],
+    "original_language": "fr",
+    "original_title": "Madame Vautrin's Smile",
+    "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+    "popularity": 2.076,
+    "poster_path": "/xUdd29vYVJKjDUrjdYfpxytQIdf.jpg",
+    "production_companies": [
+      {
+        "id": 8996,
+        "logo_path": null,
+        "name": "Atelier des Brumes",
+        "origin_country": "FR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      }
+    ],
+    "release_date": "1923-11-09",
+    "revenue": 0,
+    "runtime": 43,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A quiet smile can hide a daring plan.",
+    "title": "Madame Vautrin's Smile",
+    "video": false,
+    "vote_average": 6,
+    "vote_count": 98,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 43,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 0,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 0,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 54,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 43,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 0,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 0,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 38,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 0,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 0,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/madame-vautrins-smile",
+            "overview": "Trapped in a joyless marriage, a clever woman quietly devises a plan to rid herself of a husband who treats their home as his stage.",
+            "runtime": 0,
+            "tagline": "A quiet smile can hide a daring plan.",
+            "title": "Madame Vautrin's Smile"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xUdd29vYVJKjDUrjdYfpxytQIdf.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

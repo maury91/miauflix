@@ -74,6 +74,7 @@ export const handleRequest = async ({
   API_SECRET,
   API_BASE_URL = 'https://api.trakt.tv',
   API_HEADERS,
+  RECORD_PROVIDER_FIXTURES,
 }: HandleRequestParams): Promise<HandleRequestResponse | null> => {
   // Only handle POST requests for OAuth endpoints
   if (method !== 'POST' || !path.startsWith('/oauth/')) {
@@ -84,7 +85,7 @@ export const handleRequest = async ({
 
   try {
     // Try to fetch from real API if credentials are available
-    if (API_KEY && API_SECRET) {
+    if (RECORD_PROVIDER_FIXTURES && API_KEY && API_SECRET) {
       console.log(`🌐 Calling real Trakt API for POST ${path}`);
 
       const requestBody = await req.json();
@@ -121,7 +122,7 @@ export const handleRequest = async ({
       // Note: We don't sanitize OAuth responses as they contain sensitive tokens
       return {
         data: data,
-        store: true, // Store successful OAuth responses
+        store: true,
         response: new Response(JSON.stringify(data), {
           headers: { 'Content-Type': 'application/json' },
           status: apiResponse.status,
@@ -135,7 +136,7 @@ export const handleRequest = async ({
       if (mockResponse) {
         return {
           data: mockResponse,
-          store: true, // Store mock responses for consistency
+          store: RECORD_PROVIDER_FIXTURES,
           response: new Response(JSON.stringify(mockResponse), {
             headers: { 'Content-Type': 'application/json' },
             status: 200,

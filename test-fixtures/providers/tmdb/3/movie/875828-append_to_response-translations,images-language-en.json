@@ -1,0 +1,915 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6602",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1eaf018921d316ab5355051df0fdeaf3\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1fkuBPid72KGS6WmtkEXMftZtkE.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/the-exile-s-return",
+    "id": 875828,
+    "imdb_id": "tt15574124",
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_title": "The Exile’s Return",
+    "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+    "popularity": 20.5608,
+    "poster_path": "/gRMalasZEzsZi4w2VFuYusfSfqf.jpg",
+    "production_companies": [
+      {
+        "id": 288,
+        "logo_path": "/aW0IpM9d4Zjj978EqgDVSxXXhTj.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 241143,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 125282,
+        "logo_path": "/9D4A6Lc6m2RBlDkeGF6jpJljAgm.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2026-03-05",
+    "revenue": 0,
+    "runtime": 112,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The family name calls him home.",
+    "title": "The Exile’s Return",
+    "video": false,
+    "vote_average": 7.186,
+    "vote_count": 1237,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 112,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-exile-s-return",
+            "overview": "The exiled gangster returns from exile when his son is pulled into a fascist scheme that threatens The industrial city and the country.",
+            "runtime": 0,
+            "tagline": "The family name calls him home.",
+            "title": "The Exile’s Return"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/af8sU7ts4uwSBCkm6o1ZMidIV2R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s00bi9cGGkrMEdJfDGDWeRL0Fi1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fFCQwZdn2cyXhNWDRK4TTJtrovU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.593,
+          "height": 486,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9IpyBrvW5WqAUwiNIqFf7YbqLS4.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1260
+        },
+        {
+          "aspect_ratio": 1.109,
+          "height": 889,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gFTnP5HMXeCPa0Ga7rzseFR3wDG.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 986
+        },
+        {
+          "aspect_ratio": 2.593,
+          "height": 486,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pRYBvZlE3qzhS6c38aWPATLLVhh.png",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1260
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gRMalasZEzsZi4w2VFuYusfSfqf.jpg",
+          "vote_average": 10,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2556,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n4vtfLKJL5UhzT1ymzmGJ2xpgpx.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1704
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1754,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dVa9TYV5o4905OvwtiV0LSUW9Yd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 850,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wq5RlmN50N6QcHZngRiVFDBrwwc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 566
+        },
+        {
+          "aspect_ratio": 0.665,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aNDIr1OQi97a6O7B0d9Y7z4nK7a.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 681
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1754,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/drk94ZxRVaGNLtg2kS5MqmVDP1H.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9ruqVbnVGWxwRq8BcDZbOoTseVU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1186
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1248,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mKSnqcEOpr2hUq7moF4bJVBGZcO.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 832
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kUexkZKeKgsyjjfgmzRSZTE5dIB.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lqnGKcasnML4hqSf0OCNMQsdvAK.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wJ34i0hrQskdWaflEYrmgR2Bm2n.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1126
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a0BxDJrjIRD6IsYVv49yMXNRKYI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2520,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/khJtS9VnykXsKvgW1En9mhJXwCa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/67Ht7PS8X3CxKgTp8GZv7SxWpjN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qjgZfHyxPumme2B7ptaKX8UsHf1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

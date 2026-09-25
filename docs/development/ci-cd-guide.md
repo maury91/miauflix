@@ -21,13 +21,13 @@ A comprehensive workflow that includes:
 
 All tests run in a completely networkless environment using HTTP VCR in replay mode:
 
-- Tests use pre-recorded HTTP responses stored in the `backend/test-fixtures` directory
+- Provider E2E mocks use pre-recorded responses stored in `test-fixtures/providers`
 - No actual network requests are made during CI runs
 - Mock API keys are used instead of real credentials
 
 ## Test Fixtures
 
-The tests rely on fixtures stored in the `backend/test-fixtures` directory. These fixtures contain pre-recorded API responses that allow tests to run without making actual network requests.
+The tests rely on committed provider fixtures. These fixtures contain pre-recorded API responses that allow tests to run without making actual network requests. Missing TMDB and Trakt fixtures fail in replay mode; recording requires `RECORD_PROVIDER_FIXTURES=true` for that invocation.
 
 During development, you can record new fixtures by setting `HTTP_VCR_MODE=record` in your environment. In CI/CD environments, the mode is always set to `replay` to ensure tests are isolated from external dependencies.
 

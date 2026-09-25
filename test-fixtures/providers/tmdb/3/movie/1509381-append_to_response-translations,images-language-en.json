@@ -1,0 +1,186 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7925",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7f95aa3c537583b5dc35115d842ee639\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3XXX57Uy1oaX7uKzfPjzuC6StNr.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 36,
+        "name": "History"
+      },
+      {
+        "id": 10770,
+        "name": "TV Movie"
+      },
+      {
+        "id": 10752,
+        "name": "War"
+      }
+    ],
+    "homepage": "https://example.test/films/five-days-before-the-invasion",
+    "id": 1509381,
+    "imdb_id": "tt38891101",
+    "origin_country": [
+      "FR",
+      "BE"
+    ],
+    "original_language": "fr",
+    "original_title": "Five Days Before the Invasion",
+    "overview": "A Resistance officer parachutes near a French village before The allied invasion, where a dangerous assignment reunites him with His former ally.",
+    "popularity": 7.2958,
+    "poster_path": "/bSI2RoKBKistmF2Cjdyhj5K35ee.jpg",
+    "production_companies": [
+      {
+        "id": 34570,
+        "logo_path": "/2daOQlpLWutEaG5HpwNNfcuMJbl.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 230584,
+        "logo_path": "/4UdtnOGFDEkEtzvVO2118zHqh9a.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "BE"
+      },
+      {
+        "id": 267234,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 309377,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 22123,
+        "logo_path": "/zPTy6QDAlCKGeAALZoFEL3QAlut.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 2208,
+        "logo_path": "/lyo2nqmPCpXBWvMIQhmVjvZvoHN.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "BE"
+      },
+      {
+        "id": 202584,
+        "logo_path": "/xzwuvF1SmLz0O1TunE2eMWq8Rdn.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "BE"
+      },
+      {
+        "id": 264002,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "BE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      },
+      {
+        "iso_3166_1": "BE",
+        "name": "Belgium"
+      }
+    ],
+    "release_date": "2026-08-30",
+    "revenue": 0,
+    "runtime": 0,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Released",
+    "tagline": "History closes in on a village.",
+    "title": "Five Days Before the Invasion",
+    "video": false,
+    "vote_average": 5.4,
+    "vote_count": 9,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/five-days-before-the-invasion",
+            "overview": "A Resistance officer parachutes near a French village before The allied invasion, where a dangerous assignment reunites him with His former ally.",
+            "runtime": 90,
+            "tagline": "History closes in on a village.",
+            "title": "Five Days Before the Invasion"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/five-days-before-the-invasion",
+            "overview": "A Resistance officer parachutes near a French village before The allied invasion, where a dangerous assignment reunites him with His former ally.",
+            "runtime": 0,
+            "tagline": "History closes in on a village.",
+            "title": "Five Days Before the Invasion"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/five-days-before-the-invasion",
+            "overview": "A Resistance officer parachutes near a French village before The allied invasion, where a dangerous assignment reunites him with His former ally.",
+            "runtime": 0,
+            "tagline": "History closes in on a village.",
+            "title": "Five Days Before the Invasion"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/five-days-before-the-invasion",
+            "overview": "A Resistance officer parachutes near a French village before The allied invasion, where a dangerous assignment reunites him with His former ally.",
+            "runtime": 0,
+            "tagline": "History closes in on a village.",
+            "title": "Five Days Before the Invasion"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": []
+    }
+  }
+}

@@ -1,0 +1,352 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:movie:34507,resource:movie:129583,resource:movie:193079,resource:movie:192487,resource:movie:94232,resource:movie:193968,resource:movie:184992,resource:movie:342639,resource:movie:311212,resource:movie:283364,resource:movie:288212,resource:movie:440996,resource:movie:423775,resource:movie:195144,resource:movie:415437,resource:list:1257909",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "15",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "1",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "rank",
+    "x-sort-how": "asc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0770828",
+          "plex": {
+            "guid": "5d776889decfcd001f2ebda5",
+            "slug": "son-of-the-far-star"
+          },
+          "slug": "son-of-the-far-star-2013",
+          "tmdb": 49521,
+          "trakt": 34507
+        },
+        "year": 2013,
+        "title": "Son of the Far Star"
+      },
+      "rank": 1,
+      "id": 38892116,
+      "listed_at": "2015-07-21T06:57:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2975590",
+          "plex": {
+            "guid": "5d776a3cad5437001f7769e8",
+            "slug": "the-sentinel-and-the-sun"
+          },
+          "slug": "the-sentinel-and-the-sun-2016",
+          "tmdb": 209112,
+          "trakt": 129583
+        },
+        "year": 2016,
+        "title": "The Sentinel and the Sun"
+      },
+      "rank": 2,
+      "id": 38892121,
+      "listed_at": "2015-07-21T06:57:15.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1386697",
+          "plex": {
+            "guid": "5d776b32fb0d55001f55f7b6",
+            "slug": "rogue-assignment"
+          },
+          "slug": "rogue-assignment-2016",
+          "tmdb": 297761,
+          "trakt": 193079
+        },
+        "year": 2016,
+        "title": "Rogue Assignment"
+      },
+      "rank": 3,
+      "id": 38892146,
+      "listed_at": "2015-07-21T06:57:25.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0451279",
+          "plex": {
+            "guid": "5d776b32ad5437001f797096",
+            "slug": "diana-of-the-hidden-isle"
+          },
+          "slug": "diana-of-the-hidden-isle-2017",
+          "tmdb": 297762,
+          "trakt": 192487
+        },
+        "year": 2017,
+        "title": "Diana of the Hidden Isle"
+      },
+      "rank": 4,
+      "id": 38892181,
+      "listed_at": "2015-07-21T06:57:43.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0974015",
+          "plex": {
+            "guid": "5d7769aafb0d55001f52c98d",
+            "slug": "the-worldwardens"
+          },
+          "slug": "the-worldwardens-2017",
+          "tmdb": 141052,
+          "trakt": 94232
+        },
+        "year": 2017,
+        "title": "The Worldwardens"
+      },
+      "rank": 5,
+      "id": 38892185,
+      "listed_at": "2015-07-21T06:57:53.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1477834",
+          "plex": {
+            "guid": "5d776b329ab5440021508861",
+            "slug": "tideborn"
+          },
+          "slug": "tideborn-2018",
+          "tmdb": 297802,
+          "trakt": 193968
+        },
+        "year": 2018,
+        "title": "Tideborn"
+      },
+      "rank": 6,
+      "id": 38892198,
+      "listed_at": "2015-07-21T06:58:11.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0448115",
+          "plex": {
+            "guid": "5d776b127a53e9001e719244",
+            "slug": "thunder-kid"
+          },
+          "slug": "thunder-kid-2019",
+          "tmdb": 287947,
+          "trakt": 184992
+        },
+        "year": 2019,
+        "title": "Thunder Kid"
+      },
+      "rank": 7,
+      "id": 38892204,
+      "listed_at": "2015-07-21T06:58:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt7713068",
+          "plex": {
+            "guid": "5d776d9f594b2b001e70db2b",
+            "slug": "the-diamond-s-last-laugh"
+          },
+          "slug": "the-diamond-s-last-laugh-2020",
+          "tmdb": 495764,
+          "trakt": 342639
+        },
+        "year": 2020,
+        "title": "The Diamond's Last Laugh"
+      },
+      "rank": 8,
+      "id": 401702444,
+      "listed_at": "2019-04-21T19:57:36.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt7126948",
+          "plex": {
+            "guid": "5d776d43fb0d55001f59bbbc",
+            "slug": "wonder-woman-the-golden-year"
+          },
+          "slug": "wonder-woman-the-golden-year-2020",
+          "tmdb": 464052,
+          "trakt": 311212
+        },
+        "year": 2020,
+        "title": "Wonder Woman: The Golden Year"
+      },
+      "rank": 9,
+      "id": 288619968,
+      "listed_at": "2017-09-23T12:06:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt6334354",
+          "plex": {
+            "guid": "5d776ca8fb0d55001f58eb2b",
+            "slug": "the-deniable-unit"
+          },
+          "slug": "the-deniable-unit-2021",
+          "tmdb": 436969,
+          "trakt": 283364
+        },
+        "year": 2021,
+        "title": "The Deniable Unit"
+      },
+      "rank": 10,
+      "id": 401702461,
+      "listed_at": "2019-04-21T20:03:11.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt6443346",
+          "plex": {
+            "guid": "5d776ca79ab544002151945c",
+            "slug": "the-ashen-king"
+          },
+          "slug": "the-ashen-king-2022",
+          "tmdb": 436270,
+          "trakt": 288212
+        },
+        "year": 2022,
+        "title": "The Ashen King"
+      },
+      "rank": 11,
+      "id": 176789796,
+      "listed_at": "2017-02-26T16:45:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt10151854",
+          "plex": {
+            "guid": "5d7770d4594b2b001e7528a2",
+            "slug": "thunderborn-wrath-of-the-titans"
+          },
+          "slug": "thunderborn-wrath-of-the-titans-2023",
+          "tmdb": 594767,
+          "trakt": 440996
+        },
+        "year": 2023,
+        "title": "Thunderborn: Wrath of the Titans"
+      },
+      "rank": 12,
+      "id": 496450426,
+      "listed_at": "2020-03-30T19:47:32.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt9663764",
+          "plex": {
+            "guid": "5d7770b2594b2b001e74fb7e",
+            "slug": "tides-of-the-sunken-crown"
+          },
+          "slug": "tides-of-the-sunken-crown-2023",
+          "tmdb": 572802,
+          "trakt": 423775
+        },
+        "year": 2023,
+        "title": "Tides of the Sunken Crown"
+      },
+      "rank": 13,
+      "id": 401702480,
+      "listed_at": "2019-04-21T20:03:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0439572",
+          "plex": {
+            "guid": "5d776b34ad5437001f797675",
+            "slug": "the-last-lap"
+          },
+          "slug": "the-last-lap-2023",
+          "tmdb": 298618,
+          "trakt": 195144
+        },
+        "year": 2023,
+        "title": "The Last Lap"
+      },
+      "rank": 14,
+      "id": 38892190,
+      "listed_at": "2015-07-21T06:58:03.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt9362930",
+          "plex": {
+            "guid": "5d7770a5fb0d55001f5f59bb",
+            "slug": "the-azure-scarab"
+          },
+          "slug": "the-azure-scarab-2023",
+          "tmdb": 565770,
+          "trakt": 415437
+        },
+        "year": 2023,
+        "title": "The Azure Scarab"
+      },
+      "rank": 16,
+      "id": 746221521,
+      "listed_at": "2022-09-30T19:40:34.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

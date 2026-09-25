@@ -1,0 +1,722 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "2893",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,movie",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 14:40:13 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "492",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "3",
+    "x-pagination-page-count": "10",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt14181714",
+        "plex": {
+          "guid": "6048832da653c5002d11fefb",
+          "slug": "the-bluff-blackwater-island"
+        },
+        "slug": "the-bluff-blackwater-island-2026",
+        "tmdb": 799882,
+        "trakt": 634944
+      },
+      "year": 2026,
+      "title": "The Bluff: Blackwater Island"
+    },
+    {
+      "ids": {
+        "imdb": "tt22868010",
+        "plex": {
+          "guid": "6352e881c014c1d7fdbca6c2",
+          "slug": "the-abandoned-town"
+        },
+        "slug": "the-abandoned-town-2026",
+        "tmdb": 680493,
+        "trakt": 525669
+      },
+      "year": 2026,
+      "title": "The Abandoned Town"
+    },
+    {
+      "ids": {
+        "imdb": "tt36304003",
+        "plex": {
+          "guid": "67e2bd331b9848b5ea0d2cff",
+          "slug": "the-wrong-group-chat"
+        },
+        "slug": "the-wrong-group-chat-2026",
+        "tmdb": 949838,
+        "trakt": 763449
+      },
+      "year": 2026,
+      "title": "The Wrong Group Chat"
+    },
+    {
+      "ids": {
+        "imdb": "tt39792948",
+        "plex": {
+          "guid": "699ec3fe8d6980eb524f6746",
+          "slug": "the-alpha-network"
+        },
+        "slug": "the-alpha-network-2026",
+        "tmdb": 1633264,
+        "trakt": 1354831
+      },
+      "year": 2026,
+      "title": "The Alpha Network"
+    },
+    {
+      "ids": {
+        "imdb": "tt35892608",
+        "plex": {
+          "guid": "67dd4b1d5e267cdf808eada4",
+          "slug": "dead-air-dear-listener"
+        },
+        "slug": "dead-air-dear-listener-2026",
+        "tmdb": 1480387,
+        "trakt": 1213506
+      },
+      "year": 2026,
+      "title": "Dead Air, Dear Listener"
+    },
+    {
+      "ids": {
+        "imdb": "tt34888871",
+        "plex": {
+          "guid": "676e1d48fc5459c8046e35c3",
+          "slug": "the-brother-arrangement"
+        },
+        "slug": "the-brother-arrangement-2026",
+        "tmdb": 1397385,
+        "trakt": 1142824
+      },
+      "year": 2026,
+      "title": "The Brother Arrangement"
+    },
+    {
+      "ids": {
+        "imdb": "tt23572848",
+        "plex": {
+          "guid": "636ff714d7aff345330d74cc",
+          "slug": "the-dutchman-s-deep"
+        },
+        "slug": "the-dutchman-s-deep-2025",
+        "tmdb": 991494,
+        "trakt": 796977
+      },
+      "year": 2025,
+      "title": "The Dutchman’s Deep"
+    },
+    {
+      "ids": {
+        "imdb": "tt29927663",
+        "plex": {
+          "guid": "65510c7a66f9be5d4de62007",
+          "slug": "the-great-flood-safe-passage"
+        },
+        "slug": "the-great-flood-safe-passage-2025",
+        "tmdb": 982843,
+        "trakt": 789688
+      },
+      "year": 2025,
+      "title": "The Great Flood: Safe Passage"
+    },
+    {
+      "ids": {
+        "imdb": "tt42863533",
+        "plex": {
+          "guid": "6a11276bf73cbc6319d11a47",
+          "slug": "the-baby-at-the-roadside"
+        },
+        "slug": "the-baby-at-the-roadside-2026",
+        "tmdb": 1699155,
+        "trakt": 1372949
+      },
+      "year": 2026,
+      "title": "The Baby at the Roadside"
+    },
+    {
+      "ids": {
+        "imdb": "tt43749709",
+        "plex": {
+          "guid": "6a76f5131adc3a0dc8527e67",
+          "slug": "first-look-at-the-coastal-metropolis"
+        },
+        "slug": "first-look-at-the-coastal-metropolis-2026",
+        "tmdb": 1744462,
+        "trakt": 1389489
+      },
+      "year": 2026,
+      "title": "First Look at the Coastal Metropolis"
+    },
+    {
+      "ids": {
+        "imdb": "tt34564059",
+        "plex": {
+          "guid": "6738e193d70f01a8cec05ff0",
+          "slug": "miles-to-midnight"
+        },
+        "slug": "miles-to-midnight-2026",
+        "tmdb": 1386315,
+        "trakt": 1132946
+      },
+      "year": 2026,
+      "title": "Miles to Midnight"
+    },
+    {
+      "ids": {
+        "imdb": "tt36958312",
+        "plex": {
+          "guid": "6825ed1bda725a9ba4ab81b5",
+          "slug": "below-the-devil-s-mouth"
+        },
+        "slug": "below-the-devil-s-mouth-2026",
+        "tmdb": 1481343,
+        "trakt": 1214338
+      },
+      "year": 2026,
+      "title": "Below the Devil's Mouth"
+    },
+    {
+      "ids": {
+        "imdb": "tt33088452",
+        "plex": {
+          "guid": "66b7f4c9b6a161a8d96ca7c7",
+          "slug": "what-we-leave-behind"
+        },
+        "slug": "what-we-leave-behind-2025",
+        "tmdb": 1327862,
+        "trakt": 1086230
+      },
+      "year": 2025,
+      "title": "What We Leave Behind"
+    },
+    {
+      "ids": {
+        "imdb": "tt34385135",
+        "plex": {
+          "guid": "672c9ca5e1cbea4d3571e67c",
+          "slug": "quarantine-at-the-summit"
+        },
+        "slug": "quarantine-at-the-summit-2026",
+        "tmdb": 1375646,
+        "trakt": 1123763
+      },
+      "year": 2026,
+      "title": "Quarantine at the Summit"
+    },
+    {
+      "ids": {
+        "imdb": "tt31189814",
+        "plex": {
+          "guid": "65c7036a2612c4da83e3e7f3",
+          "slug": "the-evacuation"
+        },
+        "slug": "the-evacuation-2025",
+        "tmdb": 1242265,
+        "trakt": 1005644
+      },
+      "year": 2025,
+      "title": "The Evacuation"
+    },
+    {
+      "ids": {
+        "imdb": "tt29516222",
+        "plex": {
+          "guid": "65319e02f47a41f49bc8a0e0",
+          "slug": "the-last-landing"
+        },
+        "slug": "the-last-landing-2026",
+        "tmdb": 1127384,
+        "trakt": 907305
+      },
+      "year": 2026,
+      "title": "The Last Landing"
+    },
+    {
+      "ids": {
+        "imdb": "tt32537226",
+        "plex": {
+          "guid": "6660d3017231c580fcc6273c",
+          "slug": "river-of-vengeance"
+        },
+        "slug": "river-of-vengeance-2025",
+        "tmdb": 1387382,
+        "trakt": 1133930
+      },
+      "year": 2025,
+      "title": "River of Vengeance"
+    },
+    {
+      "ids": {
+        "imdb": "tt26735622",
+        "plex": {
+          "guid": "63efd06ae7f94e2f4090be7f",
+          "slug": "the-big-pitch"
+        },
+        "slug": "the-big-pitch-2026",
+        "tmdb": 1084577,
+        "trakt": 871860
+      },
+      "year": 2026,
+      "title": "The Big Pitch"
+    },
+    {
+      "ids": {
+        "imdb": "tt39316472",
+        "plex": {
+          "guid": "69620ce3aa4423feaa327934",
+          "slug": "one-more-bad-idea"
+        },
+        "slug": "one-more-bad-idea-2026",
+        "tmdb": 1612018,
+        "trakt": 1339052
+      },
+      "year": 2026,
+      "title": "One More Bad Idea"
+    },
+    {
+      "ids": {
+        "imdb": "tt9362736",
+        "plex": {
+          "guid": "5e5d3b0b01f65d003eca6208",
+          "slug": "the-house-on-stillwater-road"
+        },
+        "slug": "the-house-on-stillwater-road-2025",
+        "tmdb": 1033148,
+        "trakt": 831157
+      },
+      "year": 2025,
+      "title": "The House on Stillwater Road"
+    },
+    {
+      "ids": {
+        "imdb": "tt29550683",
+        "plex": {
+          "guid": "653434588ca101e8b9eac7c1",
+          "slug": "the-last-note"
+        },
+        "slug": "the-last-note-2026",
+        "tmdb": 1193501,
+        "trakt": 962950
+      },
+      "year": 2026,
+      "title": "The Last Note"
+    },
+    {
+      "ids": {
+        "imdb": "tt34381258",
+        "plex": {
+          "guid": "672c9c8b7c6cd9b6540b02ff",
+          "slug": "the-house-below-the-farm"
+        },
+        "slug": "the-house-below-the-farm-2026",
+        "tmdb": 1381027,
+        "trakt": 1128543
+      },
+      "year": 2026,
+      "title": "The House Below the Farm"
+    },
+    {
+      "ids": {
+        "imdb": "tt27564844",
+        "plex": {
+          "guid": "6447a325cc18a8f07a2c65aa",
+          "slug": "the-blood-sea"
+        },
+        "slug": "the-blood-sea-2026",
+        "tmdb": 1116201,
+        "trakt": 897961
+      },
+      "year": 2026,
+      "title": "The Blood Sea"
+    },
+    {
+      "ids": {
+        "imdb": "tt32654916",
+        "plex": {
+          "guid": "66791f2d0049c99bf3f4ebe2",
+          "slug": "perfect-companion"
+        },
+        "slug": "perfect-companion-2026",
+        "tmdb": 1307118,
+        "trakt": 1066241
+      },
+      "year": 2026,
+      "title": "Perfect Companion"
+    },
+    {
+      "ids": {
+        "imdb": "tt30343021",
+        "plex": {
+          "guid": "65761f75b426dbf4186c37b4",
+          "slug": "the-diamond-tribute"
+        },
+        "slug": "the-diamond-tribute-2025",
+        "tmdb": 1371185,
+        "trakt": 1119747
+      },
+      "year": 2025,
+      "title": "The Diamond Tribute"
+    },
+    {
+      "ids": {
+        "imdb": "tt33014583",
+        "plex": {
+          "guid": "669f217eb80ef7c71e0cd80a",
+          "slug": "deep-cover-in-a-major-port-city"
+        },
+        "slug": "deep-cover-in-a-major-port-city-2025",
+        "tmdb": 1291608,
+        "trakt": 1051128
+      },
+      "year": 2025,
+      "title": "Deep Cover in a major port city"
+    },
+    {
+      "ids": {
+        "imdb": "tt29713093",
+        "plex": {
+          "guid": "6542ee42799ae9104b6c34db",
+          "slug": "the-walking-return"
+        },
+        "slug": "the-walking-return-2026",
+        "tmdb": 1198984,
+        "trakt": 967798
+      },
+      "year": 2026,
+      "title": "The Walking Return"
+    },
+    {
+      "ids": {
+        "imdb": "tt26678938",
+        "plex": {
+          "guid": "63e686e66449672d69624277",
+          "slug": "the-last-rehearsal"
+        },
+        "slug": "the-last-rehearsal-2026",
+        "tmdb": 1084187,
+        "trakt": 871548
+      },
+      "year": 2026,
+      "title": "The Last Rehearsal"
+    },
+    {
+      "ids": {
+        "imdb": "tt33714084",
+        "plex": {
+          "guid": "670b7ea0fb5cda66a9af7c04",
+          "slug": "the-space-between-us"
+        },
+        "slug": "the-space-between-us-2026",
+        "tmdb": 1367642,
+        "trakt": 1116720
+      },
+      "year": 2026,
+      "title": "The Space Between Us"
+    },
+    {
+      "ids": {
+        "imdb": "tt2012616",
+        "plex": {
+          "guid": "5d7768e2fb0d55001f51bc9d",
+          "slug": "motor-city-the-long-payback"
+        },
+        "slug": "motor-city-the-long-payback-2026",
+        "tmdb": 87513,
+        "trakt": 65760
+      },
+      "year": 2026,
+      "title": "Motor City: The Long Payback"
+    },
+    {
+      "ids": {
+        "imdb": "tt32306991",
+        "plex": {
+          "guid": "663be101888bb00686b6ba78",
+          "slug": "honeymoon-for-one"
+        },
+        "slug": "honeymoon-for-one-2026",
+        "tmdb": 1291335,
+        "trakt": 1050875
+      },
+      "year": 2026,
+      "title": "Honeymoon for One"
+    },
+    {
+      "ids": {
+        "imdb": "tt11214558",
+        "plex": {
+          "guid": "5f40962102101b0040056d82",
+          "slug": "the-smashing-machine-inside-the-fight"
+        },
+        "slug": "the-smashing-machine-inside-the-fight-2025",
+        "tmdb": 760329,
+        "trakt": 599275
+      },
+      "year": 2025,
+      "title": "The Smashing Machine: Inside the Fight"
+    },
+    {
+      "ids": {
+        "imdb": "tt35521922",
+        "plex": {
+          "guid": "679fff086d57c87b03564702",
+          "slug": "paws-at-the-door"
+        },
+        "slug": "paws-at-the-door-2025",
+        "tmdb": 1422096,
+        "trakt": 1163318
+      },
+      "year": 2025,
+      "title": "Paws at the Door"
+    },
+    {
+      "ids": {
+        "imdb": "tt34962891",
+        "plex": {
+          "guid": "675ae76def2cf881ad6a4ea1",
+          "slug": "a-street-called-fear"
+        },
+        "slug": "a-street-called-fear-2025",
+        "tmdb": 1400782,
+        "trakt": 1145888
+      },
+      "year": 2025,
+      "title": "A Street Called Fear"
+    },
+    {
+      "ids": {
+        "imdb": "tt23172090",
+        "plex": {
+          "guid": "636439af4679b174a3cb60b5",
+          "slug": "the-monster-next-door"
+        },
+        "slug": "the-monster-next-door-2025",
+        "tmdb": 1043197,
+        "trakt": 839410
+      },
+      "year": 2025,
+      "title": "The Monster Next Door"
+    },
+    {
+      "ids": {
+        "imdb": "tt7574556",
+        "plex": {
+          "guid": "5f40d3412e2b260040b898e2",
+          "slug": "whiteout-rescue"
+        },
+        "slug": "whiteout-rescue-2025",
+        "tmdb": 1235746,
+        "trakt": 999650
+      },
+      "year": 2025,
+      "title": "Whiteout Rescue"
+    },
+    {
+      "ids": {
+        "imdb": "tt35538033",
+        "plex": {
+          "guid": "67a23f4861078f9079534716",
+          "slug": "city-hospital-outbreak"
+        },
+        "slug": "city-hospital-outbreak-2026",
+        "tmdb": 1423191,
+        "trakt": 1164118
+      },
+      "year": 2026,
+      "title": "City Hospital: Outbreak"
+    },
+    {
+      "ids": {
+        "imdb": "tt33499146",
+        "plex": {
+          "guid": "66f841b96c174455758b8fda",
+          "slug": "dink-at-the-club"
+        },
+        "slug": "dink-at-the-club-2026",
+        "tmdb": 1361774,
+        "trakt": 1111709
+      },
+      "year": 2026,
+      "title": "Dink at the Club"
+    },
+    {
+      "ids": {
+        "imdb": "tt32333324",
+        "plex": {
+          "guid": "664081d9987087a6b1b31b63",
+          "slug": "the-broken-city"
+        },
+        "slug": "the-broken-city-2026",
+        "tmdb": 1560520,
+        "trakt": 1281643
+      },
+      "year": 2026,
+      "title": "The Broken City"
+    },
+    {
+      "ids": {
+        "imdb": "tt24326458",
+        "plex": {
+          "guid": "639b56b0c1ada42f5c034248",
+          "slug": "one-mile-out"
+        },
+        "slug": "one-mile-out-2026",
+        "tmdb": 1327688,
+        "trakt": 1086071
+      },
+      "year": 2026,
+      "title": "One Mile Out"
+    },
+    {
+      "ids": {
+        "imdb": "tt30851137",
+        "plex": {
+          "guid": "65a59ec671f2a22e6406f7c8",
+          "slug": "the-second-creation"
+        },
+        "slug": "the-second-creation-2026",
+        "tmdb": 1159831,
+        "trakt": 934595
+      },
+      "year": 2026,
+      "title": "The Second Creation"
+    },
+    {
+      "ids": {
+        "imdb": "tt37969426",
+        "plex": {
+          "guid": "68c603b8e3c0c6463a502c58",
+          "slug": "the-theatre-returns"
+        },
+        "slug": "the-theatre-returns-2026",
+        "tmdb": 1548113,
+        "trakt": 1270365
+      },
+      "year": 2026,
+      "title": "The Theatre Returns"
+    },
+    {
+      "ids": {
+        "imdb": "tt37853455",
+        "plex": {
+          "guid": "67ae386f3c22b1734388d86c",
+          "slug": "the-one-night-rule"
+        },
+        "slug": "the-one-night-rule-2026",
+        "tmdb": 1433367,
+        "trakt": 1172561
+      },
+      "year": 2026,
+      "title": "The One-Night Rule"
+    },
+    {
+      "ids": {
+        "imdb": "tt39139925",
+        "plex": {
+          "guid": "6928855248e6afb60bfa5c27",
+          "slug": "the-patriot-s-shadow"
+        },
+        "slug": "the-patriot-s-shadow-2026",
+        "tmdb": 1582770,
+        "trakt": 1313407
+      },
+      "year": 2026,
+      "title": "The Patriot’s Shadow"
+    },
+    {
+      "ids": {
+        "imdb": "tt10799690",
+        "plex": {
+          "guid": "5e16334a1493cd003f0d9bb2",
+          "slug": "trap-house-family-business"
+        },
+        "slug": "trap-house-family-business-2025",
+        "tmdb": 628847,
+        "trakt": 469557
+      },
+      "year": 2025,
+      "title": "Trap House: Family Business"
+    },
+    {
+      "ids": {
+        "imdb": "tt33311244",
+        "plex": {
+          "guid": "66db9afccbc3a81c39350e94",
+          "slug": "the-wedding-reunion"
+        },
+        "slug": "the-wedding-reunion-2025",
+        "tmdb": 1156594,
+        "trakt": 931834
+      },
+      "year": 2025,
+      "title": "The Wedding Reunion"
+    },
+    {
+      "ids": {
+        "imdb": "tt18382850",
+        "plex": {
+          "guid": "62287dd96d12925e11d9496e",
+          "slug": "everything-at-once"
+        },
+        "slug": "everything-at-once-2025",
+        "tmdb": 1160360,
+        "trakt": 935050
+      },
+      "year": 2025,
+      "title": "Everything at Once"
+    },
+    {
+      "ids": {
+        "imdb": "tt23724682",
+        "plex": {
+          "guid": "63768fe04ef1250d39a920b3",
+          "slug": "the-comeback-cut"
+        },
+        "slug": "the-comeback-cut-2026",
+        "tmdb": 1049471,
+        "trakt": 844391
+      },
+      "year": 2026,
+      "title": "The Comeback Cut"
+    },
+    {
+      "ids": {
+        "imdb": "tt36153493",
+        "plex": {
+          "guid": "67fc6d8efe34022dc6adf2c8",
+          "slug": "the-last-extraction"
+        },
+        "slug": "the-last-extraction-2025",
+        "tmdb": 1448560,
+        "trakt": 1185901
+      },
+      "year": 2025,
+      "title": "The Last Extraction"
+    },
+    {
+      "ids": {
+        "imdb": "tt13964560",
+        "plex": {
+          "guid": "608f3b24c5609f002c214957",
+          "slug": "the-house-after-orbit"
+        },
+        "slug": "the-house-after-orbit-2025",
+        "tmdb": 1086260,
+        "trakt": 873382
+      },
+      "year": 2025,
+      "title": "The House After Orbit"
+    }
+  ]
+}

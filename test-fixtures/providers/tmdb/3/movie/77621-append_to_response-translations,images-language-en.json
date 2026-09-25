@@ -1,0 +1,332 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9313",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"19903a8be3d9cd0b3e883faa0d22fdfc\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/eGhQXfGeNdJfywH6ZmjRwN3f1X8.jpg",
+    "belongs_to_collection": null,
+    "budget": 15000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+    "id": 77621,
+    "imdb_id": "tt0011870",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Beyond the Schoolhouse Gate",
+    "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+    "popularity": 1.2438,
+    "poster_path": "/36MR5nOWUZypLY3i32LCjdqxXOQ.jpg",
+    "production_companies": [
+      {
+        "id": 72067,
+        "logo_path": null,
+        "name": "Juniper Frame Collective",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1920-01-12",
+    "revenue": 0,
+    "runtime": 74,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A picture of courage, learning, and a future reclaimed.",
+    "title": "Beyond the Schoolhouse Gate",
+    "video": false,
+    "vote_average": 6.1,
+    "vote_count": 113,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 74,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 0,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 80,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 79,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 79,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 79,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 0,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 0,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/beyond-the-schoolhouse-gate",
+            "overview": "After her engagement collapses, an educated Black woman devotes herself to saving a nearly bankrupt school serving poor Black children. Her own painful past shadows the work, even as the students' future gives it new purpose.",
+            "runtime": 0,
+            "tagline": "A picture of courage, learning, and a future reclaimed.",
+            "title": "Beyond the Schoolhouse Gate"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 0.999,
+          "height": 1328,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1sPTTodhnoA5OXzlNn1hedMyHdh.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1327
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/36MR5nOWUZypLY3i32LCjdqxXOQ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uz1ONg4DXS9VulSlgF7SOzY7Hz1.jpg",
+          "vote_average": 2.066,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lfCpXkGqGnjBazMkotpa0ktzTvc.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fpYu6zTCaAHMX0t8HGAD5q9syWz.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gLzNRvn1kfHbbk357TnnsTBNEhE.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mv6m7UXxMVQUJuiKY96aOlDtNc1.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.663,
+          "height": 1424,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1GKPMiug46rkqwhYWXUDnQOCMKv.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 944
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a1YX4rvBjmlGX2kl8LMxiwxkeGR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eLqsVqV1zc7ACvfxh3Os66VYqyM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rrDIyk7GNqSe1usBJJi1GAeUEpo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cUuFVcJZxSw9TCtuw9e1lTqRmK2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AtgwK4z2aQrYYNkjIvrC738nvIE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

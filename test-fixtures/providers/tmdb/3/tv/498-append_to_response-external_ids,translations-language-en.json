@@ -1,0 +1,497 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11581",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c43a5378f63975877d2162e1e6bf725f\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7jEnft2CLNbILWAiBRIBrXNN7Qh.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "1993-08-30",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/series/last-compass-alder-bay",
+    "id": 498,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2015-05-20",
+    "last_episode_to_air": {
+      "id": 1070870,
+      "name": "Quiet Garden",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2015-05-20",
+      "episode_number": 149,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 22,
+      "show_id": 498,
+      "still_path": null
+    },
+    "name": "Last Compass: Alder Bay",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Falling River Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 4252,
+    "number_of_seasons": 22,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Last Compass: Alder Bay",
+    "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 294.2778,
+    "poster_path": "/fTBC5EpsgKmli9VQcJMtqQ08Qj4.jpg",
+    "production_companies": [
+      {
+        "id": 54388,
+        "logo_path": "/4XbkL5Av0Y8uVZ3fdhRZhvoKHK9.png",
+        "name": "Hidden Window Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 124448,
+        "logo_path": null,
+        "name": "Emerald Archive Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 2161,
+        "logo_path": "/kaHPCUD2nQ1DGWDAH3zbYVCkTae.png",
+        "name": "Copper Window Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1081,
+        "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
+        "name": "Silent Lantern Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1993-08-30",
+        "episode_count": 219,
+        "id": 61493,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 1,
+        "vote_average": 7.1
+      },
+      {
+        "air_date": "1994-08-29",
+        "episode_count": 220,
+        "id": 66942,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 4
+      },
+      {
+        "air_date": "1995-09-04",
+        "episode_count": 210,
+        "id": 66943,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 9.5
+      },
+      {
+        "air_date": "1996-09-02",
+        "episode_count": 213,
+        "id": 66944,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1997-09-01",
+        "episode_count": 203,
+        "id": 61594,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 5,
+        "vote_average": 6
+      },
+      {
+        "air_date": "1998-08-31",
+        "episode_count": 213,
+        "id": 67240,
+        "name": "Season 6",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 6,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1999-09-07",
+        "episode_count": 196,
+        "id": 67241,
+        "name": "Season 7",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 7,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2000-08-21",
+        "episode_count": 197,
+        "id": 67242,
+        "name": "Season 8",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 8,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2001-08-20",
+        "episode_count": 208,
+        "id": 67243,
+        "name": "Season 9",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 9,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2002-09-03",
+        "episode_count": 187,
+        "id": 67244,
+        "name": "Season 10",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 10,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2003-09-01",
+        "episode_count": 189,
+        "id": 67358,
+        "name": "Season 11",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 11,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2004-08-23",
+        "episode_count": 193,
+        "id": 67359,
+        "name": "Season 12",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 12,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2005-08-29",
+        "episode_count": 197,
+        "id": 67360,
+        "name": "Season 13",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 13,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2006-08-28",
+        "episode_count": 199,
+        "id": 67361,
+        "name": "Season 14",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 14,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2007-09-04",
+        "episode_count": 168,
+        "id": 62434,
+        "name": "Season 15",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 15,
+        "vote_average": 5.9
+      },
+      {
+        "air_date": "2008-09-02",
+        "episode_count": 200,
+        "id": 67362,
+        "name": "Season 16",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 16,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2009-08-31",
+        "episode_count": 245,
+        "id": 61492,
+        "name": "Season 17",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 17,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2011-01-03",
+        "episode_count": 181,
+        "id": 67363,
+        "name": "Season 18",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 18,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2012-01-03",
+        "episode_count": 178,
+        "id": 61592,
+        "name": "Season 19",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 19,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2013-01-02",
+        "episode_count": 179,
+        "id": 61590,
+        "name": "Season 20",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 20,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2014-01-06",
+        "episode_count": 118,
+        "id": 61589,
+        "name": "Season 21",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 21,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2014-09-02",
+        "episode_count": 139,
+        "id": 66740,
+        "name": "Season 22",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 22,
+        "vote_average": 6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Talk Show",
+    "vote_average": 6.5,
+    "vote_count": 174,
+    "external_ids": {
+      "imdb_id": "tt0106053",
+      "freebase_mid": "/m/0ph24",
+      "freebase_id": "/en/late_show_with_david_letterman",
+      "tvdb_id": 75088,
+      "tvrage_id": 4198,
+      "wikidata_id": "Q858778",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Last Compass: Alder Bay",
+            "overview": "Last Compass: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-compass-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

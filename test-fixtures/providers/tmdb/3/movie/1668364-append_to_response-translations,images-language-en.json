@@ -1,0 +1,470 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11720",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8d63e638f5acaf3a6ce1f63bfa0c5f45\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oBter8Y5p2ZFUwWgQ1T9pulGFTJ.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/lucero-s-secret-summer",
+    "id": 1668364,
+    "imdb_id": "tt41617470",
+    "origin_country": [
+      "MX",
+      "ES"
+    ],
+    "original_language": "es",
+    "original_title": "Lucero's Secret Summer",
+    "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+    "popularity": 24.5068,
+    "poster_path": "/3bEqHqeaQlFykaLQ7N4gDkIvL5w.jpg",
+    "production_companies": [
+      {
+        "id": 134015,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "ES"
+      },
+      {
+        "id": 94730,
+        "logo_path": "/1fwoMRV4eUpdosHjiveHV91LaXJ.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "ES"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      }
+    ],
+    "release_date": "2026-05-07",
+    "revenue": 0,
+    "runtime": 97,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Desire has a place at the table.",
+    "title": "Lucero's Secret Summer",
+    "video": false,
+    "vote_average": 6.699,
+    "vote_count": 254,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 97,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 97,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 97,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 97,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 97,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/lucero-s-secret-summer",
+            "overview": "A polished mother becomes entangled with her children's swimming coach, and hidden jealousy unsettles the family she curated.",
+            "runtime": 0,
+            "tagline": "Desire has a place at the table.",
+            "title": "Lucero's Secret Summer"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tXgAdNWi85yDssXy0653hVJ7Smt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.391,
+          "height": 202,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1G8vzunHvNWnxwc91u51dgZ6z6q.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 685
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3bEqHqeaQlFykaLQ7N4gDkIvL5w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

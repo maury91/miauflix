@@ -1,0 +1,387 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22775",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"caf270b9d430a11ca4139fce7ee61dbf\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/wJ1ppVIjxTBx2O6DHRBswH1Go6B.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      60
+    ],
+    "first_air_date": "1973-10-31",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 10768,
+        "name": "War & Politics"
+      }
+    ],
+    "homepage": "https://example.test/series/silent-echo-westmere",
+    "id": 751,
+    "in_production": false,
+    "languages": [
+      "de",
+      "en",
+      "fr"
+    ],
+    "last_air_date": "1974-05-08",
+    "last_episode_to_air": {
+      "id": 40847,
+      "name": "Bright Voyage",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8,
+      "vote_count": 4,
+      "air_date": "1974-05-08",
+      "episode_number": 26,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 52,
+      "season_number": 1,
+      "show_id": 751,
+      "still_path": "/xeufQEKfqbwIVSRUvZratkYeMx7.jpg"
+    },
+    "name": "Silent Echo: Westmere",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 9,
+        "logo_path": "/oz9pjTHnBUmlju8OkaTymhKbh6C.png",
+        "name": "Northern Echo Network",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 26,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_name": "Silent Echo: Westmere",
+    "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 13.8295,
+    "poster_path": "/bWdwEYQQEsz9HuXy5m95z95BYQM.jpg",
+    "production_companies": [
+      {
+        "id": 5846,
+        "logo_path": "/h9O2O30eqiYaNi8qRKclV2U4Wjw.png",
+        "name": "Quiet Horizon Studios",
+        "origin_country": "GB"
+      },
+      {
+        "id": 34917,
+        "logo_path": "/rCmOrLlCmu09wfv80DAsxofvoX2.png",
+        "name": "Silent Sky Studios",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1975-04-30",
+        "episode_count": 12,
+        "id": 507865,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/h6IIIyao5xJwrm1cSKOn3A5haMy.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1973-10-31",
+        "episode_count": 26,
+        "id": 2223,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/jvv2vAeIPIxpONVHb4HfQQu6H0K.jpg",
+        "season_number": 1,
+        "vote_average": 8.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Documentary",
+    "vote_average": 8.3,
+    "vote_count": 187,
+    "external_ids": {
+      "imdb_id": "tt0071075",
+      "freebase_mid": "/m/01hf0q",
+      "freebase_id": "/en/the_world_at_war",
+      "tvdb_id": 79309,
+      "tvrage_id": null,
+      "wikidata_id": "Q12766",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Silent Echo: Westmere",
+            "overview": "Silent Echo: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silent-echo-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

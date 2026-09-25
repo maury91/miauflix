@@ -63,9 +63,11 @@ export class CatalogSynchronizer {
     }
   }
 
-  async syncIncompleteSeasons(): Promise<void> {
-    const watchingOnly = this.episodeSyncMode !== 'GREEDY';
-    const incomplete = this.tvShows.findIncompleteSeason(watchingOnly);
+  async syncIncompleteSeasons(tvMediaId?: number): Promise<void> {
+    // Explicit list-triggered jobs warm the requested show even in ON_DEMAND
+    // mode; the scheduled seed retains the mode-aware watching filter.
+    const watchingOnly = tvMediaId === undefined && this.episodeSyncMode !== 'GREEDY';
+    const incomplete = this.tvShows.findIncompleteSeason(watchingOnly, tvMediaId);
     if (!incomplete) return;
     const season = await this.provider.getSeason(incomplete.tv_media_id, incomplete.season_number);
     if (!season) {
