@@ -5,10 +5,16 @@ import type { PlayablePreparationService } from './playable-preparation.service'
 import type { TorrentWarmupController } from './torrent-warmup.controller';
 
 const LEASE_TTL_MS = 15_000;
+type PreparationLevel = 'metadata' | 'warm';
 
 type PreparationEntry =
-  | { state: 'complete' }
-  | { state: 'pending'; controller: AbortController; timer: ReturnType<typeof setTimeout> };
+  | {
+      state: 'pending';
+      level: PreparationLevel;
+      controller: AbortController;
+      timer: ReturnType<typeof setTimeout>;
+    }
+  | { state: 'complete'; level: PreparationLevel };
 
 export interface PreloadLease {
   key: IntentLeaseKey;
@@ -156,25 +162,31 @@ export class PreloadIntentService {
 
     if (!this.preparation) return;
     for (const [key, target] of wanted) {
-      if (this.preparations.has(key)) continue;
+      const level = this.levelForView(target.view);
+      const existing = this.preparations.get(key);
+      if (existing) {
+        if (this.levelRank(existing.level) >= this.levelRank(level)) continue;
+        if (existing.state === 'pending') {
+          clearTimeout(existing.timer);
+          existing.controller.abort();
+        }
+        this.preparations.delete(key);
+      }
       const controller = new AbortController();
       const timer = setTimeout(
         () => {
           void this.preparation
             ?.prepare(target.playable, {
-              through: target.view === 'details' || target.view === 'player' ? 'warm' : 'metadata',
+              through: level,
               preferences: { quality: 'auto', allowHevc: true },
-              workClass:
-                target.view === 'details' || target.view === 'player'
-                  ? 'interactive'
-                  : 'background',
+              workClass: level === 'warm' ? 'interactive' : 'background',
               ownerKey: key,
               signal: controller.signal,
             })
             .then(() => {
               const current = this.preparations.get(key);
               if (current?.state === 'pending' && current.controller === controller) {
-                this.preparations.set(key, { state: 'complete' });
+                this.preparations.set(key, { state: 'complete', level });
               }
             })
             .catch(() => {
@@ -186,9 +198,17 @@ export class PreloadIntentService {
         },
         target.view === 'player' ? 0 : 350
       );
-      this.preparations.set(key, { state: 'pending', controller, timer });
+      this.preparations.set(key, { state: 'pending', level, controller, timer });
     }
     void now;
+  }
+
+  private levelForView(view: PreloadIntentRequest['view']): PreparationLevel {
+    return view === 'details' || view === 'player' ? 'warm' : 'metadata';
+  }
+
+  private levelRank(level: PreparationLevel): number {
+    return level === 'warm' ? 2 : 1;
   }
 
   private dedupeReachable(reachable: PreloadIntentRequest['reachable']) {

@@ -1,8 +1,8 @@
 import { PreloadIntentService } from './preload-intent.service';
 
-const intent = (sequence: number) => ({
+const intent = (sequence: number, view: 'browse' | 'details' | 'player' = 'details') => ({
   sequence,
-  view: 'details' as const,
+  view,
   focused: { kind: 'movie' as const, mediaId: 42 },
   reachable: [
     {
@@ -63,6 +63,31 @@ describe('PreloadIntentService', () => {
       await jest.advanceTimersByTimeAsync(350);
 
       expect(prepare).toHaveBeenCalledTimes(1);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('re-prepares when the requested view increases the preparation level', async () => {
+    jest.useFakeTimers();
+    const prepare = jest.fn().mockResolvedValue({});
+    const service = new PreloadIntentService({ prepare } as never);
+    try {
+      service.update('user', 'session', 'client', intent(1, 'browse'), 1_000);
+      await jest.advanceTimersByTimeAsync(350);
+      expect(prepare).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ through: 'metadata' })
+      );
+
+      service.update('user', 'session', 'client', intent(2, 'details'), 1_100);
+      await jest.advanceTimersByTimeAsync(350);
+
+      expect(prepare).toHaveBeenCalledTimes(2);
+      expect(prepare).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ through: 'warm' })
+      );
     } finally {
       service.close();
     }
