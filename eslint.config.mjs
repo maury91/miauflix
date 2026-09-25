@@ -23,6 +23,7 @@ export default [
       'frontend/.next/**',
       'frontend/playwright-report*/**',
       'frontend/test-results*/**',
+      'legacy/**',
       'packages/**/dist/**',
       'backend-e2e/docker/**',
       'backend-e2e/scripts/**',
