@@ -6,8 +6,8 @@ import { Storage } from '@entities/storage.entity';
 export class StorageRepository {
   private readonly repository: Repository<Storage>;
 
-  constructor(db: Database) {
-    this.repository = db.getRepository(Storage);
+  constructor(private readonly database: Database) {
+    this.repository = database.getRepository(Storage);
   }
 
   async findById(id: number): Promise<Storage | null> {
@@ -74,6 +74,56 @@ export class StorageRepository {
     await this.repository.update(id, updateData);
   }
 
+  async updateAccounting(
+    id: number,
+    accounting: Partial<Pick<Storage, 'logicalBytes' | 'verifiedBytes'>>
+  ): Promise<void> {
+    await this.repository.update(id, accounting);
+  }
+
+  async reconcileAllocation(id: number, allocatedBytes: number): Promise<void> {
+    await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(Storage)
+        .set({
+          allocatedBytes,
+          reservedBytes: () =>
+            'CASE WHEN :measuredAllocatedBytes >= reservedBytes THEN 0 ELSE reservedBytes END',
+        })
+        .where('id = :id', { id })
+        .setParameter('measuredAllocatedBytes', allocatedBytes)
+        .execute()
+    );
+  }
+
+  async changeActiveStreams(id: number, delta: -1 | 1): Promise<boolean> {
+    const expression =
+      delta === 1
+        ? 'activeStreams + 1'
+        : 'CASE WHEN activeStreams > 0 THEN activeStreams - 1 ELSE 0 END';
+    const result = await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(Storage)
+        .set({ activeStreams: () => expression, lastInterestAt: new Date() })
+        .where('id = :id', { id })
+        .execute()
+    );
+    return (result.affected ?? 0) > 0;
+  }
+
+  async resetActiveStreams(): Promise<void> {
+    await this.database.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(Storage)
+        .set({ activeStreams: 0 })
+        .where('activeStreams > 0')
+        .execute()
+    );
+  }
+
   /**
    * Find storage records that haven't been accessed recently for cleanup
    */
@@ -97,12 +147,18 @@ export class StorageRepository {
    * Find the most stale storage record (least recently accessed)
    * Returns null if no storage records exist
    */
-  async findMostStaleStorage(): Promise<Storage | null> {
-    return this.repository
+  async findMostStaleStorage(excludeMovieSourceId?: number): Promise<Storage | null> {
+    const query = this.repository
       .createQueryBuilder('storage')
+      .where('storage.retentionClass = :retentionClass', { retentionClass: 'speculative' })
+      .andWhere('storage.speculativeExpiresAt <= :now', { now: new Date() })
+      .andWhere('storage.activeStreams = 0')
       .orderBy('storage.lastAccessAt', 'ASC')
-      .addOrderBy('storage.createdAt', 'ASC') // Secondary sort by creation date
-      .getOne();
+      .addOrderBy('storage.createdAt', 'ASC'); // Secondary sort by creation date
+    if (excludeMovieSourceId !== undefined) {
+      query.andWhere('storage.movieSourceId != :excludeMovieSourceId', { excludeMovieSourceId });
+    }
+    return query.getOne();
   }
 
   /**
@@ -119,6 +175,16 @@ export class StorageRepository {
     const result = await this.repository
       .createQueryBuilder('storage')
       .select('SUM(storage.size)', 'totalSize')
+      .getRawOne<{ totalSize: string }>();
+
+    return BigInt(result?.totalSize || 0);
+  }
+
+  /** Application charge: physical allocation, or the reservation until measured. */
+  async getChargedStorageUsage(): Promise<bigint> {
+    const result = await this.repository
+      .createQueryBuilder('storage')
+      .select('SUM(MAX(storage.allocatedBytes, storage.reservedBytes))', 'totalSize')
       .getRawOne<{ totalSize: string }>();
 
     return BigInt(result?.totalSize || 0);

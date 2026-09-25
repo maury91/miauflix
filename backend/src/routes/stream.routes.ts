@@ -13,6 +13,7 @@ export const createStreamRoutes = ({
   configurationService,
   downloadService,
   mediaService,
+  playbackSessionService,
   streamService,
 }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
@@ -40,6 +41,27 @@ export const createStreamRoutes = ({
       try {
         const { token } = context.req.valid('param');
         const { quality = 'auto', hevc = true } = context.req.valid('query');
+
+        // New playback grants are pinned to the exact source selected by the
+        // preparation pipeline. They must never fall back to source ranking.
+        const playbackGrant = await playbackSessionService.verify(token);
+        if (playbackGrant) {
+          if (playbackGrant.playableKind !== 'movie') {
+            return context.json(
+              { error: 'Playable source is unavailable' } satisfies ErrorResponse,
+              404
+            );
+          }
+          const source = await streamService.getSourceById(playbackGrant.sourceId);
+          const movie = source ? await mediaService.getMovieById(source.movieId) : null;
+          if (!source || !movie || `m:${movie.mediaId}` !== playbackGrant.playableKey) {
+            return context.json(
+              { error: 'Playback grant does not match source' } satisfies ErrorResponse,
+              403
+            );
+          }
+          return await downloadService.streamFile(source, context.req.header('range'));
+        }
 
         // Verify streaming key (includes timing attack protection)
         const keyData = await authService.verifyStreamingKey(token);

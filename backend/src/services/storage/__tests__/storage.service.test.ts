@@ -114,6 +114,27 @@ describe('StorageService', () => {
       expect(foundStorage?.movieSourceId).toBe(movieSource.id);
     });
 
+    it('keeps watched retention when the same source is warmed again', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const location = '/tmp/test/watched-rewarm.mkv';
+      await storageService.createStorage({ movieSourceId: source.id, location, size: 1000 });
+
+      const warmed = await storageService.createStorage({
+        movieSourceId: source.id,
+        location,
+        size: 1000,
+        retentionClass: 'speculative',
+        reservedBytes: 100,
+        speculativeExpiresAt: new Date(Date.now() + 15_000),
+      });
+
+      expect(warmed.retentionClass).toBe('watched');
+      expect(warmed.speculativeExpiresAt).toBeNull();
+      expect(warmed.reservedBytes).toBe(1000);
+    });
+
     it('should find storage by ID', async () => {
       // Arrange
       const { storageService } = setupTest();
@@ -463,18 +484,15 @@ describe('StorageService', () => {
       const movieSource = await testDataFactory.createTestMovieSource(movie.id);
       const largeSize = 2 ** 40; // 1TB
 
-      // Act
-      const storage = await storageService.createStorage({
-        movieSourceId: movieSource.id,
-        location: '/tmp/test/large-file.mkv',
-        size: largeSize,
-        downloadedPieces: new Uint8Array(1000),
-        totalPieces: 8000,
-      });
-
-      // Assert
-      expect(storage.size).toBe(largeSize);
-      expect(storage.downloadedPieces.length).toBe(1000);
+      await expect(
+        storageService.createStorage({
+          movieSourceId: movieSource.id,
+          location: '/tmp/test/large-file.mkv',
+          size: largeSize,
+          downloadedPieces: new Uint8Array(1000),
+          totalPieces: 8000,
+        })
+      ).rejects.toThrow('Insufficient storage capacity');
     });
 
     it('should validate file location path exists', async () => {
@@ -535,6 +553,27 @@ describe('StorageService', () => {
       // Assert
       const updatedStorage = await storageService.getStorageByMovieSource(movieSource.id);
       expect(updatedStorage?.lastAccessAt).not.toBeNull();
+      expect(updatedStorage?.lastAccessAt).toBeInstanceOf(Date);
+    });
+
+    it('should not promote speculative storage when marked as accessed', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+      const speculativeExpiresAt = new Date(Date.now() + 60_000);
+      await storageService.createStorage({
+        movieSourceId: movieSource.id,
+        location: '/tmp/test/speculative-access-test.mkv',
+        size: 1_000_000,
+        retentionClass: 'speculative',
+        speculativeExpiresAt,
+      });
+
+      await storageService.markAsAccessed(movieSource.id);
+
+      const updatedStorage = await storageService.getStorageByMovieSource(movieSource.id);
+      expect(updatedStorage?.retentionClass).toBe('speculative');
+      expect(updatedStorage?.speculativeExpiresAt?.getTime()).toBe(speculativeExpiresAt.getTime());
       expect(updatedStorage?.lastAccessAt).toBeInstanceOf(Date);
     });
 
@@ -628,7 +667,7 @@ describe('StorageService', () => {
     it('should emit delete events when cleaning up due to storage pressure', async () => {
       // Arrange
       const originalEnv = process.env.STORAGE_THRESHOLD;
-      process.env.STORAGE_THRESHOLD = '1GB'; // Set low threshold to trigger cleanup
+      process.env.STORAGE_THRESHOLD = '50GB';
 
       try {
         // Create a new service instance to pick up the new threshold
@@ -645,8 +684,13 @@ describe('StorageService', () => {
             movieSourceId: movieSource.id,
             location: `/tmp/test/pressure-${i}.mkv`,
             size: 2 * 1024 * 1024 * 1024, // 2GB each, total 20GB
+            retentionClass: 'speculative',
+            reservedBytes: 2 * 1024 * 1024 * 1024,
+            speculativeExpiresAt: new Date(Date.now() - 1),
           });
         }
+        process.env.STORAGE_THRESHOLD = '1GB';
+        await storageService.reload();
         let deletedCount = 0;
         storageService.on('delete', () => {
           deletedCount++;
@@ -656,7 +700,7 @@ describe('StorageService', () => {
         await storageService.createStorage({
           movieSourceId: extraSource.id,
           location: `/tmp/test/pressure-extra.mkv`,
-          size: 2 * 1024 * 1024 * 1024,
+          size: 100 * 1024 * 1024,
         });
         // Assert: at least one delete event should have been emitted
         expect(deletedCount).toBeGreaterThan(0);
@@ -680,18 +724,24 @@ describe('StorageService', () => {
         movieSourceId: (await testDataFactory.createTestMovieSource(movie.id)).id,
         location: '/tmp/test/stale1.mkv',
         size: 1000000,
+        retentionClass: 'speculative',
+        speculativeExpiresAt: new Date(Date.now() - 1),
       });
 
       const storage2 = await storageService.createStorage({
         movieSourceId: (await testDataFactory.createTestMovieSource(movie.id)).id,
         location: '/tmp/test/stale2.mkv',
         size: 1000000,
+        retentionClass: 'speculative',
+        speculativeExpiresAt: new Date(Date.now() - 1),
       });
 
       const storage3 = await storageService.createStorage({
         movieSourceId: (await testDataFactory.createTestMovieSource(movie.id)).id,
         location: '/tmp/test/stale3.mkv',
         size: 1000000,
+        retentionClass: 'speculative',
+        speculativeExpiresAt: new Date(Date.now() - 1),
       });
 
       // Set different access times
@@ -755,19 +805,24 @@ describe('StorageService', () => {
     it('should not delete the last storage record during periodic cleanup', async () => {
       // Arrange
       const originalEnv = process.env.STORAGE_THRESHOLD;
-      process.env.STORAGE_THRESHOLD = '1MB'; // Very low threshold
+      process.env.STORAGE_THRESHOLD = '50GB';
 
       try {
         const { storageService } = setupTest();
         const movie = await testDataFactory.createTestMovie();
 
-        // Create a single storage record that exceeds the threshold
+        // Seed a row before lowering the limit to simulate existing pressure.
         const movieSource = await testDataFactory.createTestMovieSource(movie.id);
         const storage = await storageService.createStorage({
           movieSourceId: movieSource.id,
           location: '/tmp/test/last-record.mkv',
           size: 10 * 1024 * 1024, // 10MB, exceeds 1MB threshold
+          retentionClass: 'speculative',
+          reservedBytes: 10 * 1024 * 1024,
+          speculativeExpiresAt: new Date(Date.now() - 1),
         });
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
 
         let deletedCount = 0;
         storageService.on('delete', () => {
@@ -795,19 +850,24 @@ describe('StorageService', () => {
     it('should delete all storage records when canCleanEverything is true', async () => {
       // Arrange
       const originalEnv = process.env.STORAGE_THRESHOLD;
-      process.env.STORAGE_THRESHOLD = '1MB'; // Very low threshold
+      process.env.STORAGE_THRESHOLD = '50GB';
 
       try {
         const { storageService } = setupTest();
         const movie = await testDataFactory.createTestMovie();
 
-        // Create a single storage record that exceeds the threshold
+        // Create a single expired speculative record that exceeds the threshold
         const movieSource = await testDataFactory.createTestMovieSource(movie.id);
         await storageService.createStorage({
           movieSourceId: movieSource.id,
           location: '/tmp/test/clean-all.mkv',
           size: 10 * 1024 * 1024, // 10MB, exceeds 1MB threshold
+          retentionClass: 'speculative',
+          reservedBytes: 10 * 1024 * 1024,
+          speculativeExpiresAt: new Date(Date.now() - 1),
         });
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
 
         let deletedCount = 0;
         storageService.on('delete', () => {
@@ -834,7 +894,7 @@ describe('StorageService', () => {
     it('should handle cleanup with multiple storage records', async () => {
       // Arrange
       const originalEnv = process.env.STORAGE_THRESHOLD;
-      process.env.STORAGE_THRESHOLD = '1MB'; // Very low threshold to trigger cleanup
+      process.env.STORAGE_THRESHOLD = '50GB';
 
       try {
         const { storageService } = setupTest();
@@ -848,9 +908,14 @@ describe('StorageService', () => {
             movieSourceId: movieSource.id,
             location: `/tmp/test/multi-${i}.mkv`,
             size: 3 * 1024 * 1024, // 3MB each, total 9MB exceeds 1MB threshold
+            retentionClass: 'speculative',
+            reservedBytes: 3 * 1024 * 1024,
+            speculativeExpiresAt: new Date(Date.now() - 1),
           });
           storages.push({ storage, movieSource });
         }
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
 
         // Set different access times to control deletion order
         const db = dbHelper.getDatabase();
@@ -882,6 +947,252 @@ describe('StorageService', () => {
           delete process.env.STORAGE_THRESHOLD;
         }
       }
+    });
+  });
+
+  describe('admission and playback accounting', () => {
+    it('rejects a new speculative reservation without evicting expired speculative storage', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '50GB';
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+        const expiredSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: expiredSource.id,
+          location: '/tmp/test/expired-speculative.mkv',
+          size: 700 * 1024,
+          retentionClass: 'speculative',
+          reservedBytes: 700 * 1024,
+          speculativeExpiresAt: new Date(Date.now() - 1),
+        });
+
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
+        const newSource = await testDataFactory.createTestMovieSource(movie.id);
+
+        await expect(
+          storageService.createStorage({
+            movieSourceId: newSource.id,
+            location: '/tmp/test/new-speculative.mkv',
+            size: 400 * 1024,
+            retentionClass: 'speculative',
+            reservedBytes: 400 * 1024,
+            speculativeExpiresAt: new Date(Date.now() + 60_000),
+          })
+        ).rejects.toThrow('Insufficient storage capacity');
+        expect(await storageService.getStorageByMovieSource(expiredSource.id)).not.toBeNull();
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
+    it('rejects an existing speculative reservation increase without cleanup', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '50GB';
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+        const expiredSource = await testDataFactory.createTestMovieSource(movie.id);
+        const targetSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: expiredSource.id,
+          location: '/tmp/test/existing-expired.mkv',
+          size: 700 * 1024,
+          retentionClass: 'speculative',
+          reservedBytes: 700 * 1024,
+          speculativeExpiresAt: new Date(Date.now() - 1),
+        });
+        await storageService.createStorage({
+          movieSourceId: targetSource.id,
+          location: '/tmp/test/existing-target.mkv',
+          size: 200 * 1024,
+          retentionClass: 'speculative',
+          reservedBytes: 200 * 1024,
+          speculativeExpiresAt: new Date(Date.now() + 60_000),
+        });
+
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
+        await expect(
+          storageService.createStorage({
+            movieSourceId: targetSource.id,
+            location: '/tmp/test/existing-target.mkv',
+            size: 500 * 1024,
+            retentionClass: 'speculative',
+            reservedBytes: 500 * 1024,
+            speculativeExpiresAt: new Date(Date.now() + 60_000),
+          })
+        ).rejects.toThrow('Insufficient storage capacity');
+        expect(await storageService.getStorageByMovieSource(expiredSource.id)).not.toBeNull();
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
+    it('serializes concurrent reservations for the same source', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const params = (reservedBytes: number) => ({
+        movieSourceId: source.id,
+        location: '/tmp/test/concurrent-source.mkv',
+        size: reservedBytes,
+        retentionClass: 'speculative' as const,
+        reservedBytes,
+        speculativeExpiresAt: new Date(Date.now() + 60_000),
+      });
+
+      const rows = await Promise.all([
+        storageService.createStorage(params(100 * 1024)),
+        storageService.createStorage(params(200 * 1024)),
+      ]);
+
+      expect(rows[0].id).toBe(rows[1].id);
+      expect((await storageService.getStorageByMovieSource(source.id))?.reservedBytes).toBe(
+        200 * 1024
+      );
+      expect(await dbHelper.getDatabase().getStorageRepository().getStorageCount()).toBe(1);
+    });
+
+    it('evicts only expired speculative storage during watched admission', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '50GB';
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+        const expiredSource = await testDataFactory.createTestMovieSource(movie.id);
+        const unexpiredSource = await testDataFactory.createTestMovieSource(movie.id);
+        const watchedSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: expiredSource.id,
+          location: '/tmp/test/evict-expired.mkv',
+          size: 700 * 1024,
+          retentionClass: 'speculative',
+          reservedBytes: 700 * 1024,
+          speculativeExpiresAt: new Date(Date.now() - 1),
+        });
+        await storageService.createStorage({
+          movieSourceId: unexpiredSource.id,
+          location: '/tmp/test/keep-unexpired.mkv',
+          size: 100 * 1024,
+          retentionClass: 'speculative',
+          reservedBytes: 100 * 1024,
+          speculativeExpiresAt: new Date(Date.now() + 60_000),
+        });
+        const watchedStorage = await storageService.createStorage({
+          movieSourceId: watchedSource.id,
+          location: '/tmp/test/keep-watched.mkv',
+          size: 100 * 1024,
+        });
+
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
+        const newWatchedSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: newWatchedSource.id,
+          location: '/tmp/test/new-watched.mkv',
+          size: 300 * 1024,
+        });
+
+        expect(await storageService.getStorageByMovieSource(expiredSource.id)).toBeNull();
+        expect(await storageService.getStorageByMovieSource(unexpiredSource.id)).not.toBeNull();
+        expect(await storageService.getStorageById(watchedStorage.id)).not.toBeNull();
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
+    it('serializes capacity checks through storage insertion', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '1MB';
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+        const sources = await Promise.all([
+          testDataFactory.createTestMovieSource(movie.id),
+          testDataFactory.createTestMovieSource(movie.id),
+        ]);
+
+        const results = await Promise.allSettled(
+          sources.map((source, index) =>
+            storageService.createStorage({
+              movieSourceId: source.id,
+              location: `/tmp/test/admission-${index}.mkv`,
+              size: 700 * 1024,
+            })
+          )
+        );
+
+        expect(results.filter(result => result.status === 'fulfilled')).toHaveLength(1);
+        expect(await storageService.getChargedStorageUsage()).toBe(700n * 1024n);
+        expect(await dbHelper.getDatabase().getStorageRepository().getStorageCount()).toBe(1);
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
+    it('increments and decrements active playback counts without lost updates or underflow', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const storage = await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/tmp/test/active-counter.mkv',
+        size: 1_000,
+      });
+
+      await Promise.all([
+        storageService.setPlaybackActive(source.id, true),
+        storageService.setPlaybackActive(source.id, true),
+      ]);
+      expect((await storageService.getStorageById(storage.id))?.activeStreams).toBe(2);
+
+      await Promise.all([
+        storageService.setPlaybackActive(source.id, false),
+        storageService.setPlaybackActive(source.id, false),
+        storageService.setPlaybackActive(source.id, false),
+      ]);
+      expect((await storageService.getStorageById(storage.id))?.activeStreams).toBe(0);
+    });
+
+    it('prevents cleanup while playback is active and resets stale counters', async () => {
+      const { storageService, database } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const storage = await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/tmp/test/active-cleanup.mkv',
+        size: 1_000,
+      });
+      await storageService.setPlaybackActive(source.id, true);
+
+      await expect(storageService.removeStorage(source.id)).resolves.toBe(0);
+      expect(await storageService.getStorageById(storage.id)).not.toBeNull();
+
+      await database.getStorageRepository().resetActiveStreams();
+      expect((await storageService.getStorageById(storage.id))?.activeStreams).toBe(0);
+    });
+
+    it('keeps an admission reservation until measured allocation catches up', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const storage = await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/path/that/does/not/exist',
+        size: 1_000,
+        reservedBytes: 1_000,
+      });
+
+      const reconciled = await storageService.reconcileAllocation(source.id);
+
+      expect(reconciled?.allocatedBytes).toBe(0);
+      expect(reconciled?.reservedBytes).toBe(storage.reservedBytes);
     });
   });
 });

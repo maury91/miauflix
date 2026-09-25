@@ -20,6 +20,10 @@ import { DownloadService } from '@services/download/download.service';
 import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
+import { PlaybackSessionService } from '@services/playback/playback-session.service';
+import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
+import { PreloadIntentService } from '@services/preload/preload-intent.service';
+import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import { RequestService } from '@services/request/request.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
@@ -103,6 +107,23 @@ try {
     backgroundJobs
   );
   const streamService = new StreamService(db, sourceService, downloadService, mediaService);
+  const torrentWarmupController = new TorrentWarmupController(downloadService);
+  const playablePreparationService = new PlayablePreparationService(
+    mediaService,
+    sourceService,
+    torrentWarmupController
+  );
+  const preloadIntentService = new PreloadIntentService(
+    playablePreparationService,
+    torrentWarmupController
+  );
+  const playbackSessionService = new PlaybackSessionService(
+    db,
+    playablePreparationService,
+    configurationService,
+    torrentWarmupController,
+    storageService
+  );
 
   const serverService = {
     testable: false as const,
@@ -205,6 +226,9 @@ try {
     streamService,
     requestService,
     statsService,
+    preloadIntentService,
+    playbackSessionService,
+    progressRepository: db.getProgressRepository(),
   });
 
   // Error handling middleware - must be added first
