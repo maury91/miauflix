@@ -352,6 +352,272 @@ describe('DownloadService', () => {
     });
   });
 
+  describe('stream cancellation', () => {
+    it('releases stream activity once when cancellation interrupts a pending read', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as {
+        ready: boolean;
+        add: jest.Mock;
+        torrents: unknown[];
+      };
+      const storage = {
+        id: 1,
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+        size: 10,
+      };
+      webtorrent.ready = true;
+      mockStorageService.withSourceLock.mockImplementation(async (_sourceId, operation) =>
+        operation()
+      );
+      mockStorageService.createStorage.mockResolvedValue(storage as never);
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+
+      let resolveRead!: (value: IteratorResult<Uint8Array>) => void;
+      const returnIterator = jest.fn(async () => ({ done: true, value: undefined }));
+      const file = {
+        name: 'movie.mkv',
+        length: 10,
+        offset: 0,
+        select: jest.fn(),
+        [Symbol.asyncIterator]: () => ({
+          next: () => new Promise<IteratorResult<Uint8Array>>(resolve => (resolveRead = resolve)),
+          return: returnIterator,
+        }),
+      };
+      const torrent = {
+        bitfield: undefined,
+        numPieces: 1,
+        pieceLength: 10,
+        length: 10,
+        files: [file],
+        on: jest.fn(),
+        off: jest.fn(),
+      };
+      webtorrent.torrents = [];
+      webtorrent.add.mockImplementation((_input, _options, callback) => {
+        queueMicrotask(() => callback?.(torrent as never));
+        return torrent as never;
+      });
+
+      const response = await service.streamFile({
+        id: 1,
+        size: 10,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+        file: null,
+      } as never);
+      const cancel = response.body!.cancel();
+      await cancel;
+
+      expect(service.hasActivePlayback()).toBe(false);
+      expect(service.isPlaybackActive(1)).toBe(false);
+      expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(1, 1, true);
+      expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(2, 1, false);
+      expect(returnIterator).toHaveBeenCalledTimes(1);
+
+      // Settle the underlying read after cancellation to ensure it is ignored.
+      resolveRead({ done: true, value: undefined });
+    });
+  });
+
+  describe('source promotion', () => {
+    it('starts the watched download with a reservation and marks the selected file accessed', async () => {
+      const { service, mockStorageService } = setupTest();
+      const file = { name: 'movie.mkv', length: 10, select: jest.fn() };
+      const download = { torrent: { files: [file] } };
+      const startDownload = jest
+        .spyOn(service, 'startDownload')
+        .mockResolvedValue(download as never);
+      const source = {
+        id: 12,
+        size: 100,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+      } as never;
+
+      await expect(service.promoteSource(source)).resolves.toBe(true);
+
+      expect(startDownload).toHaveBeenCalledWith(source, {
+        retentionClass: 'watched',
+        reservedBytes: 100,
+      });
+      expect(mockStorageService.reserveStorage).not.toHaveBeenCalled();
+      expect(file.select).toHaveBeenCalledTimes(1);
+      expect(mockStorageService.markAsAccessed).toHaveBeenCalledWith(12);
+    });
+
+    it.each(['watched', 'speculative'] as const)(
+      'preserves %s torrent selection when warming the source',
+      async retentionClass => {
+        const { service } = setupTest();
+        const file = {
+          name: 'movie.mkv',
+          offset: 0,
+          length: 10,
+          select: jest.fn(),
+          deselect: jest.fn(),
+        };
+        const torrent = {
+          files: [file],
+          pieceLength: 2,
+          numPieces: 5,
+          select: jest.fn(),
+        };
+        jest.spyOn(service, 'startDownload').mockResolvedValue({
+          torrent,
+          storage: { retentionClass },
+        } as never);
+        const source = { id: 12, size: 10 } as never;
+
+        await service.warmSource(source, 4);
+
+        if (retentionClass === 'watched') {
+          expect(file.select).toHaveBeenCalledTimes(1);
+          expect(file.deselect).not.toHaveBeenCalled();
+          expect(torrent.select).not.toHaveBeenCalled();
+        } else {
+          expect(file.select).not.toHaveBeenCalled();
+          expect(file.deselect).toHaveBeenCalledTimes(1);
+          expect(torrent.select).toHaveBeenCalledWith(0, 1, 1);
+        }
+      }
+    );
+  });
+
+  describe('download tracking and allocation reconciliation', () => {
+    it('sets up bitfield tracking once when a torrent is reused', async () => {
+      const { service, mockStorageService } = setupTest();
+      const torrent = {
+        bitfield: undefined,
+        numPieces: 1,
+        pieceLength: 10,
+        length: 10,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+      const source = {
+        id: 1,
+        size: 10,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+      } as never;
+
+      await service.startDownload(source);
+      await service.startDownload(source);
+
+      expect(torrent.on).toHaveBeenCalledTimes(2);
+      expect(torrent.on).toHaveBeenNthCalledWith(1, 'verified', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(2, 'done', expect.any(Function));
+    });
+
+    it('tracks each source when different sources reuse one torrent', async () => {
+      const { service, mockStorageService } = setupTest();
+      const torrent = {
+        bitfield: undefined,
+        numPieces: 1,
+        pieceLength: 10,
+        length: 10,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+      const source = (id: number) =>
+        ({
+          id,
+          size: 10,
+          hash: 'a'.repeat(40),
+          magnetLink: 'magnet:?xt=urn:btih:test',
+        }) as never;
+
+      await service.startDownload(source(1));
+      await service.startDownload(source(2));
+
+      expect(torrent.on).toHaveBeenCalledTimes(4);
+      expect(torrent.on).toHaveBeenNthCalledWith(1, 'verified', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(2, 'done', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(3, 'verified', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(4, 'done', expect.any(Function));
+
+      mockStorageService.updateDownloadProgress.mockClear();
+      const verifiedHandlers = (torrent.on as jest.Mock).mock.calls
+        .filter(([event]) => event === 'verified')
+        .map(([, handler]) => handler as () => Promise<void>);
+      await Promise.all(verifiedHandlers.map(handler => handler()));
+
+      expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
+        expect.objectContaining({ movieSourceId: 1 })
+      );
+      expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
+        expect.objectContaining({ movieSourceId: 2 })
+      );
+    });
+
+    it('joins an in-flight reconciliation for non-forced calls', async () => {
+      const { service, mockStorageService } = setupTest();
+      let resolveReconcile!: (value: null) => void;
+      const pending = new Promise<null>(resolve => {
+        resolveReconcile = resolve;
+      });
+      mockStorageService.reconcileAllocation.mockReturnValueOnce(pending);
+      const reconcile = (
+        service as unknown as {
+          reconcileAllocationIfDue: (movieSourceId: number, force?: boolean) => Promise<void>;
+        }
+      ).reconcileAllocationIfDue.bind(service);
+
+      const firstCall = reconcile(1);
+      const joinedCall = reconcile(1);
+      expect(mockStorageService.reconcileAllocation).toHaveBeenCalledTimes(1);
+
+      resolveReconcile(null);
+      await expect(firstCall).resolves.toBeUndefined();
+      await expect(joinedCall).resolves.toBeUndefined();
+    });
+
+    it('runs a fresh forced reconciliation after an in-flight call rejects', async () => {
+      const { service, mockStorageService } = setupTest();
+      let rejectReconcile!: (error: Error) => void;
+      const pending = new Promise<null>((_resolve, reject) => {
+        rejectReconcile = reject;
+      });
+      mockStorageService.reconcileAllocation
+        .mockReturnValueOnce(pending)
+        .mockResolvedValueOnce(null);
+      const reconcile = (
+        service as unknown as {
+          reconcileAllocationIfDue: (movieSourceId: number, force?: boolean) => Promise<void>;
+        }
+      ).reconcileAllocationIfDue.bind(service);
+
+      const firstCall = reconcile(1);
+      const forcedCall = reconcile(1, true);
+      expect(mockStorageService.reconcileAllocation).toHaveBeenCalledTimes(1);
+      rejectReconcile(new Error('initial reconciliation failed'));
+
+      await expect(firstCall).rejects.toThrow('initial reconciliation failed');
+      await expect(forcedCall).resolves.toBeUndefined();
+      expect(mockStorageService.reconcileAllocation).toHaveBeenCalledTimes(2);
+    });
+  });
+
   //   describe('getSourceMetadataFile', () => {
   //     beforeEach(() => {
   //       mockRequestService.request.mockResolvedValue(

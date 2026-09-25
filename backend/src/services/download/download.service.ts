@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { logger } from '@logger';
 import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
-import { access, constants, mkdir } from 'fs/promises';
+import { access, constants, mkdir, rm } from 'fs/promises';
 import MemoryChunkStore from 'memory-chunk-store';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
@@ -47,8 +47,20 @@ export interface DownloadProgress {
   isComplete: boolean;
 }
 
+export interface WarmupResult {
+  sourceId: number;
+  targetBytes: number;
+  firstPiece: number;
+  lastPiece: number;
+}
+
 export class DownloadService {
   public readonly client: WebTorrent;
+  private activeStreams = 0;
+  private readonly activeSourceCounts = new Map<number, number>();
+  private readonly allocationReconcileAt = new Map<number, number>();
+  private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
+  private readonly bitfieldTrackedTorrents = new WeakMap<Torrent, Set<number>>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -86,8 +98,9 @@ export class DownloadService {
     config.registerService('DOWNLOAD', this);
     void this.init();
 
-    // Subscribe to storageService 'delete' events
-    this.storageService.on('delete', async storage => {
+    const cleanupStorage = async (storage: Storage, strict: boolean): Promise<void> => {
+      const marker = storage as Storage & { physicalCleanupDone?: boolean };
+      if (marker.physicalCleanupDone) return;
       // Get the hash from the associated MovieSource
       const hash = storage.movieSource?.hash;
       if (!hash) {
@@ -95,18 +108,33 @@ export class DownloadService {
           'DownloadService',
           `No hash found for storage ${storage.id}, cannot remove torrent`
         );
+        if (strict) throw new Error(`No hash found for storage ${storage.id}`);
         return;
       }
 
       const torrent = await this.client.get(hash);
       if (torrent) {
-        this.client.remove(torrent, { destroyStore: true });
+        await Promise.resolve(this.client.remove(torrent, { destroyStore: true }));
         logger.info('DownloadService', `Removed torrent for deleted storage: ${storage.location}`);
       }
-    });
+      await rm(storage.location, { recursive: true, force: true });
+      marker.physicalCleanupDone = true;
+    };
+
+    // StorageService invokes the strict handler before deleting its database
+    // row. Keep the event hook for existing observers and unit-level callers.
+    this.storageService.registerDeleteHandler(storage => cleanupStorage(storage, true));
+    this.storageService.on('delete', storage => cleanupStorage(storage, false));
   }
 
   testable = true;
+  hasActivePlayback(): boolean {
+    return this.activeStreams > 0;
+  }
+
+  isPlaybackActive(sourceId: number): boolean {
+    return (this.activeSourceCounts.get(sourceId) ?? 0) > 0;
+  }
   getStatus(): ServiceInstanceStatus {
     return this._initStatus;
   }
@@ -281,7 +309,14 @@ export class DownloadService {
    * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
    */
   @traced('DownloadService')
-  async startDownload(source: MovieSource): Promise<GreedyDownload> {
+  async startDownload(
+    source: MovieSource,
+    options: {
+      retentionClass?: 'speculative' | 'watched';
+      reservedBytes?: number;
+      speculativeExpiresAt?: Date | null;
+    } = {}
+  ): Promise<GreedyDownload> {
     try {
       logger.info('DownloadService', `Starting download for source ${source.id}`);
 
@@ -294,6 +329,10 @@ export class DownloadService {
         size: source.size || 0,
         downloadedPieces: new Uint8Array(0),
         totalPieces: 0,
+        retentionClass: options.retentionClass,
+        reservedBytes:
+          options.reservedBytes ?? (options.retentionClass === 'speculative' ? 0 : source.size),
+        speculativeExpiresAt: options.speculativeExpiresAt,
       });
 
       // Add torrent with priority-specific configuration
@@ -306,9 +345,24 @@ export class DownloadService {
         totalPieces: torrent.numPieces,
         size: torrent.length,
       });
+      await this.storageService.updateTorrentLayout(
+        source.id,
+        torrent.numPieces,
+        torrent.pieceLength,
+        torrent.length
+      );
+      if (options.retentionClass !== 'speculative') {
+        await this.storageService.reserveStorage(source.id, torrent.length);
+      }
+      await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
-      this.setupBitfieldTracking(torrent, source.id);
+      const trackedSourceIds = this.bitfieldTrackedTorrents.get(torrent) ?? new Set<number>();
+      if (!trackedSourceIds.has(source.id)) {
+        trackedSourceIds.add(source.id);
+        this.bitfieldTrackedTorrents.set(torrent, trackedSourceIds);
+        this.setupBitfieldTracking(torrent, source.id);
+      }
 
       const greedyDownload: GreedyDownload = {
         movieSourceId: source.id,
@@ -333,6 +387,60 @@ export class DownloadService {
         'greedy_download_failed'
       );
     }
+  }
+
+  /**
+   * Add a torrent without selecting the complete file. WebTorrent selection is
+   * piece-based, so the selected range is the smallest piece-aligned prefix
+   * that covers the initial playback target.
+   */
+  async warmSource(
+    source: MovieSource,
+    targetBytes: number,
+    speculativeExpiresAt: Date | null = null
+  ): Promise<WarmupResult> {
+    const target = Math.max(1, Math.min(Math.floor(targetBytes), source.size || targetBytes));
+    const download = await this.startDownload(source, {
+      retentionClass: 'speculative',
+      reservedBytes: target,
+      speculativeExpiresAt,
+    });
+    const file = getVideoFile(download.torrent);
+    const pieceLength = download.torrent.pieceLength;
+    const fileOffset = Number(file.offset ?? 0);
+    const firstPiece = Math.max(0, Math.floor(fileOffset / pieceLength));
+    const lastPiece = Math.min(
+      download.torrent.numPieces - 1,
+      Math.max(
+        firstPiece,
+        Math.ceil((fileOffset + Math.min(target, file.length)) / pieceLength) - 1
+      )
+    );
+
+    if (download.storage.retentionClass === 'watched') {
+      // A watched row may survive a torrent restart, so restore its full selection.
+      file.select();
+    } else {
+      file.deselect();
+      download.torrent.select(firstPiece, lastPiece, 1);
+    }
+    return { sourceId: source.id, targetBytes: target, firstPiece, lastPiece };
+  }
+
+  async pauseSource(sourceId: number): Promise<boolean> {
+    return this.pauseDownload(sourceId);
+  }
+
+  /** Promote the already-added source; no source ranking or replacement occurs. */
+  async promoteSource(source: MovieSource): Promise<boolean> {
+    const download = await this.startDownload(source, {
+      retentionClass: 'watched',
+      reservedBytes: source.size,
+    });
+    const file = getVideoFile(download.torrent);
+    file.select();
+    await this.storageService.markAsAccessed(source.id);
+    return true;
   }
 
   /**
@@ -592,6 +700,7 @@ export class DownloadService {
           totalPieces: torrent.numPieces,
           size: torrent.length,
         });
+        await this.reconcileAllocationIfDue(movieSourceId);
       } catch (error) {
         logger.warn(
           'DownloadService',
@@ -603,6 +712,7 @@ export class DownloadService {
 
     torrent.on('done', async () => {
       try {
+        await this.reconcileAllocationIfDue(movieSourceId, true);
         await this.storageService.markAsAccessed(movieSourceId);
         logger.info('DownloadService', `Download completed for movie source ${movieSourceId}`);
       } catch (error) {
@@ -615,18 +725,53 @@ export class DownloadService {
     });
   }
 
+  private async reconcileAllocationIfDue(movieSourceId: number, force = false): Promise<void> {
+    const inFlight = this.allocationReconcileInFlight.get(movieSourceId);
+    if (inFlight) {
+      if (!force) return inFlight;
+      await inFlight.catch(() => undefined);
+      return this.reconcileAllocationIfDue(movieSourceId, true);
+    }
+    const now = Date.now();
+    if (!force && now - (this.allocationReconcileAt.get(movieSourceId) ?? 0) < 1_000) return;
+    const reconcile = this.storageService
+      .reconcileAllocation(movieSourceId)
+      .then(() => {
+        this.allocationReconcileAt.set(movieSourceId, Date.now());
+      })
+      .finally(() => {
+        if (this.allocationReconcileInFlight.get(movieSourceId) === reconcile) {
+          this.allocationReconcileInFlight.delete(movieSourceId);
+        }
+      });
+    this.allocationReconcileInFlight.set(movieSourceId, reconcile);
+    return reconcile;
+  }
+
   /**
    * Stream a file from a torrent with range request support
    * Based on WebTorrent server implementation
    */
   @traced('DownloadService')
   async streamFile(movieSource: MovieSource, rangeHeader?: string): Promise<Response> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const handleRequest = async () => {
-        const { torrent } = await this.startDownload(movieSource);
-        // Autofind the correct file
+        const { torrent } = await this.startDownload(movieSource, {
+          retentionClass: 'watched',
+          reservedBytes: movieSource.size,
+        });
         const file = getVideoFile(torrent);
-        file.select();
+        await this.storageService.withSourceLock(movieSource.id, async () => {
+          if (!(await this.storageService.setPlaybackActive(movieSource.id, true))) {
+            throw new Error(`Storage not found for movie source ${movieSource.id}`);
+          }
+          file.select();
+          this.activeStreams += 1;
+          this.activeSourceCounts.set(
+            movieSource.id,
+            (this.activeSourceCounts.get(movieSource.id) ?? 0) + 1
+          );
+        });
 
         const headers: Record<string, string> = {
           'Accept-Ranges': 'bytes',
@@ -652,49 +797,77 @@ export class DownloadService {
           headers['Content-Length'] = String(file.length);
         }
 
-        const webReadableStream = new ReadableStream({
-          async start(controller) {
-            try {
-              const iterator = file[Symbol.asyncIterator](range || {});
+        let iterator: AsyncIterator<Uint8Array> | undefined;
+        let iteratorReturned = false;
+        let cancelled = false;
+        let resolveCancellation!: () => void;
+        const cancellation = new Promise<void>(
+          resolveCancel => (resolveCancellation = resolveCancel)
+        );
+        const returnIterator = () => {
+          if (iteratorReturned) return;
+          iteratorReturned = true;
+          void iterator?.return?.().catch(() => undefined);
+        };
+        let releasePromise: Promise<void> | undefined;
+        const release = (): Promise<void> => {
+          if (releasePromise) return releasePromise;
+          this.activeStreams = Math.max(0, this.activeStreams - 1);
+          const remaining = (this.activeSourceCounts.get(movieSource.id) ?? 1) - 1;
+          if (remaining > 0) this.activeSourceCounts.set(movieSource.id, remaining);
+          else this.activeSourceCounts.delete(movieSource.id);
+          releasePromise = this.storageService.withSourceLock(movieSource.id, async () => {
+            await this.storageService.setPlaybackActive(movieSource.id, false);
+          });
+          return releasePromise;
+        };
 
-              while (true) {
-                const result = await iterator.next();
+        const webReadableStream = new ReadableStream<Uint8Array>({
+          start: async controller => {
+            try {
+              iterator = file[Symbol.asyncIterator](range || {});
+
+              while (!cancelled) {
+                const next = await Promise.race([
+                  iterator.next().then(result => ({ type: 'read' as const, result })),
+                  cancellation.then(() => ({ type: 'cancel' as const })),
+                ]);
+                if (next.type === 'cancel' || cancelled) break;
+                const { result } = next;
 
                 if (result.done) {
                   controller.close();
                   break;
                 }
 
-                // Check if the stream has been cancelled
-                if (controller.desiredSize === null) {
-                  break;
-                }
-
                 // Wait for backpressure to clear if needed
-                if (controller.desiredSize !== null && controller.desiredSize <= 0) {
-                  await new Promise(resolve => {
-                    const checkBackpressure = () => {
-                      const desiredSize = controller.desiredSize;
-                      if (desiredSize !== null && desiredSize > 0) {
-                        resolve(undefined);
-                      } else {
-                        setTimeout(checkBackpressure, 10);
-                      }
-                    };
-                    checkBackpressure();
-                  });
+                while (
+                  !cancelled &&
+                  controller.desiredSize !== null &&
+                  controller.desiredSize <= 0
+                ) {
+                  await Promise.race([
+                    new Promise<void>(resolveWait => setTimeout(resolveWait, 10)),
+                    cancellation,
+                  ]);
                 }
-
+                if (cancelled) break;
                 controller.enqueue(result.value);
               }
             } catch (error) {
-              controller.error(error);
+              if (!cancelled) controller.error(error);
+            } finally {
+              if (cancelled) returnIterator();
+              if (!releasePromise) await release();
             }
           },
 
-          cancel() {
-            // Clean up if the stream is cancelled
+          async cancel() {
+            cancelled = true;
+            resolveCancellation();
+            returnIterator();
             logger.debug('DownloadService', 'Stream cancelled by client');
+            await release();
           },
         });
 
@@ -708,9 +881,9 @@ export class DownloadService {
       };
 
       if (this.client.ready) {
-        handleRequest();
+        handleRequest().catch(reject);
       } else {
-        this.client.once('ready', handleRequest);
+        this.client.once('ready', () => handleRequest().catch(reject));
       }
     });
   }

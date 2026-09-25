@@ -14,6 +14,8 @@ import { createConfigRoutes } from './config.routes';
 import { createIntegrationRoutes } from './integrations.routes';
 import { createListRoutes } from './list.routes';
 import { createMovieRoutes } from './movie.routes';
+import { createPlaybackRoutes } from './playback.routes';
+import { createPreloadRoutes } from './preload.routes';
 import { createProgressRoutes } from './progress.routes';
 import { createShowRoutes } from './show.routes';
 import { createStreamRoutes } from './stream.routes';
@@ -53,6 +55,8 @@ function createApiRoutes(deps: Deps) {
     .route('/shows', createShowRoutes(deps))
     .route('/stream', createStreamRoutes(deps))
     .route('/progress', createProgressRoutes(deps))
+    .route('/preload', createPreloadRoutes(deps))
+    .route('/playback', createPlaybackRoutes(deps))
     .route('/', createListRoutes(deps));
 }
 

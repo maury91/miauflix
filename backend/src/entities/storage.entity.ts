@@ -39,6 +39,40 @@ export class Storage {
   })
   size: number;
 
+  /** Logical bytes belong to the selected playable file, not physical usage. */
+  @Column({ type: 'integer', default: 0 })
+  logicalBytes: number;
+
+  /** Bytes verified from the torrent bitfield. */
+  @Column({ type: 'integer', default: 0 })
+  verifiedBytes: number;
+
+  /** Physical filesystem blocks charged to this storage. */
+  @Column({ type: 'integer', default: 0 })
+  allocatedBytes: number;
+
+  /** Admission charge while physical allocation has not been measured. */
+  @Column({ type: 'integer', default: 0 })
+  reservedBytes: number;
+
+  @Column({ type: 'integer', default: 0 })
+  totalPieces: number;
+
+  @Column({ type: 'integer', default: 0 })
+  pieceLength: number;
+
+  @Column({ length: 16, default: 'watched' })
+  retentionClass: 'speculative' | 'watched';
+
+  @Column({ type: 'datetime', nullable: true })
+  lastInterestAt: Date | null;
+
+  @Column({ type: 'datetime', nullable: true })
+  speculativeExpiresAt: Date | null;
+
+  @Column({ type: 'integer', default: 0 })
+  activeStreams: number;
+
   @Column({
     type: 'integer',
     default: 0,

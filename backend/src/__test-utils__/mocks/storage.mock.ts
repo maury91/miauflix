@@ -14,6 +14,16 @@ export function createMockStorage(overrides: Partial<Storage> = {}): Storage {
     movieSourceId,
     downloadedPieces: overrides.downloadedPieces ?? new Uint8Array(0),
     size: overrides.size ?? faker.number.int({ min: 1024 * 1024, max: 10 * 1024 * 1024 * 1024 }), // 1MB to 10GB
+    logicalBytes: overrides.logicalBytes ?? overrides.size ?? 0,
+    verifiedBytes: overrides.verifiedBytes ?? 0,
+    allocatedBytes: overrides.allocatedBytes ?? 0,
+    reservedBytes: overrides.reservedBytes ?? 0,
+    totalPieces: overrides.totalPieces ?? 0,
+    pieceLength: overrides.pieceLength ?? 0,
+    retentionClass: overrides.retentionClass ?? 'watched',
+    lastInterestAt: overrides.lastInterestAt ?? null,
+    speculativeExpiresAt: overrides.speculativeExpiresAt ?? null,
+    activeStreams: overrides.activeStreams ?? 0,
     downloaded: overrides.downloaded ?? faker.number.int({ min: 0, max: 10000 }), // 0-100% in basis points
     location: overrides.location ?? faker.system.filePath(),
     lastAccessAt: overrides.lastAccessAt ?? (faker.datatype.boolean() ? faker.date.recent() : null),
