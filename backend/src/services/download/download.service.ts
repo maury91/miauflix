@@ -60,7 +60,7 @@ export class DownloadService {
   private readonly activeSourceCounts = new Map<number, number>();
   private readonly allocationReconcileAt = new Map<number, number>();
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
-  private readonly bitfieldTrackedTorrents = new WeakSet<Torrent>();
+  private readonly bitfieldTrackedTorrents = new WeakMap<Torrent, Set<number>>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -357,8 +357,10 @@ export class DownloadService {
       await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
-      if (!this.bitfieldTrackedTorrents.has(torrent)) {
-        this.bitfieldTrackedTorrents.add(torrent);
+      const trackedSourceIds = this.bitfieldTrackedTorrents.get(torrent) ?? new Set<number>();
+      if (!trackedSourceIds.has(source.id)) {
+        trackedSourceIds.add(source.id);
+        this.bitfieldTrackedTorrents.set(torrent, trackedSourceIds);
         this.setupBitfieldTracking(torrent, source.id);
       }
 

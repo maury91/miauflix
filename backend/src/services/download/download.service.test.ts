@@ -520,6 +520,56 @@ describe('DownloadService', () => {
       expect(torrent.on).toHaveBeenNthCalledWith(2, 'done', expect.any(Function));
     });
 
+    it('tracks each source when different sources reuse one torrent', async () => {
+      const { service, mockStorageService } = setupTest();
+      const torrent = {
+        bitfield: undefined,
+        numPieces: 1,
+        pieceLength: 10,
+        length: 10,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+      const source = (id: number) =>
+        ({
+          id,
+          size: 10,
+          hash: 'a'.repeat(40),
+          magnetLink: 'magnet:?xt=urn:btih:test',
+        }) as never;
+
+      await service.startDownload(source(1));
+      await service.startDownload(source(2));
+
+      expect(torrent.on).toHaveBeenCalledTimes(4);
+      expect(torrent.on).toHaveBeenNthCalledWith(1, 'verified', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(2, 'done', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(3, 'verified', expect.any(Function));
+      expect(torrent.on).toHaveBeenNthCalledWith(4, 'done', expect.any(Function));
+
+      mockStorageService.updateDownloadProgress.mockClear();
+      const verifiedHandlers = (torrent.on as jest.Mock).mock.calls
+        .filter(([event]) => event === 'verified')
+        .map(([, handler]) => handler as () => Promise<void>);
+      await Promise.all(verifiedHandlers.map(handler => handler()));
+
+      expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
+        expect.objectContaining({ movieSourceId: 1 })
+      );
+      expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
+        expect.objectContaining({ movieSourceId: 2 })
+      );
+    });
+
     it('joins an in-flight reconciliation for non-forced calls', async () => {
       const { service, mockStorageService } = setupTest();
       let resolveReconcile!: (value: null) => void;
