@@ -16,6 +16,7 @@ import { Episode } from '@entities/episode.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
+import { PlaybackGrant } from '@entities/playback-grant.entity';
 import { Progress } from '@entities/progress.entity';
 import { QrLoginRequest } from '@entities/qr-login-request.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
@@ -28,6 +29,7 @@ import { AuditLogRepository } from '@repositories/audit-log.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
+import { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import { ProgressRepository } from '@repositories/progress.repository';
 import { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
@@ -115,6 +117,7 @@ export class Database {
   private storageRepository: StorageRepository;
   private streamingKeyRepository: StreamingKeyRepository;
   private progressRepository: ProgressRepository;
+  private playbackGrantRepository: PlaybackGrantRepository;
 
   constructor(configurationService: ConfigurationService) {
     const encryptionService = new EncryptionService(
@@ -147,6 +150,7 @@ export class Database {
         Storage,
         StreamingKey,
         Progress,
+        PlaybackGrant,
       ],
       synchronize: false,
       logger: new DatabaseLogger('all'),
@@ -166,8 +170,10 @@ export class Database {
     this.auditLogRepository = new AuditLogRepository(this);
     this.qrLoginRequestRepository = new QrLoginRequestRepository(this);
     this.storageRepository = new StorageRepository(this);
+    await this.storageRepository.resetActiveStreams();
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this);
+    this.playbackGrantRepository = new PlaybackGrantRepository(this);
   }
 
   public async close(): Promise<void> {
@@ -257,5 +263,9 @@ export class Database {
 
   public getProgressRepository() {
     return this.progressRepository;
+  }
+
+  public getPlaybackGrantRepository() {
+    return this.playbackGrantRepository;
   }
 }
