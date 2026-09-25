@@ -32,6 +32,10 @@ export class CatalogWorkerManager {
 
   async stop(): Promise<void> {
     this.stopped = true;
+    await this.pause();
+  }
+
+  async pause(): Promise<void> {
     await Promise.all(this.workers.map(worker => worker.close()));
     this.workers.length = 0;
     for (const queue of this.queues.values()) queue.close();

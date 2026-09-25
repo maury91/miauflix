@@ -14,7 +14,6 @@ export type {
 export type {
   ServiceConfigSchema as CatalogConfigSchema,
   ServiceConfigTestResult as CatalogConfigTestResult,
-  ServiceConfigState as CatalogConfigValues,
   ConfigVariable as CatalogConfigVariableSchema,
   ServiceConfigApplyResult as CatalogConfigWriteResult,
   ServiceStatus as CatalogStatus,

@@ -1,7 +1,5 @@
 import {
-  type ServiceStatuses,
   useGetConfigQuery,
-  useGetServiceStatusesQuery,
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
 } from '@features/config/api/config.api';
@@ -228,34 +226,10 @@ const formatServiceName = (name: string) =>
         .join(' ')
     : name;
 
-const statusFailureResult = (
-  service: string,
-  serviceStatuses: ServiceStatuses
-): ConfigServiceActionResult | undefined => {
-  const status = serviceStatuses[service];
-  if (!status || !['degraded', 'error', 'needs_configuration'].includes(status.status)) {
-    return undefined;
-  }
-
-  return {
-    service: service as ConfigServiceActionResult['service'],
-    success: false,
-    testMode: 'live',
-    message:
-      status.errorMessage ??
-      status.reason ??
-      status.details ??
-      `The service status is ${status.status.replace(/_/g, ' ')}.`,
-  };
-};
-
 const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, duration));
 
 export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const { data: entries = [], isLoading } = useGetConfigQuery(undefined);
-  const { data: serviceStatusData, isLoading: isServiceStatusesLoading } =
-    useGetServiceStatusesQuery(undefined);
-  const serviceStatuses = useMemo(() => serviceStatusData ?? {}, [serviceStatusData]);
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
   const { values, dirtyServices, handleChange, getServiceEntries, markServiceSaved } =
@@ -265,7 +239,6 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const [results, setResults] = useState<Record<string, ConfigServiceActionResult>>({});
   const [actions, setActions] = useState<Record<string, 'testing' | 'saving' | 'saved'>>({});
   const [savedServices, setSavedServices] = useState<Set<string>>(new Set());
-  const [editedServices, setEditedServices] = useState<Set<string>>(new Set());
   const [initialRequiredServiceNames, setInitialRequiredServiceNames] = useState<string[] | null>(
     null
   );
@@ -279,26 +252,18 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     () =>
       sortServiceGroups(
         Object.fromEntries(
-          Object.entries(groups).filter(([name, group]) => {
-            const status = serviceStatuses[name]?.status;
-            const hasMissingRequiredValue = group.some(entry => entry.required && !entry.hasValue);
-            return hasMissingRequiredValue || (status !== undefined && status !== 'ready');
+          Object.entries(groups).filter(([, group]) => {
+            return group.some(entry => entry.required && !entry.hasValue);
           })
-        ),
-        serviceStatuses
+        )
       ),
-    [groups, serviceStatuses]
+    [groups]
   );
   useEffect(() => {
-    if (!isLoading && !isServiceStatusesLoading && !initialRequiredServiceNames) {
+    if (!isLoading && !initialRequiredServiceNames) {
       setInitialRequiredServiceNames(requiredGroupsNeedingConfiguration.map(([name]) => name));
     }
-  }, [
-    initialRequiredServiceNames,
-    isLoading,
-    isServiceStatusesLoading,
-    requiredGroupsNeedingConfiguration,
-  ]);
+  }, [initialRequiredServiceNames, isLoading, requiredGroupsNeedingConfiguration]);
   const requiredGroups = useMemo(() => {
     if (!initialRequiredServiceNames) return requiredGroupsNeedingConfiguration;
     return initialRequiredServiceNames
@@ -313,16 +278,14 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
       sortServiceGroups(
         Object.fromEntries(
           Object.entries(groups).filter(([name, group]) => {
-            const status = serviceStatuses[name]?.status;
             const hasCompleteRequiredValues = group.every(
               entry => !entry.required || entry.hasValue
             );
-            return hasCompleteRequiredValues && (status === undefined || status === 'ready');
+            return hasCompleteRequiredValues && !initialRequiredServiceNames?.includes(name);
           })
-        ),
-        serviceStatuses
+        )
       ),
-    [groups, serviceStatuses]
+    [groups, initialRequiredServiceNames]
   );
   const currentRequired = requiredGroups[step];
   const currentOptional = optionalService ? groups[optionalService] : undefined;
@@ -339,7 +302,6 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
         next.delete(service);
         return next;
       });
-      setEditedServices(current => new Set(current).add(service));
       setResults(current => {
         const next = { ...current };
         delete next[service];
@@ -358,7 +320,30 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
           ? await testServiceConfig({ service, entries: getServiceEntries(service) })
           : await saveServiceConfig({ service, entries: getServiceEntries(service) });
       const responseData = 'data' in response ? response.data : undefined;
-      const result = responseData?.services.find(item => item.service === service);
+      const consumerResults = responseData?.services ?? [];
+      const reactivatedServices: string[] =
+        action === 'save' &&
+        responseData &&
+        'restarted' in responseData &&
+        Array.isArray(responseData.restarted)
+          ? responseData.restarted
+          : [];
+      const result =
+        consumerResults.length > 0
+          ? {
+              service: service as ConfigServiceActionResult['service'],
+              success: responseData?.success ?? consumerResults.every(item => item.success),
+              testMode: consumerResults.some(item => item.testMode === 'validation')
+                ? ('validation' as const)
+                : ('live' as const),
+              message: [
+                ...consumerResults.map(item => `${item.service}: ${item.message}`),
+                ...(reactivatedServices.length
+                  ? [`Reactivated: ${reactivatedServices.join(', ')}`]
+                  : []),
+              ].join(' · '),
+            }
+          : undefined;
       if (action === 'save') await wait(Math.max(0, 500 - (Date.now() - startedAt)));
       setResults(current => ({
         ...current,
@@ -369,16 +354,10 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
           message: `Failed to ${action} ${service} configuration.`,
         },
       }));
-      const savedSuccessfully =
-        action === 'save' && Boolean(result?.success ?? responseData?.success);
+      const savedSuccessfully = action === 'save' && Boolean(responseData?.success);
       if (savedSuccessfully) {
         markServiceSaved(service);
         setSavedServices(current => new Set(current).add(service));
-        setEditedServices(current => {
-          const next = new Set(current);
-          next.delete(service);
-          return next;
-        });
         setActions(current => ({ ...current, [service]: 'saved' }));
         await wait(1500);
         if (!optionalService) setStep(current => current + 1);
@@ -392,7 +371,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     [getServiceEntries, markServiceSaved, optionalService, saveServiceConfig, testServiceConfig]
   );
 
-  if (isLoading || isServiceStatusesLoading) return <Page />;
+  if (isLoading) return <Page />;
 
   const isOptionalStep = Boolean(optionalService);
   if (!current || !currentName) {
@@ -429,19 +408,12 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   }
 
   const hasCompleteRequiredValues = current.every(entry => !entry.required || entry.hasValue);
-  const statusAllowsNoSave =
-    serviceStatuses[currentName]?.status === undefined ||
-    serviceStatuses[currentName]?.status === 'ready';
   const canContinue =
     isOptionalStep ||
     savedServices.has(currentName) ||
-    (!dirtyServices.has(currentName) && hasCompleteRequiredValues && statusAllowsNoSave);
+    (!dirtyServices.has(currentName) && hasCompleteRequiredValues);
   const hasPreviousStep = isOptionalStep || step > 0;
-  const currentResult =
-    results[currentName] ??
-    (editedServices.has(currentName)
-      ? undefined
-      : statusFailureResult(currentName, serviceStatuses));
+  const currentResult = results[currentName];
   return (
     <Page>
       <Content>

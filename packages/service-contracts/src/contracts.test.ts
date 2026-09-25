@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   batchResponseSchema,
   serviceConfigMutationSchema,
+  serviceConfigSchemaSchema,
   serviceManifestSchema,
   serviceStatusSchema,
 } from './index.js';
@@ -14,12 +15,11 @@ test('management manifest requires the supported protocol and relative paths', (
     name: 'Media Catalog',
     description: 'Catalog',
     version: '1.0.0',
-    managementProtocolVersion: 1,
+    managementProtocolVersion: 2,
     capabilities: { catalog: { version: 1, basePath: '/v1/catalog' } },
     management: {
       statusPath: '/status',
       configurationSchemaPath: '/configuration/schema',
-      configurationStatePath: '/configuration',
       configurationTestPath: '/configuration/test',
       configurationApplyPath: '/configuration',
     },
@@ -27,9 +27,9 @@ test('management manifest requires the supported protocol and relative paths', (
   assert.equal(manifest.capabilities.catalog.version, 1);
   assert.equal(manifest.management.statusEventsPath, undefined);
   assert.equal(
-    serviceManifestSchema.parse({ ...manifest, managementProtocolVersion: 2 })
+    serviceManifestSchema.parse({ ...manifest, managementProtocolVersion: 1 })
       .managementProtocolVersion,
-    2
+    1
   );
 });
 
@@ -39,13 +39,12 @@ test('management manifest accepts an optional status event stream path', () => {
     name: 'Media Catalog',
     description: 'Catalog',
     version: '1.0.0',
-    managementProtocolVersion: 1,
+    managementProtocolVersion: 2,
     capabilities: { catalog: { version: 1, basePath: '/v1/catalog' } },
     management: {
       statusPath: '/status',
       statusEventsPath: '/status/events',
       configurationSchemaPath: '/configuration/schema',
-      configurationStatePath: '/configuration',
       configurationTestPath: '/configuration/test',
       configurationApplyPath: '/configuration',
     },
@@ -66,12 +65,11 @@ test('management manifest rejects paths WHATWG URL normalizes as cross-origin', 
       name: 'Media Catalog',
       description: 'Catalog',
       version: '1.0.0',
-      managementProtocolVersion: 1,
+      managementProtocolVersion: 2,
       capabilities: { catalog: { version: 1, basePath } },
       management: {
         statusPath: '/status',
         configurationSchemaPath: '/configuration/schema',
-        configurationStatePath: '/configuration',
         configurationTestPath: '/configuration/test',
         configurationApplyPath: '/configuration',
       },
@@ -81,14 +79,27 @@ test('management manifest rejects paths WHATWG URL normalizes as cross-origin', 
   }
 });
 
-test('status and explicit configuration clearing are runtime validated', () => {
+test('status and complete configuration snapshots are runtime validated', () => {
   assert.equal(
     serviceStatusSchema.parse({ state: 'standby', missingConfiguration: ['TOKEN'] }).state,
     'standby'
   );
+  assert.deepEqual(serviceConfigMutationSchema.parse({ values: { TOKEN: 'value' } }), {
+    values: { TOKEN: 'value' },
+  });
+  assert.deepEqual(serviceConfigMutationSchema.parse({ clear: true }), { clear: true });
+});
+
+test('configuration schemas publish distinct groups with canonical keys', () => {
+  const schema = serviceConfigSchemaSchema.parse({
+    groups: [
+      { id: 'TRAKT', name: 'Trakt', description: 'Shared settings', variables: [] },
+      { id: 'LIST', name: 'Lists', description: 'List service settings', variables: [] },
+    ],
+  });
   assert.deepEqual(
-    serviceConfigMutationSchema.parse({ values: {}, unsetKeys: ['TOKEN'] }).unsetKeys,
-    ['TOKEN']
+    schema.groups.map(group => group.id),
+    ['TRAKT', 'LIST']
   );
 });
 

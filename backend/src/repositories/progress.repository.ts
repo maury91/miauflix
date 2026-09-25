@@ -1,5 +1,6 @@
-import type { DataSource, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
+import type { Database } from '@database/database';
 import { Progress } from '@entities/progress.entity';
 import type { PlayableRef } from '@routes/playable.types';
 import { playableKey } from '@routes/playable.types';
@@ -11,8 +12,8 @@ export type ProgressUpdate = Pick<Progress, 'durationSeconds' | 'positionSeconds
 export class ProgressRepository {
   private readonly progressRepository: Repository<Progress>;
 
-  constructor(dataSource: DataSource) {
-    this.progressRepository = dataSource.getRepository(Progress);
+  constructor(database: Database) {
+    this.progressRepository = database.getRepository(Progress);
   }
 
   async upsert(userId: string, update: ProgressUpdate): Promise<Progress> {

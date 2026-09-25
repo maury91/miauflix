@@ -1,9 +1,13 @@
+import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:crypto';
+import { mkdirSync } from 'node:fs';
+import { join } from 'node:path';
+
 import {
   connectionResultSchema,
-  listServiceDefinitionSchema,
-  listServicePageSchema,
   LIST_CAPABILITY,
   LIST_CAPABILITY_VERSION,
+  listServiceDefinitionSchema,
+  listServicePageSchema,
   MANAGEMENT_PROTOCOL_VERSION,
   providerAssociationSchema,
   providerAuthorizationSchema,
@@ -11,29 +15,37 @@ import {
   serviceConfigApplyResultSchema,
   serviceConfigMutationSchema,
   serviceConfigSchemaSchema,
-  serviceConfigStateSchema,
   serviceConfigTestResultSchema,
   serviceManifestSchema,
+  ServiceSecretCodec,
   serviceStatusSchema,
 } from '@miauflix/service-contracts';
-import { createHash, createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
-import { mkdirSync } from 'node:fs';
 import { Database } from 'bun:sqlite';
 import { z } from 'zod';
 
-import { mapItems, normalizeListItems, type TraktItem } from './list-normalization';
+import { ListConfigService } from './config/config.service';
+import { disconnectAssociation, replaceAssociation } from './association-store';
+import { listPage } from './list-page-cache';
 import { parsePositivePage } from './request-validation';
 import { TraktClient } from './trakt-client';
 
 const PORT = Number(process.env.LIST_SERVICE_PORT ?? 3002);
 const HOST = process.env.LIST_SERVICE_HOST ?? '0.0.0.0';
-const DEFAULT_API_URL = process.env.TRAKT_API_URL ?? 'https://api.trakt.tv';
 const DATA_DIR = process.env.LIST_SERVICE_DATA_DIR ?? process.env.DATA_DIR ?? './data';
+const KEY_FILE = process.env.LIST_SERVICE_KEY_FILE ?? join(DATA_DIR, '.list-service-key');
+const configuredEncryptionKey = process.env.LIST_SERVICE_ENCRYPTION_KEY;
+const encryptionKey = configuredEncryptionKey
+  ? createHash('sha256').update(configuredEncryptionKey).digest()
+  : createHash('sha256')
+      .update(new ServiceSecretCodec({ filePath: KEY_FILE }).key)
+      .digest();
 mkdirSync(DATA_DIR, { recursive: true });
-const encryptionKey = (): Buffer => {
-  const value = runtimeConfig.LIST_SERVICE_ENCRYPTION_KEY;
-  if (!value) throw new Error('LIST_SERVICE_ENCRYPTION_KEY is required');
-  return createHash('sha256').update(value).digest();
+
+const decrypt = (value: string): string => {
+  const [iv, tag, ciphertext] = value.split('.').map(part => Buffer.from(part, 'base64url'));
+  const decipher = createDecipheriv('aes-256-gcm', encryptionKey, iv);
+  decipher.setAuthTag(tag);
+  return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8');
 };
 
 const database = new Database(`${DATA_DIR}/list-service.sqlite`);
@@ -44,7 +56,8 @@ database.run(`
     username TEXT,
     access_token TEXT NOT NULL,
     refresh_token TEXT NOT NULL,
-    expires_at INTEGER NOT NULL
+    expires_at INTEGER NOT NULL,
+    connection_id TEXT NOT NULL DEFAULT ''
   )
 `);
 database.run(`
@@ -58,149 +71,75 @@ database.run(`
     expires_at INTEGER NOT NULL
   )
 `);
+const associationColumns = database.query('PRAGMA table_info(associations)').all() as Array<{
+  name: string;
+}>;
+if (!associationColumns.some(column => column.name === 'connection_id')) {
+  database.run("ALTER TABLE associations ADD COLUMN connection_id TEXT NOT NULL DEFAULT ''");
+}
+for (const record of database
+  .query("SELECT subject_id FROM associations WHERE connection_id = ''")
+  .all() as Array<{ subject_id: string }>) {
+  database
+    .query('UPDATE associations SET connection_id = ?1 WHERE subject_id = ?2')
+    .run(crypto.randomUUID(), record.subject_id);
+}
+database.run(`
+  CREATE TABLE IF NOT EXISTS list_pages (
+    subject_id TEXT NOT NULL,
+    list_id TEXT NOT NULL,
+    page INTEGER NOT NULL,
+    payload TEXT NOT NULL,
+    fetched_at INTEGER NOT NULL,
+    PRIMARY KEY (subject_id, list_id, page)
+  )
+`);
 
 const seal = (value: string): string => {
   const iv = randomBytes(12);
-  const cipher = createCipheriv('aes-256-gcm', encryptionKey(), iv);
+  const cipher = createCipheriv('aes-256-gcm', encryptionKey, iv);
   const ciphertext = Buffer.concat([cipher.update(value, 'utf8'), cipher.final()]);
   return `${iv.toString('base64url')}.${cipher.getAuthTag().toString('base64url')}.${ciphertext.toString('base64url')}`;
 };
-const open = (value: string): string => {
-  const [iv, tag, ciphertext] = value.split('.').map(part => Buffer.from(part, 'base64url'));
-  const decipher = createDecipheriv('aes-256-gcm', encryptionKey(), iv);
-  decipher.setAuthTag(tag);
-  return Buffer.concat([decipher.update(ciphertext), decipher.final()]).toString('utf8');
-};
+const open = (value: string): string => decrypt(value);
 
-const schema = {
-  name: 'List Service',
-  description: 'Trakt-backed public and personal lists.',
-  variables: [
-    {
-      key: 'TRAKT_API_URL',
-      description: 'Trakt API URL',
-      required: false,
-      inputType: 'text',
-      defaultValue: DEFAULT_API_URL,
-      testRelevant: true,
-    },
-    {
-      key: 'TRAKT_CLIENT_ID',
-      description: 'Trakt client ID',
-      required: true,
-      secret: true,
-      inputType: 'password',
-      testRelevant: true,
-    },
-    {
-      key: 'TRAKT_CLIENT_SECRET',
-      description: 'Trakt client secret',
-      required: true,
-      secret: true,
-      inputType: 'password',
-      testRelevant: true,
-    },
-    {
-      key: 'TRAKT_REDIRECT_URI',
-      description: 'Redirect URI configured for the Trakt OAuth application',
-      required: true,
-      inputType: 'text',
-    },
-    {
-      key: 'LIST_SERVICE_ENCRYPTION_KEY',
-      description: 'Encryption key for provider credentials',
-      required: true,
-      secret: true,
-      inputType: 'password',
-    },
-  ],
-};
-
-const runtimeConfig = {
-  TRAKT_API_URL: DEFAULT_API_URL,
-  TRAKT_CLIENT_ID: process.env.TRAKT_CLIENT_ID ?? '',
-  TRAKT_CLIENT_SECRET: process.env.TRAKT_CLIENT_SECRET ?? '',
-  TRAKT_REDIRECT_URI: process.env.TRAKT_REDIRECT_URI ?? '',
-  LIST_SERVICE_ENCRYPTION_KEY: process.env.LIST_SERVICE_ENCRYPTION_KEY ?? '',
-};
-const config = {
-  values: {
-    ...runtimeConfig,
-  },
-  ready: false,
-};
-
-const defaultFor = (key: keyof typeof runtimeConfig): string =>
-  key === 'TRAKT_API_URL' ? DEFAULT_API_URL : '';
-
-const applyConfig = (values: Record<string, string>, unsetKeys: string[] = []) => {
-  for (const key of unsetKeys) {
-    if (!(key in runtimeConfig)) continue;
-    const typedKey = key as keyof typeof runtimeConfig;
-    config.values[typedKey] = defaultFor(typedKey);
-    runtimeConfig[typedKey] = defaultFor(typedKey);
-  }
-  for (const [key, value] of Object.entries(values)) {
-    if (value) {
-      config.values[key as keyof typeof config.values] = value;
-      runtimeConfig[key as keyof typeof runtimeConfig] = value;
-    }
-  }
-  config.ready = !!(
-    config.values.TRAKT_CLIENT_ID &&
-    config.values.TRAKT_CLIENT_SECRET &&
-    config.values.TRAKT_REDIRECT_URI &&
-    config.values.LIST_SERVICE_ENCRYPTION_KEY
-  );
-};
-applyConfig({});
+const config = new ListConfigService();
 
 const client = () =>
   new TraktClient(
-    config.values.TRAKT_CLIENT_ID,
-    config.values.TRAKT_CLIENT_SECRET,
-    config.values.TRAKT_API_URL,
-    config.values.TRAKT_REDIRECT_URI
+    config.resolve('TRAKT_CLIENT_ID'),
+    config.resolve('TRAKT_CLIENT_SECRET'),
+    config.resolve('TRAKT_API_URL'),
+    config.resolve('TRAKT_REDIRECT_URI')
   );
 
-const candidateConfig = (values: Record<string, string>, unsetKeys: string[]) => {
-  const candidate = { ...config.values, ...values };
-  for (const key of unsetKeys) {
-    if (key in candidate)
-      candidate[key as keyof typeof candidate] = defaultFor(key as keyof typeof runtimeConfig);
-  }
-  return candidate;
-};
+let lastProbeMessage = 'Trakt configuration applied';
 
-const probeConfig = async (candidate: typeof config.values) => {
-  const hasRequiredValues = !!(
-    candidate.TRAKT_CLIENT_ID &&
-    candidate.TRAKT_CLIENT_SECRET &&
-    candidate.TRAKT_REDIRECT_URI &&
-    candidate.LIST_SERVICE_ENCRYPTION_KEY
-  );
-  if (!hasRequiredValues) {
-    return { success: false, message: 'Required Trakt configuration is missing' };
-  }
-  try {
-    await new TraktClient(
-      candidate.TRAKT_CLIENT_ID,
-      candidate.TRAKT_CLIENT_SECRET,
-      candidate.TRAKT_API_URL,
-      candidate.TRAKT_REDIRECT_URI
-    ).test();
-    return {
-      success: true,
-      message:
-        'Trakt API is reachable and the client ID is accepted; the client secret is verified during account authorization',
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Trakt configuration test failed',
-    };
-  }
-};
+config.registerProber({
+  test: async values => {
+    try {
+      await new TraktClient(
+        values.TRAKT_CLIENT_ID,
+        values.TRAKT_CLIENT_SECRET,
+        values.TRAKT_API_URL,
+        values.TRAKT_REDIRECT_URI
+      ).test();
+      lastProbeMessage =
+        'Trakt API is reachable and the client ID is accepted; the client secret is verified during account authorization';
+      return {
+        success: true,
+        message: lastProbeMessage,
+      };
+    } catch (error) {
+      lastProbeMessage = error instanceof Error ? error.message : 'Trakt configuration test failed';
+      return {
+        success: false,
+        message: lastProbeMessage,
+      };
+    }
+  },
+  activate: async () => ({ success: true, message: lastProbeMessage }),
+});
 
 const publicDefinitions = [
   ['trakt-movies-popular', 'Popular Movies', 'Popular movies from Trakt', 'movies/popular'],
@@ -257,56 +196,29 @@ const association = (subjectId: string) =>
     access_token: string;
     refresh_token: string;
     expires_at: number;
+    connection_id: string;
   } | null;
 
-const accessToken = async (subjectId: string): Promise<string> => {
+const accessToken = async (subjectId: string, connectionId: string): Promise<string> => {
   const record = association(subjectId);
-  if (!record) throw new Error('Trakt account is not connected');
+  if (!record || record.connection_id !== connectionId)
+    throw new Error('Trakt account connection changed');
   if (record.expires_at > Date.now() + 5 * 60 * 1000) return open(record.access_token);
   const refreshed = await client().refreshToken(open(record.refresh_token));
-  database
+  const update = database
     .query(
-      'UPDATE associations SET access_token = ?1, refresh_token = ?2, expires_at = ?3 WHERE subject_id = ?4'
+      'UPDATE associations SET access_token = ?1, refresh_token = ?2, expires_at = ?3 WHERE subject_id = ?4 AND connection_id = ?5'
     )
     .run(
       seal(refreshed.access_token),
       seal(refreshed.refresh_token),
       Date.now() + refreshed.expires_in * 1000,
-      subjectId
+      subjectId,
+      connectionId
     );
+  if (!update.changes || association(subjectId)?.connection_id !== connectionId)
+    throw new Error('Trakt account connection changed');
   return refreshed.access_token;
-};
-
-const listPage = async (listId: string, subjectId: string | undefined, page: number) => {
-  let path: string;
-  let mediaType: 'movie' | 'tv' = listId.includes('shows') ? 'tv' : 'movie';
-  let token: string | undefined;
-  if (listId === 'trakt-movies-popular') path = '/movies/popular?limit=50';
-  else if (listId === 'trakt-movies-trending') path = '/movies/trending?limit=50';
-  else if (listId === 'trakt-shows-popular') path = '/shows/popular?limit=50';
-  else if (listId === 'trakt-shows-trending') path = '/shows/trending?limit=50';
-  else {
-    if (!subjectId) throw new Error('subjectId is required');
-    token = await accessToken(subjectId);
-    if (listId === 'trakt-watchlist-movies') path = '/sync/watchlist/movies?limit=50';
-    else if (listId === 'trakt-watchlist-shows') path = '/sync/watchlist/shows?limit=50';
-    else if (listId === 'trakt-favorites-movies') path = '/users/me/favorites/movies?limit=50';
-    else if (listId === 'trakt-favorites-shows') path = '/users/me/favorites/shows?limit=50';
-    else if (listId === 'trakt-history-movies') path = '/sync/history/movies?limit=50';
-    else if (listId === 'trakt-history-shows') path = '/sync/history/shows?limit=50';
-    else throw new Error('List not found');
-  }
-  path = path.replace('limit=50', `page=${page}&limit=50`);
-  const result = await client().page<TraktItem>(path, token);
-  const bare = listId.endsWith('-popular');
-  const items = mapItems(normalizeListItems(result.items, mediaType, bare), mediaType);
-  return listServicePageSchema.parse({
-    listId,
-    page,
-    totalPages: result.totalPages,
-    totalItems: result.totalItems,
-    items,
-  });
 };
 
 const json = (body: unknown, status = 200) => Response.json(body, { status });
@@ -334,7 +246,6 @@ const handler = async (request: Request): Promise<Response> => {
           management: {
             statusPath: '/status',
             configurationSchemaPath: '/configuration/schema',
-            configurationStatePath: '/configuration',
             configurationTestPath: '/configuration/test',
             configurationApplyPath: '/configuration',
           },
@@ -344,14 +255,7 @@ const handler = async (request: Request): Promise<Response> => {
       return json(
         serviceStatusSchema.parse({
           state: config.ready ? 'ready' : 'standby',
-          missingConfiguration: config.ready
-            ? undefined
-            : [
-                'TRAKT_CLIENT_ID',
-                'TRAKT_CLIENT_SECRET',
-                'TRAKT_REDIRECT_URI',
-                'LIST_SERVICE_ENCRYPTION_KEY',
-              ],
+          missingConfiguration: config.ready ? undefined : config.missingVars(),
           details: {
             provider: 'trakt',
             connectedAccounts: Number(
@@ -361,60 +265,41 @@ const handler = async (request: Request): Promise<Response> => {
                 } | null
               )?.count ?? 0
             ),
-            cachedLists: 0,
+            cachedLists: Number(
+              (
+                database.query('SELECT COUNT(*) AS count FROM list_pages').get() as {
+                  count?: number;
+                } | null
+              )?.count ?? 0
+            ),
           },
         })
       );
     if (request.method === 'GET' && path === '/configuration/schema')
-      return json(serviceConfigSchemaSchema.parse(schema));
-    if (request.method === 'GET' && path === '/configuration')
-      return json(
-        serviceConfigStateSchema.parse({
-          configuredKeys: Object.entries(config.values)
-            .filter(([, value]) => value)
-            .map(([key]) => key),
-        })
-      );
+      return json(serviceConfigSchemaSchema.parse(config.schema));
     if (request.method === 'POST' && path === '/configuration/test') {
       const mutation = serviceConfigMutationSchema.parse(await request.json());
-      const candidate = candidateConfig(mutation.values, mutation.unsetKeys);
-      const test = await probeConfig(candidate);
-      return json(
-        serviceConfigTestResultSchema.parse({
-          success: test.success,
-          mode: 'live',
-          message: test.message,
-        }),
-        test.success ? 200 : 400
-      );
-    }
-    if (request.method === 'PUT' && path === '/configuration') {
-      const mutation = serviceConfigMutationSchema.parse(await request.json());
-      const candidate = candidateConfig(mutation.values, mutation.unsetKeys);
-      const test = await probeConfig(candidate);
-      if (!test.success) {
+      if ('clear' in mutation) {
         return json(
-          serviceConfigApplyResultSchema.parse({
+          {
             success: false,
-            reloaded: false,
-            test: { success: false, mode: 'live', message: test.message },
-          }),
+            mode: 'validation',
+            message: 'A clear operation cannot be tested.',
+            invalidKeys: [],
+          },
           400
         );
       }
-      applyConfig(mutation.values, mutation.unsetKeys);
-      return json(
-        serviceConfigApplyResultSchema.parse({
-          success: config.ready,
-          reloaded: config.ready,
-          test: {
-            success: true,
-            mode: 'live',
-            message: test.message,
-          },
-        }),
-        config.ready ? 200 : 400
-      );
+      const test = await config.test(mutation.values);
+      return json(serviceConfigTestResultSchema.parse(test), test.success ? 200 : 400);
+    }
+    if (request.method === 'PUT' && path === '/configuration') {
+      const mutation = serviceConfigMutationSchema.parse(await request.json());
+      const result =
+        'clear' in mutation
+          ? await config.clearRemote()
+          : await config.applyRemote(mutation.values);
+      return json(serviceConfigApplyResultSchema.parse(result), result.success ? 200 : 400);
     }
     serviceReady();
     if (request.method === 'GET' && path === '/v1/lists')
@@ -423,7 +308,19 @@ const handler = async (request: Request): Promise<Response> => {
       const listId = decodeURIComponent(path.slice('/v1/lists/'.length));
       const page = parsePositivePage(url.searchParams.get('page'));
       if (page === null) return json({ error: 'page must be a positive safe integer' }, 400);
-      return json(await listPage(listId, url.searchParams.get('subjectId') ?? undefined, page));
+      return json(
+        await listPage({
+          database,
+          listId,
+          subjectId: url.searchParams.get('subjectId') ?? undefined,
+          page,
+          association,
+          accessToken,
+          fetchPage: (path, token) => client().page(path, token),
+          seal,
+          open,
+        }).then(value => listServicePageSchema.parse(value))
+      );
     }
     if (request.method === 'POST' && path === '/v1/connections/trakt/device') {
       const { subjectId } = z.object({ subjectId: z.string().min(1) }).parse(await request.json());
@@ -463,19 +360,15 @@ const handler = async (request: Request): Promise<Response> => {
       try {
         const token = await client().deviceToken(open(pending.device_code));
         const profile = await client().profile(token.access_token);
-        database
-          .query('DELETE FROM associations WHERE subject_id = ?1 OR account_id = ?2')
-          .run(subjectId, profile.ids.slug);
-        database
-          .query('INSERT INTO associations VALUES (?1, ?2, ?3, ?4, ?5, ?6)')
-          .run(
-            subjectId,
-            profile.ids.slug,
-            profile.username,
-            seal(token.access_token),
-            seal(token.refresh_token),
-            Date.now() + token.expires_in * 1000
-          );
+        replaceAssociation(database, {
+          subjectId,
+          accountId: profile.ids.slug,
+          username: profile.username,
+          accessToken: seal(token.access_token),
+          refreshToken: seal(token.refresh_token),
+          expiresAt: Date.now() + token.expires_in * 1000,
+          connectionId: crypto.randomUUID(),
+        });
         database.query('DELETE FROM authorizations WHERE id = ?1').run(authorizationId);
         return json(
           connectionResultSchema.parse({
@@ -513,7 +406,7 @@ const handler = async (request: Request): Promise<Response> => {
           await client()
             .revoke(open(record.access_token))
             .catch(() => undefined);
-        database.query('DELETE FROM associations WHERE subject_id = ?1').run(subjectId);
+        disconnectAssociation(database, subjectId);
         return json({ connected: false, provider: 'trakt', accountId: null, username: null });
       }
     }

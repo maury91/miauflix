@@ -13,6 +13,7 @@ COPY packages/source-metadata-extractor/package.json packages/source-metadata-ex
 COPY packages/yts-sanitizer/package.json packages/yts-sanitizer/package.json
 COPY packages/therarbg-sanitizer/package.json packages/therarbg-sanitizer/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
+COPY packages/service-configuration/package.json packages/service-configuration/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 COPY services/list-service/package.json services/list-service/package.json
 
@@ -20,8 +21,10 @@ RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json |
 RUN npm ci --ignore-scripts
 
 COPY packages/service-contracts packages/service-contracts
+COPY packages/service-configuration packages/service-configuration
 COPY services/media-catalog services/media-catalog
 RUN npm run build --workspace @miauflix/service-contracts && \
+    npm run build --workspace @miauflix/service-configuration && \
     bun build services/media-catalog/src/index.ts --target=bun --outfile=/tmp/media-catalog.js
 
 FROM builder AS development

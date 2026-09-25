@@ -7,7 +7,7 @@ import { ConfigurationServiceError } from '@errors/configuration.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { ALL_VAR_NAMES } from '@services/configuration/configuration.consts';
-import { isServiceName } from '@services/configuration/configuration.utils';
+import { isConfigGroupName } from '@services/configuration/configuration.utils';
 
 import type { Deps } from './common.types';
 const configEntriesSchema = z.object({
@@ -56,8 +56,8 @@ export const createConfigRoutes = (deps: Deps) => {
         zValidator('json', configEntriesSchema),
         async c => {
           const serviceParam = c.req.param('service').toUpperCase();
-          if (!isServiceName(serviceParam)) {
-            return c.json({ error: `Service '${serviceParam}' does not exist` }, 404);
+          if (!isConfigGroupName(serviceParam)) {
+            return c.json({ error: `Configuration group '${serviceParam}' does not exist` }, 404);
           }
           const { entries } = c.req.valid('json');
           return c.json(await deps.configurationService.testServiceConfigs(serviceParam, entries));
@@ -72,8 +72,8 @@ export const createConfigRoutes = (deps: Deps) => {
         zValidator('json', configEntriesSchema),
         async c => {
           const serviceParam = c.req.param('service').toUpperCase();
-          if (!isServiceName(serviceParam)) {
-            return c.json({ error: `Service '${serviceParam}' does not exist` }, 404);
+          if (!isConfigGroupName(serviceParam)) {
+            return c.json({ error: `Configuration group '${serviceParam}' does not exist` }, 404);
           }
           const { entries } = c.req.valid('json');
           return c.json(await deps.configurationService.saveServiceConfigs(serviceParam, entries));

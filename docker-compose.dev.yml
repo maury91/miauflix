@@ -32,12 +32,8 @@ services:
       target: development
     environment:
       LIST_SERVICE_DATA_DIR: /app/data
-      LIST_SERVICE_PORT: '3002'
-      TRAKT_API_URL: ${TRAKT_API_URL:-https://api.trakt.tv}
-      TRAKT_CLIENT_ID: ${TRAKT_CLIENT_ID:-}
-      TRAKT_CLIENT_SECRET: ${TRAKT_CLIENT_SECRET:-}
-      TRAKT_REDIRECT_URI: ${TRAKT_REDIRECT_URI:-}
       LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
+      LIST_SERVICE_PORT: '3002'
     ports:
       - '127.0.0.1:3002:3002'
     volumes:
@@ -93,6 +89,7 @@ services:
     environment:
       BACKEND_URL: http://backend:3000
       VITE_API_URL: /
+      MIAUFLIX_DEV_CERT_DIR: /usr/src/app/.certs
       # Docker Desktop bind mounts can miss filesystem events without polling.
       CHOKIDAR_USEPOLLING: 'true'
     depends_on:
@@ -101,6 +98,7 @@ services:
       - '127.0.0.1:4173:4173'
     volumes:
       - ./.env:/usr/src/app/.env:ro
+      - ${MIAUFLIX_DEV_CERT_DIR:-./.certs}/server:/usr/src/app/.certs/server:ro
       - ./frontend:/usr/src/app/frontend
 
 volumes:
