@@ -16,7 +16,7 @@
     "test": "vitest run --project=unit --maxWorkers=2",
     "test:watch": "vitest --project=unit",
     "test:coverage": "vitest run --project=unit --coverage",
-    "test:visual": "docker run --rm --ipc=host --network=host -v $PWD/..:/workspace -v /workspace/node_modules -v /workspace/frontend/node_modules -w /workspace -e CI=$CI mcr.microsoft.com/playwright:v1.56.1-jammy bash -lc 'npm ci --no-audit --no-fund && npm run build:backend && cd frontend && npx playwright test --project=storybook-chromium $([ \"$CI\" = \"true\" ] && echo \"--reporter=list\" || echo \"\") \"$@\"' --",
+    "test:visual": "docker run --rm --ipc=host --network=host -v $PWD/..:/workspace -v /workspace/node_modules -v /workspace/frontend/node_modules -w /workspace -e CI=$CI mcr.microsoft.com/playwright:v1.56.1-jammy bash -lc 'npm ci --no-audit --no-fund && cd frontend && npx playwright test --project=storybook-chromium $([ \"$CI\" = \"true\" ] && echo \"--reporter=list\" || echo \"\") \"$@\"' --",
     "test:visual:update": "npm run test:visual -- --update-snapshots all",
     "test:visual:ui": "playwright test --project=storybook-chromium --ui",
     "test:visual:debug": "playwright test --project=storybook-chromium --debug",
