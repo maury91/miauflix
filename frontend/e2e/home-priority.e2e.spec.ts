@@ -69,21 +69,20 @@ test.describe('Home row loading priority', () => {
     for (let press = 0; press < 4; press += 1) {
       await page.keyboard.press('ArrowDown');
     }
-    await expect
-      .poll(() => promotionRequests.length, { timeout: 30000 })
-      .toBeGreaterThan(initialPromotionCount);
-
     expect(initialPromotionCount).toBeGreaterThanOrEqual(1);
 
-    const newlyVisiblePromotions = promotionRequests.slice(initialPromotionCount);
-    for (const promotion of newlyVisiblePromotions) {
-      expect(promotion.items).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ tier: 'visible' }),
-          expect.objectContaining({ tier: 'viewport' }),
-        ])
-      );
-    }
+    await expect
+      .poll(
+        () =>
+          new Set(
+            promotionRequests
+              .slice(initialPromotionCount)
+              .flatMap(promotion => promotion.items ?? [])
+              .map(item => item.tier)
+          ),
+        { timeout: 30000 }
+      )
+      .toEqual(new Set(['visible', 'viewport']));
 
     const visibleListRequests = listRequests.filter(
       request => request.method === 'GET' && request.priority === 'visible'
