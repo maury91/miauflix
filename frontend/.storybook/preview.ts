@@ -6,6 +6,7 @@ import { sb } from 'storybook/test';
 // Home stories replace the RTK Query hooks with deterministic story-local data.
 // Keeping this mock in Storybook leaves the production API module untouched.
 sb.mock(import('../src/features/media/api/lists.api.ts'), { spy: true });
+sb.mock(import('../src/features/media/api/media.api.ts'));
 
 const preview: Preview = {
   parameters: {
