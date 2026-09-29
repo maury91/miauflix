@@ -399,8 +399,12 @@ describe('CategoryRow page window', () => {
         { mediaType: 'movie', mediaId: 1000, tier: 'visible' },
         { mediaType: 'movie', mediaId: 1001, tier: 'visible' },
         { mediaType: 'movie', mediaId: 1002, tier: 'visible' },
-        { mediaType: 'movie', mediaId: 1000, tier: 'viewport' },
       ],
     });
+    await waitFor(() =>
+      expect(promote).toHaveBeenCalledWith({
+        items: [{ mediaType: 'movie', mediaId: 1000, tier: 'viewport' }],
+      })
+    );
   });
 });

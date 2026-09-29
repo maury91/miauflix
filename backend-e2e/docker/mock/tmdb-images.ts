@@ -112,11 +112,38 @@ async function proxyImage(request: ImageRequest): Promise<Response> {
     const contentType = response.headers.get('content-type');
     if (contentType) headers.set('Content-Type', contentType);
     headers.set('Cache-Control', 'public, max-age=3600');
-    return new Response(response.body, { headers, status: response.status });
+
+    if (!response.body) {
+      clearTimeout(timeout);
+      return new Response(null, { headers, status: response.status });
+    }
+
+    const reader = response.body.getReader();
+    const body = new ReadableStream<Uint8Array>({
+      async pull(streamController) {
+        try {
+          const { done, value } = await reader.read();
+          if (done) {
+            clearTimeout(timeout);
+            streamController.close();
+          } else {
+            streamController.enqueue(value);
+          }
+        } catch (error) {
+          clearTimeout(timeout);
+          streamController.error(error);
+        }
+      },
+      async cancel(reason) {
+        clearTimeout(timeout);
+        await reader.cancel(reason);
+      },
+    });
+
+    return new Response(body, { headers, status: response.status });
   } catch {
-    return new Response('Image proxy failed', { status: 502 });
-  } finally {
     clearTimeout(timeout);
+    return new Response('Image proxy failed', { status: 502 });
   }
 }
 

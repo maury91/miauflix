@@ -96,9 +96,17 @@ describe('catalog lifecycle', () => {
     const { config, context, runtime, cleanup } = setup();
     const originalFetch = globalThis.fetch;
     const paths: string[] = [];
+    const hydrationRequests = Promise.withResolvers<void>();
     globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
       const path = String(input);
       paths.push(path);
+      if (
+        paths.some(request => request.endsWith('/configuration')) &&
+        paths.some(request => request.endsWith('/genre/movie/list?language=en')) &&
+        paths.some(request => request.endsWith('/genre/tv/list?language=en'))
+      ) {
+        hydrationRequests.resolve();
+      }
       if (path.endsWith('/configuration')) {
         return Response.json({ images: { secure_base_url: 'https://image.test/' } });
       }
@@ -112,9 +120,7 @@ describe('catalog lifecycle', () => {
         CATALOG_HYDRATION_TTL_MS: '86400000',
       });
       expect(result.success).toBe(true);
-
-      for (let attempt = 0; attempt < 10 && paths.length < 3; attempt++)
-        await new Promise(resolve => setTimeout(resolve, 0));
+      await hydrationRequests.promise;
 
       expect(paths).toContain('https://api.themoviedb.org/3/genre/movie/list?language=en');
       expect(paths).toContain('https://api.themoviedb.org/3/genre/tv/list?language=en');

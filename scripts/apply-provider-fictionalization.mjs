@@ -12,12 +12,19 @@ const manifestPath = path.resolve(
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
 const jsonFiles = directory =>
-  fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
-    const file = path.join(directory, entry.name);
-    if (entry.isDirectory()) return jsonFiles(file);
-    return entry.name.endsWith('.json') ? [file] : [];
-  }).sort();
-const slugify = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  fs
+    .readdirSync(directory, { withFileTypes: true })
+    .flatMap(entry => {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) return jsonFiles(file);
+      return entry.name.endsWith('.json') ? [file] : [];
+    })
+    .sort();
+const slugify = value =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 const keyFor = (type, id) => `${type}:${id}`;
 
 const replacementFor = (type, id) => {
@@ -45,9 +52,7 @@ const applyLocalizedFields = (data, replacement, type) => {
   data.homepage = replacement.homepage;
   if (data.belongs_to_collection) data.belongs_to_collection.name = replacement.collectionName;
   for (const company of data.production_companies ?? []) {
-    const mapped = type === 'show'
-      ? manifest.entities?.companies?.[String(company.id)]?.replacement
-      : null;
+    const mapped = manifest.entities?.companies?.[String(company.id)]?.replacement;
     company.name = mapped?.name ?? replacement.companyName;
   }
   if (data.translations) {
@@ -102,9 +107,10 @@ const applyTraktMedia = (media, type) => {
   const replacement = replacementFor(type, tmdbId);
   media.title = replacement.title;
   if (media.ids.slug) {
-    media.ids.slug = type === 'movie'
-      ? `${slugify(replacement.title)}-${media.year ?? '2000'}`
-      : slugify(replacement.title);
+    media.ids.slug =
+      type === 'movie'
+        ? `${slugify(replacement.title)}-${media.year ?? '2000'}`
+        : slugify(replacement.title);
   }
   if (media.ids.plex?.slug) media.ids.plex.slug = slugify(replacement.title);
 };

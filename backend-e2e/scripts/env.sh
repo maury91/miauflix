@@ -181,6 +181,7 @@ fi
 # local .env contains the normal disabled-worker setting.
 if [[ "${BACKGROUND_TASKS_ENABLED:-false}" == "true" ]]; then
     export DISABLE_BACKGROUND_TASKS=false
+    export CATALOG_DISABLE_BACKGROUND_TASKS=false
 fi
 
 if [[ "$INITIAL_SETUP" == "true" ]]; then

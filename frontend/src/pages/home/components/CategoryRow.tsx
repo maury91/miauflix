@@ -22,6 +22,7 @@ import ChevronRightIcon from '~icons/line-md/chevron-right';
 
 const PAGE_SIZE = 20;
 const ALIGNMENT_TOLERANCE = 0.5;
+const VIEWPORT_PROMOTION_DEBOUNCE_MS = 300;
 
 const RowContainer = styled.section`
   margin-bottom: 5vh;
@@ -370,20 +371,28 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
 
   useEffect(() => {
     if (!visible || !current.currentData?.results.length) return;
-    const viewportItems = current.currentData.results
-      .map((media, index) => ({ media, index: page * PAGE_SIZE + index }))
-      .filter(({ index }) => index >= selectedIndex && index < selectedIndex + mediaPerPage)
-      .map(({ media }) => ({
-        mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
-        mediaId: media.mediaId,
-        tier: 'viewport' as const,
-      }));
     const visibleItems = current.currentData.results.map(media => ({
       mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
       mediaId: media.mediaId,
       tier: 'visible' as const,
     }));
-    void promoteListMedia({ items: [...visibleItems, ...viewportItems] });
+    void promoteListMedia({ items: visibleItems });
+  }, [current.currentData, page, promoteListMedia, visible]);
+
+  useEffect(() => {
+    if (!visible || !current.currentData?.results.length) return;
+    const timeout = window.setTimeout(() => {
+      const viewportItems = current
+        .currentData!.results.map((media, index) => ({ media, index: page * PAGE_SIZE + index }))
+        .filter(({ index }) => index >= selectedIndex && index < selectedIndex + mediaPerPage)
+        .map(({ media }) => ({
+          mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
+          mediaId: media.mediaId,
+          tier: 'viewport' as const,
+        }));
+      if (viewportItems.length) void promoteListMedia({ items: viewportItems });
+    }, VIEWPORT_PROMOTION_DEBOUNCE_MS);
+    return () => window.clearTimeout(timeout);
   }, [current.currentData, mediaPerPage, page, promoteListMedia, selectedIndex, visible]);
 
   useEffect(() => {

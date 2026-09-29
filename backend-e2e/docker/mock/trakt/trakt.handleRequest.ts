@@ -122,7 +122,9 @@ export const handleRequest = async ({
       // Note: We don't sanitize OAuth responses as they contain sensitive tokens
       return {
         data: data,
-        store: true,
+        // OAuth responses contain live access and refresh tokens. Return them to
+        // the caller, but never persist them in a fixture on disk.
+        store: false,
         response: new Response(JSON.stringify(data), {
           headers: { 'Content-Type': 'application/json' },
           status: apiResponse.status,

@@ -283,6 +283,10 @@ export class TVShowRepository {
   }
 
   findIncompleteSeason(watchingOnly: boolean, tvMediaId?: number): SeasonRow | undefined {
+    return this.findIncompleteSeasons(watchingOnly, tvMediaId)[0];
+  }
+
+  findIncompleteSeasons(watchingOnly: boolean, tvMediaId?: number): SeasonRow[] {
     const rows = this.db
       .select({ season: seasons })
       .from(seasons)
@@ -295,9 +299,8 @@ export class TVShowRepository {
         )
       )
       .orderBy(seasons.seasonNumber)
-      .limit(1)
       .all();
-    return rows[0] && seasonRow(rows[0].season);
+    return rows.map(row => seasonRow(row.season));
   }
 
   markSeasonUnsynced(tvMediaId: number, seasonNumber: number): void {

@@ -13,39 +13,126 @@ const existingManifestPath = path.join(root, 'test-fixtures/provider-fictionaliz
 
 const words = {
   adjectives: [
-    'Amber', 'Blue', 'Brass', 'Bright', 'Copper', 'Crimson', 'Distant', 'Emerald',
-    'Falling', 'Golden', 'Hidden', 'Ivory', 'Last', 'Midnight', 'Northern', 'Quiet',
-    'Scarlet', 'Silver', 'Silent', 'Velvet',
+    'Amber',
+    'Blue',
+    'Brass',
+    'Bright',
+    'Copper',
+    'Crimson',
+    'Distant',
+    'Emerald',
+    'Falling',
+    'Golden',
+    'Hidden',
+    'Ivory',
+    'Last',
+    'Midnight',
+    'Northern',
+    'Quiet',
+    'Scarlet',
+    'Silver',
+    'Silent',
+    'Velvet',
   ],
   nouns: [
-    'Archive', 'Beacon', 'Bridge', 'Compass', 'Crown', 'Echo', 'Garden', 'Harbor',
-    'Horizon', 'Lantern', 'Meridian', 'Orchard', 'Passage', 'River', 'Signal', 'Sky',
-    'Station', 'Valley', 'Voyage', 'Window',
+    'Archive',
+    'Beacon',
+    'Bridge',
+    'Compass',
+    'Crown',
+    'Echo',
+    'Garden',
+    'Harbor',
+    'Horizon',
+    'Lantern',
+    'Meridian',
+    'Orchard',
+    'Passage',
+    'River',
+    'Signal',
+    'Sky',
+    'Station',
+    'Valley',
+    'Voyage',
+    'Window',
   ],
   places: [
-    'Alder Bay', 'Bellhaven', 'Cedar Point', 'Dunmere', 'Eastmere', 'Fox Hollow',
-    'Glassford', 'Highwater', 'Juniper Vale', 'Kingswell', 'Larkspur', 'Moonridge',
-    'Northbridge', 'Oak Harbor', 'Pinewatch', 'Queensport', 'Rosefield', 'Stonehaven',
-    'Westmere', 'Willow Reach',
+    'Alder Bay',
+    'Bellhaven',
+    'Cedar Point',
+    'Dunmere',
+    'Eastmere',
+    'Fox Hollow',
+    'Glassford',
+    'Highwater',
+    'Juniper Vale',
+    'Kingswell',
+    'Larkspur',
+    'Moonridge',
+    'Northbridge',
+    'Oak Harbor',
+    'Pinewatch',
+    'Queensport',
+    'Rosefield',
+    'Stonehaven',
+    'Westmere',
+    'Willow Reach',
   ],
   firstNames: [
-    'Avery', 'Cameron', 'Casey', 'Devon', 'Elliot', 'Emery', 'Jordan', 'Lane', 'Mara',
-    'Morgan', 'Noel', 'Parker', 'Quinn', 'Remy', 'Riley', 'Robin', 'Rowan', 'Sage',
-    'Sidney', 'Taylor',
+    'Avery',
+    'Cameron',
+    'Casey',
+    'Devon',
+    'Elliot',
+    'Emery',
+    'Jordan',
+    'Lane',
+    'Mara',
+    'Morgan',
+    'Noel',
+    'Parker',
+    'Quinn',
+    'Remy',
+    'Riley',
+    'Robin',
+    'Rowan',
+    'Sage',
+    'Sidney',
+    'Taylor',
   ],
   lastNames: [
-    'Arden', 'Bell', 'Cross', 'Dale', 'Ellis', 'Finch', 'Gray', 'Hart', 'Ives',
-    'James', 'Keene', 'Lake', 'March', 'North', 'Page', 'Reed', 'Stone', 'Vale',
-    'West', 'Young',
+    'Arden',
+    'Bell',
+    'Cross',
+    'Dale',
+    'Ellis',
+    'Finch',
+    'Gray',
+    'Hart',
+    'Ives',
+    'James',
+    'Keene',
+    'Lake',
+    'March',
+    'North',
+    'Page',
+    'Reed',
+    'Stone',
+    'Vale',
+    'West',
+    'Young',
   ],
 };
 
 const jsonFiles = directory =>
-  fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
-    const file = path.join(directory, entry.name);
-    if (entry.isDirectory()) return jsonFiles(file);
-    return entry.name.endsWith('.json') ? [file] : [];
-  }).sort();
+  fs
+    .readdirSync(directory, { withFileTypes: true })
+    .flatMap(entry => {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) return jsonFiles(file);
+      return entry.name.endsWith('.json') ? [file] : [];
+    })
+    .sort();
 
 const hash = value => {
   let result = 2166136261;
@@ -56,8 +143,12 @@ const hash = value => {
   return result >>> 0;
 };
 const pick = (values, seed, salt) => values[hash(`${salt}:${seed}`) % values.length];
-const slugify = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const itemsIn = response => Array.isArray(response.data) ? response.data : [];
+const slugify = value =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+const itemsIn = response => (Array.isArray(response.data) ? response.data : []);
 const keyFor = (type, id) => `${type}:${id}`;
 
 const fakeTitle = (type, id) => {
@@ -97,11 +188,13 @@ const userReplacement = id => {
 };
 const listReplacement = id => ({
   name: `${pick(words.adjectives, id, 'list-adjective')} ${pick(words.nouns, id, 'list-noun')} Watchlist`,
-  description: 'A hand-picked collection of memorable films and series, organized for an easy viewing journey.',
+  description:
+    'A hand-picked collection of memorable films and series, organized for an easy viewing journey.',
 });
 const episodeReplacement = id => ({
   title: `${pick(words.adjectives, id, 'episode-adjective')} ${pick(words.nouns, id, 'episode-noun')}`,
-  overview: 'A new discovery changes the plan and forces the group to decide what they are willing to risk next.',
+  overview:
+    'A new discovery changes the plan and forces the group to decide what they are willing to risk next.',
 });
 const seasonReplacement = seasonNumber => ({
   name: seasonNumber === 0 ? 'Specials' : `Season ${seasonNumber}`,
@@ -145,9 +238,8 @@ for (const [id, record] of Object.entries(existing.records ?? {})) {
 for (const bucket of Object.keys(manifest.entities)) {
   for (const [id, entity] of Object.entries(existing.entities?.[bucket] ?? {})) {
     if (!entity?.replacement) continue;
-    const replacement = bucket === 'users'
-      ? { ...userReplacement(id), ...entity.replacement }
-      : entity.replacement;
+    const replacement =
+      bucket === 'users' ? { ...userReplacement(id), ...entity.replacement } : entity.replacement;
     manifest.entities[bucket][id] = { replacement };
   }
 }
@@ -183,6 +275,9 @@ for (const file of jsonFiles(providersRoot)) {
   if (relative.startsWith('tmdb/3/movie/') && response.data?.id != null) {
     const movie = response.data;
     ensureMedia('movie', movie.id, file, movie.title, alreadyAnonymized);
+    for (const company of movie.production_companies ?? []) {
+      ensureEntity('companies', company.id, companyReplacement(company.id));
+    }
   }
   if (relative.startsWith('tmdb/3/tv/') && response.data?.id != null) {
     const show = response.data;
@@ -196,7 +291,8 @@ for (const file of jsonFiles(providersRoot)) {
     for (const network of show.networks ?? []) {
       ensureEntity('networks', network.id, networkReplacement(network.id));
     }
-    for (const episode of [show.last_episode_to_air, show.next_episode_to_air]) ensureEpisode(episode);
+    for (const episode of [show.last_episode_to_air, show.next_episode_to_air])
+      ensureEpisode(episode);
     for (const season of show.seasons ?? []) {
       const key = `${show.id}:${season.season_number}`;
       ensureEntity('seasons', key, seasonReplacement(season.season_number));
@@ -204,8 +300,10 @@ for (const file of jsonFiles(providersRoot)) {
   }
 
   for (const item of itemsIn(response)) {
-    if (item.movie) ensureMedia('movie', item.movie.ids?.tmdb, file, item.movie.title, alreadyAnonymized);
-    if (item.show) ensureMedia('show', item.show.ids?.tmdb, file, item.show.title, alreadyAnonymized);
+    if (item.movie)
+      ensureMedia('movie', item.movie.ids?.tmdb, file, item.movie.title, alreadyAnonymized);
+    if (item.show)
+      ensureMedia('show', item.show.ids?.tmdb, file, item.show.title, alreadyAnonymized);
     if (!item.movie && !item.show && item.ids?.tmdb && relative.startsWith('trakt/movies/')) {
       ensureMedia('movie', item.ids.tmdb, file, item.title, alreadyAnonymized);
     }
@@ -233,9 +331,7 @@ for (const [bucketName, bucket] of Object.entries(manifest.entities)) {
   Object.assign(bucket, sorted);
 }
 manifest.records = Object.fromEntries(
-  Object.entries(manifest.records).sort(([a], [b]) =>
-    a.localeCompare(b, 'en', { numeric: true })
-  )
+  Object.entries(manifest.records).sort(([a], [b]) => a.localeCompare(b, 'en', { numeric: true }))
 );
 
 fs.writeFileSync(outputPath, `${JSON.stringify(manifest, null, 2)}\n`);

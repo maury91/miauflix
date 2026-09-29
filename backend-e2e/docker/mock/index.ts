@@ -136,6 +136,10 @@ function omitHeaders(headers: Headers): Record<string, string> | undefined {
   return Object.keys(result).length > 0 ? result : undefined;
 }
 
+function responseBodyForStatus(status: number, body: string): string | null {
+  return status === 204 || status === 205 || status === 304 ? null : body;
+}
+
 async function defaultHandleRequest({
   req,
   path,
@@ -225,7 +229,7 @@ async function defaultHandleRequest({
     return {
       data: body,
       store: apiResponse.ok,
-      response: new Response(body, {
+      response: new Response(responseBodyForStatus(apiResponse.status, body), {
         headers: omitHeaders(apiResponse.headers),
         status: apiResponse.status,
       }),
@@ -241,10 +245,13 @@ async function defaultHandleRequest({
   return {
     data: sanitizedData,
     store: apiResponse.ok,
-    response: new Response(JSON.stringify(sanitizedData), {
-      headers: omitHeaders(apiResponse.headers),
-      status: apiResponse.status,
-    }),
+    response: new Response(
+      responseBodyForStatus(apiResponse.status, JSON.stringify(sanitizedData)),
+      {
+        headers: omitHeaders(apiResponse.headers),
+        status: apiResponse.status,
+      }
+    ),
   };
 }
 
