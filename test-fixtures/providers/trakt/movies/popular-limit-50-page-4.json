@@ -1,0 +1,722 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "331",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,movie",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 15:22:58 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "492",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "4",
+    "x-pagination-page-count": "10",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt29008225",
+        "plex": {
+          "guid": "64fecf1cfc409784111601ce",
+          "slug": "the-manor-match"
+        },
+        "slug": "the-manor-match-2025",
+        "tmdb": 1175174,
+        "trakt": 947485
+      },
+      "year": 2025,
+      "title": "The Manor Match"
+    },
+    {
+      "ids": {
+        "imdb": "tt29232158",
+        "plex": {
+          "guid": "650b2f5b190d11eb142216f7",
+          "slug": "the-mountain-colossus"
+        },
+        "slug": "the-mountain-colossus-2025",
+        "tmdb": 1180831,
+        "trakt": 952199
+      },
+      "year": 2025,
+      "title": "The Mountain Colossus"
+    },
+    {
+      "ids": {
+        "imdb": "tt36958376",
+        "plex": {
+          "guid": "68331a2394be96a41974fae3",
+          "slug": "the-oxford-distance"
+        },
+        "slug": "the-oxford-distance-2026",
+        "tmdb": 1477317,
+        "trakt": 1210814
+      },
+      "year": 2026,
+      "title": "The Oxford Distance"
+    },
+    {
+      "ids": {
+        "imdb": "tt31998881",
+        "plex": {
+          "guid": "660fd45601036246e4d843bb",
+          "slug": "claire-s-christmas-detour"
+        },
+        "slug": "claire-s-christmas-detour-2025",
+        "tmdb": 1261825,
+        "trakt": 1023819
+      },
+      "year": 2025,
+      "title": "Claire's Christmas Detour"
+    },
+    {
+      "ids": {
+        "imdb": "tt39390497",
+        "plex": {
+          "guid": "69b8acd1a7417e5e4dd1304f",
+          "slug": "the-last-shift-in-sinaloa"
+        },
+        "slug": "the-last-shift-in-sinaloa-2026",
+        "tmdb": 1621552,
+        "trakt": 1345669
+      },
+      "year": 2026,
+      "title": "The Last Shift in Sinaloa"
+    },
+    {
+      "ids": {
+        "imdb": "tt32880540",
+        "plex": {
+          "guid": "6692882d50100e74bfc21ce5",
+          "slug": "operation-marshland"
+        },
+        "slug": "operation-marshland-2026",
+        "tmdb": 1314786,
+        "trakt": 1074817
+      },
+      "year": 2026,
+      "title": "Operation Marshland"
+    },
+    {
+      "ids": {
+        "imdb": "tt37969901",
+        "plex": {
+          "guid": "657b2801b0a207f8aa040c03",
+          "slug": "the-self-appointed-candidate"
+        },
+        "slug": "the-self-appointed-candidate-2026",
+        "tmdb": 1217584,
+        "trakt": 982421
+      },
+      "year": 2026,
+      "title": "The Self-Appointed Candidate"
+    },
+    {
+      "ids": {
+        "imdb": "tt36619926",
+        "plex": {
+          "guid": "6813a52db371af844e449a62",
+          "slug": "after-the-last-bell"
+        },
+        "slug": "after-the-last-bell-2026",
+        "tmdb": 1468683,
+        "trakt": 1203125
+      },
+      "year": 2026,
+      "title": "After the Last Bell"
+    },
+    {
+      "ids": {
+        "imdb": "tt37209937",
+        "plex": {
+          "guid": "684a342c37fab5705e04f808",
+          "slug": "the-stairwell-quest"
+        },
+        "slug": "the-stairwell-quest-2026",
+        "tmdb": 1493859,
+        "trakt": 1225081
+      },
+      "year": 2026,
+      "title": "The Stairwell Quest"
+    },
+    {
+      "ids": {
+        "imdb": "tt43619305",
+        "plex": {
+          "guid": "6a432c29825647990dd558c4",
+          "slug": "a-correspondence-of-revenge"
+        },
+        "slug": "a-correspondence-of-revenge-2026",
+        "tmdb": 1723460,
+        "trakt": 1379395
+      },
+      "year": 2026,
+      "title": "A Correspondence of Revenge"
+    },
+    {
+      "ids": {
+        "imdb": "tt24852126",
+        "plex": {
+          "guid": "63a4d7d04db2e5498bfbbcf1",
+          "slug": "christmas-after-hours"
+        },
+        "slug": "christmas-after-hours-2025",
+        "tmdb": 1218762,
+        "trakt": 983466
+      },
+      "year": 2025,
+      "title": "Christmas After Hours"
+    },
+    {
+      "ids": {
+        "imdb": "tt39143902",
+        "plex": {
+          "guid": "68fde9ecedee722917d6d7a1",
+          "slug": "the-shape-of-want"
+        },
+        "slug": "the-shape-of-want-2026",
+        "tmdb": 1564614,
+        "trakt": 1290816
+      },
+      "year": 2026,
+      "title": "The Shape of Want"
+    },
+    {
+      "ids": {
+        "imdb": "tt35520315",
+        "plex": {
+          "guid": "679fff02c48a031ce38c3f1c",
+          "slug": "the-disclosure-files"
+        },
+        "slug": "the-disclosure-files-2025",
+        "tmdb": 1422166,
+        "trakt": 1162824
+      },
+      "year": 2025,
+      "title": "The Disclosure Files"
+    },
+    {
+      "ids": {
+        "imdb": "tt43595399",
+        "plex": {
+          "guid": "6a409c999ccaf1b00a338c83",
+          "slug": "the-night-the-meridian-sank"
+        },
+        "slug": "the-night-the-meridian-sank-2026",
+        "tmdb": 1715492,
+        "trakt": 1376901
+      },
+      "year": 2026,
+      "title": "The Night the Meridian Sank"
+    },
+    {
+      "ids": {
+        "imdb": "tt31923069",
+        "plex": {
+          "guid": "6605d234c4af9f36bc46b172",
+          "slug": "the-songs-we-carry"
+        },
+        "slug": "the-songs-we-carry-2025",
+        "tmdb": 1230368,
+        "trakt": 994890
+      },
+      "year": 2025,
+      "title": "The Songs We Carry"
+    },
+    {
+      "ids": {
+        "imdb": "tt6341826",
+        "plex": {
+          "guid": "5f40cba102101b00400f8fd1",
+          "slug": "a-thousand-small-tomorrows"
+        },
+        "slug": "a-thousand-small-tomorrows-2026",
+        "tmdb": 1032892,
+        "trakt": 830830
+      },
+      "year": 2026,
+      "title": "A Thousand Small Tomorrows"
+    },
+    {
+      "ids": {
+        "imdb": "tt28671344",
+        "plex": {
+          "guid": "64e19baf3d4f7a0431384e11",
+          "slug": "no-safe-door"
+        },
+        "slug": "no-safe-door-2025",
+        "tmdb": 1010756,
+        "trakt": 812292
+      },
+      "year": 2025,
+      "title": "No Safe Door"
+    },
+    {
+      "ids": {
+        "imdb": "tt34471850",
+        "plex": {
+          "guid": "672e4f0ae966ae9ffbf5c6c8",
+          "slug": "mother-s-reckoning"
+        },
+        "slug": "mother-s-reckoning-2026",
+        "tmdb": 1383731,
+        "trakt": 1130717
+      },
+      "year": 2026,
+      "title": "Mother's Reckoning"
+    },
+    {
+      "ids": {
+        "imdb": "tt32321317",
+        "plex": {
+          "guid": "663f0d8fade9cf429612896c",
+          "slug": "the-quiet-rider"
+        },
+        "slug": "the-quiet-rider-2025",
+        "tmdb": 1287141,
+        "trakt": 1047047
+      },
+      "year": 2025,
+      "title": "The Quiet Rider"
+    },
+    {
+      "ids": {
+        "imdb": "tt24326462",
+        "plex": {
+          "guid": "639b56b0d5ee4492e17eaaee",
+          "slug": "one-mile-back"
+        },
+        "slug": "one-mile-back-2026",
+        "tmdb": 1327690,
+        "trakt": 1086072
+      },
+      "year": 2026,
+      "title": "One Mile Back"
+    },
+    {
+      "ids": {
+        "imdb": "tt37605896",
+        "plex": {
+          "guid": "688f96fa2ac89f516e29dff7",
+          "slug": "the-desert-facility-enigma"
+        },
+        "slug": "the-desert-facility-enigma-2026",
+        "tmdb": 1462146,
+        "trakt": 1197738
+      },
+      "year": 2026,
+      "title": "The Desert Facility Enigma"
+    },
+    {
+      "ids": {
+        "imdb": "tt21109170",
+        "plex": {
+          "guid": "62ce984fa44c55cfcf28a534",
+          "slug": "contact-at-blackwater-key"
+        },
+        "slug": "contact-at-blackwater-key-2026",
+        "tmdb": 1083884,
+        "trakt": 871399
+      },
+      "year": 2026,
+      "title": "Contact at Blackwater Key"
+    },
+    {
+      "ids": {
+        "imdb": "tt37654096",
+        "plex": {
+          "guid": "6813a58e68c977d61100d4d6",
+          "slug": "a-summer-for-two"
+        },
+        "slug": "a-summer-for-two-2026",
+        "tmdb": 1516698,
+        "trakt": 1244419
+      },
+      "year": 2026,
+      "title": "A Summer for Two"
+    },
+    {
+      "ids": {
+        "imdb": "tt33295741",
+        "plex": {
+          "guid": "66d3f92777f09efa16f8218d",
+          "slug": "second-chance-same-killer"
+        },
+        "slug": "second-chance-same-killer-2025",
+        "tmdb": 1340110,
+        "trakt": 1096228
+      },
+      "year": 2025,
+      "title": "Second Chance, Same Killer"
+    },
+    {
+      "ids": {
+        "imdb": "tt34459219",
+        "plex": {
+          "guid": "672f2419452f167e59e65e57",
+          "slug": "dad-on-the-clock"
+        },
+        "slug": "dad-on-the-clock-2026",
+        "tmdb": 1440050,
+        "trakt": 1178443
+      },
+      "year": 2026,
+      "title": "Dad on the Clock"
+    },
+    {
+      "ids": {
+        "imdb": "tt3515878",
+        "plex": {
+          "guid": "5f40b8b886422500429a14fe",
+          "slug": "do-not-enter-the-grand-meridian"
+        },
+        "slug": "do-not-enter-the-grand-meridian-2026",
+        "tmdb": 999136,
+        "trakt": 803243
+      },
+      "year": 2026,
+      "title": "Do Not Enter: The Grand Meridian"
+    },
+    {
+      "ids": {
+        "imdb": "tt39140662",
+        "plex": {
+          "guid": "6940fd85fc2370bc6ba10442",
+          "slug": "taken-from-home"
+        },
+        "slug": "taken-from-home-2026",
+        "tmdb": 1595481,
+        "trakt": 1325708
+      },
+      "year": 2026,
+      "title": "Taken from Home"
+    },
+    {
+      "ids": {
+        "imdb": "tt33053440",
+        "plex": {
+          "guid": "660e3828694ea16e347888f8",
+          "slug": "bubbles-before-christmas"
+        },
+        "slug": "bubbles-before-christmas-2025",
+        "tmdb": 1323475,
+        "trakt": 1082353
+      },
+      "year": 2025,
+      "title": "Bubbles Before Christmas"
+    },
+    {
+      "ids": {
+        "imdb": "tt29780866",
+        "plex": {
+          "guid": "6549b331385bbd5c598c814a",
+          "slug": "thin-ice-run"
+        },
+        "slug": "thin-ice-run-2025",
+        "tmdb": 1242501,
+        "trakt": 1005864
+      },
+      "year": 2025,
+      "title": "Thin Ice Run"
+    },
+    {
+      "ids": {
+        "imdb": "tt30446847",
+        "plex": {
+          "guid": "6582253468f3cd06c50d14f8",
+          "slug": "the-life-between-takes"
+        },
+        "slug": "the-life-between-takes-2025",
+        "tmdb": 1069905,
+        "trakt": 860421
+      },
+      "year": 2025,
+      "title": "The Life Between Takes"
+    },
+    {
+      "ids": {
+        "imdb": "tt37540875",
+        "plex": {
+          "guid": "6880e87c6442b88c03c31ee8",
+          "slug": "dormitory-diplomacy"
+        },
+        "slug": "dormitory-diplomacy-2026",
+        "tmdb": 1511057,
+        "trakt": 1239227
+      },
+      "year": 2026,
+      "title": "Dormitory Diplomacy"
+    },
+    {
+      "ids": {
+        "imdb": "tt32315584",
+        "plex": {
+          "guid": "663f0d8908eee4e5469efea8",
+          "slug": "flight-into-the-unseen"
+        },
+        "slug": "flight-into-the-unseen-2026",
+        "tmdb": 1321008,
+        "trakt": 1080135
+      },
+      "year": 2026,
+      "title": "Flight Into the Unseen"
+    },
+    {
+      "ids": {
+        "imdb": "tt36331860",
+        "plex": {
+          "guid": "6813a362749005eb88069ed4",
+          "slug": "between-two-paths"
+        },
+        "slug": "between-two-paths-2026",
+        "tmdb": 1317672,
+        "trakt": 1077021
+      },
+      "year": 2026,
+      "title": "Between Two Paths"
+    },
+    {
+      "ids": {
+        "imdb": "tt35519455",
+        "plex": {
+          "guid": "679ffefd06cdece7e7d595c5",
+          "slug": "the-road-that-loops"
+        },
+        "slug": "the-road-that-loops-2026",
+        "tmdb": 1422011,
+        "trakt": 1163200
+      },
+      "year": 2026,
+      "title": "The Road That Loops"
+    },
+    {
+      "ids": {
+        "imdb": "tt7708226",
+        "plex": {
+          "guid": "5f40d3ea02101b004010fe05",
+          "slug": "one-more-round"
+        },
+        "slug": "one-more-round-2026",
+        "tmdb": 1292415,
+        "trakt": 1051859
+      },
+      "year": 2026,
+      "title": "One More Round"
+    },
+    {
+      "ids": {
+        "imdb": "tt39227597",
+        "plex": {
+          "guid": "6948bfe23b5913c82849ef58",
+          "slug": "no-soft-landing"
+        },
+        "slug": "no-soft-landing-2025",
+        "tmdb": 1601195,
+        "trakt": 1330217
+      },
+      "year": 2025,
+      "title": "No Soft Landing"
+    },
+    {
+      "ids": {
+        "imdb": "tt36926359",
+        "plex": {
+          "guid": "682f30c25a5dea5650c83560",
+          "slug": "the-quiet-marksman"
+        },
+        "slug": "the-quiet-marksman-2026",
+        "tmdb": 1288341,
+        "trakt": 1048328
+      },
+      "year": 2026,
+      "title": "The Quiet Marksman"
+    },
+    {
+      "ids": {
+        "imdb": "tt35219851",
+        "plex": {
+          "guid": "67c4ad0a37486c316c966193",
+          "slug": "santa-at-snowcap-lodge"
+        },
+        "slug": "santa-at-snowcap-lodge-2025",
+        "tmdb": 1441563,
+        "trakt": 1179754
+      },
+      "year": 2025,
+      "title": "Santa at Snowcap Lodge"
+    },
+    {
+      "ids": {
+        "imdb": "tt42373968",
+        "plex": {
+          "guid": "69fae131a4b13176705eb1ab",
+          "slug": "the-away-team"
+        },
+        "slug": "the-away-team-2026",
+        "tmdb": 1688652,
+        "trakt": 1368105
+      },
+      "year": 2026,
+      "title": "The Away Team"
+    },
+    {
+      "ids": {
+        "imdb": "tt7734244",
+        "plex": {
+          "guid": "5f40d40603883a0040d167e2",
+          "slug": "the-wandering-tree"
+        },
+        "slug": "the-wandering-tree-2026",
+        "tmdb": 1140521,
+        "trakt": 918300
+      },
+      "year": 2026,
+      "title": "The Wandering Tree"
+    },
+    {
+      "ids": {
+        "imdb": "tt32767869",
+        "plex": {
+          "guid": "6680c8882b068de1786c15e2",
+          "slug": "still-here-still-laughing"
+        },
+        "slug": "still-here-still-laughing-2025",
+        "tmdb": 1312150,
+        "trakt": 1072420
+      },
+      "year": 2025,
+      "title": "Still Here, Still Laughing"
+    },
+    {
+      "ids": {
+        "imdb": "tt14619456",
+        "plex": {
+          "guid": "609ce73e447cea002c130237",
+          "slug": "faces-of-death-the-moderator"
+        },
+        "slug": "faces-of-death-the-moderator-2026",
+        "tmdb": 855435,
+        "trakt": 683873
+      },
+      "year": 2026,
+      "title": "Faces of Death: The Moderator"
+    },
+    {
+      "ids": {
+        "imdb": "tt15678738",
+        "plex": {
+          "guid": "616a96cd039aabdb6c7571dc",
+          "slug": "the-shepherd-s-promise"
+        },
+        "slug": "the-shepherd-s-promise-2025",
+        "tmdb": 1167307,
+        "trakt": 940730
+      },
+      "year": 2025,
+      "title": "The Shepherd’s Promise"
+    },
+    {
+      "ids": {
+        "imdb": "tt36073210",
+        "plex": {
+          "guid": "67f728f097f5a99d6f6ca577",
+          "slug": "the-bodyguard-s-promise"
+        },
+        "slug": "the-bodyguard-s-promise-2026",
+        "tmdb": 1440098,
+        "trakt": 1367885
+      },
+      "year": 2026,
+      "title": "The Bodyguard's Promise"
+    },
+    {
+      "ids": {
+        "imdb": "tt27604215",
+        "plex": {
+          "guid": "644cca0c7b10820176a6dfb5",
+          "slug": "the-sandman-s-door"
+        },
+        "slug": "the-sandman-s-door-2025",
+        "tmdb": 1117857,
+        "trakt": 899456
+      },
+      "year": 2025,
+      "title": "The Sandman’s Door"
+    },
+    {
+      "ids": {
+        "imdb": "tt28682323",
+        "plex": {
+          "guid": "64e3194f2db8e025b2ede3f2",
+          "slug": "the-last-knock"
+        },
+        "slug": "the-last-knock-2026",
+        "tmdb": 1010755,
+        "trakt": 812253
+      },
+      "year": 2026,
+      "title": "The Last Knock"
+    },
+    {
+      "ids": {
+        "imdb": "tt32321803",
+        "plex": {
+          "guid": "663f0d9008eee4e5469f03cc",
+          "slug": "last-call-at-the-blue-room"
+        },
+        "slug": "last-call-at-the-blue-room-2026",
+        "tmdb": 1279493,
+        "trakt": 1039902
+      },
+      "year": 2026,
+      "title": "Last Call at the Blue Room"
+    },
+    {
+      "ids": {
+        "imdb": "tt32332404",
+        "plex": {
+          "guid": "664081d79091980e53b1906c",
+          "slug": "the-cabin-keeps"
+        },
+        "slug": "the-cabin-keeps-2025",
+        "tmdb": 1288072,
+        "trakt": 1048117
+      },
+      "year": 2025,
+      "title": "The Cabin Keeps"
+    },
+    {
+      "ids": {
+        "imdb": "tt35522483",
+        "plex": {
+          "guid": "64bc01a86042f826af998051",
+          "slug": "back-to-the-showcase"
+        },
+        "slug": "back-to-the-showcase-2026",
+        "tmdb": 1154538,
+        "trakt": 930265
+      },
+      "year": 2026,
+      "title": "Back to the Showcase"
+    },
+    {
+      "ids": {
+        "imdb": "tt40898187",
+        "plex": {
+          "guid": "69c450d47275b7906dbd95ab",
+          "slug": "all-smoke"
+        },
+        "slug": "all-smoke-2026",
+        "tmdb": 1658982,
+        "trakt": 1361127
+      },
+      "year": 2026,
+      "title": "All Smoke"
+    }
+  ]
+}

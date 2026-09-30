@@ -17,8 +17,5 @@ COPY . ./
 # Expose port
 EXPOSE 80
 
-# Copy TMDB-specific sanitizer to replace the identity sanitizer
-COPY tmdb/tmdb.sanitize.ts sanitize.ts
-
 # Start the mock server using the "start" script from package.json
 CMD ["bun", "start"]

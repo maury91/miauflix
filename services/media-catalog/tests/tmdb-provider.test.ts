@@ -126,6 +126,27 @@ describe('TmdbClient', () => {
     expect(requests).toBe(2);
     expect(cacheKeys).toEqual(['tmdb:v1:configuration', 'tmdb:v1:configuration']);
   });
+
+  it('shares concurrent movie and TV genre requests', async () => {
+    let requests = 0;
+    globalThis.fetch = (async () => {
+      requests++;
+      return Response.json({ genres: [] });
+    }) as unknown as typeof fetch;
+    const client = new TmdbClient(makeCache([]), {
+      apiUrl: 'https://tmdb.example/3',
+      accessToken: 'token',
+    });
+
+    await Promise.all([
+      client.movieGenres('en'),
+      client.movieGenres('en'),
+      client.tvGenres('en'),
+      client.tvGenres('en'),
+    ]);
+
+    expect(requests).toBe(2);
+  });
 });
 
 describe('TmdbProvider', () => {

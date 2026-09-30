@@ -142,7 +142,7 @@ export class CatalogService {
     await this.synchronizer.syncTVShows();
   }
 
-  async syncIncompleteSeasons(): Promise<void> {
-    await this.synchronizer.syncIncompleteSeasons();
+  async syncIncompleteSeasons(tvMediaId?: number): Promise<void> {
+    await this.synchronizer.syncIncompleteSeasons(tvMediaId);
   }
 }

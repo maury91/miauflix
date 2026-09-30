@@ -1,0 +1,433 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1573",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c4b8fcadc6980e2b16840af3b48c61f4\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6D2NsU3FIQVthPgjT6RAsX58qZ6.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/wedding-at-the-border",
+    "id": 1414413,
+    "imdb_id": "tt32394984",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Wedding at the Border",
+    "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+    "popularity": 16.6711,
+    "poster_path": "/e5EKqk9V7N3w0WvYFhl6wSVrMp0.jpg",
+    "production_companies": [
+      {
+        "id": 76991,
+        "logo_path": "/pQjdvbv4y9yuIDSHDEHc9ijJKaS.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 144803,
+        "logo_path": "/yXwiJ1poBK106mUDBLNfIWcaeQg.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-04-15",
+    "revenue": 0,
+    "runtime": 99,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "No one leaves the party.",
+    "title": "Wedding at the Border",
+    "video": false,
+    "vote_average": 5.853,
+    "vote_count": 58,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 99,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 100,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 100,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 101,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 101,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 100,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 100,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 99,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/wedding-at-the-border",
+            "overview": "A squad on leave in A neighboring country is ambushed by cartel gunmen, and Captain Wright must guide scattered survivors to safety.",
+            "runtime": 0,
+            "tagline": "No one leaves the party.",
+            "title": "Wedding at the Border"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tw06ow5cTKIz7PVyd1sbWrANkDX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.166,
+          "height": 379,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sRjbOFvEJp4xCFnxWEtGtvu97Ri.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e5EKqk9V7N3w0WvYFhl6wSVrMp0.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1024
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2133,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xwHendC10u5WvIozmMyZGMvrZ0t.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1422
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2dAvu3HNsnvrmkdRiOkQfva2tza.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 772,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uR1ByiMu9G6NHCqAQ0pwgTt0jhs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 521
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2HeUFPb1L5ruOv0kMAqxsJjeTjY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/arCRXWkkSQMRca110INDm6cXwwt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nNnMxAxHtP6Ctc7CK9KwStxBjTR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 768
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,629 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3623",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f2919356143939253baac79f9de02bf1\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/xQy6a3OPZdW3I2YxmOahJHtASqk.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2023-06-01",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+    "id": 216228,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2023-06-01",
+    "last_episode_to_air": {
+      "id": 4256034,
+      "name": "Brass Orchard",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 7.333,
+      "vote_count": 3,
+      "air_date": "2023-06-01",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 66,
+      "season_number": 1,
+      "show_id": 216228,
+      "still_path": "/g6ftG998CsbSld1QIUWFJ9h5EEu.jpg"
+    },
+    "name": "Scarlet Valley: Juniper Vale",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Bright Crown Network",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "Scarlet Valley: Juniper Vale",
+    "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 9.6396,
+    "poster_path": "/fxRGoQfYqWWopNuG1SCF0j41qRv.jpg",
+    "production_companies": [
+      {
+        "id": 188402,
+        "logo_path": "/ibax6OhjIl9hRt0Cs0TWAZvRZF8.png",
+        "name": "Velvet Station Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3627,
+        "logo_path": "/pBfPYpzg5o3EoBPfrFKzTRi8MGr.png",
+        "name": "Silent Beacon Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 228301,
+        "logo_path": "/29HdeSBspnEjVQ3IkpoOc1c7aJ6.png",
+        "name": "Distant Echo Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-06-01",
+        "episode_count": 8,
+        "id": 319861,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/fxRGoQfYqWWopNuG1SCF0j41qRv.jpg",
+        "season_number": 1,
+        "vote_average": 7.2
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 7.722,
+    "vote_count": 153,
+    "external_ids": {
+      "imdb_id": "tt22074484",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 434136,
+      "tvrage_id": null,
+      "wikidata_id": "Q119049946",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Scarlet Valley: Juniper Vale",
+            "overview": "Scarlet Valley: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-valley-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24136",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"718cb56d6ee0210a9e7a3bb0379f334d\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/xM7MaKDqzr5kDQ1FRAagaxpH74T.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/trouble-at-saint-agnes",
+    "id": 43097,
+    "imdb_id": "tt0052850",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Trouble at Saint Agnes",
+    "overview": "After a young man is killed during an attempted assault, a rebellious girl with an alibi is blamed and sent to a convent school for troubled teenagers. She clashes with the strict sisters while her closest friend spirals into a dangerous obsession with a rising singer, and their families chase answers outside the school gates.",
+    "popularity": 1.5815,
+    "poster_path": "/nbHxQOvHLX6LrHdRfBmoiD5cQlE.jpg",
+    "production_companies": [
+      {
+        "id": 13709,
+        "logo_path": null,
+        "name": "Side Street Releasing",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1959-10-05",
+    "revenue": 0,
+    "runtime": 90,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "What happens when youthful rebels go bad?",
+    "title": "Trouble at Saint Agnes",
+    "video": false,
+    "vote_average": 3.7,
+    "vote_count": 21,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/trouble-at-saint-agnes",
+            "overview": "After a young man is killed during an attempted assault, a rebellious girl with an alibi is blamed and sent to a convent school for troubled teenagers. She clashes with the strict sisters while her closest friend spirals into a dangerous obsession with a rising singer, and their families chase answers outside the school gates.",
+            "runtime": 90,
+            "tagline": "What happens when youthful rebels go bad?",
+            "title": "Trouble at Saint Agnes"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/trouble-at-saint-agnes",
+            "overview": "After a young man is killed during an attempted assault, a rebellious girl with an alibi is blamed and sent to a convent school for troubled teenagers. She clashes with the strict sisters while her closest friend spirals into a dangerous obsession with a rising singer, and their families chase answers outside the school gates.",
+            "runtime": 90,
+            "tagline": "What happens when youthful rebels go bad?",
+            "title": "Trouble at Saint Agnes"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/trouble-at-saint-agnes",
+            "overview": "After a young man is killed during an attempted assault, a rebellious girl with an alibi is blamed and sent to a convent school for troubled teenagers. She clashes with the strict sisters while her closest friend spirals into a dangerous obsession with a rising singer, and their families chase answers outside the school gates.",
+            "runtime": 0,
+            "tagline": "What happens when youthful rebels go bad?",
+            "title": "Trouble at Saint Agnes"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/trouble-at-saint-agnes",
+            "overview": "After a young man is killed during an attempted assault, a rebellious girl with an alibi is blamed and sent to a convent school for troubled teenagers. She clashes with the strict sisters while her closest friend spirals into a dangerous obsession with a rising singer, and their families chase answers outside the school gates.",
+            "runtime": 0,
+            "tagline": "What happens when youthful rebels go bad?",
+            "title": "Trouble at Saint Agnes"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/trouble-at-saint-agnes",
+            "overview": "After a young man is killed during an attempted assault, a rebellious girl with an alibi is blamed and sent to a convent school for troubled teenagers. She clashes with the strict sisters while her closest friend spirals into a dangerous obsession with a rising singer, and their families chase answers outside the school gates.",
+            "runtime": 0,
+            "tagline": "What happens when youthful rebels go bad?",
+            "title": "Trouble at Saint Agnes"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "id": 43097,
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2694,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nbHxQOvHLX6LrHdRfBmoiD5cQlE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1796
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2563,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zRZHfR5s20cKcmMWkTLN3fTbiVx.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1709
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rvifIBUYzhoIw4Q3bwk8JuuojLU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2694,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/guu2b8MP8NdRfQKTvQLIHCQLF4h.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1796
+        }
+      ]
+    }
+  }
+}

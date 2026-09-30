@@ -1,0 +1,1860 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:show:170568,resource:show:195758,resource:episode:6693106,resource:episode:6693107,resource:episode:6693105,resource:movie:1268,resource:show:140411,resource:episode:3579092,resource:episode:4104044,resource:episode:6693108,resource:show:121334,resource:episode:2985390,resource:movie:1269,resource:episode:3276726,resource:show:4170,resource:episode:295658,resource:episode:295636,resource:movie:7093,resource:episode:295665,resource:episode:6693109,resource:episode:295667,resource:episode:295621,resource:episode:295622,resource:episode:295623,resource:episode:295624,resource:episode:295625,resource:episode:295626,resource:episode:295627,resource:episode:295628,resource:episode:295629,resource:episode:295630,resource:episode:295631,resource:episode:295632,resource:episode:295633,resource:episode:295634,resource:episode:295635,resource:episode:295637,resource:episode:295638,resource:episode:295639,resource:episode:295640,resource:episode:295641,resource:episode:295643,resource:episode:295644,resource:episode:295645,resource:episode:295659,resource:episode:295660,resource:episode:295661,resource:episode:295646,resource:episode:295647,resource:episode:295648,resource:episode:295649,resource:episode:295650,resource:episode:295651,resource:episode:295652,resource:list:2233867",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "330",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "7",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "rank",
+    "x-sort-how": "asc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt12262202",
+          "plex": {
+            "guid": "5fd4f9d15e58c2002ed6b402",
+            "slug": "midnight-crown-stonehaven"
+          },
+          "slug": "midnight-crown-stonehaven",
+          "tmdb": 114479,
+          "tvdb": 393197,
+          "trakt": 170568
+        },
+        "year": 2024,
+        "title": "Midnight Crown: Stonehaven",
+        "aired_episodes": 8
+      },
+      "rank": 1,
+      "id": 644862188,
+      "listed_at": "2021-12-29T09:15:19.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt20723374",
+          "plex": {
+            "guid": "62d640da8e100d08d32d0115",
+            "slug": "blue-passage-fox-hollow"
+          },
+          "slug": "blue-passage-fox-hollow",
+          "tmdb": 203085,
+          "tvdb": 420659,
+          "trakt": 195758
+        },
+        "year": 2022,
+        "title": "Blue Passage: Fox Hollow",
+        "aired_episodes": 6
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt20764572",
+          "plex": {
+            "guid": "631ce76bcbff4464978ffb64"
+          },
+          "tmdb": 3947845,
+          "tvdb": 9191069,
+          "trakt": 6693106
+        },
+        "title": "Brass Harbor",
+        "number": 2,
+        "season": 1
+      },
+      "rank": 2,
+      "id": 757665885,
+      "listed_at": "2022-10-27T09:15:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt20723374",
+          "plex": {
+            "guid": "62d640da8e100d08d32d0115",
+            "slug": "blue-passage-fox-hollow"
+          },
+          "slug": "blue-passage-fox-hollow",
+          "tmdb": 203085,
+          "tvdb": 420659,
+          "trakt": 195758
+        },
+        "year": 2022,
+        "title": "Blue Passage: Fox Hollow",
+        "aired_episodes": 6
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt20764576",
+          "plex": {
+            "guid": "631ce76bcbff4464978ffb68"
+          },
+          "tmdb": 3947849,
+          "tvdb": 9344415,
+          "trakt": 6693107
+        },
+        "title": "Hidden Compass",
+        "number": 3,
+        "season": 1
+      },
+      "rank": 3,
+      "id": 757665888,
+      "listed_at": "2022-10-27T09:16:03.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt20723374",
+          "plex": {
+            "guid": "62d640da8e100d08d32d0115",
+            "slug": "blue-passage-fox-hollow"
+          },
+          "slug": "blue-passage-fox-hollow",
+          "tmdb": 203085,
+          "tvdb": 420659,
+          "trakt": 195758
+        },
+        "year": 2022,
+        "title": "Blue Passage: Fox Hollow",
+        "aired_episodes": 6
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt20753364",
+          "plex": {
+            "guid": "62d640db8e100d08d32d011f"
+          },
+          "tmdb": 3947794,
+          "tvdb": 9191066,
+          "trakt": 6693105
+        },
+        "title": "Golden Crown",
+        "number": 1,
+        "season": 1
+      },
+      "rank": 4,
+      "id": 757665777,
+      "listed_at": "2022-10-27T09:15:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0120915",
+          "plex": {
+            "guid": "5d77682a961905001eb91f0f",
+            "slug": "starward-the-hidden-menace"
+          },
+          "slug": "starward-the-hidden-menace-1999",
+          "tmdb": 1893,
+          "trakt": 1268
+        },
+        "year": 1999,
+        "title": "Starward: The Hidden Menace"
+      },
+      "rank": 5,
+      "id": 93125243,
+      "listed_at": "2016-05-05T08:48:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt9353248",
+          "plex": {
+            "guid": "5d9c09142df347001e3bc87b",
+            "slug": "hidden-river-westmere"
+          },
+          "slug": "hidden-river-westmere",
+          "tmdb": 85536,
+          "tvdb": 356114,
+          "trakt": 140411
+        },
+        "year": 2018,
+        "title": "Hidden River: Westmere",
+        "aired_episodes": 54
+      },
+      "episode": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "5e1cd2149459f4003c2d6933"
+          },
+          "tmdb": 2044557,
+          "tvdb": 7246079,
+          "trakt": 3579092
+        },
+        "title": "Bright Voyage",
+        "number": 34,
+        "season": 1
+      },
+      "rank": 6,
+      "id": 457555905,
+      "listed_at": "2019-10-02T09:29:35.000Z",
+      "notes": "A short curator note for this selection.",
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt9353248",
+          "plex": {
+            "guid": "5d9c09142df347001e3bc87b",
+            "slug": "hidden-river-westmere"
+          },
+          "slug": "hidden-river-westmere",
+          "tmdb": 85536,
+          "tvdb": 356114,
+          "trakt": 140411
+        },
+        "year": 2018,
+        "title": "Hidden River: Westmere",
+        "aired_episodes": 54
+      },
+      "episode": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "5e91b84098d3e70043188e08"
+          },
+          "tmdb": 2251910,
+          "tvdb": 7680805,
+          "trakt": 4104044
+        },
+        "title": "Northern Window",
+        "number": 7,
+        "season": 2
+      },
+      "rank": 7,
+      "id": 566647381,
+      "listed_at": "2021-01-24T17:34:27.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt20723374",
+          "plex": {
+            "guid": "62d640da8e100d08d32d0115",
+            "slug": "blue-passage-fox-hollow"
+          },
+          "slug": "blue-passage-fox-hollow",
+          "tmdb": 203085,
+          "tvdb": 420659,
+          "trakt": 195758
+        },
+        "year": 2022,
+        "title": "Blue Passage: Fox Hollow",
+        "aired_episodes": 6
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt20764574",
+          "plex": {
+            "guid": "631ce76bcbff4464978ffb65"
+          },
+          "tmdb": 3947846,
+          "tvdb": 9344416,
+          "trakt": 6693108
+        },
+        "title": "Bright Garden",
+        "number": 4,
+        "season": 1
+      },
+      "rank": 8,
+      "id": 757665989,
+      "listed_at": "2022-10-27T09:16:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt6779076",
+          "plex": {
+            "guid": "5d9c08d3ffd9ef001e99b28a",
+            "slug": "distant-valley-westmere"
+          },
+          "slug": "distant-valley-westmere",
+          "tmdb": 71412,
+          "tvdb": 330710,
+          "trakt": 121334
+        },
+        "year": 2017,
+        "title": "Distant Valley: Westmere",
+        "aired_episodes": 32
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt8382048",
+          "plex": {
+            "guid": "5d9c18cb2df347001e455283"
+          },
+          "tmdb": 1482564,
+          "tvdb": 6679122,
+          "trakt": 2985390
+        },
+        "title": "Hidden Orchard",
+        "number": 10,
+        "season": 2
+      },
+      "rank": 9,
+      "id": 342106969,
+      "listed_at": "2018-05-05T14:37:14.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0121765",
+          "plex": {
+            "guid": "5d77682a961905001eb91f40",
+            "slug": "starward-the-clone-offensive"
+          },
+          "slug": "starward-the-clone-offensive-2002",
+          "tmdb": 1894,
+          "trakt": 1269
+        },
+        "year": 2002,
+        "title": "Starward: The Clone Offensive"
+      },
+      "rank": 10,
+      "id": 93125268,
+      "listed_at": "2016-05-05T08:49:39.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt9353248",
+          "plex": {
+            "guid": "5d9c09142df347001e3bc87b",
+            "slug": "hidden-river-westmere"
+          },
+          "slug": "hidden-river-westmere",
+          "tmdb": 85536,
+          "tvdb": 356114,
+          "trakt": 140411
+        },
+        "year": 2018,
+        "title": "Hidden River: Westmere",
+        "aired_episodes": 54
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt9703392",
+          "plex": {
+            "guid": "5d9c1a393c3f87001f40884a"
+          },
+          "tmdb": 1757474,
+          "tvdb": 6923552,
+          "trakt": 3276726
+        },
+        "title": "Midnight Horizon",
+        "number": 13,
+        "season": 1
+      },
+      "rank": 11,
+      "id": 487895194,
+      "listed_at": "2020-03-13T10:59:05.000Z",
+      "notes": "A short curator note for this selection.",
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1558192",
+          "plex": {
+            "guid": "5d9c0d672192ba001f3403ba"
+          },
+          "tmdb": 286602,
+          "tvdb": 1725761,
+          "trakt": 295658
+        },
+        "title": "Distant Beacon",
+        "number": 16,
+        "season": 2
+      },
+      "rank": 12,
+      "id": 93125289,
+      "listed_at": "2016-05-05T08:50:40.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1371608",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1cad"
+          },
+          "tmdb": 286581,
+          "tvdb": 431037,
+          "trakt": 295636
+        },
+        "title": "Hidden Valley",
+        "number": 16,
+        "season": 1
+      },
+      "rank": 13,
+      "id": 93125296,
+      "listed_at": "2016-05-05T08:51:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1185834",
+          "plex": {
+            "guid": "5d776838880197001ec9401d",
+            "slug": "star-rangers-the-stolen-heir"
+          },
+          "slug": "star-rangers-the-stolen-heir-2008",
+          "tmdb": 12180,
+          "trakt": 7093
+        },
+        "year": 2008,
+        "title": "Star Rangers: The Stolen Heir"
+      },
+      "rank": 14,
+      "id": 93125298,
+      "listed_at": "2016-05-05T08:51:32.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1707609",
+          "plex": {
+            "guid": "5d9c0d67ba6eb9001fbd3054"
+          },
+          "tmdb": 286631,
+          "tvdb": 2240111,
+          "trakt": 295665
+        },
+        "title": "Copper Harbor",
+        "number": 1,
+        "season": 3
+      },
+      "rank": 15,
+      "id": 93125326,
+      "listed_at": "2016-05-05T08:52:03.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt20723374",
+          "plex": {
+            "guid": "62d640da8e100d08d32d0115",
+            "slug": "blue-passage-fox-hollow"
+          },
+          "slug": "blue-passage-fox-hollow",
+          "tmdb": 203085,
+          "tvdb": 420659,
+          "trakt": 195758
+        },
+        "year": 2022,
+        "title": "Blue Passage: Fox Hollow",
+        "aired_episodes": 6
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt20764578",
+          "plex": {
+            "guid": "631ce76bcbff4464978ffb66"
+          },
+          "tmdb": 3947847,
+          "tvdb": 9344417,
+          "trakt": 6693109
+        },
+        "title": "Copper Echo",
+        "number": 5,
+        "season": 1
+      },
+      "rank": 16,
+      "id": 757665992,
+      "listed_at": "2022-10-27T09:16:17.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1707624",
+          "plex": {
+            "guid": "5d9c0d67ba6eb9001fbd3058"
+          },
+          "tmdb": 286624,
+          "tvdb": 2825061,
+          "trakt": 295667
+        },
+        "title": "Hidden Lantern",
+        "number": 3,
+        "season": 3
+      },
+      "rank": 17,
+      "id": 93125331,
+      "listed_at": "2016-05-05T08:52:16.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1288767",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9ab"
+          },
+          "tmdb": 286576,
+          "tvdb": 393233,
+          "trakt": 295621
+        },
+        "title": "Amber Window",
+        "number": 1,
+        "season": 1
+      },
+      "rank": 18,
+      "id": 93125335,
+      "listed_at": "2016-05-05T08:52:33.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1288768",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1c99"
+          },
+          "tmdb": 286570,
+          "tvdb": 393234,
+          "trakt": 295622
+        },
+        "title": "Northern Valley",
+        "number": 2,
+        "season": 1
+      },
+      "rank": 19,
+      "id": 93125354,
+      "listed_at": "2016-05-05T08:53:08.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1292836",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f99b"
+          },
+          "tmdb": 286559,
+          "tvdb": 393235,
+          "trakt": 295623
+        },
+        "title": "Emerald Station",
+        "number": 3,
+        "season": 1
+      },
+      "rank": 20,
+      "id": 93125357,
+      "listed_at": "2016-05-05T08:53:19.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1292833",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9a7"
+          },
+          "tmdb": 286575,
+          "tvdb": 393236,
+          "trakt": 295624
+        },
+        "title": "Silver Voyage",
+        "number": 4,
+        "season": 1
+      },
+      "rank": 21,
+      "id": 93125360,
+      "listed_at": "2016-05-05T08:53:29.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1292835",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9b7"
+          },
+          "tmdb": 286573,
+          "tvdb": 393711,
+          "trakt": 295625
+        },
+        "title": "Quiet Archive",
+        "number": 5,
+        "season": 1
+      },
+      "rank": 22,
+      "id": 93125362,
+      "listed_at": "2016-05-05T08:53:34.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1292834",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9bb"
+          },
+          "tmdb": 286568,
+          "tvdb": 393712,
+          "trakt": 295626
+        },
+        "title": "Emerald Station",
+        "number": 6,
+        "season": 1
+      },
+      "rank": 23,
+      "id": 93125363,
+      "listed_at": "2016-05-05T08:53:39.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1320037",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9a3"
+          },
+          "tmdb": 286567,
+          "tvdb": 403518,
+          "trakt": 295627
+        },
+        "title": "Hidden Echo",
+        "number": 7,
+        "season": 1
+      },
+      "rank": 24,
+      "id": 93125366,
+      "listed_at": "2016-05-05T08:53:47.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1322836",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f99f"
+          },
+          "tmdb": 286572,
+          "tvdb": 403519,
+          "trakt": 295628
+        },
+        "title": "Scarlet Window",
+        "number": 8,
+        "season": 1
+      },
+      "rank": 25,
+      "id": 93125371,
+      "listed_at": "2016-05-05T08:53:55.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1322837",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9bf"
+          },
+          "tmdb": 286569,
+          "tvdb": 403520,
+          "trakt": 295629
+        },
+        "title": "Falling Sky",
+        "number": 9,
+        "season": 1
+      },
+      "rank": 26,
+      "id": 93125373,
+      "listed_at": "2016-05-05T08:54:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1322834",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9af"
+          },
+          "tmdb": 286574,
+          "tvdb": 403521,
+          "trakt": 295630
+        },
+        "title": "Silent Valley",
+        "number": 10,
+        "season": 1
+      },
+      "rank": 27,
+      "id": 93125375,
+      "listed_at": "2016-05-05T08:54:10.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1322835",
+          "plex": {
+            "guid": "5d9c0d673c3f87001f37f9b3"
+          },
+          "tmdb": 286578,
+          "tvdb": 417298,
+          "trakt": 295631
+        },
+        "title": "Brass Echo",
+        "number": 11,
+        "season": 1
+      },
+      "rank": 28,
+      "id": 93125378,
+      "listed_at": "2016-05-05T08:54:16.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1345675",
+          "plex": {
+            "guid": "5d9c0d67ba6eb9001fbd303c"
+          },
+          "tmdb": 286580,
+          "tvdb": 419505,
+          "trakt": 295632
+        },
+        "title": "Golden Voyage",
+        "number": 12,
+        "season": 1
+      },
+      "rank": 29,
+      "id": 93125389,
+      "listed_at": "2016-05-05T08:54:48.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1345254",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1c9d"
+          },
+          "tmdb": 286582,
+          "tvdb": 423943,
+          "trakt": 295633
+        },
+        "title": "Ivory Archive",
+        "number": 13,
+        "season": 1
+      },
+      "rank": 30,
+      "id": 93125393,
+      "listed_at": "2016-05-05T08:55:01.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1345253",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1c95"
+          },
+          "tmdb": 286583,
+          "tvdb": 423944,
+          "trakt": 295634
+        },
+        "title": "Last Window",
+        "number": 14,
+        "season": 1
+      },
+      "rank": 31,
+      "id": 93125401,
+      "listed_at": "2016-05-05T08:55:06.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1345740",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1ca5"
+          },
+          "tmdb": 286579,
+          "tvdb": 423945,
+          "trakt": 295635
+        },
+        "title": "Blue Garden",
+        "number": 15,
+        "season": 1
+      },
+      "rank": 32,
+      "id": 93125410,
+      "listed_at": "2016-05-05T08:55:45.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1371607",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1ca9"
+          },
+          "tmdb": 286577,
+          "tvdb": 431038,
+          "trakt": 295637
+        },
+        "title": "Velvet Archive",
+        "number": 17,
+        "season": 1
+      },
+      "rank": 33,
+      "id": 93125417,
+      "listed_at": "2016-05-05T08:56:01.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1380663",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1cb9"
+          },
+          "tmdb": 286584,
+          "tvdb": 435753,
+          "trakt": 295638
+        },
+        "title": "Midnight Signal",
+        "number": 18,
+        "season": 1
+      },
+      "rank": 34,
+      "id": 93125420,
+      "listed_at": "2016-05-05T08:56:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1380664",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1cb5"
+          },
+          "tmdb": 286585,
+          "tvdb": 435903,
+          "trakt": 295639
+        },
+        "title": "Northern River",
+        "number": 19,
+        "season": 1
+      },
+      "rank": 35,
+      "id": 93125424,
+      "listed_at": "2016-05-05T08:56:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1380660",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1cb1"
+          },
+          "tmdb": 286586,
+          "tvdb": 435904,
+          "trakt": 295640
+        },
+        "title": "Quiet Station",
+        "number": 20,
+        "season": 1
+      },
+      "rank": 36,
+      "id": 93125429,
+      "listed_at": "2016-05-05T08:56:18.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1380662",
+          "plex": {
+            "guid": "5d9c0d67ffd9ef001e9c1ca1"
+          },
+          "tmdb": 286587,
+          "tvdb": 435905,
+          "trakt": 295641
+        },
+        "title": "Scarlet Sky",
+        "number": 21,
+        "season": 1
+      },
+      "rank": 37,
+      "id": 93125438,
+      "listed_at": "2016-05-05T08:56:39.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1517137",
+          "plex": {
+            "guid": "5d9c0d677b5c2e001e688976"
+          },
+          "tmdb": 286589,
+          "tvdb": 532351,
+          "trakt": 295643
+        },
+        "title": "Silent Lantern",
+        "number": 1,
+        "season": 2
+      },
+      "rank": 38,
+      "id": 93125446,
+      "listed_at": "2016-05-05T08:57:00.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1517135",
+          "plex": {
+            "guid": "5d9c0d677b5c2e001e68898d"
+          },
+          "tmdb": 286609,
+          "tvdb": 532361,
+          "trakt": 295644
+        },
+        "title": "Quiet Station",
+        "number": 2,
+        "season": 2
+      },
+      "rank": 39,
+      "id": 93125449,
+      "listed_at": "2016-05-05T08:57:06.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1517136",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f936"
+          },
+          "tmdb": 286590,
+          "tvdb": 1147951,
+          "trakt": 295645
+        },
+        "title": "Amber Harbor",
+        "number": 3,
+        "season": 2
+      },
+      "rank": 40,
+      "id": 93125455,
+      "listed_at": "2016-05-05T08:57:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1618280",
+          "plex": {
+            "guid": "5d9c0d672192ba001f3403b6"
+          },
+          "tmdb": 286603,
+          "tvdb": 1771741,
+          "trakt": 295659
+        },
+        "title": "Crimson Bridge",
+        "number": 17,
+        "season": 2
+      },
+      "rank": 41,
+      "id": 93125462,
+      "listed_at": "2016-05-05T08:57:35.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1626033",
+          "plex": {
+            "guid": "5d9c0d672192ba001f3403aa"
+          },
+          "tmdb": 286604,
+          "tvdb": 1992481,
+          "trakt": 295660
+        },
+        "title": "Last Window",
+        "number": 18,
+        "season": 2
+      },
+      "rank": 42,
+      "id": 93125469,
+      "listed_at": "2016-05-05T08:57:47.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1626034",
+          "plex": {
+            "guid": "5d9c0d672192ba001f3403ae"
+          },
+          "tmdb": 286605,
+          "tvdb": 1992491,
+          "trakt": 295661
+        },
+        "title": "Ivory Archive",
+        "number": 19,
+        "season": 2
+      },
+      "rank": 43,
+      "id": 93125472,
+      "listed_at": "2016-05-05T08:57:52.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1531365",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f956"
+          },
+          "tmdb": 286591,
+          "tvdb": 1186351,
+          "trakt": 295646
+        },
+        "title": "Velvet Horizon",
+        "number": 4,
+        "season": 2
+      },
+      "rank": 44,
+      "id": 93125480,
+      "listed_at": "2016-05-05T08:58:09.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1535506",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f952"
+          },
+          "tmdb": 286592,
+          "tvdb": 1191431,
+          "trakt": 295647
+        },
+        "title": "Silent Echo",
+        "number": 5,
+        "season": 2
+      },
+      "rank": 45,
+      "id": 93125487,
+      "listed_at": "2016-05-05T08:58:23.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1541414",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f95a"
+          },
+          "tmdb": 286593,
+          "tvdb": 1258111,
+          "trakt": 295648
+        },
+        "title": "Silver Garden",
+        "number": 6,
+        "season": 2
+      },
+      "rank": 46,
+      "id": 93125488,
+      "listed_at": "2016-05-05T08:58:29.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1555789",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f94e"
+          },
+          "tmdb": 286594,
+          "tvdb": 1271141,
+          "trakt": 295649
+        },
+        "title": "Copper Orchard",
+        "number": 7,
+        "season": 2
+      },
+      "rank": 47,
+      "id": 93125493,
+      "listed_at": "2016-05-05T08:58:35.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1555788",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f946"
+          },
+          "tmdb": 286595,
+          "tvdb": 1366491,
+          "trakt": 295650
+        },
+        "title": "Bright Passage",
+        "number": 8,
+        "season": 2
+      },
+      "rank": 48,
+      "id": 93125494,
+      "listed_at": "2016-05-05T08:58:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1558193",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f942"
+          },
+          "tmdb": 286597,
+          "tvdb": 1371171,
+          "trakt": 295651
+        },
+        "title": "Blue Meridian",
+        "number": 9,
+        "season": 2
+      },
+      "rank": 49,
+      "id": 93125501,
+      "listed_at": "2016-05-05T08:58:46.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt0458290",
+          "plex": {
+            "guid": "5d9c08097b5c2e001e652b09",
+            "slug": "golden-crown-bellhaven"
+          },
+          "slug": "golden-crown-bellhaven",
+          "tmdb": 4194,
+          "tvdb": 83268,
+          "trakt": 4170
+        },
+        "year": 2008,
+        "title": "Golden Crown: Bellhaven",
+        "aired_episodes": 133
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt1558186",
+          "plex": {
+            "guid": "5d9c0d671cae62001f75f93e"
+          },
+          "tmdb": 286598,
+          "tvdb": 1412531,
+          "trakt": 295652
+        },
+        "title": "Falling Window",
+        "number": 10,
+        "season": 2
+      },
+      "rank": 50,
+      "id": 93125504,
+      "listed_at": "2016-05-05T08:58:51.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

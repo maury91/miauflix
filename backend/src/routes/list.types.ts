@@ -7,6 +7,14 @@ export interface ListDto {
 
 export type ListsResponse = ListDto[];
 
+export interface ListsPageResponse {
+  results: ListDto[];
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface MovieDto {
   _type: 'movie';
   id: number;

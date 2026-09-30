@@ -1,0 +1,492 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4515",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9f726848f5c395f61edbfccf7209e67a\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dJTWIecL2vxsCRl5G0lRhPsfrhc.jpg",
+    "belongs_to_collection": null,
+    "budget": 32000000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-last-score",
+    "id": 1228834,
+    "imdb_id": "tt9601292",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Last Score",
+    "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+    "popularity": 155.2676,
+    "poster_path": "/yopXjun3ICFfJci2ukcEzceZjUs.jpg",
+    "production_companies": [
+      {
+        "id": 217982,
+        "logo_path": null,
+        "name": "Red Meridian Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 208153,
+        "logo_path": null,
+        "name": "Red Meridian Entertainment",
+        "origin_country": ""
+      },
+      {
+        "id": 124504,
+        "logo_path": "/2lNM3d3KUlDk3phoFpTkrIS8jKU.png",
+        "name": "Red Meridian Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 121204,
+        "logo_path": "/vbtvY4IxgUZk713rkmoTO4MHIac.png",
+        "name": "Red Meridian Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 198605,
+        "logo_path": null,
+        "name": "Red Meridian Entertainment",
+        "origin_country": ""
+      },
+      {
+        "id": 2623,
+        "logo_path": "/7Bkm1yUF0y8x6jw8dHRfzS3B6dq.png",
+        "name": "Red Meridian Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 229487,
+        "logo_path": "/vF5HUjsJU0jFtlhpUdcodrECXBk.png",
+        "name": "Red Meridian Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 179981,
+        "logo_path": "/vbI6QgAC9s3BilQ5Oa7juyrf59N.png",
+        "name": "Red Meridian Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 185588,
+        "logo_path": null,
+        "name": "Red Meridian Entertainment",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-09-10",
+    "revenue": 0,
+    "runtime": 142,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Arabic",
+        "iso_639_1": "ar",
+        "name": "العربية"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "One last job. No clean exits.",
+    "title": "The Last Score",
+    "video": false,
+    "vote_average": 7.179,
+    "vote_count": 28,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 142,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 142,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 144,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 142,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-score",
+            "overview": "Disgraced intelligence veterans arrive in a distant capital chasing one last score, convinced the fortune will buy them a clean break. Their carefully planned job pulls old loyalties and wartime scars into a city where every alliance has a price.",
+            "runtime": 0,
+            "tagline": "One last job. No clean exits.",
+            "title": "The Last Score"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bQQ3UGOJcCTRjVAjOwR17eQuwJC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.003,
+          "height": 391,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sg0cMIDL4dwMZEu2wPIFTUppquO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1174
+        },
+        {
+          "aspect_ratio": 3.003,
+          "height": 391,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jHDVVyIYFxLcNfk8UVqq2MSsQX3.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1174
+        },
+        {
+          "aspect_ratio": 3.003,
+          "height": 766,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e8GdKxhgIBVR06z1Xar4g2RHrN7.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2300
+        },
+        {
+          "aspect_ratio": 3.003,
+          "height": 766,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jdMq055EplMjt5PUIfzopqav4qB.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2300
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yopXjun3ICFfJci2ukcEzceZjUs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1560,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9iSkee8DPpwBQI3GhXSTGZJKNYM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6TsWqeuUUZdvtFI9sACmU3xbrar.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2997,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9lN1qEdM2c6OZivRr2PzqfyJKf6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5VQ3PTS5WKd1pvSXug6IwrMecZp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jlP8XDjZN89GrpM3je5Uf8Grqx8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

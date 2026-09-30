@@ -1,0 +1,595 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25026",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"826604d1527f071bd5765b0942aa3b0c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/zLeq2fbHU6UdA7mhsYnIULORTgq.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/films/gold-below-the-ridge",
+    "id": 1433583,
+    "imdb_id": "tt10794054",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "pt",
+    "original_title": "Gold Below the Ridge",
+    "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+    "popularity": 29.8581,
+    "poster_path": "/8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
+    "production_companies": [
+      {
+        "id": 25540,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 98506,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 20037,
+        "logo_path": "/6W92BtQOutAi9KFp0aeb41RBH95.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "DE"
+      },
+      {
+        "id": 209127,
+        "logo_path": "/6kby8aYYQX7RqPGs0DPIGMtG2Sg.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "FR"
+      },
+      {
+        "id": 44225,
+        "logo_path": "/faD1loVvInTAOnwWpqNPRXe3Itj.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "DE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      },
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      }
+    ],
+    "release_date": "2026-09-16",
+    "revenue": 0,
+    "runtime": 112,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "One last job buys a life.",
+    "title": "Gold Below the Ridge",
+    "video": false,
+    "vote_average": 6.786,
+    "vote_count": 21,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 112,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 115,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 115,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 112,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 115,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 0,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/gold-below-the-ridge",
+            "overview": "A jailed father accepts a prison warden's offer to move stolen bullion from a mountain mine for a chance at freedom.",
+            "runtime": 112,
+            "tagline": "One last job buys a life.",
+            "title": "Gold Below the Ridge"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zKizFK3adjtpXut1dW6bRaxwhd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/doKGNHnbawL8bsIAfkZH6AA2To3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wnn2jKXfBGOZmCxW78PGSr4WfjQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.62,
+          "height": 192,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/goGNzpf7rm2chxzcbLiLg5LDqmI.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 311
+        },
+        {
+          "aspect_ratio": 7.258,
+          "height": 221,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v0HDMLpeksb4ZOda9Z5fr1sKxTI.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1604
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8i5iZV50CoEtmDCFM7RSxCkpE8h.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x4HFddDKpla5gFUiM8mmFIirML5.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bsrd6ItRwNrg3DGlUDYrEy1S9C1.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1534,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rGpiLK47OQPGv9LduqFbRdKzuqo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1023
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dov6BObRtnR1UOOsEMRWLEshBZO.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fnXA9C0wgeogytADJXiQeMWyZS3.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lGrf2U5mu06WjXBCwCjbTGEjscp.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dJ7RNypJ87XPqksidaWmZaGmjUJ.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ksu3POnhaWflw0AQaIIMU5C8QsZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eeH1DeRjCCBsOW6D869mx6jRuA0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mqXCpiz6h7sY2IPyl1UfRf8Mc3C.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.681,
+          "height": 1468,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Q61bNKOTixRTjbUE9bcENGmqmD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xfSi8PpiE32AtjlipuOpmlMq11P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gXCd2v8giyt9PMkSHgMLpiGIeGm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tfJJy9Lvzyo18GfVdrm27kaqlID.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iYMKfIMAe7IP37tsiZYjCd6fyZC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1537,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o3W94EyyywdIJfhB6twy1RUGtYa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1023
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6szuCC8YLbEORG4Ay1E4GEpZEAF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        }
+      ]
+    }
+  }
+}

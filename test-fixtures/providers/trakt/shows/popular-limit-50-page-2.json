@@ -1,0 +1,822 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "895",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,show",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 18:07:44 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "666",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "2",
+    "x-pagination-page-count": "14",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt30826447",
+        "plex": {
+          "guid": "659f162f4ac34b656efae4ed",
+          "slug": "the-four-seasons"
+        },
+        "slug": "the-four-seasons",
+        "tmdb": 243316,
+        "tvdb": 444528,
+        "trakt": 220439
+      },
+      "year": 2025,
+      "title": "The Four Seasons",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": null,
+        "plex": {
+          "guid": "606ef58bff5b43002ce0589a",
+          "slug": "the-butcher-of-briar-county"
+        },
+        "slug": "the-butcher-of-briar-county",
+        "tmdb": 286801,
+        "tvdb": null,
+        "trakt": 279819
+      },
+      "year": 2025,
+      "title": "The Butcher of Briar County",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt8622160",
+        "plex": {
+          "guid": "6426d5438debdad08445123d",
+          "slug": "star-trek-academy-of-the-far-stars"
+        },
+        "slug": "star-trek-academy-of-the-far-stars",
+        "tmdb": 223530,
+        "tvdb": 433120,
+        "trakt": 203632
+      },
+      "year": 2026,
+      "title": "Star Trek: Academy of the Far Stars",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt31974367",
+        "plex": {
+          "guid": "6606b11ff7560d81174ce8e1",
+          "slug": "the-shadow-within"
+        },
+        "slug": "the-shadow-within",
+        "tmdb": 250504,
+        "tvdb": 448245,
+        "trakt": 233089
+      },
+      "year": 2025,
+      "title": "The Shadow Within",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt28013708",
+        "plex": {
+          "guid": "6484c59a303021d6e0396988",
+          "slug": "task"
+        },
+        "slug": "task",
+        "tmdb": 228305,
+        "tvdb": 451873,
+        "trakt": 206561
+      },
+      "year": 2025,
+      "title": "Task",
+      "aired_episodes": 7
+    },
+    {
+      "ids": {
+        "imdb": "tt32268630",
+        "plex": {
+          "guid": "6634a38e4a044f7f876506aa",
+          "slug": "sheriff-country"
+        },
+        "slug": "sheriff-country",
+        "tmdb": 253391,
+        "tvdb": 449708,
+        "trakt": 238131
+      },
+      "year": 2025,
+      "title": "Sheriff Country",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt11737520",
+        "plex": {
+          "guid": "5f7c9b1c9b958e00415de6bb",
+          "slug": "one-piece"
+        },
+        "slug": "one-piece",
+        "tmdb": 111110,
+        "tvdb": 392276,
+        "trakt": 184618
+      },
+      "year": 2023,
+      "title": "ONE PIECE",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt31137273",
+        "plex": {
+          "guid": "65be308abf1c327017d109b2",
+          "slug": "june-s-money-problems"
+        },
+        "slug": "june-s-money-problems",
+        "tmdb": 245318,
+        "tvdb": 445651,
+        "trakt": 223228
+      },
+      "year": 2026,
+      "title": "June's Money Problems",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt16358384",
+        "plex": {
+          "guid": "61af329023a999555e3ea541",
+          "slug": "the-king-of-broken-tulsa"
+        },
+        "slug": "the-king-of-broken-tulsa",
+        "tmdb": 153312,
+        "tvdb": 413215,
+        "trakt": 191758
+      },
+      "year": 2022,
+      "title": "The King of Broken Tulsa",
+      "aired_episodes": 29
+    },
+    {
+      "ids": {
+        "imdb": "tt9288030",
+        "plex": {
+          "guid": "5d9c09190aaccd001f8f42f0",
+          "slug": "reacher"
+        },
+        "slug": "reacher",
+        "tmdb": 108978,
+        "tvdb": 366924,
+        "trakt": 155536
+      },
+      "year": 2022,
+      "title": "Reacher",
+      "aired_episodes": 32
+    },
+    {
+      "ids": {
+        "imdb": "tt13210838",
+        "plex": {
+          "guid": "6365f4db354ca0d2edfad043",
+          "slug": "the-gentlemen"
+        },
+        "slug": "the-gentlemen",
+        "tmdb": 236235,
+        "tvdb": 426845,
+        "trakt": 211407
+      },
+      "year": 2024,
+      "title": "The Gentlemen",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt17220216",
+        "plex": {
+          "guid": "629239d5227b9116a93569f0",
+          "slug": "titan-archive"
+        },
+        "slug": "titan-archive",
+        "tmdb": 202411,
+        "tvdb": 422598,
+        "trakt": 195644
+      },
+      "year": 2023,
+      "title": "Titan Archive",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt21975436",
+        "plex": {
+          "guid": "62ed126ee903875a9223f1c4",
+          "slug": "kaiju-cleanup-unit-eight"
+        },
+        "slug": "kaiju-cleanup-unit-eight",
+        "tmdb": 207468,
+        "tvdb": 423075,
+        "trakt": 197270
+      },
+      "year": 2024,
+      "title": "Kaiju Cleanup Unit Eight",
+      "aired_episodes": 23
+    },
+    {
+      "ids": {
+        "imdb": "tt26591110",
+        "plex": {
+          "guid": "645ea1c294b088b0810f2ea8",
+          "slug": "elsbeth-the-unlikely-angle"
+        },
+        "slug": "elsbeth-the-unlikely-angle",
+        "tmdb": 226285,
+        "tvdb": 430543,
+        "trakt": 205237
+      },
+      "year": 2024,
+      "title": "Elsbeth: The Unlikely Angle",
+      "aired_episodes": 50
+    },
+    {
+      "ids": {
+        "imdb": "tt33550053",
+        "plex": {
+          "guid": "6823c9224eb01a7282133dc5",
+          "slug": "first-response-music-city"
+        },
+        "slug": "first-response-music-city",
+        "tmdb": 284838,
+        "tvdb": 460463,
+        "trakt": 277227
+      },
+      "year": 2025,
+      "title": "First Response: Music City",
+      "aired_episodes": 18
+    },
+    {
+      "ids": {
+        "imdb": "tt12324366",
+        "plex": {
+          "guid": "5ec75ff2f190410042db1b15",
+          "slug": "percy-jackson-and-the-olympians"
+        },
+        "slug": "percy-jackson-and-the-olympians",
+        "tmdb": 103540,
+        "tvdb": 415151,
+        "trakt": 194518
+      },
+      "year": 2023,
+      "title": "Percy Jackson and the Olympians",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt26670955",
+        "plex": {
+          "guid": "65be308856d4e337fe684844",
+          "slug": "the-friendly-informant"
+        },
+        "slug": "the-friendly-informant",
+        "tmdb": 245312,
+        "tvdb": 445646,
+        "trakt": 223229
+      },
+      "year": 2024,
+      "title": "The Friendly Informant",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt9018736",
+        "plex": {
+          "guid": "5d9c090d7b5c2e001e665fa5",
+          "slug": "the-last-airbender-s-journey"
+        },
+        "slug": "the-last-airbender-s-journey",
+        "tmdb": 82452,
+        "tvdb": 385925,
+        "trakt": 136561
+      },
+      "year": 2024,
+      "title": "The Last Airbender's Journey",
+      "aired_episodes": 15
+    },
+    {
+      "ids": {
+        "imdb": "tt33517752",
+        "plex": {
+          "guid": "66ff496554c6cdba39045e46",
+          "slug": "the-new-face"
+        },
+        "slug": "the-new-face",
+        "tmdb": 273160,
+        "tvdb": 455046,
+        "trakt": 258198
+      },
+      "year": 2026,
+      "title": "The New Face",
+      "aired_episodes": 11
+    },
+    {
+      "ids": {
+        "imdb": "tt11794812",
+        "plex": {
+          "guid": "635b4366954a508bdbcfd922",
+          "slug": "cross-a-mind-in-the-dark"
+        },
+        "slug": "cross-a-mind-in-the-dark",
+        "tmdb": 213306,
+        "tvdb": 426501,
+        "trakt": 199331
+      },
+      "year": 2024,
+      "title": "Cross: A Mind in the Dark",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt26862142",
+        "plex": {
+          "guid": "63f94eebeaeab7f4ec72292f",
+          "slug": "the-last-frontier-whiteout"
+        },
+        "slug": "the-last-frontier-whiteout",
+        "tmdb": 221079,
+        "tvdb": 431488,
+        "trakt": 202773
+      },
+      "year": 2025,
+      "title": "The Last Frontier: Whiteout",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt32159809",
+        "plex": {
+          "guid": "663c5c9154860a808df84899",
+          "slug": "the-ledger"
+        },
+        "slug": "the-ledger",
+        "tmdb": 253941,
+        "tvdb": 449872,
+        "trakt": 239158
+      },
+      "year": 2025,
+      "title": "The Ledger",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt19231492",
+        "plex": {
+          "guid": "5fd2a1b82de5fd002dd4c7b1",
+          "slug": "the-other-equation"
+        },
+        "slug": "the-other-equation",
+        "tmdb": 196322,
+        "tvdb": 393159,
+        "trakt": 170597
+      },
+      "year": 2024,
+      "title": "The Other Equation",
+      "aired_episodes": 14
+    },
+    {
+      "ids": {
+        "imdb": "tt32937780",
+        "plex": {
+          "guid": "669816fb3e098290af509585",
+          "slug": "the-wedding-omen"
+        },
+        "slug": "the-wedding-omen",
+        "tmdb": 259265,
+        "tvdb": 452277,
+        "trakt": 248719
+      },
+      "year": 2026,
+      "title": "The Wedding Omen",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt34809853",
+        "plex": {
+          "guid": "68667e7fafde924fc005cf95",
+          "slug": "the-lesson-plan"
+        },
+        "slug": "the-lesson-plan",
+        "tmdb": 276161,
+        "tvdb": 464356,
+        "trakt": 262654
+      },
+      "year": 2026,
+      "title": "The Lesson Plan",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt11691774",
+        "plex": {
+          "guid": "5f2e583c684902004303e54a",
+          "slug": "only-murders-in-the-building"
+        },
+        "slug": "only-murders-in-the-building",
+        "tmdb": 107113,
+        "tvdb": 399959,
+        "trakt": 165314
+      },
+      "year": 2021,
+      "title": "Only Murders in the Building",
+      "aired_episodes": 50
+    },
+    {
+      "ids": {
+        "imdb": "tt35515227",
+        "plex": {
+          "guid": "6807f9768d0f702ad2219f2d",
+          "slug": "the-quiet-agency"
+        },
+        "slug": "the-quiet-agency",
+        "tmdb": 289560,
+        "tvdb": 462856,
+        "trakt": 283328
+      },
+      "year": 2026,
+      "title": "The Quiet Agency",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt29921437",
+        "plex": {
+          "guid": "6566354d7fd4d7c621b92f76",
+          "slug": "spartacus-house-of-ashur"
+        },
+        "slug": "spartacus-house-of-ashur",
+        "tmdb": 240459,
+        "tvdb": 465189,
+        "trakt": 215466
+      },
+      "year": 2025,
+      "title": "Spartacus: House of Ashur",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt33204276",
+        "plex": {
+          "guid": "66d0e7a12e939f22a5da6053",
+          "slug": "the-madison-river-of-return"
+        },
+        "slug": "the-madison-river-of-return",
+        "tmdb": 225891,
+        "tvdb": 441735,
+        "trakt": 212581
+      },
+      "year": 2026,
+      "title": "The Madison: River of Return",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt15716776",
+        "plex": {
+          "guid": "651520cd66b711c74d983fc8",
+          "slug": "devil-may-cry"
+        },
+        "slug": "devil-may-cry",
+        "tmdb": 235930,
+        "tvdb": 440193,
+        "trakt": 210223
+      },
+      "year": 2025,
+      "title": "Devil May Cry",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt14786934",
+        "plex": {
+          "guid": "656ba4bb066fe29e173246fe",
+          "slug": "scarpetta"
+        },
+        "slug": "scarpetta",
+        "tmdb": 240740,
+        "tvdb": 464253,
+        "trakt": 216188
+      },
+      "year": 2026,
+      "title": "Scarpetta",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt14218830",
+        "plex": {
+          "guid": "60a69b7811abb9002d7adbb8",
+          "slug": "riverside-elementary"
+        },
+        "slug": "riverside-elementary",
+        "tmdb": 125935,
+        "tvdb": 402910,
+        "trakt": 180675
+      },
+      "year": 2021,
+      "title": "Riverside Elementary",
+      "aired_episodes": 92
+    },
+    {
+      "ids": {
+        "imdb": "tt35618070",
+        "plex": {
+          "guid": "67bc3b911e815de0ebd24e9d",
+          "slug": "sterling-harbor"
+        },
+        "slug": "sterling-harbor",
+        "tmdb": 283297,
+        "tvdb": 459552,
+        "trakt": 275110
+      },
+      "year": 2026,
+      "title": "Sterling Harbor",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt26748321",
+        "plex": {
+          "guid": "642cba76777d97685153f6fb",
+          "slug": "dr-vale"
+        },
+        "slug": "dr-vale",
+        "tmdb": 255055,
+        "tvdb": 433263,
+        "trakt": 241215
+      },
+      "year": 2025,
+      "title": "Dr. Vale",
+      "aired_episodes": 33
+    },
+    {
+      "ids": {
+        "imdb": "tt21433690",
+        "plex": {
+          "guid": "6492c92d68bf0cad06459aec",
+          "slug": "st-brigid-s-clinic"
+        },
+        "slug": "st-brigid-s-clinic",
+        "tmdb": 251941,
+        "tvdb": 435916,
+        "trakt": 235514
+      },
+      "year": 2024,
+      "title": "St. Brigid's Clinic",
+      "aired_episodes": 36
+    },
+    {
+      "ids": {
+        "imdb": "tt42178219",
+        "plex": {
+          "guid": "694c8321ef65c103bf4fffee",
+          "slug": "berlin-and-the-ermine-portrait"
+        },
+        "slug": "berlin-and-the-ermine-portrait",
+        "tmdb": 308014,
+        "tvdb": 477676,
+        "trakt": 310740
+      },
+      "year": 2026,
+      "title": "Berlin and the Ermine Portrait",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt35946742",
+        "plex": {
+          "guid": "67c388d784276ed2373beb23",
+          "slug": "maximum-pleasure-guaranteed"
+        },
+        "slug": "maximum-pleasure-guaranteed",
+        "tmdb": 285404,
+        "tvdb": 460793,
+        "trakt": 277916
+      },
+      "year": 2026,
+      "title": "Maximum Pleasure Guaranteed",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt35316225",
+        "plex": {
+          "guid": "68094bf8e7767590be049e4d",
+          "slug": "the-pursuit-of-lian"
+        },
+        "slug": "the-pursuit-of-lian",
+        "tmdb": 279388,
+        "tvdb": 462845,
+        "trakt": 269744
+      },
+      "year": 2026,
+      "title": "The Pursuit of Lian",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt30796986",
+        "plex": {
+          "guid": "65999b6b9eb629b3703a2c7a",
+          "slug": "ncis-origins"
+        },
+        "slug": "ncis-origins",
+        "tmdb": 243006,
+        "tvdb": 444350,
+        "trakt": 220040
+      },
+      "year": 2024,
+      "title": "NCIS: Origins",
+      "aired_episodes": 36
+    },
+    {
+      "ids": {
+        "imdb": "tt16026746",
+        "plex": {
+          "guid": "618fbfc4255e4791afa3efa3",
+          "slug": "mutants-year-1997"
+        },
+        "slug": "mutants-year-1997",
+        "tmdb": 138502,
+        "tvdb": 412432,
+        "trakt": 191187
+      },
+      "year": 2024,
+      "title": "Mutants: Year 1997",
+      "aired_episodes": 19
+    },
+    {
+      "ids": {
+        "imdb": "tt30494226",
+        "plex": {
+          "guid": "658366f2283cbad2c792a839",
+          "slug": "ride-or-die"
+        },
+        "slug": "ride-or-die",
+        "tmdb": 241882,
+        "tvdb": 457730,
+        "trakt": 217937
+      },
+      "year": 2026,
+      "title": "Ride or Die",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt21906554",
+        "plex": {
+          "guid": "65e0775007e862daad474570",
+          "slug": "the-missing-files-unit"
+        },
+        "slug": "the-missing-files-unit",
+        "tmdb": 247723,
+        "tvdb": 446821,
+        "trakt": 228601
+      },
+      "year": 2025,
+      "title": "The Missing Files Unit",
+      "aired_episodes": 23
+    },
+    {
+      "ids": {
+        "imdb": "tt33539520",
+        "plex": {
+          "guid": "6995dd6b96c7221de9313980",
+          "slug": "neagley-field-notes"
+        },
+        "slug": "neagley-field-notes",
+        "tmdb": 273207,
+        "tvdb": 455064,
+        "trakt": 258222
+      },
+      "year": 2026,
+      "title": "Neagley: Field Notes",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt35826715",
+        "plex": {
+          "guid": "67b5362ff6be73365de6d070",
+          "slug": "boston-harbor-unit"
+        },
+        "slug": "boston-harbor-unit",
+        "tmdb": 284736,
+        "tvdb": 460392,
+        "trakt": 277132
+      },
+      "year": 2025,
+      "title": "Boston Harbor Unit",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt35707374",
+        "plex": {
+          "guid": "68227161737b1ec84a43d70a",
+          "slug": "a-killer-remembers"
+        },
+        "slug": "a-killer-remembers",
+        "tmdb": 291339,
+        "tvdb": 463592,
+        "trakt": 285472
+      },
+      "year": 2026,
+      "title": "A Killer Remembers",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt9169516",
+        "plex": {
+          "guid": "65b0456b3fcfb91d383a46e7",
+          "slug": "run-away"
+        },
+        "slug": "run-away",
+        "tmdb": 244244,
+        "tvdb": 445068,
+        "trakt": 220846
+      },
+      "year": 2026,
+      "title": "Run Away",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt5875444",
+        "plex": {
+          "guid": "5e1622a54f2292003e912fcf",
+          "slug": "slow-horses"
+        },
+        "slug": "slow-horses",
+        "tmdb": 95480,
+        "tvdb": 372264,
+        "trakt": 155534
+      },
+      "year": 2022,
+      "title": "Slow Horses",
+      "aired_episodes": 32
+    },
+    {
+      "ids": {
+        "imdb": "tt22475008",
+        "plex": {
+          "guid": "65973a8ee99135385627f237",
+          "slug": "watson"
+        },
+        "slug": "watson",
+        "tmdb": 242867,
+        "tvdb": 444195,
+        "trakt": 219932
+      },
+      "year": 2025,
+      "title": "Watson",
+      "aired_episodes": 33
+    },
+    {
+      "ids": {
+        "imdb": "tt34385331",
+        "plex": {
+          "guid": "6943f0185c1d277eda251d1c",
+          "slug": "three-hearts-in-st-louis"
+        },
+        "slug": "three-hearts-in-st-louis",
+        "tmdb": 206828,
+        "tvdb": 468739,
+        "trakt": 197136
+      },
+      "year": 2026,
+      "title": "Three Hearts in St. Louis",
+      "aired_episodes": 7
+    },
+    {
+      "ids": {
+        "imdb": "tt31812476",
+        "plex": {
+          "guid": "65f98223428a65acb6a78ea8",
+          "slug": "the-wildcard-trials"
+        },
+        "slug": "the-wildcard-trials",
+        "tmdb": 249522,
+        "tvdb": 447806,
+        "trakt": 231618
+      },
+      "year": 2024,
+      "title": "The Wildcard Trials",
+      "aired_episodes": 20
+    }
+  ]
+}

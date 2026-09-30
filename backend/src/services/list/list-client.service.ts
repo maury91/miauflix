@@ -6,6 +6,8 @@ import {
   LIST_CAPABILITY_VERSION,
   type ListServiceDefinition,
   listServiceDefinitionSchema,
+  type ListServiceDefinitionsPage,
+  listServiceDefinitionsPageSchema,
   type ListServicePage,
   listServicePageSchema,
   type ProviderAssociation,
@@ -74,6 +76,13 @@ export class ListClientService {
 
   getDefinitions(subjectId: string): Promise<ListServiceDefinition[]> {
     return this.get(listServiceDefinitionSchema.array(), '/lists', { subjectId });
+  }
+
+  getPopularDefinitions(page: number, limit: number): Promise<ListServiceDefinitionsPage> {
+    return this.get(listServiceDefinitionsPageSchema, '/lists/popular', {
+      page: String(page),
+      limit: String(limit),
+    });
   }
 
   getPage(subjectId: string, listId: string, page: number): Promise<ListServicePage> {

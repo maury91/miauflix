@@ -1,0 +1,180 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14104",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f1d0ee7337d6882ff0fe126e322bddd0\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/diGLwPJ79qlDBL3a8rE1Zf5GEnE.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/januarys-turning-point",
+    "id": 1275377,
+    "imdb_id": "tt29644446",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "January's Turning Point",
+    "overview": "Through six Americans whose paths crossed during the assault on the nation's Capitol on January 6, 2021, this documentary follows a single day as it reshapes lives, families, and ideas of civic duty.",
+    "popularity": 0.8558,
+    "poster_path": "/asDTwKxL6OHcLacEIbHOqowf3eX.jpg",
+    "production_companies": [
+      {
+        "id": 155001,
+        "logo_path": null,
+        "name": "Civic Lantern Documentaries",
+        "origin_country": "US"
+      },
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Civic Lantern Documentaries",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2024-05-03",
+    "revenue": 0,
+    "runtime": 106,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "One day. Six lives. A lasting divide.",
+    "title": "January's Turning Point",
+    "video": false,
+    "vote_average": 5.6,
+    "vote_count": 8,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/januarys-turning-point",
+            "overview": "Through six Americans whose paths crossed during the assault on the nation's Capitol on January 6, 2021, this documentary follows a single day as it reshapes lives, families, and ideas of civic duty.",
+            "runtime": 106,
+            "tagline": "One day. Six lives. A lasting divide.",
+            "title": "January's Turning Point"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/januarys-turning-point",
+            "overview": "Through six Americans whose paths crossed during the assault on the nation's Capitol on January 6, 2021, this documentary follows a single day as it reshapes lives, families, and ideas of civic duty.",
+            "runtime": 0,
+            "tagline": "One day. Six lives. A lasting divide.",
+            "title": "January's Turning Point"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/faxwVF3fnPdg75SaY8ikYrrowKr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.663,
+          "height": 560,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sWHcxzzGUs95Z9YRlOpLiX2xBZx.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1491
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/asDTwKxL6OHcLacEIbHOqowf3eX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xsa9q6QsI0PnIJS1U5YqjdFzqKq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2592,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AiHNAkG5wkSXUfr9vHlz523gMhz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1728
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dsMTi7f0Ezsb9brYrPM8SusPCqR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/on05uOL9IUHAJOmNdqlorqwVzHe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=27868",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"42146ee5b76beec288c279bbccca418e\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": null,
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/films/the-hairline-clue",
+    "id": 1728398,
+    "imdb_id": "tt46659055",
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_title": "The Hairline Clue",
+    "overview": "A murder investigation begins when Mara Bell is found holding two carefully cut locks of hair. The trail leads detectives from a quiet English town to Italy, where the discovery of a second victim years later finally helps uncover the killer.",
+    "popularity": 2.4804,
+    "poster_path": "/mVaJHJA5fGwCJOn53SdITLXyXRe.jpg",
+    "production_companies": [
+      {
+        "id": 78731,
+        "logo_path": null,
+        "name": "Copper Kite Factual",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2026-09-22",
+    "revenue": 0,
+    "runtime": 90,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "One small clue. Years without answers.",
+    "title": "The Hairline Clue",
+    "video": false,
+    "vote_average": 0,
+    "vote_count": 0,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-hairline-clue",
+            "overview": "A murder investigation begins when Mara Bell is found holding two carefully cut locks of hair. The trail leads detectives from a quiet English town to Italy, where the discovery of a second victim years later finally helps uncover the killer.",
+            "runtime": 90,
+            "tagline": "One small clue. Years without answers.",
+            "title": "The Hairline Clue"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.75,
+          "height": 2560,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mVaJHJA5fGwCJOn53SdITLXyXRe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ]
+    }
+  }
+}

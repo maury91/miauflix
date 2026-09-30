@@ -41,6 +41,11 @@ describe('CatalogWorkerManager', () => {
     expect(workerCount).toBe(3);
     await processors[0]?.({ raw: { name: 'catalog.movie-changes.scan' } });
     expect(catalog.syncMovies).toHaveBeenCalledTimes(1);
+    await processors[2]?.({
+      raw: { name: 'catalog.season-sync.seed' },
+      data: { tvMediaId: 100 },
+    });
+    expect(catalog.syncIncompleteSeasons).toHaveBeenCalledWith(100);
     catalogAvailable = false;
     await processors[0]?.({ raw: { name: 'catalog.movie-changes.scan' } });
     expect(catalog.syncMovies).toHaveBeenCalledTimes(1);

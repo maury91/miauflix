@@ -1,0 +1,626 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14212",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f0d550d3f250b3cde866603ae6a1d8b8\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ewlmL0nxo2lLqBj69upgp2gjHpV.jpg",
+    "created_by": [
+      {
+        "id": 56665,
+        "credit_id": "69b657aa482d00725c3b9286",
+        "name": "Robin Dale",
+        "original_name": "Robin Dale",
+        "gender": 2,
+        "profile_path": "/kO7cUR8nd6Fn01OYkgpEuYKYfUb.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-05-15",
+    "genres": [
+      {
+        "id": 37,
+        "name": "Western"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/dutton-acres",
+    "id": 299167,
+    "in_production": true,
+    "languages": [
+      "de",
+      "es",
+      "en"
+    ],
+    "last_air_date": "2026-07-03",
+    "last_episode_to_air": {
+      "id": 7041322,
+      "name": "Emerald Voyage",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.333,
+      "vote_count": 21,
+      "air_date": "2026-07-03",
+      "episode_number": 9,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 60,
+      "season_number": 1,
+      "show_id": 299167,
+      "still_path": "/yR9CRcKrGM85omkkHAy35o5vSIz.jpg"
+    },
+    "name": "Dutton Acres",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2076,
+        "logo_path": "/4knr4ozp2IQrA3SMQlLSYKcM3ML.png",
+        "name": "Last Lantern Network",
+        "origin_country": "US"
+      },
+      {
+        "id": 4330,
+        "logo_path": "/fi83B1oztoS47xxcemFdPMhIzK.png",
+        "name": "Midnight Archive Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 9,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Dutton Acres",
+    "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+    "popularity": 46.8617,
+    "poster_path": "/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
+    "production_companies": [
+      {
+        "id": 270146,
+        "logo_path": "/4r6rIxegOrrVeJwqRxpzNrCRQMD.png",
+        "name": "Distant River Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 124254,
+        "logo_path": "/Aq2pCS1mXg4AiVwLTkh4bhcejmt.png",
+        "name": "Copper Orchard Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 106789,
+        "logo_path": "/oEgUdRh5YWF6Il705WnpwauirIj.png",
+        "name": "Blue Garden Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 4700,
+        "logo_path": "/A32wmjrs9Psf4zw0uaixF0GXfxq.png",
+        "name": "Blue Garden Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-05-15",
+        "episode_count": 9,
+        "id": 471596,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "The land keeps its own history.",
+    "type": "Scripted",
+    "vote_average": 9.132,
+    "vote_count": 605,
+    "external_ids": {
+      "imdb_id": "tt34991493",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 463308,
+      "tvrage_id": null,
+      "wikidata_id": "Q136524178",
+      "facebook_id": "duttonranchpplus",
+      "instagram_id": "duttonranch",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Dutton Acres",
+            "overview": "A family rancher fights to keep the land his generations have worked as outside interests and old family grudges close in from every side.",
+            "homepage": "https://example.test/films/dutton-acres",
+            "tagline": "The land keeps its own history."
+          }
+        }
+      ]
+    }
+  }
+}

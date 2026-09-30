@@ -1,0 +1,1024 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6945",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8399c665e03af5a5380377fc20f00d58\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
+    "created_by": [
+      {
+        "id": 66633,
+        "credit_id": "52542286760ee31328001a7b",
+        "name": "Sage Finch",
+        "original_name": "Sage Finch",
+        "gender": 2,
+        "profile_path": "/wJIxATESjzsjSgvRhVavOmdamXc.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2008-01-20",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/series/amber-echo-northbridge",
+    "id": 1396,
+    "in_production": false,
+    "languages": [
+      "en",
+      "de",
+      "es"
+    ],
+    "last_air_date": "2013-09-29",
+    "last_episode_to_air": {
+      "id": 62161,
+      "name": "Copper Valley",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 9.293,
+      "vote_count": 322,
+      "air_date": "2013-09-29",
+      "episode_number": 16,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 56,
+      "season_number": 5,
+      "show_id": 1396,
+      "still_path": "/pA0YwyhvdDXP3BEGL2grrIhq8aM.jpg"
+    },
+    "name": "Amber Echo: Northbridge",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 174,
+        "logo_path": "/pmvRmATOCaDykE6JrVoeYxlFHw3.png",
+        "name": "Golden Bridge Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 62,
+    "number_of_seasons": 5,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Amber Echo: Northbridge",
+    "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 211.0089,
+    "poster_path": "/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg",
+    "production_companies": [
+      {
+        "id": 11073,
+        "logo_path": "/wHs44fktdoj6c378ZbSWfzKsM2Z.png",
+        "name": "Scarlet Beacon Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 33742,
+        "logo_path": "/2jdh2sEa0R6y6uT0F7g0IgA2WO8.png",
+        "name": "Crimson Archive Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 2605,
+        "logo_path": null,
+        "name": "Bright Horizon Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2009-02-17",
+        "episode_count": 9,
+        "id": 3577,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/4RaIvSQgHHHPfaI1jFqaMR8UJWM.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-01-20",
+        "episode_count": 7,
+        "id": 3572,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/1BP4xYv9ZG4ZVHkL7ocOziBbSYH.jpg",
+        "season_number": 1,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2009-03-08",
+        "episode_count": 13,
+        "id": 3573,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/e3oGYpoTUhOFK0BJfloru5ZmGV.jpg",
+        "season_number": 2,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2010-03-21",
+        "episode_count": 13,
+        "id": 3575,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/ffP8Q8ew048YofHRnFVM18B2fPG.jpg",
+        "season_number": 3,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2011-07-17",
+        "episode_count": 13,
+        "id": 3576,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/5ewrnKp4TboU4hTLT5cWO350mHj.jpg",
+        "season_number": 4,
+        "vote_average": 8.6
+      },
+      {
+        "air_date": "2012-07-15",
+        "episode_count": 16,
+        "id": 3578,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/r3z70vunihrAkjILQKWHX0G2xzO.jpg",
+        "season_number": 5,
+        "vote_average": 8.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.953,
+    "vote_count": 18710,
+    "external_ids": {
+      "imdb_id": "tt0903747",
+      "freebase_mid": "/m/03d34x8",
+      "freebase_id": "/en/breaking_bad",
+      "tvdb_id": 81189,
+      "tvrage_id": 18164,
+      "wikidata_id": "Q1079",
+      "facebook_id": "BreakingBad",
+      "instagram_id": "breakingbad",
+      "twitter_id": "BreakingBad"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UZ",
+          "iso_639_1": "uz",
+          "name": "ozbek",
+          "english_name": "Uzbek",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BD",
+          "iso_639_1": "bn",
+          "name": "বাংলা",
+          "english_name": "Bengali",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "ku",
+          "name": "",
+          "english_name": "Kurdish",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AM",
+          "iso_639_1": "hy",
+          "name": "",
+          "english_name": "Armenian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KZ",
+          "iso_639_1": "kk",
+          "name": "қазақ",
+          "english_name": "Kazakh",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "kn",
+          "name": "?????",
+          "english_name": "Kannada",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KG",
+          "iso_639_1": "ky",
+          "name": "??????",
+          "english_name": "Kirghiz",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NP",
+          "iso_639_1": "ne",
+          "name": "",
+          "english_name": "Nepali",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "pa",
+          "name": "ਪੰਜਾਬੀ",
+          "english_name": "Punjabi",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LK",
+          "iso_639_1": "si",
+          "name": "සිංහල",
+          "english_name": "Sinhalese",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TT",
+          "iso_639_1": "tt",
+          "name": "",
+          "english_name": "Tatar",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UG",
+          "iso_639_1": "ug",
+          "name": "",
+          "english_name": "Uighur",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "Amber Echo: Northbridge",
+            "overview": "Amber Echo: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-echo-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

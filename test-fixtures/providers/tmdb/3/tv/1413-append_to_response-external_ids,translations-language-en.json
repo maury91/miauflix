@@ -1,0 +1,824 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24849",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b1fbf688495a56d28c98b068e9650571\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5G4Bnc4Q0YUK1bwLEUYmIsmm2Ib.jpg",
+    "created_by": [
+      {
+        "id": 52779,
+        "credit_id": "5256ce6919c2956ff608653a",
+        "name": "Remy James",
+        "original_name": "Remy James",
+        "gender": 2,
+        "profile_path": "/uPojf0hEIpud1huRC9NY7R55OSy.jpg"
+      },
+      {
+        "id": 1224030,
+        "credit_id": "6ab8146881a5e4a3bada2149",
+        "name": "Emery James",
+        "original_name": "Emery James",
+        "gender": 2,
+        "profile_path": "/kVMTpVi2I9UhlcJdBUWcq744Lgg.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2011-10-05",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://example.test/films/ashes-after-midnight",
+    "id": 1413,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-24",
+    "last_episode_to_air": {
+      "id": 7663319,
+      "name": "Quiet Garden",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 9.167,
+      "vote_count": 6,
+      "air_date": "2026-09-24",
+      "episode_number": 3,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 13,
+      "show_id": 1413,
+      "still_path": "/iN0IJPLUrImUhS8swm7b6iLjwlZ.jpg"
+    },
+    "name": "Ashes After Midnight",
+    "next_episode_to_air": {
+      "id": 7663320,
+      "name": "Bright Bridge",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-10-01",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 29,
+      "season_number": 13,
+      "show_id": 1413,
+      "still_path": "/xn1K68H1sk9xUQ1gwKK5mkdkkyg.jpg"
+    },
+    "networks": [
+      {
+        "id": 88,
+        "logo_path": "/aexGjtcs42DgRtZh7zOxayiry4J.png",
+        "name": "Emerald Bridge Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 145,
+    "number_of_seasons": 13,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Ashes After Midnight",
+    "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+    "popularity": 245.7186,
+    "poster_path": "/yCkPLQ10qKIUgRBXmQVVMF1h96d.jpg",
+    "production_companies": [
+      {
+        "id": 19328,
+        "logo_path": "/2AdkrU1av4fDGw0Zaf68XH4YcqC.png",
+        "name": "Golden Passage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 68682,
+        "logo_path": "/x4htMipi2e3QMQuyeLhrwlpxgKf.png",
+        "name": "Northern Orchard Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1556,
+        "logo_path": "/31h94rG9hzjprXoYNy3L1ErUya2.png",
+        "name": "Midnight Voyage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 236166,
+        "logo_path": "/8rFlu5iytnjsciYXZDw90ktllCI.png",
+        "name": "Silent Valley Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2012-09-25",
+        "episode_count": 24,
+        "id": 299674,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/khisxfaLFq81N1CAmlJGG6HZBYW.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2011-10-05",
+        "episode_count": 12,
+        "id": 3700,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/n7qB6yELp8k4tW4SalLLl7dC923.jpg",
+        "season_number": 1,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2012-10-17",
+        "episode_count": 13,
+        "id": 3702,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/5tjLJZCzBeP8wMaMkUTVVaoZFFY.jpg",
+        "season_number": 2,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2013-10-09",
+        "episode_count": 13,
+        "id": 3703,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/mXitazUTbOGU0zCPCcHQqTmde7y.jpg",
+        "season_number": 3,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2014-10-08",
+        "episode_count": 13,
+        "id": 62526,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/shRONGlqTAVWxHO1ZoaTjLTUMxn.jpg",
+        "season_number": 4,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2015-10-07",
+        "episode_count": 12,
+        "id": 69193,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/jOO6bG2hYlipyk2O2p8fsjWeCCn.jpg",
+        "season_number": 5,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2016-09-14",
+        "episode_count": 10,
+        "id": 78479,
+        "name": "Season 6",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/2fzIW0cOIwWQLgjaGn5swKcEPmJ.jpg",
+        "season_number": 6,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2017-09-05",
+        "episode_count": 11,
+        "id": 90503,
+        "name": "Season 7",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/zbtHocTYd2ukJeCeYD49AWOhxdC.jpg",
+        "season_number": 7,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2018-09-12",
+        "episode_count": 10,
+        "id": 106028,
+        "name": "Season 8",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/kQR2aYeg94voYMUD4DOYPgTJnTY.jpg",
+        "season_number": 8,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2019-09-18",
+        "episode_count": 9,
+        "id": 126646,
+        "name": "Season 9",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/uF1ADMb60LgcalmGJfnR3nJU2IQ.jpg",
+        "season_number": 9,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2021-08-25",
+        "episode_count": 10,
+        "id": 144095,
+        "name": "Season 10",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/3SCcuYxKYkZPpcIgY27tv9HW4ri.jpg",
+        "season_number": 10,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2022-10-19",
+        "episode_count": 10,
+        "id": 298367,
+        "name": "Season 11",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/aMvxRAfuJF9AlXtXQGGGlNKaE70.jpg",
+        "season_number": 11,
+        "vote_average": 6.7
+      },
+      {
+        "air_date": "2023-09-20",
+        "episode_count": 9,
+        "id": 333606,
+        "name": "Season 12",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/iMPLvOFxU5iRqErZnzAgc9DSSxf.jpg",
+        "season_number": 12,
+        "vote_average": 6.4
+      },
+      {
+        "air_date": "2026-09-24",
+        "episode_count": 13,
+        "id": 528425,
+        "name": "Season 13",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/s8Nbz8ok2v3Uw5sRwSC6eWJLX25.jpg",
+        "season_number": 13,
+        "vote_average": 9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Every shadow keeps a story.",
+    "type": "Scripted",
+    "vote_average": 8.074,
+    "vote_count": 6197,
+    "external_ids": {
+      "imdb_id": "tt1844624",
+      "freebase_mid": "/m/0h3mh3q",
+      "freebase_id": null,
+      "tvdb_id": 250487,
+      "tvrage_id": 28776,
+      "wikidata_id": "Q53922",
+      "facebook_id": "americanhorrorstory",
+      "instagram_id": "ahsfx",
+      "twitter_id": "AHSFX"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "LB",
+          "iso_639_1": "lb",
+          "name": "",
+          "english_name": "Letzeburgesch",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "name": "Ashes After Midnight",
+            "overview": "Across different towns and eras, ordinary people find their lives tangled in uncanny horrors, from haunted homes to old curses that refuse to stay buried.",
+            "homepage": "https://example.test/films/ashes-after-midnight",
+            "tagline": "Every shadow keeps a story."
+          }
+        }
+      ]
+    }
+  }
+}

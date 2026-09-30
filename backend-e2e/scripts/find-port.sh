@@ -52,8 +52,10 @@ find_available_port() {
     exit 1
 }
 
-# Find ports for each service
+# Find ports for the backend and its host-published image mock
 PORT=$(find_available_port 3000)
+TMDB_IMAGE_PORT=$(find_available_port $((PORT + 1)))
 
 # Output the ports as environment variables
 echo "export PORT=$PORT"
+echo "export TMDB_IMAGE_PORT=$TMDB_IMAGE_PORT"

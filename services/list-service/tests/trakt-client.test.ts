@@ -201,4 +201,41 @@ describe('TraktClient', () => {
       status: 502,
     });
   });
+
+  it('parses paginated popular community lists', async () => {
+    globalThis.fetch = (async () =>
+      new Response(
+        JSON.stringify([
+          {
+            list: {
+              name: 'Best science fiction',
+              description: 'A public list',
+              item_count: 2,
+              user: { ids: { slug: 'example-user' } },
+              ids: { trakt: 42, slug: 'best-science-fiction' },
+            },
+          },
+        ]),
+        {
+          status: 200,
+          headers: {
+            'X-Pagination-Page-Count': '3',
+            'X-Pagination-Item-Count': '41',
+          },
+        }
+      )) as typeof fetch;
+
+    await expect(
+      new TraktClient(
+        'client',
+        'secret',
+        'https://trakt.example',
+        'https://app.example/trakt/callback'
+      ).popularLists(1, 20)
+    ).resolves.toMatchObject({
+      totalPages: 3,
+      totalItems: 41,
+      items: [{ list: { ids: { trakt: 42 } } }],
+    });
+  });
 });

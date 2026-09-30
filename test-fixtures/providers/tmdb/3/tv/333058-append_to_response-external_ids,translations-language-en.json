@@ -1,0 +1,286 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8871",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"6e3fc9c21bbeb176a31e9caaeea6f019\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oLsJziZaI6gCUhAJOfGdDmlZM3U.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-09-01",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/series/velvet-voyage-highwater",
+    "id": 333058,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-01",
+    "last_episode_to_air": {
+      "id": 7754440,
+      "name": "Ivory Signal",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2026-09-01",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 45,
+      "season_number": 1,
+      "show_id": 333058,
+      "still_path": "/o37ezSO6UEZ7SoxE2M9jW8JU7RZ.jpg"
+    },
+    "name": "Velvet Voyage: Highwater",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 453,
+        "logo_path": "/pqUTCleNUiTLAVlelGxUgWn1ELh.png",
+        "name": "Golden Bridge Network",
+        "origin_country": "US"
+      },
+      {
+        "id": 2739,
+        "logo_path": "/1edZOYAfoyZyZ3rklNSiUpXX30Q.png",
+        "name": "Copper Echo Network",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 4,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "GB",
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Velvet Voyage: Highwater",
+    "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 3.3464,
+    "poster_path": "/2Do6U54cg31Y9DWWmjT69O6lFow.jpg",
+    "production_companies": [
+      {
+        "id": 179418,
+        "logo_path": "/rvOynvYRFkwrZmnxIheWfFZJokr.png",
+        "name": "Falling Sky Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 81364,
+        "logo_path": "/cwPL6vTyZi4tfqSaJ1gizzFdgST.png",
+        "name": "Northern Sky Studios",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-09-01",
+        "episode_count": 4,
+        "id": 539232,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/tyjfIbtzXrH5rvBbvJZCl4uexTS.jpg",
+        "season_number": 1,
+        "vote_average": 6.5
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 7.2,
+    "vote_count": 5,
+    "external_ids": {
+      "imdb_id": "tt44842745",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 481960,
+      "tvrage_id": null,
+      "wikidata_id": null,
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Velvet Voyage: Highwater",
+            "overview": "Velvet Voyage: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/velvet-voyage-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

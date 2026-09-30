@@ -636,7 +636,12 @@ describe('CatalogService', () => {
     await onDemand.syncIncompleteSeasons();
     expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(0);
 
+    // An explicit list-triggered job targets this show even when it is not watched.
+    await onDemand.syncIncompleteSeasons(100);
+    expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(1);
+
     // Mark watching → the season gets its episodes.
+    repo.tvShows.markSeasonUnsynced(100, 1);
     db.setWatching([100]);
     await onDemand.syncIncompleteSeasons();
     const synced = repo.tvShows.getSeasonWithEpisodes(100, 1);
@@ -658,5 +663,41 @@ describe('CatalogService', () => {
     expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(1);
     expect(repo.tvShows.getSeasonRow(100, 1)?.synced).toBe(1);
     cleanup();
+  });
+
+  it('drains every incomplete season for an explicitly targeted show', async () => {
+    const { repo, provider, service, cleanup } = setup();
+    try {
+      repo.tvShows.upsertTVShow(
+        makeTVShow([
+          { mediaId: 1000, seasonNumber: 1, name: 'S1', overview: '', airDate: null, poster: '' },
+          { mediaId: 2000, seasonNumber: 2, name: 'S2', overview: '', airDate: null, poster: '' },
+        ])
+      );
+      provider.seasons.set('100:1', makeSeason());
+      provider.seasons.set('100:2', {
+        ...makeSeason(),
+        mediaId: 2000,
+        seasonNumber: 2,
+        episodes: [
+          {
+            mediaId: 20000,
+            episodeNumber: 1,
+            name: 'Finale',
+            overview: '',
+            airDate: null,
+            still: '',
+          },
+        ],
+      });
+
+      await service.syncIncompleteSeasons(100);
+
+      expect(provider.seasonCalls).toBe(2);
+      expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(1);
+      expect(repo.tvShows.getSeasonWithEpisodes(100, 2)?.episodes).toHaveLength(1);
+    } finally {
+      cleanup();
+    }
   });
 });

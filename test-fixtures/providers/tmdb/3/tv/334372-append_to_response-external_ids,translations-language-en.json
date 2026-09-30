@@ -1,0 +1,101 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16670",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d4dd3af1e6345371b3eb36d91471ace2\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5nmWphWDxCx6stBpeN6jC7wxUwk.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2010-03-31",
+    "genres": [],
+    "homepage": "https://example.test/series/blue-passage-stonehaven",
+    "id": 334372,
+    "in_production": true,
+    "languages": [],
+    "last_air_date": "2010-04-23",
+    "last_episode_to_air": {
+      "id": 7778590,
+      "name": "Emerald Meridian",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2010-04-23",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 334372,
+      "still_path": null
+    },
+    "name": "Blue Passage: Stonehaven",
+    "next_episode_to_air": null,
+    "networks": [],
+    "number_of_episodes": 5,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Blue Passage: Stonehaven",
+    "overview": "Blue Passage: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 0.5051,
+    "poster_path": "/zmv6CjOI0ncQG2ulsxPvEzpe44C.jpg",
+    "production_companies": [],
+    "production_countries": [],
+    "seasons": [
+      {
+        "air_date": "2010-03-31",
+        "episode_count": 5,
+        "id": 541900,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/zmv6CjOI0ncQG2ulsxPvEzpe44C.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [],
+    "status": "Returning Series",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 0,
+    "vote_count": 0,
+    "external_ids": {
+      "imdb_id": null,
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 361608,
+      "tvrage_id": null,
+      "wikidata_id": null,
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Blue Passage: Stonehaven",
+            "overview": "Blue Passage: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-passage-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

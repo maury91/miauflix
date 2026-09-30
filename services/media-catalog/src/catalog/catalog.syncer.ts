@@ -63,19 +63,22 @@ export class CatalogSynchronizer {
     }
   }
 
-  async syncIncompleteSeasons(): Promise<void> {
-    const watchingOnly = this.episodeSyncMode !== 'GREEDY';
-    const incomplete = this.tvShows.findIncompleteSeason(watchingOnly);
-    if (!incomplete) return;
-    const season = await this.provider.getSeason(incomplete.tv_media_id, incomplete.season_number);
-    if (!season) {
-      logger.warn(
-        SCOPE,
-        `Incomplete season ${incomplete.season_number} of show ${incomplete.tv_media_id} not found upstream`
-      );
-      return;
+  async syncIncompleteSeasons(tvMediaId?: number): Promise<void> {
+    // Explicit list-triggered jobs warm the requested show even in ON_DEMAND
+    // mode; the scheduled seed retains the mode-aware watching filter.
+    const watchingOnly = tvMediaId === undefined && this.episodeSyncMode !== 'GREEDY';
+    const incomplete = this.tvShows.findIncompleteSeasons(watchingOnly, tvMediaId);
+    for (const seasonRow of incomplete) {
+      const season = await this.provider.getSeason(seasonRow.tv_media_id, seasonRow.season_number);
+      if (!season) {
+        logger.warn(
+          SCOPE,
+          `Incomplete season ${seasonRow.season_number} of show ${seasonRow.tv_media_id} not found upstream`
+        );
+        continue;
+      }
+      this.tvShows.upsertSeasonWithEpisodes(season);
     }
-    this.tvShows.upsertSeasonWithEpisodes(season);
   }
 
   private async runChangeSync(

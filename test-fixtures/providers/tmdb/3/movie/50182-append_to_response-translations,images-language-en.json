@@ -1,0 +1,290 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13331",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"73b1236b9f4219bb6330d7b309efea26\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tJfcI6A2sSfbSjxscDWFUOHJcRD.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "https://example.test/films/the-railwaymans-daughter",
+    "id": 50182,
+    "imdb_id": "tt0014417",
+    "origin_country": [
+      "FR"
+    ],
+    "original_language": "fr",
+    "original_title": "The Railwayman's Daughter",
+    "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+    "popularity": 1.3519,
+    "poster_path": "/5ed3ywd7lmDPhsCXmcdSih9SxP2.jpg",
+    "production_companies": [
+      {
+        "id": 9005,
+        "logo_path": null,
+        "name": "Ironbridge Heritage Films",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      }
+    ],
+    "release_date": "1923-02-17",
+    "revenue": 0,
+    "runtime": 418,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A father's love, a truth delayed.",
+    "title": "The Railwayman's Daughter",
+    "video": false,
+    "vote_average": 7.3,
+    "vote_count": 69,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 418,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 273,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 261,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 418,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 0,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 0,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 512,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 417,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 0,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-railwaymans-daughter",
+            "overview": "A railway worker rescues a little girl orphaned in a train disaster and raises her beside his own son. Years later, as she grows into a young woman, he must decide whether to reveal the truth about her birth and the family he built around her.",
+            "runtime": 417,
+            "tagline": "A father's love, a truth delayed.",
+            "title": "The Railwayman's Daughter"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.668,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5ed3ywd7lmDPhsCXmcdSih9SxP2.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 601
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bXiKxhX83DKbi1f1EiZ3mQf1cJC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gCTbSfPSWrznulg8kZTziMG2QXn.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 627
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gd74lBBZcXWnikJfWXnTB1juYsd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ArQF4I0l3RqcXv7SPzOMoHqOPZJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oKTTnGWuHWbqi2q2CcyW8cyz6xM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aOUj21VzD6F6XXDG2RMn7WG5BAs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yLGssSb8OZ2tsNwEbOzZvFSJTcY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        }
+      ]
+    }
+  }
+}

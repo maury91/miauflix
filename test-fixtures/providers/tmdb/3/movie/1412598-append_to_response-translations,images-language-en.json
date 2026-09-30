@@ -1,0 +1,601 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16712",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ca17c49ec942fbc42a9be44543454789\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ykigHs1OIyqqV04zfFqIlSHp546.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://example.test/films/lagoon-of-teeth",
+    "id": 1412598,
+    "imdb_id": "tt33479805",
+    "origin_country": [
+      "AU"
+    ],
+    "original_language": "en",
+    "original_title": "Lagoon of Teeth",
+    "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+    "popularity": 9.0117,
+    "poster_path": "/xC6zdIoIHjhOIFmjNyGgtzhuhiF.jpg",
+    "production_companies": [
+      {
+        "id": 199833,
+        "logo_path": "/jBvzUqNAKQL9KUiAXPHJ01fREGN.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "AU"
+      },
+      {
+        "id": 25954,
+        "logo_path": "/oga9DS7GZGbZ0iZ4JFuVTBMBv1C.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 157172,
+        "logo_path": "/fNnKmC4ZP28Im4NaFsDwsblyVLF.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 5056,
+        "logo_path": "/ok7CQyn0RPEuI0upznPoo93YE6H.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 283868,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 10950,
+        "logo_path": "/6TdE9m9KgV2az7vNI8n95rQiYr3.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "AU"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "AU",
+        "name": "Australia"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2026-01-16",
+    "revenue": 0,
+    "runtime": 89,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The tide is not on their side.",
+    "title": "Lagoon of Teeth",
+    "video": false,
+    "vote_average": 5.357,
+    "vote_count": 206,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 89,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 89,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 89,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 89,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 90,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 89,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 0,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/lagoon-of-teeth",
+            "overview": "Two lifelong friends are marooned in a sealed tropical inlet with A killer whale, a killer whale guarding the only exit.",
+            "runtime": 89,
+            "tagline": "The tide is not on their side.",
+            "title": "Lagoon of Teeth"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kNulN7b7YI6cRQe5d8aZWUmCKwm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2k56aUc68UDd6T50BuyVAACRwM0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.722,
+          "height": 1272,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sBWGq4Ks58VKJmH3l9ABtMD2fBK.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2191
+        },
+        {
+          "aspect_ratio": 1.722,
+          "height": 1275,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6LHLyD4ZLPJyXloLDORYfQWEiLl.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2196
+        },
+        {
+          "aspect_ratio": 9.474,
+          "height": 196,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mrmQCDKb3jsMoNeycE7Bb2mAcy3.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1857
+        },
+        {
+          "aspect_ratio": 6.834,
+          "height": 632,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2C52MNkt4SdDKhSe3zMcadWAG0m.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 9.325,
+          "height": 452,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4ZhW35141RyybwO3ZYd3UiZDyUe.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4215
+        },
+        {
+          "aspect_ratio": 6.834,
+          "height": 632,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p0nnqGwWOMYL3Q42e88iWhz1FSq.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 9.275,
+          "height": 459,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l5XL8Mfrz3eUMzcKyr4pVOIW5Th.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4257
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xC6zdIoIHjhOIFmjNyGgtzhuhiF.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cqbXxAw9sUr4tJ5ffEwtnz6IL9o.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aT5bcS7ZNij8PxjlerrHcBS2Iol.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kwD4xuRygWtlvFhJgEHPg7mE4Z9.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a7T82M3neKPDyttHaJkbBIqQpwv.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/YpBKyLKhqd7aEjnHIoTsvL8Gni.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gGVe9XSdmSzocBOSL2uNBMR4rSO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

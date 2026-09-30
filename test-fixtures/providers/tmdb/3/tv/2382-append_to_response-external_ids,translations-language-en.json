@@ -1,0 +1,458 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22976",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b9960a05118b18f1f261d2ce4f6c22d8\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1lOGkpGa9SjZ2uP1PxfxDkSXRNs.jpg",
+    "created_by": [
+      {
+        "id": 116805,
+        "credit_id": "555619b6c3a368777e002d8a",
+        "name": "Rowan Stone",
+        "original_name": "Rowan Stone",
+        "gender": 2,
+        "profile_path": "/mE3eFY3gq1UQ7Rj2He2YbZ7PFya.jpg"
+      }
+    ],
+    "episode_run_time": [
+      44
+    ],
+    "first_air_date": "1999-09-25",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+    "id": 2382,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2000-10-17",
+    "last_episode_to_air": {
+      "id": 178925,
+      "name": "Falling Compass",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.5,
+      "vote_count": 12,
+      "air_date": "2000-10-17",
+      "episode_number": 18,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 44,
+      "season_number": 1,
+      "show_id": 2382,
+      "still_path": "/nt7cnJ7HCJZICsnYgApqLHE8TDw.jpg"
+    },
+    "name": "Hidden Harbor: Cedar Point",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Bright Archive Network",
+        "origin_country": "US"
+      },
+      {
+        "id": 8486,
+        "logo_path": "/vWGbI1EzoEDQXSI9dYFJXgOuJN8.png",
+        "name": "Blue Station Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 18,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Hidden Harbor: Cedar Point",
+    "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 25.2714,
+    "poster_path": "/tPqV63zcW6ZV0Hd48DMGb5UzQIG.jpg",
+    "production_companies": [
+      {
+        "id": 10105,
+        "logo_path": "/bN4tiAS8oNlHhIqq66KBPQ1Ekqh.png",
+        "name": "Emerald Voyage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 15258,
+        "logo_path": "/d6Aqo5YatP3SUkMi1PEwT0nK0GB.png",
+        "name": "Blue Horizon Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": null,
+        "episode_count": 30,
+        "id": 7427,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/u6HZ1JAQHLId3aOX5YtOWuyZwNU.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1999-09-25",
+        "episode_count": 18,
+        "id": 7426,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/nUEet6ef4R0wxBlszUajaa94fK9.jpg",
+        "season_number": 1,
+        "vote_average": 8.4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Canceled",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.2,
+    "vote_count": 934,
+    "external_ids": {
+      "imdb_id": "tt0193676",
+      "freebase_mid": "/m/03tzsr",
+      "freebase_id": "/en/freaks_and_geeks",
+      "tvdb_id": 76321,
+      "tvrage_id": null,
+      "wikidata_id": "Q500769",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Hidden Harbor: Cedar Point",
+            "overview": "Hidden Harbor: Cedar Point follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/hidden-harbor-cedar-point",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

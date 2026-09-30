@@ -1,0 +1,339 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18090",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d7dfedcdd91979cfedf4620273e15bb3\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/43rA20XmMR5jUklfpCAksc32LKt.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/blacks-game",
+    "id": 97340,
+    "imdb_id": "tt1860181",
+    "origin_country": [
+      "IS"
+    ],
+    "original_language": "is",
+    "original_title": "Black's Game",
+    "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+    "popularity": 2.244,
+    "poster_path": "/iG3e6KeIvhbkryLolUGx8BNfCnj.jpg",
+    "production_companies": [
+      {
+        "id": 25568,
+        "logo_path": "/yWsdN2R76EOaIJftJAoMDn0U2ok.png",
+        "name": "Northglass Cinema",
+        "origin_country": "IS"
+      },
+      {
+        "id": 14938,
+        "logo_path": "/qbTj5eKcWTz3G9SU6LKImzAsne2.png",
+        "name": "Northglass Cinema",
+        "origin_country": "IS"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IS",
+        "name": "Iceland"
+      }
+    ],
+    "release_date": "2012-03-11",
+    "revenue": 67009,
+    "runtime": 104,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Icelandic",
+        "iso_639_1": "is",
+        "name": "Íslenska"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The streets keep their own score.",
+    "title": "Black's Game",
+    "video": false,
+    "vote_average": 5.9,
+    "vote_count": 76,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "IS",
+          "iso_639_1": "is",
+          "name": "Íslenska",
+          "english_name": "Icelandic",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 104,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/blacks-game",
+            "overview": "In the late nineties, Reykjavik's once-small drug trade grows ruthless. Through an ambitious crew of fictional street dealers, a city watches its underworld transform into a violent contest for control.",
+            "runtime": 0,
+            "tagline": "The streets keep their own score.",
+            "title": "Black's Game"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iG3e6KeIvhbkryLolUGx8BNfCnj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1400
+        }
+      ]
+    }
+  }
+}

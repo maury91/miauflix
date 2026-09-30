@@ -1,0 +1,515 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4697",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d95f4f2c2ef4927e1f368b7f45f2e813\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7lizs4SuEU2ihkkAa0SZ66NtHbl.jpg",
+    "belongs_to_collection": {
+      "id": 14246,
+      "name": "Coastal Extraction Collection",
+      "poster_path": "/2NbhXWB5SKRCdMqEpMz9XieQqxU.jpg",
+      "backdrop_path": "/kvuUWjeSFEXmc7DytEFKehlNHo4.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/coastal-extraction",
+    "id": 1641319,
+    "imdb_id": "tt39538786",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Coastal Extraction",
+    "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+    "popularity": 13.3106,
+    "poster_path": "/tUmARo0TZEK1EaSuS6dU35FhDyU.jpg",
+    "production_companies": [
+      {
+        "id": 769,
+        "logo_path": "/j8zjbr6CzgiOj4kdtkTkwjdn0b3.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 82659,
+        "logo_path": "/3mZkZUZUaqXDcIoYnECLb98PSWC.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "CA"
+      },
+      {
+        "id": 156309,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "ZA"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      },
+      {
+        "iso_3166_1": "ZA",
+        "name": "South Africa"
+      }
+    ],
+    "release_date": "2026-03-13",
+    "revenue": 0,
+    "runtime": 96,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "No one gets left behind.",
+    "title": "Coastal Extraction",
+    "video": false,
+    "vote_average": 6.72,
+    "vote_count": 100,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 96,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 95,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 95,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 95,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 96,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 95,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/coastal-extraction",
+            "overview": "Two allied snipers enter a volatile coastal state after their allies are seized during a failed operation.",
+            "runtime": 0,
+            "tagline": "No one gets left behind.",
+            "title": "Coastal Extraction"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q8SJVDewYCG8ol9pe5mbK0qCeyS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.655,
+          "height": 400,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2R6hoW67kT8poPTpN5HEpimLc3C.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1062
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tUmARo0TZEK1EaSuS6dU35FhDyU.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wlimwHMelt9PRdgFhS5bWJWPrjr.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/guq1m8OxXAgbJ8Ex61KDifM1lqj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3T9nAX0jAp0iT18ex25BlZEpRDb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8S7c93EMP2sEryqTT8dyrQpUNkk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 960
+        }
+      ]
+    }
+  }
+}

@@ -15,6 +15,9 @@ import { AuthService } from './auth.service';
 
 jest.mock('@database/database');
 jest.mock('@services/configuration/configuration.service');
+jest.mock('hono/cookie', () => ({
+  deleteCookie: jest.fn(),
+}));
 
 // Mock the tracing decorator
 jest.mock('@utils/tracing.util', () => ({
@@ -430,6 +433,76 @@ describe('AuthService', () => {
         maxAge: 7 * 24 * 60 * 60, // 7 days in seconds
         path: '/api/auth/',
       });
+    });
+  });
+
+  describe('getSessionsFromCookies', () => {
+    it('clears invalid cookies and still returns a valid session after them', async () => {
+      const invalidSessions = Array.from({ length: 6 }, (_, index) => `invalid-${index}`);
+      const validSession = 'valid-session';
+      const cookieHeader = [
+        ...invalidSessions.map(session => `__test_rt_${session}=invalid-token`),
+        `__test_rt_${validSession}=valid-token`,
+        `__test_at_${validSession}=valid-access-token`,
+      ].join('; ');
+      const context = {
+        req: {
+          raw: { headers: new Headers({ cookie: cookieHeader }) },
+        },
+      } as unknown as Context;
+      const user = {
+        id: 'user-123',
+        email: 'test@example.com',
+        displayName: 'Test User',
+        role: UserRole.USER,
+      } as User;
+      const refreshToken = {
+        userId: user.id,
+        session: validSession,
+        expiresAt: new Date(Date.now() + 86400000),
+        user,
+      } as RefreshToken;
+
+      mockRefreshTokenRepository.findByToken.mockImplementation(async (token, session) =>
+        token === 'valid-token' && session === validSession ? refreshToken : null
+      );
+      mockRefreshTokenRepository.isChainExpired.mockResolvedValue(false);
+      mockUserRepository.findById.mockResolvedValue(user);
+
+      const sessions = await authService.getSessionsFromCookies(context);
+
+      expect(sessions).toEqual([
+        {
+          session: validSession,
+          user: {
+            id: user.id,
+            email: user.email,
+            displayName: user.displayName,
+            role: user.role,
+          },
+        },
+      ]);
+      expect(mockRefreshTokenRepository.findByToken).toHaveBeenCalledTimes(5);
+
+      const { deleteCookie } = jest.requireMock('hono/cookie') as {
+        deleteCookie: jest.Mock;
+      };
+      for (const session of invalidSessions.slice(0, 4)) {
+        expect(deleteCookie).toHaveBeenCalledWith(context, `__test_rt_${session}`, {
+          domain: undefined,
+          path: '/api/auth/',
+        });
+        expect(deleteCookie).toHaveBeenCalledWith(context, `__test_at_${session}`, {
+          domain: undefined,
+          path: '/',
+        });
+      }
+      expect(deleteCookie).toHaveBeenCalledTimes(8);
+      expect(deleteCookie).not.toHaveBeenCalledWith(
+        context,
+        `__test_rt_${invalidSessions[4]}`,
+        expect.anything()
+      );
     });
   });
 });

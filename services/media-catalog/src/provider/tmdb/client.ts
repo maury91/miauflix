@@ -114,6 +114,7 @@ export class TmdbClient {
    */
   private readonly rateLimiter = new RateLimiter(40, 'tmdb');
   private readonly configurationFlight = new SingleFlight();
+  private readonly genreFlight = new SingleFlight();
 
   constructor(
     private readonly apiCache: ApiCache,
@@ -302,18 +303,22 @@ export class TmdbClient {
   /* ------------------------------------------------------------------ genres */
 
   movieGenres(language: string) {
-    return this.cached<{ genres: TmdbGenre[] }>(
-      `genres:movie:${language}`,
-      2 * dayMs,
-      `/genre/movie/list?language=${language}`
+    return this.genreFlight.run(`movie:${language}`, () =>
+      this.cached<{ genres: TmdbGenre[] }>(
+        `genres:movie:${language}`,
+        2 * dayMs,
+        `/genre/movie/list?language=${language}`
+      )
     );
   }
 
   tvGenres(language: string) {
-    return this.cached<{ genres: TmdbGenre[] }>(
-      `genres:tv:${language}`,
-      2 * dayMs,
-      `/genre/tv/list?language=${language}`
+    return this.genreFlight.run(`tv:${language}`, () =>
+      this.cached<{ genres: TmdbGenre[] }>(
+        `genres:tv:${language}`,
+        2 * dayMs,
+        `/genre/tv/list?language=${language}`
+      )
     );
   }
 

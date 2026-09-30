@@ -1,0 +1,550 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15004",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f9306f22ae5923013eee98a68bf2ec47\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rDJei8aoHbhgKOSgFSZ4zI6sbwa.jpg",
+    "created_by": [
+      {
+        "id": 23287,
+        "credit_id": "683775f382f6a8a7114150c9",
+        "name": "Taylor Hart",
+        "original_name": "Taylor Hart",
+        "gender": 2,
+        "profile_path": "/8XpWHXSR8CCkWakCuEEnJKTdTJE.jpg"
+      },
+      {
+        "id": 23289,
+        "credit_id": "683775f894584af5ae0564c4",
+        "name": "Remy James",
+        "original_name": "Remy James",
+        "gender": 2,
+        "profile_path": "/6IECU9jn6efCb4Ys8FlkQSk49jr.jpg"
+      },
+      {
+        "id": 984103,
+        "credit_id": "683775fa8ece7a1dae414ec1",
+        "name": "Quinn Ellis",
+        "original_name": "Quinn Ellis",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2015-02-08",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/series/copper-window-northbridge",
+    "id": 61929,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2024-05-26",
+    "last_episode_to_air": {
+      "id": 5271558,
+      "name": "Blue Passage",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 7.167,
+      "vote_count": 6,
+      "air_date": "2024-05-26",
+      "episode_number": 6,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 58,
+      "season_number": 2,
+      "show_id": 61929,
+      "still_path": "/srZr8HkMetdfCICiL5mteO4Iv5J.jpg"
+    },
+    "name": "Copper Window: Northbridge",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Amber Valley Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Copper Window: Northbridge",
+    "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 8.4395,
+    "poster_path": "/qY3rk9hH6dzgDrIkonxxHBF3rp8.jpg",
+    "production_companies": [
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Velvet Passage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 68884,
+        "logo_path": "/1BYexT6Vikz4ulCcYKGPmOi6Jm0.png",
+        "name": "Silent Sky Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 14914,
+        "logo_path": "/1RZBWz53SpHUTLpRcM8BGv2plIP.png",
+        "name": "Midnight Crown Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 6523,
+        "logo_path": null,
+        "name": "Silent Echo Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2015-02-08",
+        "episode_count": 6,
+        "id": 64692,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/qY3rk9hH6dzgDrIkonxxHBF3rp8.jpg",
+        "season_number": 1,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2024-04-21",
+        "episode_count": 6,
+        "id": 386501,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/kK2ijwppBMXYIqXdEFAIAGE0Fze.jpg",
+        "season_number": 2,
+        "vote_average": 7.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Documentary",
+    "vote_average": 8,
+    "vote_count": 541,
+    "external_ids": {
+      "imdb_id": "tt4299972",
+      "freebase_mid": "/m/012l44sn",
+      "freebase_id": null,
+      "tvdb_id": 289946,
+      "tvrage_id": 47014,
+      "wikidata_id": "Q19602027",
+      "facebook_id": "",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Copper Window: Northbridge",
+            "overview": "Copper Window: Northbridge follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/copper-window-northbridge",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

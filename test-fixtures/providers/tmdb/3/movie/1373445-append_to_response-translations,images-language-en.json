@@ -1,0 +1,573 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22160",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"63f2be6ee8197b82a7804754a559cb67\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2JHJtATet58dzGpEwFek0kKGJFo.jpg",
+    "belongs_to_collection": {
+      "id": 207621,
+      "name": "Halloween Tapes Collection",
+      "poster_path": "/uSpfqhUF7Zxo5O9ptNlWr4dyqAr.jpg",
+      "backdrop_path": "/m3xmiaeZKsjnHiGJvFGb1W6Ti81.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/halloween-tapes",
+    "id": 1373445,
+    "imdb_id": "tt37676033",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Halloween Tapes",
+    "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+    "popularity": 4.7034,
+    "poster_path": "/bvMKSZtN8KAdtlKoYbEi1Zhyaou.jpg",
+    "production_companies": [
+      {
+        "id": 142877,
+        "logo_path": "/c0Qhy9uvdXfvAZQ9e8GnT5Nb75m.png",
+        "name": "Static Bloom",
+        "origin_country": "US"
+      },
+      {
+        "id": 179565,
+        "logo_path": "/burAbTx0L7cECMVqAEerWNPGYdI.png",
+        "name": "Static Bloom",
+        "origin_country": "US"
+      },
+      {
+        "id": 15157,
+        "logo_path": "/yezzLb9RbKNtQUsyYySAqC9TQr7.png",
+        "name": "Static Bloom",
+        "origin_country": "US"
+      },
+      {
+        "id": 80884,
+        "logo_path": "/nTpiHXhGyh9BZPccglpqt3ql2HY.png",
+        "name": "Static Bloom",
+        "origin_country": "US"
+      },
+      {
+        "id": 6736,
+        "logo_path": "/cdCAYeb3K3Ajhn1tfXHPSfT1KzB.png",
+        "name": "Static Bloom",
+        "origin_country": "AE"
+      },
+      {
+        "id": 169906,
+        "logo_path": "/zcjActhEXaYww1JSvx2OtCd8jTG.png",
+        "name": "Static Bloom",
+        "origin_country": "US"
+      },
+      {
+        "id": 276262,
+        "logo_path": "/aPBayr9blyun7loP31H67Jlq2tT.png",
+        "name": "Static Bloom",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "AE",
+        "name": "United Arab Emirates"
+      }
+    ],
+    "release_date": "2025-09-19",
+    "revenue": 0,
+    "runtime": 115,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Press play. Lock the door.",
+    "title": "Halloween Tapes",
+    "video": false,
+    "vote_average": 6.2,
+    "vote_count": 243,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 115,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 115,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 115,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 115,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 105,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 115,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/halloween-tapes",
+            "overview": "A box of Halloween recordings contains a run of disturbing stories that refuse to stay on the screen. As the tapes play, their nightmares turn an ordinary night of costumes and candy into a fight to see morning.",
+            "runtime": 0,
+            "tagline": "Press play. Lock the door.",
+            "title": "Halloween Tapes"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hR4gL5V0Ey4acGUJFVyIZxhlBGH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 784,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k5mOdmjgOKiCa01hVUGZ0fFgUl2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1394
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1151,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e2XxbPjyNYk5Dkzsw5wbGDSwdee.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2048
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.997,
+          "height": 594,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hJouA85Ga0XjmTG0jlZ2GRrBgWV.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1186
+        },
+        {
+          "aspect_ratio": 4.403,
+          "height": 216,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/44S849Ia2byaR46UQZ5XB2qOBLk.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 951
+        },
+        {
+          "aspect_ratio": 2.229,
+          "height": 315,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lvl8nolaywdQ5AcyKkgkFfGw2LR.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 702
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bvMKSZtN8KAdtlKoYbEi1Zhyaou.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vwx23xafZmPGwcW4Pe53QdXx0lX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kdZUnzXVhVFAw5uQnRhHCi8iBW.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1666
+        },
+        {
+          "aspect_ratio": 0.749,
+          "height": 2014,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9YIVJeZ9UAAfSTq1H06fi5nqq5a.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1508
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u6hatmnJz5uBScxcBCdjlX2Ih8y.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1768,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/beRY2rnpBKMeSobMbQvU5wSF7Xo.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1179
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2837,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AuAkODMixv9GA8CkvPT2SnGCUMx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1891
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4xBRJd6cleSq533glJsl5iFfkYA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fboqtNvlLsKoaYCFScvCypxokAP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mpV6760ObRzzDxvZT3Qh8bT6Wjw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

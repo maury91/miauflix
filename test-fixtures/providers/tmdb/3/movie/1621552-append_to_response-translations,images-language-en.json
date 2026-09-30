@@ -1,0 +1,561 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5667",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"113dd8a673429bbd83c8488e28754a81\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/c4U96GrPRfnNrS01mBtqnocvlLJ.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+    "id": 1621552,
+    "imdb_id": "tt39390497",
+    "origin_country": [
+      "MX"
+    ],
+    "original_language": "es",
+    "original_title": "The Last Shift in Sinaloa",
+    "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+    "popularity": 82.2798,
+    "poster_path": "/alpf5v4UqSFawPmG9RX03Or4BDk.jpg",
+    "production_companies": [
+      {
+        "id": 84651,
+        "logo_path": "/o7gUREdtNzQ3Alrck13tlvcNKvv.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "MX"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "MX",
+        "name": "Mexico"
+      }
+    ],
+    "release_date": "2026-08-21",
+    "revenue": 0,
+    "runtime": 91,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Portuguese",
+        "iso_639_1": "pt",
+        "name": "Português"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Dawn is a long way off.",
+    "title": "The Last Shift in Sinaloa",
+    "video": false,
+    "vote_average": 8.799,
+    "vote_count": 797,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 92,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 0,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-shift-in-sinaloa",
+            "overview": "Two municipal officers face the final hours of duty after a routine stop draws a cartel boss's attention.",
+            "runtime": 91,
+            "tagline": "Dawn is a long way off.",
+            "title": "The Last Shift in Sinaloa"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/etFPzmqXZlHDderOCgg3YjQswT1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.474,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1d22QQ6k9kAwI3ku4f8c3d3vUrM.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2135
+        },
+        {
+          "aspect_ratio": 15.035,
+          "height": 85,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bS3heqECU4hjWm9Znb8PHkptzzK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1278
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/alpf5v4UqSFawPmG9RX03Or4BDk.jpg",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z8eF0ACFFKtIZ4pUeo02PCzxRVO.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Ns1OV14bGbffaAfD38Bzg3ygBF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9XdGF6AD5IAJvdgAyWtVV1EXTyr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1370,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pEGPbRGWfvb6nSTaXW41Malo00I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 912
+        }
+      ]
+    }
+  }
+}
