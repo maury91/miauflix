@@ -20,6 +20,6 @@ export const useGetSeasonQuery = fn().mockReturnValue(emptyQuery);
 export const useEnsureBackdropFocusMutation = () =>
   [
     () => ({
-      unwrap: async () => ({ backdropFocus: null }),
+      unwrap: async () => ({ backdropFocus: { x: 0.5, y: 0.5 } }),
     }),
   ] as const;
