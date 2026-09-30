@@ -1,19 +1,46 @@
 import type { ListResponse } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createRef } from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { useGetListQuery } = vi.hoisted(() => ({ useGetListQuery: vi.fn() }));
-
-vi.mock('@features/media/api/lists.api', () => ({ useGetListQuery }));
-vi.mock('./MediaCard', () => ({
-  MediaCard: ({ media }: { media: { id: number } }) => (
-    <button data-testid={`media-${media.id}`} type="button">
-      {media.id}
-    </button>
-  ),
+const { useGetListQuery, usePromoteListMediaMutation } = vi.hoisted(() => ({
+  useGetListQuery: vi.fn(),
+  usePromoteListMediaMutation: vi.fn(() => [vi.fn()]),
 }));
+
+vi.mock('@features/media/api/lists.api', () => ({ useGetListQuery, usePromoteListMediaMutation }));
+vi.mock('./MediaCard', async () => {
+  const React = await import('react');
+  return {
+    MediaCard: React.forwardRef(
+      (
+        props: {
+          media: { id: number };
+          selected: boolean;
+          tabIndex: number;
+          onFocus: () => void;
+          onHover: () => void;
+          onSelect: () => void;
+        },
+        ref
+      ) => (
+        <button
+          ref={ref}
+          aria-current={props.selected ? 'true' : undefined}
+          data-testid={`media-${props.media.id}`}
+          tabIndex={props.tabIndex}
+          type="button"
+          onFocus={props.onFocus}
+          onMouseEnter={props.onHover}
+          onClick={props.onSelect}
+        >
+          {props.media.id}
+        </button>
+      )
+    ),
+  };
+});
 
 import { CategoryRow } from './CategoryRow';
 
@@ -24,6 +51,7 @@ const response = (page: number, total = 40): ListResponse =>
     total,
     results: Array.from({ length: Math.max(0, Math.min(20, total - page * 20)) }, (_, offset) => ({
       id: page * 20 + offset,
+      mediaId: page * 20 + offset + 1000,
       _type: 'movie',
     })),
   }) as ListResponse;
@@ -36,6 +64,8 @@ const makeProps = (
   overrides: Partial<{
     categoryIndex: number;
     active: boolean;
+    visible: boolean;
+    mediaPerPage: number;
     total: number;
   }> = {}
 ) => {
@@ -46,15 +76,29 @@ const makeProps = (
     initialIndex,
     nearby,
     mediaWidth: 180,
-    mediaPerPage: 1,
+    mediaPerPage: overrides.mediaPerPage ?? 1,
     gap: 12,
+    peekWidth: 54,
     active: overrides.active ?? false,
+    visible: overrides.visible ?? false,
     onActive: vi.fn(),
     onSelect: vi.fn(),
   };
 };
 
 describe('CategoryRow page window', () => {
+  beforeAll(() => {
+    HTMLElement.prototype.scrollIntoView = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
+      configurable: true,
+      value: function (this: HTMLElement, options: { left?: number } | number) {
+        if (typeof options === 'object' && options.left !== undefined) {
+          this.scrollLeft = options.left;
+        }
+      },
+    });
+  });
+
   beforeEach(() => {
     queryTotal = 40;
     useGetListQuery.mockReset();
@@ -74,18 +118,29 @@ describe('CategoryRow page window', () => {
     render(<CategoryRow {...makeProps(19)} />);
 
     await waitFor(() => expect(screen.getByTestId('media-20')).toBeInTheDocument());
-    expect(useGetListQuery).toHaveBeenCalledWith({ category: 'popular', page: 1, limit: 20 });
+    expect(useGetListQuery).toHaveBeenCalledWith({
+      category: 'popular',
+      page: 1,
+      limit: 20,
+      priority: 'visible',
+    });
   });
 
   it('loads the saved page and renders a restored selection on remount', async () => {
     render(<CategoryRow {...makeProps(45, true, { categoryIndex: 1, active: true, total: 60 })} />);
 
     await waitFor(() => expect(screen.getByTestId('media-45')).toBeInTheDocument());
-    expect(useGetListQuery).toHaveBeenCalledWith({ category: 'popular', page: 2, limit: 20 });
+    expect(useGetListQuery).toHaveBeenCalledWith({
+      category: 'popular',
+      page: 2,
+      limit: 20,
+      priority: 'visible',
+    });
     expect(useGetListQuery).not.toHaveBeenCalledWith({
       category: 'popular',
       page: 0,
       limit: 20,
+      priority: 'visible',
     });
   });
 
@@ -97,6 +152,7 @@ describe('CategoryRow page window', () => {
         category: 'popular',
         page: 0,
         limit: 20,
+        priority: 'visible',
       })
     );
     expect(screen.getByTestId('media-19')).toBeInTheDocument();
@@ -120,6 +176,7 @@ describe('CategoryRow page window', () => {
       category: 'popular',
       page: 2,
       limit: 20,
+      priority: 'visible',
     });
     expect(screen.getByTestId('media-19')).toBeInTheDocument();
   });
@@ -129,7 +186,7 @@ describe('CategoryRow page window', () => {
 
     expect(useGetListQuery).toHaveBeenCalledTimes(3);
     expect(useGetListQuery.mock.calls.map(([query]) => query)).toEqual([
-      { category: 'popular', page: 0, limit: 20 },
+      { category: 'popular', page: 0, limit: 20, priority: 'visible' },
       skipToken,
       skipToken,
     ]);
@@ -143,6 +200,17 @@ describe('CategoryRow page window', () => {
       skipToken,
       skipToken,
     ]);
+  });
+
+  it('loads a prefetched row with the lower downstream priority tier', () => {
+    render(<CategoryRow {...makeProps(0, false)} loadIntent="prefetch" />);
+
+    expect(useGetListQuery).toHaveBeenCalledWith({
+      category: 'popular',
+      page: 0,
+      limit: 20,
+      priority: 'prefetch',
+    });
   });
 
   it('shows a failed current page instead of rendering retained data from another page', () => {
@@ -204,5 +272,139 @@ describe('CategoryRow page window', () => {
     rerender(<CategoryRow ref={ref} {...makeProps(7, true)} />);
 
     await waitFor(() => expect(screen.getByTestId('media-7')).toBeInTheDocument());
+  });
+
+  it('moves and confirms the selected media through its imperative handle', async () => {
+    const ref = createRef<import('./CategoryRow').CategoryRowHandle>();
+    const onSelect = vi.fn();
+    const props = makeProps(0, true, { active: true, visible: true });
+    props.onSelect = onSelect;
+
+    render(<CategoryRow ref={ref} {...props} />);
+    await waitFor(() => expect(screen.getByTestId('media-0')).toBeInTheDocument());
+
+    act(() => {
+      expect(ref.current?.handleAction('right')).toEqual({ type: 'handled' });
+    });
+    await waitFor(() => expect(ref.current?.getNavigationContext().selected?.id).toBe(1));
+    act(() => {
+      expect(ref.current?.handleAction('confirm')).toEqual({ type: 'activate' });
+    });
+    expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 1, mediaId: 1001 }));
+  });
+
+  it('advances by one visible page when the browser next arrow is clicked', async () => {
+    const onActive = vi.fn();
+    const props = makeProps(0, true, { active: true, visible: true });
+    props.onActive = onActive;
+
+    render(<CategoryRow {...props} />);
+    await waitFor(() => expect(screen.getByTestId('media-0')).toBeInTheDocument());
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next Popular items' }));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('media-1')).toHaveAttribute('aria-current', 'true')
+    );
+    expect(onActive).toHaveBeenCalledWith(0, 1, expect.objectContaining({ id: 1 }));
+  });
+
+  it('advances one card stride from an aligned browser scroll position', async () => {
+    render(<CategoryRow {...makeProps(0, true, { active: true, visible: true })} />);
+    await waitFor(() => expect(screen.getByTestId('media-0')).toBeInTheDocument());
+
+    const scrollContainer = screen.getByTestId('media-0').parentElement as HTMLDivElement;
+    expect(scrollContainer.scrollLeft).toBe(0);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next Popular items' }));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('media-1')).toHaveAttribute('aria-current', 'true')
+    );
+    expect(scrollContainer.scrollLeft).toBe(192);
+  });
+
+  it('normalizes an arbitrary scroll position before moving in the requested direction', async () => {
+    render(<CategoryRow {...makeProps(0, true, { active: true, visible: true })} />);
+    await waitFor(() => expect(screen.getByTestId('media-0')).toBeInTheDocument());
+
+    const scrollContainer = screen.getByTestId('media-0').parentElement as HTMLDivElement;
+    scrollContainer.scrollLeft = 100;
+    fireEvent.scroll(scrollContainer);
+    fireEvent.click(screen.getByRole('button', { name: 'Previous Popular items' }));
+    await waitFor(() =>
+      expect(screen.getByTestId('media-0')).toHaveAttribute('aria-current', 'true')
+    );
+    expect(scrollContainer.scrollLeft).toBe(0);
+
+    scrollContainer.scrollLeft = 250;
+    fireEvent.scroll(scrollContainer);
+    fireEvent.click(screen.getByRole('button', { name: 'Previous Popular items' }));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('media-1')).toHaveAttribute('aria-current', 'true')
+    );
+    expect(scrollContainer.scrollLeft).toBe(192);
+
+    scrollContainer.scrollLeft = 250;
+    fireEvent.scroll(scrollContainer);
+    fireEvent.click(screen.getByRole('button', { name: 'Next Popular items' }));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('media-2')).toHaveAttribute('aria-current', 'true')
+    );
+    expect(scrollContainer.scrollLeft).toBe(384);
+  });
+
+  it('keeps each keyboard-focused card at the leading carousel slot', async () => {
+    const ref = createRef<import('./CategoryRow').CategoryRowHandle>();
+    render(
+      <CategoryRow
+        ref={ref}
+        {...makeProps(0, true, { active: true, visible: true, mediaPerPage: 3, total: 5 })}
+      />
+    );
+    await waitFor(() => expect(screen.getByTestId('media-0')).toBeInTheDocument());
+
+    const scrollContainer = screen.getByTestId('media-0').parentElement as HTMLDivElement;
+    for (const expectedIndex of [1, 2, 3, 4]) {
+      act(() => {
+        expect(ref.current?.handleAction('right')).toEqual({ type: 'handled' });
+      });
+      await waitFor(() =>
+        expect(ref.current?.getNavigationContext().selected?.id).toBe(expectedIndex)
+      );
+      expect(scrollContainer.scrollLeft).toBe(expectedIndex * 192);
+    }
+    for (const expectedIndex of [3, 2, 1, 0]) {
+      act(() => {
+        expect(ref.current?.handleAction('left')).toEqual({ type: 'handled' });
+      });
+      await waitFor(() =>
+        expect(ref.current?.getNavigationContext().selected?.id).toBe(expectedIndex)
+      );
+      expect(scrollContainer.scrollLeft).toBe(expectedIndex * 192);
+    }
+  });
+
+  it('promotes the visible row and viewport media with their priority tiers', async () => {
+    const promote = vi.fn();
+    usePromoteListMediaMutation.mockReturnValue([promote]);
+
+    render(<CategoryRow {...makeProps(0, true, { active: true, visible: true, total: 3 })} />);
+
+    await waitFor(() => expect(promote).toHaveBeenCalled());
+    expect(promote).toHaveBeenCalledWith({
+      items: [
+        { mediaType: 'movie', mediaId: 1000, tier: 'visible' },
+        { mediaType: 'movie', mediaId: 1001, tier: 'visible' },
+        { mediaType: 'movie', mediaId: 1002, tier: 'visible' },
+      ],
+    });
+    await waitFor(() =>
+      expect(promote).toHaveBeenCalledWith({
+        items: [{ mediaType: 'movie', mediaId: 1000, tier: 'viewport' }],
+      })
+    );
   });
 });

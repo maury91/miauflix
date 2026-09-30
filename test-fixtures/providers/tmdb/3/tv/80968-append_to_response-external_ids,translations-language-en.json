@@ -1,0 +1,638 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5129",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f89e4c3d7469d162928726741f1ed966\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/64jEzC7YeKEpnn1YwjCGRo9ZvOX.jpg",
+    "created_by": [
+      {
+        "id": 64506,
+        "credit_id": "5f1e7419511d090036757f00",
+        "name": "Noel Gray",
+        "original_name": "Noel Gray",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 121479,
+        "credit_id": "5f1e743566a7c300370a5ac0",
+        "name": "Cameron James",
+        "original_name": "Cameron James",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 81203,
+        "credit_id": "5f1e7424511d0900357795a7",
+        "name": "Taylor Reed",
+        "original_name": "Taylor Reed",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2018-11-16",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/series/last-sky-juniper-vale",
+    "id": 80968,
+    "in_production": false,
+    "languages": [
+      "en",
+      "es"
+    ],
+    "last_air_date": "2021-11-05",
+    "last_episode_to_air": {
+      "id": 3302591,
+      "name": "Bright Garden",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 7.083,
+      "vote_count": 12,
+      "air_date": "2021-11-05",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "610",
+      "runtime": 69,
+      "season_number": 3,
+      "show_id": 80968,
+      "still_path": "/bEBOSpPYrZoI91zmgzqgtQnVNZF.jpg"
+    },
+    "name": "Last Sky: Juniper Vale",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Bright Crown Network",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 30,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Last Sky: Juniper Vale",
+    "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 29.7896,
+    "poster_path": "/aXwMx8OvRFMfI1RmkbJm6Bq1jVg.jpg",
+    "production_companies": [
+      {
+        "id": 206133,
+        "logo_path": "/wS56yo8ya8fui8imnDRbkyjWE7H.png",
+        "name": "Golden Voyage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 36812,
+        "logo_path": "/t0cibwMPVH7RD7UsQNqmugDMnw7.png",
+        "name": "Falling River Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2018-11-16",
+        "episode_count": 10,
+        "id": 106584,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/nd6btFNw6kly3BuxojYAhnIwGg.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2020-02-13",
+        "episode_count": 10,
+        "id": 124641,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/BBGuA0GXeGeSJxjlcawljLEN66.jpg",
+        "season_number": 2,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2021-11-05",
+        "episode_count": 10,
+        "id": 166998,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/uYcZMiIIUv8NPebpqKbUGhf2M3y.jpg",
+        "season_number": 3,
+        "vote_average": 7.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.9,
+    "vote_count": 1543,
+    "external_ids": {
+      "imdb_id": "tt8714904",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 353232,
+      "tvrage_id": null,
+      "wikidata_id": "Q55657276",
+      "facebook_id": "narcosnetflix",
+      "instagram_id": "Narcos",
+      "twitter_id": "NarcosNetflix"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Last Sky: Juniper Vale",
+            "overview": "Last Sky: Juniper Vale follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/last-sky-juniper-vale",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

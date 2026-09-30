@@ -1,3 +1,0 @@
-# Prevent Roo agents from accessing environment secrets
-.env
-.env.*

@@ -1,0 +1,1038 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16837",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f8b0e7cf556ae16b44e22bdaef3b22da\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7Z7WVzJsSReG8B0CaPk0bvWD7tK.jpg",
+    "belongs_to_collection": null,
+    "budget": 23000000,
+    "genres": [
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+    "id": 51739,
+    "imdb_id": "tt1568921",
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_title": "The Borrowers of Briar House",
+    "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+    "popularity": 10.4474,
+    "poster_path": "/3lSRaSjDp2nkXMQkzzjpRi3035O.jpg",
+    "production_companies": [
+      {
+        "id": 10342,
+        "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11846,
+        "logo_path": "/es3LvDA6wLWVDvZnAYYuAT6x8lJ.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 882,
+        "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 856,
+        "logo_path": "/3tfzS2CrX6Ntbu927XzHXEPDA6y.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "FR"
+      },
+      {
+        "id": 272654,
+        "logo_path": null,
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12518,
+        "logo_path": "/qJZAVb8vx6qFLQJ6cunRkVUJVdB.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11847,
+        "logo_path": "/gW5RN3ylzsAwQ1uGHBpezUZ0vXF.png",
+        "name": "Thimblewing Animation",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      },
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "2010-07-16",
+    "revenue": 149660003,
+    "runtime": 95,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A secret world within our own.",
+    "title": "The Borrowers of Briar House",
+    "video": false,
+    "vote_average": 7.7,
+    "vote_count": 3285,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 95,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 94,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-borrowers-of-briar-house",
+            "overview": "A fourteen-year-old girl from a tiny family living beneath the floorboards quietly borrows household objects to build their hidden home. Their careful life changes when a human boy discovers her and reaches out in friendship.",
+            "runtime": 0,
+            "tagline": "A secret world within our own.",
+            "title": "The Borrowers of Briar House"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b49Fl7cRG8ScvkF7yuCSob58V5T.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6wmaqHfYB7CnFw4a3feQtBI64XF.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aXvkwWPZdW2J5GQxwndF10O44yw.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nSmA5kgB9GcMDB72DdDebcB1PdT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dJIY15svyL5aCeGfd036uAB5x4D.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.501,
+          "height": 747,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lCIYf28WTRnSkMPBVURJGnBP8yo.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1868
+        },
+        {
+          "aspect_ratio": 2.501,
+          "height": 747,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iVbzCvOz6b1AKHHIeqwvbZUDF59.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1868
+        },
+        {
+          "aspect_ratio": 2.501,
+          "height": 747,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9OwyDva3RpCgfrIxYooyIoMgpck.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1868
+        },
+        {
+          "aspect_ratio": 2.506,
+          "height": 85,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ijxCcDNEHsnVrSmYCeij2Tey68X.svg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 213
+        },
+        {
+          "aspect_ratio": 2.506,
+          "height": 85,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5in6uLcX14ldPJP9Zfu3PIofjt5.svg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 213
+        },
+        {
+          "aspect_ratio": 2.479,
+          "height": 514,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hcbqCKyNkWFAjIdmXo54SKLQlnT.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1274
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3lSRaSjDp2nkXMQkzzjpRi3035O.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iFONYHe0NsKZa89V0Qx8fe0rHK3.jpg",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xLkyM2Vt3yqlttnql02uXt0lemy.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xGz75oFXt4OmFgvQ7kVjaPboRJr.jpg",
+          "vote_average": 5.25,
+          "vote_count": 16,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b8ivJAaHH26joElvvU8ALe0UBNi.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oc2OB2KDmSRDMelKEAA1n4YRQL0.jpg",
+          "vote_average": 4.458,
+          "vote_count": 12,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1480,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mYZW7dPJ7eoKtJc68ecrK9NJftG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jNk5S3jCJCY2lIYupvRpwGD1efh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5sg8hswOVwXXuOybdy9W37XM81d.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f48o1qLfeS6t3k2R0kAeg17FTA0.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1075,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7Nw4G7awbXQUPP9DBZM8VNdEKkZ.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 716
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uHMzEF1QUVpdVXpv3Yc0d6V9OQp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.674,
+          "height": 1023,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9O2Dy4tHBIqOsRB3iM7nW86rQSh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 690
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1950,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iEzR1XoqS1tPvz3UFW7PqcoLrQ9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1950,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fVFtFvweQK21oY6LKQkm0vcICKR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1950,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hWgpmAXj449wRd5ziv301bJ1MhB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bf6IG3eYl2IR7DEzxtby4Jpu7mr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1213,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eBvhsDTLU46gK435jVHweq7sU1E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 820
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oWZomufjsHdgA2YIzU06sOzQkgz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dw6I9xRJHfdvrwt9EFws7ZukCJy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1950,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nL3KDkq4QUNx78TiGh30CrauaGD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vtcfn9lGPcJdBQHid6CcFOW5HeD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/55KLFgglhsnzezbHh5cdYp9lvmY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 692
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2964,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yhgDz7z3VswLh2Lk7ViJoWWgsVB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vNSejBVbtjWu8buATOKKDBqvUCf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/epICheq8CyDKSCASNCzjkwE8Qy2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.678,
+          "height": 2948,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jWqO2pltaSJs9laVYHznrX0dEUo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

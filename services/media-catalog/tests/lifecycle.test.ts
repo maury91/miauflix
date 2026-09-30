@@ -92,6 +92,46 @@ const runShutdown = async (event: 'SIGTERM' | 'uncaughtException') => {
 };
 
 describe('catalog lifecycle', () => {
+  it('starts warming English genres immediately after provider activation', async () => {
+    const { config, context, runtime, cleanup } = setup();
+    const originalFetch = globalThis.fetch;
+    const paths: string[] = [];
+    const hydrationRequests = Promise.withResolvers<void>();
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
+      const path = String(input);
+      paths.push(path);
+      if (
+        paths.some(request => request.endsWith('/configuration')) &&
+        paths.some(request => request.endsWith('/genre/movie/list?language=en')) &&
+        paths.some(request => request.endsWith('/genre/tv/list?language=en'))
+      ) {
+        hydrationRequests.resolve();
+      }
+      if (path.endsWith('/configuration')) {
+        return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+      }
+      return Response.json({ genres: [] });
+    }) as unknown as typeof fetch;
+    try {
+      const result = await config.applyRemote({
+        TMDB_API_URL: 'https://api.themoviedb.org/3',
+        TMDB_API_ACCESS_TOKEN: 'test-token',
+        EPISODE_SYNC_MODE: 'ON_DEMAND',
+        CATALOG_HYDRATION_TTL_MS: '86400000',
+      });
+      expect(result.success).toBe(true);
+      await hydrationRequests.promise;
+
+      expect(paths).toContain('https://api.themoviedb.org/3/genre/movie/list?language=en');
+      expect(paths).toContain('https://api.themoviedb.org/3/genre/tv/list?language=en');
+      expect(context.catalog).not.toBeNull();
+    } finally {
+      await runtime.stop();
+      globalThis.fetch = originalFetch;
+      cleanup();
+    }
+  });
+
   it('waits for worker shutdown before runtime stop resolves', async () => {
     const { runtime, cleanup } = setup();
     const gate = Promise.withResolvers<void>();

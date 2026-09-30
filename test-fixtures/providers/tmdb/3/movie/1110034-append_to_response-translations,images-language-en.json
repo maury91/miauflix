@@ -1,0 +1,531 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15686",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1eea75ac8611082fbbe38b7dce4fae09\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oV472EbPedkc5QzqolGc7sCgCnn.jpg",
+    "belongs_to_collection": null,
+    "budget": 1000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-fjord-below",
+    "id": 1110034,
+    "imdb_id": "tt19838566",
+    "origin_country": [
+      "NO"
+    ],
+    "original_language": "no",
+    "original_title": "The Fjord Below",
+    "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+    "popularity": 46.2981,
+    "poster_path": "/snjASPpfqpkmA7lVXDo24rA8I0z.jpg",
+    "production_companies": [
+      {
+        "id": 119141,
+        "logo_path": "/bTHtOUdHmlzZdMDaCwXbERngUId.png",
+        "name": "Black Lantern Cinema",
+        "origin_country": "NO"
+      },
+      {
+        "id": 38072,
+        "logo_path": "/obOynoztBEhDNfHsDXBqOuQLAZk.png",
+        "name": "Black Lantern Cinema",
+        "origin_country": "NO"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "NO",
+        "name": "Norway"
+      }
+    ],
+    "release_date": "2026-02-06",
+    "revenue": 14329678,
+    "runtime": 94,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Norwegian",
+        "iso_639_1": "no",
+        "name": "Norsk"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The deep keeps what it finds.",
+    "title": "The Fjord Below",
+    "video": false,
+    "vote_average": 6.289,
+    "vote_count": 332,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 94,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 94,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 100,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 102,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 100,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 94,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 94,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 95,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-fjord-below",
+            "overview": "A marine biologist studying a remote salmon farm witnesses impossible activity beneath the water, followed by the deaths of two local teenagers. The clues point toward a deep fjord whose dark waters conceal something ancient and violently territorial.",
+            "runtime": 0,
+            "tagline": "The deep keeps what it finds.",
+            "title": "The Fjord Below"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 2.324,
+          "height": 478,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8HMuWDM1bsaqdwCGPt2bMXaIGdQ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1111
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/snjASPpfqpkmA7lVXDo24rA8I0z.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2716,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5CD7WnzZdsVJzjJJiNp6NUm8HFM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1bIZRcxQ8SVv1ufVfEsOYTUqPhI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 960
+        }
+      ]
+    }
+  }
+}

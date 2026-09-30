@@ -1,0 +1,449 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1626",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"4794055d25d1ad4ac43c70a0e3d26064\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/eUERZRVjCTNdgnESlQxyaOJ2d4K.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://example.test/films/the-internship-program",
+    "id": 1584215,
+    "imdb_id": "tt38238651",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Internship Program",
+    "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+    "popularity": 10.3888,
+    "poster_path": "/fYqSOkix4rbDiZW0ACNnvZCpT6X.jpg",
+    "production_companies": [
+      {
+        "id": 177095,
+        "logo_path": "/nfwWCvMNaK687bjyM7un8p7ilz0.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-01-13",
+    "revenue": 0,
+    "runtime": 91,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "They trained her to obey.",
+    "title": "The Internship Program",
+    "video": false,
+    "vote_average": 6.381,
+    "vote_count": 147,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 91,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 91,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 91,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 92,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-internship-program",
+            "overview": "An assassin turns against the secret academy that raised her, gathering fellow graduates as the agency hunts them down.",
+            "runtime": 0,
+            "tagline": "They trained her to obey.",
+            "title": "The Internship Program"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2EptPFNLmu61CzCSHW6J5vDqJRw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pKPOsCPQad6ITy3uzCVozwIOsTE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.996,
+          "height": 1011,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9qP6mGX2nDKABVWjFxcZViZro12.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3029
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fYqSOkix4rbDiZW0ACNnvZCpT6X.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 891,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/euZui1pdwjYyHcrW3PCVnzuJFSC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 595
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jJN6DAHBxq07ccRwpb6AwXZUuyQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.665,
+          "height": 1686,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jQb73TCjNCZLOcxnbFnEK3TQty2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1122
+        },
+        {
+          "aspect_ratio": 0.739,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m4PXX3kD6w98FNlE7YMFZ01s1De.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 887
+        }
+      ]
+    }
+  }
+}

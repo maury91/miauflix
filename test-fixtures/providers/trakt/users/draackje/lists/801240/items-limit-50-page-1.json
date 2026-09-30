@@ -1,0 +1,704 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:movie:705,resource:movie:4771,resource:movie:706,resource:movie:464,resource:movie:8,resource:movie:5065,resource:movie:762,resource:movie:1416,resource:movie:5853,resource:movie:8476,resource:movie:5407,resource:movie:34064,resource:movie:44653,resource:movie:44679,resource:movie:98998,resource:movie:75285,resource:movie:87254,resource:movie:159627,resource:movie:222605,resource:movie:159626,resource:movie:193972,resource:movie:355892,resource:movie:355959,resource:movie:356328,resource:movie:356441,resource:movie:561241,resource:movie:784814,resource:movie:822464,resource:movie:822165,resource:movie:1085761,resource:movie:871500,resource:list:801240",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "31",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "1",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "released",
+    "x-sort-how": "asc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0114709",
+          "plex": {
+            "guid": "5d776828880197001ec90d44",
+            "slug": "room-for-one-more"
+          },
+          "slug": "room-for-one-more-1995",
+          "tmdb": 862,
+          "trakt": 705
+        },
+        "year": 1995,
+        "title": "Room for One More"
+      },
+      "rank": 1,
+      "id": 7062214,
+      "listed_at": "2012-08-25T09:04:34.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0120623",
+          "plex": {
+            "guid": "5d77683385719b001f3a3310",
+            "slug": "the-ant-brigade"
+          },
+          "slug": "the-ant-brigade-1998",
+          "tmdb": 9487,
+          "trakt": 4771
+        },
+        "year": 1998,
+        "title": "The Ant Brigade"
+      },
+      "rank": 2,
+      "id": 7062218,
+      "listed_at": "2012-08-25T09:04:55.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0120363",
+          "plex": {
+            "guid": "5d77682885719b001f3a124d",
+            "slug": "the-toy-collector-s-choice"
+          },
+          "slug": "the-toy-collector-s-choice-1999",
+          "tmdb": 863,
+          "trakt": 706
+        },
+        "year": 1999,
+        "title": "The Toy Collector’s Choice"
+      },
+      "rank": 3,
+      "id": 7062215,
+      "listed_at": "2012-08-25T09:04:39.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0198781",
+          "plex": {
+            "guid": "5d776826151a60001f24a9cf",
+            "slug": "the-screamworks"
+          },
+          "slug": "the-screamworks-2001",
+          "tmdb": 585,
+          "trakt": 464
+        },
+        "year": 2001,
+        "title": "The Screamworks"
+      },
+      "rank": 4,
+      "id": 7062213,
+      "listed_at": "2012-08-25T09:05:14.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0266543",
+          "plex": {
+            "guid": "5d776824961905001eb908dd",
+            "slug": "the-reef-run"
+          },
+          "slug": "the-reef-run-2003",
+          "tmdb": 12,
+          "trakt": 8
+        },
+        "year": 2003,
+        "title": "The Reef Run"
+      },
+      "rank": 5,
+      "id": 7062212,
+      "listed_at": "2012-08-25T09:05:33.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0317705",
+          "plex": {
+            "guid": "5d7768332e80df001ebde157",
+            "slug": "the-remarkable-parrs"
+          },
+          "slug": "the-remarkable-parrs-2004",
+          "tmdb": 9806,
+          "trakt": 5065
+        },
+        "year": 2004,
+        "title": "The Remarkable Parrs"
+      },
+      "rank": 6,
+      "id": 7062219,
+      "listed_at": "2012-08-25T09:05:42.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0317219",
+          "plex": {
+            "guid": "5d7768285af944001f1f7091",
+            "slug": "the-long-detour"
+          },
+          "slug": "the-long-detour-2006",
+          "tmdb": 920,
+          "trakt": 762
+        },
+        "year": 2006,
+        "title": "The Long Detour"
+      },
+      "rank": 7,
+      "id": 7062216,
+      "listed_at": "2012-08-25T09:05:53.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0382932",
+          "plex": {
+            "guid": "5d77682a8718ba001e3125c2",
+            "slug": "remy-and-the-rooftop-kitchen"
+          },
+          "slug": "remy-and-the-rooftop-kitchen-2007",
+          "tmdb": 2062,
+          "trakt": 1416
+        },
+        "year": 2007,
+        "title": "Remy and the Rooftop Kitchen"
+      },
+      "rank": 8,
+      "id": 7062217,
+      "listed_at": "2012-08-25T09:06:09.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0910970",
+          "plex": {
+            "guid": "5d776836151a60001f24de1f",
+            "slug": "echo-the-last-cleaner"
+          },
+          "slug": "echo-the-last-cleaner-2008",
+          "tmdb": 10681,
+          "trakt": 5853
+        },
+        "year": 2008,
+        "title": "ECHO the Last Cleaner"
+      },
+      "rank": 9,
+      "id": 7062221,
+      "listed_at": "2012-08-25T09:06:29.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1049413",
+          "plex": {
+            "guid": "5d77683b151a60001f24f132",
+            "slug": "a-house-above-the-clouds"
+          },
+          "slug": "a-house-above-the-clouds-2009",
+          "tmdb": 14160,
+          "trakt": 8476
+        },
+        "year": 2009,
+        "title": "A House Above the Clouds"
+      },
+      "rank": 10,
+      "id": 7062222,
+      "listed_at": "2012-08-25T09:06:42.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0435761",
+          "plex": {
+            "guid": "5d77683454f42c001f8c435e",
+            "slug": "the-daycare-escape"
+          },
+          "slug": "the-daycare-escape-2010",
+          "tmdb": 10193,
+          "trakt": 5407
+        },
+        "year": 2010,
+        "title": "The Daycare Escape"
+      },
+      "rank": 11,
+      "id": 7062220,
+      "listed_at": "2012-08-25T09:04:43.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1216475",
+          "plex": {
+            "guid": "5d77688833f255001e858e69",
+            "slug": "grand-prix-secret-circuit"
+          },
+          "slug": "grand-prix-secret-circuit-2011",
+          "tmdb": 49013,
+          "trakt": 34064
+        },
+        "year": 2011,
+        "title": "Grand Prix: Secret Circuit"
+      },
+      "rank": 12,
+      "id": 7062223,
+      "listed_at": "2012-08-25T09:05:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1217209",
+          "plex": {
+            "guid": "5d7768a247dd6e001f6bca0e",
+            "slug": "merida-of-the-heather-hills"
+          },
+          "slug": "merida-of-the-heather-hills-2012",
+          "tmdb": 62177,
+          "trakt": 44653
+        },
+        "year": 2012,
+        "title": "Merida of the Heather Hills"
+      },
+      "rank": 13,
+      "id": 7062224,
+      "listed_at": "2012-08-25T09:06:57.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1453405",
+          "plex": {
+            "guid": "5d7768a296b655001fdbd8a0",
+            "slug": "monsters-at-northgate-college"
+          },
+          "slug": "monsters-at-northgate-college-2013",
+          "tmdb": 62211,
+          "trakt": 44679
+        },
+        "year": 2013,
+        "title": "Monsters at Northgate College"
+      },
+      "rank": 14,
+      "id": 7062225,
+      "listed_at": "2012-08-25T09:05:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2096673",
+          "plex": {
+            "guid": "5d7769c0594b2b001e6a8a17",
+            "slug": "inside-the-feeling"
+          },
+          "slug": "inside-the-feeling-2015",
+          "tmdb": 150540,
+          "trakt": 98998
+        },
+        "year": 2015,
+        "title": "Inside the Feeling"
+      },
+      "rank": 15,
+      "id": 7062228,
+      "listed_at": "2013-08-05T16:55:21.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1979388",
+          "plex": {
+            "guid": "5d776919594b2b001e69cf71",
+            "slug": "the-good-dinosaur"
+          },
+          "slug": "the-good-dinosaur-2015",
+          "tmdb": 105864,
+          "trakt": 75285
+        },
+        "year": 2015,
+        "title": "The Good Dinosaur"
+      },
+      "rank": 16,
+      "id": 7062226,
+      "listed_at": "2012-08-25T09:08:32.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2277860",
+          "plex": {
+            "guid": "5d77698aad5437001f75fe33",
+            "slug": "finding-maris"
+          },
+          "slug": "finding-maris-2016",
+          "tmdb": 127380,
+          "trakt": 87254
+        },
+        "year": 2016,
+        "title": "Finding Maris"
+      },
+      "rank": 17,
+      "id": 7062227,
+      "listed_at": "2013-08-05T16:56:22.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3606752",
+          "plex": {
+            "guid": "5d776ab423d5a3001f507d91",
+            "slug": "redline-one-more-lap"
+          },
+          "slug": "redline-one-more-lap-2017",
+          "tmdb": 260514,
+          "trakt": 159627
+        },
+        "year": 2017,
+        "title": "Redline: One More Lap"
+      },
+      "rank": 18,
+      "id": 80783172,
+      "listed_at": "2016-02-09T15:48:14.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2380307",
+          "plex": {
+            "guid": "5d776bcd7a53e9001e73069f",
+            "slug": "a-song-for-the-ancestors"
+          },
+          "slug": "a-song-for-the-ancestors-2017",
+          "tmdb": 354912,
+          "trakt": 222605
+        },
+        "year": 2017,
+        "title": "A Song for the Ancestors"
+      },
+      "rank": 19,
+      "id": 80783308,
+      "listed_at": "2016-02-09T15:48:42.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3606756",
+          "plex": {
+            "guid": "5d9f3c34b0262f001f6f1f6a",
+            "slug": "the-remarkables-family-in-motion"
+          },
+          "slug": "the-remarkables-family-in-motion-2018",
+          "tmdb": 260513,
+          "trakt": 159626
+        },
+        "year": 2018,
+        "title": "The Remarkables: Family in Motion"
+      },
+      "rank": 21,
+      "id": 80783541,
+      "listed_at": "2016-02-09T15:49:35.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1979376",
+          "plex": {
+            "guid": "5d9f3c7f6fc551001ef89219",
+            "slug": "a-place-to-belong"
+          },
+          "slug": "a-place-to-belong-2019",
+          "tmdb": 301528,
+          "trakt": 193972
+        },
+        "year": 2019,
+        "title": "A Place to Belong"
+      },
+      "rank": 20,
+      "id": 80783424,
+      "listed_at": "2016-02-09T15:49:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt7146812",
+          "plex": {
+            "guid": "5d776edfad5437001f803cf9",
+            "slug": "golden-meridian-stonehaven"
+          },
+          "slug": "golden-meridian-stonehaven-2020",
+          "tmdb": 508439,
+          "trakt": 355892
+        },
+        "year": 2020,
+        "title": "Golden Meridian: Stonehaven"
+      },
+      "rank": 22,
+      "id": 398781494,
+      "listed_at": "2019-04-13T17:59:55.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2948372",
+          "plex": {
+            "guid": "5d77702d594b2b001e746263",
+            "slug": "velvet-station-moonridge"
+          },
+          "slug": "velvet-station-moonridge-2020",
+          "tmdb": 508442,
+          "trakt": 355959
+        },
+        "year": 2020,
+        "title": "Velvet Station: Moonridge"
+      },
+      "rank": 23,
+      "id": 540027246,
+      "listed_at": "2020-09-21T07:41:32.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt12801262",
+          "plex": {
+            "guid": "5d777093ad5437001f825d23",
+            "slug": "ivory-crown-dunmere"
+          },
+          "slug": "ivory-crown-dunmere-2021",
+          "tmdb": 508943,
+          "trakt": 356328
+        },
+        "year": 2021,
+        "title": "Ivory Crown: Dunmere"
+      },
+      "rank": 24,
+      "id": 540027302,
+      "listed_at": "2020-09-21T07:42:39.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt8097030",
+          "plex": {
+            "guid": "5d7770ae51dd69001fe59d6a",
+            "slug": "emerald-horizon-willow-reach"
+          },
+          "slug": "emerald-horizon-willow-reach-2022",
+          "tmdb": 508947,
+          "trakt": 356441
+        },
+        "year": 2022,
+        "title": "Emerald Horizon: Willow Reach"
+      },
+      "rank": 25,
+      "id": 629405336,
+      "listed_at": "2021-11-08T14:45:22.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt10298810",
+          "plex": {
+            "guid": "5ef5ee0d1ce3fd004039976a",
+            "slug": "silent-echo-westmere"
+          },
+          "slug": "silent-echo-westmere-2022",
+          "tmdb": 718789,
+          "trakt": 561241
+        },
+        "year": 2022,
+        "title": "Silent Echo: Westmere"
+      },
+      "rank": 26,
+      "id": 629405356,
+      "listed_at": "2021-11-08T14:45:46.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt15789038",
+          "plex": {
+            "guid": "617d3aaf6d9bee0ff53feabb",
+            "slug": "bright-passage-highwater"
+          },
+          "slug": "bright-passage-highwater-2023",
+          "tmdb": 976573,
+          "trakt": 784814
+        },
+        "year": 2023,
+        "title": "Bright Passage: Highwater"
+      },
+      "rank": 27,
+      "id": 825513003,
+      "listed_at": "2023-04-27T07:30:37.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt22022452",
+          "plex": {
+            "guid": "631bfefb0667a4eded0d5b66",
+            "slug": "crimson-horizon-stonehaven"
+          },
+          "slug": "crimson-horizon-stonehaven-2024",
+          "tmdb": 1022789,
+          "trakt": 822464
+        },
+        "year": 2024,
+        "title": "Crimson Horizon: Stonehaven"
+      },
+      "rank": 29,
+      "id": 892563492,
+      "listed_at": "2023-08-30T07:54:59.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt4900148",
+          "plex": {
+            "guid": "5f40c148bf3e560040d37d82",
+            "slug": "bright-meridian-moonridge"
+          },
+          "slug": "bright-meridian-moonridge-2025",
+          "tmdb": 1022787,
+          "trakt": 822165
+        },
+        "year": 2025,
+        "title": "Bright Meridian: Moonridge"
+      },
+      "rank": 28,
+      "id": 892563415,
+      "listed_at": "2023-08-30T07:54:43.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt26443616",
+          "plex": {
+            "guid": "63d15b0b3ad5857a621ccaf5",
+            "slug": "hoppers-wild-frequency"
+          },
+          "slug": "hoppers-wild-frequency-2026",
+          "tmdb": 1327819,
+          "trakt": 1085761
+        },
+        "year": 2026,
+        "title": "Hoppers: Wild Frequency"
+      },
+      "rank": 31,
+      "id": 1174582024,
+      "listed_at": "2025-02-17T10:46:03.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt29355505",
+          "plex": {
+            "guid": "63e52aa555e2324b6e9f5f6e",
+            "slug": "playtime-protocol"
+          },
+          "slug": "playtime-protocol-2026",
+          "tmdb": 1084244,
+          "trakt": 871500
+        },
+        "year": 2026,
+        "title": "Playtime Protocol"
+      },
+      "rank": 30,
+      "id": 1040017219,
+      "listed_at": "2024-06-12T12:50:54.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3d5e2499cdde22967994f5b0cff22286\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kFp5nRy5b6xghGKObHsqvcyGlR8.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-09-10",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/series/blue-archive-bellhaven",
+    "id": 332910,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-24",
+    "last_episode_to_air": {
+      "id": 7731205,
+      "name": "Silver Horizon",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-09-24",
+      "episode_number": 3,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 39,
+      "season_number": 1,
+      "show_id": 332910,
+      "still_path": "/cGblZwsRA8LZUwptZ6AthDUmffo.jpg"
+    },
+    "name": "Blue Archive: Bellhaven",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Amber Valley Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 3,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Blue Archive: Bellhaven",
+    "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 4.6419,
+    "poster_path": "/aq9m0ZiiNVquFFrTMeL9dCDstkJ.jpg",
+    "production_companies": [
+      {
+        "id": 14914,
+        "logo_path": "/1RZBWz53SpHUTLpRcM8BGv2plIP.png",
+        "name": "Midnight Crown Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 136480,
+        "logo_path": "/5fLrloYGsWbdxS0HMmetiyZJ0Tw.png",
+        "name": "Brass River Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 121511,
+        "logo_path": "/nlrrg9d0Pi2LAIwIAVfAdMEpOH2.png",
+        "name": "Emerald Station Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 125345,
+        "logo_path": "/z3Ly3BKafB4PUkvVmkTwLQ8V8yS.png",
+        "name": "Falling Orchard Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-09-10",
+        "episode_count": 3,
+        "id": 538926,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/aq9m0ZiiNVquFFrTMeL9dCDstkJ.jpg",
+        "season_number": 1,
+        "vote_average": 9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 7.2,
+    "vote_count": 4,
+    "external_ids": {
+      "imdb_id": "tt9280400",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 481946,
+      "tvrage_id": null,
+      "wikidata_id": null,
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Blue Archive: Bellhaven",
+            "overview": "Blue Archive: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-archive-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

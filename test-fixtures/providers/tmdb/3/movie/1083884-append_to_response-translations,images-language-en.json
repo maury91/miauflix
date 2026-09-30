@@ -1,0 +1,450 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ecaf97f3d1a86ad9d8489a75d5765380\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3gN540zmAiJW1v6mFoNiciamxc2.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      }
+    ],
+    "homepage": "https://example.test/films/contact-at-blackwater-key",
+    "id": 1083884,
+    "imdb_id": "tt21109170",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Contact at Blackwater Key",
+    "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+    "popularity": 12.3877,
+    "poster_path": "/bi7Aeaozl51cd5K6vAn8tI1lOW0.jpg",
+    "production_companies": [
+      {
+        "id": 5486,
+        "logo_path": "/gDkL1DKC1IaXToq7APrT8vBXK4y.png",
+        "name": "Blue Hour Pictures",
+        "origin_country": "CA"
+      },
+      {
+        "id": 41608,
+        "logo_path": "/5BCREil54GIMdX95OopfIX05YZx.png",
+        "name": "Blue Hour Pictures",
+        "origin_country": "CA"
+      },
+      {
+        "id": 247817,
+        "logo_path": null,
+        "name": "Blue Hour Pictures",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "release_date": "2026-06-05",
+    "revenue": 0,
+    "runtime": 87,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The first reply may be the last.",
+    "title": "Contact at Blackwater Key",
+    "video": false,
+    "vote_average": 6.121,
+    "vote_count": 58,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 87,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 87,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 87,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/contact-at-blackwater-key",
+            "overview": "A reclusive technology magnate invites a skeptical computer scientist to study a fragment of unknown origin at his island laboratory. When their experiment draws a reply from beyond Earth, the isolated team must decide whether it is an invitation or a warning.",
+            "runtime": 0,
+            "tagline": "The first reply may be the last.",
+            "title": "Contact at Blackwater Key"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 6.823,
+          "height": 249,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xiByUSS5sQUlXwqAgvzCz1iIYyh.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1699
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bi7Aeaozl51cd5K6vAn8tI1lOW0.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wDkWKXQbcKXTy37MDqrNR485xtd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8lOpT0vEcyt98fUzzpOdccbXmwc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/akH3lP8Kxl8RqZUa68lZtEPfmSj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bAMujRjz8piYN5kAKdHl2s6aFmN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 2468,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dINJlQVlDCpsEVqhjFyOjpymxsg.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1851
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/35xDS6wkrWcoyQNI8qCO095rtIq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2468,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/71GnydRyjtBmD3S1Qkxx2ffiD7b.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1645
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xyZdFSgnORM8U6oiSivO4VPxXc3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Nn1S7RgXtETZpgEhMXOP1DBYxY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        }
+      ]
+    }
+  }
+}

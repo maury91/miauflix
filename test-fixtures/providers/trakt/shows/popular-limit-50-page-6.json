@@ -1,0 +1,822 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "2708",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,show",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 17:37:32 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "666",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "6",
+    "x-pagination-page-count": "14",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt35051401",
+        "plex": {
+          "guid": "67b5a6ab6b1bac696fce904f",
+          "slug": "the-jade-east"
+        },
+        "slug": "the-jade-east",
+        "tmdb": 279323,
+        "tvdb": 453962,
+        "trakt": 269661
+      },
+      "year": 2026,
+      "title": "The Jade East",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt10541088",
+        "plex": {
+          "guid": "601349233bdc7c0030dca455",
+          "slug": "clarkson-s-farm"
+        },
+        "slug": "clarkson-s-farm",
+        "tmdb": 117648,
+        "tvdb": 378165,
+        "trakt": 159013
+      },
+      "year": 2021,
+      "title": "Clarkson's Farm",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt12408718",
+        "plex": {
+          "guid": "657b8fca9fc8d35ffdabe3ae",
+          "slug": "murder-in-a-small-town"
+        },
+        "slug": "murder-in-a-small-town",
+        "tmdb": 241549,
+        "tvdb": 443402,
+        "trakt": 217672
+      },
+      "year": 2024,
+      "title": "Murder in a Small Town",
+      "aired_episodes": 18
+    },
+    {
+      "ids": {
+        "imdb": "tt31867798",
+        "plex": {
+          "guid": "65ba51aa8e4b83c7df2df949",
+          "slug": "the-spellbound-siblings"
+        },
+        "slug": "the-spellbound-siblings",
+        "tmdb": 245026,
+        "tvdb": 447975,
+        "trakt": 222547
+      },
+      "year": 2024,
+      "title": "The Spellbound Siblings",
+      "aired_episodes": 35
+    },
+    {
+      "ids": {
+        "imdb": "tt33317800",
+        "plex": {
+          "guid": "66b75c1e7af4815cfad310f2",
+          "slug": "the-quiet-spellcaster"
+        },
+        "slug": "the-quiet-spellcaster",
+        "tmdb": 281058,
+        "tvdb": 452832,
+        "trakt": 272094
+      },
+      "year": 2025,
+      "title": "The Quiet Spellcaster",
+      "aired_episodes": 13
+    },
+    {
+      "ids": {
+        "imdb": "tt38821531",
+        "plex": {
+          "guid": "605f037d11d36f002c243442",
+          "slug": "my-two-cents"
+        },
+        "slug": "my-two-cents",
+        "tmdb": 304597,
+        "tvdb": 470108,
+        "trakt": 306805
+      },
+      "year": 2026,
+      "title": "My Two Cents",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt33165027",
+        "plex": {
+          "guid": "66c3b4b6e4a665093a3ad450",
+          "slug": "moonlit-familiar"
+        },
+        "slug": "moonlit-familiar",
+        "tmdb": 261868,
+        "tvdb": 453127,
+        "trakt": 252434
+      },
+      "year": 2025,
+      "title": "Moonlit Familiar",
+      "aired_episodes": 25
+    },
+    {
+      "ids": {
+        "imdb": "tt36593026",
+        "plex": {
+          "guid": "674ef92331b8c62386e99830",
+          "slug": "unlimited-draw"
+        },
+        "slug": "unlimited-draw",
+        "tmdb": 278635,
+        "tvdb": 456730,
+        "trakt": 265911
+      },
+      "year": 2025,
+      "title": "Unlimited Draw",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt38353551",
+        "plex": {
+          "guid": "672528a3185f7e5559c8c97a",
+          "slug": "a-kiss-with-consequences"
+        },
+        "slug": "a-kiss-with-consequences",
+        "tmdb": 281013,
+        "tvdb": 455586,
+        "trakt": 272022
+      },
+      "year": 2025,
+      "title": "A Kiss with Consequences",
+      "aired_episodes": 14
+    },
+    {
+      "ids": {
+        "imdb": "tt39122769",
+        "plex": {
+          "guid": "68dcc0d1b7737e75b0a4f7dd",
+          "slug": "the-matchmaker-s-venom"
+        },
+        "slug": "the-matchmaker-s-venom",
+        "tmdb": 301944,
+        "tvdb": 468734,
+        "trakt": 300756
+      },
+      "year": 2026,
+      "title": "The Matchmaker's Venom",
+      "aired_episodes": 13
+    },
+    {
+      "ids": {
+        "imdb": "tt21064598",
+        "plex": {
+          "guid": "629cb89d120d1e7e6d15f4da",
+          "slug": "pinewater-crossing"
+        },
+        "slug": "pinewater-crossing",
+        "tmdb": 211564,
+        "tvdb": 420865,
+        "trakt": 202916
+      },
+      "year": 2023,
+      "title": "Pinewater Crossing",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt14016574",
+        "plex": {
+          "guid": "61167fa77e4afc002cb4c881",
+          "slug": "civic-beasts"
+        },
+        "slug": "civic-beasts",
+        "tmdb": 131033,
+        "tvdb": 403077,
+        "trakt": 187538
+      },
+      "year": 2023,
+      "title": "Civic Beasts",
+      "aired_episodes": 58
+    },
+    {
+      "ids": {
+        "imdb": "tt11815682",
+        "plex": {
+          "guid": "608599a4ac0818002c5e0de3",
+          "slug": "quick-wit"
+        },
+        "slug": "quick-wit",
+        "tmdb": 124101,
+        "tvdb": 401582,
+        "trakt": 179632
+      },
+      "year": 2021,
+      "title": "Quick Wit",
+      "aired_episodes": 47
+    },
+    {
+      "ids": {
+        "imdb": "tt37041021",
+        "plex": {
+          "guid": "6836d5339677728749e9b91b",
+          "slug": "red-sky-protocol"
+        },
+        "slug": "red-sky-protocol",
+        "tmdb": 292474,
+        "tvdb": 464073,
+        "trakt": 286932
+      },
+      "year": 2026,
+      "title": "Red Sky Protocol",
+      "aired_episodes": 5
+    },
+    {
+      "ids": {
+        "imdb": "tt36517689",
+        "plex": {
+          "guid": "6652b02f57b38b2d9bc327ca",
+          "slug": "shell-of-tomorrow"
+        },
+        "slug": "shell-of-tomorrow",
+        "tmdb": 255358,
+        "tvdb": 450475,
+        "trakt": 241679
+      },
+      "year": 2026,
+      "title": "Shell of Tomorrow",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt39050141",
+        "plex": {
+          "guid": "69341677a7269e981f49baa5",
+          "slug": "love-in-watercolor"
+        },
+        "slug": "love-in-watercolor",
+        "tmdb": 306762,
+        "tvdb": 470980,
+        "trakt": 309275
+      },
+      "year": 2026,
+      "title": "Love in Watercolor",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt27846061",
+        "plex": {
+          "guid": "65a075815d499e6227552626",
+          "slug": "ludwig"
+        },
+        "slug": "ludwig",
+        "tmdb": 243360,
+        "tvdb": 435298,
+        "trakt": 220499
+      },
+      "year": 2024,
+      "title": "Ludwig",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt32491422",
+        "plex": {
+          "guid": "67bf9cac7d1d138d38b087c7",
+          "slug": "the-seven-figure-alibi"
+        },
+        "slug": "the-seven-figure-alibi",
+        "tmdb": 285205,
+        "tvdb": 460679,
+        "trakt": 277657
+      },
+      "year": 2025,
+      "title": "The Seven-Figure Alibi",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt36955608",
+        "plex": {
+          "guid": "6825f38d83859bd5b6664eea",
+          "slug": "our-awkward-little-romance"
+        },
+        "slug": "our-awkward-little-romance",
+        "tmdb": 291496,
+        "tvdb": 460145,
+        "trakt": 285713
+      },
+      "year": 2026,
+      "title": "Our Awkward Little Romance",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt23743442",
+        "plex": {
+          "guid": "6376db4a17d081831de87846",
+          "slug": "the-deceivers-table"
+        },
+        "slug": "the-deceivers-table",
+        "tmdb": 215307,
+        "tvdb": 420543,
+        "trakt": 200100
+      },
+      "year": 2022,
+      "title": "The Deceivers' Table",
+      "aired_episodes": 48
+    },
+    {
+      "ids": {
+        "imdb": "tt21088136",
+        "plex": {
+          "guid": "62b1b378e2ad35049f91ee10",
+          "slug": "old-case-new-evidence"
+        },
+        "slug": "old-case-new-evidence",
+        "tmdb": 204490,
+        "tvdb": 421495,
+        "trakt": 196417
+      },
+      "year": 2024,
+      "title": "Old Case, New Evidence",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt37024136",
+        "plex": {
+          "guid": "6975de41f5c978a85eea16fa",
+          "slug": "strangers-at-bellweather"
+        },
+        "slug": "strangers-at-bellweather",
+        "tmdb": 274776,
+        "tvdb": 464966,
+        "trakt": 260520
+      },
+      "year": 2026,
+      "title": "Strangers at Bellweather",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt21030032",
+        "plex": {
+          "guid": "62a3245d52758f8243740884",
+          "slug": "starlet-s-second-life"
+        },
+        "slug": "starlet-s-second-life",
+        "tmdb": 203737,
+        "tvdb": 421069,
+        "trakt": 196091
+      },
+      "year": 2023,
+      "title": "Starlet's Second Life",
+      "aired_episodes": 35
+    },
+    {
+      "ids": {
+        "imdb": "tt30217222",
+        "plex": {
+          "guid": "66250332adec9f6f40525e80",
+          "slug": "murder-mindfully"
+        },
+        "slug": "murder-mindfully",
+        "tmdb": 252372,
+        "tvdb": 417272,
+        "trakt": 236245
+      },
+      "year": 2024,
+      "title": "Murder Mindfully",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt32493765",
+        "plex": {
+          "guid": "6988eddc07042d86d2f9ea49",
+          "slug": "before-the-giants"
+        },
+        "slug": "before-the-giants",
+        "tmdb": 313298,
+        "tvdb": 473613,
+        "trakt": 316192
+      },
+      "year": 2026,
+      "title": "Before the Giants",
+      "aired_episodes": 4
+    },
+    {
+      "ids": {
+        "imdb": "tt23052950",
+        "plex": {
+          "guid": "645ff305689942dc45f6071d",
+          "slug": "deli-brothers"
+        },
+        "slug": "deli-brothers",
+        "tmdb": 226346,
+        "tvdb": 435662,
+        "trakt": 205387
+      },
+      "year": 2025,
+      "title": "Deli Brothers",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt13930822",
+        "plex": {
+          "guid": "6016d94378a766002ba722b2",
+          "slug": "tomb-raider-the-legend-of-lara-croft"
+        },
+        "slug": "tomb-raider-the-legend-of-lara-croft",
+        "tmdb": 117830,
+        "tvdb": 409591,
+        "trakt": 172944
+      },
+      "year": 2024,
+      "title": "Tomb Raider: The Legend of Lara Croft",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt40247521",
+        "plex": {
+          "guid": "68a99a0a5dc043ed2c1846f4",
+          "slug": "haunted-hearts"
+        },
+        "slug": "haunted-hearts",
+        "tmdb": 298610,
+        "tvdb": 466998,
+        "trakt": 295351
+      },
+      "year": 2026,
+      "title": "Haunted Hearts",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt38673133",
+        "plex": {
+          "guid": "68f42aeb56e41707b2ae55f5",
+          "slug": "the-final-season"
+        },
+        "slug": "the-final-season",
+        "tmdb": 302919,
+        "tvdb": 469202,
+        "trakt": 303399
+      },
+      "year": 2025,
+      "title": "The Final Season",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt19853270",
+        "plex": {
+          "guid": "66dd6a59bd30c65b6c7fb689",
+          "slug": "the-river-county-case"
+        },
+        "slug": "the-river-county-case",
+        "tmdb": 270734,
+        "tvdb": 454196,
+        "trakt": 255091
+      },
+      "year": 2025,
+      "title": "The River County Case",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt39133077",
+        "plex": {
+          "guid": "6882c2ae735667265b1e9e48",
+          "slug": "the-girl-from-room-seven"
+        },
+        "slug": "the-girl-from-room-seven",
+        "tmdb": 296523,
+        "tvdb": 465411,
+        "trakt": 292696
+      },
+      "year": 2026,
+      "title": "The Girl from Room Seven",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt39387440",
+        "plex": {
+          "guid": "67deb60606664721b90ad656",
+          "slug": "last-call-at-the-market"
+        },
+        "slug": "last-call-at-the-market",
+        "tmdb": 287011,
+        "tvdb": 461821,
+        "trakt": 280075
+      },
+      "year": 2026,
+      "title": "Last Call at the Market",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt17371078",
+        "plex": {
+          "guid": "61effc8a9911a6c1eee7f3dd",
+          "slug": "the-ark-of-morning"
+        },
+        "slug": "the-ark-of-morning",
+        "tmdb": 47663,
+        "tvdb": 415089,
+        "trakt": 195475
+      },
+      "year": 2023,
+      "title": "The Ark of Morning",
+      "aired_episodes": 33
+    },
+    {
+      "ids": {
+        "imdb": "tt29899148",
+        "plex": {
+          "guid": "65317cf688bf442aec808583",
+          "slug": "jurassic-world-chaos-theory"
+        },
+        "slug": "jurassic-world-chaos-theory",
+        "tmdb": 237512,
+        "tvdb": 440997,
+        "trakt": 211950
+      },
+      "year": 2024,
+      "title": "Jurassic World: Chaos Theory",
+      "aired_episodes": 39
+    },
+    {
+      "ids": {
+        "imdb": "tt35316779",
+        "plex": {
+          "guid": "66ab4803d9c1d48c238fd200",
+          "slug": "salvador-s-crossing"
+        },
+        "slug": "salvador-s-crossing",
+        "tmdb": 259856,
+        "tvdb": 452682,
+        "trakt": 249706
+      },
+      "year": 2026,
+      "title": "Salvador's Crossing",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt20285780",
+        "plex": {
+          "guid": "628518adc03a80842c2275d8",
+          "slug": "the-clever-hand"
+        },
+        "slug": "the-clever-hand",
+        "tmdb": 202208,
+        "tvdb": 429915,
+        "trakt": 200166
+      },
+      "year": 2023,
+      "title": "The Clever Hand",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt36188448",
+        "plex": {
+          "guid": "65524be313943daa7922b474",
+          "slug": "the-manipulated"
+        },
+        "slug": "the-manipulated",
+        "tmdb": 239385,
+        "tvdb": 442170,
+        "trakt": 258558
+      },
+      "year": 2025,
+      "title": "The Manipulated",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt28298539",
+        "plex": {
+          "guid": "64a71b5cc831ca9a14e76aac",
+          "slug": "breathless"
+        },
+        "slug": "breathless",
+        "tmdb": 230069,
+        "tvdb": 437173,
+        "trakt": 239249
+      },
+      "year": 2024,
+      "title": "Breathless",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt38734636",
+        "plex": {
+          "guid": "69a9849608107dfbd518d821",
+          "slug": "the-green-expanse"
+        },
+        "slug": "the-green-expanse",
+        "tmdb": 296285,
+        "tvdb": 474560,
+        "trakt": 292413
+      },
+      "year": 2026,
+      "title": "The Green Expanse",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt14681924",
+        "plex": {
+          "guid": "60a785e29bdbf5002ca54b5e",
+          "slug": "my-adventures-with-solar-man"
+        },
+        "slug": "my-adventures-with-solar-man",
+        "tmdb": 125928,
+        "tvdb": 403172,
+        "trakt": 180751
+      },
+      "year": 2023,
+      "title": "My Adventures with Solar Man",
+      "aired_episodes": 30
+    },
+    {
+      "ids": {
+        "imdb": "tt10795658",
+        "plex": {
+          "guid": "5e16253691c20300412003a8",
+          "slug": "alice-in-borderland"
+        },
+        "slug": "alice-in-borderland",
+        "tmdb": 110316,
+        "tvdb": 376472,
+        "trakt": 157841
+      },
+      "year": 2020,
+      "title": "Alice in Borderland",
+      "aired_episodes": 22
+    },
+    {
+      "ids": {
+        "imdb": "tt8888540",
+        "plex": {
+          "guid": "620e6e8ae7560641ece21e4f",
+          "slug": "palm-royale"
+        },
+        "slug": "palm-royale",
+        "tmdb": 157367,
+        "tvdb": 415970,
+        "trakt": 193301
+      },
+      "year": 2024,
+      "title": "Palm Royale",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt35495063",
+        "plex": {
+          "guid": "677d203012fb31a0ca0699f8",
+          "slug": "elite-response"
+        },
+        "slug": "elite-response",
+        "tmdb": 281281,
+        "tvdb": 479932,
+        "trakt": 272426
+      },
+      "year": 2026,
+      "title": "Elite Response",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt35664835",
+        "plex": {
+          "guid": "684a5133023d45e8b9801526",
+          "slug": "body-of-champions-east"
+        },
+        "slug": "body-of-champions-east",
+        "tmdb": 293613,
+        "tvdb": 2207257,
+        "trakt": 288251
+      },
+      "year": 2025,
+      "title": "Body of Champions: East",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt13293588",
+        "plex": {
+          "guid": "5e01fc33932ff9001db3b242",
+          "slug": "the-jobless-mage-s-second-life"
+        },
+        "slug": "the-jobless-mage-s-second-life",
+        "tmdb": 94664,
+        "tvdb": 371310,
+        "trakt": 156460
+      },
+      "year": 2021,
+      "title": "The Jobless Mage's Second Life",
+      "aired_episodes": 60
+    },
+    {
+      "ids": {
+        "imdb": "tt35149250",
+        "plex": {
+          "guid": "670ec90d2c21405391b07d4e",
+          "slug": "the-art-of-mina"
+        },
+        "slug": "the-art-of-mina",
+        "tmdb": 273977,
+        "tvdb": 472689,
+        "trakt": 259403
+      },
+      "year": 2026,
+      "title": "The Art of Mina",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt15791630",
+        "plex": {
+          "guid": "61d17a07041a4a8d12c36111",
+          "slug": "the-kardashian-house"
+        },
+        "slug": "the-kardashian-house",
+        "tmdb": 154521,
+        "tvdb": 414093,
+        "trakt": 192158
+      },
+      "year": 2022,
+      "title": "The Kardashian House",
+      "aired_episodes": 70
+    },
+    {
+      "ids": {
+        "imdb": "tt31186865",
+        "plex": {
+          "guid": "65c615d2f8e51ca7dec512a1",
+          "slug": "elias-crow-s-return"
+        },
+        "slug": "elias-crow-s-return",
+        "tmdb": 245827,
+        "tvdb": 445873,
+        "trakt": 225018
+      },
+      "year": 2025,
+      "title": "Elias Crow's Return",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt12809802",
+        "plex": {
+          "guid": "5f7e10343c39010040de63f3",
+          "slug": "shadow-protocol-last-watch"
+        },
+        "slug": "shadow-protocol-last-watch",
+        "tmdb": 127366,
+        "tvdb": 386210,
+        "trakt": 165099
+      },
+      "year": 2025,
+      "title": "Shadow Protocol: Last Watch",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt21057450",
+        "plex": {
+          "guid": "62b5b86d346caa1dbf787bca",
+          "slug": "after-the-bell-rings"
+        },
+        "slug": "after-the-bell-rings",
+        "tmdb": 208397,
+        "tvdb": 421636,
+        "trakt": 198139
+      },
+      "year": 2023,
+      "title": "After the Bell Rings",
+      "aired_episodes": 24
+    }
+  ]
+}

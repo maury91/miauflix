@@ -1,0 +1,915 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20514",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"668d210a593436c0b3cb530e188ac4df\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/bf5TG9RODkPXmtJSgf8Iymof1wl.jpg",
+    "belongs_to_collection": null,
+    "budget": 11800000,
+    "genres": [
+      {
+        "id": 36,
+        "name": "History"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/the-examiner-s-dilemma",
+    "id": 1214931,
+    "imdb_id": "tt29567915",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Examiner’s Dilemma",
+    "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+    "popularity": 16.1276,
+    "poster_path": "/xthXNYltOOm80vW5Kxjzxx5gvQ6.jpg",
+    "production_companies": [
+      {
+        "id": 86382,
+        "logo_path": "/yzQivYdNoLd95XtP5ccspiVMDeM.png",
+        "name": "Blue Hour Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 10221,
+        "logo_path": "/99VfWRgKasZoyK9UVB39gnYvFrZ.png",
+        "name": "Blue Hour Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 166380,
+        "logo_path": "/w7jeLWAWm7lPzfIWDjYVIupbHNt.png",
+        "name": "Blue Hour Pictures",
+        "origin_country": "HU"
+      },
+      {
+        "id": 34982,
+        "logo_path": "/uvTmiRZzNfG88dVXi9hQ7eFNirq.png",
+        "name": "Blue Hour Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 282266,
+        "logo_path": null,
+        "name": "Blue Hour Pictures",
+        "origin_country": "HU"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "HU",
+        "name": "Hungary"
+      }
+    ],
+    "release_date": "2025-11-06",
+    "revenue": 37009109,
+    "runtime": 149,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Understanding is not absolution.",
+    "title": "The Examiner’s Dilemma",
+    "video": false,
+    "vote_average": 7.602,
+    "vote_count": 1435,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 149,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 150,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 148,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-examiner-s-dilemma",
+            "overview": "In the aftermath of a devastating war, a psychiatrist is assigned to assess whether captured leaders can stand trial. His private interviews with a calculating former deputy force him to weigh justice against the unsettling pull of intellectual understanding.",
+            "runtime": 0,
+            "tagline": "Understanding is not absolution.",
+            "title": "The Examiner’s Dilemma"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7ooMj8SdV54QMvRU2Ej0cSPKG7V.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y9XJkJf4UVBkGDLUd5MaL5O6JDh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3kk6UmiICMx3fbuk6TuLyPJPPuu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3GydSc8iIdhEgi9swE3FIzPFPm8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q7WfjCvEXca2YyJ203XmDwsmI8S.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/IZIZsmiFYMunvNOKpGA8qg6JsQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z9BV7KdthUkra9tFdBFl4llnanI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b3E2GInLVtdPhZs28J9Hu9uG92c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 14.892,
+          "height": 65,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/luBcOrF4OM4xZGKpgylTG5I3W7m.png",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 968
+        },
+        {
+          "aspect_ratio": 8.567,
+          "height": 208,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o7IxBWT4NVN2eW2HlGKmNZ6agjD.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1782
+        },
+        {
+          "aspect_ratio": 8.567,
+          "height": 208,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dqsALOxITiTnz76ifTP0vsFuEnK.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1782
+        },
+        {
+          "aspect_ratio": 15.654,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6YhQwoIrTWfGma09YzMEk7WeeP9.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 6105
+        },
+        {
+          "aspect_ratio": 10.87,
+          "height": 660,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vHERMUIYCbPnnYeSs7TU7PckfUu.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 7174
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xthXNYltOOm80vW5Kxjzxx5gvQ6.jpg",
+          "vote_average": 1.714,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7cWTGH2svfNHWVRjsfKIBob9pDj.jpg",
+          "vote_average": 10,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sxu8TsG7k06ymWL98ELEIE1EMZV.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6ycI4m8FW8iXJHyx0YLFiOz7YJ5.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2866,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nNj6Tl78MB6QLNC1Ge0gyoD7gD.jpg",
+          "vote_average": 4.458,
+          "vote_count": 12,
+          "width": 1911
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7acokAwroAFmpDgkwseQVOclwqt.jpg",
+          "vote_average": 3.892,
+          "vote_count": 14,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iZ1Y7w634Simap7anXWQDVwJWqY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5sIW7PmpnZDUoYGuw0HqEBbmzpa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/inUCmn9qXHPuGlDPLle0LlvN2pV.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 1233,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bYnmYlCQgH1GsY2a8LMp3FNosae.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 828
+        },
+        {
+          "aspect_ratio": 0.702,
+          "height": 2850,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j6LtdatIMpJNGf8Nx3tvtO3vZu6.jpg",
+          "vote_average": 1.35,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jgBuxWfrD5ku9PeoaxBFfXE1Z3F.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qzsN0ACTOuobTJJy2DU4WP28ylt.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Af5BiwjzQ6EBTQvZ7bZheQOLYho.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i1n8jejzR1MTlyYjxPI3gtOtR1E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

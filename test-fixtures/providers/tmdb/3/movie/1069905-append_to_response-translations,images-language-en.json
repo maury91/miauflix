@@ -1,0 +1,928 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13591",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f47bdf40137b4b623a7de3c2a964a5a5\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/wR9D9hQvCVBux16NauY4b7letdU.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/the-life-between-takes",
+    "id": 1069905,
+    "imdb_id": "tt30446847",
+    "origin_country": [
+      "GB",
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Life Between Takes",
+    "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+    "popularity": 10.1267,
+    "poster_path": "/lEXYpY9X17pGC7xYYy17Guv0L3J.jpg",
+    "production_companies": [
+      {
+        "id": 84041,
+        "logo_path": "/nw4kyc29QRpNtFbdsBHkRSFavvt.png",
+        "name": "Westward Frame Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 437,
+        "logo_path": "/nu20mtwbEIhUNnQ5NXVhHsNknZj.png",
+        "name": "Westward Frame Productions",
+        "origin_country": "GB"
+      },
+      {
+        "id": 181486,
+        "logo_path": null,
+        "name": "Westward Frame Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2025-11-14",
+    "revenue": 0,
+    "runtime": 132,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      },
+      {
+        "english_name": "Italian",
+        "iso_639_1": "it",
+        "name": "Italiano"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The role you play off camera matters most.",
+    "title": "The Life Between Takes",
+    "video": false,
+    "vote_average": 6.134,
+    "vote_count": 469,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 132,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 132,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 132,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 132,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 132,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 132,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-life-between-takes",
+            "overview": "Beloved screen actor Julian Cross leaves a publicity tour for an unplanned journey through the places and relationships he abandoned on the way to fame. Accompanied by his longtime manager, he begins to see how little he knows about the person behind his public image.",
+            "runtime": 0,
+            "tagline": "The role you play off camera matters most.",
+            "title": "The Life Between Takes"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6XiHSoh5JUddbYu9qZ4p1Due5BI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pZc47DYloGB1Mcc6zYIXRjMVdF3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2400
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/82dSryKpmn0AxeQBAUJNvn0RmOG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6xEl7m5gk8tEJQwQ8nufCAdaVT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.298,
+          "height": 857,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c30boUKrENwHp5vsvz8AkeUDWwo.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1112
+        },
+        {
+          "aspect_ratio": 1.298,
+          "height": 857,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xEJP3ZDizZoc4Itflo2Ie9dKuB0.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1112
+        },
+        {
+          "aspect_ratio": 3.47,
+          "height": 232,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8E4sHio8B2DA0dWi74z5C1wjchG.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 805
+        },
+        {
+          "aspect_ratio": 1.282,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yCJDsrDbP4VkfPdVuUE8L79bF7R.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lEXYpY9X17pGC7xYYy17Guv0L3J.jpg",
+          "vote_average": 5.928,
+          "vote_count": 14,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bKLm1xS9DsODWB4i1SxTEvLXab9.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aeOCq6H3he7AGQdmr0we7q0o2zk.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tDiFuiTCwnvGpouXC2cIVQTcYCt.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wOWglmJ72PATp9KoThqyOXsTXd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kZZApPoR6wQ82neuocYORr7vh3M.jpg",
+          "vote_average": 1.75,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pIat72I1IWTkFW0jfs3I5UcU8qd.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qxeurt3nYyKVXijpbj60DEr44My.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q4ZNdJxZyQ60HcpG5Kd6oInD64u.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gsa7YUa0fZ4m7LJZhiOfwUK6AXy.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rAQ3ZcL4sMeWHyrHjmCVlW9lK4C.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5EEVjtR99028YTKILx1zZVqlkdb.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3YmNS4sYJlEmCVuzpISHgd4XBry.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 2835,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bwKVkbZswfqYkzG673W1q5ut1Kp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1984
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r65crhHdcFOvI9kuB6IUioGZYfY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4U7av2g1KRMsneIQMpXRByuV9Zq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cYB8DdU4WykR14tYIFFY9jiGSFK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/usp918HgikLwkKAaWQeFLgxsCtZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

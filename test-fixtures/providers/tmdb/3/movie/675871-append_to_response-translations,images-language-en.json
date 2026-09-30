@@ -1,0 +1,675 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23691",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d4c99b7551d4bee04a006b3d6be9ff07\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mqO2Q8BeCuESJUVZgwyWRDa9Ux9.jpg",
+    "belongs_to_collection": {
+      "id": 449462,
+      "name": "Super Troopers: Wedding Detail Collection",
+      "poster_path": "/4AZESG5xRjB8SG7CVovQJsdgi6l.jpg",
+      "backdrop_path": "/6BGdTvwgcknQZxw9CMAJUdYNyEP.jpg"
+    },
+    "budget": 20000000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://example.test/films/super-troopers-wedding-detail",
+    "id": 675871,
+    "imdb_id": "tt8820258",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Super Troopers: Wedding Detail",
+    "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+    "popularity": 47.9362,
+    "poster_path": "/ecTxAyfx4fdTMy2N288oZMMn3Ey.jpg",
+    "production_companies": [
+      {
+        "id": 2773,
+        "logo_path": "/ubyU2v6XcREGwyeieqdcxvZzvKc.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 127929,
+        "logo_path": "/7DLKyL15ETI9645XSr9JcbMV79c.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 52948,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 22213,
+        "logo_path": "/qx9K6bFWJupwde0xQDwOvXkOaL8.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-08-06",
+    "revenue": 6858200,
+    "runtime": 104,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The vows come with a side of chaos.",
+    "title": "Super Troopers: Wedding Detail",
+    "video": false,
+    "vote_average": 6.76,
+    "vote_count": 25,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 104,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 100,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 100,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 104,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 104,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 104,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/super-troopers-wedding-detail",
+            "overview": "A trooper's elaborate engagement plans collide with a narcotics case, leaving the squad to police both the wedding and each other.",
+            "runtime": 0,
+            "tagline": "The vows come with a side of chaos.",
+            "title": "Super Troopers: Wedding Detail"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sVtb0ASjjpJgz3fJYUqybGoLEp3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lT7JAJ70IDd3LRJn78apkfyf7kv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tTaXsvUv2hX5nzNvutuiJizeURy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n5k5SwTN6XCbKTSulxnNm6t4Hsj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.739,
+          "height": 1297,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y3TH2T94gzxHKimHKNB2a30ZrXL.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3553
+        },
+        {
+          "aspect_ratio": 6.287,
+          "height": 356,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m5oChjEmB9nULBhgS9LHXdlJC82.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2238
+        },
+        {
+          "aspect_ratio": 3.869,
+          "height": 656,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wPtOpsfgCWKZK8cVn7xUlSLff2J.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2538
+        },
+        {
+          "aspect_ratio": 1.252,
+          "height": 1525,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xfvETCCwu5l0xj4gkc2JKdafa8E.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1910
+        },
+        {
+          "aspect_ratio": 2.748,
+          "height": 1291,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zZCdbc3vlKw1Q7RA0XukLV7yQUY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3548
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ecTxAyfx4fdTMy2N288oZMMn3Ey.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1001
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/VVU42nqsEmUtFpH1d9MHj5BIpF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zMSIzHxhiBriMZ74lVF4beRGlO3.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1334
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8yBocksqW4qGWKTQlnS8iEbQvAm.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eV2Uhn8A93V4ELySlrBGvBuQJLj.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iZK7dZXAZEqAt5TYionYretrgWg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zx7RBuw1IxMO4Vft5wzaupA96ul.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1753,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2QFmB0ZNPZlVyGKC9lVqo8QTzWd.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1169
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iGPEYmQFZGJa2Ubk977n3zE4gaz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1334
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xcBnbpFuOZrvZjKHXptzH30ULyh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1334
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gBdIh8vvdFvxSDBIBNqtDuzq4b1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1001
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4QNT2Ge43sqh1TdUy5yDa2GlBBt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bIWsN5HCgwKRrSQ7XdYtIH4KADm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rbm7mxRe9jVSVXMgZO7mzyRZyt4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xCzdynZ8HqFyQL5Fw7fuUdAPOoM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i6cQK5GUVfBbdg6RrK6tP16kFF0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 755,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pjgqDbeeqEyIrUQajIkemfvU6YW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 504
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hOAjBggD7zWat7nqt7dUUDH5ZRG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fHp10rovi17eZJ2F04swV17aVNa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

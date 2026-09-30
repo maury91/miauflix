@@ -1,0 +1,720 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "discover,popular,movie,resource:movie:875162,resource:movie:1040648,resource:movie:1112194,resource:movie:1044240,resource:movie:1146382,resource:movie:918266,resource:movie:1087715,resource:movie:1187625,resource:movie:1069346,resource:movie:1077926,resource:movie:1157128,resource:movie:1051116,resource:movie:1024887,resource:movie:1014382,resource:movie:1131132,resource:movie:1192614,resource:movie:906431,resource:movie:1155630,resource:movie:1345224,resource:movie:1047409,resource:movie:1088587,resource:movie:1026370,resource:movie:830859,resource:movie:1038484,resource:movie:893087,resource:movie:1355758,resource:movie:1069566,resource:movie:1302910,resource:movie:1065196,resource:movie:1068035,resource:movie:1048093,resource:movie:1033140,resource:movie:1325277,resource:movie:1233639,resource:movie:1127912,resource:movie:1018119,resource:movie:965173,resource:movie:1374633,resource:movie:1129980,resource:movie:1316734,resource:movie:1037296,resource:movie:1385497,resource:movie:1103789,resource:movie:1354147,resource:movie:1004362,resource:movie:1087296,resource:movie:1224697,resource:movie:1204556,resource:movie:1191569,resource:movie:1177593",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "492",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "5",
+    "x-pagination-page-count": "10",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt14507394",
+        "plex": {
+          "guid": "6083dab7188611002d61052a",
+          "slug": "mercy-creek"
+        },
+        "slug": "mercy-creek-2026",
+        "tmdb": 1088434,
+        "trakt": 875162
+      },
+      "year": 2026,
+      "title": "Mercy Creek"
+    },
+    {
+      "ids": {
+        "imdb": "tt32214143",
+        "plex": {
+          "guid": "662c0eeccf98039405fe0429",
+          "slug": "the-great-cat-caper"
+        },
+        "slug": "the-great-cat-caper-2025",
+        "tmdb": 1280282,
+        "trakt": 1040648
+      },
+      "year": 2025,
+      "title": "The Great Cat Caper"
+    },
+    {
+      "ids": {
+        "imdb": "tt33502160",
+        "plex": {
+          "guid": "66fa4f677453e16989d10136",
+          "slug": "the-perfect-nanny"
+        },
+        "slug": "the-perfect-nanny-2025",
+        "tmdb": 1362315,
+        "trakt": 1112194
+      },
+      "year": 2025,
+      "title": "The Perfect Nanny"
+    },
+    {
+      "ids": {
+        "imdb": "tt32267691",
+        "plex": {
+          "guid": "663515fea048bebb106e946b",
+          "slug": "the-song-he-borrowed"
+        },
+        "slug": "the-song-he-borrowed-2026",
+        "tmdb": 1284016,
+        "trakt": 1044240
+      },
+      "year": 2026,
+      "title": "The Song He Borrowed"
+    },
+    {
+      "ids": {
+        "imdb": "tt34992378",
+        "plex": {
+          "guid": "675e5fe520aec2000d6f036d",
+          "slug": "christmas-with-conditions"
+        },
+        "slug": "christmas-with-conditions-2025",
+        "tmdb": 1401318,
+        "trakt": 1146382
+      },
+      "year": 2025,
+      "title": "Christmas, With Conditions"
+    },
+    {
+      "ids": {
+        "imdb": "tt28083456",
+        "plex": {
+          "guid": "649097955e73f79c7393e948",
+          "slug": "second-set"
+        },
+        "slug": "second-set-2025",
+        "tmdb": 1140498,
+        "trakt": 918266
+      },
+      "year": 2025,
+      "title": "Second Set"
+    },
+    {
+      "ids": {
+        "imdb": "tt33365126",
+        "plex": {
+          "guid": "66e466e414b2ce3fbc0c3242",
+          "slug": "caroline-runs-south"
+        },
+        "slug": "caroline-runs-south-2026",
+        "tmdb": 1329471,
+        "trakt": 1087715
+      },
+      "year": 2026,
+      "title": "Caroline Runs South"
+    },
+    {
+      "ids": {
+        "imdb": "tt30691214",
+        "plex": {
+          "guid": "659191d68bdde13813e932cd",
+          "slug": "the-orchard-coven"
+        },
+        "slug": "the-orchard-coven-2026",
+        "tmdb": 1450527,
+        "trakt": 1187625
+      },
+      "year": 2026,
+      "title": "The Orchard Coven"
+    },
+    {
+      "ids": {
+        "imdb": "tt32104007",
+        "plex": {
+          "guid": "661c3bd438450fc0200a194f",
+          "slug": "the-young-commander"
+        },
+        "slug": "the-young-commander-2026",
+        "tmdb": 1308767,
+        "trakt": 1069346
+      },
+      "year": 2026,
+      "title": "The Young Commander"
+    },
+    {
+      "ids": {
+        "imdb": "tt34477910",
+        "plex": {
+          "guid": "67327c7c327d374ee8f4ca75",
+          "slug": "the-queen-s-rescue"
+        },
+        "slug": "the-queen-s-rescue-2026",
+        "tmdb": 1318621,
+        "trakt": 1077926
+      },
+      "year": 2026,
+      "title": "The Queen’s Rescue"
+    },
+    {
+      "ids": {
+        "imdb": "tt32394984",
+        "plex": {
+          "guid": "664a6793df4db8e8b63573fb",
+          "slug": "wedding-at-the-border"
+        },
+        "slug": "wedding-at-the-border-2026",
+        "tmdb": 1414413,
+        "trakt": 1157128
+      },
+      "year": 2026,
+      "title": "Wedding at the Border"
+    },
+    {
+      "ids": {
+        "imdb": "tt32393988",
+        "plex": {
+          "guid": "6647e4d172e5befb43bed8be",
+          "slug": "the-shadow-door"
+        },
+        "slug": "the-shadow-door-2026",
+        "tmdb": 1291595,
+        "trakt": 1051116
+      },
+      "year": 2026,
+      "title": "The Shadow Door"
+    },
+    {
+      "ids": {
+        "imdb": "tt15181326",
+        "plex": {
+          "guid": "6118d1cc5a55e1002c081b7b",
+          "slug": "dead-man-s-switchboard"
+        },
+        "slug": "dead-man-s-switchboard-2026",
+        "tmdb": 1263012,
+        "trakt": 1024887
+      },
+      "year": 2026,
+      "title": "Dead Man's Switchboard"
+    },
+    {
+      "ids": {
+        "imdb": "tt31511689",
+        "plex": {
+          "guid": "65e3eb0713989362d5cd05da",
+          "slug": "the-wanting-box"
+        },
+        "slug": "the-wanting-box-2025",
+        "tmdb": 1251717,
+        "trakt": 1014382
+      },
+      "year": 2025,
+      "title": "The Wanting Box"
+    },
+    {
+      "ids": {
+        "imdb": "tt21285562",
+        "plex": {
+          "guid": "62d7d0c54d0067dd4d6066f6",
+          "slug": "the-quiet-frequency"
+        },
+        "slug": "the-quiet-frequency-2026",
+        "tmdb": 1384216,
+        "trakt": 1131132
+      },
+      "year": 2026,
+      "title": "The Quiet Frequency"
+    },
+    {
+      "ids": {
+        "imdb": "tt36491653",
+        "plex": {
+          "guid": "67e932d40d41759f55879e42",
+          "slug": "the-man-from-cell-nine"
+        },
+        "slug": "the-man-from-cell-nine-2025",
+        "tmdb": 1456349,
+        "trakt": 1192614
+      },
+      "year": 2025,
+      "title": "The Man from Cell Nine"
+    },
+    {
+      "ids": {
+        "imdb": "tt12583926",
+        "plex": {
+          "guid": "5f409fbafea1a1003fb0fff8",
+          "slug": "a-place-at-the-table"
+        },
+        "slug": "a-place-at-the-table-2025",
+        "tmdb": 1126336,
+        "trakt": 906431
+      },
+      "year": 2025,
+      "title": "A Place at the Table"
+    },
+    {
+      "ids": {
+        "imdb": "tt33479805",
+        "plex": {
+          "guid": "66f55d774b7e982e3256b2f9",
+          "slug": "lagoon-of-teeth"
+        },
+        "slug": "lagoon-of-teeth-2026",
+        "tmdb": 1412598,
+        "trakt": 1155630
+      },
+      "year": 2026,
+      "title": "Lagoon of Teeth"
+    },
+    {
+      "ids": {
+        "imdb": "tt39389929",
+        "plex": {
+          "guid": "6973471fef031a6f888d88d6",
+          "slug": "the-nursery-files"
+        },
+        "slug": "the-nursery-files-2026",
+        "tmdb": 1620991,
+        "trakt": 1345224
+      },
+      "year": 2026,
+      "title": "The Nursery Files"
+    },
+    {
+      "ids": {
+        "imdb": "tt32323252",
+        "plex": {
+          "guid": "663f0d93c6dbf042841ae443",
+          "slug": "the-fighter-from-fairmont"
+        },
+        "slug": "the-fighter-from-fairmont-2025",
+        "tmdb": 1287322,
+        "trakt": 1047409
+      },
+      "year": 2025,
+      "title": "The Fighter from Fairmont"
+    },
+    {
+      "ids": {
+        "imdb": "tt26783625",
+        "plex": {
+          "guid": "63f9f39c0b6d4eb384f9bb2e",
+          "slug": "the-house-at-bone-lake"
+        },
+        "slug": "the-house-at-bone-lake-2025",
+        "tmdb": 1330421,
+        "trakt": 1088587
+      },
+      "year": 2025,
+      "title": "The House at Bone Lake"
+    },
+    {
+      "ids": {
+        "imdb": "tt32159989",
+        "plex": {
+          "guid": "662608913b7eee1e807dd77f",
+          "slug": "the-faculty-line"
+        },
+        "slug": "the-faculty-line-2025",
+        "tmdb": 1265063,
+        "trakt": 1026370
+      },
+      "year": 2025,
+      "title": "The Faculty Line"
+    },
+    {
+      "ids": {
+        "imdb": "tt22526100",
+        "plex": {
+          "guid": "63431d1b569aac9831dcf041",
+          "slug": "a-theory-of-us"
+        },
+        "slug": "a-theory-of-us-2026",
+        "tmdb": 1032863,
+        "trakt": 830859
+      },
+      "year": 2026,
+      "title": "A Theory of Us"
+    },
+    {
+      "ids": {
+        "imdb": "tt32549601",
+        "plex": {
+          "guid": "66639e418a7341c0d6a6e11b",
+          "slug": "a-dog-named-hope"
+        },
+        "slug": "a-dog-named-hope-2025",
+        "tmdb": 1277988,
+        "trakt": 1038484
+      },
+      "year": 2025,
+      "title": "A Dog Named Hope"
+    },
+    {
+      "ids": {
+        "imdb": "tt19838566",
+        "plex": {
+          "guid": "627b6f9d53b3f4e85b80f8e2",
+          "slug": "the-fjord-below"
+        },
+        "slug": "the-fjord-below-2026",
+        "tmdb": 1110034,
+        "trakt": 893087
+      },
+      "year": 2026,
+      "title": "The Fjord Below"
+    },
+    {
+      "ids": {
+        "imdb": "tt39389429",
+        "plex": {
+          "guid": "699ec433aca3e887198b475f",
+          "slug": "twenty-years-later"
+        },
+        "slug": "twenty-years-later-2026",
+        "tmdb": 1637319,
+        "trakt": 1355758
+      },
+      "year": 2026,
+      "title": "Twenty Years Later"
+    },
+    {
+      "ids": {
+        "imdb": "tt32123395",
+        "plex": {
+          "guid": "6621e80f9e8fc1e68a2a6f4b",
+          "slug": "the-altered-majority"
+        },
+        "slug": "the-altered-majority-2025",
+        "tmdb": 1309012,
+        "trakt": 1069566
+      },
+      "year": 2025,
+      "title": "The Altered Majority"
+    },
+    {
+      "ids": {
+        "imdb": "tt28283547",
+        "plex": {
+          "guid": "66048284fb7c4e695549ecdc",
+          "slug": "a-monster-hunter-s-bargain"
+        },
+        "slug": "a-monster-hunter-s-bargain-2025",
+        "tmdb": 1571470,
+        "trakt": 1302910
+      },
+      "year": 2025,
+      "title": "A Monster Hunter’s Bargain"
+    },
+    {
+      "ids": {
+        "imdb": "tt32649961",
+        "plex": {
+          "guid": "66769afa344c86f27f2d808d",
+          "slug": "the-imperial-escort"
+        },
+        "slug": "the-imperial-escort-2026",
+        "tmdb": 1305781,
+        "trakt": 1065196
+      },
+      "year": 2026,
+      "title": "The Imperial Escort"
+    },
+    {
+      "ids": {
+        "imdb": "tt29028515",
+        "plex": {
+          "guid": "64fdc3b86a04359e1d4ba1ae",
+          "slug": "cellblock-chances"
+        },
+        "slug": "cellblock-chances-2026",
+        "tmdb": 1307373,
+        "trakt": 1068035
+      },
+      "year": 2026,
+      "title": "Cellblock Chances"
+    },
+    {
+      "ids": {
+        "imdb": "tt32332915",
+        "plex": {
+          "guid": "663e0ca8fc0ef23672ea898a",
+          "slug": "muse-for-hire"
+        },
+        "slug": "muse-for-hire-2026",
+        "tmdb": 1288059,
+        "trakt": 1048093
+      },
+      "year": 2026,
+      "title": "Muse for Hire"
+    },
+    {
+      "ids": {
+        "imdb": "tt32063098",
+        "plex": {
+          "guid": "6619799d7fea74fbbb24bb8c",
+          "slug": "the-high-stakes-table"
+        },
+        "slug": "the-high-stakes-table-2025",
+        "tmdb": 1272166,
+        "trakt": 1033140
+      },
+      "year": 2025,
+      "title": "The High Stakes Table"
+    },
+    {
+      "ids": {
+        "imdb": "tt19035928",
+        "plex": {
+          "guid": "6242c10d7750797add664b94",
+          "slug": "bulge-behind-enemy-lines"
+        },
+        "slug": "bulge-behind-enemy-lines-2026",
+        "tmdb": 1594914,
+        "trakt": 1325277
+      },
+      "year": 2026,
+      "title": "Bulge: Behind Enemy Lines"
+    },
+    {
+      "ids": {
+        "imdb": "tt36590417",
+        "plex": {
+          "guid": "6813a4e979ba86ac99bb0dcf",
+          "slug": "curtain-call-sophie"
+        },
+        "slug": "curtain-call-sophie-2026",
+        "tmdb": 1504358,
+        "trakt": 1233639
+      },
+      "year": 2026,
+      "title": "Curtain Call, Sophie"
+    },
+    {
+      "ids": {
+        "imdb": "tt34379307",
+        "plex": {
+          "guid": "672c9c813e83d965a28e47bb",
+          "slug": "ashes-of-our-house"
+        },
+        "slug": "ashes-of-our-house-2026",
+        "tmdb": 1380316,
+        "trakt": 1127912
+      },
+      "year": 2026,
+      "title": "Ashes of Our House"
+    },
+    {
+      "ids": {
+        "imdb": "tt31281659",
+        "plex": {
+          "guid": "65d1a89b25b418db7b5d7432",
+          "slug": "merv-s-two-homes"
+        },
+        "slug": "merv-s-two-homes-2025",
+        "tmdb": 1255775,
+        "trakt": 1018119
+      },
+      "year": 2025,
+      "title": "Merv's Two Homes"
+    },
+    {
+      "ids": {
+        "imdb": "tt14264694",
+        "plex": {
+          "guid": "605a29e71273d7002c347714",
+          "slug": "the-breach-years"
+        },
+        "slug": "the-breach-years-2025",
+        "tmdb": 1196067,
+        "trakt": 965173
+      },
+      "year": 2025,
+      "title": "The Breach Years"
+    },
+    {
+      "ids": {
+        "imdb": "tt38681832",
+        "plex": {
+          "guid": "68f1019af101ea8c3096eb99",
+          "slug": "the-black-shore-case"
+        },
+        "slug": "the-black-shore-case-2026",
+        "tmdb": 1560681,
+        "trakt": 1374633
+      },
+      "year": 2026,
+      "title": "The Black Shore Case"
+    },
+    {
+      "ids": {
+        "imdb": "tt34494076",
+        "plex": {
+          "guid": "67342a60b379638489ce4ff6",
+          "slug": "teeth-in-the-marsh"
+        },
+        "slug": "teeth-in-the-marsh-2026",
+        "tmdb": 1382832,
+        "trakt": 1129980
+      },
+      "year": 2026,
+      "title": "Teeth in the Marsh"
+    },
+    {
+      "ids": {
+        "imdb": "tt38238651",
+        "plex": {
+          "guid": "68c8329f577373a207942bc3",
+          "slug": "the-internship-program"
+        },
+        "slug": "the-internship-program-2026",
+        "tmdb": 1584215,
+        "trakt": 1316734
+      },
+      "year": 2026,
+      "title": "The Internship Program"
+    },
+    {
+      "ids": {
+        "imdb": "tt32155665",
+        "plex": {
+          "guid": "6626088d3b7eee1e807dd57f",
+          "slug": "three-at-the-table"
+        },
+        "slug": "three-at-the-table-2026",
+        "tmdb": 1276704,
+        "trakt": 1037296
+      },
+      "year": 2026,
+      "title": "Three at the Table"
+    },
+    {
+      "ids": {
+        "imdb": "tt37042085",
+        "plex": {
+          "guid": "6840a424aa39c5ad04d6ca33",
+          "slug": "elize-the-poisoned-vow"
+        },
+        "slug": "elize-the-poisoned-vow-2026",
+        "tmdb": 1487861,
+        "trakt": 1385497
+      },
+      "year": 2026,
+      "title": "Elize: The Poisoned Vow"
+    },
+    {
+      "ids": {
+        "imdb": "tt33335602",
+        "plex": {
+          "guid": "66de4dd359a10caa8db9bcf0",
+          "slug": "grease-gears-secrets"
+        },
+        "slug": "grease-gears-secrets-2025",
+        "tmdb": 1352755,
+        "trakt": 1103789
+      },
+      "year": 2025,
+      "title": "Grease, Gears & Secrets"
+    },
+    {
+      "ids": {
+        "imdb": "tt37275992",
+        "plex": {
+          "guid": "68568927b59d28dec1893a2b",
+          "slug": "the-shipping-heiress"
+        },
+        "slug": "the-shipping-heiress-2026",
+        "tmdb": 1631807,
+        "trakt": 1354147
+      },
+      "year": 2026,
+      "title": "The Shipping Heiress"
+    },
+    {
+      "ids": {
+        "imdb": "tt35298123",
+        "plex": {
+          "guid": "6780d7aa5d22e687d518cc07",
+          "slug": "camp-miasma-the-final-cut"
+        },
+        "slug": "camp-miasma-the-final-cut-2026",
+        "tmdb": 1240889,
+        "trakt": 1004362
+      },
+      "year": 2026,
+      "title": "Camp Miasma: The Final Cut"
+    },
+    {
+      "ids": {
+        "imdb": "tt33095251",
+        "plex": {
+          "guid": "66bd8236aa2252647b024b81",
+          "slug": "kitchen-summer"
+        },
+        "slug": "kitchen-summer-2026",
+        "tmdb": 1329016,
+        "trakt": 1087296
+      },
+      "year": 2026,
+      "title": "Kitchen Summer"
+    },
+    {
+      "ids": {
+        "imdb": "tt6743524",
+        "plex": {
+          "guid": "5f40ce1cbf3e560040d5d45e",
+          "slug": "the-reunion-tour"
+        },
+        "slug": "the-reunion-tour-2026",
+        "tmdb": 1493400,
+        "trakt": 1224697
+      },
+      "year": 2026,
+      "title": "The Reunion Tour"
+    },
+    {
+      "ids": {
+        "imdb": "tt36647890",
+        "plex": {
+          "guid": "6813a55875454b9deae927b8",
+          "slug": "river-fields-night-shift"
+        },
+        "slug": "river-fields-night-shift-2026",
+        "tmdb": 1470130,
+        "trakt": 1204556
+      },
+      "year": 2026,
+      "title": "River Fields, Night Shift"
+    },
+    {
+      "ids": {
+        "imdb": "tt36352591",
+        "plex": {
+          "guid": "67e5856c9b8f3779f381af9e",
+          "slug": "a-villa-for-two"
+        },
+        "slug": "a-villa-for-two-2026",
+        "tmdb": 1455079,
+        "trakt": 1191569
+      },
+      "year": 2026,
+      "title": "A Villa for Two"
+    },
+    {
+      "ids": {
+        "imdb": "tt32395062",
+        "plex": {
+          "guid": "664a6793e5c8edbb6fbd0493",
+          "slug": "the-k-9-pursuit"
+        },
+        "slug": "the-k-9-pursuit-2025",
+        "tmdb": 1439112,
+        "trakt": 1177593
+      },
+      "year": 2025,
+      "title": "The K-9 Pursuit"
+    }
+  ]
+}

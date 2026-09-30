@@ -1,0 +1,580 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7166",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9aa082f9fce3f028f4923d7ca8beb0ba\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dc8YYZ5mAwq3n4AafVvV343MKN4.jpg",
+    "created_by": [
+      {
+        "id": 1382987,
+        "credit_id": "63c6d7fc6905fb00e9a5bd42",
+        "name": "Remy Finch",
+        "original_name": "Remy Finch",
+        "gender": 2,
+        "profile_path": "/uLQWOoq11TKqnLfJBu90aKEGj8O.jpg"
+      },
+      {
+        "id": 34522,
+        "credit_id": "63c6d8a2de11e50094b9d4ce",
+        "name": "Taylor Hart",
+        "original_name": "Taylor Hart",
+        "gender": 1,
+        "profile_path": "/eaEP8fYoHOag9sLnj25bUFtcCob.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2025-04-17",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/series/amber-lantern-rosefield",
+    "id": 218510,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2025-04-17",
+    "last_episode_to_air": {
+      "id": 5995912,
+      "name": "Hidden Sky",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 5.5,
+      "vote_count": 2,
+      "air_date": "2025-04-17",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 32,
+      "season_number": 1,
+      "show_id": 218510,
+      "still_path": "/fCXo1bWxUHfLGuTfQFRP3uiMZkR.jpg"
+    },
+    "name": "Amber Lantern: Rosefield",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1024,
+        "logo_path": "/w7HfLNm9CWwRmAMU58udl2L7We7.png",
+        "name": "Last Valley Network",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Amber Lantern: Rosefield",
+    "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 7.3119,
+    "poster_path": "/1EzcDTGhbbvTS27iKK4ompIQjva.jpg",
+    "production_companies": [
+      {
+        "id": 191137,
+        "logo_path": null,
+        "name": "Hidden Lantern Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Quiet Meridian Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 210099,
+        "logo_path": "/g5oRCNCi8kNVb8gEoSoIcqkhjmR.png",
+        "name": "Ivory Station Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 75855,
+        "logo_path": null,
+        "name": "Northern Orchard Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-04-17",
+        "episode_count": 8,
+        "id": 324827,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/1EzcDTGhbbvTS27iKK4ompIQjva.jpg",
+        "season_number": 1,
+        "vote_average": 7.2
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.2,
+    "vote_count": 13,
+    "external_ids": {
+      "imdb_id": "tt18566094",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 429874,
+      "tvrage_id": null,
+      "wikidata_id": "Q132820652",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Lantern: Rosefield",
+            "overview": "Amber Lantern: Rosefield follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-lantern-rosefield",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

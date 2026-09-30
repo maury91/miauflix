@@ -1,0 +1,1222 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:show:170566,resource:show:200801,resource:show:189114,resource:show:154383,resource:show:122709,resource:show:153575,resource:show:180774,resource:show:194475,resource:show:149335,resource:show:189717,resource:show:168471,resource:show:193032,resource:show:195530,resource:show:146413,resource:show:192837,resource:show:136732,resource:show:41793,resource:show:170954,resource:show:59660,resource:show:179557,resource:show:187261,resource:show:167450,resource:show:183528,resource:show:142508,resource:show:179636,resource:show:192442,resource:show:193802,resource:show:142048,resource:show:108966,resource:show:191307,resource:show:202107,resource:show:181803,resource:show:173940,resource:show:203265,resource:show:172648,resource:show:185579,resource:show:185981,resource:show:99718,resource:show:184773,resource:show:155090,resource:show:149635,resource:show:158804,resource:show:150900,resource:show:167395,resource:show:186545,resource:show:163643,resource:show:170597,resource:show:168750,resource:show:173916,resource:show:193367,resource:list:20124699",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "534",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "11",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "random",
+    "x-sort-how": "desc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13157618",
+          "plex": {
+            "guid": "5fd4f9d1741c48002dd1461c",
+            "slug": "copper-lantern-northbridge"
+          },
+          "slug": "copper-lantern-northbridge",
+          "tmdb": 114472,
+          "tvdb": 393203,
+          "trakt": 170566
+        },
+        "year": 2023,
+        "title": "Copper Lantern: Northbridge",
+        "aired_episodes": 6
+      },
+      "rank": 134,
+      "id": 854505007,
+      "listed_at": "2023-06-25T19:36:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt22074484",
+          "plex": {
+            "guid": "6399380b137c50eee700091d",
+            "slug": "scarlet-valley-juniper-vale"
+          },
+          "slug": "scarlet-valley-juniper-vale",
+          "tmdb": 216228,
+          "tvdb": 434136,
+          "trakt": 200801
+        },
+        "year": 2023,
+        "title": "Scarlet Valley: Juniper Vale",
+        "aired_episodes": 8
+      },
+      "rank": 142,
+      "id": 842528085,
+      "listed_at": "2023-06-04T00:51:31.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt15553922",
+          "plex": {
+            "guid": "5fad5de8fe9a78002d83a084",
+            "slug": "crimson-archive-bellhaven"
+          },
+          "slug": "crimson-archive-bellhaven",
+          "tmdb": 112833,
+          "tvdb": 403495,
+          "trakt": 189114
+        },
+        "year": 2022,
+        "title": "Crimson Archive: Bellhaven",
+        "aired_episodes": 10
+      },
+      "rank": 428,
+      "id": 670538764,
+      "listed_at": "2022-03-03T01:55:48.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8403570",
+          "plex": {
+            "guid": "5df5b930122c71001d430049",
+            "slug": "blue-bridge-bellhaven"
+          },
+          "slug": "blue-bridge-bellhaven",
+          "tmdb": 94801,
+          "tvdb": 371258,
+          "trakt": 154383
+        },
+        "year": 2019,
+        "title": "Blue Bridge: Bellhaven",
+        "aired_episodes": 12
+      },
+      "rank": 515,
+      "id": 602606502,
+      "listed_at": "2021-07-03T19:44:42.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt5348176",
+          "plex": {
+            "guid": "5d9c08da4eefaa001f5e44af",
+            "slug": "silver-voyage-kingswell"
+          },
+          "slug": "silver-voyage-kingswell",
+          "tmdb": 73107,
+          "tvdb": 333072,
+          "trakt": 122709
+        },
+        "year": 2018,
+        "title": "Silver Voyage: Kingswell",
+        "aired_episodes": 32
+      },
+      "rank": 164,
+      "id": 821382462,
+      "listed_at": "2023-04-17T23:45:38.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8690918",
+          "plex": {
+            "guid": "5e165a4361c6140040d9364e",
+            "slug": "quiet-archive-moonridge"
+          },
+          "slug": "quiet-archive-moonridge",
+          "tmdb": 96580,
+          "tvdb": 368166,
+          "trakt": 153575
+        },
+        "year": 2021,
+        "title": "Quiet Archive: Moonridge",
+        "aired_episodes": 44
+      },
+      "rank": 59,
+      "id": 982184019,
+      "listed_at": "2024-02-18T02:17:03.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14689620",
+          "plex": {
+            "guid": "611f8406909674002cb2b140",
+            "slug": "brass-orchard-glassford"
+          },
+          "slug": "brass-orchard-glassford",
+          "tmdb": 125940,
+          "tvdb": 403187,
+          "trakt": 180774
+        },
+        "year": 2022,
+        "title": "Brass Orchard: Glassford",
+        "aired_episodes": 10
+      },
+      "rank": 298,
+      "id": 740635266,
+      "listed_at": "2022-09-16T16:50:00.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11852810",
+          "plex": {
+            "guid": "6249737855fcf228186a3c10",
+            "slug": "blue-passage-stonehaven"
+          },
+          "slug": "blue-passage-stonehaven",
+          "tmdb": 196749,
+          "tvdb": 418549,
+          "trakt": 194475
+        },
+        "year": 2022,
+        "title": "Blue Passage: Stonehaven",
+        "aired_episodes": 8
+      },
+      "rank": 377,
+      "id": 694289219,
+      "listed_at": "2022-05-13T00:49:24.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8369840",
+          "plex": {
+            "guid": "5d9c08fdffd9ef001e99db36",
+            "slug": "blue-garden-stonehaven"
+          },
+          "slug": "blue-garden-stonehaven",
+          "tmdb": 79130,
+          "tvdb": 365722,
+          "trakt": 149335
+        },
+        "year": 2019,
+        "title": "Blue Garden: Stonehaven",
+        "aired_episodes": 20
+      },
+      "rank": 478,
+      "id": 623809411,
+      "listed_at": "2021-10-15T23:30:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14452776",
+          "plex": {
+            "guid": "611f8407767ddf002cb05be2",
+            "slug": "the-night-kitchen"
+          },
+          "slug": "the-night-kitchen",
+          "tmdb": 136315,
+          "tvdb": 403294,
+          "trakt": 189717
+        },
+        "year": 2022,
+        "title": "The Night Kitchen",
+        "aired_episodes": 46
+      },
+      "rank": 135,
+      "id": 854505507,
+      "listed_at": "2023-06-25T19:37:33.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13406094",
+          "plex": {
+            "guid": "5f9075bb583581002d739d91",
+            "slug": "golden-station-oak-harbor"
+          },
+          "slug": "golden-station-oak-harbor",
+          "tmdb": 111803,
+          "tvdb": 390430,
+          "trakt": 168471
+        },
+        "year": 2021,
+        "title": "Golden Station: Oak Harbor",
+        "aired_episodes": 21
+      },
+      "rank": 243,
+      "id": 775530673,
+      "listed_at": "2022-12-16T21:23:50.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt15090858",
+          "plex": {
+            "guid": "609ea08525134c002c958c60",
+            "slug": "crimson-horizon-oak-harbor"
+          },
+          "slug": "crimson-horizon-oak-harbor",
+          "tmdb": 125462,
+          "tvdb": 424591,
+          "trakt": 193032
+        },
+        "year": 2023,
+        "title": "Crimson Horizon: Oak Harbor",
+        "aired_episodes": 8
+      },
+      "rank": 172,
+      "id": 816436549,
+      "listed_at": "2023-04-07T18:59:50.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt17043230",
+          "plex": {
+            "guid": "6283c8d9c84de3abae294b9a",
+            "slug": "hidden-sky-pinewatch"
+          },
+          "slug": "hidden-sky-pinewatch",
+          "tmdb": 202102,
+          "tvdb": 419936,
+          "trakt": 195530
+        },
+        "year": 2022,
+        "title": "Hidden Sky: Pinewatch",
+        "aired_episodes": 31
+      },
+      "rank": 290,
+      "id": 742235762,
+      "listed_at": "2022-09-20T23:49:14.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8610082",
+          "plex": {
+            "guid": "5e16128304b9ad001e9a5ac0",
+            "slug": "emerald-archive-highwater"
+          },
+          "slug": "emerald-archive-highwater",
+          "tmdb": 90461,
+          "tvdb": 362280,
+          "trakt": 146413
+        },
+        "year": 2021,
+        "title": "Emerald Archive: Highwater",
+        "aired_episodes": 20
+      },
+      "rank": 502,
+      "id": 607409595,
+      "listed_at": "2021-07-22T21:59:04.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt21344706",
+          "plex": {
+            "guid": "61684b1f639d6e5b904443d7",
+            "slug": "northern-sky-pinewatch"
+          },
+          "slug": "northern-sky-pinewatch",
+          "tmdb": 136283,
+          "tvdb": 411469,
+          "trakt": 192837
+        },
+        "year": 2022,
+        "title": "Northern Sky: Pinewatch",
+        "aired_episodes": 16
+      },
+      "rank": 185,
+      "id": 807354697,
+      "listed_at": "2023-03-18T15:20:02.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8714904",
+          "plex": {
+            "guid": "5d9c0906ba2e21001f194485",
+            "slug": "last-sky-juniper-vale"
+          },
+          "slug": "last-sky-juniper-vale",
+          "tmdb": 80968,
+          "tvdb": 353232,
+          "trakt": 136732
+        },
+        "year": 2018,
+        "title": "Last Sky: Juniper Vale",
+        "aired_episodes": 30
+      },
+      "rank": 470,
+      "id": 629250273,
+      "listed_at": "2021-11-07T15:35:38.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt2085059",
+          "plex": {
+            "guid": "5d9c0863ef619b002047f234",
+            "slug": "last-compass-alder-bay"
+          },
+          "slug": "last-compass-alder-bay",
+          "tmdb": 42009,
+          "tvdb": 253463,
+          "trakt": 41793
+        },
+        "year": 2011,
+        "title": "Last Compass: Alder Bay",
+        "aired_episodes": 33
+      },
+      "rank": 138,
+      "id": 848827943,
+      "listed_at": "2023-06-15T16:29:55.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt12879632",
+          "plex": {
+            "guid": "5f6c9327d8075f00422805b0",
+            "slug": "blue-horizon-kingswell"
+          },
+          "slug": "blue-horizon-kingswell",
+          "tmdb": 115915,
+          "tvdb": 393566,
+          "trakt": 170954
+        },
+        "year": 2022,
+        "title": "Blue Horizon: Kingswell",
+        "aired_episodes": 8
+      },
+      "rank": 394,
+      "id": 689804791,
+      "listed_at": "2022-04-26T14:44:59.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt3032476",
+          "plex": {
+            "guid": "5d9c08254eefaa001f5d6dcb",
+            "slug": "crimson-signal-fox-hollow"
+          },
+          "slug": "crimson-signal-fox-hollow",
+          "tmdb": 60059,
+          "tvdb": 273181,
+          "trakt": 59660
+        },
+        "year": 2015,
+        "title": "Crimson Signal: Fox Hollow",
+        "aired_episodes": 63
+      },
+      "rank": 336,
+      "id": 720270034,
+      "listed_at": "2022-07-21T22:11:34.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14500082",
+          "plex": {
+            "guid": "60844302404320002c149cc9",
+            "slug": "crimson-station-bellhaven"
+          },
+          "slug": "crimson-station-bellhaven",
+          "tmdb": 124010,
+          "tvdb": 401513,
+          "trakt": 179557
+        },
+        "year": 2022,
+        "title": "Crimson Station: Bellhaven",
+        "aired_episodes": 30
+      },
+      "rank": 447,
+      "id": 654192087,
+      "listed_at": "2022-01-19T20:09:53.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11771270",
+          "plex": {
+            "guid": "5e4d2531ab8d5a003d216129",
+            "slug": "copper-window-rosefield"
+          },
+          "slug": "copper-window-rosefield",
+          "tmdb": 99346,
+          "tvdb": 402602,
+          "trakt": 187261
+        },
+        "year": 2022,
+        "title": "Copper Window: Rosefield",
+        "aired_episodes": 6
+      },
+      "rank": 269,
+      "id": 764237679,
+      "listed_at": "2022-11-13T01:14:59.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13075042",
+          "plex": {
+            "guid": "5f6e152ca1c82b0040982073",
+            "slug": "northern-compass-cedar-point"
+          },
+          "slug": "northern-compass-cedar-point",
+          "tmdb": 110531,
+          "tvdb": 389085,
+          "trakt": 167450
+        },
+        "year": 2022,
+        "title": "Northern Compass: Cedar Point",
+        "aired_episodes": 18
+      },
+      "rank": 332,
+      "id": 723128456,
+      "listed_at": "2022-07-29T13:20:46.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt15017118",
+          "plex": {
+            "guid": "60eb18afa7a952002d5410d0",
+            "slug": "quiet-garden-moonridge"
+          },
+          "slug": "quiet-garden-moonridge",
+          "tmdb": 128904,
+          "tvdb": 406179,
+          "trakt": 183528
+        },
+        "year": 2022,
+        "title": "Quiet Garden: Moonridge",
+        "aired_episodes": 28
+      },
+      "rank": 356,
+      "id": 707634097,
+      "listed_at": "2022-06-14T19:17:43.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8101850",
+          "plex": {
+            "guid": "5d9c08f70aaccd001f8f366d",
+            "slug": "silent-river-glassford"
+          },
+          "slug": "silent-river-glassford",
+          "tmdb": 86340,
+          "tvdb": 357756,
+          "trakt": 142508
+        },
+        "year": 2019,
+        "title": "Silent River: Glassford",
+        "aired_episodes": 16
+      },
+      "rank": 388,
+      "id": 690922705,
+      "listed_at": "2022-04-30T20:54:56.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13966962",
+          "plex": {
+            "guid": "6067dc2704d0f3002de87cf2",
+            "slug": "last-lantern-juniper-vale"
+          },
+          "slug": "last-lantern-juniper-vale",
+          "tmdb": 122226,
+          "tvdb": 412431,
+          "trakt": 179636
+        },
+        "year": 2024,
+        "title": "Last Lantern: Juniper Vale",
+        "aired_episodes": 5
+      },
+      "rank": 70,
+      "id": 962429913,
+      "listed_at": "2024-01-14T22:16:40.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt15180134",
+          "plex": {
+            "guid": "61ded73d1780f2b70341ca1c",
+            "slug": "quiet-bridge-willow-reach"
+          },
+          "slug": "quiet-bridge-willow-reach",
+          "tmdb": 155427,
+          "tvdb": 414543,
+          "trakt": 192442
+        },
+        "year": 2022,
+        "title": "Quiet Bridge: Willow Reach",
+        "aired_episodes": 8
+      },
+      "rank": 291,
+      "id": 742236337,
+      "listed_at": "2022-09-20T23:50:50.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt18974572",
+          "plex": {
+            "guid": "62222b2d084dec318fa57f89",
+            "slug": "silver-station-oak-harbor"
+          },
+          "slug": "silver-station-oak-harbor",
+          "tmdb": 158916,
+          "tvdb": 418089,
+          "trakt": 193802
+        },
+        "year": 2022,
+        "title": "Silver Station: Oak Harbor",
+        "aired_episodes": 24
+      },
+      "rank": 400,
+      "id": 688753481,
+      "listed_at": "2022-04-22T02:43:44.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8634332",
+          "plex": {
+            "guid": "5d9c090e170e24001f2aee75",
+            "slug": "last-compass-rosefield"
+          },
+          "slug": "last-compass-rosefield",
+          "tmdb": 82782,
+          "tvdb": 357223,
+          "trakt": 142048
+        },
+        "year": 2019,
+        "title": "Last Compass: Rosefield",
+        "aired_episodes": 36
+      },
+      "rank": 450,
+      "id": 650785936,
+      "listed_at": "2022-01-11T19:18:25.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt4288182",
+          "plex": {
+            "guid": "5d9c0817e264b7001fc3bbb1",
+            "slug": "scarlet-orchard-northbridge"
+          },
+          "slug": "scarlet-orchard-northbridge",
+          "tmdb": 65495,
+          "tvdb": 313999,
+          "trakt": 108966
+        },
+        "year": 2016,
+        "title": "Scarlet Orchard: Northbridge",
+        "aired_episodes": 41
+      },
+      "rank": 296,
+      "id": 740635399,
+      "listed_at": "2022-09-16T16:50:40.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt16152716",
+          "plex": {
+            "guid": "6197a19e26d37b3e1c5c1947",
+            "slug": "last-lantern-juniper-vale"
+          },
+          "slug": "last-lantern-juniper-vale",
+          "tmdb": 139099,
+          "tvdb": 412634,
+          "trakt": 191307
+        },
+        "year": 2023,
+        "title": "Last Lantern: Juniper Vale",
+        "aired_episodes": 8
+      },
+      "rank": 198,
+      "id": 799607597,
+      "listed_at": "2023-02-28T04:32:46.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt22325774",
+          "plex": {
+            "guid": "6335a39cbe87436e92bc3870",
+            "slug": "quiet-signal-highwater"
+          },
+          "slug": "quiet-signal-highwater",
+          "tmdb": 211079,
+          "tvdb": 432040,
+          "trakt": 202107
+        },
+        "year": 2024,
+        "title": "Quiet Signal: Highwater",
+        "aired_episodes": 7
+      },
+      "rank": 56,
+      "id": 993267875,
+      "listed_at": "2024-03-09T01:02:24.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9737326",
+          "plex": {
+            "guid": "60c1e50a32a4f9002df7c14e",
+            "slug": "the-visitors"
+          },
+          "slug": "the-visitors",
+          "tmdb": 127235,
+          "tvdb": 404492,
+          "trakt": 181803
+        },
+        "year": 2021,
+        "title": "The Visitors",
+        "aired_episodes": 30
+      },
+      "rank": 114,
+      "id": 889034622,
+      "listed_at": "2023-08-23T19:15:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8590080",
+          "plex": {
+            "guid": "606ee72865d1b6002cdf10e1",
+            "slug": "copper-valley-alder-bay"
+          },
+          "slug": "copper-valley-alder-bay",
+          "tmdb": 118906,
+          "tvdb": 396967,
+          "trakt": 173940
+        },
+        "year": 2022,
+        "title": "Copper Valley: Alder Bay",
+        "aired_episodes": 6
+      },
+      "rank": 415,
+      "id": 679343815,
+      "listed_at": "2022-03-25T14:52:48.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt27142031",
+          "plex": {
+            "guid": "641298955d79dfd198236ae2",
+            "slug": "blue-archive-stonehaven"
+          },
+          "slug": "blue-archive-stonehaven",
+          "tmdb": 222314,
+          "tvdb": 432470,
+          "trakt": 203265
+        },
+        "year": 2023,
+        "title": "Blue Archive: Stonehaven",
+        "aired_episodes": 3
+      },
+      "rank": 168,
+      "id": 819997485,
+      "listed_at": "2023-04-15T01:02:11.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt6741278",
+          "plex": {
+            "guid": "5e1622ea4f2292003e913277",
+            "slug": "invincible"
+          },
+          "slug": "invincible",
+          "tmdb": 95557,
+          "tvdb": 368207,
+          "trakt": 172648
+        },
+        "year": 2021,
+        "title": "Invincible",
+        "aired_episodes": 32
+      },
+      "rank": 51,
+      "id": 1007572175,
+      "listed_at": "2024-04-06T03:03:25.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14675860",
+          "plex": {
+            "guid": "610d45b2b7f406002da30e70",
+            "slug": "emerald-signal-highwater"
+          },
+          "slug": "emerald-signal-highwater",
+          "tmdb": 130567,
+          "tvdb": 403128,
+          "trakt": 185579
+        },
+        "year": 2022,
+        "title": "Emerald Signal: Highwater",
+        "aired_episodes": 8
+      },
+      "rank": 257,
+      "id": 768376940,
+      "listed_at": "2022-11-24T00:40:25.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt15227418",
+          "plex": {
+            "guid": "611cdc573dbcaf002c99fb91",
+            "slug": "golden-passage-kingswell"
+          },
+          "slug": "golden-passage-kingswell",
+          "tmdb": 134095,
+          "tvdb": 408696,
+          "trakt": 185981
+        },
+        "year": 2023,
+        "title": "Golden Passage: Kingswell",
+        "aired_episodes": 7
+      },
+      "rank": 85,
+      "id": 938914919,
+      "listed_at": "2023-11-29T23:35:30.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0475784",
+          "plex": {
+            "guid": "5d9c0803705e7a001e6cfb54",
+            "slug": "emerald-horizon-queensport"
+          },
+          "slug": "emerald-horizon-queensport",
+          "tmdb": 63247,
+          "tvdb": 296762,
+          "trakt": 99718
+        },
+        "year": 2016,
+        "title": "Emerald Horizon: Queensport",
+        "aired_episodes": 36
+      },
+      "rank": 349,
+      "id": 712489908,
+      "listed_at": "2022-06-28T18:08:37.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt21195490",
+          "plex": {
+            "guid": "61027e10bd1e55002c2038d3",
+            "slug": "brass-window-westmere"
+          },
+          "slug": "brass-window-westmere",
+          "tmdb": 155226,
+          "tvdb": 407544,
+          "trakt": 184773
+        },
+        "year": 2022,
+        "title": "Brass Window: Westmere",
+        "aired_episodes": 16
+      },
+      "rank": 302,
+      "id": 739341031,
+      "listed_at": "2022-09-13T02:03:36.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt7456722",
+          "plex": {
+            "guid": "5d9c08ffe98e47001eb197d7",
+            "slug": "bright-station-dunmere"
+          },
+          "slug": "bright-station-dunmere",
+          "tmdb": 79622,
+          "tvdb": 372081,
+          "trakt": 155090
+        },
+        "year": 2020,
+        "title": "Bright Station: Dunmere",
+        "aired_episodes": 18
+      },
+      "rank": 227,
+      "id": 781097511,
+      "listed_at": "2023-01-13T17:34:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt10477528",
+          "plex": {
+            "guid": "5e1612964e7a9b001ec07d5e",
+            "slug": "velvet-passage-dunmere"
+          },
+          "slug": "velvet-passage-dunmere",
+          "tmdb": 90955,
+          "tvdb": 366010,
+          "trakt": 149635
+        },
+        "year": 2019,
+        "title": "Velvet Passage: Dunmere",
+        "aired_episodes": 16
+      },
+      "rank": 519,
+      "id": 600825692,
+      "listed_at": "2021-06-24T19:06:09.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9569546",
+          "plex": {
+            "guid": "5e5855a9b94cc20040cf297e",
+            "slug": "silver-meridian-kingswell"
+          },
+          "slug": "silver-meridian-kingswell",
+          "tmdb": 99617,
+          "tvdb": 377886,
+          "trakt": 158804
+        },
+        "year": 2021,
+        "title": "Silver Meridian: Kingswell",
+        "aired_episodes": 5
+      },
+      "rank": 531,
+      "id": 592977430,
+      "listed_at": "2021-05-19T19:42:56.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt7631058",
+          "plex": {
+            "guid": "5d9c09154eefaa001f5e7cd2",
+            "slug": "hidden-lantern-westmere"
+          },
+          "slug": "hidden-lantern-westmere",
+          "tmdb": 84773,
+          "tvdb": 367506,
+          "trakt": 150900
+        },
+        "year": 2022,
+        "title": "Hidden Lantern: Westmere",
+        "aired_episodes": 16
+      },
+      "rank": 313,
+      "id": 736475105,
+      "listed_at": "2022-09-04T17:02:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13142324",
+          "plex": {
+            "guid": "6096bc0ee5c72d002c1d7e60",
+            "slug": "hidden-sky-cedar-point"
+          },
+          "slug": "hidden-sky-cedar-point",
+          "tmdb": 116793,
+          "tvdb": 388891,
+          "trakt": 167395
+        },
+        "year": 2023,
+        "title": "Hidden Sky: Cedar Point",
+        "aired_episodes": 8
+      },
+      "rank": 152,
+      "id": 834870901,
+      "listed_at": "2023-05-18T00:10:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8559532",
+          "plex": {
+            "guid": "6127679937321f002c6247a5",
+            "slug": "silent-compass-westmere"
+          },
+          "slug": "silent-compass-westmere",
+          "tmdb": 131992,
+          "tvdb": 409143,
+          "trakt": 186545
+        },
+        "year": 2023,
+        "title": "Silent Compass: Westmere",
+        "aired_episodes": 8
+      },
+      "rank": 109,
+      "id": 898273852,
+      "listed_at": "2023-09-09T19:22:21.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9319668",
+          "plex": {
+            "guid": "5e16128ee0d3ae001ed1076f",
+            "slug": "blue-voyage-bellhaven"
+          },
+          "slug": "blue-voyage-bellhaven",
+          "tmdb": 90669,
+          "tvdb": 384429,
+          "trakt": 163643
+        },
+        "year": 2022,
+        "title": "Blue Voyage: Bellhaven",
+        "aired_episodes": 8
+      },
+      "rank": 261,
+      "id": 766410417,
+      "listed_at": "2022-11-18T20:46:42.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt19231492",
+          "plex": {
+            "guid": "5fd2a1b82de5fd002dd4c7b1",
+            "slug": "the-other-equation"
+          },
+          "slug": "the-other-equation",
+          "tmdb": 196322,
+          "tvdb": 393159,
+          "trakt": 170597
+        },
+        "year": 2024,
+        "title": "The Other Equation",
+        "aired_episodes": 14
+      },
+      "rank": 36,
+      "id": 1045023404,
+      "listed_at": "2024-06-22T13:35:16.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13361448",
+          "plex": {
+            "guid": "5f91ad6c1c2bcd002e14ee69",
+            "slug": "crimson-horizon-oak-harbor"
+          },
+          "slug": "crimson-horizon-oak-harbor",
+          "tmdb": 111894,
+          "tvdb": 390848,
+          "trakt": 168750
+        },
+        "year": 2022,
+        "title": "Crimson Horizon: Oak Harbor",
+        "aired_episodes": 8
+      },
+      "rank": 369,
+      "id": 698893697,
+      "listed_at": "2022-05-24T23:57:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13649396",
+          "plex": {
+            "guid": "63236c6a53c331b9fab8dd7c",
+            "slug": "last-echo-rosefield"
+          },
+          "slug": "last-echo-rosefield",
+          "tmdb": 210235,
+          "tvdb": 396992,
+          "trakt": 173916
+        },
+        "year": 2022,
+        "title": "Last Echo: Rosefield",
+        "aired_episodes": 8
+      },
+      "rank": 256,
+      "id": 758684152,
+      "listed_at": "2022-10-30T01:10:17.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt15399640",
+          "plex": {
+            "guid": "621a0843249a4b826390cb83",
+            "slug": "brass-sky-larkspur"
+          },
+          "slug": "brass-sky-larkspur",
+          "tmdb": 157732,
+          "tvdb": 416503,
+          "trakt": 193367
+        },
+        "year": 2023,
+        "title": "Brass Sky: Larkspur",
+        "aired_episodes": 8
+      },
+      "rank": 88,
+      "id": 927550564,
+      "listed_at": "2023-11-05T20:58:13.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

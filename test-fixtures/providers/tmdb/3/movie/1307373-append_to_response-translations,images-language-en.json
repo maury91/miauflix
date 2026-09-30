@@ -1,0 +1,626 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21580",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"cb9f4f054a9786df714414e9247b6f9f\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qLp9td9ZfOe7G6wHhrepKtIH5Qe.jpg",
+    "belongs_to_collection": null,
+    "budget": 1200000,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/cellblock-chances",
+    "id": 1307373,
+    "imdb_id": "tt29028515",
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_title": "Cellblock Chances",
+    "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+    "popularity": 7.2593,
+    "poster_path": "/lKK9ImwpoTCwDZKgYpjIIJCnlf0.jpg",
+    "production_companies": [
+      {
+        "id": 61922,
+        "logo_path": "/aGPysvtFfH8d8UjekpZD3GT9m7k.png",
+        "name": "Concrete Floor Films",
+        "origin_country": "GB"
+      },
+      {
+        "id": 231906,
+        "logo_path": null,
+        "name": "Concrete Floor Films",
+        "origin_country": "GB"
+      },
+      {
+        "id": 85136,
+        "logo_path": "/gkOBQC95ZhfwC1KKokZbLYh1wPV.png",
+        "name": "Concrete Floor Films",
+        "origin_country": "GB"
+      },
+      {
+        "id": 192277,
+        "logo_path": "/6EWCQcniXEDLdkD8Go4dge64HWf.png",
+        "name": "Concrete Floor Films",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2026-02-20",
+    "revenue": 1205018,
+    "runtime": 91,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Freedom is never simple.",
+    "title": "Cellblock Chances",
+    "video": false,
+    "vote_average": 7.319,
+    "vote_count": 91,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 91,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 90,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 90,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 90,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 90,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 90,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 90,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/cellblock-chances",
+            "overview": "A prisoner nearing release hopes to rebuild his life until a new cellmate draws him into a violent test of loyalty. Helping the man could cost him his freedom; turning away may cost him the only friendship he has found inside.",
+            "runtime": 0,
+            "tagline": "Freedom is never simple.",
+            "title": "Cellblock Chances"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1yJzx2Xm0QpOF2hCcufkCGgbToN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5UNJ6A9L5UhPZFJpBQ692g93UlS.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t5ydrDFHeoknkGoxQe8pZQISoUv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.302,
+          "height": 683,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y7b1I84NvrSogfNOcB46ZXYxEnJ.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4304
+        },
+        {
+          "aspect_ratio": 6.302,
+          "height": 683,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zllWXi0aUII28AoEwDD0GuaW4a0.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4304
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lKK9ImwpoTCwDZKgYpjIIJCnlf0.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/znNVGtyjdkGIhsjV6tcmFkEqczM.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.669,
+          "height": 1748,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zWnh25eaz68JEfHim07dmgb2IJL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1248,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/scv5DoTsLL5Wi83CExTCUapDIzC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 832
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8n4Y2Htuj1WDzCASRSnfJvIsDOS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7AyT5jWhSIHB2FQ3KQ6r021StoY.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7FmBAoeHZuGef5gP5j2X5FBRHOC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kuaVf2Te1fTGQz3Ybbeeon7noAp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5RemjyKyaU3VEbKQixxY3w3RS5p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sGeTbWToBU9shJIKpCoffIRJC6T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cP64HTrr54BBnFbRXP1uX78NNfX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xQePYj27PkuU5w23b9cbOMaw2uM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m2KOc6wwVP5oqrIprEslGkGBLVq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2245,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6cQI49LMw2wyp92uSKTEbc74Vi3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1587
+        },
+        {
+          "aspect_ratio": 0.669,
+          "height": 1748,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oak8QY51Ltm8YigKJ0WZNkFw3ka.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hGr9Kc5DiVpW0mgoydKdLAdxW77.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

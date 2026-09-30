@@ -1,0 +1,605 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23251",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c447b4c5e7b627ff8cb84f2191fda5ab\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/zAgcM7zwWAVOIT9dMMzQx7e4vdX.jpg",
+    "created_by": [
+      {
+        "id": 13268,
+        "credit_id": "5257864d19c29531db297dcb",
+        "name": "Emery James",
+        "original_name": "Emery James",
+        "gender": 2,
+        "profile_path": "/yrQvDQ08tBOgnhY8tG6Oc0RBGde.jpg"
+      }
+    ],
+    "episode_run_time": [
+      25,
+      52
+    ],
+    "first_air_date": "1959-10-02",
+    "genres": [
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/series/amber-beacon-alder-bay",
+    "id": 6357,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "1964-06-19",
+    "last_episode_to_air": {
+      "id": 374887,
+      "name": "Blue Signal",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 6.1,
+      "vote_count": 9,
+      "air_date": "1964-06-19",
+      "episode_number": 36,
+      "episode_type": "finale",
+      "production_code": "2619",
+      "runtime": 26,
+      "season_number": 5,
+      "show_id": 6357,
+      "still_path": "/14dGGthtsrdrh6w9104eDJiun95.jpg"
+    },
+    "name": "Amber Beacon: Alder Bay",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Falling River Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 156,
+    "number_of_seasons": 5,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Amber Beacon: Alder Bay",
+    "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 58.8945,
+    "poster_path": "/7uY4pCOxbEdv4M8jTE4uMPVoSIW.jpg",
+    "production_companies": [
+      {
+        "id": 78181,
+        "logo_path": null,
+        "name": "Silver Horizon Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 4898,
+        "logo_path": "/nm8d7P7MJNiBLdgIzUK0gkuEA4r.png",
+        "name": "Blue Meridian Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1958-11-24",
+        "episode_count": 182,
+        "id": 16515,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/qxCj5i5vVaA58UxIWavzIGUQ2Cu.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1959-10-02",
+        "episode_count": 36,
+        "id": 16510,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/1DKVWl80YSLi0TE8IbyUdqq2o5l.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "1960-09-30",
+        "episode_count": 29,
+        "id": 16513,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/jxH1SvUiMnaTXOEo9ivA9RegktH.jpg",
+        "season_number": 2,
+        "vote_average": 7.1
+      },
+      {
+        "air_date": "1961-09-15",
+        "episode_count": 37,
+        "id": 16514,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/1bBd7xSbATm9VfOZWKedkzTWXen.jpg",
+        "season_number": 3,
+        "vote_average": 7
+      },
+      {
+        "air_date": "1963-01-03",
+        "episode_count": 18,
+        "id": 16511,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/x5TWWLTvpDRZ7Pk1043rViXoQkB.jpg",
+        "season_number": 4,
+        "vote_average": 6.7
+      },
+      {
+        "air_date": "1963-09-27",
+        "episode_count": 36,
+        "id": 16512,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/nQwRHZVKS1Pn9xSoTYNJP6Hk8Z3.jpg",
+        "season_number": 5,
+        "vote_average": 6.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.508,
+    "vote_count": 1077,
+    "external_ids": {
+      "imdb_id": "tt0052520",
+      "freebase_mid": "/m/0d_rw",
+      "freebase_id": "/en/the_twilight_zone",
+      "tvdb_id": 73587,
+      "tvrage_id": 6258,
+      "wikidata_id": "Q742103",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Amber Beacon: Alder Bay",
+            "overview": "Amber Beacon: Alder Bay follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-beacon-alder-bay",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

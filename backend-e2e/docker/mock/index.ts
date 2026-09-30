@@ -1,8 +1,14 @@
 import { sanitize } from './sanitize';
 import { handleRequest } from './handleRequest';
-import type { HandleRequestParams, HandleRequestResponse, HttpMethod } from './types';
+import type {
+  AnonymizedBy,
+  HandleRequestParams,
+  HandleRequestResponse,
+  HttpMethod,
+  MockResponseEnvelope,
+} from './types';
 
-const PORT = 80;
+const PORT = Number(process.env.MOCK_PORT || 80);
 const DATA_DIR = process.env.DATA_DIR;
 const API_KEY = process.env.API_KEY || '';
 const API_SECRET = process.env.API_SECRET || '';
@@ -10,6 +16,10 @@ const API_BASE_URL = process.env.API_BASE_URL;
 const API_HEADERS = process.env.API_HEADERS ? JSON.parse(process.env.API_HEADERS) : {};
 const API_AUTH_HEADER = process.env.API_AUTH_HEADER || 'Authorization';
 const API_AUTH_HEADER_IS_BEARER = process.env.API_AUTH_HEADER_IS_BEARER === 'true';
+const RECORD_PROVIDER_FIXTURES = process.env.RECORD_PROVIDER_FIXTURES === 'true';
+const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL;
+// Recording mode is the explicit original-data path; ordinary generated writes are faker-backed.
+const ANONYMIZED_BY: AnonymizedBy = RECORD_PROVIDER_FIXTURES ? false : 'faker';
 
 // This params will be replaced with default values in the filename
 // when saving/loading responses. This is to avoid data that changes based on time
@@ -87,7 +97,23 @@ function getFilePath(urlPath: string, queryParams: Record<string, string>, metho
   return `${DATA_DIR}/${methodPrefix}${sanitizedPath}${queryString}.json`;
 }
 
-async function saveResponse(filePath: string, response: any): Promise<void> {
+function withImageBaseUrl(data: unknown): unknown {
+  if (!IMAGE_BASE_URL || !data || typeof data !== 'object') return data;
+
+  const configuration = data as { images?: Record<string, unknown> };
+  if (!configuration.images) return data;
+
+  return {
+    ...configuration,
+    images: {
+      ...configuration.images,
+      base_url: IMAGE_BASE_URL,
+      secure_base_url: IMAGE_BASE_URL,
+    },
+  };
+}
+
+async function saveResponse<T>(filePath: string, response: MockResponseEnvelope<T>): Promise<void> {
   const dir = filePath.substring(0, filePath.lastIndexOf('/'));
   await ensureDir(dir);
   await Bun.write(filePath, JSON.stringify(response, null, 2));
@@ -108,6 +134,10 @@ function omitHeaders(headers: Headers): Record<string, string> | undefined {
     }
   }
   return Object.keys(result).length > 0 ? result : undefined;
+}
+
+function responseBodyForStatus(status: number, body: string): string | null {
+  return status === 204 || status === 205 || status === 304 ? null : body;
 }
 
 async function defaultHandleRequest({
@@ -147,6 +177,24 @@ async function defaultHandleRequest({
     };
   }
 
+  if (!RECORD_PROVIDER_FIXTURES) {
+    return {
+      data: null,
+      store: false,
+      response: new Response(
+        JSON.stringify({
+          error: 'Fixture missing and recording is disabled',
+          path,
+          hint: 'Set RECORD_PROVIDER_FIXTURES=true for an explicit recording run',
+        }),
+        {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      ),
+    };
+  }
+
   console.log(`Calling real API for ${filePath}`);
 
   const apiUrl = new URL(path, API_BASE_URL);
@@ -156,6 +204,18 @@ async function defaultHandleRequest({
 
   // Make the request to API
   const incomingHeaders = Object.fromEntries(req.headers.entries());
+  for (const header of [
+    'host',
+    'connection',
+    'content-length',
+    'transfer-encoding',
+    'accept-encoding',
+    'authorization',
+    'trakt-api-key',
+    API_AUTH_HEADER.toLowerCase(),
+  ]) {
+    delete incomingHeaders[header];
+  }
   const apiResponse = await fetch(apiUrl.toString(), {
     headers: {
       ...incomingHeaders,
@@ -165,10 +225,14 @@ async function defaultHandleRequest({
   });
 
   if (!apiResponse.headers.get('content-type')?.includes('application/json')) {
+    const body = await apiResponse.text();
     return {
-      data: await apiResponse.text(),
-      store: true,
-      response: apiResponse,
+      data: body,
+      store: apiResponse.ok,
+      response: new Response(responseBodyForStatus(apiResponse.status, body), {
+        headers: omitHeaders(apiResponse.headers),
+        status: apiResponse.status,
+      }),
     };
   }
 
@@ -180,11 +244,14 @@ async function defaultHandleRequest({
   // Apply sanitization and return the response
   return {
     data: sanitizedData,
-    store: true,
-    response: new Response(JSON.stringify(sanitizedData), {
-      headers: omitHeaders(apiResponse.headers),
-      status: apiResponse.status,
-    }),
+    store: apiResponse.ok,
+    response: new Response(
+      responseBodyForStatus(apiResponse.status, JSON.stringify(sanitizedData)),
+      {
+        headers: omitHeaders(apiResponse.headers),
+        status: apiResponse.status,
+      }
+    ),
   };
 }
 
@@ -207,9 +274,12 @@ Bun.serve({
       if (await Bun.file(filePath).exists()) {
         console.log(`Loading cached response from ${filePath}`);
         const fileContent = await Bun.file(filePath).json();
-        const data = fileContent.headers?.['content-type']?.includes('application/json')
-          ? JSON.stringify(fileContent.data)
+        const responseData = path.endsWith('/configuration')
+          ? withImageBaseUrl(fileContent.data)
           : fileContent.data;
+        const data = fileContent.headers?.['content-type']?.includes('application/json')
+          ? JSON.stringify(responseData)
+          : responseData;
         return new Response(data, {
           headers: fileContent.headers || { 'Content-Type': 'application/json' },
           status: fileContent.status || 200,
@@ -228,6 +298,7 @@ Bun.serve({
         API_HEADERS,
         API_AUTH_HEADER,
         API_AUTH_HEADER_IS_BEARER,
+        RECORD_PROVIDER_FIXTURES,
       };
 
       const { data, store, response } =
@@ -237,6 +308,7 @@ Bun.serve({
         await saveResponse(filePath, {
           headers: omitHeaders(response.headers),
           status: response.status,
+          anonymized: ANONYMIZED_BY,
           data,
         });
       }
@@ -255,3 +327,4 @@ Bun.serve({
 console.log(`Mock server listening on http://localhost:${PORT}`);
 console.log(`API Key configured: ${API_KEY ? 'Yes' : 'No'}`);
 console.log(`API Secret configured: ${API_SECRET ? 'Yes' : 'No'}`);
+console.log(`Fixture recording enabled: ${RECORD_PROVIDER_FIXTURES ? 'Yes' : 'No'}`);

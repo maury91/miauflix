@@ -1,0 +1,597 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15043",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"43292312a41fe718fc2899f22c038b4c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mj3RFamNUleZB94zMWgGnJkQCAH.jpg",
+    "belongs_to_collection": {
+      "id": 1726155,
+      "name": "The Young Commander Collection",
+      "poster_path": null,
+      "backdrop_path": null
+    },
+    "budget": 20000000,
+    "genres": [
+      {
+        "id": 36,
+        "name": "History"
+      },
+      {
+        "id": 10752,
+        "name": "War"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/the-young-commander",
+    "id": 1308767,
+    "imdb_id": "tt32104007",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Young Commander",
+    "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+    "popularity": 12.4196,
+    "poster_path": "/6CdoTKnRQHJkjRGxTefFGkPQplB.jpg",
+    "production_companies": [
+      {
+        "id": 165435,
+        "logo_path": "/pDh2WDdOajWST9jlkFo6TOvETnB.png",
+        "name": "Founders' Road Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 273310,
+        "logo_path": null,
+        "name": "Founders' Road Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 218666,
+        "logo_path": "/1FyQYjUUIijNZEJBUPqrpDxCZz3.png",
+        "name": "Founders' Road Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 223271,
+        "logo_path": "/2Rc6Dvg3tpIfDzgQE6ycWxNj0kT.png",
+        "name": "Founders' Road Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 11166,
+        "logo_path": null,
+        "name": "Founders' Road Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 3291,
+        "logo_path": null,
+        "name": "Founders' Road Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 129815,
+        "logo_path": "/qbCmnVTQEuFqrVkbxn3i9P7Jrcw.png",
+        "name": "Founders' Road Pictures",
+        "origin_country": "IE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "IE",
+        "name": "Ireland"
+      },
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "release_date": "2026-07-02",
+    "revenue": 44888507,
+    "runtime": 121,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A nation begins with a choice.",
+    "title": "The Young Commander",
+    "video": false,
+    "vote_average": 7.798,
+    "vote_count": 124,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 121,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 125,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 125,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "LK",
+          "iso_639_1": "si",
+          "name": "සිංහල",
+          "english_name": "Sinhalese",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 121,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 121,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 121,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-young-commander",
+            "overview": "Before becoming a statesman, a young colonial officer is thrust into a widening war and a maze of failing alliances. Each decision tests his judgment and begins to shape the leader he will one day become.",
+            "runtime": 0,
+            "tagline": "A nation begins with a choice.",
+            "title": "The Young Commander"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3RHN5LV16sTu9WKBM2im5FkAQfH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1270,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/44m6m9SQwYGDdlj0gtmSg9LtnBT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2260
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1181,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l5JHPtXhbamA56M0pk5m13nTAxZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2100
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1181,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eVdmCCIqWcoQirqLapvZGVJITR0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2100
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.315,
+          "height": 1643,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aUQ2XzsGJJ42ow3rn2DTVOXeBlW.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2160
+        },
+        {
+          "aspect_ratio": 1.315,
+          "height": 1364,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4oFPGaLH2U3dkMGbzDI7lS4j6Ol.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1793
+        },
+        {
+          "aspect_ratio": 1.36,
+          "height": 492,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iU3CdE6iNhoW4nEqsW0shmSsV6J.png",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 669
+        },
+        {
+          "aspect_ratio": 2.548,
+          "height": 703,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/65bsBk7o6MTfl7mYk430jPhpwbL.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1791
+        },
+        {
+          "aspect_ratio": 8.157,
+          "height": 344,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t1ZctSRFRRo5jJMMwHrAoZzuLln.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2806
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6CdoTKnRQHJkjRGxTefFGkPQplB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/unvgjp9WxIt2myfPgVLg1yTyuo1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 768,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/guNMNNPcyCJkPCzwKtJOSNcdGum.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 512
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f6GqyCQMc0V7Gt8OdEl7EqtlQC7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1921,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/72363w1Ec15lAvJqUSczDCeqcOS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k7PFDnUT8QLnmYZ6oz5Mvr0Bf4b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

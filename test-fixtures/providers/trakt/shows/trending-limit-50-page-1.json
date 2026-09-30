@@ -1,0 +1,973 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "1697",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,trending,show",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Mon, 28 Sep 2026 13:28:41 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "801",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "17",
+    "x-permitted-cross-domain-policies": "none",
+    "x-trending-user-count": "101799"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "watchers": 13164,
+      "show": {
+        "ids": {
+          "imdb": "tt26545992",
+          "plex": {
+            "guid": "6475f4e274668225adb2c0e0",
+            "slug": "lanterns"
+          },
+          "slug": "lanterns",
+          "tmdb": 95350,
+          "tvdb": 376098,
+          "trakt": 157599
+        },
+        "year": 2026,
+        "title": "Lanterns",
+        "aired_episodes": 7
+      }
+    },
+    {
+      "watchers": 5279,
+      "show": {
+        "ids": {
+          "imdb": "tt10986410",
+          "plex": {
+            "guid": "5e204251072b9e003ca5c140",
+            "slug": "ted-lasso"
+          },
+          "slug": "ted-lasso",
+          "tmdb": 97546,
+          "tvdb": 383203,
+          "trakt": 162639
+        },
+        "year": 2020,
+        "title": "Ted Lasso",
+        "aired_episodes": 42
+      }
+    },
+    {
+      "watchers": 5233,
+      "show": {
+        "ids": {
+          "imdb": "tt31510819",
+          "plex": {
+            "guid": "65e04d051f43644ac5a79a99",
+            "slug": "kingdom-of-knives"
+          },
+          "slug": "kingdom-of-knives",
+          "tmdb": 247718,
+          "tvdb": 446831,
+          "trakt": 228595
+        },
+        "year": 2025,
+        "title": "Kingdom of Knives",
+        "aired_episodes": 12
+      }
+    },
+    {
+      "watchers": 4547,
+      "show": {
+        "ids": {
+          "imdb": "tt13293588",
+          "plex": {
+            "guid": "5e01fc33932ff9001db3b242",
+            "slug": "the-jobless-mage-s-second-life"
+          },
+          "slug": "the-jobless-mage-s-second-life",
+          "tmdb": 94664,
+          "tvdb": 371310,
+          "trakt": 156460
+        },
+        "year": 2021,
+        "title": "The Jobless Mage's Second Life",
+        "aired_episodes": 61
+      }
+    },
+    {
+      "watchers": 3805,
+      "show": {
+        "ids": {
+          "imdb": "tt33539520",
+          "plex": {
+            "guid": "6995dd6b96c7221de9313980",
+            "slug": "neagley-field-notes"
+          },
+          "slug": "neagley-field-notes",
+          "tmdb": 273207,
+          "tvdb": 455064,
+          "trakt": 258222
+        },
+        "year": 2026,
+        "title": "Neagley: Field Notes",
+        "aired_episodes": 8
+      }
+    },
+    {
+      "watchers": 3421,
+      "show": {
+        "ids": {
+          "imdb": "tt0388629",
+          "plex": {
+            "guid": "5d9c084fec357c001f9ab4d8",
+            "slug": "voyage-of-the-starwake"
+          },
+          "slug": "voyage-of-the-starwake",
+          "tmdb": 37854,
+          "tvdb": 81797,
+          "trakt": 37696
+        },
+        "year": 1999,
+        "title": "Voyage of the Starwake",
+        "aired_episodes": 1180
+      }
+    },
+    {
+      "watchers": 3357,
+      "show": {
+        "ids": {
+          "imdb": "tt13210838",
+          "plex": {
+            "guid": "6365f4db354ca0d2edfad043",
+            "slug": "the-gentlemen"
+          },
+          "slug": "the-gentlemen",
+          "tmdb": 236235,
+          "tvdb": 426845,
+          "trakt": 211407
+        },
+        "year": 2024,
+        "title": "The Gentlemen",
+        "aired_episodes": 16
+      }
+    },
+    {
+      "watchers": 3296,
+      "show": {
+        "ids": {
+          "imdb": "tt13111078",
+          "plex": {
+            "guid": "62ac863c44b73ea95829962c",
+            "slug": "lioness"
+          },
+          "slug": "lioness",
+          "tmdb": 113962,
+          "tvdb": 388589,
+          "trakt": 167187
+        },
+        "year": 2023,
+        "title": "Lioness",
+        "aired_episodes": 24
+      }
+    },
+    {
+      "watchers": 3290,
+      "show": {
+        "ids": {
+          "imdb": "tt9288030",
+          "plex": {
+            "guid": "5d9c09190aaccd001f8f42f0",
+            "slug": "reacher"
+          },
+          "slug": "reacher",
+          "tmdb": 108978,
+          "tvdb": 366924,
+          "trakt": 155536
+        },
+        "year": 2022,
+        "title": "Reacher",
+        "aired_episodes": 32
+      }
+    },
+    {
+      "watchers": 3265,
+      "show": {
+        "ids": {
+          "imdb": "tt14688458",
+          "plex": {
+            "guid": "61b180686bfb4feb48515e07",
+            "slug": "the-vault-below"
+          },
+          "slug": "the-vault-below",
+          "tmdb": 125988,
+          "tvdb": 403245,
+          "trakt": 180770
+        },
+        "year": 2023,
+        "title": "The Vault Below",
+        "aired_episodes": 30
+      }
+    },
+    {
+      "watchers": 3123,
+      "show": {
+        "ids": {
+          "imdb": "tt1844624",
+          "plex": {
+            "guid": "5d9c086c02391c001f5891c7",
+            "slug": "ashes-after-midnight"
+          },
+          "slug": "ashes-after-midnight",
+          "tmdb": 1413,
+          "tvdb": 250487,
+          "trakt": 1404
+        },
+        "year": 2011,
+        "title": "Ashes After Midnight",
+        "aired_episodes": 135
+      }
+    },
+    {
+      "watchers": 3092,
+      "show": {
+        "ids": {
+          "imdb": "tt19231492",
+          "plex": {
+            "guid": "5fd2a1b82de5fd002dd4c7b1",
+            "slug": "the-other-equation"
+          },
+          "slug": "the-other-equation",
+          "tmdb": 196322,
+          "tvdb": 393159,
+          "trakt": 170597
+        },
+        "year": 2024,
+        "title": "The Other Equation",
+        "aired_episodes": 14
+      }
+    },
+    {
+      "watchers": 2983,
+      "show": {
+        "ids": {
+          "imdb": "tt5875444",
+          "plex": {
+            "guid": "5e1622a54f2292003e912fcf",
+            "slug": "slow-horses"
+          },
+          "slug": "slow-horses",
+          "tmdb": 95480,
+          "tvdb": 372264,
+          "trakt": 155534
+        },
+        "year": 2022,
+        "title": "Slow Horses",
+        "aired_episodes": 32
+      }
+    },
+    {
+      "watchers": 2928,
+      "show": {
+        "ids": {
+          "imdb": "tt27497393",
+          "plex": {
+            "guid": "67e9368d8b8ea643cb8c9fba",
+            "slug": "stuart-breaks-the-cosmos"
+          },
+          "slug": "stuart-breaks-the-cosmos",
+          "tmdb": 287620,
+          "tvdb": 465664,
+          "trakt": 280856
+        },
+        "year": 2026,
+        "title": "Stuart Breaks the Cosmos",
+        "aired_episodes": 10
+      }
+    },
+    {
+      "watchers": 2480,
+      "show": {
+        "ids": {
+          "imdb": "tt12327578",
+          "plex": {
+            "guid": "5ec75ff037d69c0039b83267",
+            "slug": "star-trek-strange-new-worlds"
+          },
+          "slug": "star-trek-strange-new-worlds",
+          "tmdb": 103516,
+          "tvdb": 382389,
+          "trakt": 162206
+        },
+        "year": 2022,
+        "title": "Star Trek: Strange New Worlds",
+        "aired_episodes": 40
+      }
+    },
+    {
+      "watchers": 1989,
+      "show": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "606ef58bff5b43002ce0589a",
+            "slug": "the-lizzie-borden-casefiles"
+          },
+          "slug": "the-lizzie-borden-casefiles",
+          "tmdb": 299939,
+          "tvdb": null,
+          "trakt": 297898
+        },
+        "year": 2026,
+        "title": "The Lizzie Borden Casefiles",
+        "aired_episodes": 8
+      }
+    },
+    {
+      "watchers": 1787,
+      "show": {
+        "ids": {
+          "imdb": "tt0072562",
+          "plex": {
+            "guid": "5d9c086d2192ba001f310238",
+            "slug": "saturday-at-the-spotlight"
+          },
+          "slug": "saturday-at-the-spotlight",
+          "tmdb": 1667,
+          "tvdb": 76177,
+          "trakt": 1656
+        },
+        "year": 1975,
+        "title": "Saturday at the Spotlight",
+        "aired_episodes": 1010
+      }
+    },
+    {
+      "watchers": 1748,
+      "show": {
+        "ids": {
+          "imdb": "tt1196946",
+          "plex": {
+            "guid": "5d9c08353c3f87001f34a531",
+            "slug": "the-mentalist"
+          },
+          "slug": "the-mentalist",
+          "tmdb": 5920,
+          "tvdb": 82459,
+          "trakt": 5882
+        },
+        "year": 2008,
+        "title": "The Mentalist",
+        "aired_episodes": 151
+      }
+    },
+    {
+      "watchers": 1671,
+      "show": {
+        "ids": {
+          "imdb": "tt0096697",
+          "plex": {
+            "guid": "5d9c080d3c3f87001f3460e8",
+            "slug": "the-springfield-neighbors"
+          },
+          "slug": "the-springfield-neighbors",
+          "tmdb": 456,
+          "tvdb": 71663,
+          "trakt": 455
+        },
+        "year": 1989,
+        "title": "The Springfield Neighbors",
+        "aired_episodes": 802
+      }
+    },
+    {
+      "watchers": 1661,
+      "show": {
+        "ids": {
+          "imdb": "tt33332385",
+          "plex": {
+            "guid": "66da94bee48eef4cef8fc3e6",
+            "slug": "widow-s-harbor"
+          },
+          "slug": "widow-s-harbor",
+          "tmdb": 270476,
+          "tvdb": 454109,
+          "trakt": 254678
+        },
+        "year": 2026,
+        "title": "Widow's Harbor",
+        "aired_episodes": 10
+      }
+    },
+    {
+      "watchers": 1596,
+      "show": {
+        "ids": {
+          "imdb": "tt0149460",
+          "plex": {
+            "guid": "5d9c0819cb3ffa001f1b207c",
+            "slug": "tomorrow-s-misfits"
+          },
+          "slug": "tomorrow-s-misfits",
+          "tmdb": 615,
+          "tvdb": 73871,
+          "trakt": 614
+        },
+        "year": 1999,
+        "title": "Tomorrow's Misfits",
+        "aired_episodes": 164
+      }
+    },
+    {
+      "watchers": 1513,
+      "show": {
+        "ids": {
+          "imdb": "tt0121955",
+          "plex": {
+            "guid": "5d9c08742192ba001f311a5d",
+            "slug": "four-corners-one-small-town"
+          },
+          "slug": "four-corners-one-small-town",
+          "tmdb": 2190,
+          "tvdb": 75897,
+          "trakt": 2177
+        },
+        "year": 1997,
+        "title": "Four Corners, One Small Town",
+        "aired_episodes": 332
+      }
+    },
+    {
+      "watchers": 1429,
+      "show": {
+        "ids": {
+          "imdb": "tt37692332",
+          "plex": {
+            "guid": "6888e951727a173b95d2446e",
+            "slug": "president-curtis"
+          },
+          "slug": "president-curtis",
+          "tmdb": 296756,
+          "tvdb": 466198,
+          "trakt": 292895
+        },
+        "year": 2026,
+        "title": "President Curtis",
+        "aired_episodes": 10
+      }
+    },
+    {
+      "watchers": 1310,
+      "show": {
+        "ids": {
+          "imdb": "tt3530232",
+          "plex": {
+            "guid": "5d9c0839e98e47001eb0ab81",
+            "slug": "the-late-briefing-with-miles-vale"
+          },
+          "slug": "the-late-briefing-with-miles-vale",
+          "tmdb": 60694,
+          "tvdb": 278518,
+          "trakt": 60267
+        },
+        "year": 2014,
+        "title": "The Late Briefing with Miles Vale",
+        "aired_episodes": 374
+      }
+    },
+    {
+      "watchers": 1295,
+      "show": {
+        "ids": {
+          "imdb": "tt11198330",
+          "plex": {
+            "guid": "5e160ed3e68804001e87a7b5",
+            "slug": "house-of-the-dragon"
+          },
+          "slug": "house-of-the-dragon",
+          "tmdb": 94997,
+          "tvdb": 371572,
+          "trakt": 154574
+        },
+        "year": 2022,
+        "title": "House of the Dragon",
+        "aired_episodes": 26
+      }
+    },
+    {
+      "watchers": 1257,
+      "show": {
+        "ids": {
+          "imdb": "tt0472954",
+          "plex": {
+            "guid": "5d9c0875170e24001f2ab27e",
+            "slug": "the-last-call-in-port-mercy"
+          },
+          "slug": "the-last-call-in-port-mercy",
+          "tmdb": 2710,
+          "tvdb": 75805,
+          "trakt": 2692
+        },
+        "year": 2005,
+        "title": "The Last Call in Port Mercy",
+        "aired_episodes": 184
+      }
+    },
+    {
+      "watchers": 1165,
+      "show": {
+        "ids": {
+          "imdb": "tt0898266",
+          "plex": {
+            "guid": "5d9c086c02391c001f5891b3",
+            "slug": "the-quantum-flatmates"
+          },
+          "slug": "the-quantum-flatmates",
+          "tmdb": 1418,
+          "tvdb": 80379,
+          "trakt": 1409
+        },
+        "year": 2007,
+        "title": "The Quantum Flatmates",
+        "aired_episodes": 279
+      }
+    },
+    {
+      "watchers": 1094,
+      "show": {
+        "ids": {
+          "imdb": "tt1442437",
+          "plex": {
+            "guid": "5d9c086c3c3f87001f34f630",
+            "slug": "the-many-branches-of-home"
+          },
+          "slug": "the-many-branches-of-home",
+          "tmdb": 1421,
+          "tvdb": 95011,
+          "trakt": 1412
+        },
+        "year": 2009,
+        "title": "The Many Branches of Home",
+        "aired_episodes": 250
+      }
+    },
+    {
+      "watchers": 1082,
+      "show": {
+        "ids": {
+          "imdb": "tt9054364",
+          "plex": {
+            "guid": "5d9c090e08fddd001f2a6a98",
+            "slug": "reborn-as-a-slime"
+          },
+          "slug": "reborn-as-a-slime",
+          "tmdb": 82684,
+          "tvdb": 352408,
+          "trakt": 135985
+        },
+        "year": 2018,
+        "title": "Reborn as a Slime",
+        "aired_episodes": 96
+      }
+    },
+    {
+      "watchers": 1035,
+      "show": {
+        "ids": {
+          "imdb": "tt2861424",
+          "plex": {
+            "guid": "5d9c08382192ba001f30a9c7",
+            "slug": "riftbound-relatives"
+          },
+          "slug": "riftbound-relatives",
+          "tmdb": 60625,
+          "tvdb": 275274,
+          "trakt": 69829
+        },
+        "year": 2013,
+        "title": "Riftbound Relatives",
+        "aired_episodes": 91
+      }
+    },
+    {
+      "watchers": 1022,
+      "show": {
+        "ids": {
+          "imdb": "tt0944947",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2fe",
+            "slug": "crowns-of-the-shattered-realm"
+          },
+          "slug": "crowns-of-the-shattered-realm",
+          "tmdb": 1399,
+          "tvdb": 121361,
+          "trakt": 1390
+        },
+        "year": 2011,
+        "title": "Crowns of the Shattered Realm",
+        "aired_episodes": 73
+      }
+    },
+    {
+      "watchers": 997,
+      "show": {
+        "ids": {
+          "imdb": "tt0108778",
+          "plex": {
+            "guid": "5d9c086d2192ba001f3101c6",
+            "slug": "six-on-the-landing"
+          },
+          "slug": "six-on-the-landing",
+          "tmdb": 1668,
+          "tvdb": 79168,
+          "trakt": 1657
+        },
+        "year": 1994,
+        "title": "Six on the Landing",
+        "aired_episodes": 228
+      }
+    },
+    {
+      "watchers": 997,
+      "show": {
+        "ids": {
+          "imdb": "tt15557874",
+          "plex": {
+            "guid": "639389aee1b8c7ff30756ad8",
+            "slug": "the-deceivers-table-the-island-game"
+          },
+          "slug": "the-deceivers-table-the-island-game",
+          "tmdb": 215943,
+          "tvdb": 428163,
+          "trakt": 200623
+        },
+        "year": 2023,
+        "title": "The Deceivers' Table: The Island Game",
+        "aired_episodes": 51
+      }
+    },
+    {
+      "watchers": 924,
+      "show": {
+        "ids": {
+          "imdb": "tt0251497",
+          "plex": {
+            "guid": "5d9c0865e9d5a1001f4d96e1",
+            "slug": "big-brother"
+          },
+          "slug": "big-brother",
+          "tmdb": 10160,
+          "tvdb": 76706,
+          "trakt": 10111
+        },
+        "year": 2000,
+        "title": "Big Brother",
+        "aired_episodes": 1013
+      }
+    },
+    {
+      "watchers": 902,
+      "show": {
+        "ids": {
+          "imdb": "tt0386676",
+          "plex": {
+            "guid": "5d9c0873ef619b002047fda0",
+            "slug": "the-paper-supply-company"
+          },
+          "slug": "the-paper-supply-company",
+          "tmdb": 2316,
+          "tvdb": 73244,
+          "trakt": 2302
+        },
+        "year": 2005,
+        "title": "The Paper Supply Company",
+        "aired_episodes": 186
+      }
+    },
+    {
+      "watchers": 886,
+      "show": {
+        "ids": {
+          "imdb": "tt7587890",
+          "plex": {
+            "guid": "5d9c08ffe264b7001fc4d397",
+            "slug": "the-rookie-detective"
+          },
+          "slug": "the-rookie-detective",
+          "tmdb": 79744,
+          "tvdb": 350665,
+          "trakt": 134421
+        },
+        "year": 2018,
+        "title": "The Rookie Detective",
+        "aired_episodes": 144
+      }
+    },
+    {
+      "watchers": 875,
+      "show": {
+        "ids": {
+          "imdb": "tt30051064",
+          "plex": {
+            "guid": "65569bccb690e76d694bee11",
+            "slug": "american-hostage"
+          },
+          "slug": "american-hostage",
+          "tmdb": 239618,
+          "tvdb": 462907,
+          "trakt": 213280
+        },
+        "year": 2026,
+        "title": "American Hostage",
+        "aired_episodes": 3
+      }
+    },
+    {
+      "watchers": 855,
+      "show": {
+        "ids": {
+          "imdb": "tt36937503",
+          "plex": {
+            "guid": "682f7be5332a01b1ed83a2bc",
+            "slug": "anna-vale"
+          },
+          "slug": "anna-vale",
+          "tmdb": 291350,
+          "tvdb": 463597,
+          "trakt": 285533
+        },
+        "year": 2026,
+        "title": "Anna Vale",
+        "aired_episodes": 8
+      }
+    },
+    {
+      "watchers": 846,
+      "show": {
+        "ids": {
+          "imdb": "tt0460681",
+          "plex": {
+            "guid": "5d9c086de9d5a1001f4d9d3f",
+            "slug": "the-nightbound-road"
+          },
+          "slug": "the-nightbound-road",
+          "tmdb": 1622,
+          "tvdb": 78901,
+          "trakt": 1611
+        },
+        "year": 2005,
+        "title": "The Nightbound Road",
+        "aired_episodes": 327
+      }
+    },
+    {
+      "watchers": 845,
+      "show": {
+        "ids": {
+          "imdb": "tt31938062",
+          "plex": {
+            "guid": "66047594f2781fe94954a721",
+            "slug": "harborview-emergency"
+          },
+          "slug": "harborview-emergency",
+          "tmdb": 250307,
+          "tvdb": 448176,
+          "trakt": 232884
+        },
+        "year": 2025,
+        "title": "Harborview Emergency",
+        "aired_episodes": 30
+      }
+    },
+    {
+      "watchers": 842,
+      "show": {
+        "ids": {
+          "imdb": "tt4934214",
+          "plex": {
+            "guid": "5d9c08042192ba001f3051e2",
+            "slug": "the-taskmaster-s-trials"
+          },
+          "slug": "the-taskmaster-s-trials",
+          "tmdb": 63404,
+          "tvdb": 298905,
+          "trakt": 100820
+        },
+        "year": 2015,
+        "title": "The Taskmaster's Trials",
+        "aired_episodes": 196
+      }
+    },
+    {
+      "watchers": 841,
+      "show": {
+        "ids": {
+          "imdb": "tt6773088",
+          "plex": {
+            "guid": "660287bde98021c154100e69",
+            "slug": "the-calder-brothers"
+          },
+          "slug": "the-calder-brothers",
+          "tmdb": 250203,
+          "tvdb": 448114,
+          "trakt": 232728
+        },
+        "year": 2026,
+        "title": "The Calder Brothers",
+        "aired_episodes": 2
+      }
+    },
+    {
+      "watchers": 814,
+      "show": {
+        "ids": {
+          "imdb": "tt18332852",
+          "plex": {
+            "guid": "62ed127018504555c64d36f0",
+            "slug": "highland-bloodlines"
+          },
+          "slug": "highland-bloodlines",
+          "tmdb": 207484,
+          "tvdb": 429964,
+          "trakt": 197276
+        },
+        "year": 2025,
+        "title": "Highland Bloodlines",
+        "aired_episodes": 12
+      }
+    },
+    {
+      "watchers": 809,
+      "show": {
+        "ids": {
+          "imdb": "tt0141842",
+          "plex": {
+            "guid": "5d9c086c46115600200aa302",
+            "slug": "the-north-jersey-circle"
+          },
+          "slug": "the-north-jersey-circle",
+          "tmdb": 1398,
+          "tvdb": 75299,
+          "trakt": 1389
+        },
+        "year": 1999,
+        "title": "The North Jersey Circle",
+        "aired_episodes": 86
+      }
+    },
+    {
+      "watchers": 772,
+      "show": {
+        "ids": {
+          "imdb": "tt0182576",
+          "plex": {
+            "guid": "5d9c086c7d06d9001ffd279e",
+            "slug": "the-quahog-misfits"
+          },
+          "slug": "the-quahog-misfits",
+          "tmdb": 1434,
+          "tvdb": 75978,
+          "trakt": 1425
+        },
+        "year": 1999,
+        "title": "The Quahog Misfits",
+        "aired_episodes": 456
+      }
+    },
+    {
+      "watchers": 771,
+      "show": {
+        "ids": {
+          "imdb": "tt36303968",
+          "plex": {
+            "guid": "68d30fff1190765ce3a96c77",
+            "slug": "furious"
+          },
+          "slug": "furious",
+          "tmdb": 287238,
+          "tvdb": 468000,
+          "trakt": 280335
+        },
+        "year": 2026,
+        "title": "Furious",
+        "aired_episodes": 8
+      }
+    },
+    {
+      "watchers": 744,
+      "show": {
+        "ids": {
+          "imdb": "tt32159809",
+          "plex": {
+            "guid": "663c5c9154860a808df84899",
+            "slug": "the-ledger"
+          },
+          "slug": "the-ledger",
+          "tmdb": 253941,
+          "tvdb": 449872,
+          "trakt": 239158
+        },
+        "year": 2025,
+        "title": "The Ledger",
+        "aired_episodes": 20
+      }
+    },
+    {
+      "watchers": 736,
+      "show": {
+        "ids": {
+          "imdb": "tt6037988",
+          "plex": {
+            "guid": "66c479ce34f7a5fb641c17f4",
+            "slug": "the-last-sighting"
+          },
+          "slug": "the-last-sighting",
+          "tmdb": 258230,
+          "tvdb": 451782,
+          "trakt": 247058
+        },
+        "year": 2026,
+        "title": "The Last Sighting",
+        "aired_episodes": 4
+      }
+    },
+    {
+      "watchers": 717,
+      "show": {
+        "ids": {
+          "imdb": "tt9813792",
+          "plex": {
+            "guid": "608ae6cf5077dd002d3bb8be",
+            "slug": "from-the-hollow"
+          },
+          "slug": "from-the-hollow",
+          "tmdb": 124364,
+          "tvdb": 401003,
+          "trakt": 188205
+        },
+        "year": 2022,
+        "title": "FROM THE Hollow",
+        "aired_episodes": 40
+      }
+    },
+    {
+      "watchers": 709,
+      "show": {
+        "ids": {
+          "imdb": "tt36034547",
+          "plex": {
+            "guid": "6745cc419b783bf0880c593f",
+            "slug": "opposites-in-orbit"
+          },
+          "slug": "opposites-in-orbit",
+          "tmdb": 278043,
+          "tvdb": 457078,
+          "trakt": 264998
+        },
+        "year": 2026,
+        "title": "Opposites in Orbit",
+        "aired_episodes": 24
+      }
+    }
+  ]
+}

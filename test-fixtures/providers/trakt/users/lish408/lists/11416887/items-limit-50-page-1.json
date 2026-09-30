@@ -1,0 +1,1158 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:show:327292,resource:movie:1145516,resource:show:158549,resource:movie:9489,resource:movie:1272947,resource:movie:794001,resource:movie:63169,resource:movie:1145888,resource:movie:415884,resource:movie:1372949,resource:show:94066,resource:movie:1379395,resource:show:327378,resource:show:252096,resource:movie:1403083,resource:movie:488388,resource:movie:85301,resource:movie:30322,resource:movie:1402976,resource:show:118361,resource:movie:317669,resource:movie:233859,resource:movie:51922,resource:show:314507,resource:movie:302200,resource:movie:681143,resource:show:77,resource:movie:1362157,resource:show:155423,resource:show:150372,resource:show:103423,resource:movie:1396172,resource:show:158450,resource:movie:129641,resource:movie:236835,resource:show:194621,resource:show:289508,resource:movie:1245332,resource:movie:1326462,resource:movie:1163216,resource:show:323911,resource:show:289596,resource:show:325283,resource:movie:25646,resource:movie:7847,resource:movie:1589,resource:movie:1110519,resource:movie:584296,resource:movie:959,resource:show:219763,resource:list:11416887",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "497",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "10",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "rank",
+    "x-sort-how": "asc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9280400",
+          "plex": {
+            "guid": "6a902cba0c45a5658b3cbd58",
+            "slug": "blue-archive-bellhaven"
+          },
+          "slug": "blue-archive-bellhaven",
+          "tmdb": 332910,
+          "tvdb": 481946,
+          "trakt": 327292
+        },
+        "year": 2026,
+        "title": "Blue Archive: Bellhaven",
+        "aired_episodes": 3
+      },
+      "rank": 1,
+      "id": 1549225571,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt34963732",
+          "plex": {
+            "guid": "67597f4d7051fd0cfced024d",
+            "slug": "the-hidden-camera-line"
+          },
+          "slug": "the-hidden-camera-line-2025",
+          "tmdb": 1400382,
+          "trakt": 1145516
+        },
+        "year": 2025,
+        "title": "The Hidden Camera Line"
+      },
+      "rank": 2,
+      "id": 1549225398,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11833494",
+          "plex": {
+            "guid": "5e61880123771e003dabde26",
+            "slug": "silver-bridge-stonehaven"
+          },
+          "slug": "silver-bridge-stonehaven",
+          "tmdb": 99954,
+          "tvdb": 377519,
+          "trakt": 158549
+        },
+        "year": 2020,
+        "title": "Silver Bridge: Stonehaven",
+        "aired_episodes": 4
+      },
+      "rank": 3,
+      "id": 1549225572,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1152758",
+          "plex": {
+            "guid": "5d77683d961905001eb9598e",
+            "slug": "a-letter-for-noah"
+          },
+          "slug": "a-letter-for-noah-2008",
+          "tmdb": 15584,
+          "trakt": 9489
+        },
+        "year": 2008,
+        "title": "A Letter for Noah"
+      },
+      "rank": 4,
+      "id": 1549225399,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt38457052",
+          "plex": {
+            "guid": "68dcc67f4a8b0a19d6c08b1e",
+            "slug": "rena-vale-shadow-of-the-highway"
+          },
+          "slug": "rena-vale-shadow-of-the-highway-2025",
+          "tmdb": 1550569,
+          "trakt": 1272947
+        },
+        "year": 2025,
+        "title": "Rena Vale: Shadow of the Highway"
+      },
+      "rank": 5,
+      "id": 1549225400,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt21059520",
+          "plex": {
+            "guid": "62ab4cd48f2a4fd01198f044",
+            "slug": "the-girl-behind-the-photograph"
+          },
+          "slug": "the-girl-behind-the-photograph-2022",
+          "tmdb": 988046,
+          "trakt": 794001
+        },
+        "year": 2022,
+        "title": "The Girl Behind the Photograph"
+      },
+      "rank": 6,
+      "id": 1549225401,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1966604",
+          "plex": {
+            "guid": "5d7768d296b655001fdc27c7",
+            "slug": "the-borrowed-son"
+          },
+          "slug": "the-borrowed-son-2012",
+          "tmdb": 84287,
+          "trakt": 63169
+        },
+        "year": 2012,
+        "title": "The Borrowed Son"
+      },
+      "rank": 7,
+      "id": 1549225402,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt34962891",
+          "plex": {
+            "guid": "675ae76def2cf881ad6a4ea1",
+            "slug": "a-street-called-fear"
+          },
+          "slug": "a-street-called-fear-2025",
+          "tmdb": 1400782,
+          "trakt": 1145888
+        },
+        "year": 2025,
+        "title": "A Street Called Fear"
+      },
+      "rank": 8,
+      "id": 1549225403,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt8488126",
+          "plex": {
+            "guid": "5d7770a631d95e001f1a69ec",
+            "slug": "the-miracle-in-the-vial"
+          },
+          "slug": "the-miracle-in-the-vial-2019",
+          "tmdb": 566228,
+          "trakt": 415884
+        },
+        "year": 2019,
+        "title": "The Miracle in the Vial"
+      },
+      "rank": 9,
+      "id": 1549225404,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt42863533",
+          "plex": {
+            "guid": "6a11276bf73cbc6319d11a47",
+            "slug": "the-baby-at-the-roadside"
+          },
+          "slug": "the-baby-at-the-roadside-2026",
+          "tmdb": 1699155,
+          "trakt": 1372949
+        },
+        "year": 2026,
+        "title": "The Baby at the Roadside"
+      },
+      "rank": 10,
+      "id": 1549225405,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt4299972",
+          "plex": {
+            "guid": "5d9c084f705e7a001e6d8b0f",
+            "slug": "copper-window-northbridge"
+          },
+          "slug": "copper-window-northbridge",
+          "tmdb": 61929,
+          "tvdb": 289946,
+          "trakt": 94066
+        },
+        "year": 2015,
+        "title": "Copper Window: Northbridge",
+        "aired_episodes": 12
+      },
+      "rank": 11,
+      "id": 1549225573,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt43619305",
+          "plex": {
+            "guid": "6a432c29825647990dd558c4",
+            "slug": "a-correspondence-of-revenge"
+          },
+          "slug": "a-correspondence-of-revenge-2026",
+          "tmdb": 1723460,
+          "trakt": 1379395
+        },
+        "year": 2026,
+        "title": "A Correspondence of Revenge"
+      },
+      "rank": 12,
+      "id": 1549225406,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt44842745",
+          "plex": {
+            "guid": "6a917fc3f774b7501fa76406",
+            "slug": "velvet-voyage-highwater"
+          },
+          "slug": "velvet-voyage-highwater",
+          "tmdb": 333058,
+          "tvdb": 481960,
+          "trakt": 327378
+        },
+        "year": 2026,
+        "title": "Velvet Voyage: Highwater",
+        "aired_episodes": 4
+      },
+      "rank": 13,
+      "id": 1549225574,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt33163756",
+          "plex": {
+            "guid": "66bf16583e4755bab4f782c3",
+            "slug": "emerald-meridian-moonridge"
+          },
+          "slug": "emerald-meridian-moonridge",
+          "tmdb": 261649,
+          "tvdb": 453315,
+          "trakt": 252096
+        },
+        "year": 2024,
+        "title": "Emerald Meridian: Moonridge",
+        "aired_episodes": 2
+      },
+      "rank": 14,
+      "id": 1549225575,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt46076019",
+          "plex": {
+            "guid": "6aafa5e2e28eb21cbdbe5cb2",
+            "slug": "the-gazette-under-siege"
+          },
+          "slug": "the-gazette-under-siege-2026",
+          "tmdb": 1772976,
+          "trakt": 1403083
+        },
+        "year": 2026,
+        "title": "The Gazette Under Siege"
+      },
+      "rank": 15,
+      "id": 1549225407,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt11394296",
+          "plex": {
+            "guid": "5e1625615551ad0041feb69e",
+            "slug": "beneath-the-blackwater"
+          },
+          "slug": "beneath-the-blackwater-2020",
+          "tmdb": 653588,
+          "trakt": 488388
+        },
+        "year": 2020,
+        "title": "Beneath the Blackwater"
+      },
+      "rank": 16,
+      "id": 1549225408,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2375605",
+          "plex": {
+            "guid": "5d77697f594b2b001e6a2376",
+            "slug": "the-performance-of-silence"
+          },
+          "slug": "the-performance-of-silence-2012",
+          "tmdb": 123678,
+          "trakt": 85301
+        },
+        "year": 2012,
+        "title": "The Performance of Silence"
+      },
+      "rank": 17,
+      "id": 1549225409,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1645089",
+          "plex": {
+            "guid": "5d77687eeb5d26001f1edd61",
+            "slug": "the-price-of-the-crash"
+          },
+          "slug": "the-price-of-the-crash-2010",
+          "tmdb": 44639,
+          "trakt": 30322
+        },
+        "year": 2010,
+        "title": "The Price of the Crash"
+      },
+      "rank": 18,
+      "id": 1549225410,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt46659055",
+          "plex": {
+            "guid": null,
+            "slug": null
+          },
+          "slug": "the-hairline-clue-2026",
+          "tmdb": 1728398,
+          "trakt": 1402976
+        },
+        "year": 2026,
+        "title": "The Hairline Clue"
+      },
+      "rank": 19,
+      "id": 1549225411,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt6792200",
+          "plex": {
+            "guid": "5d9c0855e264b7001fc41a20",
+            "slug": "golden-signal-kingswell"
+          },
+          "slug": "golden-signal-kingswell",
+          "tmdb": 26101,
+          "tvdb": 327175,
+          "trakt": 118361
+        },
+        "year": 2017,
+        "title": "Golden Signal: Kingswell",
+        "aired_episodes": 7
+      },
+      "rank": 20,
+      "id": 1549225577,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3444312",
+          "plex": {
+            "guid": "5d776d55594b2b001e70697a",
+            "slug": "silent-river-westmere"
+          },
+          "slug": "silent-river-westmere-2017",
+          "tmdb": 470401,
+          "trakt": 317669
+        },
+        "year": 2017,
+        "title": "Silent River: Westmere"
+      },
+      "rank": 21,
+      "id": 1549225412,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt5278506",
+          "plex": {
+            "guid": "5d776c029ab5440021511d40",
+            "slug": "last-harbor-northbridge"
+          },
+          "slug": "last-harbor-northbridge-2016",
+          "tmdb": 373072,
+          "trakt": 233859
+        },
+        "year": 2016,
+        "title": "Last Harbor: Northbridge"
+      },
+      "rank": 22,
+      "id": 1549225413,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2011325",
+          "plex": {
+            "guid": "5d7768b1308bca002033008c",
+            "slug": "brass-sky-larkspur"
+          },
+          "slug": "brass-sky-larkspur-2011",
+          "tmdb": 70845,
+          "trakt": 51922
+        },
+        "year": 2011,
+        "title": "Brass Sky: Larkspur"
+      },
+      "rank": 23,
+      "id": 1549225414,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt39368539",
+          "plex": {
+            "guid": "699081b2965499159fae5b37",
+            "slug": "ivory-bridge-highwater"
+          },
+          "slug": "ivory-bridge-highwater",
+          "tmdb": 311731,
+          "tvdb": 480409,
+          "trakt": 314507
+        },
+        "year": 2026,
+        "title": "Ivory Bridge: Highwater",
+        "aired_episodes": 5
+      },
+      "rank": 24,
+      "id": 1549225578,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt6098546",
+          "plex": {
+            "guid": "5d776d20fb0d55001f5984c5",
+            "slug": "crimson-bridge-oak-harbor"
+          },
+          "slug": "crimson-bridge-oak-harbor-2017",
+          "tmdb": 455962,
+          "trakt": 302200
+        },
+        "year": 2017,
+        "title": "Crimson Bridge: Oak Harbor"
+      },
+      "rank": 25,
+      "id": 1549225415,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt15085784",
+          "plex": {
+            "guid": "60f9436a7d87e7002c3b78f6",
+            "slug": "ivory-passage-dunmere"
+          },
+          "slug": "ivory-passage-dunmere-2021",
+          "tmdb": 852851,
+          "trakt": 681143
+        },
+        "year": 2021,
+        "title": "Ivory Passage: Dunmere"
+      },
+      "rank": 25,
+      "id": 1549225422,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0103396",
+          "plex": {
+            "guid": "5d9c07fe6c3e37001ecd3821",
+            "slug": "scarlet-valley-eastmere"
+          },
+          "slug": "scarlet-valley-eastmere",
+          "tmdb": 78,
+          "tvdb": 70600,
+          "trakt": 77
+        },
+        "year": 1992,
+        "title": "Scarlet Valley: Eastmere",
+        "aired_episodes": 1108
+      },
+      "rank": 26,
+      "id": 1549225579,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt40792117",
+          "plex": {
+            "guid": "69c4507a7cfecf363d58861c",
+            "slug": "impact-the-case-of-lena-ortiz"
+          },
+          "slug": "impact-the-case-of-lena-ortiz-2026",
+          "tmdb": 1662317,
+          "trakt": 1362157
+        },
+        "year": 2026,
+        "title": "Impact: The Case of Lena Ortiz"
+      },
+      "rank": 27,
+      "id": 1549225416,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11318602",
+          "plex": {
+            "guid": "5e01fc33d1987c001d6f5be2",
+            "slug": "brass-valley-cedar-point"
+          },
+          "slug": "brass-valley-cedar-point",
+          "tmdb": 96129,
+          "tvdb": 372566,
+          "trakt": 155423
+        },
+        "year": 2019,
+        "title": "Brass Valley: Cedar Point",
+        "aired_episodes": 3
+      },
+      "rank": 28,
+      "id": 1549225580,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt10532840",
+          "plex": {
+            "guid": "5e1612aa0257e0001eb551fa",
+            "slug": "silver-bridge-oak-harbor"
+          },
+          "slug": "silver-bridge-oak-harbor",
+          "tmdb": 91514,
+          "tvdb": 366831,
+          "trakt": 150372
+        },
+        "year": 2019,
+        "title": "Silver Bridge: Oak Harbor",
+        "aired_episodes": 2
+      },
+      "rank": 29,
+      "id": 1549225581,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt5189670",
+          "plex": {
+            "guid": "5d9c08107d06d9001ffcf5a3",
+            "slug": "bright-crown-queensport"
+          },
+          "slug": "bright-crown-queensport",
+          "tmdb": 64439,
+          "tvdb": 303210,
+          "trakt": 103423
+        },
+        "year": 2015,
+        "title": "Bright Crown: Queensport",
+        "aired_episodes": 20
+      },
+      "rank": 30,
+      "id": 1549225582,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt44568097",
+          "plex": {
+            "guid": "6a896e910b6c4b799add6a18",
+            "slug": "midnight-crown-bellhaven"
+          },
+          "slug": "midnight-crown-bellhaven-2026",
+          "tmdb": 1758536,
+          "trakt": 1396172
+        },
+        "year": 2026,
+        "title": "Midnight Crown: Bellhaven"
+      },
+      "rank": 31,
+      "id": 1549225417,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11822998",
+          "plex": {
+            "guid": "5e5855a9ef1f92003e96b32a",
+            "slug": "midnight-voyage-kingswell"
+          },
+          "slug": "midnight-voyage-kingswell",
+          "tmdb": 99626,
+          "tvdb": 377321,
+          "trakt": 158450
+        },
+        "year": 2020,
+        "title": "Midnight Voyage: Kingswell",
+        "aired_episodes": 6
+      },
+      "rank": 32,
+      "id": 1549225583,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2934036",
+          "plex": {
+            "guid": "5d776a3c47dd6e001f6d047a",
+            "slug": "crimson-meridian-oak-harbor"
+          },
+          "slug": "crimson-meridian-oak-harbor-2013",
+          "tmdb": 209204,
+          "trakt": 129641
+        },
+        "year": 2013,
+        "title": "Crimson Meridian: Oak Harbor"
+      },
+      "rank": 33,
+      "id": 1549225418,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt5278460",
+          "plex": {
+            "guid": "5d776c097a53e9001e737a56",
+            "slug": "falling-compass-juniper-vale"
+          },
+          "slug": "falling-compass-juniper-vale-2016",
+          "tmdb": 376228,
+          "trakt": 236835
+        },
+        "year": 2016,
+        "title": "Falling Compass: Juniper Vale"
+      },
+      "rank": 34,
+      "id": 1549225419,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt15185666",
+          "plex": {
+            "guid": "6239a087d30e742a614f7553",
+            "slug": "silent-compass-larkspur"
+          },
+          "slug": "silent-compass-larkspur",
+          "tmdb": 195420,
+          "tvdb": 418061,
+          "trakt": 194621
+        },
+        "year": 2022,
+        "title": "Silent Compass: Larkspur",
+        "aired_episodes": 3
+      },
+      "rank": 35,
+      "id": 1549225584,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt36581829",
+          "plex": {
+            "guid": "685d6d3baf9cf7a891cafd93",
+            "slug": "distant-harbor-pinewatch"
+          },
+          "slug": "distant-harbor-pinewatch",
+          "tmdb": 294633,
+          "tvdb": 465614,
+          "trakt": 289508
+        },
+        "year": 2025,
+        "title": "Distant Harbor: Pinewatch",
+        "aired_episodes": 2
+      },
+      "rank": 36,
+      "id": 1549225585,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt37674426",
+          "plex": {
+            "guid": "68879404b0f01657de640a3e",
+            "slug": "northern-orchard-cedar-point"
+          },
+          "slug": "northern-orchard-cedar-point-2025",
+          "tmdb": 1517772,
+          "trakt": 1245332
+        },
+        "year": 2025,
+        "title": "Northern Orchard: Cedar Point"
+      },
+      "rank": 37,
+      "id": 1549225420,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt39075417",
+          "plex": {
+            "guid": "6940fce956ca3cf04f6e904f",
+            "slug": "amber-river-rosefield"
+          },
+          "slug": "amber-river-rosefield-2026",
+          "tmdb": 1596319,
+          "trakt": 1326462
+        },
+        "year": 2026,
+        "title": "Amber River: Rosefield"
+      },
+      "rank": 38,
+      "id": 1549225421,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt35519537",
+          "plex": {
+            "guid": "6961122502fae798909362ea",
+            "slug": "silver-station-fox-hollow"
+          },
+          "slug": "silver-station-fox-hollow-2025",
+          "tmdb": 1422028,
+          "trakt": 1163216
+        },
+        "year": 2025,
+        "title": "Silver Station: Fox Hollow"
+      },
+      "rank": 38,
+      "id": 1549225435,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt43680755",
+          "plex": {
+            "guid": "6a5a87fa1a76ab3259bfc3d1",
+            "slug": "emerald-voyage-highwater"
+          },
+          "slug": "emerald-voyage-highwater",
+          "tmdb": 328735,
+          "tvdb": 480250,
+          "trakt": 323911
+        },
+        "year": 2026,
+        "title": "Emerald Voyage: Highwater",
+        "aired_episodes": 3
+      },
+      "rank": 39,
+      "id": 1549225586,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt37439438",
+          "plex": {
+            "guid": "685f9a7fe1b16be95196fae1",
+            "slug": "ivory-voyage-dunmere"
+          },
+          "slug": "ivory-voyage-dunmere",
+          "tmdb": 294726,
+          "tvdb": 465157,
+          "trakt": 289596
+        },
+        "year": 2025,
+        "title": "Ivory Voyage: Dunmere",
+        "aired_episodes": 3
+      },
+      "rank": 40,
+      "id": 1549225587,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt43706317",
+          "plex": {
+            "guid": null,
+            "slug": null
+          },
+          "slug": "brass-orchard-westmere",
+          "tmdb": 329524,
+          "tvdb": null,
+          "trakt": 325283
+        },
+        "year": 2026,
+        "title": "Brass Orchard: Westmere",
+        "aired_episodes": 0
+      },
+      "rank": 41,
+      "id": 1549225588,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1587707",
+          "plex": {
+            "guid": "5d7768703ab0e7001f5011da",
+            "slug": "bright-voyage-dunmere"
+          },
+          "slug": "bright-voyage-dunmere-2010",
+          "tmdb": 39452,
+          "trakt": 25646
+        },
+        "year": 2010,
+        "title": "Bright Voyage: Dunmere"
+      },
+      "rank": 42,
+      "id": 1549225423,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0854678",
+          "plex": {
+            "guid": "5d77683aeb5d26001f1e1cbd",
+            "slug": "midnight-crown-oak-harbor"
+          },
+          "slug": "midnight-crown-oak-harbor-2008",
+          "tmdb": 13362,
+          "trakt": 7847
+        },
+        "year": 2008,
+        "title": "Midnight Crown: Oak Harbor"
+      },
+      "rank": 43,
+      "id": 1549225424,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0342172",
+          "plex": {
+            "guid": "5d77682b8a7581001f12c413",
+            "slug": "silent-valley-glassford"
+          },
+          "slug": "silent-valley-glassford-2003",
+          "tmdb": 2260,
+          "trakt": 1589
+        },
+        "year": 2003,
+        "title": "Silent Valley: Glassford"
+      },
+      "rank": 44,
+      "id": 1549225425,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt33481094",
+          "plex": {
+            "guid": "66f9df0e6c17445575bef65e",
+            "slug": "blue-archive-bellhaven"
+          },
+          "slug": "blue-archive-bellhaven-2024",
+          "tmdb": 1360610,
+          "trakt": 1110519
+        },
+        "year": 2024,
+        "title": "Blue Archive: Bellhaven"
+      },
+      "rank": 45,
+      "id": 1549225426,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt12987894",
+          "plex": {
+            "guid": "5f40c75a04a8650040b95525",
+            "slug": "golden-garden-oak-harbor"
+          },
+          "slug": "golden-garden-oak-harbor-2020",
+          "tmdb": 743601,
+          "trakt": 584296
+        },
+        "year": 2020,
+        "title": "Golden Garden: Oak Harbor"
+      },
+      "rank": 46,
+      "id": 1549225427,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0310793",
+          "plex": {
+            "guid": "5d7768296f4521001ea99a20",
+            "slug": "brass-river-larkspur"
+          },
+          "slug": "brass-river-larkspur-2002",
+          "tmdb": 1430,
+          "trakt": 959
+        },
+        "year": 2002,
+        "title": "Brass River: Larkspur"
+      },
+      "rank": 47,
+      "id": 1549225428,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt22797582",
+          "plex": {
+            "guid": "6488fc61d413548bb7997333",
+            "slug": "falling-lantern-eastmere"
+          },
+          "slug": "falling-lantern-eastmere",
+          "tmdb": 242845,
+          "tvdb": 435726,
+          "trakt": 219763
+        },
+        "year": 2024,
+        "title": "Falling Lantern: Eastmere",
+        "aired_episodes": 3
+      },
+      "rank": 48,
+      "id": 1549225589,
+      "listed_at": "2026-09-28T13:54:07.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

@@ -7,12 +7,12 @@ export function listSchedules(
   lists: ReadonlyArray<{ slug: string }>
 ): BackgroundJobSchedule[] {
   const intervalSeconds = Number(config.getOrThrow('REFRESH_LISTS_INTERVAL'));
-  return lists.map(list => ({
+  return lists.map((list, index) => ({
     job: 'list.refresh.plan',
     id: `refresh-${list.slug}`,
     intervalSeconds,
     payload: { slug: list.slug, maxPages: DEFAULT_LIST_REFRESH_PAGES, subjectId: 'public' },
-    priority: 100,
+    priority: Math.max(20, 90 - index * 3),
     runOnStart: true,
   }));
 }
