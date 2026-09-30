@@ -1,0 +1,130 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10296",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"dee3b82324d0c6eefe6cef55fdf097cb\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": null,
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/the-gazette-under-siege",
+    "id": 1772976,
+    "imdb_id": "tt46076019",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Gazette Under Siege",
+    "overview": "When the small, family-run Bellwether Gazette reports allegations of sex, drugs, and violence inside its county sheriff's office, the family faces retaliation from local authorities. The conflict escalates after the paper obtains a secret recording in which the sheriff and civic officials allegedly discuss killing them, drawing international attention to their investigation.",
+    "popularity": 4.3374,
+    "poster_path": "/lW2E1jC61YNJq46Wald6kvcUInF.jpg",
+    "production_companies": [
+      {
+        "id": 188431,
+        "logo_path": null,
+        "name": "Far Beacon Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 311126,
+        "logo_path": null,
+        "name": "Far Beacon Films",
+        "origin_country": ""
+      },
+      {
+        "id": 95243,
+        "logo_path": "/oiMAvljl1t6RrlHa8KcTQShs1Uh.png",
+        "name": "Far Beacon Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 149109,
+        "logo_path": null,
+        "name": "Far Beacon Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-09-27",
+    "revenue": 0,
+    "runtime": 86,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The story they tried to silence.",
+    "title": "The Gazette Under Siege",
+    "video": false,
+    "vote_average": 1,
+    "vote_count": 1,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-gazette-under-siege",
+            "overview": "When the small, family-run Bellwether Gazette reports allegations of sex, drugs, and violence inside its county sheriff's office, the family faces retaliation from local authorities. The conflict escalates after the paper obtains a secret recording in which the sheriff and civic officials allegedly discuss killing them, drawing international attention to their investigation.",
+            "runtime": 86,
+            "tagline": "The story they tried to silence.",
+            "title": "The Gazette Under Siege"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-gazette-under-siege",
+            "overview": "When the small, family-run Bellwether Gazette reports allegations of sex, drugs, and violence inside its county sheriff's office, the family faces retaliation from local authorities. The conflict escalates after the paper obtains a secret recording in which the sheriff and civic officials allegedly discuss killing them, drawing international attention to their investigation.",
+            "runtime": 0,
+            "tagline": "The story they tried to silence.",
+            "title": "The Gazette Under Siege"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lW2E1jC61YNJq46Wald6kvcUInF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

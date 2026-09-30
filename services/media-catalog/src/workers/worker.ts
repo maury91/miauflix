@@ -3,7 +3,7 @@ import { Queue, Worker } from 'bunqueue-client';
 import type { CatalogService } from '../catalog/catalog.service';
 import type { ServiceEnv } from '../env';
 import { logger } from '../logger';
-import { CATALOG_JOB_QUEUES, type CatalogJobName } from './jobs';
+import { CATALOG_JOB_QUEUES, type CatalogJobName, type CatalogJobPayloads } from './jobs';
 
 const SCOPE = 'CatalogWorker';
 /**
@@ -65,10 +65,14 @@ export class CatalogWorkerManager {
     for (const [jobName, queueName] of Object.entries(CATALOG_JOB_QUEUES)) {
       const worker = new Worker(
         queueName,
-        async _job => {
+        async job => {
           const catalog = this.catalog();
           if (!catalog) return; // standby guard: skip until the service is ready
-          await this.runJob(jobName as CatalogJobName, catalog);
+          await this.runJob(
+            jobName as CatalogJobName,
+            catalog,
+            job.data as CatalogJobPayloads[CatalogJobName]
+          );
         },
         {
           ...connection,
@@ -83,7 +87,11 @@ export class CatalogWorkerManager {
     }
   }
 
-  private async runJob(job: CatalogJobName, catalog: CatalogService): Promise<void> {
+  private async runJob(
+    job: CatalogJobName,
+    catalog: CatalogService,
+    payload: CatalogJobPayloads[CatalogJobName] = {}
+  ): Promise<void> {
     switch (job) {
       case 'catalog.movie-changes.scan':
         await catalog.syncMovies();
@@ -92,7 +100,7 @@ export class CatalogWorkerManager {
         await catalog.syncTVShows();
         break;
       case 'catalog.season-sync.seed':
-        await catalog.syncIncompleteSeasons();
+        await catalog.syncIncompleteSeasons(payload.tvMediaId);
         break;
     }
   }

@@ -1,0 +1,469 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=26774",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d665bc70f43645319c2179ba3a92a38d\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rQXIm9oICpHCBpuHSJ3SwthBQYc.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/no-ring-new-plans",
+    "id": 1429605,
+    "imdb_id": "tt34622232",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "No Ring, New Plans",
+    "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+    "popularity": 7.3125,
+    "poster_path": "/8zPExowfpfZOTpS1W4J7G27lH4H.jpg",
+    "production_companies": [
+      {
+        "id": 44632,
+        "logo_path": "/neCKH4sJCBhZ1B4QocTM4VXCQOR.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 41945,
+        "logo_path": "/3Lb6fsbpbXaeOfxtNk1xzn70QB9.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 87472,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 258062,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 12852,
+        "logo_path": "/a2yqtzhDsTCsgccaed7tVCWjkhD.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-02-12",
+    "revenue": 0,
+    "runtime": 95,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A holiday from happily ever after.",
+    "title": "No Ring, New Plans",
+    "video": false,
+    "vote_average": 6,
+    "vote_count": 80,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 95,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 95,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 95,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 95,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/no-ring-new-plans",
+            "overview": "Gina flees her birthday and a looming proposal abroad, where two strangers help her reconsider the life she's dodging.",
+            "runtime": 0,
+            "tagline": "A holiday from happily ever after.",
+            "title": "No Ring, New Plans"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nQJAsPs49y7m1lzVWQyha93yI9X.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hqYraiuzrgW1QskCuj21nzanUJr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dJI1OHgeCQDXlXaA7PW7of3TcV1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.212,
+          "height": 665,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kbZ1msGh2D4DJLjDv0FVQU457LU.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1471
+        },
+        {
+          "aspect_ratio": 10.047,
+          "height": 43,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u3J836dEdDq1PxxIsTa2e6EcHWd.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 432
+        },
+        {
+          "aspect_ratio": 2.203,
+          "height": 227,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o59GzvadFWPM5Oo9d0ITn5pTwzl.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8zPExowfpfZOTpS1W4J7G27lH4H.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iQH0Zyl7pF7J3PkdTIvKbSX6Z7Q.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lmBXWYRN6Ws8n1mW9SzRefa0kKD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

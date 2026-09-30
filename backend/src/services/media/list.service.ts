@@ -1,5 +1,8 @@
 import { logger } from '@logger';
-import type { ListServiceDefinition } from '@miauflix/service-contracts';
+import type {
+  ListServiceDefinition,
+  ListServiceDefinitionsPage,
+} from '@miauflix/service-contracts';
 
 import type { Database } from '@database/database';
 import type { MediaList, MediaListItemType } from '@entities/list.entity';
@@ -18,12 +21,41 @@ import type { ListClientService } from '@services/list/list-client.service';
 import { traced } from '@utils/tracing.util';
 
 export const DEFAULT_LIST_REFRESH_PAGES = 6;
+const LIST_BASE_PRIORITY = 90;
+const LIST_MIN_PRIORITY = 20;
+const LIST_PREFETCH_PRIORITY_OFFSET = 20;
+const VIEWPORT_PRIORITY = 100;
+
+export type ListLoadPriority = 'prefetch' | 'visible';
+export type MediaPriorityRequest = {
+  mediaType: 'movie' | 'tv';
+  mediaId: number;
+  tier: 'viewport' | 'visible';
+};
+
+export function listDownstreamPriority(
+  listRank: number,
+  itemRank: number,
+  loadPriority: ListLoadPriority = 'visible'
+): number {
+  const priority = LIST_BASE_PRIORITY - Math.min(70, listRank * 3 + Math.floor(itemRank / 20));
+  return Math.max(
+    LIST_MIN_PRIORITY,
+    loadPriority === 'prefetch' ? priority - LIST_PREFETCH_PRIORITY_OFFSET : priority
+  );
+}
+
+export function mediaVisibilityPriority(tier: MediaPriorityRequest['tier']): number {
+  return tier === 'viewport' ? VIEWPORT_PRIORITY : LIST_BASE_PRIORITY;
+}
 
 /** Local projection of provider-backed list membership. */
 export class ListService {
   private readonly mediaListRepository: MediaListRepository;
   private readonly movieRepository;
   private readonly tvShowRepository;
+  private readonly listRanks = new Map<string, number>();
+  private readonly listDefinitions = new Map<string, ListServiceDefinition>();
 
   constructor(
     private readonly db: Database,
@@ -36,8 +68,22 @@ export class ListService {
     this.tvShowRepository = db.getTVShowRepository();
   }
 
-  getLists(subjectId = 'public'): Promise<ListServiceDefinition[]> {
-    return this.listClient.getDefinitions(subjectId);
+  async getLists(subjectId = 'public'): Promise<ListServiceDefinition[]> {
+    const lists = await this.listClient.getDefinitions(subjectId);
+    lists.forEach((list, index) => {
+      this.listRanks.set(list.slug, list.rank ?? index);
+      this.listDefinitions.set(list.slug, list);
+    });
+    return lists;
+  }
+
+  async getPopularLists(page = 1, limit = 20): Promise<ListServiceDefinitionsPage> {
+    const result = await this.listClient.getPopularDefinitions(page, limit);
+    result.results.forEach((list, index) => {
+      this.listRanks.set(list.slug, list.rank ?? (page - 1) * limit + index);
+      this.listDefinitions.set(list.slug, list);
+    });
+    return result;
   }
 
   @traced('ListService')
@@ -47,7 +93,7 @@ export class ListService {
     try {
       const firstPage = await this.listClient.getPage(subjectId, slug, 1);
       const seen = new Set<string>();
-      const resolvePage = async (page: typeof firstPage, priority: number) => {
+      const resolvePage = async (page: typeof firstPage) => {
         const refs = await this.resolveExternalRefs(page.items.map(item => item.media));
         const summaries = refs.flatMap(({ ref }) => {
           const key = `${ref.mediaType}:${ref.mediaId}`;
@@ -68,16 +114,16 @@ export class ListService {
             } satisfies MediaSummary,
           ];
         });
-        return this.resolveMediaPage(summaries, priority);
+        return this.resolveMediaPage(summaries, this.listRank(slug), (page.page - 1) * 50);
       };
-      const firstItems = await resolvePage(firstPage, 80);
+      const firstItems = await resolvePage(firstPage);
       await this.mediaListRepository.stagePage(mediaList.id, generation, 0, firstItems);
       const pageLimit = Math.min(firstPage.totalPages, maxPages);
       let offset = firstItems.length;
       for (let page = 2; page <= pageLimit; page++) {
         const result = await this.listClient.getPage(subjectId, slug, page);
         logger.debug('ListService', `List ${slug} obtained page ${page}/${pageLimit}`);
-        const items = await resolvePage(result, 50);
+        const items = await resolvePage(result);
         await this.mediaListRepository.stagePage(mediaList.id, generation, offset, items);
         offset += items.length;
       }
@@ -98,6 +144,7 @@ export class ListService {
       listId: list.id,
       pageCount: Math.min(firstPage.totalPages, maxPages),
       pageSize: Math.max(1, firstPage.items.length),
+      listRank: this.listRank(slug),
     };
   }
 
@@ -126,7 +173,11 @@ export class ListService {
           rating: 0,
         }) satisfies MediaSummary
     );
-    const items = await this.resolveMediaPage(summaries, page === 1 ? 80 : 50);
+    const items = await this.resolveMediaPage(
+      summaries,
+      this.listRank(slug),
+      (page - 1) * pageSize
+    );
     await this.mediaListRepository.stagePage(listId, generation, (page - 1) * pageSize, items);
   }
 
@@ -135,9 +186,18 @@ export class ListService {
   }
 
   @traced('ListService')
-  async getListPage(slug: string, language = 'en', page = 0, limit = 20, subjectId = 'public') {
-    const list = await this.getListBySlug(slug, subjectId);
-    if (!list.activeGeneration) return { medias: [], total: 0 };
+  async getListPage(
+    slug: string,
+    language = 'en',
+    page = 0,
+    limit = 20,
+    subjectId = 'public',
+    loadPriority: ListLoadPriority = 'visible'
+  ) {
+    const list = await this.getOrCreateList(slug, subjectId);
+    if (!list.activeGeneration) {
+      return this.getOnDemandListPage(slug, language, page, limit, subjectId, loadPriority);
+    }
     const [items, total] = await Promise.all([
       this.mediaListRepository.getPage(list.id, list.activeGeneration, page * limit, limit),
       this.mediaListRepository.countItems(list.id, list.activeGeneration),
@@ -147,24 +207,52 @@ export class ListService {
       mediaId: item.mediaId,
     }));
     const batch = await this.catalogClient.batch(refs, language);
-    const details = new Map(
-      batch.items.map(detail => [`${detail.mediaType}:${detail.mediaId}`, detail])
+    const medias = await this.hydrateMediaDetails(
+      batch.items,
+      this.listRank(slug),
+      page * limit,
+      loadPriority
     );
-    const localMovies = await this.movieRepository.findListItemsByMediaIds(
-      items.filter(item => item.mediaType === 'movie').map(item => item.mediaId)
-    );
-    const localShows = await this.tvShowRepository.findListItemsByMediaIds(
-      items.filter(item => item.mediaType === 'tv').map(item => item.mediaId)
-    );
-    const localIds = new Map<string, number>();
-    for (const movie of localMovies) localIds.set(`movie:${movie.mediaId}`, movie.id);
-    for (const show of localShows) localIds.set(`tv:${show.mediaId}`, show.id);
-    const medias = items.flatMap(item => {
-      const detail = details.get(`${item.mediaType}:${item.mediaId}`);
-      const localId = localIds.get(`${item.mediaType}:${item.mediaId}`);
-      return detail && localId !== undefined ? [{ ...detail, localId }] : [];
-    });
     return { medias, total };
+  }
+
+  /**
+   * Serve a cold list request from only the provider page(s) needed for the
+   * requested API page. Full list projection remains the responsibility of
+   * the background refresh pipeline.
+   */
+  private async getOnDemandListPage(
+    slug: string,
+    language: string,
+    page: number,
+    limit: number,
+    subjectId: string,
+    loadPriority: ListLoadPriority
+  ) {
+    const providerPageSize = 50;
+    const start = page * limit;
+    const firstProviderPage = Math.floor(start / providerPageSize) + 1;
+    const lastProviderPage = Math.floor((start + limit - 1) / providerPageSize) + 1;
+    const providerPages = await Promise.all(
+      Array.from({ length: lastProviderPage - firstProviderPage + 1 }, (_, index) =>
+        this.listClient.getPage(subjectId, slug, firstProviderPage + index)
+      )
+    );
+    const providerItems = providerPages.flatMap(result => result.items);
+    const firstItemOffset = start - (firstProviderPage - 1) * providerPageSize;
+    const requestedItems = providerItems.slice(firstItemOffset, firstItemOffset + limit);
+    const refs = await this.resolveExternalRefs(requestedItems.map(item => item.media));
+    const batch = await this.catalogClient.batch(
+      refs.map(({ ref }) => ref),
+      language
+    );
+    const medias = await this.hydrateMediaDetails(
+      batch.items,
+      this.listRank(slug),
+      start,
+      loadPriority
+    );
+    return { medias, total: providerPages[0]?.totalItems ?? 0 };
   }
 
   getListContent(slug: string, language = 'en', subjectId = 'public') {
@@ -173,48 +261,109 @@ export class ListService {
 
   private async resolveMediaPage(
     medias: MediaSummary[],
-    priority: number
+    listRank: number,
+    itemOffset: number
   ): Promise<Array<{ mediaType: MediaListItemType; mediaId: number }>> {
     const refs: MediaRef[] = medias.map(media => ({
       mediaType: media.mediaType,
       mediaId: media.mediaId,
     }));
-    const details = new Map<string, MovieDetail | TVShowDetail>();
     try {
       const batch = await this.catalogClient.batch(refs, 'en');
-      for (const detail of batch.items)
-        details.set(`${detail.mediaType}:${detail.mediaId}`, detail);
+      const hydrated = await this.hydrateMediaDetails(batch.items, listRank, itemOffset);
+      return hydrated.map(detail => ({ mediaType: detail.mediaType, mediaId: detail.mediaId }));
     } catch (error) {
       logger.warn('ListService', 'Catalog batch failed while projecting a list page', error);
       throw error;
     }
-    const resolved: Array<{ mediaType: MediaListItemType; mediaId: number }> = [];
-    for (const media of medias) {
+  }
+
+  private async hydrateMediaDetails(
+    details: Array<MovieDetail | TVShowDetail>,
+    listRank = 0,
+    itemOffset = 0,
+    loadPriority: ListLoadPriority = 'visible'
+  ): Promise<Array<{ localId: number } & (MovieDetail | TVShowDetail)>> {
+    const resolved: Array<{ localId: number } & (MovieDetail | TVShowDetail)> = [];
+    for (const detail of details) {
       try {
-        const detail = details.get(`${media.mediaType}:${media.mediaId}`);
-        if (media.mediaType === 'movie') {
-          if (detail?.mediaType !== 'movie') continue;
-          await this.movieRepository.upsertMovieDetail(detail);
+        if (detail.mediaType === 'movie') {
+          const local = await this.movieRepository.upsertMovieDetail(detail);
           this.backgroundJobs?.enqueueBestEffort({
             type: 'source.discover',
-            dedupeKey: `media:${media.mediaId}`,
-            payload: { movieMediaId: media.mediaId },
-            options: { priority: Math.max(1, priority - 20) },
+            dedupeKey: `media:${detail.mediaId}`,
+            payload: {
+              movieMediaId: detail.mediaId,
+              priority: listDownstreamPriority(
+                listRank,
+                itemOffset + resolved.length,
+                loadPriority
+              ),
+            },
+            options: {
+              priority: listDownstreamPriority(
+                listRank,
+                itemOffset + resolved.length,
+                loadPriority
+              ),
+            },
           });
+          resolved.push({ ...detail, localId: local.id });
         } else {
-          if (detail?.mediaType !== 'tv') continue;
-          await this.tvShowRepository.upsertTVShowDetail(detail);
+          const local = await this.tvShowRepository.upsertTVShowDetail(detail);
+          this.backgroundJobs?.enqueueBestEffort({
+            type: 'catalog.season-sync.seed',
+            dedupeKey: `show:${detail.mediaId}`,
+            payload: {
+              tvMediaId: detail.mediaId,
+              priority: listDownstreamPriority(
+                listRank,
+                itemOffset + resolved.length,
+                loadPriority
+              ),
+            },
+            options: {
+              priority: listDownstreamPriority(
+                listRank,
+                itemOffset + resolved.length,
+                loadPriority
+              ),
+            },
+          });
+          resolved.push({ ...detail, localId: local.id });
         }
-        resolved.push({ mediaType: media.mediaType, mediaId: media.mediaId });
       } catch (error) {
         logger.warn(
           'ListService',
-          `Skipping ${media.mediaType} ${media.mediaId} while projecting`,
+          `Skipping ${detail.mediaType} ${detail.mediaId} while projecting`,
           error
         );
       }
     }
     return resolved;
+  }
+
+  async promoteMediaPriorities(items: MediaPriorityRequest[]): Promise<void> {
+    if (!this.backgroundJobs) return;
+    await Promise.all(
+      items.map(item => {
+        const priority = mediaVisibilityPriority(item.tier);
+        if (item.mediaType === 'movie') {
+          return this.backgroundJobs!.enqueueOrPromote(
+            'source.discover',
+            `media:${item.mediaId}`,
+            { movieMediaId: item.mediaId, priority },
+            { priority }
+          );
+        }
+        return this.backgroundJobs!.enqueueOrPromote(
+          'catalog.season-sync.seed',
+          `show:${item.mediaId}`,
+          { tvMediaId: item.mediaId, priority },
+          { priority }
+        );
+      })
+    );
   }
 
   private async resolveExternalRefs(
@@ -239,22 +388,41 @@ export class ListService {
   }
 
   private async getOrCreateList(slug: string, ownerKey = 'public'): Promise<MediaList> {
-    const definition = (await this.listClient.getDefinitions(ownerKey)).find(
-      item => item.slug === slug
-    );
-    if (!definition) throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
-    const actualOwner = definition.scope === 'public' ? 'public' : ownerKey;
+    const definition =
+      this.listDefinitions.get(slug) ??
+      (await this.listClient.getDefinitions(ownerKey)).find(item => item.slug === slug);
+    if (definition) this.listDefinitions.set(slug, definition);
+    const resolvedDefinition =
+      definition ??
+      (/^trakt-community-.+-\d+$/.test(slug)
+        ? {
+            id: slug,
+            slug,
+            name: 'Trakt community list',
+            description: 'Popular list from Trakt',
+            provider: 'trakt',
+            scope: 'public' as const,
+            requiresConnection: false,
+          }
+        : undefined);
+    if (!resolvedDefinition)
+      throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
+    const actualOwner = resolvedDefinition.scope === 'public' ? 'public' : ownerKey;
     let list = await this.mediaListRepository.findBySlug(slug, false, actualOwner);
     if (!list) {
       list = await this.mediaListRepository.createMediaList(
-        definition.name,
-        definition.description,
+        resolvedDefinition.name,
+        resolvedDefinition.description,
         slug,
         actualOwner,
-        definition.id
+        resolvedDefinition.id
       );
     }
     return list;
+  }
+
+  private listRank(slug: string): number {
+    return this.listRanks.get(slug) ?? 19;
   }
 
   private async getListBySlug(slug: string, ownerKey = 'public'): Promise<MediaList> {

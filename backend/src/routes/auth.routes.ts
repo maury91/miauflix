@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
-import { deleteCookie, getCookie } from 'hono/cookie';
+import { getCookie } from 'hono/cookie';
 import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
@@ -127,9 +127,7 @@ export const createAuthRoutes = ({
 
         if (!authResult) {
           // Clear invalid cookies
-          deleteCookie(context, cookieName);
-          const { name: accessCookieName } = authService.getAccessTokenCookieConfig(session);
-          deleteCookie(context, accessCookieName);
+          authService.clearCookies(context, session);
           throw new InvalidTokenError();
         }
 
@@ -169,9 +167,7 @@ export const createAuthRoutes = ({
         }
 
         // Clear cookies for this specific session only
-        deleteCookie(context, cookieName);
-        const { name: accessCookieName } = authService.getAccessTokenCookieConfig(session);
-        deleteCookie(context, accessCookieName);
+        authService.clearCookies(context, session);
 
         return context.json({ message: 'Logged out successfully' } satisfies LogoutResponse);
       }

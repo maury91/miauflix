@@ -54,6 +54,14 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
+get_owner_group() {
+  stat -c '%u:%g' "$1" 2>/dev/null || stat -f '%u:%g' "$1" 2>/dev/null
+}
+
+get_mode() {
+  stat -c '%a' "$1" 2>/dev/null || stat -f '%Lp' "$1" 2>/dev/null
+}
+
 # Docker Desktop accesses bind-mount sources through the logged-in macOS user.
 # Service directories still need their container UID/GID ownership, so grant
 # the host user an inheritable ACL instead of weakening their POSIX modes.
@@ -110,7 +118,7 @@ ensure_data_dir() {
   fi
 
   local catalog_owner
-  catalog_owner=$(stat -c '%u:%g' "$catalog_data_dir" 2>/dev/null || stat -f '%u:%g' "$catalog_data_dir" 2>/dev/null) || catalog_owner=""
+  catalog_owner=$(get_owner_group "$catalog_data_dir") || catalog_owner=""
 
   if [ "$catalog_owner" != "911:911" ]; then
     if ! chown -R 911:911 "$catalog_data_dir" 2>/dev/null; then
@@ -121,7 +129,7 @@ ensure_data_dir() {
   fi
 
   local list_service_owner
-  list_service_owner=$(stat -c '%u:%g' "$list_service_data_dir" 2>/dev/null || stat -f '%u:%g' "$list_service_data_dir" 2>/dev/null) || list_service_owner=""
+  list_service_owner=$(get_owner_group "$list_service_data_dir") || list_service_owner=""
 
   if [ "$list_service_owner" != "1000:1000" ]; then
     if ! chown -R 1000:1000 "$list_service_data_dir" 2>/dev/null; then
@@ -132,22 +140,44 @@ ensure_data_dir() {
     fi
   fi
 
-  if ! chmod 0770 "$list_service_data_dir" 2>/dev/null; then
-    if ! command_exists sudo || ! sudo chmod 0770 "$list_service_data_dir"; then
-      print_error "Cannot make ${list_service_data_dir} writable for the List Service."
-      return 1
+  local list_service_mode
+  list_service_mode=$(get_mode "$list_service_data_dir") || list_service_mode=""
+
+  if [ "$list_service_mode" != "770" ]; then
+    if ! chmod 0770 "$list_service_data_dir" 2>/dev/null; then
+      if ! command_exists sudo || ! sudo chmod 0770 "$list_service_data_dir"; then
+        print_error "Cannot make ${list_service_data_dir} writable for the List Service."
+        return 1
+      fi
     fi
   fi
 
   # Keep the host owner for the backend and share the directory with the
   # catalog's fixed UID/GID without granting access to every local account.
   local service_access_ready=false
-  if chgrp 911 "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-    chmod 2770 "$data_dir" 2>/dev/null && chmod 0770 "$catalog_data_dir" 2>/dev/null; then
+  local data_owner data_mode catalog_mode required_data_mode
+  data_owner=$(get_owner_group "$data_dir") || data_owner=""
+  data_mode=$(get_mode "$data_dir") || data_mode=""
+  catalog_owner=$(get_owner_group "$catalog_data_dir") || catalog_owner=""
+  catalog_mode=$(get_mode "$catalog_data_dir") || catalog_mode=""
+  required_data_mode=2770
+
+  # Docker Desktop does not preserve the setgid bit on macOS bind-mount
+  # sources. Group access is sufficient there; Linux keeps setgid so files
+  # created below data/ inherit the service group.
+  if [ "$(uname -s)" = "Darwin" ]; then
+    required_data_mode=0770
+  fi
+
+  if [ "${data_owner##*:}" = "911" ] && [ "$data_mode" = "${required_data_mode#0}" ] && \
+    [ "${catalog_owner##*:}" = "911" ] && [ "$catalog_mode" = "770" ]; then
+    service_access_ready=true
+  elif chgrp 911 "$data_dir" "$catalog_data_dir" 2>/dev/null && \
+    chmod "$required_data_mode" "$data_dir" 2>/dev/null && chmod 0770 "$catalog_data_dir" 2>/dev/null; then
     service_access_ready=true
   elif command_exists sudo && \
     sudo chgrp 911 "$data_dir" "$catalog_data_dir" && \
-    sudo chmod 2770 "$data_dir" && sudo chmod 0770 "$catalog_data_dir"; then
+    sudo chmod "$required_data_mode" "$data_dir" && sudo chmod 0770 "$catalog_data_dir"; then
     service_access_ready=true
   fi
 
@@ -174,7 +204,7 @@ ensure_data_dir() {
 
   if [ "$service_access_ready" != "true" ]; then
     print_error "Cannot make ${data_dir} writable for the Docker services."
-    print_status "Run: sudo chgrp 911 ${data_dir} ${catalog_data_dir} && sudo chmod 2770 ${data_dir} && sudo chmod 0770 ${catalog_data_dir}"
+    print_status "Run: sudo chgrp 911 ${data_dir} ${catalog_data_dir} && sudo chmod ${required_data_mode} ${data_dir} && sudo chmod 0770 ${catalog_data_dir}"
     return 1
   fi
 

@@ -1,0 +1,844 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1203",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ddf3010b3c4b4d878f895a74b01e67e3\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rfxryDIv8huejujg4JueDJx8zCz.jpg",
+    "created_by": [
+      {
+        "id": 66633,
+        "credit_id": "52599cb3760ee34661b60d94",
+        "name": "Sage Finch",
+        "original_name": "Sage Finch",
+        "gender": 2,
+        "profile_path": "/wJIxATESjzsjSgvRhVavOmdamXc.jpg"
+      },
+      {
+        "id": 24951,
+        "credit_id": "52599cb3760ee34661b60d9a",
+        "name": "Jordan Page",
+        "original_name": "Jordan Page",
+        "gender": 2,
+        "profile_path": "/a2dJSpUiXQ2NAxqSzztr6WsnhOJ.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2015-02-08",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+    "id": 60059,
+    "in_production": false,
+    "languages": [
+      "en",
+      "de",
+      "es"
+    ],
+    "last_air_date": "2022-08-15",
+    "last_episode_to_air": {
+      "id": 3641954,
+      "name": "Distant Orchard",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 9.227,
+      "vote_count": 130,
+      "air_date": "2022-08-15",
+      "episode_number": 13,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 70,
+      "season_number": 6,
+      "show_id": 60059,
+      "still_path": "/aZFwz8FaM9MXFqwakFnhhNjYZSv.jpg"
+    },
+    "name": "Crimson Signal: Fox Hollow",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 174,
+        "logo_path": "/pmvRmATOCaDykE6JrVoeYxlFHw3.png",
+        "name": "Golden Bridge Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 63,
+    "number_of_seasons": 6,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Crimson Signal: Fox Hollow",
+    "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 115.4678,
+    "poster_path": "/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
+    "production_companies": [
+      {
+        "id": 11073,
+        "logo_path": "/wHs44fktdoj6c378ZbSWfzKsM2Z.png",
+        "name": "Scarlet Beacon Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 2605,
+        "logo_path": null,
+        "name": "Bright Horizon Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 33742,
+        "logo_path": "/2jdh2sEa0R6y6uT0F7g0IgA2WO8.png",
+        "name": "Crimson Archive Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 241151,
+        "logo_path": null,
+        "name": "Silent Beacon Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2015-11-10",
+        "episode_count": 6,
+        "id": 64929,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/rGvjDw9U0aKjz2Jc7yROoqXLhMD.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2015-02-08",
+        "episode_count": 10,
+        "id": 60223,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/bAbZBZmz25Lqk8A8mwMWzAkvlAj.jpg",
+        "season_number": 1,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2016-02-15",
+        "episode_count": 10,
+        "id": 72040,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/4NDwAQjFD8bTOsMKxYdl8IK10R9.jpg",
+        "season_number": 2,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2017-04-10",
+        "episode_count": 10,
+        "id": 83956,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/dHIMW3CkL21jYWtsHiAdwkCjAej.jpg",
+        "season_number": 3,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2018-08-06",
+        "episode_count": 10,
+        "id": 104603,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/8zvIqLFOrBymKKI3L2W1AH8YZQI.jpg",
+        "season_number": 4,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2020-02-23",
+        "episode_count": 10,
+        "id": 136162,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/dZHa2vUtYNQ81KV38eHGjn0P4JE.jpg",
+        "season_number": 5,
+        "vote_average": 8.7
+      },
+      {
+        "air_date": "2022-04-18",
+        "episode_count": 13,
+        "id": 243392,
+        "name": "Season 6",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/wKTzWgDaHxjdMhZ3zsVEF5eXVvX.jpg",
+        "season_number": 6,
+        "vote_average": 8.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.714,
+    "vote_count": 6913,
+    "external_ids": {
+      "imdb_id": "tt3032476",
+      "freebase_mid": "/m/0x12811",
+      "freebase_id": null,
+      "tvdb_id": 273181,
+      "tvrage_id": 37780,
+      "wikidata_id": "Q14925221",
+      "facebook_id": "BetterCallSaulAMC",
+      "instagram_id": "bettercallsaulamc",
+      "twitter_id": "BetterCallSaul"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Crimson Signal: Fox Hollow",
+            "overview": "Crimson Signal: Fox Hollow follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/crimson-signal-fox-hollow",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

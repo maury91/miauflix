@@ -276,8 +276,8 @@ describe('Movie Endpoints', () => {
       );
     }
 
-    // Use a movie ID that is present in test fixtures and likely unprocessed
-    const unprocessedMovieId = 1356039; // Mid Bandicoot, valid and unused movie for on-demand test
+    // Use a movie ID with active TMDB and YTS fixtures that is unused by this suite.
+    const unprocessedMovieId = 120; // The Ember Covenant
     const start = Date.now();
 
     // Request the movie with sources included (on-demand)
@@ -290,6 +290,10 @@ describe('Movie Endpoints', () => {
 
     expect(response).toBeHttpStatus(200);
     expect(response.data).toHaveProperty('sources');
+    if (!('sources' in response.data) || !Array.isArray(response.data.sources)) {
+      throw new Error('Expected the on-demand response to contain source results');
+    }
+    expect(response.data.sources.length).toBeGreaterThan(0);
     expect(durationMs).toBeLessThan(1000);
   });
 });

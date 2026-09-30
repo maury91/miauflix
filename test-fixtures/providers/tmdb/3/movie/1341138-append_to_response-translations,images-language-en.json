@@ -1,0 +1,566 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25822",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"83650c81442e59ce87aafbb6843ba881\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8NGPUlR4xKQfgLaWCeXALGF3i27.jpg",
+    "belongs_to_collection": null,
+    "budget": 20000000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/steam-and-seltzer",
+    "id": 1341138,
+    "imdb_id": "tt33305867",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Steam and Seltzer",
+    "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+    "popularity": 33.345,
+    "poster_path": "/uhx4YjT9YbSxrKVE7GWJdjI412J.jpg",
+    "production_companies": [
+      {
+        "id": 91921,
+        "logo_path": null,
+        "name": "Bubbly Weekend Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 22146,
+        "logo_path": "/v37N1mFeXNQfvPankg3feBhVvM7.png",
+        "name": "Bubbly Weekend Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-08-20",
+    "revenue": 10154377,
+    "runtime": 97,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Self-care was never this complicated.",
+    "title": "Steam and Seltzer",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 41,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 97,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 97,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 97,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 97,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 93,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 97,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 97,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/steam-and-seltzer",
+            "overview": "Four longtime friends realize they have spent years tending to everyone except one another. At a lavish spa retreat, they attempt to rest, reconnect, and behave responsibly—until the weekend's increasingly bad ideas take over.",
+            "runtime": 0,
+            "tagline": "Self-care was never this complicated.",
+            "title": "Steam and Seltzer"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hXHzJiIocjKIysuam5rLtkHOA2D.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6nluJ2EhHMI939vnU3H3F4B8OI5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jFFCBC2QkrMUTvm1WOSRhMEm8xz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.519,
+          "height": 588,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nMb9B7NKkHKgppeOeO98a0GWX6Y.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2069
+        },
+        {
+          "aspect_ratio": 3.509,
+          "height": 114,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xvHFREK4yMdMm1Zw1T6MC6r1V8s.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 400
+        },
+        {
+          "aspect_ratio": 3.519,
+          "height": 588,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aBFBjOzu7v5BTn8ezJRlEjJ8nGK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2069
+        },
+        {
+          "aspect_ratio": 3.519,
+          "height": 588,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iZoXvejO50O8xlVJoSJS3qWcTfo.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2069
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uhx4YjT9YbSxrKVE7GWJdjI412J.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zMmHkDi2PqudAsHlhtmkkshZ5XX.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i3I19SbOyz6AIl0cSYdyVJRucMr.jpg",
+          "vote_average": 3.666,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qLPHntUZFrv8rrZOU1aBiu1orse.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fJgkvsCWHtX5uUMuNHQYWN9lnEa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e3C9EuHwvqM1DGzZ6j9O7HcZv2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d2Ga7lZI4c19YGcIH09vj9mDZKU.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zS3apCL6ME3dWLHi5qV2qWmbucC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7LIP05jWWwLPObSOAVbX7xkWPQ0.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sUM8xnMs3P9wHMB5Lm5ZRWs8qQN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

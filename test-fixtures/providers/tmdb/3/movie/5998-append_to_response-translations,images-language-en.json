@@ -1,0 +1,373 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3905",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f50a3a9a546612993e8e3a6cf759051b\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/sHIwzZ0GBE3Y9vMdQWtsFtc5duV.jpg",
+    "belongs_to_collection": {
+      "id": 11140,
+      "name": "Voss Crime Chronicles",
+      "poster_path": "/e9iMj6Xb1MSTqK7ypCa6fGQyLn2.jpg",
+      "backdrop_path": "/91bjhhNr46T07ZZisdXUGGnU7ja.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-gambler-of-voss",
+    "id": 5998,
+    "imdb_id": "tt0013086",
+    "origin_country": [
+      "DE"
+    ],
+    "original_language": "de",
+    "original_title": "The Gambler of Voss",
+    "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+    "popularity": 3.214,
+    "poster_path": "/giarOpuBw8fRlNejbBbPMlRHz1I.jpg",
+    "production_companies": [
+      {
+        "id": 2127,
+        "logo_path": null,
+        "name": "Silver Meridian Films",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      }
+    ],
+    "release_date": "1922-04-27",
+    "revenue": 0,
+    "runtime": 271,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "One face hides a thousand schemes.",
+    "title": "The Gambler of Voss",
+    "video": false,
+    "vote_average": 7.674,
+    "vote_count": 218,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 271,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 242,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 270,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 220,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 272,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 242,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 195,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-gambler-of-voss",
+            "overview": "Mastermind Viktor Voss and his criminal circle steal private market intelligence to rig a fortune. Voss adopts a string of disguises, using a nightclub singer as his messenger and a young heir as his next mark. As Inspector Rehn follows the trail, he must find a way to expose a criminal who seems to be everywhere and nowhere at once.",
+            "runtime": 0,
+            "tagline": "One face hides a thousand schemes.",
+            "title": "The Gambler of Voss"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kxwsuipdJRHhFNEda1QmFIfRrZh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.666,
+          "height": 2392,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/giarOpuBw8fRlNejbBbPMlRHz1I.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1592
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tZ703k8zHyvsLoj8OeCnzfiMZUr.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ysHJDo9do2USU1BhWxcT0WO9WTO.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1080
+        }
+      ]
+    }
+  }
+}

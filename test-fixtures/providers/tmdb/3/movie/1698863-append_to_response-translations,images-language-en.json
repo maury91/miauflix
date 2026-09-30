@@ -1,0 +1,263 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ec7db80ecee363d8a34a650fd101eb23\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mPy1xSASQ9NYWJdAGx2C2sOsnNw.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://example.test/films/the-homeward-sea",
+    "id": 1698863,
+    "imdb_id": "tt41605854",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Homeward Sea",
+    "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+    "popularity": 32.2523,
+    "poster_path": "/b0z3ViIC5AkbJoqxmTpqyjgmoJs.jpg",
+    "production_companies": [
+      {
+        "id": 1311,
+        "logo_path": "/ic2bTizdzRLDVzAvN7MXdUg3WQV.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-07-03",
+    "revenue": 0,
+    "runtime": 86,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The journey home is the hardest one.",
+    "title": "The Homeward Sea",
+    "video": false,
+    "vote_average": 4.051,
+    "vote_count": 594,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 86,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 0,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 0,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 86,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 0,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 0,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 0,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 0,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/the-homeward-sea",
+            "overview": "After The fallen city falls, The homeward king sails for The island kingdom through divine schemes, strange islands, and dangers that outlast the war.",
+            "runtime": 0,
+            "tagline": "The journey home is the hardest one.",
+            "title": "The Homeward Sea"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v79FwTv2Dz9p5uRvfa8WgKNIsyO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.983,
+          "height": 1081,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m6w20NsuOQN8dOM8DztHEvIALFd.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4306
+        },
+        {
+          "aspect_ratio": 3.773,
+          "height": 88,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4TvKMbDnMGxrSD32gdZVIT1nzVY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 332
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b0z3ViIC5AkbJoqxmTpqyjgmoJs.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1850,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xBHCRB7zLIW41w8QskfwJhm32YF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1233
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fXgFgtzAohNSwSFfrIDgVZX5FGx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 750
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,688 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"161b48c12f8dbd3d858df736adebd9ff\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/edGuDPKY6qHBg9hYvmnvLjcFoy4.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/inside-the-final-inversion",
+    "id": 1610413,
+    "imdb_id": "tt39307872",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Inside the Final Inversion",
+    "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+    "popularity": 6.7895,
+    "poster_path": "/iX3ccl1TUNZgu4cNUm1pRLcevww.jpg",
+    "production_companies": [
+      {
+        "id": 182083,
+        "logo_path": "/snRLy61xn6sZNtNi3uNpFp1nLVE.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-01-11",
+    "revenue": 0,
+    "runtime": 123,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The last season, from the inside.",
+    "title": "Inside the Final Inversion",
+    "video": false,
+    "vote_average": 7.2,
+    "vote_count": 95,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 123,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 122,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 122,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 122,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/inside-the-final-inversion",
+            "overview": "Cast and crew revisit years of practical effects, late-night shoots, and emotional farewells behind a landmark series finale.",
+            "runtime": 0,
+            "tagline": "The last season, from the inside.",
+            "title": "Inside the Final Inversion"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.777,
+          "height": 844,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jMLn4z9b9Kvf6BcoNbecZId6EnV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.024,
+          "height": 419,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1SYLgTq7s1p6wjwDzIj7kMo2UR1.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1267
+        },
+        {
+          "aspect_ratio": 3.024,
+          "height": 419,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1cv97UgdZiNXf6ToAxU5VYetvKB.png",
+          "vote_average": 0.166,
+          "vote_count": 0,
+          "width": 1267
+        },
+        {
+          "aspect_ratio": 3.024,
+          "height": 419,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d7VbVfChxRO1TvNxZ7AqCL4SAUB.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1267
+        },
+        {
+          "aspect_ratio": 3.158,
+          "height": 520,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nauaUEheHQ3q8rOpBdSV5oYrQGr.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1642
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.675,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iX3ccl1TUNZgu4cNUm1pRLcevww.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 810
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vSMtNRRre0MEoQT0g6rv2E1gD8h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dpEBdgSHdBoSn3wHhldY18RPWvy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2btFRLpxkR6Z0FJZTkfLZWKxEaV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

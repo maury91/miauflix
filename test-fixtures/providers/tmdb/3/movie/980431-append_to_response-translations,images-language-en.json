@@ -1,0 +1,1027 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22664",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e0b4d7bf86638a8f1d2faae8f8fd7893\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ezbrL1dMymKQZw7mDEWa2ZTzN7d.jpg",
+    "belongs_to_collection": {
+      "id": 1136366,
+      "name": "The Wind Legacy Collection",
+      "poster_path": "/p7ZNY1G2ysI9oAok4jdqV3iwS8h.jpg",
+      "backdrop_path": null
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 28,
+        "name": "Action"
+      }
+    ],
+    "homepage": "https://example.test/films/the-wind-legacy",
+    "id": 980431,
+    "imdb_id": "tt18259538",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Wind Legacy",
+    "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+    "popularity": 75.6223,
+    "poster_path": "/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg",
+    "production_companies": [
+      {
+        "id": 2348,
+        "logo_path": "/m31fQvZJuUvAgxoqTiCGYFBfZYe.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 4,
+        "logo_path": "/jay6WcMgagAklUt7i9Euwj1pzTF.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 20187,
+        "logo_path": "/bYdzRm9r74bIWlSRKIWZeZyDBFD.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "AU"
+      },
+      {
+        "id": 58209,
+        "logo_path": "/bmoAT1OD8AAHpBVj4OGvA5UkM9e.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "KR"
+      },
+      {
+        "id": 149943,
+        "logo_path": "/1xacI0DXJAe5YWPP0dTJV48B9na.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      },
+      {
+        "iso_3166_1": "AU",
+        "name": "Australia"
+      }
+    ],
+    "release_date": "2026-07-24",
+    "revenue": 0,
+    "runtime": 99,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The last airbender carries a future.",
+    "title": "The Wind Legacy",
+    "video": false,
+    "vote_average": 9.147,
+    "vote_count": 1187,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 99,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 99,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 99,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 99,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 98,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 99,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 99,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 100,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/the-wind-legacy",
+            "overview": "The young monk searches the world for an ancient art that could preserve the Vanished monastic order legacy before it is captured by a new power.",
+            "runtime": 0,
+            "tagline": "The last airbender carries a future.",
+            "title": "The Wind Legacy"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2157,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/74iiUwzqe2BnRZl7QD4LVQUQKHb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3835
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gYRqPBok2mhUbsFPeB8Cj9yppBD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1150,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9te2BRQjaNeXxvQKD0c3v63UJ8Q.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2045
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2157,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hP0cMVW7uvj1s7iz0NEUjAosuve.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3835
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7R7pUny8TmGuGhp1Aj3J45gMwVJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6FGB9bD1XgzmHhX8wTkf1cWLk0E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.393,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vVzGZ7ghSF1tkeuJP1bMFd3pMdY.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3108
+        },
+        {
+          "aspect_ratio": 2.393,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/53LxdIprZQI9mn0KfbLjbtcGeCj.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3108
+        },
+        {
+          "aspect_ratio": 2.574,
+          "height": 603,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xq2m2dGb9SyJ28RBpQpiV2Zcu6C.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1552
+        },
+        {
+          "aspect_ratio": 2.574,
+          "height": 603,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4VmVBP4fytagVkZqghFSk3nrF8x.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1552
+        },
+        {
+          "aspect_ratio": 2.574,
+          "height": 603,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/14QAG63iFqhedkwAb6XGr1KLw45.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1552
+        },
+        {
+          "aspect_ratio": 5.803,
+          "height": 1318,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xx9PmEeJx9zrC6WpdaY6uBgvQlv.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 7649
+        },
+        {
+          "aspect_ratio": 5.715,
+          "height": 1318,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aya58k4NrCesBeSrhBuuRdZL6vK.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 7533
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3sgnSfNT27Bx5O5ukr7B26mhEQq.jpg",
+          "vote_average": 9.106,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/29Jdsak3SrwGds5k1t43kH6Khed.jpg",
+          "vote_average": 5.25,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AbUa37L0mRs4RtMLvSD6cWZcPJP.jpg",
+          "vote_average": 3.892,
+          "vote_count": 14,
+          "width": 1533
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/88ZbXOMt3WVli9Okhl8BA7TlIOM.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1xj5OqZv88PHzoOGSNyPB7Vda0x.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vQqIz8dwTRpRyAGTgA2KqObhma3.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mm9anPWCdAKQ3abQRIl73cOg5Uh.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.681,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7U0SvMioSq4EyD6Vw1QGFKGA9vr.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 697
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vVIrAp4yb8QUyVYB19Ez9WeIswT.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6xLxBoXaAb0joJh6mprw13FjaCr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pbNTpKl03u4eZ6gxPE5avnMqRJj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iihW33gCJ6QAgDQoNNHrRMmCELf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xjdjwzE188TtT6IaXHzjB3HyMSS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xbQiSFw4jWe5g29KbjrJL1oX1Hz.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gPiyTLo5GGwtJl0L8TlaJF9r0KE.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1533
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oS9LQQjVVAwTVcSye9rndcK6BNC.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bL0kpH1mL82VpZkpkAVn7X1age7.jpg",
+          "vote_average": 0.904,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oB8BuwXIzFQo0DL3F6ZGoB1N0jp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cc4Ribsc4bS0Atf780ycMZBkKtc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1261,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n0gpgUYzlxDHQWG1ReLBE9UseQs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 841
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eC86ptr0YbzFMydClSpzQwB6N3T.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8NaqNy07BXIThklyfxNrgTxJ2E6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1266
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tMVSKoLQ9Jcyt6uOYUUVDPqw7JR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w6UU04DrxdGFCSqQBOSJDYYwLWA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dAd8g75rGusuxqIaauNDLcBtx3y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

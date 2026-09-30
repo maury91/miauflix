@@ -1,0 +1,865 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20521",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e6d82883d4bc909e79ebf92f0735b674\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2uv0VEoyWxb3KgsiF5FInWP18wQ.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 12,
+        "name": "Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+    "id": 15283,
+    "imdb_id": "tt0110008",
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_title": "The Raccoons of Clover Hill",
+    "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+    "popularity": 8.6516,
+    "poster_path": "/gyoJmFf24MOUc4TTu97sd0cHIQF.jpg",
+    "production_companies": [
+      {
+        "id": 10342,
+        "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+        "name": "Moss Lantern Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1779,
+        "logo_path": "/41nGzTdCnORYZIZzaGZtfsBwQCl.png",
+        "name": "Moss Lantern Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Moss Lantern Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 13411,
+        "logo_path": "/5pzxTy7lWRCiruCNzwqtIYB3N43.png",
+        "name": "Moss Lantern Animation",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "1994-07-16",
+    "revenue": 43700000,
+    "runtime": 119,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A little mischief can save a home.",
+    "title": "The Raccoons of Clover Hill",
+    "video": false,
+    "vote_average": 7.175,
+    "vote_count": 1237,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 119,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/the-raccoons-of-clover-hill",
+            "overview": "As new homes and shopping centers spread across Clover Hill, its raccoon families lose the woods that shelter and feed them. They unite to protect their home, reviving an old art of transformation to outwit the developers and astonish the human neighbors.",
+            "runtime": 0,
+            "tagline": "A little mischief can save a home.",
+            "title": "The Raccoons of Clover Hill"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3YDaDwaB4XnRhYLLdW8qzS9VVoS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.949,
+          "height": 297,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vcb5vD06bqJQR0NtJ7ava0fqEd5.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 579
+        },
+        {
+          "aspect_ratio": 8.188,
+          "height": 96,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eUPDT7R3xPrIq7OEVMzASDFvmeh.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 786
+        },
+        {
+          "aspect_ratio": 1.934,
+          "height": 303,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rN86aZZ5cVfcmcnIuFq6ythpBId.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 586
+        },
+        {
+          "aspect_ratio": 5.302,
+          "height": 63,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/djvTecYv4kJI40oN676evM9NFrx.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 334
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gyoJmFf24MOUc4TTu97sd0cHIQF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nLonRwfYRGmJlkGCjhI3Cq85hDG.jpg",
+          "vote_average": 6.346,
+          "vote_count": 13,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kowo9E1e1JcWLXj9cCvAOFZcy5n.jpg",
+          "vote_average": 6.346,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2245,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kkVBk2qjmVf5lo5Clv8P8YD0x03.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1587
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jdQkjbQVOBP1jcGNQr9eSW3s9Z8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tjGUIGRo0pbOCmADheYxT2vR6fD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 1240,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3fedF6iVkUR0OnvrOGcjgdDWutU.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 828
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A3T66Z4ADDRptmE6MDkYU8EbteC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1333
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rME4I4GzzYAtGWZeadMmMypy2ph.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1480,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oOexAE5kV5NmPTEt94jbTS7lcin.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 2875,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7tRQ5VTyG3XyIOYtaYDEaf74njR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fx6C5OHgWuiVFr7LydrrH0hzue8.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/abYeTfRSbwYSA4l8pzVOtSqysDA.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7GARHjDoPONkqVCapd2zAyGPaUi.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xkdvNMyii2TCKWdZj3QVmPXZxoW.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jLo99FlwauX3e68ILuioK2p2SdL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zat2MMhejQyJJN6CucLI9Or9kdo.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1121,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tLAuB956UnRt2LLkswzviuiu8mQ.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 747
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iKc5YHKAZuTNDsZTerB1xJRCDNt.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1121,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/krBUW2Vn0bIKaFU0HtZhv3qPu7l.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 747
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1121,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cTyjoFBajbAnQlIl6aAhPUOitQq.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 747
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1121,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aB72jxr0YepDv5zRD9IpQQODwp9.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 747
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2ds0TERlcNSj2NUcrnaWT6qNPqT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 692
+        }
+      ]
+    }
+  }
+}

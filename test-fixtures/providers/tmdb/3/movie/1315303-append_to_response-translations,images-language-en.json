@@ -1,0 +1,941 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18022",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"5b33a34637957ed7bf72c153f693c20c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/d5C5Wsx4fnMRA0tj9BK1kTPcgQe.jpg",
+    "belongs_to_collection": null,
+    "budget": 21000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-infected-chimp",
+    "id": 1315303,
+    "imdb_id": "tt33028778",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Infected Chimp",
+    "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+    "popularity": 15.0121,
+    "poster_path": "/rKleYiEj4pFqxedTRWfujLooi84.jpg",
+    "production_companies": [
+      {
+        "id": 225897,
+        "logo_path": "/27MdBWUI30G7TTcKIFRhZo1DvdE.png",
+        "name": "Canopy Night Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 4,
+        "logo_path": "/jay6WcMgagAklUt7i9Euwj1pzTF.png",
+        "name": "Canopy Night Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 216687,
+        "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
+        "name": "Canopy Night Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-01-01",
+    "revenue": 41235665,
+    "runtime": 89,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The family pet isn't himself.",
+    "title": "The Infected Chimp",
+    "video": false,
+    "vote_average": 6.474,
+    "vote_count": 900,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 89,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 105,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-infected-chimp",
+            "overview": "A college student's vacation at her family's island home turns perilous when their beloved chimp becomes infected after an animal attack. As the chimp grows violently unpredictable, the young visitors must use the house and island terrain to stay alive.",
+            "runtime": 0,
+            "tagline": "The family pet isn't himself.",
+            "title": "The Infected Chimp"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/epV8l6VQJfQDCu8G5BtZggNakVX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5fPJDTC9xrp3Or2d8eMegywfAHs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1139,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sD9PnjKDqM9V5YLUPqub7ial5vR.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2025
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1124,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zUVzB37b5FpuSgWT2wpQWLPj05y.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1998
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2FuJ7QUKkRnycrNRH5BI91TLSQn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.325,
+          "height": 1297,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3lrUfCP2ftPb3TKIX2SNSISFXq3.png",
+          "vote_average": 7.814,
+          "vote_count": 9,
+          "width": 4313
+        },
+        {
+          "aspect_ratio": 3.325,
+          "height": 1297,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ejpFMkKMjnMyx9HX4nII9gjbUyi.png",
+          "vote_average": 7.19,
+          "vote_count": 7,
+          "width": 4313
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rKleYiEj4pFqxedTRWfujLooi84.jpg",
+          "vote_average": 6.346,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/46Qk0CAtmU0ubRtenDFA1pTiwtj.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z97hrgI5wbGbZvSVkBfAeBnFKAg.jpg",
+          "vote_average": 5.456,
+          "vote_count": 23,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/57cyAMc9c8iveudogTRuDOQjujn.jpg",
+          "vote_average": 5.25,
+          "vote_count": 16,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Q1zdYe9PYEXMGELzjfjyx8Eb7H.jpg",
+          "vote_average": 5,
+          "vote_count": 19,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wCk4110sstVLGLg9I1TO5aIcGG8.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1183,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xkEaVgVSBmm6EkW0Ux0ujS7efjL.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 798
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b5bxk31khqSIgCby5mo8YVQrGoq.jpg",
+          "vote_average": 4.458,
+          "vote_count": 12,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xJUVzcS5OGdj4kghqu34viW4AlB.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mUNrdzoIRNHFhnJpPZiMnUs6eHl.jpg",
+          "vote_average": 3.424,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1535,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sv807FXoJvPZ0liG0KEd8bQ0cjF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1024
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b9dWKnqS4FN1JvyTcpiETnP46H2.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1430,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d6lGppV96uHeP4q1uUT7zpEPVM5.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 953
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b1a6AwA9KDp0NTOYbzYV8V2tQYg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dawjBPDfGezVVvCi13a89jI9cGb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8u9p9gQufXkSdLzGVkXNl2WiH1i.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 853
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gKGHvtkZRULisq9qb0laQgcpD6i.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Ovti6DqXxG957Y2QDHJoOREwnS.jpg",
+          "vote_average": 1.272,
+          "vote_count": 11,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/skXnxPbi5M4S128WBoCKq5GOEyZ.jpg",
+          "vote_average": 1.208,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mUQJkXRsZnVQRkRzgjTcORdUFnj.jpg",
+          "vote_average": 1.066,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c3mfqyCQPYa21AGeHglS8nOq9oA.jpg",
+          "vote_average": 1.066,
+          "vote_count": 10,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2998,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u1mmyOwob2QgwQmcpTDOAd84C27.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4WWPKkVujcEVz7qC8QfTEWUESRV.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y2jBjbv94yLvNB1LtkrC56CkCIR.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n51rxXC1HQZJNac7jq2XOGRulNo.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1804,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6lxLXhgN9exkSnpSwNSsAJfn8pw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1203
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hIsmANBqgQV7ibTRmDC1SIXQiwY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

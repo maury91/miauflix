@@ -12,6 +12,15 @@ export const listServiceDefinitionSchema = z.object({
   provider: z.string().min(1),
   scope: listScopeSchema,
   requiresConnection: z.boolean(),
+  rank: z.number().int().nonnegative().optional(),
+});
+
+export const listServiceDefinitionsPageSchema = z.object({
+  results: z.array(listServiceDefinitionSchema),
+  page: z.number().int().positive(),
+  pageSize: z.number().int().positive(),
+  totalPages: z.number().int().nonnegative(),
+  totalItems: z.number().int().nonnegative(),
 });
 
 export const externalMediaIdsSchema = z
@@ -74,6 +83,7 @@ export const listStatusDetailsSchema = z.object({
 });
 
 export type ListServiceDefinition = z.infer<typeof listServiceDefinitionSchema>;
+export type ListServiceDefinitionsPage = z.infer<typeof listServiceDefinitionsPageSchema>;
 export type ExternalMediaRef = z.infer<typeof externalMediaRefSchema>;
 export type ListItem = z.infer<typeof listItemSchema>;
 export type ListServicePage = z.infer<typeof listServicePageSchema>;

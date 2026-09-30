@@ -5,6 +5,7 @@ import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
 import { TVShowRepository } from '../db/tv-show.repo';
+import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
 import { TmdbProvider } from '../provider/tmdb/tmdb.provider';
 import type { ServiceContext } from '../service-context';
@@ -91,7 +92,7 @@ export class CatalogRuntime {
 
       if (this.stopped) return { success: false, message: 'Catalog runtime is stopping' };
 
-      this.ctx.catalog = new CatalogService(
+      const catalog = new CatalogService(
         this.movies,
         this.tvShows,
         this.localization,
@@ -99,6 +100,10 @@ export class CatalogRuntime {
         provider,
         this.catalogValues(values)
       );
+      this.ctx.catalog = catalog;
+      void catalog
+        .getGenres('en')
+        .catch(error => logger.warn('CatalogRuntime', 'Unable to preload English genres', error));
       this.workerManager.start();
       return { success: true, message: `Catalog provider '${provider.name}' is ready` };
     },

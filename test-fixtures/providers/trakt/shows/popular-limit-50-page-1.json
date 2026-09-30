@@ -1,0 +1,822 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "916",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,show",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 18:07:23 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "666",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "14",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt31938062",
+        "plex": {
+          "guid": "66047594f2781fe94954a721",
+          "slug": "harborview-emergency"
+        },
+        "slug": "harborview-emergency",
+        "tmdb": 250307,
+        "tvdb": 448176,
+        "trakt": 232884
+      },
+      "year": 2025,
+      "title": "Harborview Emergency",
+      "aired_episodes": 30
+    },
+    {
+      "ids": {
+        "imdb": "tt22202452",
+        "plex": {
+          "guid": "6497f1862313a1f871612318",
+          "slug": "many-worlds-one-morning"
+        },
+        "slug": "many-worlds-one-morning",
+        "tmdb": 225171,
+        "tvdb": 436457,
+        "trakt": 206790
+      },
+      "year": 2025,
+      "title": "Many Worlds, One Morning",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt27497448",
+        "plex": {
+          "guid": "643cbf9ec1962a0897b7f6dd",
+          "slug": "a-knight-of-the-broken-crown"
+        },
+        "slug": "a-knight-of-the-broken-crown",
+        "tmdb": 224372,
+        "tvdb": 433631,
+        "trakt": 204141
+      },
+      "year": 2026,
+      "title": "A Knight of the Broken Crown",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt33332385",
+        "plex": {
+          "guid": "66da94bee48eef4cef8fc3e6",
+          "slug": "widow-s-harbor"
+        },
+        "slug": "widow-s-harbor",
+        "tmdb": 270476,
+        "tvdb": 454109,
+        "trakt": 254678
+      },
+      "year": 2026,
+      "title": "Widow's Harbor",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt12637874",
+        "plex": {
+          "guid": "5f1b325f4e3eb7003f6a4140",
+          "slug": "fallout"
+        },
+        "slug": "fallout",
+        "tmdb": 106379,
+        "tvdb": 416744,
+        "trakt": 163965
+      },
+      "year": 2024,
+      "title": "Fallout",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt18923754",
+        "plex": {
+          "guid": "628b9a7558130eca919281cb",
+          "slug": "the-blind-sentinel-second-trial"
+        },
+        "slug": "the-blind-sentinel-second-trial",
+        "tmdb": 202555,
+        "tvdb": 422712,
+        "trakt": 195845
+      },
+      "year": 2025,
+      "title": "The Blind Sentinel: Second Trial",
+      "aired_episodes": 17
+    },
+    {
+      "ids": {
+        "imdb": "tt22091076",
+        "plex": {
+          "guid": "646e036d7a2b3b58610b5cab",
+          "slug": "brilliant-by-accident"
+        },
+        "slug": "brilliant-by-accident",
+        "tmdb": 226637,
+        "tvdb": 434988,
+        "trakt": 205414
+      },
+      "year": 2024,
+      "title": "Brilliant by Accident",
+      "aired_episodes": 31
+    },
+    {
+      "ids": {
+        "imdb": "tt14186672",
+        "plex": {
+          "guid": "622ac0c4223545ee012ad733",
+          "slug": "landman"
+        },
+        "slug": "landman",
+        "tmdb": 157741,
+        "tvdb": 397424,
+        "trakt": 174314
+      },
+      "year": 2024,
+      "title": "Landman",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt27444205",
+        "plex": {
+          "guid": "673bdceaf3b97c1ef594ab33",
+          "slug": "eden-under-glass"
+        },
+        "slug": "eden-under-glass",
+        "tmdb": 245927,
+        "tvdb": 454565,
+        "trakt": 225096
+      },
+      "year": 2025,
+      "title": "Eden Under Glass",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt14688458",
+        "plex": {
+          "guid": "61b180686bfb4feb48515e07",
+          "slug": "the-vault-below"
+        },
+        "slug": "the-vault-below",
+        "tmdb": 125988,
+        "tvdb": 403245,
+        "trakt": 180770
+      },
+      "year": 2023,
+      "title": "The Vault Below",
+      "aired_episodes": 30
+    },
+    {
+      "ids": {
+        "imdb": "tt30459041",
+        "plex": {
+          "guid": "657dc33ef513062f56b44a23",
+          "slug": "your-friends-neighbors"
+        },
+        "slug": "your-friends-neighbors",
+        "tmdb": 241609,
+        "tvdb": 443433,
+        "trakt": 217691
+      },
+      "year": 2025,
+      "title": "Your Friends & Neighbors",
+      "aired_episodes": 19
+    },
+    {
+      "ids": {
+        "imdb": "tt30460310",
+        "plex": {
+          "guid": "63e6c25cbd7f14051f6c297a",
+          "slug": "spider-noir-shadows-over-bellwether"
+        },
+        "slug": "spider-noir-shadows-over-bellwether",
+        "tmdb": 220102,
+        "tvdb": 450033,
+        "trakt": 202400
+      },
+      "year": 2026,
+      "title": "Spider-Noir: Shadows Over Bellwether",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt33546863",
+        "plex": {
+          "guid": "670d3d01ea35b28bf307201f",
+          "slug": "off-the-sidelines"
+        },
+        "slug": "off-the-sidelines",
+        "tmdb": 273240,
+        "tvdb": 455086,
+        "trakt": 258304
+      },
+      "year": 2026,
+      "title": "Off the Sidelines",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt31510819",
+        "plex": {
+          "guid": "65e04d051f43644ac5a79a99",
+          "slug": "kingdom-of-knives"
+        },
+        "slug": "kingdom-of-knives",
+        "tmdb": 247718,
+        "tvdb": 446831,
+        "trakt": 228595
+      },
+      "year": 2025,
+      "title": "Kingdom of Knives",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt34771210",
+        "plex": {
+          "guid": "6749125e8148e744286155b2",
+          "slug": "i-will-find-mara"
+        },
+        "slug": "i-will-find-mara",
+        "tmdb": 278178,
+        "tvdb": 457173,
+        "trakt": 265319
+      },
+      "year": 2026,
+      "title": "I Will Find Mara",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt34991493",
+        "plex": {
+          "guid": "68b6e52b87dc0d2b6b23d0f3",
+          "slug": "dutton-acres"
+        },
+        "slug": "dutton-acres",
+        "tmdb": 299167,
+        "tvdb": 463308,
+        "trakt": 296208
+      },
+      "year": 2026,
+      "title": "Dutton Acres",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt11198330",
+        "plex": {
+          "guid": "5e160ed3e68804001e87a7b5",
+          "slug": "house-of-the-dragon"
+        },
+        "slug": "house-of-the-dragon",
+        "tmdb": 94997,
+        "tvdb": 371572,
+        "trakt": 154574
+      },
+      "year": 2022,
+      "title": "House of the Dragon",
+      "aired_episodes": 26
+    },
+    {
+      "ids": {
+        "imdb": "tt31589662",
+        "plex": {
+          "guid": "66948ced836d6c7c1774fab8",
+          "slug": "georgie-mandy-s-first-marriage"
+        },
+        "slug": "georgie-mandy-s-first-marriage",
+        "tmdb": 243875,
+        "tvdb": 448023,
+        "trakt": 228089
+      },
+      "year": 2024,
+      "title": "Georgie & Mandy's First Marriage",
+      "aired_episodes": 44
+    },
+    {
+      "ids": {
+        "imdb": "tt13875494",
+        "plex": {
+          "guid": "6339b5e5bc01498ae59c016c",
+          "slug": "the-trailkeeper"
+        },
+        "slug": "the-trailkeeper",
+        "tmdb": 211288,
+        "tvdb": 428433,
+        "trakt": 198575
+      },
+      "year": 2024,
+      "title": "The Trailkeeper",
+      "aired_episodes": 55
+    },
+    {
+      "ids": {
+        "imdb": "tt19244304",
+        "plex": {
+          "guid": "62554fd3f9d8ae441b2bdddc",
+          "slug": "derry-before-the-flood"
+        },
+        "slug": "derry-before-the-flood",
+        "tmdb": 200875,
+        "tvdb": 418424,
+        "trakt": 195268
+      },
+      "year": 2025,
+      "title": "Derry: Before the Flood",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt36849871",
+        "plex": {
+          "guid": "681bfb361a7ad6c1b6da9873",
+          "slug": "range-county"
+        },
+        "slug": "range-county",
+        "tmdb": 290856,
+        "tvdb": 463433,
+        "trakt": 284855
+      },
+      "year": 2026,
+      "title": "Range County",
+      "aired_episodes": 13
+    },
+    {
+      "ids": {
+        "imdb": "tt26545992",
+        "plex": {
+          "guid": "6475f4e274668225adb2c0e0",
+          "slug": "lanterns"
+        },
+        "slug": "lanterns",
+        "tmdb": 95350,
+        "tvdb": 376098,
+        "trakt": 157599
+      },
+      "year": 2026,
+      "title": "Lanterns",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt14452776",
+        "plex": {
+          "guid": "611f8407767ddf002cb05be2",
+          "slug": "the-night-kitchen"
+        },
+        "slug": "the-night-kitchen",
+        "tmdb": 136315,
+        "tvdb": 403294,
+        "trakt": 189717
+      },
+      "year": 2022,
+      "title": "The Night Kitchen",
+      "aired_episodes": 46
+    },
+    {
+      "ids": {
+        "imdb": "tt32612521",
+        "plex": {
+          "guid": "666b617d8e424828556e01cf",
+          "slug": "wasteland-hands"
+        },
+        "slug": "wasteland-hands",
+        "tmdb": 256721,
+        "tvdb": 450537,
+        "trakt": 243992
+      },
+      "year": 2025,
+      "title": "Wasteland Hands",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt33035373",
+        "plex": {
+          "guid": "66a33f8ece8cbb431d9b47f9",
+          "slug": "his-side-her-side"
+        },
+        "slug": "his-side-her-side",
+        "tmdb": 259731,
+        "tvdb": 452521,
+        "trakt": 249443
+      },
+      "year": 2026,
+      "title": "His Side, Her Side",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt26933824",
+        "plex": {
+          "guid": "660d495735513de615d99203",
+          "slug": "the-unlikely-pair"
+        },
+        "slug": "the-unlikely-pair",
+        "tmdb": 250923,
+        "tvdb": 450093,
+        "trakt": 233797
+      },
+      "year": 2024,
+      "title": "The Unlikely Pair",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt21066182",
+        "plex": {
+          "guid": "626411f62ca794f0875278f6",
+          "slug": "the-extraordinary-mr-marvel"
+        },
+        "slug": "the-extraordinary-mr-marvel",
+        "tmdb": 198178,
+        "tvdb": 428629,
+        "trakt": 196325
+      },
+      "year": 2026,
+      "title": "The Extraordinary Mr. Marvel",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt9813792",
+        "plex": {
+          "guid": "608ae6cf5077dd002d3bb8be",
+          "slug": "from-the-hollow"
+        },
+        "slug": "from-the-hollow",
+        "tmdb": 124364,
+        "tvdb": 401003,
+        "trakt": 188205
+      },
+      "year": 2022,
+      "title": "FROM THE Hollow",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt10970762",
+        "plex": {
+          "guid": "67ec4b17063a2874f7d50ea5",
+          "slug": "the-daughters-of-mercy"
+        },
+        "slug": "the-daughters-of-mercy",
+        "tmdb": 287527,
+        "tvdb": 460241,
+        "trakt": 280754
+      },
+      "year": 2026,
+      "title": "The Daughters of Mercy",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt32420734",
+        "plex": {
+          "guid": "664c912d9ecccd2ff053cd86",
+          "slug": "the-rooster"
+        },
+        "slug": "the-rooster",
+        "tmdb": 254953,
+        "tvdb": 457770,
+        "trakt": 240718
+      },
+      "year": 2026,
+      "title": "The Rooster",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt8599532",
+        "plex": {
+          "guid": "66589e320f6e7f8278b9be69",
+          "slug": "young-detective-rowan"
+        },
+        "slug": "young-detective-rowan",
+        "tmdb": 255661,
+        "tvdb": 450633,
+        "trakt": 242387
+      },
+      "year": 2026,
+      "title": "Young Detective Rowan",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt13159924",
+        "plex": {
+          "guid": "6294e6012dcf10c05a6f46c9",
+          "slug": "next-class-vanguard"
+        },
+        "slug": "next-class-vanguard",
+        "tmdb": 205715,
+        "tvdb": 417909,
+        "trakt": 196842
+      },
+      "year": 2023,
+      "title": "Next Class: Vanguard",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt22248376",
+        "plex": {
+          "guid": "631ccdfccbff4464978f9d53",
+          "slug": "eira-the-long-road-home"
+        },
+        "slug": "eira-the-long-road-home",
+        "tmdb": 209867,
+        "tvdb": 424536,
+        "trakt": 198225
+      },
+      "year": 2023,
+      "title": "Eira: The Long Road Home",
+      "aired_episodes": 38
+    },
+    {
+      "ids": {
+        "imdb": "tt34675596",
+        "plex": {
+          "guid": "673e0ad2d093dd790f373e0f",
+          "slug": "ravenwood-cape"
+        },
+        "slug": "ravenwood-cape",
+        "tmdb": 277439,
+        "tvdb": 456813,
+        "trakt": 264291
+      },
+      "year": 2026,
+      "title": "Ravenwood Cape",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt32550889",
+        "plex": {
+          "guid": "624d68dac2d693a25d73c51a",
+          "slug": "the-apprentice-of-ink-and-thread"
+        },
+        "slug": "the-apprentice-of-ink-and-thread",
+        "tmdb": 196950,
+        "tvdb": 418666,
+        "trakt": 194536
+      },
+      "year": 2026,
+      "title": "The Apprentice of Ink and Thread",
+      "aired_episodes": 13
+    },
+    {
+      "ids": {
+        "imdb": "tt31314751",
+        "plex": {
+          "guid": "65cf164547b6b46bf15979b2",
+          "slug": "what-we-couldn-t-see"
+        },
+        "slug": "what-we-couldn-t-see",
+        "tmdb": 246386,
+        "tvdb": 446149,
+        "trakt": 226034
+      },
+      "year": 2025,
+      "title": "What We Couldn't See",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt13918776",
+        "plex": {
+          "guid": "60f9444c9f3e49002d08d6e4",
+          "slug": "the-midnight-liaison"
+        },
+        "slug": "the-midnight-liaison",
+        "tmdb": 129552,
+        "tvdb": 407281,
+        "trakt": 184471
+      },
+      "year": 2023,
+      "title": "The Midnight Liaison",
+      "aired_episodes": 30
+    },
+    {
+      "ids": {
+        "imdb": "tt35495073",
+        "plex": {
+          "guid": "6841a59cd5fd1108085b4a9f",
+          "slug": "rival-ice"
+        },
+        "slug": "rival-ice",
+        "tmdb": 301507,
+        "tvdb": 464461,
+        "trakt": 300028
+      },
+      "year": 2025,
+      "title": "Rival Ice",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt37532356",
+        "plex": {
+          "guid": "66a939a42812c96c475b9808",
+          "slug": "the-ashen-boundary"
+        },
+        "slug": "the-ashen-boundary",
+        "tmdb": 260463,
+        "tvdb": 452711,
+        "trakt": 250204
+      },
+      "year": 2026,
+      "title": "The Ashen Boundary",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt27497393",
+        "plex": {
+          "guid": "67e9368d8b8ea643cb8c9fba",
+          "slug": "stuart-breaks-the-cosmos"
+        },
+        "slug": "stuart-breaks-the-cosmos",
+        "tmdb": 287620,
+        "tvdb": 465664,
+        "trakt": 280856
+      },
+      "year": 2026,
+      "title": "Stuart Breaks the Cosmos",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt27557289",
+        "plex": {
+          "guid": "64456c8c39b14cd3818b865f",
+          "slug": "the-borough-last-light"
+        },
+        "slug": "the-borough-last-light",
+        "tmdb": 224941,
+        "tvdb": 433989,
+        "trakt": 204528
+      },
+      "year": 2026,
+      "title": "The Borough: Last Light",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt36594331",
+        "plex": {
+          "guid": "68024730777501456d5e5aec",
+          "slug": "star-wars-veyra-lord-of-the-veil"
+        },
+        "slug": "star-wars-veyra-lord-of-the-veil",
+        "tmdb": 289219,
+        "tvdb": 462715,
+        "trakt": 282764
+      },
+      "year": 2026,
+      "title": "Star Wars: Veyra — Lord of the Veil",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt40197357",
+        "plex": {
+          "guid": "687d434c16e6d561559bef1e",
+          "slug": "house-calls"
+        },
+        "slug": "house-calls",
+        "tmdb": 295778,
+        "tvdb": 465690,
+        "trakt": 291441
+      },
+      "year": 2026,
+      "title": "House Calls",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt34866681",
+        "plex": {
+          "guid": "67507127b734a2ab5d683713",
+          "slug": "fortune-on-her-side"
+        },
+        "slug": "fortune-on-her-side",
+        "tmdb": 278624,
+        "tvdb": 457437,
+        "trakt": 265812
+      },
+      "year": 2026,
+      "title": "Fortune on Her Side",
+      "aired_episodes": 7
+    },
+    {
+      "ids": {
+        "imdb": "tt15677150",
+        "plex": {
+          "guid": "6168243f1c627ddb697e2a46",
+          "slug": "making-room"
+        },
+        "slug": "making-room",
+        "tmdb": 136311,
+        "tvdb": 411364,
+        "trakt": 189764
+      },
+      "year": 2023,
+      "title": "Making Room",
+      "aired_episodes": 33
+    },
+    {
+      "ids": {
+        "imdb": "tt13111078",
+        "plex": {
+          "guid": "62ac863c44b73ea95829962c",
+          "slug": "lioness"
+        },
+        "slug": "lioness",
+        "tmdb": 113962,
+        "tvdb": 388589,
+        "trakt": 167187
+      },
+      "year": 2023,
+      "title": "Lioness",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt26591147",
+        "plex": {
+          "guid": "645bf5428fbf681e141ac983",
+          "slug": "matlock-a-second-verdict"
+        },
+        "slug": "matlock-a-second-verdict",
+        "tmdb": 226174,
+        "tvdb": 434780,
+        "trakt": 205195
+      },
+      "year": 2024,
+      "title": "Matlock: A Second Verdict",
+      "aired_episodes": 35
+    },
+    {
+      "ids": {
+        "imdb": "tt26656917",
+        "plex": {
+          "guid": "63e188721fa52962cfb52d7e",
+          "slug": "the-bureau-second-posting"
+        },
+        "slug": "the-bureau-second-posting",
+        "tmdb": 219971,
+        "tvdb": 430769,
+        "trakt": 202341
+      },
+      "year": 2024,
+      "title": "The Bureau: Second Posting",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt14879018",
+        "plex": {
+          "guid": "65b5ba17eee505e570fe44e8",
+          "slug": "the-fourth-quarter"
+        },
+        "slug": "the-fourth-quarter",
+        "tmdb": 244623,
+        "tvdb": 450102,
+        "trakt": 221851
+      },
+      "year": 2025,
+      "title": "The Fourth Quarter",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt36303968",
+        "plex": {
+          "guid": "68d30fff1190765ce3a96c77",
+          "slug": "furious"
+        },
+        "slug": "furious",
+        "tmdb": 287238,
+        "tvdb": 468000,
+        "trakt": 280335
+      },
+      "year": 2026,
+      "title": "Furious",
+      "aired_episodes": 8
+    }
+  ]
+}

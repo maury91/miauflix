@@ -1,0 +1,822 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "2709",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,show",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 17:37:31 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "666",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "3",
+    "x-pagination-page-count": "14",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt17543592",
+        "plex": {
+          "guid": "6304d26a33946dfaf1ef8611",
+          "slug": "will-mercer"
+        },
+        "slug": "will-mercer",
+        "tmdb": 208569,
+        "tvdb": 419879,
+        "trakt": 197615
+      },
+      "year": 2023,
+      "title": "Will Mercer",
+      "aired_episodes": 59
+    },
+    {
+      "ids": {
+        "imdb": "tt32499731",
+        "plex": {
+          "guid": "663f62b3be761301f87d7dbf",
+          "slug": "the-take"
+        },
+        "slug": "the-take",
+        "tmdb": 254071,
+        "tvdb": 449950,
+        "trakt": 239320
+      },
+      "year": 2026,
+      "title": "The Take",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt11379026",
+        "plex": {
+          "guid": "60a9318a2d6fc0002dfd4542",
+          "slug": "second-sightings"
+        },
+        "slug": "second-sightings",
+        "tmdb": 126027,
+        "tvdb": 400267,
+        "trakt": 176964
+      },
+      "year": 2021,
+      "title": "Second Sightings",
+      "aired_episodes": 94
+    },
+    {
+      "ids": {
+        "imdb": "tt32020831",
+        "plex": {
+          "guid": "67ac7f7849b7ba5b2b751f7c",
+          "slug": "elise"
+        },
+        "slug": "elise",
+        "tmdb": 254420,
+        "tvdb": 450048,
+        "trakt": 239856
+      },
+      "year": 2026,
+      "title": "Elise",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt32536168",
+        "plex": {
+          "guid": "65fec75d4ec68f9b9b37358d",
+          "slug": "chosen-for-the-front-line"
+        },
+        "slug": "chosen-for-the-front-line",
+        "tmdb": 249907,
+        "tvdb": 437266,
+        "trakt": 232210
+      },
+      "year": 2026,
+      "title": "Chosen for the Front Line",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt33484460",
+        "plex": {
+          "guid": "66f5bff6dfb31331aafbc867",
+          "slug": "the-greenwood-outlaw"
+        },
+        "slug": "the-greenwood-outlaw",
+        "tmdb": 272418,
+        "tvdb": 454834,
+        "trakt": 257282
+      },
+      "year": 2025,
+      "title": "The Greenwood Outlaw",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt31091039",
+        "plex": {
+          "guid": "66ab7df01b3e8c6904148bba",
+          "slug": "behind-the-covenant"
+        },
+        "slug": "behind-the-covenant",
+        "tmdb": 261102,
+        "tvdb": 452714,
+        "trakt": 251301
+      },
+      "year": 2024,
+      "title": "Behind the Covenant",
+      "aired_episodes": 45
+    },
+    {
+      "ids": {
+        "imdb": "tt13833978",
+        "plex": {
+          "guid": "60046295cdf6b0002b565c6f",
+          "slug": "the-lincoln-lawyer"
+        },
+        "slug": "the-lincoln-lawyer",
+        "tmdb": 116799,
+        "tvdb": 399909,
+        "trakt": 172130
+      },
+      "year": 2022,
+      "title": "The Lincoln Lawyer",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt27331527",
+        "plex": {
+          "guid": "6424274be7025053a45a7e0c",
+          "slug": "man-on-fire-safe-passage"
+        },
+        "slug": "man-on-fire-safe-passage",
+        "tmdb": 223386,
+        "tvdb": 433027,
+        "trakt": 203594
+      },
+      "year": 2026,
+      "title": "Man on Fire: Safe Passage",
+      "aired_episodes": 7
+    },
+    {
+      "ids": {
+        "imdb": "tt31614348",
+        "plex": {
+          "guid": "663c6f8622aec5fa6cb8465f",
+          "slug": "second-shift"
+        },
+        "slug": "second-shift",
+        "tmdb": 260471,
+        "tvdb": 447183,
+        "trakt": 250206
+      },
+      "year": 2025,
+      "title": "Second Shift",
+      "aired_episodes": 23
+    },
+    {
+      "ids": {
+        "imdb": "tt15232564",
+        "plex": {
+          "guid": "61b1811072d2810d4b1b54a2",
+          "slug": "love-in-the-spotlight"
+        },
+        "slug": "love-in-the-spotlight",
+        "tmdb": 131142,
+        "tvdb": 408694,
+        "trakt": 185998
+      },
+      "year": 2026,
+      "title": "Love in the Spotlight",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt19854762",
+        "plex": {
+          "guid": "6262c52fc0e1db31c74755bd",
+          "slug": "red-eye-atlantic"
+        },
+        "slug": "red-eye-atlantic",
+        "tmdb": 198102,
+        "tvdb": 419254,
+        "trakt": 194907
+      },
+      "year": 2023,
+      "title": "Red Eye: Atlantic",
+      "aired_episodes": 15
+    },
+    {
+      "ids": {
+        "imdb": "tt12327578",
+        "plex": {
+          "guid": "5ec75ff037d69c0039b83267",
+          "slug": "star-trek-strange-new-worlds"
+        },
+        "slug": "star-trek-strange-new-worlds",
+        "tmdb": 103516,
+        "tvdb": 382389,
+        "trakt": 162206
+      },
+      "year": 2022,
+      "title": "Star Trek: Strange New Worlds",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt31449991",
+        "plex": {
+          "guid": "65d88d78a57f7d57d36d552a",
+          "slug": "cal-mercer-comeback-season"
+        },
+        "slug": "cal-mercer-comeback-season",
+        "tmdb": 247168,
+        "tvdb": 446526,
+        "trakt": 227577
+      },
+      "year": 2025,
+      "title": "Cal Mercer: Comeback Season",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt13062500",
+        "plex": {
+          "guid": "633f0da60743b10ec055ac89",
+          "slug": "the-walking-dead-ashes-of-the-north"
+        },
+        "slug": "the-walking-dead-ashes-of-the-north",
+        "tmdb": 211684,
+        "tvdb": 427464,
+        "trakt": 198729
+      },
+      "year": 2023,
+      "title": "The Walking Dead: Ashes of the North",
+      "aired_episodes": 19
+    },
+    {
+      "ids": {
+        "imdb": "tt31987295",
+        "plex": {
+          "guid": "66e51854f1d012d958aeeb4d",
+          "slug": "the-office-chair"
+        },
+        "slug": "the-office-chair",
+        "tmdb": 271267,
+        "tvdb": 454397,
+        "trakt": 255718
+      },
+      "year": 2025,
+      "title": "The Office Chair",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt8323628",
+        "plex": {
+          "guid": "60ed66108fa387002c0e63d3",
+          "slug": "the-bennett-ranch-year"
+        },
+        "slug": "the-bennett-ranch-year",
+        "tmdb": 199001,
+        "tvdb": 405817,
+        "trakt": 183619
+      },
+      "year": 2023,
+      "title": "The Bennett Ranch Year",
+      "aired_episodes": 30
+    },
+    {
+      "ids": {
+        "imdb": "tt14403178",
+        "plex": {
+          "guid": "61cdd57fcd8c10ae5aca39f4",
+          "slug": "beef-collision-course"
+        },
+        "slug": "beef-collision-course",
+        "tmdb": 154385,
+        "tvdb": 399838,
+        "trakt": 197667
+      },
+      "year": 2023,
+      "title": "BEEF: Collision Course",
+      "aired_episodes": 18
+    },
+    {
+      "ids": {
+        "imdb": "tt33270420",
+        "plex": {
+          "guid": "67173bed7c347c3b8fe95a0f",
+          "slug": "the-laughing-embassy"
+        },
+        "slug": "the-laughing-embassy",
+        "tmdb": 262793,
+        "tvdb": 453786,
+        "trakt": 253584
+      },
+      "year": 2026,
+      "title": "The Laughing Embassy",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt42127457",
+        "plex": {
+          "guid": "687b81e4fc650b409c413a5b",
+          "slug": "agent-kim-back-in-the-field"
+        },
+        "slug": "agent-kim-back-in-the-field",
+        "tmdb": 296206,
+        "tvdb": 468006,
+        "trakt": 292308
+      },
+      "year": 2026,
+      "title": "Agent Kim: Back in the Field",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt10986410",
+        "plex": {
+          "guid": "5e204251072b9e003ca5c140",
+          "slug": "ted-lasso"
+        },
+        "slug": "ted-lasso",
+        "tmdb": 97546,
+        "tvdb": 383203,
+        "trakt": 162639
+      },
+      "year": 2020,
+      "title": "Ted Lasso",
+      "aired_episodes": 42
+    },
+    {
+      "ids": {
+        "imdb": "tt13706018",
+        "plex": {
+          "guid": "617fcf9e0b976a839051dab2",
+          "slug": "spy-x-household"
+        },
+        "slug": "spy-x-household",
+        "tmdb": 120089,
+        "tvdb": 405920,
+        "trakt": 190742
+      },
+      "year": 2022,
+      "title": "SPY x HOUSEHOLD",
+      "aired_episodes": 50
+    },
+    {
+      "ids": {
+        "imdb": "tt27427326",
+        "plex": {
+          "guid": "642d74a1bf7200856400ff80",
+          "slug": "wayward-pines"
+        },
+        "slug": "wayward-pines",
+        "tmdb": 255859,
+        "tvdb": 433309,
+        "trakt": 242696
+      },
+      "year": 2025,
+      "title": "Wayward Pines",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt28088031",
+        "plex": {
+          "guid": "656ff8021618e1eba2286daf",
+          "slug": "ransom-canyon"
+        },
+        "slug": "ransom-canyon",
+        "tmdb": 240993,
+        "tvdb": 443051,
+        "trakt": 216613
+      },
+      "year": 2025,
+      "title": "Ransom Canyon",
+      "aired_episodes": 18
+    },
+    {
+      "ids": {
+        "imdb": "tt13542714",
+        "plex": {
+          "guid": "65fb757103ae884d7c437521",
+          "slug": "house-of-blackthorn"
+        },
+        "slug": "house-of-blackthorn",
+        "tmdb": 250988,
+        "tvdb": 447594,
+        "trakt": 233921
+      },
+      "year": 2025,
+      "title": "House of Blackthorn",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt33055254",
+        "plex": {
+          "guid": "66ad93deda8b6e651917e7c6",
+          "slug": "every-year-after"
+        },
+        "slug": "every-year-after",
+        "tmdb": 260592,
+        "tvdb": 452789,
+        "trakt": 250645
+      },
+      "year": 2026,
+      "title": "Every Year After",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt31314791",
+        "plex": {
+          "guid": "65cf164a47b6b46bf1597c2d",
+          "slug": "the-oslo-cipher"
+        },
+        "slug": "the-oslo-cipher",
+        "tmdb": 246412,
+        "tvdb": 453657,
+        "trakt": 226029
+      },
+      "year": 2025,
+      "title": "The Oslo Cipher",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt17491088",
+        "plex": {
+          "guid": "6274f781093e999f383e7197",
+          "slug": "the-envoy-s-residence"
+        },
+        "slug": "the-envoy-s-residence",
+        "tmdb": 203857,
+        "tvdb": 415239,
+        "trakt": 196192
+      },
+      "year": 2023,
+      "title": "The Envoy's Residence",
+      "aired_episodes": 22
+    },
+    {
+      "ids": {
+        "imdb": "tt35466672",
+        "plex": {
+          "guid": "679960dab0ac6cec256baf3f",
+          "slug": "the-middle-years-still-a-mess"
+        },
+        "slug": "the-middle-years-still-a-mess",
+        "tmdb": 279471,
+        "tvdb": 457779,
+        "trakt": 269843
+      },
+      "year": 2026,
+      "title": "The Middle Years: Still a Mess",
+      "aired_episodes": 4
+    },
+    {
+      "ids": {
+        "imdb": "tt16098700",
+        "plex": {
+          "guid": "627e37a6dcbc250fc7b9abce",
+          "slug": "county-line-fire"
+        },
+        "slug": "county-line-fire",
+        "tmdb": 202297,
+        "tvdb": 420063,
+        "trakt": 195577
+      },
+      "year": 2022,
+      "title": "County Line Fire",
+      "aired_episodes": 72
+    },
+    {
+      "ids": {
+        "imdb": "tt27550719",
+        "plex": {
+          "guid": "6646a03bab6b31fa3ee5e703",
+          "slug": "the-falcon"
+        },
+        "slug": "the-falcon",
+        "tmdb": 254528,
+        "tvdb": 450088,
+        "trakt": 240024
+      },
+      "year": 2026,
+      "title": "The Falcon",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt32140872",
+        "plex": {
+          "guid": "67a711656b1b8d167eb3f327",
+          "slug": "dawnward"
+        },
+        "slug": "dawnward",
+        "tmdb": 252107,
+        "tvdb": 449146,
+        "trakt": 235622
+      },
+      "year": 2026,
+      "title": "Dawnward",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt26448526",
+        "plex": {
+          "guid": "6533258185decb9532ec97a0",
+          "slug": "brilliant-minds"
+        },
+        "slug": "brilliant-minds",
+        "tmdb": 237748,
+        "tvdb": 441114,
+        "trakt": 211900
+      },
+      "year": 2024,
+      "title": "Brilliant Minds",
+      "aired_episodes": 33
+    },
+    {
+      "ids": {
+        "imdb": "tt30412869",
+        "plex": {
+          "guid": "6578507605050e5de4b04644",
+          "slug": "56-days"
+        },
+        "slug": "56-days",
+        "tmdb": 241372,
+        "tvdb": 443312,
+        "trakt": 219940
+      },
+      "year": 2026,
+      "title": "56 Days",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt36957934",
+        "plex": {
+          "guid": "68a2c3a99c0cefc0c6d48e41",
+          "slug": "big-trouble-small-family"
+        },
+        "slug": "big-trouble-small-family",
+        "tmdb": 291506,
+        "tvdb": 466852,
+        "trakt": 285724
+      },
+      "year": 2026,
+      "title": "Big Trouble, Small Family",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt31937954",
+        "plex": {
+          "guid": "6618540eb55799d71ea9e060",
+          "slug": "imperfect-women"
+        },
+        "slug": "imperfect-women",
+        "tmdb": 108181,
+        "tvdb": 448179,
+        "trakt": 232778
+      },
+      "year": 2026,
+      "title": "Imperfect Women",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt14824792",
+        "plex": {
+          "guid": "627e76a87d645e56a1cb3080",
+          "slug": "teddy-and-john"
+        },
+        "slug": "teddy-and-john",
+        "tmdb": 201834,
+        "tvdb": 404604,
+        "trakt": 195458
+      },
+      "year": 2024,
+      "title": "Teddy and John",
+      "aired_episodes": 15
+    },
+    {
+      "ids": {
+        "imdb": "tt32344704",
+        "plex": {
+          "guid": "663bc1c52425418bb8bc5249",
+          "slug": "oni-bloodline"
+        },
+        "slug": "oni-bloodline",
+        "tmdb": 253811,
+        "tvdb": 449843,
+        "trakt": 238966
+      },
+      "year": 2025,
+      "title": "Oni Bloodline",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt37063558",
+        "plex": {
+          "guid": "6880680966d178081c70c59d",
+          "slug": "r-j-decker"
+        },
+        "slug": "r-j-decker",
+        "tmdb": 302074,
+        "tvdb": 466025,
+        "trakt": 301095
+      },
+      "year": 2026,
+      "title": "R.J. Decker",
+      "aired_episodes": 11
+    },
+    {
+      "ids": {
+        "imdb": "tt35823838",
+        "plex": {
+          "guid": "67d2e22e15cae9a654c717bb",
+          "slug": "after-office-hours"
+        },
+        "slug": "after-office-hours",
+        "tmdb": 284725,
+        "tvdb": 460383,
+        "trakt": 277120
+      },
+      "year": 2026,
+      "title": "After Office Hours",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt12343534",
+        "plex": {
+          "guid": "5e1622a5124ae9003e3ccd14",
+          "slug": "jujutsu-kaisen"
+        },
+        "slug": "jujutsu-kaisen",
+        "tmdb": 95479,
+        "tvdb": 377543,
+        "trakt": 158594
+      },
+      "year": 2020,
+      "title": "Jujutsu Kaisen",
+      "aired_episodes": 59
+    },
+    {
+      "ids": {
+        "imdb": "tt32132630",
+        "plex": {
+          "guid": "661fbf5c21e38a08d49b7a57",
+          "slug": "beneath-briar-lane"
+        },
+        "slug": "beneath-briar-lane",
+        "tmdb": 252000,
+        "tvdb": 449071,
+        "trakt": 235497
+      },
+      "year": 2025,
+      "title": "Beneath Briar Lane",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt26453092",
+        "plex": {
+          "guid": "63d272fd95244f1d6e3691b4",
+          "slug": "the-emberbound-company"
+        },
+        "slug": "the-emberbound-company",
+        "tmdb": 219080,
+        "tvdb": 430243,
+        "trakt": 201975
+      },
+      "year": 2025,
+      "title": "The Emberbound Company",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt1190634",
+        "plex": {
+          "guid": "5d9c08f246115600200ae0f6",
+          "slug": "the-champions"
+        },
+        "slug": "the-champions",
+        "tmdb": 76479,
+        "tvdb": 355567,
+        "trakt": 139960
+      },
+      "year": 2019,
+      "title": "The Champions",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": "tt31810018",
+        "plex": {
+          "guid": "65fbe43cdb0a72f4022f2a6e",
+          "slug": "detective-nils-varden"
+        },
+        "slug": "detective-nils-varden",
+        "tmdb": 249597,
+        "tvdb": 447892,
+        "trakt": 231755
+      },
+      "year": 2026,
+      "title": "Detective Nils Varden",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt37692332",
+        "plex": {
+          "guid": "6888e951727a173b95d2446e",
+          "slug": "president-curtis"
+        },
+        "slug": "president-curtis",
+        "tmdb": 296756,
+        "tvdb": 466198,
+        "trakt": 292895
+      },
+      "year": 2026,
+      "title": "President Curtis",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt16418808",
+        "plex": {
+          "guid": "62a35be541db86d50abcadfb",
+          "slug": "sweet-alibi"
+        },
+        "slug": "sweet-alibi",
+        "tmdb": 203744,
+        "tvdb": 421070,
+        "trakt": 196180
+      },
+      "year": 2024,
+      "title": "Sweet Alibi",
+      "aired_episodes": 16
+    },
+    {
+      "ids": {
+        "imdb": "tt36985473",
+        "plex": {
+          "guid": "682dfa6ebb8da03261899d5c",
+          "slug": "the-wonderfully-odd-world-of-pip-puddle"
+        },
+        "slug": "the-wonderfully-odd-world-of-pip-puddle",
+        "tmdb": 291904,
+        "tvdb": 464881,
+        "trakt": 286042
+      },
+      "year": 2025,
+      "title": "The Wonderfully Odd World of Pip Puddle",
+      "aired_episodes": 40
+    },
+    {
+      "ids": {
+        "imdb": null,
+        "plex": {
+          "guid": "699ef1bc67d4df6046f743dd",
+          "slug": "the-office-retreat"
+        },
+        "slug": "the-office-retreat",
+        "tmdb": 312697,
+        "tvdb": null,
+        "trakt": 315568
+      },
+      "year": 2026,
+      "title": "The Office Retreat",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt33265765",
+        "plex": {
+          "guid": "670911d764ef701e671a9ce8",
+          "slug": "the-long-memory"
+        },
+        "slug": "the-long-memory",
+        "tmdb": 262280,
+        "tvdb": 453615,
+        "trakt": 253005
+      },
+      "year": 2026,
+      "title": "The Long Memory",
+      "aired_episodes": 6
+    }
+  ]
+}

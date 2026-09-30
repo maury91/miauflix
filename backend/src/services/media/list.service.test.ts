@@ -4,10 +4,11 @@ import { configureFakerSeed } from '@__test-utils__/utils';
 
 import { Database } from '@database/database';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
+import type { BackgroundJobService } from '@services/background-job/background-job.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ListClientService } from '@services/list/list-client.service';
 
-import { DEFAULT_LIST_REFRESH_PAGES, ListService } from './list.service';
+import { DEFAULT_LIST_REFRESH_PAGES, listDownstreamPriority, ListService } from './list.service';
 
 const publicDefinition = {
   id: 'trakt-movies-popular',
@@ -62,6 +63,12 @@ describe('ListService refresh safety', () => {
     jest.useRealTimers();
   });
 
+  it('keeps prefetched downstream work below visible work', () => {
+    expect(listDownstreamPriority(0, 0, 'prefetch')).toBeLessThan(
+      listDownstreamPriority(0, 0, 'visible')
+    );
+  });
+
   it('discards a failed generation without activating it', async () => {
     const { catalogClient, mediaListRepository, service } = setupTest();
     const mediaList = {
@@ -107,5 +114,68 @@ describe('ListService refresh safety', () => {
     expect(listClient.getPage).toHaveBeenNthCalledWith(1, 'user-1', 'personal-list', 1);
     expect(listClient.getPage).toHaveBeenNthCalledWith(2, 'user-1', 'personal-list', 2);
     expect(mediaListRepository.activateGeneration).toHaveBeenCalledWith(1, expect.any(String));
+  });
+
+  it('queues movie source discovery and TV season hydration for every returned item', async () => {
+    const { database, listClient, catalogClient, mediaListRepository } = setupTest();
+    const backgroundJobs = {
+      enqueueBestEffort: jest.fn(),
+    } as unknown as jest.Mocked<BackgroundJobService>;
+    const movieRepository = database.getMovieRepository();
+    const tvShowRepository = database.getTVShowRepository();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockResolvedValue({
+      listId: publicDefinition.id,
+      page: 1,
+      totalPages: 1,
+      totalItems: 4,
+      items: [
+        { media: { mediaType: 'movie', ids: { tmdb: 101 } } },
+        { media: { mediaType: 'tv', ids: { tmdb: 202 } } },
+        { media: { mediaType: 'movie', ids: { tmdb: 303 } } },
+        { media: { mediaType: 'tv', ids: { tmdb: 404 } } },
+      ],
+    } as never);
+    catalogClient.batch.mockResolvedValue({
+      items: [
+        { mediaType: 'movie', mediaId: 101 },
+        { mediaType: 'tv', mediaId: 202 },
+        { mediaType: 'movie', mediaId: 303 },
+        { mediaType: 'tv', mediaId: 404 },
+      ],
+    } as never);
+    movieRepository.upsertMovieDetail = jest.fn().mockResolvedValue({ id: 11 } as never);
+    tvShowRepository.upsertTVShowDetail = jest.fn().mockResolvedValue({ id: 22 } as never);
+    const service = new ListService(database, catalogClient, listClient, backgroundJobs);
+
+    const result = await service.getListPage('trakt-movies-popular', 'en', 0, 20);
+
+    expect(result.medias).toHaveLength(4);
+    expect(backgroundJobs.enqueueBestEffort).toHaveBeenNthCalledWith(1, {
+      type: 'source.discover',
+      dedupeKey: 'media:101',
+      payload: { movieMediaId: 101, priority: 33 },
+      options: { priority: 33 },
+    });
+    expect(backgroundJobs.enqueueBestEffort).toHaveBeenNthCalledWith(2, {
+      type: 'catalog.season-sync.seed',
+      dedupeKey: 'show:202',
+      payload: { tvMediaId: 202, priority: 33 },
+      options: { priority: 33 },
+    });
+    expect(backgroundJobs.enqueueBestEffort).toHaveBeenNthCalledWith(3, {
+      type: 'source.discover',
+      dedupeKey: 'media:303',
+      payload: { movieMediaId: 303, priority: 33 },
+      options: { priority: 33 },
+    });
+    expect(backgroundJobs.enqueueBestEffort).toHaveBeenNthCalledWith(4, {
+      type: 'catalog.season-sync.seed',
+      dedupeKey: 'show:404',
+      payload: { tvMediaId: 404, priority: 33 },
+      options: { priority: 33 },
+    });
   });
 });

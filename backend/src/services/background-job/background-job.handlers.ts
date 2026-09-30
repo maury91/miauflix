@@ -46,7 +46,9 @@ export function registerBackgroundJobHandlers({
           pageSize: plan.pageSize,
           subjectId,
         },
-        options: { priority: 60 },
+        options: {
+          priority: Math.max(20, 90 - plan.listRank * 3 - Math.floor(index / 2)),
+        },
       }));
       if (!pages.length) {
         await listService.activateRefreshGeneration(plan.listId, plan.generation);
@@ -80,15 +82,15 @@ export function registerBackgroundJobHandlers({
   worker.register('source.discover', {
     concurrency: 1,
     leaseMs: 2 * 60 * 1000,
-    run: async ({ movieId, movieMediaId }) => {
+    run: async ({ movieId, movieMediaId, priority }) => {
       if (!(await sourceService.canRunSourceJobs())) return;
       if (movieMediaId) {
         // Lazy mirror: make sure the local index holds fresh details (imdbId)
         // before searching for sources.
         await mediaService.getMovieByMediaId(movieMediaId);
-        await sourceService.processSourceDiscoveryByMediaId(movieMediaId);
+        await sourceService.processSourceDiscoveryByMediaId(movieMediaId, priority);
       } else if (movieId) {
-        await sourceService.processSourceDiscovery(movieId);
+        await sourceService.processSourceDiscovery(movieId, priority);
       } else {
         await sourceService.seedSourceDiscoveryJobs();
       }

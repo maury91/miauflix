@@ -1,0 +1,700 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20900",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7df6e409a3d401fb7a989923a4ac14e2\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/u98PeujOJCXCowph9mxRzo9Nw1s.jpg",
+    "created_by": [
+      {
+        "id": 16376,
+        "credit_id": "52576f19760ee36aaa452ef8",
+        "name": "Elliot Stone",
+        "original_name": "Elliot Stone",
+        "gender": 2,
+        "profile_path": "/ojPx93eaDcanOVi4AH14uAFwXhn.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2000-10-15",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/series/northern-window-westmere",
+    "id": 4546,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2024-04-07",
+    "last_episode_to_air": {
+      "id": 4998036,
+      "name": "Midnight Station",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.7,
+      "vote_count": 10,
+      "air_date": "2024-04-07",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 53,
+      "season_number": 12,
+      "show_id": 4546,
+      "still_path": "/bsckMmhv2YFDXRgNSIfYepp4uC.jpg"
+    },
+    "name": "Northern Window: Westmere",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Amber Valley Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 120,
+    "number_of_seasons": 12,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Northern Window: Westmere",
+    "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 105.5858,
+    "poster_path": "/pjRRB1NCFJzCb0euvpia4rKDov1.jpg",
+    "production_companies": [
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Velvet Passage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 8803,
+        "logo_path": null,
+        "name": "Blue Garden Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1999-12-01",
+        "episode_count": 47,
+        "id": 13721,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/mu2tj7IbHMjF79tXWMAbv7CSlVN.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2000-10-15",
+        "episode_count": 10,
+        "id": 13716,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/an2PP01XrCAzSXB8aQaUlUiC69h.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2001-09-23",
+        "episode_count": 10,
+        "id": 13715,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/w5QYqd6ucj22yolBUdrhV45NCnn.jpg",
+        "season_number": 2,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2002-09-15",
+        "episode_count": 10,
+        "id": 13719,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/bLBDcwar0FB940gzNU5XhiEc2zr.jpg",
+        "season_number": 3,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2004-01-04",
+        "episode_count": 10,
+        "id": 13717,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/phSfnHPqve22EYCKCVcCEO5NdAW.jpg",
+        "season_number": 4,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2005-09-25",
+        "episode_count": 10,
+        "id": 13714,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/rVrZ2pad3U0sEFTAnZqjzup9R5G.jpg",
+        "season_number": 5,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2007-09-09",
+        "episode_count": 10,
+        "id": 13718,
+        "name": "Season 6",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/mKcg3P2bLnxE2suusIbMVa4V2DM.jpg",
+        "season_number": 6,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": "2009-09-20",
+        "episode_count": 10,
+        "id": 13720,
+        "name": "Season 7",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/wNH2skHzKwt6PQRF2YBAOiQBiwV.jpg",
+        "season_number": 7,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2011-07-10",
+        "episode_count": 10,
+        "id": 13722,
+        "name": "Season 8",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/lY8OrMJH5W9OVN4o61UAm2SpLXO.jpg",
+        "season_number": 8,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": "2017-10-01",
+        "episode_count": 10,
+        "id": 90336,
+        "name": "Season 9",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/juOhISBDQUdRKVXjDYss8no1nzM.jpg",
+        "season_number": 9,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2020-01-19",
+        "episode_count": 10,
+        "id": 137894,
+        "name": "Season 10",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/zvR2DpElEbBp05y8O3J0XtLd4X5.jpg",
+        "season_number": 10,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2021-10-24",
+        "episode_count": 10,
+        "id": 213521,
+        "name": "Season 11",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/tMKxFUneUgHFdId4DPuL05Khjqk.jpg",
+        "season_number": 11,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2024-02-04",
+        "episode_count": 10,
+        "id": 369008,
+        "name": "Season 12",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/oFhbmoiN6kiQ02KBc8IsGUycgSZ.jpg",
+        "season_number": 12,
+        "vote_average": 7.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.051,
+    "vote_count": 980,
+    "external_ids": {
+      "imdb_id": "tt0264235",
+      "freebase_mid": "/m/01ft14",
+      "freebase_id": "/en/curb_your_enthusiasm",
+      "tvdb_id": 76203,
+      "tvrage_id": 3188,
+      "wikidata_id": "Q23722",
+      "facebook_id": "curbyourenthusiasm",
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Northern Window: Westmere",
+            "overview": "Northern Window: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-window-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

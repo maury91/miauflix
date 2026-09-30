@@ -89,6 +89,15 @@ test.describe('QRDisplay - Visual Tests', () => {
 
         await page.goto(url);
         await page.waitForLoadState('networkidle');
+        await page.addStyleTag({
+          content: `
+            html, body {
+              height: auto !important;
+              min-height: 100% !important;
+              overflow: visible !important;
+            }
+          `,
+        });
 
         if (state.isLoading) {
           // Wait for spinner to render and force it to static state

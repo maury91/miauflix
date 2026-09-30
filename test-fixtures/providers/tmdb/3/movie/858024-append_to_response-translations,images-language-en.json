@@ -1,0 +1,916 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23967",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7af7b0062e13f51ce6af54bcf4e1cee6\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yt9m5CiU2MZkQoNl1kqLPODNR4t.jpg",
+    "belongs_to_collection": null,
+    "budget": 35000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "https://example.test/films/a-winter-of-loss",
+    "id": 858024,
+    "imdb_id": "tt14905854",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "A Winter of Loss",
+    "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+    "popularity": 18.0929,
+    "poster_path": "/vbeyOZm2bvBXcbgPD3v6o94epPX.jpg",
+    "production_companies": [
+      {
+        "id": 122908,
+        "logo_path": "/iVPAyAXjzbHjzRamNcc1R8Ra7sD.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 1522,
+        "logo_path": "/8uaoEVgNxFH0R94O53gUiByahVr.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 56,
+        "logo_path": "/cEaxANEisCqeEoRvODv2dO1I0iI.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 197107,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-11-26",
+    "revenue": 107756183,
+    "runtime": 125,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Love endures in what we make.",
+    "title": "A Winter of Loss",
+    "video": false,
+    "vote_average": 7.721,
+    "vote_count": 1628,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 126,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 126,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 126,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 126,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 125,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 140,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/a-winter-of-loss",
+            "overview": "A young couple's intimate family life is changed by grief, memory, and the play one of them will eventually write.",
+            "runtime": 0,
+            "tagline": "Love endures in what we make.",
+            "title": "A Winter of Loss"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g4oYzlJZMdqtVOCYSkhNjg92rKf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oMkeMAAVF0OfFyXh6aK9v0dQwtF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1636
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eJa1A3eV5NTh7QeVkmQAXyJxmEt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pVX3PAEZiDoMRrsD0ASH7UbMg75.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.495,
+          "height": 665,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/98SGH8eTrksZLAGevwU3xVxZp7m.png",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 6.493,
+          "height": 655,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wFxSRw8bCCnKkQ0oXVrHwr3QK69.png",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 4253
+        },
+        {
+          "aspect_ratio": 6.473,
+          "height": 74,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2nQgubVbb9SUu7Olz7DWdqYYxSB.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 479
+        },
+        {
+          "aspect_ratio": 6.511,
+          "height": 184,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s31p8GndCrSgATw1dd2HXaimn8G.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1198
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vbeyOZm2bvBXcbgPD3v6o94epPX.jpg",
+          "vote_average": 5.928,
+          "vote_count": 21,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/61xMzN4h8iLk0hq6oUzr9Ts6GE9.jpg",
+          "vote_average": 5.646,
+          "vote_count": 24,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/54LVKsZFWJ7rLUfA7jikDMYVaVS.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/71KNp6RiOQTbs8Fn1DagrFQrZmx.jpg",
+          "vote_average": 4.884,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l2JQz8644JxMJxW2EZOJtULNcV6.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a3uh6io9usK6bLtyloS9ySheReI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9wHqarn5uDhxnw8eTHpVC1uRl0L.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vpcgRPitinihBgAhsClDGimF2bu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aFailXmO7BH5WXK8zHYOTybsGg4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1599,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d8RLyN6jKA2Za7kNO4dY9zsEB7j.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nYpdDBQPsogtbV7Uf7qF6J0b9UJ.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1599,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uPJI7LNrCaho6aouTKuWdYurk1T.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uz5fqT25pf5dIqwScShbBWcLmrW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hVnVwYRUcKNz8mXiRpeKtvCSg3H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pUycQ4hP7Gvcat7FfKRc65OfpTF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mL5qgvBWfB0lkgCLQKnfAMfkP7R.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        }
+      ]
+    }
+  }
+}

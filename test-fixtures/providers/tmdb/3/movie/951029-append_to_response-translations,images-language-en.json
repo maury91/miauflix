@@ -1,0 +1,211 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2091",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"86d1e2415bb7a7a4618dcad0e216ffbc\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/crF6INgzwVsbuFqzszjntvCP3TC.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/what-the-cards-remember",
+    "id": 951029,
+    "imdb_id": "tt19121796",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "What the Cards Remember",
+    "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+    "popularity": 1.3202,
+    "poster_path": "/mp1UYL6Z8A5aMbQQKxyWPWwNJkU.jpg",
+    "production_companies": [
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Quiet Current Documentaries",
+        "origin_country": "US"
+      },
+      {
+        "id": 191133,
+        "logo_path": "/toELTK9C3UbE95wmMUWIfucLK1L.png",
+        "name": "Quiet Current Documentaries",
+        "origin_country": "US"
+      },
+      {
+        "id": 66478,
+        "logo_path": "/u7WmMkfo9MqsqfD5cuDAbd0u1qY.png",
+        "name": "Quiet Current Documentaries",
+        "origin_country": "US"
+      },
+      {
+        "id": 75170,
+        "logo_path": "/mKw4pn8URnhzV5UDVpbovehWJ8d.png",
+        "name": "Quiet Current Documentaries",
+        "origin_country": "US"
+      },
+      {
+        "id": 151143,
+        "logo_path": "/uFw5BmCroQ1XFz2sz7UjK1SoYxB.png",
+        "name": "Quiet Current Documentaries",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2024-09-06",
+    "revenue": 0,
+    "runtime": 108,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Every answer begins with a story.",
+    "title": "What the Cards Remember",
+    "video": false,
+    "vote_average": 5.4,
+    "vote_count": 20,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/what-the-cards-remember",
+            "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+            "runtime": 108,
+            "tagline": "Every answer begins with a story.",
+            "title": "What the Cards Remember"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/what-the-cards-remember",
+            "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+            "runtime": 0,
+            "tagline": "Every answer begins with a story.",
+            "title": "What the Cards Remember"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/what-the-cards-remember",
+            "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+            "runtime": 0,
+            "tagline": "Every answer begins with a story.",
+            "title": "What the Cards Remember"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/what-the-cards-remember",
+            "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+            "runtime": 0,
+            "tagline": "Every answer begins with a story.",
+            "title": "What the Cards Remember"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/what-the-cards-remember",
+            "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+            "runtime": 0,
+            "tagline": "Every answer begins with a story.",
+            "title": "What the Cards Remember"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/what-the-cards-remember",
+            "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+            "runtime": 0,
+            "tagline": "Every answer begins with a story.",
+            "title": "What the Cards Remember"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/what-the-cards-remember",
+            "overview": "A circle of city psychics meets clients in cramped apartments and storefronts, offering readings that uncover grief, longing, and unexpected connection. As their private lives emerge, each encounter becomes a search for a little healing.",
+            "runtime": 0,
+            "tagline": "Every answer begins with a story.",
+            "title": "What the Cards Remember"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mp1UYL6Z8A5aMbQQKxyWPWwNJkU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sOE9bvQF2eBqiitoD2J0ebRn0b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

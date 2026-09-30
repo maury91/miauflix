@@ -1,0 +1,889 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18538",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1825af60f051e8d7f21970dfdfb95b88\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/9CaNCElCXrjdJoUadfXHiNTMFcR.jpg",
+    "belongs_to_collection": null,
+    "budget": 25000000,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+    "id": 3021,
+    "imdb_id": "tt0450385",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Room 1408: The Stillwater Hotel",
+    "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+    "popularity": 9.8519,
+    "poster_path": "/yE9MCW7ZNxSw5SC1TMqm51pMBIV.jpg",
+    "production_companies": [
+      {
+        "id": 7405,
+        "logo_path": "/rfnws0uY8rsNAsrLbx3gEIcYXx3.png",
+        "name": "Dreadline Threshold Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 435,
+        "logo_path": "/AjzK0s2w1GtLfR4hqCjVSYi0Sr8.png",
+        "name": "Dreadline Threshold Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2007-06-22",
+    "revenue": 133000000,
+    "runtime": 104,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Every room has a view. One has no way out.",
+    "title": "Room 1408: The Stillwater Hotel",
+    "video": false,
+    "vote_average": 6.696,
+    "vote_count": 5094,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 96,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 106,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 94,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 105,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 103,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 105,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 104,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 94,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 105,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 103,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 0,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/room-1408-the-stillwater-hotel",
+            "overview": "A writer who makes a living debunking ghost stories checks into a notorious suite at an old city hotel. The room's first unsettling tricks soon give way to a terror he cannot explain away.",
+            "runtime": 105,
+            "tagline": "Every room has a view. One has no way out.",
+            "title": "Room 1408: The Stillwater Hotel"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1UYCLedjLfzM2wnuUERd1gEv0kD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1z7w2gQ8KpoLGeUvXpqGFVKc4la.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2670
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5U5RyL5CWRunVYHRbfr24uvaICH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mTjO7y1aItcsN3yiuEj91tsdYnS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1075,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kEzkstrpEx6CJEuL0Y9buIXtOMX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1911
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3LQnmnWDy4OctAo11y3p4ywcXhL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r4QudEpLqcHT8QWh8ZqxSWN0O7u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fZ4f5hoesL0S8KaHDroXMpun3PD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/67FtL3JQp2seF6Zs9y0tY63qmVG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hLXZWnEQF3a3D4Mwzoh1TPG7b2v.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.215,
+          "height": 536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zGYUhNtRcNESk4PvgJ6403G0M6n.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1187
+        },
+        {
+          "aspect_ratio": 2.029,
+          "height": 1289,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Ykl8bWWz6TFtPzBmNEgsmvngkC.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2616
+        },
+        {
+          "aspect_ratio": 1.395,
+          "height": 1284,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5uKkx4pvoZvju5eIo1kFQpWLCcM.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1791
+        },
+        {
+          "aspect_ratio": 2.029,
+          "height": 1289,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kCYHlIWnARwrhIWhUzJ1BNVRDmS.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2616
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yE9MCW7ZNxSw5SC1TMqm51pMBIV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a3uYq1NHO0Axr1iIu9J90sVkeLB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6eCdh0jqzmbj39Da5KLkDraqC4i.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wdpKHGBcpdueFq3MM6xSXmeJ4xG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1587,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7UENh9vRbeNEUWxrKOeCcPe2Fck.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1058
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zEaMTpG71O0NN7XlQwYyaWVpTyX.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oyaGNWS2LoWX9T1inBvZXisHE3p.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4Z8xfxIv38NItFj5y1X2RgnBoJD.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t1YRKOLOzreHuBzu2Rc7LeHMzdV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1067
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gg38ntJzx0ODEoclgEzGMxmfNwp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5TJm7Mx6uwc4GJaqoOCwvp3KUN0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1CGt9s7e06UFjuTXO8ZQVH0TsHS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 841,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6SfeB8T8Ao9M4TcnhPh3YeA7qLL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 592
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qGjnAcIBJ97Xv02OD6cLEwJWfj6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pRd9g8KzJGmf2UFQj8rdDbCN2S5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9kltBwFUpekVoIx7cfXME2xdjEm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zTqYJ2Wn5dlsEhDaG1GRNlOePCY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wzQTVqUQNxogSLjD3bi8L0Ojo2j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

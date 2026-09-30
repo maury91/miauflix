@@ -1,0 +1,586 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2911",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f1249ce8d0c675831d7b2cbff4b997e4\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ncI1PlBcANixIkgQSnjsSRz4OyT.jpg",
+    "belongs_to_collection": {
+      "id": 1570181,
+      "name": "The K-9 Pursuit Collection",
+      "poster_path": "/iU124bwXVhS5MmN1rTt0qgLIACM.jpg",
+      "backdrop_path": "/9djssTAsJHhsVFE78wIgzQkIxEI.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://example.test/films/the-k-9-pursuit",
+    "id": 1439112,
+    "imdb_id": "tt32395062",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The K-9 Pursuit",
+    "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+    "popularity": 8.3958,
+    "poster_path": "/8qTMRmC07XCGidnKQFLbRM3FoDU.jpg",
+    "production_companies": [
+      {
+        "id": 76991,
+        "logo_path": "/pQjdvbv4y9yuIDSHDEHc9ijJKaS.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 187281,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 174474,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 148930,
+        "logo_path": "/5vQU9dfSiYNQyTuciY8T3tUfI4a.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 215935,
+        "logo_path": "/pYh0UKZbx8WGKLDZuBkq7WwvGSH.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 19330,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 233099,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 274685,
+        "logo_path": "/dOi8cmvTdZbVFLidw11eR04XSUN.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-11-13",
+    "revenue": 0,
+    "runtime": 93,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A new partner. A personal hunt.",
+    "title": "The K-9 Pursuit",
+    "video": false,
+    "vote_average": 6.642,
+    "vote_count": 159,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 93,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 93,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 94,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 99,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 94,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 93,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 93,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 95,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-k-9-pursuit",
+            "overview": "After an attack threatens his family, an City police officer and his new K-9 partner pursue the gang behind it.",
+            "runtime": 0,
+            "tagline": "A new partner. A personal hunt.",
+            "title": "The K-9 Pursuit"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zXuBWKfUquvBDHFngZzphb2qRUX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j0hBqgfWMoeFjCtGieIp0T9OqFx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.818,
+          "height": 440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zhbJVaexxxmMqKkDAQX2oB68Prw.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 1.823,
+          "height": 813,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zEyaKRNXBFJjfCbChDUcCGi0gH1.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1482
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2898,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8qTMRmC07XCGidnKQFLbRM3FoDU.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1932
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6D5cgS13EiRtrHUFYRWczbYnSQA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2898,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vXcDH3YqSgXKYQrPKvkvqC5phT2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1932
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wM9V0aDoosTDyg3PIyPeV2iloHq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 683
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eI498z9c4xTzkQ7YtFzu6mOQpyf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rDsvXlVzYvvubhHseRzX2i8mHYG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w4Gtev2ocEeARkNVtAKchdJDv7A.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

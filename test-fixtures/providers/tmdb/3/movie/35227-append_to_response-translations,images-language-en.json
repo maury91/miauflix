@@ -1,0 +1,416 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5509",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d2cc337a43d4c542c12b6d4caeb273c7\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/9VR9nofT0dCP30b7WLMkuhykikM.jpg",
+    "belongs_to_collection": null,
+    "budget": 1100000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-false-countess",
+    "id": 35227,
+    "imdb_id": "tt0013140",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The False Countess",
+    "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+    "popularity": 1.9287,
+    "poster_path": "/esdMep54xAUYUE4CCktAh2Rh3gk.jpg",
+    "production_companies": [
+      {
+        "id": 13133,
+        "logo_path": null,
+        "name": "Velvet Curtain Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1922-01-11",
+    "revenue": 400200,
+    "runtime": 143,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A title borrowed. A marriage in danger.",
+    "title": "The False Countess",
+    "video": false,
+    "vote_average": 6.5,
+    "vote_count": 111,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 143,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 117,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 130,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 140,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 117,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 117,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 117,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-false-countess",
+            "overview": "A practiced swindler poses as a Russian aristocrat in a European resort, where she sets her sights on the wife of an American diplomat.",
+            "runtime": 0,
+            "tagline": "A title borrowed. A marriage in danger.",
+            "title": "The False Countess"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 1.603,
+          "height": 194,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n7088mBPNIzTiFeVbv7Ogs97TV9.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 311
+        },
+        {
+          "aspect_ratio": 5.371,
+          "height": 372,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AvQD6JSBpTjxB0aSlYsCWx183bV.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1998
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/esdMep54xAUYUE4CCktAh2Rh3gk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hpS7ive4buVFe5vNjzXw6Ub6SC2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2005,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q8HI0WqwLKY2O1JYyFUF9awi3br.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1337
+        },
+        {
+          "aspect_ratio": 0.638,
+          "height": 1023,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rZp5GeeK1pny30xmeNqbcQOPYOu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 653
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3TYQ5WthmefOTEbM5qPt0aTv0L0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/SdA44Fgg7uvqITLbGwT6S2WaR4.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2sVDxPuU4u8Lb9xPGWyFiDKCLU7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8uhz1U4scFSCPtIPsUWvjda8Z3I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gg2KfhEEqtfhTIelZGOKTuQkzlu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1594,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8i520lOwZQEluKrBQi0hUj9PlSI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1063
+        },
+        {
+          "aspect_ratio": 0.76,
+          "height": 1590,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o69U9Pm5KfZX4hStqHJZ4SByIzC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1209
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2204,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wwnD4gg5nqXvz8EqXLphzqtGGY1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1469
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,873 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "1116",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,trending,movie",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 15:09:49 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "160",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "3",
+    "x-pagination-page-count": "4",
+    "x-permitted-cross-domain-policies": "none",
+    "x-trending-user-count": "2879"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "watchers": 65,
+      "movie": {
+        "ids": {
+          "imdb": "tt1745960",
+          "plex": {
+            "guid": "5d776be17a53e9001e732ab9",
+            "slug": "one-more-flight"
+          },
+          "slug": "one-more-flight-2022",
+          "tmdb": 361743,
+          "trakt": 297485
+        },
+        "year": 2022,
+        "title": "One More Flight"
+      }
+    },
+    {
+      "watchers": 65,
+      "movie": {
+        "ids": {
+          "imdb": "tt3521164",
+          "plex": {
+            "guid": "5d776af2ad5437001f78dad6",
+            "slug": "beyond-the-reef"
+          },
+          "slug": "beyond-the-reef-2016",
+          "tmdb": 277834,
+          "trakt": 175475
+        },
+        "year": 2016,
+        "title": "Beyond the Reef"
+      }
+    },
+    {
+      "watchers": 65,
+      "movie": {
+        "ids": {
+          "imdb": "tt0120903",
+          "plex": {
+            "guid": "5d7768680ab244002006d256",
+            "slug": "children-of-the-gifted"
+          },
+          "slug": "children-of-the-gifted-2000",
+          "tmdb": 36657,
+          "trakt": 23299
+        },
+        "year": 2000,
+        "title": "Children of the Gifted"
+      }
+    },
+    {
+      "watchers": 64,
+      "movie": {
+        "ids": {
+          "imdb": "tt0458339",
+          "plex": {
+            "guid": "5d77682a103a2d001f564ffb",
+            "slug": "the-first-stand"
+          },
+          "slug": "the-first-stand-2011",
+          "tmdb": 1771,
+          "trakt": 1170
+        },
+        "year": 2011,
+        "title": "The First Stand"
+      }
+    },
+    {
+      "watchers": 64,
+      "movie": {
+        "ids": {
+          "imdb": "tt39390497",
+          "plex": {
+            "guid": "69b8acd1a7417e5e4dd1304f",
+            "slug": "the-last-shift-in-sinaloa"
+          },
+          "slug": "the-last-shift-in-sinaloa-2026",
+          "tmdb": 1621552,
+          "trakt": 1345669
+        },
+        "year": 2026,
+        "title": "The Last Shift in Sinaloa"
+      }
+    },
+    {
+      "watchers": 63,
+      "movie": {
+        "ids": {
+          "imdb": "tt0330373",
+          "plex": {
+            "guid": "5d77682785719b001f3a0d8b",
+            "slug": "the-three-school-trial"
+          },
+          "slug": "the-three-school-trial-2005",
+          "tmdb": 674,
+          "trakt": 548
+        },
+        "year": 2005,
+        "title": "The Three-School Trial"
+      }
+    },
+    {
+      "watchers": 63,
+      "movie": {
+        "ids": {
+          "imdb": "tt1856101",
+          "plex": {
+            "guid": "5d776b95594b2b001e6de3f3",
+            "slug": "the-memory-index"
+          },
+          "slug": "the-memory-index-2017",
+          "tmdb": 335984,
+          "trakt": 216716
+        },
+        "year": 2017,
+        "title": "The Memory Index"
+      }
+    },
+    {
+      "watchers": 63,
+      "movie": {
+        "ids": {
+          "imdb": "tt31195136",
+          "plex": {
+            "guid": "65cc295e16bb4db33e2d07f5",
+            "slug": "quiet-county"
+          },
+          "slug": "quiet-county-2026",
+          "tmdb": 1242332,
+          "trakt": 1005706
+        },
+        "year": 2026,
+        "title": "Quiet County"
+      }
+    },
+    {
+      "watchers": 62,
+      "movie": {
+        "ids": {
+          "imdb": "tt0478970",
+          "plex": {
+            "guid": "5d77690f7a53e9001e6e05a8",
+            "slug": "the-pocket-heist"
+          },
+          "slug": "the-pocket-heist-2015",
+          "tmdb": 102899,
+          "trakt": 73582
+        },
+        "year": 2015,
+        "title": "The Pocket Heist"
+      }
+    },
+    {
+      "watchers": 62,
+      "movie": {
+        "ids": {
+          "imdb": "tt1201607",
+          "plex": {
+            "guid": "5d776838151a60001f24e81b",
+            "slug": "the-last-relics-reckoning"
+          },
+          "slug": "the-last-relics-reckoning-2011",
+          "tmdb": 12445,
+          "trakt": 7229
+        },
+        "year": 2011,
+        "title": "The Last Relics: Reckoning"
+      }
+    },
+    {
+      "watchers": 61,
+      "movie": {
+        "ids": {
+          "imdb": "tt16311594",
+          "plex": {
+            "guid": "61b0a23cc2629c42c5fe61cd",
+            "slug": "f1-one-more-lap"
+          },
+          "slug": "f1-one-more-lap-2025",
+          "tmdb": 911430,
+          "trakt": 729817
+        },
+        "year": 2025,
+        "title": "F1: One More Lap"
+      }
+    },
+    {
+      "watchers": 61,
+      "movie": {
+        "ids": {
+          "imdb": "tt10375624",
+          "plex": {
+            "guid": "5e1632fcef1040003f24861a",
+            "slug": "messages-meant-for-isabelle"
+          },
+          "slug": "messages-meant-for-isabelle-2026",
+          "tmdb": 614945,
+          "trakt": 458282
+        },
+        "year": 2026,
+        "title": "Messages Meant for Isabelle"
+      }
+    },
+    {
+      "watchers": 60,
+      "movie": {
+        "ids": {
+          "imdb": "tt0114709",
+          "plex": {
+            "guid": "5d776828880197001ec90d44",
+            "slug": "room-for-one-more"
+          },
+          "slug": "room-for-one-more-1995",
+          "tmdb": 862,
+          "trakt": 705
+        },
+        "year": 1995,
+        "title": "Room for One More"
+      }
+    },
+    {
+      "watchers": 60,
+      "movie": {
+        "ids": {
+          "imdb": "tt0435761",
+          "plex": {
+            "guid": "5d77683454f42c001f8c435e",
+            "slug": "the-daycare-escape"
+          },
+          "slug": "the-daycare-escape-2010",
+          "tmdb": 10193,
+          "trakt": 5407
+        },
+        "year": 2010,
+        "title": "The Daycare Escape"
+      }
+    },
+    {
+      "watchers": 60,
+      "movie": {
+        "ids": {
+          "imdb": "tt0318627",
+          "plex": {
+            "guid": "5d77682961141d001fb139ee",
+            "slug": "last-extraction"
+          },
+          "slug": "last-extraction-2004",
+          "tmdb": 1577,
+          "trakt": 1033
+        },
+        "year": 2004,
+        "title": "Last Extraction"
+      }
+    },
+    {
+      "watchers": 60,
+      "movie": {
+        "ids": {
+          "imdb": "tt2012616",
+          "plex": {
+            "guid": "5d7768e2fb0d55001f51bc9d",
+            "slug": "motor-city-the-long-payback"
+          },
+          "slug": "motor-city-the-long-payback-2026",
+          "tmdb": 87513,
+          "trakt": 65760
+        },
+        "year": 2026,
+        "title": "Motor City: The Long Payback"
+      }
+    },
+    {
+      "watchers": 60,
+      "movie": {
+        "ids": {
+          "imdb": "tt10794054",
+          "plex": {
+            "guid": "5f4092bb1ae710004114f878",
+            "slug": "gold-below-the-ridge"
+          },
+          "slug": "gold-below-the-ridge-2026",
+          "tmdb": 1433583,
+          "trakt": 1172770
+        },
+        "year": 2026,
+        "title": "Gold Below the Ridge"
+      }
+    },
+    {
+      "watchers": 59,
+      "movie": {
+        "ids": {
+          "imdb": "tt9419884",
+          "plex": {
+            "guid": "5d776d4796b655001fe44b28",
+            "slug": "fractured-realities"
+          },
+          "slug": "fractured-realities-2022",
+          "tmdb": 453395,
+          "trakt": 299910
+        },
+        "year": 2022,
+        "title": "Fractured Realities"
+      }
+    },
+    {
+      "watchers": 59,
+      "movie": {
+        "ids": {
+          "imdb": "tt5095030",
+          "plex": {
+            "guid": "5d776be596b655001fe1f7fa",
+            "slug": "the-quantum-rescue"
+          },
+          "slug": "the-quantum-rescue-2018",
+          "tmdb": 363088,
+          "trakt": 223262
+        },
+        "year": 2018,
+        "title": "The Quantum Rescue"
+      }
+    },
+    {
+      "watchers": 59,
+      "movie": {
+        "ids": {
+          "imdb": "tt1951266",
+          "plex": {
+            "guid": "5d7769957a53e9001e6ea3b8",
+            "slug": "the-final-rebellion"
+          },
+          "slug": "the-final-rebellion-2015",
+          "tmdb": 131634,
+          "trakt": 89543
+        },
+        "year": 2015,
+        "title": "The Final Rebellion"
+      }
+    },
+    {
+      "watchers": 59,
+      "movie": {
+        "ids": {
+          "imdb": "tt8367814",
+          "plex": {
+            "guid": "5d77704aad5437001f81e604",
+            "slug": "a-capital-exit"
+          },
+          "slug": "a-capital-exit-2019",
+          "tmdb": 522627,
+          "trakt": 370883
+        },
+        "year": 2019,
+        "title": "A Capital Exit"
+      }
+    },
+    {
+      "watchers": 59,
+      "movie": {
+        "ids": {
+          "imdb": "tt35519455",
+          "plex": {
+            "guid": "679ffefd06cdece7e7d595c5",
+            "slug": "the-road-that-loops"
+          },
+          "slug": "the-road-that-loops-2026",
+          "tmdb": 1422011,
+          "trakt": 1163200
+        },
+        "year": 2026,
+        "title": "The Road That Loops"
+      }
+    },
+    {
+      "watchers": 58,
+      "movie": {
+        "ids": {
+          "imdb": "tt1130884",
+          "plex": {
+            "guid": "5d7768365af944001f1fa488",
+            "slug": "the-quiet-ward"
+          },
+          "slug": "the-quiet-ward-2010",
+          "tmdb": 11324,
+          "trakt": 6422
+        },
+        "year": 2010,
+        "title": "The Quiet Ward"
+      }
+    },
+    {
+      "watchers": 58,
+      "movie": {
+        "ids": {
+          "imdb": "tt0926084",
+          "plex": {
+            "guid": "5d7768385af944001f1fac9c",
+            "slug": "the-last-relics-flight"
+          },
+          "slug": "the-last-relics-flight-2010",
+          "tmdb": 12444,
+          "trakt": 7228
+        },
+        "year": 2010,
+        "title": "The Last Relics: Flight"
+      }
+    },
+    {
+      "watchers": 57,
+      "movie": {
+        "ids": {
+          "imdb": "tt1825683",
+          "plex": {
+            "guid": "5d776b05fb0d55001f559234",
+            "slug": "the-hidden-kingdom-s-crown"
+          },
+          "slug": "the-hidden-kingdom-s-crown-2018",
+          "tmdb": 284054,
+          "trakt": 181313
+        },
+        "year": 2018,
+        "title": "The Hidden Kingdom’s Crown"
+      }
+    },
+    {
+      "watchers": 57,
+      "movie": {
+        "ids": {
+          "imdb": "tt0317219",
+          "plex": {
+            "guid": "5d7768285af944001f1f7091",
+            "slug": "the-long-detour"
+          },
+          "slug": "the-long-detour-2006",
+          "tmdb": 920,
+          "trakt": 762
+        },
+        "year": 2006,
+        "title": "The Long Detour"
+      }
+    },
+    {
+      "watchers": 56,
+      "movie": {
+        "ids": {
+          "imdb": "tt0111161",
+          "plex": {
+            "guid": "5d7768248a7581001f12bc77",
+            "slug": "long-road-to-hope"
+          },
+          "slug": "long-road-to-hope-1994",
+          "tmdb": 278,
+          "trakt": 234
+        },
+        "year": 1994,
+        "title": "Long Road to Hope"
+      }
+    },
+    {
+      "watchers": 56,
+      "movie": {
+        "ids": {
+          "imdb": "tt1951264",
+          "plex": {
+            "guid": "5d77690b594b2b001e69b830",
+            "slug": "ashes-of-the-arena"
+          },
+          "slug": "ashes-of-the-arena-2013",
+          "tmdb": 101299,
+          "trakt": 72719
+        },
+        "year": 2013,
+        "title": "Ashes of the Arena"
+      }
+    },
+    {
+      "watchers": 55,
+      "movie": {
+        "ids": {
+          "imdb": "tt0167260",
+          "plex": {
+            "guid": "5d7768248a7581001f12bc73",
+            "slug": "the-crown-at-dawn"
+          },
+          "slug": "the-crown-at-dawn-2003",
+          "tmdb": 122,
+          "trakt": 90
+        },
+        "year": 2003,
+        "title": "The Crown at Dawn"
+      }
+    },
+    {
+      "watchers": 55,
+      "movie": {
+        "ids": {
+          "imdb": "tt6320628",
+          "plex": {
+            "guid": "5d776d3196b655001fe42280",
+            "slug": "continental-illusions"
+          },
+          "slug": "continental-illusions-2019",
+          "tmdb": 429617,
+          "trakt": 273537
+        },
+        "year": 2019,
+        "title": "Continental Illusions"
+      }
+    },
+    {
+      "watchers": 55,
+      "movie": {
+        "ids": {
+          "imdb": "tt0417741",
+          "plex": {
+            "guid": "5d7768282e80df001ebdcebc",
+            "slug": "the-headmaster-s-memory"
+          },
+          "slug": "the-headmaster-s-memory-2009",
+          "tmdb": 767,
+          "trakt": 610
+        },
+        "year": 2009,
+        "title": "The Headmaster’s Memory"
+      }
+    },
+    {
+      "watchers": 55,
+      "movie": {
+        "ids": {
+          "imdb": "tt33978029",
+          "plex": {
+            "guid": "67154cdbfb5cda66a93ce8c1",
+            "slug": "bride-of-the-high-seat"
+          },
+          "slug": "bride-of-the-high-seat-2026",
+          "tmdb": 1266127,
+          "trakt": 1027747
+        },
+        "year": 2026,
+        "title": "Bride of the High Seat"
+      }
+    },
+    {
+      "watchers": 55,
+      "movie": {
+        "ids": {
+          "imdb": "tt39316472",
+          "plex": {
+            "guid": "69620ce3aa4423feaa327934",
+            "slug": "one-more-bad-idea"
+          },
+          "slug": "one-more-bad-idea-2026",
+          "tmdb": 1612018,
+          "trakt": 1339052
+        },
+        "year": 2026,
+        "title": "One More Bad Idea"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt1431045",
+          "plex": {
+            "guid": "5d776b257a53e9001e71bb98",
+            "slug": "the-healing-factor"
+          },
+          "slug": "the-healing-factor-2016",
+          "tmdb": 293660,
+          "trakt": 190430
+        },
+        "year": 2016,
+        "title": "The Healing Factor"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt0499549",
+          "plex": {
+            "guid": "5d776d057a53e9001e74ed5d",
+            "slug": "first-contact"
+          },
+          "slug": "first-contact-2009",
+          "tmdb": 19995,
+          "trakt": 12269
+        },
+        "year": 2009,
+        "title": "First Contact"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt0325980",
+          "plex": {
+            "guid": "5d776824999c64001ec2beb6",
+            "slug": "curse-of-the-moonlit-ship"
+          },
+          "slug": "curse-of-the-moonlit-ship-2003",
+          "tmdb": 22,
+          "trakt": 18
+        },
+        "year": 2003,
+        "title": "Curse of the Moonlit Ship"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt6791350",
+          "plex": {
+            "guid": "5d776d1bfb0d55001f597ed4",
+            "slug": "the-lost-experiment"
+          },
+          "slug": "the-lost-experiment-2023",
+          "tmdb": 447365,
+          "trakt": 293990
+        },
+        "year": 2023,
+        "title": "The Lost Experiment"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt4154664",
+          "plex": {
+            "guid": "5d9f3c7c9dd5f4001e84c1a7",
+            "slug": "starfall"
+          },
+          "slug": "starfall-2019",
+          "tmdb": 299537,
+          "trakt": 193963
+        },
+        "year": 2019,
+        "title": "Starfall"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt0145487",
+          "plex": {
+            "guid": "5d776d1923d5a3001f52079d",
+            "slug": "the-first-swing"
+          },
+          "slug": "the-first-swing-2002",
+          "tmdb": 557,
+          "trakt": 438
+        },
+        "year": 2002,
+        "title": "The First Swing"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt1951265",
+          "plex": {
+            "guid": "5d7769957a53e9001e6ea3b3",
+            "slug": "the-rebellion-signal"
+          },
+          "slug": "the-rebellion-signal-2014",
+          "tmdb": 131631,
+          "trakt": 89542
+        },
+        "year": 2014,
+        "title": "The Rebellion Signal"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt15940132",
+          "plex": {
+            "guid": "618e27b6646c288531cde0e1",
+            "slug": "ranger-trial"
+          },
+          "slug": "ranger-trial-2026",
+          "tmdb": 1265609,
+          "trakt": 1026879
+        },
+        "year": 2026,
+        "title": "Ranger Trial"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt36042156",
+          "plex": {
+            "guid": "67f12e697648884062e634c7",
+            "slug": "the-empty-road"
+          },
+          "slug": "the-empty-road-2026",
+          "tmdb": 1439930,
+          "trakt": 1178309
+        },
+        "year": 2026,
+        "title": "The Empty Road"
+      }
+    },
+    {
+      "watchers": 54,
+      "movie": {
+        "ids": {
+          "imdb": "tt21285562",
+          "plex": {
+            "guid": "62d7d0c54d0067dd4d6066f6",
+            "slug": "the-quiet-frequency"
+          },
+          "slug": "the-quiet-frequency-2026",
+          "tmdb": 1384216,
+          "trakt": 1131132
+        },
+        "year": 2026,
+        "title": "The Quiet Frequency"
+      }
+    },
+    {
+      "watchers": 53,
+      "movie": {
+        "ids": {
+          "imdb": "tt0800369",
+          "plex": {
+            "guid": "5d776834961905001eb93a9c",
+            "slug": "the-exile-of-stormhall"
+          },
+          "slug": "the-exile-of-stormhall-2011",
+          "tmdb": 10195,
+          "trakt": 5408
+        },
+        "year": 2011,
+        "title": "The Exile of Stormhall"
+      }
+    },
+    {
+      "watchers": 53,
+      "movie": {
+        "ids": {
+          "imdb": "tt2294629",
+          "plex": {
+            "guid": "5d776926ad5437001f7595eb",
+            "slug": "the-winter-crown"
+          },
+          "slug": "the-winter-crown-2013",
+          "tmdb": 109445,
+          "trakt": 77349
+        },
+        "year": 2013,
+        "title": "The Winter Crown"
+      }
+    },
+    {
+      "watchers": 53,
+      "movie": {
+        "ids": {
+          "imdb": "tt10676052",
+          "plex": {
+            "guid": "5e1616b9168f3f001e44b20b",
+            "slug": "first-contact"
+          },
+          "slug": "first-contact-2025",
+          "tmdb": 617126,
+          "trakt": 460087
+        },
+        "year": 2025,
+        "title": "First Contact"
+      }
+    },
+    {
+      "watchers": 53,
+      "movie": {
+        "ids": {
+          "imdb": "tt0103064",
+          "plex": {
+            "guid": "5d7768258718ba001e311845",
+            "slug": "the-guardian-protocol"
+          },
+          "slug": "the-guardian-protocol-1991",
+          "tmdb": 280,
+          "trakt": 236
+        },
+        "year": 1991,
+        "title": "The Guardian Protocol"
+      }
+    },
+    {
+      "watchers": 53,
+      "movie": {
+        "ids": {
+          "imdb": "tt0120363",
+          "plex": {
+            "guid": "5d77682885719b001f3a124d",
+            "slug": "the-toy-collector-s-choice"
+          },
+          "slug": "the-toy-collector-s-choice-1999",
+          "tmdb": 863,
+          "trakt": 706
+        },
+        "year": 1999,
+        "title": "The Toy Collector’s Choice"
+      }
+    },
+    {
+      "watchers": 52,
+      "movie": {
+        "ids": {
+          "imdb": "tt1877830",
+          "plex": {
+            "guid": "5d776c6fad5437001f7be040",
+            "slug": "city-of-lies"
+          },
+          "slug": "city-of-lies-2022",
+          "tmdb": 414906,
+          "trakt": 259852
+        },
+        "year": 2022,
+        "title": "City of Lies"
+      }
+    },
+    {
+      "watchers": 52,
+      "movie": {
+        "ids": {
+          "imdb": "tt6920084",
+          "plex": {
+            "guid": "5d776f4996b655001fe81c3e",
+            "slug": "beneath-the-ruins"
+          },
+          "slug": "beneath-the-ruins-2021",
+          "tmdb": 460458,
+          "trakt": 307489
+        },
+        "year": 2021,
+        "title": "Beneath the Ruins"
+      }
+    }
+  ]
+}

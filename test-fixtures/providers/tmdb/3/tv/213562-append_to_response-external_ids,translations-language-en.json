@@ -1,0 +1,266 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22941",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"523da777ad1223f7b82d2f4b226e6aaa\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3qbNgNqMFrEEhIl43UKD9oxCkOw.jpg",
+    "created_by": [
+      {
+        "id": 228428,
+        "credit_id": "66e62efe9dfbbdf0e6cf4096",
+        "name": "Cameron Bell",
+        "original_name": "Cameron Bell",
+        "gender": 2,
+        "profile_path": "/5kH9BzRX1osFjvWsh9vmjwTyE7h.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-15",
+    "genres": [
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/series/distant-harbor-larkspur",
+    "id": 213562,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": null,
+    "last_episode_to_air": null,
+    "name": "Distant Harbor: Larkspur",
+    "next_episode_to_air": {
+      "id": 4034383,
+      "name": "Quiet Bridge",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-10-15",
+      "episode_number": 1,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 213562,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 3353,
+        "logo_path": "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png",
+        "name": "Golden Horizon Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Distant Harbor: Larkspur",
+    "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 8.6823,
+    "poster_path": "/3ENhExiD2fcjk5FX0AcAXcvLu9N.jpg",
+    "production_companies": [
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Quiet Meridian Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-15",
+        "episode_count": 8,
+        "id": 314829,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/hsESHRHtwIQ1OU5ck8fDmuGJkXM.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "In Production",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 0,
+    "vote_count": 0,
+    "external_ids": {
+      "imdb_id": "tt23148340",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 426669,
+      "tvrage_id": null,
+      "wikidata_id": "Q135166893",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Distant Harbor: Larkspur",
+            "overview": "Distant Harbor: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-harbor-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

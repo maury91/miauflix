@@ -1,0 +1,758 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10471",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a398340689161e6fe16b17f04de9d271\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3epmRoQFyUpLATk1JKgnKKQp0kM.jpg",
+    "belongs_to_collection": null,
+    "budget": 50000000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://example.test/films/a-home-for-the-wild",
+    "id": 74465,
+    "imdb_id": "tt1389137",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "A Home for the Wild",
+    "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+    "popularity": 12.5745,
+    "poster_path": "/dcOvIqdsojUdAtWt1nPT9xS76Su.jpg",
+    "production_companies": [
+      {
+        "id": 444,
+        "logo_path": null,
+        "name": "Willowmere Story House",
+        "origin_country": "US"
+      },
+      {
+        "id": 8518,
+        "logo_path": "/7HO5qokgMtrQI0jVUEzmXKWH2c7.png",
+        "name": "Willowmere Story House",
+        "origin_country": "US"
+      },
+      {
+        "id": 485,
+        "logo_path": "/tVOP0mIeoYLua4Rw66OYNzitrrI.png",
+        "name": "Willowmere Story House",
+        "origin_country": "US"
+      },
+      {
+        "id": 25,
+        "logo_path": "/nM2MfoMqzJQRiSynsDabOtFKetD.png",
+        "name": "Willowmere Story House",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2011-11-26",
+    "revenue": 120081841,
+    "runtime": 124,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A family can find its way back together.",
+    "title": "A Home for the Wild",
+    "video": false,
+    "vote_average": 6.838,
+    "vote_count": 3023,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 123,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 123,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 119,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 119,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 124,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/a-home-for-the-wild",
+            "overview": "After losing his wife, a father buys a country estate that comes with a struggling zoo. His daughter embraces the animals, his grieving son resists the upheaval, and the staff join him in a race to restore the grounds before the bills force the gates shut.",
+            "runtime": 0,
+            "tagline": "A family can find its way back together.",
+            "title": "A Home for the Wild"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g90n5FVxxzpKe7kELgpnXa3TRwI.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iTgrgV3PEgOuRQHn2jJbiYqbH5U.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sXH2g4LjGYWtAI67xzPj2Uoy7yM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 12.068,
+          "height": 191,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5SmMtFmP6OGRlbzmmm4aTgZzcwK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2305
+        },
+        {
+          "aspect_ratio": 2.19,
+          "height": 290,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/skXGReAdjogCBMXGxpvSE9EWU5m.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 635
+        },
+        {
+          "aspect_ratio": 2.191,
+          "height": 875,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nTyrTpIsg9AiV4AGR8uEZ22Ek0R.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1917
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dcOvIqdsojUdAtWt1nPT9xS76Su.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vw4W2QgWuPWJXDA4N0V0MU1R0TI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sjczui7B8JOyMndytZoepmdAl6U.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1467
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o3zZx6hEMsbIj6gLAzNPpyiMKo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lVuzqP4oXGc2ybxva5ZGQk0L6xi.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/udQs7ftIiWzkho8hej64N2iUdkc.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8XbVMURawztydSEZtSIn5fF2hgU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 923,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vQkqJaVNRBOHW5uKc6Ts8l9ZNd5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 623
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/71I8GeIiuB1cYp2Bn8I3FIB2YYk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2363,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8jCmMTXIsG2X5YWXsVqeXBkemvO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1595
+        }
+      ]
+    }
+  }
+}

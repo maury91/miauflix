@@ -1,0 +1,824 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "2708",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,show",
+    "content-security-policy-report-only": "script-src 'unsafe-inline' 'unsafe-eval'; connect-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=qx7Uc_8zKzBCjhjOwutcphiQI.uTsJ3oevOHWG06hCY-1790360560.959236-1.0.1.1-LKD2y0g9SPd6XAR.pfUrwvB4Pc.QzipeHnrWfvmXdlioOWA6nZC_77iixCFCKS59TxxcR_WRzQbUhfyfrbOhaj_RO6f9LXdp1DU0CofZSOC1os212B9DPa4TS9a5ZuM2mGdlJs9hT1.xmPYxCIwDKdpjF5lAt8gReROf4h4YKTs; report-to cf-csp-endpoint",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 17:37:32 GMT",
+    "reporting-endpoints": "cf-csp-endpoint=\"https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=qx7Uc_8zKzBCjhjOwutcphiQI.uTsJ3oevOHWG06hCY-1790360560.959236-1.0.1.1-LKD2y0g9SPd6XAR.pfUrwvB4Pc.QzipeHnrWfvmXdlioOWA6nZC_77iixCFCKS59TxxcR_WRzQbUhfyfrbOhaj_RO6f9LXdp1DU0CofZSOC1os212B9DPa4TS9a5ZuM2mGdlJs9hT1.xmPYxCIwDKdpjF5lAt8gReROf4h4YKTs\"",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "666",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "5",
+    "x-pagination-page-count": "14",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt27792190",
+        "plex": {
+          "guid": "6582642b65b57eb8635e7525",
+          "slug": "ashford-hall-between-worlds"
+        },
+        "slug": "ashford-hall-between-worlds",
+        "tmdb": 250670,
+        "tvdb": 443586,
+        "trakt": 233436
+      },
+      "year": 2024,
+      "title": "Ashford Hall: Between Worlds",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt36022742",
+        "plex": {
+          "guid": "67c993eaef1185df40e481a9",
+          "slug": "the-last-countermeasure"
+        },
+        "slug": "the-last-countermeasure",
+        "tmdb": 285807,
+        "tvdb": 461039,
+        "trakt": 278494
+      },
+      "year": 2026,
+      "title": "The Last Countermeasure",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt32596156",
+        "plex": {
+          "guid": "66699250bf4b6ef07509c69a",
+          "slug": "the-veil-society"
+        },
+        "slug": "the-veil-society",
+        "tmdb": 256624,
+        "tvdb": 433933,
+        "trakt": 243762
+      },
+      "year": 2025,
+      "title": "The Veil Society",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt23734948",
+        "plex": {
+          "guid": "65108abbcc44992dfe148bcb",
+          "slug": "the-pendragon-cycle-rise-of-the-merlin"
+        },
+        "slug": "the-pendragon-cycle-rise-of-the-merlin",
+        "tmdb": 235685,
+        "tvdb": 463624,
+        "trakt": 210039
+      },
+      "year": 2026,
+      "title": "The Pendragon Cycle: Rise of the Merlin",
+      "aired_episodes": 7
+    },
+    {
+      "ids": {
+        "imdb": "tt27543562",
+        "plex": {
+          "guid": "66bc9ac050195566dc81ddc9",
+          "slug": "the-shards"
+        },
+        "slug": "the-shards",
+        "tmdb": 298168,
+        "tvdb": 450799,
+        "trakt": 294781
+      },
+      "year": 2026,
+      "title": "The Shards",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt35346717",
+        "plex": {
+          "guid": "66b0abdc9f78d1296f5fbaf6",
+          "slug": "the-village-swordmaster"
+        },
+        "slug": "the-village-swordmaster",
+        "tmdb": 260823,
+        "tvdb": 452710,
+        "trakt": 250954
+      },
+      "year": 2025,
+      "title": "The Village Swordmaster",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt36104233",
+        "plex": {
+          "guid": "6822f91fa0c44e014e9a211b",
+          "slug": "if-wishes-could-kill"
+        },
+        "slug": "if-wishes-could-kill",
+        "tmdb": 285838,
+        "tvdb": 461062,
+        "trakt": 278535
+      },
+      "year": 2026,
+      "title": "If Wishes Could Kill",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt37532893",
+        "plex": {
+          "guid": "67cd8b29fbd977e716d5a0cc",
+          "slug": "obsidian-torch"
+        },
+        "slug": "obsidian-torch",
+        "tmdb": 285993,
+        "tvdb": 461194,
+        "trakt": 278722
+      },
+      "year": 2026,
+      "title": "Obsidian Torch",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt33028568",
+        "plex": {
+          "guid": "674912618148e74428615746",
+          "slug": "the-day-sora-returned"
+        },
+        "slug": "the-day-sora-returned",
+        "tmdb": 278196,
+        "tvdb": 450428,
+        "trakt": 265340
+      },
+      "year": 2025,
+      "title": "The Day Sora Returned",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt38828946",
+        "plex": {
+          "guid": "688e6e8ffc91675b466405e0",
+          "slug": "my-nemesis-the-crown"
+        },
+        "slug": "my-nemesis-the-crown",
+        "tmdb": 303143,
+        "tvdb": 466353,
+        "trakt": 303825
+      },
+      "year": 2026,
+      "title": "My Nemesis, the Crown",
+      "aired_episodes": 14
+    },
+    {
+      "ids": {
+        "imdb": "tt8962124",
+        "plex": {
+          "guid": "5d9c090d705e7a001e6e9448",
+          "slug": "clara-in-montmartre"
+        },
+        "slug": "clara-in-montmartre",
+        "tmdb": 82596,
+        "tvdb": 364439,
+        "trakt": 148191
+      },
+      "year": 2020,
+      "title": "Clara in Montmartre",
+      "aired_episodes": 50
+    },
+    {
+      "ids": {
+        "imdb": "tt7587890",
+        "plex": {
+          "guid": "5d9c08ffe264b7001fc4d397",
+          "slug": "the-rookie-detective"
+        },
+        "slug": "the-rookie-detective",
+        "tmdb": 79744,
+        "tvdb": 350665,
+        "trakt": 134421
+      },
+      "year": 2018,
+      "title": "The Rookie Detective",
+      "aired_episodes": 144
+    },
+    {
+      "ids": {
+        "imdb": "tt32213668",
+        "plex": {
+          "guid": "67891668d9bbacddbe825851",
+          "slug": "leanne"
+        },
+        "slug": "leanne",
+        "tmdb": 252751,
+        "tvdb": 457800,
+        "trakt": 237018
+      },
+      "year": 2025,
+      "title": "Leanne",
+      "aired_episodes": 26
+    },
+    {
+      "ids": {
+        "imdb": "tt33473000",
+        "plex": {
+          "guid": "6651c38aa762562f917341f4",
+          "slug": "the-combs-inquiry"
+        },
+        "slug": "the-combs-inquiry",
+        "tmdb": 255251,
+        "tvdb": 450861,
+        "trakt": 241643
+      },
+      "year": 2025,
+      "title": "The Combs Inquiry",
+      "aired_episodes": 4
+    },
+    {
+      "ids": {
+        "imdb": "tt2431250",
+        "plex": {
+          "guid": "686c3376b943c16e1c98a353",
+          "slug": "prairie-home-again"
+        },
+        "slug": "prairie-home-again",
+        "tmdb": 283304,
+        "tvdb": 459561,
+        "trakt": 275053
+      },
+      "year": 2026,
+      "title": "Prairie Home Again",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt32766897",
+        "plex": {
+          "guid": "6698039a9752b4926feeb778",
+          "slug": "ranma-tides-of-change"
+        },
+        "slug": "ranma-tides-of-change",
+        "tmdb": 259140,
+        "tvdb": 451479,
+        "trakt": 248545
+      },
+      "year": 2024,
+      "title": "Ranma: Tides of Change",
+      "aired_episodes": 24
+    },
+    {
+      "ids": {
+        "imdb": "tt37614297",
+        "plex": {
+          "guid": "688076885b61e1229ff35456",
+          "slug": "smoking-together-after-closing-time"
+        },
+        "slug": "smoking-together-after-closing-time",
+        "tmdb": 296286,
+        "tvdb": 465973,
+        "trakt": 292359
+      },
+      "year": 2026,
+      "title": "Smoking Together After Closing Time",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt14681596",
+        "plex": {
+          "guid": "61d980c30345f80804948dd5",
+          "slug": "gotham-the-masked-sentinel"
+        },
+        "slug": "gotham-the-masked-sentinel",
+        "tmdb": 125909,
+        "tvdb": 403170,
+        "trakt": 180698
+      },
+      "year": 2024,
+      "title": "Gotham: The Masked Sentinel",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt30817086",
+        "plex": {
+          "guid": "659dd8433c048ebfc6d08cc2",
+          "slug": "old-dog-new-tricks"
+        },
+        "slug": "old-dog-new-tricks",
+        "tmdb": 243200,
+        "tvdb": 461180,
+        "trakt": 278739
+      },
+      "year": 2025,
+      "title": "Old Dog, New Tricks",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt29780951",
+        "plex": {
+          "guid": "652b3676d34a85b7d9ed1344",
+          "slug": "wild-cards"
+        },
+        "slug": "wild-cards",
+        "tmdb": 240932,
+        "tvdb": 440865,
+        "trakt": 216574
+      },
+      "year": 2024,
+      "title": "Wild Cards",
+      "aired_episodes": 33
+    },
+    {
+      "ids": {
+        "imdb": "tt33248156",
+        "plex": {
+          "guid": "66fd84d5ddc1651e7899aec3",
+          "slug": "the-famous-deceivers"
+        },
+        "slug": "the-famous-deceivers",
+        "tmdb": 291431,
+        "tvdb": 453660,
+        "trakt": 285631
+      },
+      "year": 2025,
+      "title": "The Famous Deceivers",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt16280546",
+        "plex": {
+          "guid": "61a787f3e791a9a4411b2667",
+          "slug": "the-castaways-of-red-basin"
+        },
+        "slug": "the-castaways-of-red-basin",
+        "tmdb": 223300,
+        "tvdb": 413011,
+        "trakt": 203567
+      },
+      "year": 2025,
+      "title": "The Castaways of Red Basin",
+      "aired_episodes": 7
+    },
+    {
+      "ids": {
+        "imdb": "tt35495058",
+        "plex": {
+          "guid": "67da3d94ef8afaca32814a9d",
+          "slug": "finding-her-stride"
+        },
+        "slug": "finding-her-stride",
+        "tmdb": 281401,
+        "tvdb": 461179,
+        "trakt": 272579
+      },
+      "year": 2026,
+      "title": "Finding Her Stride",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt5180504",
+        "plex": {
+          "guid": "5d9c08e6ba6eb9001fbac2b1",
+          "slug": "the-witcher-of-the-wolf-road"
+        },
+        "slug": "the-witcher-of-the-wolf-road",
+        "tmdb": 71912,
+        "tvdb": 362696,
+        "trakt": 138163
+      },
+      "year": 2019,
+      "title": "The Witcher of the Wolf Road",
+      "aired_episodes": 32
+    },
+    {
+      "ids": {
+        "imdb": "tt20782190",
+        "plex": {
+          "guid": "6562ac736a74c8d14e831526",
+          "slug": "english-class"
+        },
+        "slug": "english-class",
+        "tmdb": 258902,
+        "tvdb": 421968,
+        "trakt": 248247
+      },
+      "year": 2024,
+      "title": "English Class",
+      "aired_episodes": 18
+    },
+    {
+      "ids": {
+        "imdb": "tt21906238",
+        "plex": {
+          "guid": "630a127285083526cd9fbecb",
+          "slug": "the-country-set"
+        },
+        "slug": "the-country-set",
+        "tmdb": 208921,
+        "tvdb": 429920,
+        "trakt": 205398
+      },
+      "year": 2024,
+      "title": "The Country Set",
+      "aired_episodes": 14
+    },
+    {
+      "ids": {
+        "imdb": "tt35848827",
+        "plex": {
+          "guid": "677857852a20d60cad400912",
+          "slug": "my-scheduled-sweetheart"
+        },
+        "slug": "my-scheduled-sweetheart",
+        "tmdb": 281016,
+        "tvdb": 454321,
+        "trakt": 272023
+      },
+      "year": 2026,
+      "title": "My Scheduled Sweetheart",
+      "aired_episodes": 10
+    },
+    {
+      "ids": {
+        "imdb": "tt18482892",
+        "plex": {
+          "guid": "6382a306186aa39f1381623c",
+          "slug": "the-men-of-better-days"
+        },
+        "slug": "the-men-of-better-days",
+        "tmdb": 215092,
+        "tvdb": 417478,
+        "trakt": 200074
+      },
+      "year": 2022,
+      "title": "The Men of Better Days",
+      "aired_episodes": 42
+    },
+    {
+      "ids": {
+        "imdb": "tt31495377",
+        "plex": {
+          "guid": "67616ffe8ac93ffe6605f69f",
+          "slug": "a-measure-of-patience"
+        },
+        "slug": "a-measure-of-patience",
+        "tmdb": 279603,
+        "tvdb": 451584,
+        "trakt": 269923
+      },
+      "year": 2025,
+      "title": "A Measure of Patience",
+      "aired_episodes": 14
+    },
+    {
+      "ids": {
+        "imdb": "tt33741848",
+        "plex": {
+          "guid": "66c761bb1dd42ae9a1e535ff",
+          "slug": "low-tide"
+        },
+        "slug": "low-tide",
+        "tmdb": 262262,
+        "tvdb": 453602,
+        "trakt": 252884
+      },
+      "year": 2026,
+      "title": "Low Tide",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt36230718",
+        "plex": {
+          "guid": "67b48390a91b851da549a018",
+          "slug": "the-assassin-s-unlikely-rank"
+        },
+        "slug": "the-assassin-s-unlikely-rank",
+        "tmdb": 284644,
+        "tvdb": 460341,
+        "trakt": 276993
+      },
+      "year": 2025,
+      "title": "The Assassin's Unlikely Rank",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt36592736",
+        "plex": {
+          "guid": "678263fc4c24237aa0fce835",
+          "slug": "the-water-adept"
+        },
+        "slug": "the-water-adept",
+        "tmdb": 281615,
+        "tvdb": 456435,
+        "trakt": 272796
+      },
+      "year": 2025,
+      "title": "The Water Adept",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt31314754",
+        "plex": {
+          "guid": "65d53dc2bd4db91adf873d2e",
+          "slug": "the-clown-behind-the-smile"
+        },
+        "slug": "the-clown-behind-the-smile",
+        "tmdb": 257534,
+        "tvdb": 446150,
+        "trakt": 245245
+      },
+      "year": 2025,
+      "title": "The Clown Behind the Smile",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt31289994",
+        "plex": {
+          "guid": "6700d88decd8889ab8287d07",
+          "slug": "the-night-ledger"
+        },
+        "slug": "the-night-ledger",
+        "tmdb": 273247,
+        "tvdb": 450085,
+        "trakt": 258223
+      },
+      "year": 2025,
+      "title": "The Night Ledger",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt9737326",
+        "plex": {
+          "guid": "60c1e50a32a4f9002df7c14e",
+          "slug": "the-visitors"
+        },
+        "slug": "the-visitors",
+        "tmdb": 127235,
+        "tvdb": 404492,
+        "trakt": 181803
+      },
+      "year": 2021,
+      "title": "The Visitors",
+      "aired_episodes": 30
+    },
+    {
+      "ids": {
+        "imdb": "tt13366604",
+        "plex": {
+          "guid": "5f9996634f4191002d5b65fe",
+          "slug": "platonic"
+        },
+        "slug": "platonic",
+        "tmdb": 112211,
+        "tvdb": 391020,
+        "trakt": 168898
+      },
+      "year": 2023,
+      "title": "Platonic",
+      "aired_episodes": 20
+    },
+    {
+      "ids": {
+        "imdb": "tt26675358",
+        "plex": {
+          "guid": "65300e35dbc011e6bde71140",
+          "slug": "love-is-blind-uk"
+        },
+        "slug": "love-is-blind-uk",
+        "tmdb": 237316,
+        "tvdb": 447983,
+        "trakt": 213983
+      },
+      "year": 2024,
+      "title": "Love Is Blind: UK",
+      "aired_episodes": 37
+    },
+    {
+      "ids": {
+        "imdb": "tt32409807",
+        "plex": {
+          "guid": "649997c06db013fd3b8f012a",
+          "slug": "genie-make-a-wish"
+        },
+        "slug": "genie-make-a-wish",
+        "tmdb": 228689,
+        "tvdb": 436068,
+        "trakt": 229857
+      },
+      "year": 2025,
+      "title": "Genie, Make a Wish",
+      "aired_episodes": 13
+    },
+    {
+      "ids": {
+        "imdb": "tt31974288",
+        "plex": {
+          "guid": "66680ebb4147ef08eac3aec4",
+          "slug": "the-seven-clocks-at-bellweather"
+        },
+        "slug": "the-seven-clocks-at-bellweather",
+        "tmdb": 250505,
+        "tvdb": 448466,
+        "trakt": 233165
+      },
+      "year": 2026,
+      "title": "The Seven Clocks at Bellweather",
+      "aired_episodes": 3
+    },
+    {
+      "ids": {
+        "imdb": "tt30291387",
+        "plex": {
+          "guid": "668d2acee906cf3ed3eb677f",
+          "slug": "all-s-fair-in-court"
+        },
+        "slug": "all-s-fair-in-court",
+        "tmdb": 258742,
+        "tvdb": 452036,
+        "trakt": 248076
+      },
+      "year": 2025,
+      "title": "All's Fair in Court",
+      "aired_episodes": 9
+    },
+    {
+      "ids": {
+        "imdb": "tt9794044",
+        "plex": {
+          "guid": "5e165ad891c203004123a1b5",
+          "slug": "citadel"
+        },
+        "slug": "citadel",
+        "tmdb": 114922,
+        "tvdb": 393268,
+        "trakt": 171028
+      },
+      "year": 2023,
+      "title": "Citadel",
+      "aired_episodes": 13
+    },
+    {
+      "ids": {
+        "imdb": "tt31631142",
+        "plex": {
+          "guid": "66d077f58e425a34ab364caf",
+          "slug": "the-chosen-house"
+        },
+        "slug": "the-chosen-house",
+        "tmdb": 262848,
+        "tvdb": 453813,
+        "trakt": 253675
+      },
+      "year": 2026,
+      "title": "The Chosen House",
+      "aired_episodes": 6
+    },
+    {
+      "ids": {
+        "imdb": "tt40548519",
+        "plex": {
+          "guid": "697b52fe4e11f4a9887f08b1",
+          "slug": "nippon-sangoku-three-realms-of-the-red-sun"
+        },
+        "slug": "nippon-sangoku-three-realms-of-the-red-sun",
+        "tmdb": 312474,
+        "tvdb": 473228,
+        "trakt": 315183
+      },
+      "year": 2026,
+      "title": "Nippon Sangoku: Three Realms of the Red Sun",
+      "aired_episodes": 12
+    },
+    {
+      "ids": {
+        "imdb": "tt21376524",
+        "plex": {
+          "guid": "6369cdab586d5032af4fb800",
+          "slug": "animal-control-city-calls"
+        },
+        "slug": "animal-control-city-calls",
+        "tmdb": 214162,
+        "tvdb": 423022,
+        "trakt": 199673
+      },
+      "year": 2023,
+      "title": "Animal Control: City Calls",
+      "aired_episodes": 43
+    },
+    {
+      "ids": {
+        "imdb": "tt39123061",
+        "plex": {
+          "guid": "679f13c0672a452be1b29756",
+          "slug": "beyond-the-ice-walls"
+        },
+        "slug": "beyond-the-ice-walls",
+        "tmdb": 283428,
+        "tvdb": 459627,
+        "trakt": 275247
+      },
+      "year": 2026,
+      "title": "Beyond the Ice Walls",
+      "aired_episodes": 14
+    },
+    {
+      "ids": {
+        "imdb": "tt33362589",
+        "plex": {
+          "guid": "66e2de24bab4446411282533",
+          "slug": "i-love-the-coast"
+        },
+        "slug": "i-love-the-coast",
+        "tmdb": 271053,
+        "tvdb": 454337,
+        "trakt": 255451
+      },
+      "year": 2025,
+      "title": "I Love the Coast",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt33040785",
+        "plex": {
+          "guid": "65c3d2c2fdf83806af693c5b",
+          "slug": "the-last-course"
+        },
+        "slug": "the-last-course",
+        "tmdb": 245684,
+        "tvdb": 440448,
+        "trakt": 224717
+      },
+      "year": 2024,
+      "title": "The Last Course",
+      "aired_episodes": 25
+    },
+    {
+      "ids": {
+        "imdb": "tt38218082",
+        "plex": {
+          "guid": "68cfce1b0b4018f67c550e1d",
+          "slug": "the-flight-deck"
+        },
+        "slug": "the-flight-deck",
+        "tmdb": 300507,
+        "tvdb": 467896,
+        "trakt": 298637
+      },
+      "year": 2026,
+      "title": "The Flight Deck",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt35997699",
+        "plex": {
+          "guid": "67c8c69c5ee49cc05e5aed73",
+          "slug": "viktor-at-the-window"
+        },
+        "slug": "viktor-at-the-window",
+        "tmdb": 285739,
+        "tvdb": 460989,
+        "trakt": 278400
+      },
+      "year": 2026,
+      "title": "Viktor at the Window",
+      "aired_episodes": 8
+    },
+    {
+      "ids": {
+        "imdb": "tt28230655",
+        "plex": {
+          "guid": "649ef378ad5cb2ce206a9860",
+          "slug": "among-us"
+        },
+        "slug": "among-us",
+        "tmdb": 229544,
+        "tvdb": 436645,
+        "trakt": 206968
+      },
+      "year": 2026,
+      "title": "Among Us",
+      "aired_episodes": 10
+    }
+  ]
+}

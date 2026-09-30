@@ -1,4 +1,12 @@
 services:
+  # Bunqueue broker for backend schedule coordination and background jobs
+  bunqueue:
+    image: ghcr.io/egeominotti/bunqueue:2.8.61
+    volumes:
+      - dev_bunqueue_data:/app/data
+    networks:
+      - test-network
+
   # Backend service with hot reloading for development
   backend:
     build:
@@ -10,6 +18,9 @@ services:
       - PORT=3000
       - NODE_ENV=development
       - RATE_LIMIT_TEST_MODE=true
+      - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
+      - BUNQUEUE_HOST=bunqueue
+      - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://media-catalog:3001
       - LIST_SERVICE_URL=http://list-service:3002
       - TMDB_API_URL=http://tmdb-mock/3
@@ -52,6 +63,8 @@ services:
       retries: 30
       start_period: 10s
     depends_on:
+      bunqueue:
+        condition: service_started
       media-catalog:
         condition: service_healthy
       tmdb-mock:
@@ -110,7 +123,13 @@ services:
     networks:
       - test-network
     healthcheck:
-      test: ['CMD', 'wget', '-qO-', 'http://localhost:3001/health']
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:3001/health').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))",
+        ]
       interval: 2s
       timeout: 5s
       retries: 30
@@ -119,7 +138,29 @@ services:
       tmdb-mock:
         condition: service_healthy
 
-  # TMDB Mock Service
+  # TMDB Image Mock Service
+  tmdb-images:
+    build:
+      context: mock
+      dockerfile: tmdb-images.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
+    environment:
+      - ASSET_DIR=/app/data/images
+      - IMAGE_PROXY_BASE_URL=https://image.tmdb.org/t/p/
+    ports:
+      - '${TMDB_IMAGE_PORT:-3001}:80'
+    volumes:
+      - ../../test-fixtures/providers/tmdb:/app/data:ro
+    networks:
+      - test-network
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 5s
+
+  # TMDB API Mock Service
   tmdb-mock:
     build:
       context: mock
@@ -130,6 +171,8 @@ services:
       - API_BASE_URL=https://api.themoviedb.org/3
       - API_AUTH_HEADER_IS_BEARER=true
       - API_KEY=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
+      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
+      - IMAGE_BASE_URL=http://127.0.0.1:${TMDB_IMAGE_PORT:-3001}/t/p/
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s
@@ -137,9 +180,12 @@ services:
       retries: 30
       start_period: 10s
     volumes:
-      - ./tmdb/data:/app/data
+      - ../../test-fixtures/providers/tmdb:/app/data
     networks:
       - test-network
+    depends_on:
+      tmdb-images:
+        condition: service_healthy
 
   # Trakt Mock Service
   trakt-mock:
@@ -154,6 +200,7 @@ services:
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=$TRAKT_CLIENT_ID
       - API_SECRET=$TRAKT_CLIENT_SECRET
+      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
       - |
         API_HEADERS={"trakt-api-version": "2"}
     healthcheck:
@@ -163,7 +210,7 @@ services:
       retries: 30
       start_period: 10s
     volumes:
-      - ./trakt/data:/app/data
+      - ../../test-fixtures/providers/trakt:/app/data
     networks:
       - test-network
 
@@ -218,6 +265,8 @@ networks:
     driver: bridge
 
 volumes:
+  dev_bunqueue_data:
+    name: miauflix_dev_bunqueue_data
   dev_database:
     name: miauflix_dev_database
   dev_downloads:

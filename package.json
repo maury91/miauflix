@@ -45,6 +45,7 @@
     "stop:backend:e2e": "backend-e2e/scripts/stop.sh",
     "test:backend:e2e:dev": "backend-e2e/scripts/test-only.sh",
     "test:backend:e2e": "backend-e2e/scripts/env.sh test --backend-only",
+    "test:backend:e2e:background": "BACKGROUND_TASKS_ENABLED=true backend-e2e/scripts/env.sh test --backend-only src/tests/list-priority.test.ts",
     "test:backend": "turbo run test --filter='./backend'",
     "test:e2e": "backend-e2e/scripts/env.sh test",
     "test:frontend:e2e:dev": "npm -w frontend run test:e2e",
@@ -54,8 +55,12 @@
     "test:frontend:e2e:docker:update": "npm -w frontend run test:e2e:docker:update",
     "test:frontend:e2e:docker": "npm -w frontend run test:e2e:docker",
     "test:frontend:e2e": "backend-e2e/scripts/env.sh test --frontend-only",
+    "test:frontend:e2e:home-catalog": "RECORD_PROVIDER_FIXTURES=true E2E_HOME_CROSS_LOAD=true backend-e2e/scripts/env.sh test --frontend-only home-catalog.e2e.spec.ts --project=chromium-desktop --workers=1",
     "test:frontend:visual:update": "npm -w frontend run test:visual:update",
     "test:frontend:visual": "npm -w frontend run test:visual",
+    "validate:provider-fixtures": "node scripts/validate-provider-fixtures.mjs",
+    "extract:provider-fictionalization": "node scripts/extract-provider-fictionalization.mjs",
+    "apply:provider-fictionalization": "node scripts/apply-provider-fictionalization.mjs",
     "test": "turbo run test --filter='./backend' --filter='./frontend' --filter='./packages/*' --filter='./services/*'"
   },
   "dependencies": {
@@ -86,7 +91,7 @@
   },
   "type": "module",
   "lint-staged": {
-    "*.{js,ts,tsx,json,css,scss,md}": [
+    "{*.{js,ts,tsx,json,css,scss,md},!(test-fixtures)/**/*.{js,ts,tsx,json,css,scss,md}}": [
       "prettier --write"
     ],
     "backend/src/**/*.ts": [

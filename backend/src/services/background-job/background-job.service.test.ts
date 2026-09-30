@@ -1,6 +1,10 @@
 const queueAdd = jest.fn();
 const queueAddBulk = jest.fn();
 const queueSchedule = jest.fn();
+const queueGetJobByCustomId = jest.fn();
+const queueGetJobState = jest.fn();
+const queueUpdateJobData = jest.fn();
+const queueChangePriority = jest.fn();
 const flowAddChain = jest.fn();
 const flowAddBulkThen = jest.fn();
 
@@ -17,6 +21,10 @@ jest.mock(
       addBulk: queueAddBulk,
       close: jest.fn(),
       upsertJobScheduler: queueSchedule,
+      getJobByCustomId: queueGetJobByCustomId,
+      getJobState: queueGetJobState,
+      updateJobData: queueUpdateJobData,
+      changeJobPriority: queueChangePriority,
       waitUntilReady: jest.fn().mockResolvedValue(undefined),
     })),
   }),
@@ -49,6 +57,10 @@ describe('BackgroundJobService', () => {
     queueAdd.mockResolvedValue({});
     queueAddBulk.mockResolvedValue([]);
     queueSchedule.mockResolvedValue(undefined);
+    queueGetJobByCustomId.mockResolvedValue(null);
+    queueGetJobState.mockResolvedValue('waiting');
+    queueUpdateJobData.mockResolvedValue(undefined);
+    queueChangePriority.mockResolvedValue(undefined);
     flowAddChain.mockResolvedValue({ jobIds: [] });
     flowAddBulkThen.mockResolvedValue({ parallelIds: [], finalId: 'final' });
   });
@@ -72,6 +84,29 @@ describe('BackgroundJobService', () => {
       removeOnComplete: true,
     });
     expect(queueAdd.mock.calls[0][2].jobId).toBe(queueAdd.mock.calls[1][2].jobId);
+  });
+
+  it('promotes an already queued job when a higher-ranked list discovers it', async () => {
+    const service = setupTest();
+    queueGetJobByCustomId.mockResolvedValue({
+      id: 'internal-42',
+      priority: 20,
+      data: { movieMediaId: 42, priority: 20 },
+    });
+
+    await service.enqueueOrPromote(
+      'source.discover',
+      'movie:42',
+      { movieMediaId: 42, priority: 90 },
+      { priority: 90 }
+    );
+
+    expect(queueChangePriority).toHaveBeenCalledWith('internal-42', { priority: 90 });
+    expect(queueUpdateJobData).toHaveBeenCalledWith('internal-42', {
+      movieMediaId: 42,
+      priority: 90,
+    });
+    expect(queueAdd).not.toHaveBeenCalled();
   });
 
   it('creates ordered and fan-in flows on their typed queues', async () => {

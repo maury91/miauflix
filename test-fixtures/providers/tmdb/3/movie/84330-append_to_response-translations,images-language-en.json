@@ -1,0 +1,428 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"76f264e883505cd3fc818e2cfb46c2fd\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/pYxLP0MWvhMG1Sx852N2PT8F3zf.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/room-219",
+    "id": 84330,
+    "imdb_id": "tt2085910",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Room 219",
+    "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+    "popularity": 2.7712,
+    "poster_path": "/wPXxJSz36VjAkxa4MZ0C28uOdwA.jpg",
+    "production_companies": [
+      {
+        "id": 58674,
+        "logo_path": null,
+        "name": "Lantern Key Nonfiction",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2012-10-26",
+    "revenue": 259765,
+    "runtime": 103,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Some films echo long after the credits.",
+    "title": "Room 219",
+    "video": false,
+    "vote_average": 6.1,
+    "vote_count": 541,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 103,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 102,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 102,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 104,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 102,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 102,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 102,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 102,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 102,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/room-219",
+            "overview": "A documentary follows five viewers as they search a famous haunted hotel film for hidden codes, political messages, and personal symbols. Interviews, archival footage, animation, and staged scenes reveal how one work can hold many competing mysteries.",
+            "runtime": 0,
+            "tagline": "Some films echo long after the credits.",
+            "title": "Room 219"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/msCkYiy4lLybaAPgdFLh9bnr5Xt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.596,
+          "height": 136,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2d2I6StzD3nUKQnNzFFHxl6jnnw.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 897
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wPXxJSz36VjAkxa4MZ0C28uOdwA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ySNnfNEVz8nzOkI4m8rTMDQABeL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pUGmXi0ShitYdLbtphLfThEoQhN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bsAgszEK3bhqbsVTpn8cjYPDDjc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 675
+        },
+        {
+          "aspect_ratio": 0.678,
+          "height": 1207,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7khbaUPiEA242kzbzZmeBTHb2pa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 818
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ngHlu3ktS532zwkIiJppS39kiRT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nNrUY31GWHPuIPzzHaHYVYlqHud.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -11,7 +11,7 @@ export interface BackgroundJobPayloads {
     subjectId: string;
   };
   'list.generation.activate': { listId: number; generation: string };
-  'source.discover': { movieId?: number; movieMediaId?: number };
+  'source.discover': { movieId?: number; movieMediaId?: number; priority?: number };
   'source.metadata': { sourceId?: number };
   'source.stats': { sourceId?: number };
   'cache.cleanup': Record<string, never>;

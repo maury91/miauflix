@@ -1,0 +1,361 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6452",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3b8703e16e29b55185908c27627a8baf\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/hC8i1b3rvz3omOD9PIqV3ziXvA8.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 36,
+        "name": "History"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "https://example.test/films/sisters-of-the-revolution",
+    "id": 42511,
+    "imdb_id": "tt0012532",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Sisters of the Revolution",
+    "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+    "popularity": 2.3538,
+    "poster_path": "/gbBzFuiVnuSPYZRXRArILc3Ywz3.jpg",
+    "production_companies": [
+      {
+        "id": 4759,
+        "logo_path": null,
+        "name": "Grand Rue Motion Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1921-12-28",
+    "revenue": 0,
+    "runtime": 150,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A dramatic epic",
+    "title": "Sisters of the Revolution",
+    "video": false,
+    "vote_average": 6.8,
+    "vote_count": 106,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 0,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/sisters-of-the-revolution",
+            "overview": "On the eve of a French uprising, two girls raised as sisters leave their village for Paris, hoping to find a cure for one girl's blindness after plague takes their parents. Separated on the road by a predatory nobleman, each must survive a city on the brink.",
+            "runtime": 150,
+            "tagline": "A dramatic epic",
+            "title": "Sisters of the Revolution"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 1.238,
+          "height": 282,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ytjRugDje5MMcDXOW9pyXGnTfI1.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 349
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gbBzFuiVnuSPYZRXRArILc3Ywz3.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kWiSvsbhQ7W8xeNTMv1FgBnhAbl.jpg",
+          "vote_average": 9.344,
+          "vote_count": 15,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sXIMdebk3rK3U0HKwqyB5ohpbxq.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1170,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oNVXkw5RmevOQJEM36HxjNC1Lm.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 780
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 975,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yXrguJZ3tytuQGEdKdiRU2VB7pd.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 650
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uMS9PECEEmhsPOAL7tJ1BGyNp2s.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7avuWOfZVBkzfhxn3KhJFSe0RxB.jpg",
+          "vote_average": 0.936,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 975,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mhq0w5JOYnKvHysHgc3MYpiRUWL.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 650
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 975,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qDdGfFiQkGL7oHmmj4UCfOcl8px.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 650
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pmoKT86lNHbbVwN9KO4WZLDWrX5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/55JwzMn63WoexqwfCfRMhyOMuen.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1400
+        }
+      ]
+    }
+  }
+}

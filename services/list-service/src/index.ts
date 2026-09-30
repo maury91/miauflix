@@ -7,6 +7,7 @@ import {
   LIST_CAPABILITY,
   LIST_CAPABILITY_VERSION,
   listServiceDefinitionSchema,
+  listServiceDefinitionsPageSchema,
   listServicePageSchema,
   MANAGEMENT_PROTOCOL_VERSION,
   providerAssociationSchema,
@@ -30,6 +31,7 @@ import { parsePositivePage } from './request-validation';
 import { TraktClient } from './trakt-client';
 
 const PORT = Number(process.env.LIST_SERVICE_PORT ?? 3002);
+const POPULAR_LIST_TTL_MS = 15 * 60 * 1000;
 const HOST = process.env.LIST_SERVICE_HOST ?? '0.0.0.0';
 const DATA_DIR = process.env.LIST_SERVICE_DATA_DIR ?? process.env.DATA_DIR ?? './data';
 const KEY_FILE = process.env.LIST_SERVICE_KEY_FILE ?? join(DATA_DIR, '.list-service-key');
@@ -147,6 +149,8 @@ const publicDefinitions = [
   ['trakt-shows-popular', 'Popular Shows', 'Popular shows from Trakt', 'shows/popular'],
   ['trakt-shows-trending', 'Trending Shows', 'Trending shows from Trakt', 'shows/trending'],
 ] as const;
+
+const communitySlug = (owner: string, listId: number) => `trakt-community-${owner}-${listId}`;
 
 const definitions = (subjectId?: string) => {
   const result = publicDefinitions.map(([id, name, description]) =>
@@ -304,6 +308,59 @@ const handler = async (request: Request): Promise<Response> => {
     serviceReady();
     if (request.method === 'GET' && path === '/v1/lists')
       return json(definitions(url.searchParams.get('subjectId') ?? undefined));
+    if (request.method === 'GET' && path === '/v1/lists/popular') {
+      const page = parsePositivePage(url.searchParams.get('page'));
+      const rawLimit = url.searchParams.get('limit') ?? '20';
+      if (page === null || !/^\d+$/.test(rawLimit))
+        return json({ error: 'invalid pagination' }, 400);
+      const limit = Number(rawLimit);
+      if (!Number.isSafeInteger(limit) || limit < 1 || limit > 20)
+        return json({ error: 'limit must be between 1 and 20' }, 400);
+      const cacheListId = `__popular_lists__:${limit}`;
+      const cached = database
+        .query(
+          'SELECT payload, fetched_at FROM list_pages WHERE subject_id = ?1 AND list_id = ?2 AND page = ?3'
+        )
+        .get('', cacheListId, page) as { payload: string; fetched_at: number } | null;
+      if (cached && cached.fetched_at + POPULAR_LIST_TTL_MS > Date.now())
+        return json(listServiceDefinitionsPageSchema.parse(JSON.parse(open(cached.payload))));
+      try {
+        const popular = await client().popularLists(page, limit);
+        const results = popular.items.map((entry, index) =>
+          listServiceDefinitionSchema.parse({
+            id: communitySlug(entry.list.user.ids.slug, entry.list.ids.trakt),
+            slug: communitySlug(entry.list.user.ids.slug, entry.list.ids.trakt),
+            name: entry.list.name || 'Untitled Trakt list',
+            description: entry.list.description,
+            provider: 'trakt',
+            scope: 'public',
+            requiresConnection: false,
+            rank: (page - 1) * limit + index,
+          })
+        );
+        const result = listServiceDefinitionsPageSchema.parse({
+          results,
+          page,
+          pageSize: limit,
+          totalPages: popular.totalPages,
+          totalItems: popular.totalItems,
+        });
+        database
+          .query(
+            `INSERT INTO list_pages (subject_id, list_id, page, payload, fetched_at)
+             VALUES (?1, ?2, ?3, ?4, ?5)
+             ON CONFLICT(subject_id, list_id, page) DO UPDATE SET payload = excluded.payload, fetched_at = excluded.fetched_at`
+          )
+          .run('', cacheListId, page, seal(JSON.stringify(result)), Date.now());
+        return json(result);
+      } catch (error) {
+        if (cached) {
+          console.warn(`Serving stale popular list page ${page}:`, error);
+          return json(listServiceDefinitionsPageSchema.parse(JSON.parse(open(cached.payload))));
+        }
+        throw error;
+      }
+    }
     if (request.method === 'GET' && path.startsWith('/v1/lists/')) {
       const listId = decodeURIComponent(path.slice('/v1/lists/'.length));
       const page = parsePositivePage(url.searchParams.get('page'));

@@ -1,0 +1,307 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22381",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"63c6a52121109c4c93aa8438c8c962d8\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/diKBJ2kJHHfm4nmHTHhprBgfHIF.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 37,
+        "name": "Western"
+      }
+    ],
+    "homepage": "https://example.test/films/oscar-shaw-last-beat",
+    "id": 1601243,
+    "imdb_id": "tt27674706",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Oscar Shaw: Last Beat",
+    "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+    "popularity": 15.9115,
+    "poster_path": "/tsE3nySukwrfUjouz8vzvKTcXNC.jpg",
+    "production_companies": [],
+    "production_countries": [],
+    "release_date": "2026-01-09",
+    "revenue": 0,
+    "runtime": 93,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The badge is gone. The fight remains.",
+    "title": "Oscar Shaw: Last Beat",
+    "video": false,
+    "vote_average": 6.684,
+    "vote_count": 38,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 93,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 93,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 93,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/oscar-shaw-last-beat",
+            "overview": "A retired detective arms himself with a new fortune to avenge his partner and reclaim the streets that made him.",
+            "runtime": 0,
+            "tagline": "The badge is gone. The fight remains.",
+            "title": "Oscar Shaw: Last Beat"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b0nmXbLJBVv6L72VUdZKILjQP83.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.379,
+          "height": 235,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cA61ZZWlq2BQ3pXBytZgH1W0tRO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1264
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tsE3nySukwrfUjouz8vzvKTcXNC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kOcDIwHpVbpoc7hqa0u76yTM9kH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g0CvHRHJV5PBiDqHvOKxHomLWqZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dNAKYNk5eKekuNgWc1HGWyCh0Aa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

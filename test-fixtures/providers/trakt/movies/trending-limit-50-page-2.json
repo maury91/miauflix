@@ -1,0 +1,871 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "discover,trending,movie,resource:movie:546,resource:movie:1117195,resource:movie:1032,resource:movie:1034092,resource:movie:1224034,resource:movie:474180,resource:movie:306815,resource:movie:991429,resource:movie:102156,resource:movie:71938,resource:movie:867094,resource:movie:62544,resource:movie:395672,resource:movie:673734,resource:movie:1060883,resource:movie:181311,resource:movie:1044265,resource:movie:120,resource:movie:1125169,resource:movie:82405,resource:movie:287071,resource:movie:1157,resource:movie:547,resource:movie:853702,resource:movie:1077714,resource:movie:481,resource:movie:181312,resource:movie:1169847,resource:movie:181256,resource:movie:51342,resource:movie:1040684,resource:movie:792299,resource:movie:1085761,resource:movie:88,resource:movie:196213,resource:movie:731538,resource:movie:787853,resource:movie:169105,resource:movie:5355,resource:movie:549,resource:movie:50134,resource:movie:1083999,resource:movie:1005644,resource:movie:871499,resource:movie:746852,resource:movie:73582,resource:movie:967810,resource:movie:1170,resource:movie:1244419,resource:movie:1200342",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "162",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "2",
+    "x-pagination-page-count": "4",
+    "x-permitted-cross-domain-policies": "none",
+    "x-trending-user-count": "3882"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "watchers": 93,
+      "movie": {
+        "ids": {
+          "imdb": "tt0295297",
+          "plex": {
+            "guid": "5d7768278718ba001e311d57",
+            "slug": "the-whispering-chamber"
+          },
+          "slug": "the-whispering-chamber-2002",
+          "tmdb": 672,
+          "trakt": 546
+        },
+        "year": 2002,
+        "title": "The Whispering Chamber"
+      }
+    },
+    {
+      "watchers": 93,
+      "movie": {
+        "ids": {
+          "imdb": "tt27543632",
+          "plex": {
+            "guid": "6444698339b14cd38176a513",
+            "slug": "the-live-in"
+          },
+          "slug": "the-live-in-2025",
+          "tmdb": 1368166,
+          "trakt": 1117195
+        },
+        "year": 2025,
+        "title": "The Live-In"
+      }
+    },
+    {
+      "watchers": 92,
+      "movie": {
+        "ids": {
+          "imdb": "tt0120804",
+          "plex": {
+            "guid": "5d776d16f617c90020185db0",
+            "slug": "containment-breach"
+          },
+          "slug": "containment-breach-2002",
+          "tmdb": 1576,
+          "trakt": 1032
+        },
+        "year": 2002,
+        "title": "Containment Breach"
+      }
+    },
+    {
+      "watchers": 92,
+      "movie": {
+        "ids": {
+          "imdb": "tt32093575",
+          "plex": {
+            "guid": "661ad2e15f2c9043629e7514",
+            "slug": "mask-off"
+          },
+          "slug": "mask-off-2026",
+          "tmdb": 1273221,
+          "trakt": 1034092
+        },
+        "year": 2026,
+        "title": "Mask Off!"
+      }
+    },
+    {
+      "watchers": 92,
+      "movie": {
+        "ids": {
+          "imdb": "tt6933238",
+          "plex": {
+            "guid": "5d776d53ad5437001f7d30ae",
+            "slug": "the-years-of-the-mail-bomber"
+          },
+          "slug": "the-years-of-the-mail-bomber-2026",
+          "tmdb": 1492640,
+          "trakt": 1224034
+        },
+        "year": 2026,
+        "title": "The Years of the Mail Bomber"
+      }
+    },
+    {
+      "watchers": 90,
+      "movie": {
+        "ids": {
+          "imdb": "tt10872600",
+          "plex": {
+            "guid": "5e16138ce0d3ae001ed11b39",
+            "slug": "a-spell-out-of-time"
+          },
+          "slug": "a-spell-out-of-time-2021",
+          "tmdb": 634649,
+          "trakt": 474180
+        },
+        "year": 2021,
+        "title": "A Spell Out of Time"
+      }
+    },
+    {
+      "watchers": 90,
+      "movie": {
+        "ids": {
+          "imdb": "tt0427340",
+          "plex": {
+            "guid": "5d776d1bad5437001f7cd684",
+            "slug": "the-sword-remembers"
+          },
+          "slug": "the-sword-remembers-2026",
+          "tmdb": 454639,
+          "trakt": 306815
+        },
+        "year": 2026,
+        "title": "The Sword Remembers"
+      }
+    },
+    {
+      "watchers": 89,
+      "movie": {
+        "ids": {
+          "imdb": "tt28650488",
+          "plex": {
+            "guid": "64dd290c84713e6f8ba2874b",
+            "slug": "the-royal-rescue"
+          },
+          "slug": "the-royal-rescue-2026",
+          "tmdb": 1226863,
+          "trakt": 991429
+        },
+        "year": 2026,
+        "title": "The Royal Rescue"
+      }
+    },
+    {
+      "watchers": 87,
+      "movie": {
+        "ids": {
+          "imdb": "tt0816692",
+          "plex": {
+            "guid": "5d7769cefb0d55001f530acd",
+            "slug": "the-long-way-through-the-stars"
+          },
+          "slug": "the-long-way-through-the-stars-2014",
+          "tmdb": 157336,
+          "trakt": 102156
+        },
+        "year": 2014,
+        "title": "The Long Way Through the Stars"
+      }
+    },
+    {
+      "watchers": 86,
+      "movie": {
+        "ids": {
+          "imdb": "tt2395427",
+          "plex": {
+            "guid": "5d77690623d5a3001f4f4ab6",
+            "slug": "the-machine-awakens"
+          },
+          "slug": "the-machine-awakens-2015",
+          "tmdb": 99861,
+          "trakt": 71938
+        },
+        "year": 2015,
+        "title": "The Machine Awakens"
+      }
+    },
+    {
+      "watchers": 86,
+      "movie": {
+        "ids": {
+          "imdb": "tt26581740",
+          "plex": {
+            "guid": "63dea40e697de1e45df3f50e",
+            "slug": "the-empty-classroom"
+          },
+          "slug": "the-empty-classroom-2025",
+          "tmdb": 1078605,
+          "trakt": 867094
+        },
+        "year": 2025,
+        "title": "The Empty Classroom"
+      }
+    },
+    {
+      "watchers": 86,
+      "movie": {
+        "ids": {
+          "imdb": "tt1757678",
+          "plex": {
+            "guid": "5d7768cc9ab54400214eba10",
+            "slug": "embers-of-the-distant-world"
+          },
+          "slug": "embers-of-the-distant-world-2025",
+          "tmdb": 83533,
+          "trakt": 62544
+        },
+        "year": 2025,
+        "title": "Embers of the Distant World"
+      }
+    },
+    {
+      "watchers": 85,
+      "movie": {
+        "ids": {
+          "imdb": "tt6263850",
+          "plex": {
+            "guid": "5d776c8a23d5a3001f51c946",
+            "slug": "reluctant-allies"
+          },
+          "slug": "reluctant-allies-2024",
+          "tmdb": 533535,
+          "trakt": 395672
+        },
+        "year": 2024,
+        "title": "Reluctant Allies"
+      }
+    },
+    {
+      "watchers": 84,
+      "movie": {
+        "ids": {
+          "imdb": "tt12446086",
+          "plex": {
+            "guid": "5f409ee15a76a80042e71d79",
+            "slug": "white-dragon-the-exile-s-name"
+          },
+          "slug": "white-dragon-the-exile-s-name-2026",
+          "tmdb": 843352,
+          "trakt": 673734
+        },
+        "year": 2026,
+        "title": "White Dragon: The Exile's Name"
+      }
+    },
+    {
+      "watchers": 83,
+      "movie": {
+        "ids": {
+          "imdb": "tt32565993",
+          "plex": {
+            "guid": "6667c13ae5537afffd69767f",
+            "slug": "the-woolly-sleuths"
+          },
+          "slug": "the-woolly-sleuths-2026",
+          "tmdb": 1301421,
+          "trakt": 1060883
+        },
+        "year": 2026,
+        "title": "The Woolly Sleuths"
+      }
+    },
+    {
+      "watchers": 82,
+      "movie": {
+        "ids": {
+          "imdb": "tt1211837",
+          "plex": {
+            "guid": "5d776b05ad5437001f7902ac",
+            "slug": "the-hidden-arts"
+          },
+          "slug": "the-hidden-arts-2016",
+          "tmdb": 284052,
+          "trakt": 181311
+        },
+        "year": 2016,
+        "title": "The Hidden Arts"
+      }
+    },
+    {
+      "watchers": 82,
+      "movie": {
+        "ids": {
+          "imdb": "tt32268156",
+          "plex": {
+            "guid": "663538426239ea0710cc9256",
+            "slug": "sealed-inside"
+          },
+          "slug": "sealed-inside-2026",
+          "tmdb": 1284041,
+          "trakt": 1044265
+        },
+        "year": 2026,
+        "title": "Sealed Inside"
+      }
+    },
+    {
+      "watchers": 81,
+      "movie": {
+        "ids": {
+          "imdb": "tt0468569",
+          "plex": {
+            "guid": "5d7768247e9a3c0020c6a8f3",
+            "slug": "city-of-masks"
+          },
+          "slug": "city-of-masks-2008",
+          "tmdb": 155,
+          "trakt": 120
+        },
+        "year": 2008,
+        "title": "City of Masks"
+      }
+    },
+    {
+      "watchers": 81,
+      "movie": {
+        "ids": {
+          "imdb": "tt31349844",
+          "plex": {
+            "guid": "69c44f4bb85f1bd2734c7298",
+            "slug": "the-delivery-run"
+          },
+          "slug": "the-delivery-run-2026",
+          "tmdb": 1377237,
+          "trakt": 1125169
+        },
+        "year": 2026,
+        "title": "The Delivery Run"
+      }
+    },
+    {
+      "watchers": 80,
+      "movie": {
+        "ids": {
+          "imdb": "tt2015381",
+          "plex": {
+            "guid": "5d77696ef617c9002015f700",
+            "slug": "the-orb-beyond-the-rim"
+          },
+          "slug": "the-orb-beyond-the-rim-2014",
+          "tmdb": 118340,
+          "trakt": 82405
+        },
+        "year": 2014,
+        "title": "The Orb Beyond the Rim"
+      }
+    },
+    {
+      "watchers": 78,
+      "movie": {
+        "ids": {
+          "imdb": "tt1160419",
+          "plex": {
+            "guid": "5d776cac47dd6e001f6ee059",
+            "slug": "the-desert-heir"
+          },
+          "slug": "the-desert-heir-2021",
+          "tmdb": 438631,
+          "trakt": 287071
+        },
+        "year": 2021,
+        "title": "The Desert Heir"
+      }
+    },
+    {
+      "watchers": 76,
+      "movie": {
+        "ids": {
+          "imdb": "tt0371746",
+          "plex": {
+            "guid": "5d776829151a60001f24b3db",
+            "slug": "the-cave-forge"
+          },
+          "slug": "the-cave-forge-2008",
+          "tmdb": 1726,
+          "trakt": 1157
+        },
+        "year": 2008,
+        "title": "The Cave Forge"
+      }
+    },
+    {
+      "watchers": 76,
+      "movie": {
+        "ids": {
+          "imdb": "tt0304141",
+          "plex": {
+            "guid": "5d776827103a2d001f564489",
+            "slug": "the-prisoner-beyond-the-gate"
+          },
+          "slug": "the-prisoner-beyond-the-gate-2004",
+          "tmdb": 673,
+          "trakt": 547
+        },
+        "year": 2004,
+        "title": "The Prisoner Beyond the Gate"
+      }
+    },
+    {
+      "watchers": 76,
+      "movie": {
+        "ids": {
+          "imdb": "tt5950044",
+          "plex": {
+            "guid": "5d776c73ad5437001f7be813",
+            "slug": "between-two-skies"
+          },
+          "slug": "between-two-skies-2025",
+          "tmdb": 1061474,
+          "trakt": 853702
+        },
+        "year": 2025,
+        "title": "Between Two Skies"
+      }
+    },
+    {
+      "watchers": 76,
+      "movie": {
+        "ids": {
+          "imdb": "tt32547691",
+          "plex": {
+            "guid": "666552209e34ea73f7f11b2f",
+            "slug": "seventy-two-hours"
+          },
+          "slug": "seventy-two-hours-2026",
+          "tmdb": 1318413,
+          "trakt": 1077714
+        },
+        "year": 2026,
+        "title": "Seventy-Two Hours"
+      }
+    },
+    {
+      "watchers": 75,
+      "movie": {
+        "ids": {
+          "imdb": "tt0133093",
+          "plex": {
+            "guid": "5d776827880197001ec90904",
+            "slug": "the-wake-sequence"
+          },
+          "slug": "the-wake-sequence-1999",
+          "tmdb": 603,
+          "trakt": 481
+        },
+        "year": 1999,
+        "title": "The Wake Sequence"
+      }
+    },
+    {
+      "watchers": 75,
+      "movie": {
+        "ids": {
+          "imdb": "tt3501632",
+          "plex": {
+            "guid": "5d776b0547dd6e001f6da17c",
+            "slug": "the-fall-of-the-thunder-realm"
+          },
+          "slug": "the-fall-of-the-thunder-realm-2017",
+          "tmdb": 284053,
+          "trakt": 181312
+        },
+        "year": 2017,
+        "title": "The Fall of the Thunder Realm"
+      }
+    },
+    {
+      "watchers": 75,
+      "movie": {
+        "ids": {
+          "imdb": "tt35672862",
+          "plex": {
+            "guid": "67a8bfbbc14f87b54f306104",
+            "slug": "room-17-at-blackthorn-inn"
+          },
+          "slug": "room-17-at-blackthorn-inn-2026",
+          "tmdb": 1430077,
+          "trakt": 1169847
+        },
+        "year": 2026,
+        "title": "Room 17 at Blackthorn Inn"
+      }
+    },
+    {
+      "watchers": 74,
+      "movie": {
+        "ids": {
+          "imdb": "tt3896198",
+          "plex": {
+            "guid": "5d776b057a53e9001e71734b",
+            "slug": "a-found-family"
+          },
+          "slug": "a-found-family-2017",
+          "tmdb": 283995,
+          "trakt": 181256
+        },
+        "year": 2017,
+        "title": "A Found Family"
+      }
+    },
+    {
+      "watchers": 74,
+      "movie": {
+        "ids": {
+          "imdb": "tt1392170",
+          "plex": {
+            "guid": "5d7768b051dd69001fe0f92c",
+            "slug": "the-first-tribute"
+          },
+          "slug": "the-first-tribute-2012",
+          "tmdb": 70160,
+          "trakt": 51342
+        },
+        "year": 2012,
+        "title": "The First Tribute"
+      }
+    },
+    {
+      "watchers": 74,
+      "movie": {
+        "ids": {
+          "imdb": "tt33311069",
+          "plex": {
+            "guid": "66d901a36abce217352f0f44",
+            "slug": "fury-road-to-nowhere"
+          },
+          "slug": "fury-road-to-nowhere-2026",
+          "tmdb": 1280738,
+          "trakt": 1040684
+        },
+        "year": 2026,
+        "title": "Fury Road to Nowhere"
+      }
+    },
+    {
+      "watchers": 73,
+      "movie": {
+        "ids": {
+          "imdb": "tt20969586",
+          "plex": {
+            "guid": "62aeee70252f044af9c879d6",
+            "slug": "thunderbolts-the-dead-drop"
+          },
+          "slug": "thunderbolts-the-dead-drop-2025",
+          "tmdb": 986056,
+          "trakt": 792299
+        },
+        "year": 2025,
+        "title": "Thunderbolts: The Dead Drop"
+      }
+    },
+    {
+      "watchers": 73,
+      "movie": {
+        "ids": {
+          "imdb": "tt26443616",
+          "plex": {
+            "guid": "63d15b0b3ad5857a621ccaf5",
+            "slug": "hoppers-wild-frequency"
+          },
+          "slug": "hoppers-wild-frequency-2026",
+          "tmdb": 1327819,
+          "trakt": 1085761
+        },
+        "year": 2026,
+        "title": "Hoppers: Wild Frequency"
+      }
+    },
+    {
+      "watchers": 71,
+      "movie": {
+        "ids": {
+          "imdb": "tt0120737",
+          "plex": {
+            "guid": "5d7768248a7581001f12bc70",
+            "slug": "the-ember-covenant"
+          },
+          "slug": "the-ember-covenant-2001",
+          "tmdb": 120,
+          "trakt": 88
+        },
+        "year": 2001,
+        "title": "The Ember Covenant"
+      }
+    },
+    {
+      "watchers": 71,
+      "movie": {
+        "ids": {
+          "imdb": "tt2250912",
+          "plex": {
+            "guid": "5d776b5e7a53e9001e7238e0",
+            "slug": "the-vulture-s-shadow"
+          },
+          "slug": "the-vulture-s-shadow-2017",
+          "tmdb": 315635,
+          "trakt": 196213
+        },
+        "year": 2017,
+        "title": "The Vulture’s Shadow"
+      }
+    },
+    {
+      "watchers": 71,
+      "movie": {
+        "ids": {
+          "imdb": "tt15791034",
+          "plex": {
+            "guid": "6183d811171184331c8f010b",
+            "slug": "the-other-guest"
+          },
+          "slug": "the-other-guest-2022",
+          "tmdb": 913290,
+          "trakt": 731538
+        },
+        "year": 2022,
+        "title": "The Other Guest"
+      }
+    },
+    {
+      "watchers": 71,
+      "movie": {
+        "ids": {
+          "imdb": "tt18259538",
+          "plex": {
+            "guid": "621895759fb119c33badc62d",
+            "slug": "the-wind-legacy"
+          },
+          "slug": "the-wind-legacy-2026",
+          "tmdb": 980431,
+          "trakt": 787853
+        },
+        "year": 2026,
+        "title": "The Wind Legacy"
+      }
+    },
+    {
+      "watchers": 70,
+      "movie": {
+        "ids": {
+          "imdb": "tt3498820",
+          "plex": {
+            "guid": "5d776adcfb0d55001f553b34",
+            "slug": "divided-allegiance"
+          },
+          "slug": "divided-allegiance-2016",
+          "tmdb": 271110,
+          "trakt": 169105
+        },
+        "year": 2016,
+        "title": "Divided Allegiance"
+      }
+    },
+    {
+      "watchers": 70,
+      "movie": {
+        "ids": {
+          "imdb": "tt1228705",
+          "plex": {
+            "guid": "5d776834a091de001f2e7cf9",
+            "slug": "the-armor-divide"
+          },
+          "slug": "the-armor-divide-2010",
+          "tmdb": 10138,
+          "trakt": 5355
+        },
+        "year": 2010,
+        "title": "The Armor Divide"
+      }
+    },
+    {
+      "watchers": 70,
+      "movie": {
+        "ids": {
+          "imdb": "tt0373889",
+          "plex": {
+            "guid": "5d77682854c0f0001f301de2",
+            "slug": "the-hidden-resistance"
+          },
+          "slug": "the-hidden-resistance-2007",
+          "tmdb": 675,
+          "trakt": 549
+        },
+        "year": 2007,
+        "title": "The Hidden Resistance"
+      }
+    },
+    {
+      "watchers": 70,
+      "movie": {
+        "ids": {
+          "imdb": "tt1300854",
+          "plex": {
+            "guid": "5fc695b6051be1002d70ba51",
+            "slug": "the-armor-rebuilt"
+          },
+          "slug": "the-armor-rebuilt-2013",
+          "tmdb": 68721,
+          "trakt": 50134
+        },
+        "year": 2013,
+        "title": "The Armor Rebuilt"
+      }
+    },
+    {
+      "watchers": 70,
+      "movie": {
+        "ids": {
+          "imdb": "tt33071426",
+          "plex": {
+            "guid": "66b2b37ea96123f25e363a1f",
+            "slug": "the-wedding-week"
+          },
+          "slug": "the-wedding-week-2026",
+          "tmdb": 1325734,
+          "trakt": 1083999
+        },
+        "year": 2026,
+        "title": "The Wedding Week"
+      }
+    },
+    {
+      "watchers": 70,
+      "movie": {
+        "ids": {
+          "imdb": "tt31189814",
+          "plex": {
+            "guid": "65c7036a2612c4da83e3e7f3",
+            "slug": "the-evacuation"
+          },
+          "slug": "the-evacuation-2025",
+          "tmdb": 1242265,
+          "trakt": 1005644
+        },
+        "year": 2025,
+        "title": "The Evacuation"
+      }
+    },
+    {
+      "watchers": 69,
+      "movie": {
+        "ids": {
+          "imdb": "tt26443597",
+          "plex": {
+            "guid": "63d15b0b38992be08a0efa6f",
+            "slug": "the-serpent-in-bellweather"
+          },
+          "slug": "the-serpent-in-bellweather-2025",
+          "tmdb": 1084242,
+          "trakt": 871499
+        },
+        "year": 2025,
+        "title": "The Serpent in Bellweather"
+      }
+    },
+    {
+      "watchers": 68,
+      "movie": {
+        "ids": {
+          "imdb": "tt17490712",
+          "plex": {
+            "guid": "61f330850ecd2260deb80a5e",
+            "slug": "the-last-tournament"
+          },
+          "slug": "the-last-tournament-2026",
+          "tmdb": 931285,
+          "trakt": 746852
+        },
+        "year": 2026,
+        "title": "The Last Tournament"
+      }
+    },
+    {
+      "watchers": 67,
+      "movie": {
+        "ids": {
+          "imdb": "tt0478970",
+          "plex": {
+            "guid": "5d77690f7a53e9001e6e05a8",
+            "slug": "the-pocket-heist"
+          },
+          "slug": "the-pocket-heist-2015",
+          "tmdb": 102899,
+          "trakt": 73582
+        },
+        "year": 2015,
+        "title": "The Pocket Heist"
+      }
+    },
+    {
+      "watchers": 67,
+      "movie": {
+        "ids": {
+          "imdb": "tt8036976",
+          "plex": {
+            "guid": "5f40d5d81ae7100041216ea5",
+            "slug": "stranded-together"
+          },
+          "slug": "stranded-together-2026",
+          "tmdb": 1198994,
+          "trakt": 967810
+        },
+        "year": 2026,
+        "title": "Stranded Together"
+      }
+    },
+    {
+      "watchers": 66,
+      "movie": {
+        "ids": {
+          "imdb": "tt0458339",
+          "plex": {
+            "guid": "5d77682a103a2d001f564ffb",
+            "slug": "the-first-stand"
+          },
+          "slug": "the-first-stand-2011",
+          "tmdb": 1771,
+          "trakt": 1170
+        },
+        "year": 2011,
+        "title": "The First Stand"
+      }
+    },
+    {
+      "watchers": 66,
+      "movie": {
+        "ids": {
+          "imdb": "tt37654096",
+          "plex": {
+            "guid": "6813a58e68c977d61100d4d6",
+            "slug": "a-summer-for-two"
+          },
+          "slug": "a-summer-for-two-2026",
+          "tmdb": 1516698,
+          "trakt": 1244419
+        },
+        "year": 2026,
+        "title": "A Summer for Two"
+      }
+    },
+    {
+      "watchers": 66,
+      "movie": {
+        "ids": {
+          "imdb": "tt36583977",
+          "plex": {
+            "guid": "67ff9ed2677fe6e543bc473c",
+            "slug": "nakali-the-memory-shore"
+          },
+          "slug": "nakali-the-memory-shore-2026",
+          "tmdb": 1465063,
+          "trakt": 1200342
+        },
+        "year": 2026,
+        "title": "Nakali: The Memory Shore"
+      }
+    }
+  ]
+}

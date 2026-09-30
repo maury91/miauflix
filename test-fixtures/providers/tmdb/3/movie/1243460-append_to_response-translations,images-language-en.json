@@ -1,0 +1,802 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15665",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e5c8550abc3927bdb105d01cc89b4cb2\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dbr3eceKuGnKc9v5GaVTVtegZNK.jpg",
+    "belongs_to_collection": {
+      "id": 534673,
+      "name": "Uncle Joe's Big Detour Collection",
+      "poster_path": "/bO9NvwpSElW8lp33fGyy8VaS5s9.jpg",
+      "backdrop_path": "/qxLbjNPrMKTgYrMhIIDzj4zgYjf.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+    "id": 1243460,
+    "imdb_id": "tt33603921",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Uncle Joe's Big Detour",
+    "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+    "popularity": 5.1004,
+    "poster_path": "/jWGOCUlzF4aCVLwHoiuqWWfhcrA.jpg",
+    "production_companies": [
+      {
+        "id": 3096,
+        "logo_path": "/fkZTZ4veYYr3lwr2riVrVAOfeqD.png",
+        "name": "Sunday Laughs",
+        "origin_country": "US"
+      },
+      {
+        "id": 178464,
+        "logo_path": "/tyHnxjQJLH6h4iDQKhN5iqebWmX.png",
+        "name": "Sunday Laughs",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-02-12",
+    "revenue": 0,
+    "runtime": 109,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Education takes the scenic route.",
+    "title": "Uncle Joe's Big Detour",
+    "video": false,
+    "vote_average": 6.042,
+    "vote_count": 72,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 109,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 109,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 111,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 112,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 112,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 109,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 109,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 109,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/uncle-joe-s-big-detour",
+            "overview": "An opinionated uncle takes his sheltered nephew on a cross-country trip before college, determined to introduce him to life outside the family bubble. Their detours bring noisy strangers, hard lessons, and a few stories the teenager will never tell at orientation.",
+            "runtime": 0,
+            "tagline": "Education takes the scenic route.",
+            "title": "Uncle Joe's Big Detour"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/48zw5yKNupo5UDTP7JmB1F9QfM5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.598,
+          "height": 353,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xJIHflwFsBomOR60N5H7W9hLT0V.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1270
+        },
+        {
+          "aspect_ratio": 3.632,
+          "height": 87,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lhbPCVYjbFBiltBTXs8YsCuNADb.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 316
+        },
+        {
+          "aspect_ratio": 3.598,
+          "height": 353,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4H3P4R8yTdKphH4nOad46CA0XS1.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1270
+        },
+        {
+          "aspect_ratio": 3.95,
+          "height": 321,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7sau8tOPFUiIfkYm09ua0FJASmC.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1268
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jWGOCUlzF4aCVLwHoiuqWWfhcrA.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1482
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nNSKlX31TMBaZX86tf0gjwbXLcF.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v5YCcj97kknZNtfe6gLRYLGCZgY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jhwJ19DX9q9Xz6y2kjtmgAqKkUf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1PpG9sWAPt8klMT44lyp4UIuZka.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uiBEfDR3IchewuH7On9lKD3MkCD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c7uyBUFFcPTSVOXF63A1hpJbQzS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c4wCuq5KeRkKuYAoW6rxEyBs7ya.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hpmWJrIDX6H7EGVnseBdoMplZQM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4QUZesn2SNXGE9OgzGCZgcjdtp5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/urxyPjKX7eZ96Ibpj7Krur5p7lX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dj3GXrtnUGzfCY90FblRnN9mFfo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.674,
+          "height": 1737,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p4V6Jjg24EeEENesITVKxcQCw0X.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        }
+      ]
+    }
+  }
+}

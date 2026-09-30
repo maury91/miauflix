@@ -1,0 +1,1283 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9540",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c5ce98f49b3607e8da50a17ecb130181\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tN3pTxkQoP96wtaEahYuRVdUWb2.jpg",
+    "belongs_to_collection": null,
+    "budget": 55000000,
+    "genres": [
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+    "id": 701387,
+    "imdb_id": "tt12300742",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Bugonia: The CEO from Venus",
+    "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+    "popularity": 18.7144,
+    "poster_path": "/rSdOua3wKMEaFWDcKAYWRjXQWOt.jpg",
+    "production_companies": [
+      {
+        "id": 3353,
+        "logo_path": "/hUw1iTY3hdjyb2zXT9KxupHbL4M.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "IE"
+      },
+      {
+        "id": 123620,
+        "logo_path": "/ePRhZ3yb09Ya6WMzCCBYopwIYbE.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 121813,
+        "logo_path": "/7OwtRpQAFKU3KWA7InBg3h3PxqI.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 264539,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "CA"
+      },
+      {
+        "id": 138287,
+        "logo_path": "/3I1k679J7ZLQtVFM23dJhFZQQCH.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 128404,
+        "logo_path": "/dP3usmr6di1jMPH738rvbxdkmSQ.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "KR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IE",
+        "name": "Ireland"
+      },
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "release_date": "2025-10-23",
+    "revenue": 43500000,
+    "runtime": 119,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "They have a theory and a captive.",
+    "title": "Bugonia: The CEO from Venus",
+    "video": false,
+    "vote_average": 7.289,
+    "vote_count": 2430,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 119,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 119,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 108,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 119,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 0,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/bugonia-the-ceo-from-venus",
+            "overview": "Two obsessive amateur sleuths imprison a corporate chief, certain she is an extraterrestrial preparing Earth's destruction.",
+            "runtime": 118,
+            "tagline": "They have a theory and a captive.",
+            "title": "Bugonia: The CEO from Venus"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f5stYb742P3BuBB8kPOaQgrsTZH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lJQ7uaNM0YmjwTHH93Wz0rVrjm7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ftwseU3bPmI5CvgMiTrDJniY5YA.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 911,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/274wUGUuaodih7ITJZ99XfQSwDl.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1620
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/stq0EbHFJxVFdaC3saery03UZIG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 911,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1I6NrGxb5oSLJhUhDAL96YLmbO5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1620
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wW3ihvCLdS6s7h76hjsmQ8c8VCj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9AROxiNO9tmXXKvlqDKVYmH98UJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cqxCujhrU119rrKzwl3dqt65u4J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.597,
+          "height": 1382,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zt1aSeO7YVSmBj4Dh0eTeSGYthO.png",
+          "vote_average": 6.546,
+          "vote_count": 11,
+          "width": 7735
+        },
+        {
+          "aspect_ratio": 5.597,
+          "height": 1382,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1umYVLK3IpjoLWUKJAyDy4c3Eqa.png",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 7735
+        },
+        {
+          "aspect_ratio": 5.591,
+          "height": 1381,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vGz2KzmxOXgDohi2nBIW1OY2AYb.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 7721
+        },
+        {
+          "aspect_ratio": 5.597,
+          "height": 1382,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p97I8pOBlmFWO7DRO9TOYYLNm7k.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 7735
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rSdOua3wKMEaFWDcKAYWRjXQWOt.jpg",
+          "vote_average": 6.2,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oxgsAQDAAxA92mFGYCZllgWkH9J.jpg",
+          "vote_average": 6,
+          "vote_count": 19,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/18Kbb0qeCxwzna0W6a9gEMZuizF.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xOVwietfImy3eqCdvjdPBQ7SIEq.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/drkMGse0Cq5CThg3LeiHXUfM58J.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zvTRaQSIx453rOiAFDdSKXifz7T.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.678,
+          "height": 1316,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hA2ptWYjr3Jh8RMZU0VvuwQOCAu.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 892
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uVjFnsgXRxGmfkgiH3GY0tW509k.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3vEp63la6rSvloySGrV7pxAhlAE.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v7gKTTEJouDyjttZU2l4c8DhxzN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zeUlIk1syuMcMTldG84JcBCYcxQ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ouohwP2n1E6WqGzIJ53ttTdxSqM.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9qkNGG8pfcZFJd5jBUi5NOIhWXe.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hzE24LdXITI9fyndVTaJ0FBHnPm.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pNWekuUvAB91bsmL6scoJNFi6zF.jpg",
+          "vote_average": 2.066,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wHQHnlRjtaaZyRhQijxKMPgWjl.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zWfX4jjL6TJD7PznWZ5Ru3cL745.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 1305,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yJsBkwLv8PInzg144JTHMU9GkmL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 917
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9xjT3EMypCBEOejj1wqgTofX14S.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r4vEROZwr9BQdL0jengXu0DdXAG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4g7DBW6mdDYe8zG2bJ8IspZPrqY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1HeapDrBjIhkCa7isUgp3bA5703.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1427,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oIkBBahbvccaP00QKEpZX1USRy6.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 951
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1427,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wJBgP1DF5kFhVjVTigI0l9yjFVI.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 951
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1425,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lN3Yz2ciBySprmxxlXn5XKvDCi1.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 951
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AvnQf0oT94rFffYpXDcdgX1DiVB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9rONtFX0CYFG0UrFpCNcXWHGg8W.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 901,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9g4mYfLyrqOZLSUwaPdBgtNb2cO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 601
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1109,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uXBZJaZMlrtMw1g4RKvko8T8TqB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b3HBfKHhskrB1DcIKNwk4DrzPnF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lmuGuYTyegqXUG5AdJFWkrlnJuH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 1051,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/91M0VFMVMbQaRlvo2DDpLaF6rnn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fFONtVaNgXGOW4HGaavgnyM6JmI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m5zCGXzQKGSUtWE2KDYCeWB8TZy.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1090,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cOEgejPUMCvKngRQaVl7HQ7QYhK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2934,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/26dS8eACVqwZPAu8oq48PUOdFID.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1956
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pcSvoVjoFwRhKiHz4YwdiZzUPhG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v1iJ2sSsZUC5IYz8xxy81M853y1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dn5VgsefN5RyTWi2WwS2ZYPTxKR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1551,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cJCjJysSscqq6aTBzECndogoA12.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1050
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6R5YmWlYgfzBcmgWGToxzBUj4CA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/64zxoAqeHhZaODz9CQnUSpSlNzy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yQ3ZPU2mhvaBYVKDhik5lMNiKhP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.664,
+          "height": 1170,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9l6sp2kHaTxYeI7CImWnWpdi8ft.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 777
+        }
+      ]
+    }
+  }
+}

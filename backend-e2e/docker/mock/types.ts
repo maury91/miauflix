@@ -1,4 +1,12 @@
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS';
+export type AnonymizedBy = false | 'faker' | 'llm';
+
+export interface MockResponseEnvelope<T = unknown> {
+  headers?: Record<string, string>;
+  status: number;
+  anonymized: AnonymizedBy;
+  data: T;
+}
 
 export interface HandleRequestParams {
   req: Request;
@@ -12,6 +20,7 @@ export interface HandleRequestParams {
   API_HEADERS: Record<string, string>;
   API_AUTH_HEADER: string;
   API_AUTH_HEADER_IS_BEARER: boolean;
+  RECORD_PROVIDER_FIXTURES: boolean;
 }
 
 export interface HandleRequestResponse<T = unknown> {

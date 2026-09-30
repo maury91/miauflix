@@ -1,0 +1,1641 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:movie:1170,resource:show:77677,resource:season:83598,resource:season:110761,resource:movie:130811,resource:show:230726,resource:episode:11627018,resource:movie:193963,resource:movie:1157,resource:episode:11627025,resource:episode:11627028,resource:episode:11627021,resource:episode:11627024,resource:movie:5355,resource:movie:1155,resource:movie:56529,resource:movie:5408,resource:movie:56188,resource:movie:14701,resource:movie:83096,resource:movie:50134,resource:movie:154423,resource:show:1394,resource:episode:74005,resource:episode:74006,resource:episode:74007,resource:episode:74008,resource:episode:74009,resource:episode:74010,resource:episode:74011,resource:movie:56358,resource:episode:74012,resource:episode:74013,resource:episode:74014,resource:episode:74015,resource:episode:74016,resource:episode:74017,resource:episode:74018,resource:episode:74019,resource:episode:74020,resource:movie:72297,resource:episode:74021,resource:episode:74022,resource:episode:74023,resource:episode:74024,resource:episode:74025,resource:episode:74026,resource:episode:74027,resource:episode:74028,resource:movie:82405,resource:episode:74029,resource:movie:181256,resource:show:207809,resource:season:330045,resource:list:1248149",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "215",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "5",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "rank",
+    "x-sort-how": "asc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0458339",
+          "plex": {
+            "guid": "5d77682a103a2d001f564ffb",
+            "slug": "the-first-stand"
+          },
+          "slug": "the-first-stand-2011",
+          "tmdb": 1771,
+          "trakt": 1170
+        },
+        "year": 2011,
+        "title": "The First Stand"
+      },
+      "rank": 1,
+      "id": 37745122,
+      "listed_at": "2015-07-16T15:01:36.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "season",
+      "show": {
+        "ids": {
+          "imdb": "tt3475734",
+          "plex": {
+            "guid": "5d9c084ce98e47001eb0c0b7",
+            "slug": "copper-window-northbridge"
+          },
+          "slug": "copper-window-northbridge",
+          "tmdb": 61550,
+          "tvdb": 281485,
+          "trakt": 77677
+        },
+        "year": 2015,
+        "title": "Copper Window: Northbridge",
+        "aired_episodes": 18
+      },
+      "season": {
+        "ids": {
+          "plex": {
+            "guid": "602e641fc4f5e6002c252d83"
+          },
+          "tmdb": 63213,
+          "tvdb": 585033,
+          "trakt": 83598
+        },
+        "number": 1
+      },
+      "rank": 2,
+      "id": 92178558,
+      "listed_at": "2016-04-24T15:44:25.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "season",
+      "show": {
+        "ids": {
+          "imdb": "tt3475734",
+          "plex": {
+            "guid": "5d9c084ce98e47001eb0c0b7",
+            "slug": "copper-window-northbridge"
+          },
+          "slug": "copper-window-northbridge",
+          "tmdb": 61550,
+          "tvdb": 281485,
+          "trakt": 77677
+        },
+        "year": 2015,
+        "title": "Copper Window: Northbridge",
+        "aired_episodes": 18
+      },
+      "season": {
+        "ids": {
+          "plex": {
+            "guid": "602e6420c4f5e6002c252d86"
+          },
+          "tmdb": 71006,
+          "tvdb": 644969,
+          "trakt": 110761
+        },
+        "number": 2
+      },
+      "rank": 3,
+      "id": 92178561,
+      "listed_at": "2016-04-24T15:44:28.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3067038",
+          "plex": {
+            "guid": "5d9f3941dfd12800208a4b5e",
+            "slug": "agent-vale-after-hours"
+          },
+          "slug": "agent-vale-after-hours-2013",
+          "tmdb": 211387,
+          "trakt": 130811
+        },
+        "year": 2013,
+        "title": "Agent Vale: After Hours"
+      },
+      "rank": 4,
+      "id": 37747196,
+      "listed_at": "2015-07-16T15:06:39.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "65f34d6bf60e624131664774",
+            "slug": "blue-passage-stonehaven"
+          },
+          "slug": "blue-passage-stonehaven",
+          "tmdb": 334372,
+          "tvdb": 361608,
+          "trakt": 230726
+        },
+        "year": 2010,
+        "title": "Blue Passage: Stonehaven",
+        "aired_episodes": 5
+      },
+      "episode": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "65f34d6bf60e624131664777"
+          },
+          "tmdb": 7778586,
+          "tvdb": 7106488,
+          "trakt": 11627018
+        },
+        "title": "Scarlet Beacon",
+        "number": 1,
+        "season": 1
+      },
+      "rank": 5,
+      "id": 964880087,
+      "listed_at": "2024-01-19T20:35:45.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt4154664",
+          "plex": {
+            "guid": "5d9f3c7c9dd5f4001e84c1a7",
+            "slug": "starfall"
+          },
+          "slug": "starfall-2019",
+          "tmdb": 299537,
+          "trakt": 193963
+        },
+        "year": 2019,
+        "title": "Starfall"
+      },
+      "rank": 6,
+      "id": 335329628,
+      "listed_at": "2018-03-01T11:23:12.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0371746",
+          "plex": {
+            "guid": "5d776829151a60001f24b3db",
+            "slug": "the-cave-forge"
+          },
+          "slug": "the-cave-forge-2008",
+          "tmdb": 1726,
+          "trakt": 1157
+        },
+        "year": 2008,
+        "title": "The Cave Forge"
+      },
+      "rank": 7,
+      "id": 37745129,
+      "listed_at": "2015-07-16T15:02:04.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "65f34d6bf60e624131664774",
+            "slug": "blue-passage-stonehaven"
+          },
+          "slug": "blue-passage-stonehaven",
+          "tmdb": 334372,
+          "tvdb": 361608,
+          "trakt": 230726
+        },
+        "year": 2010,
+        "title": "Blue Passage: Stonehaven",
+        "aired_episodes": 5
+      },
+      "episode": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": null
+          },
+          "tmdb": 7778589,
+          "tvdb": 7106491,
+          "trakt": 11627025
+        },
+        "title": "Golden Passage",
+        "number": 4,
+        "season": 1
+      },
+      "rank": 8,
+      "id": 964881050,
+      "listed_at": "2024-01-19T20:38:50.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "65f34d6bf60e624131664774",
+            "slug": "blue-passage-stonehaven"
+          },
+          "slug": "blue-passage-stonehaven",
+          "tmdb": 334372,
+          "tvdb": 361608,
+          "trakt": 230726
+        },
+        "year": 2010,
+        "title": "Blue Passage: Stonehaven",
+        "aired_episodes": 5
+      },
+      "episode": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": null
+          },
+          "tmdb": 7778590,
+          "tvdb": 7106493,
+          "trakt": 11627028
+        },
+        "title": "Emerald Meridian",
+        "number": 5,
+        "season": 1
+      },
+      "rank": 9,
+      "id": 964881061,
+      "listed_at": "2024-01-19T20:38:55.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "65f34d6bf60e624131664774",
+            "slug": "blue-passage-stonehaven"
+          },
+          "slug": "blue-passage-stonehaven",
+          "tmdb": 334372,
+          "tvdb": 361608,
+          "trakt": 230726
+        },
+        "year": 2010,
+        "title": "Blue Passage: Stonehaven",
+        "aired_episodes": 5
+      },
+      "episode": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "65f48a3171c733a433cd6ddb"
+          },
+          "tmdb": 7778587,
+          "tvdb": 7106489,
+          "trakt": 11627021
+        },
+        "title": "Quiet Bridge",
+        "number": 2,
+        "season": 1
+      },
+      "rank": 10,
+      "id": 964881071,
+      "listed_at": "2024-01-19T20:38:59.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": "65f34d6bf60e624131664774",
+            "slug": "blue-passage-stonehaven"
+          },
+          "slug": "blue-passage-stonehaven",
+          "tmdb": 334372,
+          "tvdb": 361608,
+          "trakt": 230726
+        },
+        "year": 2010,
+        "title": "Blue Passage: Stonehaven",
+        "aired_episodes": 5
+      },
+      "episode": {
+        "ids": {
+          "imdb": null,
+          "plex": {
+            "guid": null
+          },
+          "tmdb": 7778588,
+          "tvdb": 7106490,
+          "trakt": 11627024
+        },
+        "title": "Hidden Orchard",
+        "number": 3,
+        "season": 1
+      },
+      "rank": 11,
+      "id": 964881068,
+      "listed_at": "2024-01-19T20:38:57.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1228705",
+          "plex": {
+            "guid": "5d776834a091de001f2e7cf9",
+            "slug": "the-armor-divide"
+          },
+          "slug": "the-armor-divide-2010",
+          "tmdb": 10138,
+          "trakt": 5355
+        },
+        "year": 2010,
+        "title": "The Armor Divide"
+      },
+      "rank": 12,
+      "id": 37745162,
+      "listed_at": "2015-07-16T15:02:36.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0800080",
+          "plex": {
+            "guid": "5d77682a961905001eb91cff",
+            "slug": "the-emerald-fury"
+          },
+          "slug": "the-emerald-fury-2008",
+          "tmdb": 1724,
+          "trakt": 1155
+        },
+        "year": 2008,
+        "title": "The Emerald Fury"
+      },
+      "rank": 13,
+      "id": 37745156,
+      "listed_at": "2015-07-16T15:02:19.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2011109",
+          "plex": {
+            "guid": "5d7768bb23d5a3001f4f0942",
+            "slug": "agent-vale-s-late-stop"
+          },
+          "slug": "agent-vale-s-late-stop-2011",
+          "tmdb": 76535,
+          "trakt": 56529
+        },
+        "year": 2011,
+        "title": "Agent Vale's Late Stop"
+      },
+      "rank": 14,
+      "id": 37747867,
+      "listed_at": "2015-07-16T15:20:14.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0800369",
+          "plex": {
+            "guid": "5d776834961905001eb93a9c",
+            "slug": "the-exile-of-stormhall"
+          },
+          "slug": "the-exile-of-stormhall-2011",
+          "tmdb": 10195,
+          "trakt": 5408
+        },
+        "year": 2011,
+        "title": "The Exile of Stormhall"
+      },
+      "rank": 15,
+      "id": 37747206,
+      "listed_at": "2015-07-16T15:07:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2011118",
+          "plex": {
+            "guid": "5d7768ba1999bc0020dcf4cc",
+            "slug": "the-quiet-consultant"
+          },
+          "slug": "the-quiet-consultant-2011",
+          "tmdb": 76122,
+          "trakt": 56188
+        },
+        "year": 2011,
+        "title": "The Quiet Consultant"
+      },
+      "rank": 16,
+      "id": 37747209,
+      "listed_at": "2015-07-16T15:08:33.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0848228",
+          "plex": {
+            "guid": "5d77684d61141d001fb181b9",
+            "slug": "earth-s-last-call"
+          },
+          "slug": "earth-s-last-call-2012",
+          "tmdb": 24428,
+          "trakt": 14701
+        },
+        "year": 2012,
+        "title": "Earth’s Last Call"
+      },
+      "rank": 17,
+      "id": 37747218,
+      "listed_at": "2015-07-16T15:09:28.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2247732",
+          "plex": {
+            "guid": "5d77697196b655001fdcf313",
+            "slug": "marvel-one-shot-the-stray-device"
+          },
+          "slug": "marvel-one-shot-the-stray-device-2012",
+          "tmdb": 119569,
+          "trakt": 83096
+        },
+        "year": 2012,
+        "title": "Marvel One-Shot: The Stray Device"
+      },
+      "rank": 18,
+      "id": 37747222,
+      "listed_at": "2015-07-16T15:09:42.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1300854",
+          "plex": {
+            "guid": "5fc695b6051be1002d70ba51",
+            "slug": "the-armor-rebuilt"
+          },
+          "slug": "the-armor-rebuilt-2013",
+          "tmdb": 68721,
+          "trakt": 50134
+        },
+        "year": 2013,
+        "title": "The Armor Rebuilt"
+      },
+      "rank": 19,
+      "id": 37747230,
+      "listed_at": "2015-07-16T15:10:26.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3438640",
+          "plex": {
+            "guid": "5d776a9d51dd69001fe25f43",
+            "slug": "the-crown-prince-s-last-interview"
+          },
+          "slug": "the-crown-prince-s-last-interview-2014",
+          "tmdb": 253980,
+          "trakt": 154423
+        },
+        "year": 2014,
+        "title": "The Crown Prince's Last Interview"
+      },
+      "rank": 20,
+      "id": 37747366,
+      "listed_at": "2015-07-16T15:11:04.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt2912308",
+          "plex": {
+            "guid": "5d9c12767d06d9001fff819e"
+          },
+          "tmdb": 972992,
+          "tvdb": 4420028,
+          "trakt": 74005
+        },
+        "title": "Falling Compass",
+        "number": 1,
+        "season": 1
+      },
+      "rank": 21,
+      "id": 37747380,
+      "listed_at": "2015-07-16T15:12:00.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3130816",
+          "plex": {
+            "guid": "5d9c12767d06d9001fff81a2"
+          },
+          "tmdb": 63412,
+          "tvdb": 4647887,
+          "trakt": 74006
+        },
+        "title": "Amber Echo",
+        "number": 2,
+        "season": 1
+      },
+      "rank": 22,
+      "id": 37747386,
+      "listed_at": "2015-07-16T15:12:21.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3130186",
+          "plex": {
+            "guid": "5d9c12767d06d9001fff81ae"
+          },
+          "tmdb": 63413,
+          "tvdb": 4648316,
+          "trakt": 74007
+        },
+        "title": "Velvet Garden",
+        "number": 3,
+        "season": 1
+      },
+      "rank": 23,
+      "id": 37747393,
+      "listed_at": "2015-07-16T15:12:36.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3218318",
+          "plex": {
+            "guid": "5d9c12767d06d9001fff81a6"
+          },
+          "tmdb": 63414,
+          "tvdb": 4655697,
+          "trakt": 74008
+        },
+        "title": "Brass Compass",
+        "number": 4,
+        "season": 1
+      },
+      "rank": 24,
+      "id": 37747395,
+      "listed_at": "2015-07-16T15:12:40.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3229400",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc32"
+          },
+          "tmdb": 63415,
+          "tvdb": 4675265,
+          "trakt": 74009
+        },
+        "title": "Blue Crown",
+        "number": 5,
+        "season": 1
+      },
+      "rank": 25,
+      "id": 37747398,
+      "listed_at": "2015-07-16T15:12:44.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3229404",
+          "plex": {
+            "guid": "5d9c12767d06d9001fff81be"
+          },
+          "tmdb": 63416,
+          "tvdb": 4678721,
+          "trakt": 74010
+        },
+        "title": "Copper Beacon",
+        "number": 6,
+        "season": 1
+      },
+      "rank": 26,
+      "id": 37747400,
+      "listed_at": "2015-07-16T15:12:48.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3229406",
+          "plex": {
+            "guid": "5d9c1276ef619b00204a49f9"
+          },
+          "tmdb": 63417,
+          "tvdb": 4693749,
+          "trakt": 74011
+        },
+        "title": "Bright Bridge",
+        "number": 7,
+        "season": 1
+      },
+      "rank": 27,
+      "id": 37747403,
+      "listed_at": "2015-07-16T15:12:53.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1981115",
+          "plex": {
+            "guid": "5d7768ba07c4a5001e67bd10",
+            "slug": "thor-shadow-of-the-nine-realms"
+          },
+          "slug": "thor-shadow-of-the-nine-realms-2013",
+          "tmdb": 76338,
+          "trakt": 56358
+        },
+        "year": 2013,
+        "title": "Thor: Shadow of the Nine Realms"
+      },
+      "rank": 28,
+      "id": 37747417,
+      "listed_at": "2015-07-16T15:13:21.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3252298",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc4a"
+          },
+          "tmdb": 63418,
+          "tvdb": 4689625,
+          "trakt": 74012
+        },
+        "title": "Distant Sky",
+        "number": 8,
+        "season": 1
+      },
+      "rank": 29,
+      "id": 37747429,
+      "listed_at": "2015-07-16T15:13:59.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3252332",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc4d"
+          },
+          "tmdb": 63419,
+          "tvdb": 4701924,
+          "trakt": 74013
+        },
+        "title": "Crimson Station",
+        "number": 9,
+        "season": 1
+      },
+      "rank": 30,
+      "id": 37747431,
+      "listed_at": "2015-07-16T15:14:04.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3252318",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc47"
+          },
+          "tmdb": 63420,
+          "tvdb": 4702196,
+          "trakt": 74014
+        },
+        "title": "Silver Archive",
+        "number": 10,
+        "season": 1
+      },
+      "rank": 31,
+      "id": 37747433,
+      "listed_at": "2015-07-16T15:14:06.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3307564",
+          "plex": {
+            "guid": "5d9c1276ffd9ef001ea004c6"
+          },
+          "tmdb": 63421,
+          "tvdb": 4729205,
+          "trakt": 74015
+        },
+        "title": "Silent Window",
+        "number": 11,
+        "season": 1
+      },
+      "rank": 32,
+      "id": 37747436,
+      "listed_at": "2015-07-16T15:14:09.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3307568",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc3c"
+          },
+          "tmdb": 63422,
+          "tvdb": 4735528,
+          "trakt": 74016
+        },
+        "title": "Velvet Voyage",
+        "number": 12,
+        "season": 1
+      },
+      "rank": 33,
+      "id": 37747437,
+      "listed_at": "2015-07-16T15:14:12.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3307566",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc39"
+          },
+          "tmdb": 63423,
+          "tvdb": 4770065,
+          "trakt": 74017
+        },
+        "title": "Amber Valley",
+        "number": 13,
+        "season": 1
+      },
+      "rank": 34,
+      "id": 37747438,
+      "listed_at": "2015-07-16T15:14:15.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3476430",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc43"
+          },
+          "tmdb": 971804,
+          "tvdb": 4789859,
+          "trakt": 74018
+        },
+        "title": "Quiet Archive",
+        "number": 14,
+        "season": 1
+      },
+      "rank": 35,
+      "id": 37747440,
+      "listed_at": "2015-07-16T15:14:18.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3473818",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc3f"
+          },
+          "tmdb": 971979,
+          "tvdb": 4795998,
+          "trakt": 74019
+        },
+        "title": "Copper Compass",
+        "number": 15,
+        "season": 1
+      },
+      "rank": 36,
+      "id": 37747445,
+      "listed_at": "2015-07-16T15:14:21.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3539224",
+          "plex": {
+            "guid": "5d9c1276ffd9ef001ea004db"
+          },
+          "tmdb": 973093,
+          "tvdb": 4818122,
+          "trakt": 74020
+        },
+        "title": "Silver Garden",
+        "number": 16,
+        "season": 1
+      },
+      "rank": 37,
+      "id": 37747635,
+      "listed_at": "2015-07-16T15:15:00.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1843866",
+          "plex": {
+            "guid": "5d77690896b655001fdc8aca",
+            "slug": "the-silent-protocol"
+          },
+          "slug": "the-silent-protocol-2014",
+          "tmdb": 100402,
+          "trakt": 72297
+        },
+        "year": 2014,
+        "title": "The Silent Protocol"
+      },
+      "rank": 38,
+      "id": 37747622,
+      "listed_at": "2015-07-16T15:14:40.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3539406",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc35"
+          },
+          "tmdb": 973397,
+          "tvdb": 4823733,
+          "trakt": 74021
+        },
+        "title": "Copper Window",
+        "number": 17,
+        "season": 1
+      },
+      "rank": 39,
+      "id": 37747637,
+      "listed_at": "2015-07-16T15:15:04.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3609126",
+          "plex": {
+            "guid": "5d9c1276170e24001f2cfc2e"
+          },
+          "tmdb": 974019,
+          "tvdb": 4832165,
+          "trakt": 74022
+        },
+        "title": "Falling Window",
+        "number": 18,
+        "season": 1
+      },
+      "rank": 40,
+      "id": 37747639,
+      "listed_at": "2015-07-16T15:15:08.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3609154",
+          "plex": {
+            "guid": "5d9c1276ffd9ef001ea004cc"
+          },
+          "tmdb": 974709,
+          "tvdb": 4832166,
+          "trakt": 74023
+        },
+        "title": "Falling Harbor",
+        "number": 19,
+        "season": 1
+      },
+      "rank": 41,
+      "id": 37747642,
+      "listed_at": "2015-07-16T15:15:10.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3609164",
+          "plex": {
+            "guid": "5d9c1276ffd9ef001ea004d4"
+          },
+          "tmdb": 974655,
+          "tvdb": 4832167,
+          "trakt": 74024
+        },
+        "title": "Northern River",
+        "number": 20,
+        "season": 1
+      },
+      "rank": 42,
+      "id": 37747645,
+      "listed_at": "2015-07-16T15:15:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3609168",
+          "plex": {
+            "guid": "5d9c1276ffd9ef001ea004df"
+          },
+          "tmdb": 975266,
+          "tvdb": 4832168,
+          "trakt": 74025
+        },
+        "title": "Midnight Garden",
+        "number": 21,
+        "season": 1
+      },
+      "rank": 43,
+      "id": 37747646,
+      "listed_at": "2015-07-16T15:15:17.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3609170",
+          "plex": {
+            "guid": "5d9c1276ffd9ef001ea004d0"
+          },
+          "tmdb": 975473,
+          "tvdb": 4832169,
+          "trakt": 74026
+        },
+        "title": "Midnight Garden",
+        "number": 22,
+        "season": 1
+      },
+      "rank": 44,
+      "id": 37747651,
+      "listed_at": "2015-07-16T15:15:21.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3721000",
+          "plex": {
+            "guid": "5d9c127602391c001f5f6b0b"
+          },
+          "tmdb": 1000647,
+          "tvdb": 4933955,
+          "trakt": 74027
+        },
+        "title": "Silent Orchard",
+        "number": 1,
+        "season": 2
+      },
+      "rank": 45,
+      "id": 37747676,
+      "listed_at": "2015-07-16T15:16:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3997450",
+          "plex": {
+            "guid": "5d9c127602391c001f5f6b20"
+          },
+          "tmdb": 1007159,
+          "tvdb": 4988659,
+          "trakt": 74028
+        },
+        "title": "Velvet Bridge",
+        "number": 2,
+        "season": 2
+      },
+      "rank": 46,
+      "id": 37747679,
+      "listed_at": "2015-07-16T15:16:24.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2015381",
+          "plex": {
+            "guid": "5d77696ef617c9002015f700",
+            "slug": "the-orb-beyond-the-rim"
+          },
+          "slug": "the-orb-beyond-the-rim-2014",
+          "tmdb": 118340,
+          "trakt": 82405
+        },
+        "year": 2014,
+        "title": "The Orb Beyond the Rim"
+      },
+      "rank": 47,
+      "id": 37747659,
+      "listed_at": "2015-07-16T15:15:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "episode",
+      "show": {
+        "ids": {
+          "imdb": "tt2364582",
+          "plex": {
+            "guid": "5d9c086c46115600200aa2f6",
+            "slug": "bright-garden-dunmere"
+          },
+          "slug": "bright-garden-dunmere",
+          "tmdb": 1403,
+          "tvdb": 263365,
+          "trakt": 1394
+        },
+        "year": 2013,
+        "title": "Bright Garden: Dunmere",
+        "aired_episodes": 136
+      },
+      "episode": {
+        "ids": {
+          "imdb": "tt3997456",
+          "plex": {
+            "guid": "5d9c127602391c001f5f6b19"
+          },
+          "tmdb": 1009280,
+          "tvdb": 4992090,
+          "trakt": 74029
+        },
+        "title": "Hidden Orchard",
+        "number": 3,
+        "season": 2
+      },
+      "rank": 48,
+      "id": 37747680,
+      "listed_at": "2015-07-16T15:16:27.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3896198",
+          "plex": {
+            "guid": "5d776b057a53e9001e71734b",
+            "slug": "a-found-family"
+          },
+          "slug": "a-found-family-2017",
+          "tmdb": 283995,
+          "trakt": 181256
+        },
+        "year": 2017,
+        "title": "A Found Family"
+      },
+      "rank": 49,
+      "id": 203956205,
+      "listed_at": "2017-04-29T22:25:40.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "season",
+      "show": {
+        "ids": {
+          "imdb": "tt13623148",
+          "plex": {
+            "guid": "60f5605267e1a1002c95aa4e",
+            "slug": "last-valley-eastmere"
+          },
+          "slug": "last-valley-eastmere",
+          "tmdb": 232125,
+          "tvdb": 393201,
+          "trakt": 207809
+        },
+        "year": 2022,
+        "title": "Last Valley: Eastmere",
+        "aired_episodes": 10
+      },
+      "season": {
+        "ids": {
+          "plex": {
+            "guid": "61a612b5ccb4e64ac27ecd32"
+          },
+          "tmdb": 355645,
+          "tvdb": 1914306,
+          "trakt": 330045
+        },
+        "number": 1
+      },
+      "rank": 50,
+      "id": 964882264,
+      "listed_at": "2024-01-19T20:42:28.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

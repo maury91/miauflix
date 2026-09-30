@@ -1,0 +1,488 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14892",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a3874ec259f406e561db2debe2b1f3da\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8WwsIKZEGXhxhKpa4LwstfqgYxJ.jpg",
+    "created_by": [
+      {
+        "id": 1223862,
+        "credit_id": "5ef3f67e55b0c000350b8de6",
+        "name": "Remy North",
+        "original_name": "Remy North",
+        "gender": 2,
+        "profile_path": "/l9KN47ANMaOLgpuDp2GkYWj0VbA.jpg"
+      },
+      {
+        "id": 569,
+        "credit_id": "5ef3f67481a7fc0037bc696b",
+        "name": "Robin Reed",
+        "original_name": "Robin Reed",
+        "gender": 2,
+        "profile_path": "/2LoTr6x0TEM7L5em4kSx1VmGDgG.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2020-10-04",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 37,
+        "name": "Western"
+      },
+      {
+        "id": 10768,
+        "name": "War & Politics"
+      }
+    ],
+    "homepage": "https://example.test/series/brass-river-larkspur",
+    "id": 87523,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2020-11-15",
+    "last_episode_to_air": {
+      "id": 2459531,
+      "name": "Crimson Archive",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 3.8,
+      "vote_count": 10,
+      "air_date": "2020-11-15",
+      "episode_number": 7,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 45,
+      "season_number": 1,
+      "show_id": 87523,
+      "still_path": "/3oawUpEDoZlfvfi32Vp8aW4nGUG.jpg"
+    },
+    "name": "Brass River: Larkspur",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 67,
+        "logo_path": "/Allse9kbjiP6ExaQrnSpIhkurEi.png",
+        "name": "Amber Beacon Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 7,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Brass River: Larkspur",
+    "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 10.0395,
+    "poster_path": "/bNFcWrxlnFXvrjJezId6bAoePzT.jpg",
+    "production_companies": [
+      {
+        "id": 68884,
+        "logo_path": "/1BYexT6Vikz4ulCcYKGPmOi6Jm0.png",
+        "name": "Silent Sky Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 98506,
+        "logo_path": null,
+        "name": "Hidden Sky Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-10-04",
+        "episode_count": 7,
+        "id": 120339,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/bNFcWrxlnFXvrjJezId6bAoePzT.jpg",
+        "season_number": 1,
+        "vote_average": 3.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 6.7,
+    "vote_count": 109,
+    "external_ids": {
+      "imdb_id": "tt3673480",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 367633,
+      "tvrage_id": null,
+      "wikidata_id": "Q84238429",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Brass River: Larkspur",
+            "overview": "Brass River: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/brass-river-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

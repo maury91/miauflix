@@ -1,0 +1,567 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20258",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"4f6acea159bbfa452acb5b225bac7188\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1nfIEJu02Zhv9omTKkzwHnK8Dji.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      60
+    ],
+    "first_air_date": "2017-10-29",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://example.test/series/blue-bridge-bellhaven",
+    "id": 74313,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2017-12-10",
+    "last_episode_to_air": {
+      "id": 1388700,
+      "name": "Velvet Meridian",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.059,
+      "vote_count": 17,
+      "air_date": "2017-12-10",
+      "episode_number": 7,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 60,
+      "season_number": 1,
+      "show_id": 74313,
+      "still_path": "/rcUgNfN0nMqcrqajuxACJNiMh2G.jpg"
+    },
+    "name": "Blue Bridge: Bellhaven",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 4,
+        "logo_path": "/uJjcCg3O4DMEjM0xtno9OWFciRP.png",
+        "name": "Blue Voyage Network",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 7,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_name": "Blue Bridge: Bellhaven",
+    "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 6.6037,
+    "poster_path": "/j1NsoYYDYHnPkRr7Enqr8tlexgO.jpg",
+    "production_companies": [
+      {
+        "id": 9050,
+        "logo_path": "/dEUWxME2lFFfzsSunN3lSZyRcY.png",
+        "name": "Last Sky Studios",
+        "origin_country": "GB"
+      },
+      {
+        "id": 105182,
+        "logo_path": "/5sFjaa1lYQgcrfYHScn2GaezmN.png",
+        "name": "Crimson Voyage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 87079,
+        "logo_path": "/iYr0WDJcVZgRh1hSCFiI0SxwaxP.png",
+        "name": "Ivory Meridian Studios",
+        "origin_country": "CN"
+      },
+      {
+        "id": 46,
+        "logo_path": "/3xFdKHLXPGHEbrAkmsepGE8974Y.png",
+        "name": "Distant River Studios",
+        "origin_country": "DE"
+      },
+      {
+        "id": 7131,
+        "logo_path": "/qpFsGoa96SytbWkhtkkpllu5Cch.png",
+        "name": "Falling Orchard Studios",
+        "origin_country": "FR"
+      },
+      {
+        "id": 83696,
+        "logo_path": "/yzM5qWpO6dtcfGlPceGTPORFPoe.png",
+        "name": "Brass Harbor Studios",
+        "origin_country": "CN"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CN",
+        "name": "China"
+      },
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      },
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2017-09-27",
+        "episode_count": 2,
+        "id": 93610,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/ePFHpRDILmD4KrGDbdoNwsAGVi7.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2017-10-29",
+        "episode_count": 7,
+        "id": 93606,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/j1NsoYYDYHnPkRr7Enqr8tlexgO.jpg",
+        "season_number": 1,
+        "vote_average": 8.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 8.6,
+    "vote_count": 370,
+    "external_ids": {
+      "imdb_id": "tt6769208",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 330942,
+      "tvrage_id": null,
+      "wikidata_id": "Q28963175",
+      "facebook_id": "",
+      "instagram_id": "",
+      "twitter_id": ""
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Blue Bridge: Bellhaven",
+            "overview": "Blue Bridge: Bellhaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-bridge-bellhaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

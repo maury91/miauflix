@@ -1,0 +1,248 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5819",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"4463712616241d9cf927399260f70f8a\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/377Bqi11cmWEQeOAs7GOkCEfazk.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/the-desert-facility-enigma",
+    "id": 1462146,
+    "imdb_id": "tt37605896",
+    "origin_country": [
+      "CA"
+    ],
+    "original_language": "en",
+    "original_title": "The Desert Facility Enigma",
+    "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+    "popularity": 2.5596,
+    "poster_path": "/sQB50PgwLfftaRdNB36eJxtH3AZ.jpg",
+    "production_companies": [],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "release_date": "2026-04-03",
+    "revenue": 0,
+    "runtime": 114,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The question never left the hangar.",
+    "title": "The Desert Facility Enigma",
+    "video": false,
+    "vote_average": 8.298,
+    "vote_count": 46,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 114,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 154,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 0,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 0,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 0,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 0,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 0,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 114,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-desert-facility-enigma",
+            "overview": "The researcher revisits his disputed account of a hidden desert facility as new interviews and archival clues test the story.",
+            "runtime": 0,
+            "tagline": "The question never left the hangar.",
+            "title": "The Desert Facility Enigma"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fJkmEYgqhWAMjO2SmzNQnZK8UqW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l0LELBVcGpv9GoTguGMmOLvEi97.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.986,
+          "height": 284,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t8osMF9DySfXoVv48Rj78T8BHmG.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 564
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sQB50PgwLfftaRdNB36eJxtH3AZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1329,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cHWXWjUQg5mjuvQDimllZxusjD6.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9ipDFr3eSAIqTLDYdKwuFAsOxc9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

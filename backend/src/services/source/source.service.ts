@@ -189,7 +189,7 @@ export class SourceService {
     }
 
     for (const movie of moviesToSearch) {
-      await this.searchSourcesForMovie(movie, false);
+      await this.searchSourcesForMovie(movie, false, 10);
     }
   }
 
@@ -204,7 +204,8 @@ export class SourceService {
       title: string;
       contentDirectoriesSearched?: string[];
     },
-    isOnDemand: boolean = false
+    isOnDemand: boolean = false,
+    priority = 20
   ): Promise<{ directory: string; sources: MovieSource[] } | void> {
     if (!(await this.checkForVpnConnection('searchSourcesForMovie'))) {
       return;
@@ -269,13 +270,13 @@ export class SourceService {
             type: 'source.metadata' as const,
             dedupeKey: String(source.id),
             payload: { sourceId: source.id },
-            options: { priority: 40 },
+            options: { priority: Math.max(1, priority) },
           },
           {
             type: 'source.stats' as const,
             dedupeKey: String(source.id),
             payload: { sourceId: source.id },
-            options: { priority: 20 },
+            options: { priority: Math.max(1, priority - 20) },
           },
         ])
       );
@@ -294,7 +295,8 @@ export class SourceService {
   }
 
   public async processSourceDiscovery(
-    movieId: number
+    movieId: number,
+    priority = 20
   ): Promise<{ complete: boolean; sourceCount: number }> {
     let movie = await this.movieRepository.findById(movieId);
     if (!movie?.imdbId) return { complete: true, sourceCount: 0 };
@@ -307,7 +309,7 @@ export class SourceService {
       movie = await this.movieRepository.findById(movieId);
       if (!movie?.imdbId) return { complete: true, sourceCount: 0 };
     }
-    const result = await this.searchSourcesForMovie(movie, false);
+    const result = await this.searchSourcesForMovie(movie, false, priority);
     const refreshed = await this.movieRepository.findById(movieId);
     const complete = providerNames.every(name =>
       refreshed?.contentDirectoriesSearched.includes(name)
@@ -315,9 +317,9 @@ export class SourceService {
     return { complete, sourceCount: result?.sources.length ?? 0 };
   }
 
-  public async processSourceDiscoveryByMediaId(movieMediaId: number): Promise<void> {
+  public async processSourceDiscoveryByMediaId(movieMediaId: number, priority = 20): Promise<void> {
     const movie = await this.movieRepository.findByMediaId(movieMediaId);
-    if (movie) await this.processSourceDiscovery(movie.id);
+    if (movie) await this.processSourceDiscovery(movie.id, priority);
   }
 
   public async seedSourceDiscoveryJobs(limit = 25): Promise<void> {

@@ -1,0 +1,572 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:movie:51,resource:movie:5695,resource:movie:4169,resource:movie:7251,resource:movie:10314,resource:movie:9145,resource:movie:6697,resource:movie:12925,resource:movie:9277,resource:movie:24277,resource:movie:96,resource:movie:9946,resource:movie:97,resource:movie:9326,resource:movie:2870,resource:movie:24398,resource:movie:7217,resource:movie:36339,resource:movie:62438,resource:movie:98669,resource:movie:98670,resource:movie:147870,resource:movie:218291,resource:movie:527887,resource:movie:356368,resource:list:801239",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "25",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "1",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "released",
+    "x-sort-how": "asc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0087544",
+          "plex": {
+            "guid": "5d7768247e9a3c0020c6a8f4",
+            "slug": "the-windward-valley"
+          },
+          "slug": "the-windward-valley-1984",
+          "tmdb": 81,
+          "trakt": 51
+        },
+        "year": 1984,
+        "title": "The Windward Valley"
+      },
+      "rank": 1,
+      "id": 7062190,
+      "listed_at": "2012-08-25T08:55:50.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0092067",
+          "plex": {
+            "guid": "5d776834999c64001ec2f3d8",
+            "slug": "the-citadel-above-the-clouds"
+          },
+          "slug": "the-citadel-above-the-clouds-1986",
+          "tmdb": 10515,
+          "trakt": 5695
+        },
+        "year": 1986,
+        "title": "The Citadel Above the Clouds"
+      },
+      "rank": 2,
+      "id": 7062195,
+      "listed_at": "2012-08-25T08:41:50.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0096283",
+          "plex": {
+            "guid": "5d7768328a7581001f12d0df",
+            "slug": "the-mosswood-neighbors"
+          },
+          "slug": "the-mosswood-neighbors-1988",
+          "tmdb": 8392,
+          "trakt": 4169
+        },
+        "year": 1988,
+        "title": "The Mosswood Neighbors"
+      },
+      "rank": 4,
+      "id": 7062194,
+      "listed_at": "2012-08-25T08:42:17.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0095327",
+          "plex": {
+            "guid": "5d776d11fb0d55001f596587",
+            "slug": "the-firefly-shelter"
+          },
+          "slug": "the-firefly-shelter-1988",
+          "tmdb": 12477,
+          "trakt": 7251
+        },
+        "year": 1988,
+        "title": "The Firefly Shelter"
+      },
+      "rank": 3,
+      "id": 7062198,
+      "listed_at": "2012-08-25T08:42:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0097814",
+          "plex": {
+            "guid": "5d77683fe6d55c002040ecbd",
+            "slug": "nina-s-sky-courier"
+          },
+          "slug": "nina-s-sky-courier-1989",
+          "tmdb": 16859,
+          "trakt": 10314
+        },
+        "year": 1989,
+        "title": "Nina's Sky Courier"
+      },
+      "rank": 5,
+      "id": 7062203,
+      "listed_at": "2012-08-25T08:42:30.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0102587",
+          "plex": {
+            "guid": "5d77683ca091de001f2e8e5a",
+            "slug": "yesterday-s-fields"
+          },
+          "slug": "yesterday-s-fields-1991",
+          "tmdb": 15080,
+          "trakt": 9145
+        },
+        "year": 1991,
+        "title": "Yesterday's Fields"
+      },
+      "rank": 6,
+      "id": 7062199,
+      "listed_at": "2012-08-25T08:42:45.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0104652",
+          "plex": {
+            "guid": "5d776d1847dd6e001f6f002d",
+            "slug": "the-crimson-aviator"
+          },
+          "slug": "the-crimson-aviator-1992",
+          "tmdb": 11621,
+          "trakt": 6697
+        },
+        "year": 1992,
+        "title": "The Crimson Aviator"
+      },
+      "rank": 7,
+      "id": 7062196,
+      "listed_at": "2012-08-25T08:43:11.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0108432",
+          "plex": {
+            "guid": "5d9f3544d74e6700200214b0",
+            "slug": "the-sea-between-us"
+          },
+          "slug": "the-sea-between-us-1993",
+          "tmdb": 21057,
+          "trakt": 12925
+        },
+        "year": 1993,
+        "title": "The Sea Between Us"
+      },
+      "rank": 8,
+      "id": 7062204,
+      "listed_at": "2012-08-25T08:43:31.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0110008",
+          "plex": {
+            "guid": "5d776d1823d5a3001f52063c",
+            "slug": "the-raccoons-of-clover-hill"
+          },
+          "slug": "the-raccoons-of-clover-hill-1994",
+          "tmdb": 15283,
+          "trakt": 9277
+        },
+        "year": 1994,
+        "title": "The Raccoons of Clover Hill"
+      },
+      "rank": 9,
+      "id": 7062200,
+      "listed_at": "2012-08-25T08:43:44.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0113824",
+          "plex": {
+            "guid": "5d77686c0ab244002006d91c",
+            "slug": "the-library-of-small-dreams"
+          },
+          "slug": "the-library-of-small-dreams-1995",
+          "tmdb": 37797,
+          "trakt": 24277
+        },
+        "year": 1995,
+        "title": "The Library of Small Dreams"
+      },
+      "rank": 10,
+      "id": 7062205,
+      "listed_at": "2012-08-25T08:44:00.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0119698",
+          "plex": {
+            "guid": "5d7768246f4521001ea988b4",
+            "slug": "princess-of-the-wildwood"
+          },
+          "slug": "princess-of-the-wildwood-1997",
+          "tmdb": 128,
+          "trakt": 96
+        },
+        "year": 1997,
+        "title": "Princess of the Wildwood"
+      },
+      "rank": 11,
+      "id": 7062191,
+      "listed_at": "2012-08-25T08:44:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0206013",
+          "plex": {
+            "guid": "5d77683e7e9a3c0020c6eb3c",
+            "slug": "the-kondo-family-album"
+          },
+          "slug": "the-kondo-family-album-1999",
+          "tmdb": 16198,
+          "trakt": 9946
+        },
+        "year": 1999,
+        "title": "The Kondo Family Album"
+      },
+      "rank": 12,
+      "id": 7062202,
+      "listed_at": "2012-08-25T08:44:31.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0245429",
+          "plex": {
+            "guid": "5d7768243c3c2a001fbca858",
+            "slug": "the-bathhouse-beyond-the-tunnel"
+          },
+          "slug": "the-bathhouse-beyond-the-tunnel-2001",
+          "tmdb": 129,
+          "trakt": 97
+        },
+        "year": 2001,
+        "title": "The Bathhouse Beyond the Tunnel"
+      },
+      "rank": 13,
+      "id": 7062192,
+      "listed_at": "2012-08-25T08:44:47.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0347618",
+          "plex": {
+            "guid": "5d77683c2ec6b5001f6bd380",
+            "slug": "haru-and-the-cat-kingdom"
+          },
+          "slug": "haru-and-the-cat-kingdom-2002",
+          "tmdb": 15370,
+          "trakt": 9326
+        },
+        "year": 2002,
+        "title": "Haru and the Cat Kingdom"
+      },
+      "rank": 14,
+      "id": 7062201,
+      "listed_at": "2012-08-25T08:45:01.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0347149",
+          "plex": {
+            "guid": "5d77682e6f4521001ea9abd0",
+            "slug": "the-wanderer-s-castle"
+          },
+          "slug": "the-wanderer-s-castle-2004",
+          "tmdb": 4935,
+          "trakt": 2870
+        },
+        "year": 2004,
+        "title": "The Wanderer's Castle"
+      },
+      "rank": 15,
+      "id": 7062193,
+      "listed_at": "2012-08-25T08:45:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0495596",
+          "plex": {
+            "guid": "5d77686c6f4521001eaa6518",
+            "slug": "the-wizard-of-saltmere"
+          },
+          "slug": "the-wizard-of-saltmere-2006",
+          "tmdb": 37933,
+          "trakt": 24398
+        },
+        "year": 2006,
+        "title": "The Wizard of Saltmere"
+      },
+      "rank": 16,
+      "id": 7062206,
+      "listed_at": "2012-08-25T08:45:28.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt0876563",
+          "plex": {
+            "guid": "5d776838151a60001f24e82f",
+            "slug": "mira-of-the-tides"
+          },
+          "slug": "mira-of-the-tides-2008",
+          "tmdb": 12429,
+          "trakt": 7217
+        },
+        "year": 2008,
+        "title": "Mira of the Tides"
+      },
+      "rank": 17,
+      "id": 7062197,
+      "listed_at": "2012-08-25T08:45:39.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1568921",
+          "plex": {
+            "guid": "5d77689033f255001e85998a",
+            "slug": "the-borrowers-of-briar-house"
+          },
+          "slug": "the-borrowers-of-briar-house-2010",
+          "tmdb": 51739,
+          "trakt": 36339
+        },
+        "year": 2010,
+        "title": "The Borrowers of Briar House"
+      },
+      "rank": 18,
+      "id": 7062207,
+      "listed_at": "2012-08-25T08:45:53.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt1798188",
+          "plex": {
+            "guid": "5d7768cb47dd6e001f6bed1b",
+            "slug": "from-the-hill-of-poppies"
+          },
+          "slug": "from-the-hill-of-poppies-2011",
+          "tmdb": 83389,
+          "trakt": 62438
+        },
+        "year": 2011,
+        "title": "From the Hill of Poppies"
+      },
+      "rank": 19,
+      "id": 7062208,
+      "listed_at": "2012-08-25T08:46:03.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2013293",
+          "plex": {
+            "guid": "5d7769bfad5437001f766d94",
+            "slug": "the-wind-rises"
+          },
+          "slug": "the-wind-rises-2013",
+          "tmdb": 149870,
+          "trakt": 98669
+        },
+        "year": 2013,
+        "title": "The Wind Rises"
+      },
+      "rank": 20,
+      "id": 7062209,
+      "listed_at": "2013-08-05T16:59:55.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt2576852",
+          "plex": {
+            "guid": "5d7769bfad5437001f766d91",
+            "slug": "scarlet-compass-juniper-vale"
+          },
+          "slug": "scarlet-compass-juniper-vale-2013",
+          "tmdb": 149871,
+          "trakt": 98670
+        },
+        "year": 2013,
+        "title": "Scarlet Compass: Juniper Vale"
+      },
+      "rank": 21,
+      "id": 7062210,
+      "listed_at": "2014-03-26T10:31:09.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3398268",
+          "plex": {
+            "guid": "5d776a8223d5a3001f505581",
+            "slug": "distant-river-glassford"
+          },
+          "slug": "distant-river-glassford-2014",
+          "tmdb": 242828,
+          "trakt": 147870
+        },
+        "year": 2014,
+        "title": "Distant River: Glassford"
+      },
+      "rank": 22,
+      "id": 7062211,
+      "listed_at": "2014-11-20T10:29:37.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt3666024",
+          "plex": {
+            "guid": "5d9f3cafe4fc29001eb6f840",
+            "slug": "golden-voyage-bellhaven"
+          },
+          "slug": "golden-voyage-bellhaven-2016",
+          "tmdb": 337703,
+          "trakt": 218291
+        },
+        "year": 2016,
+        "title": "Golden Voyage: Bellhaven"
+      },
+      "rank": 23,
+      "id": 165988491,
+      "listed_at": "2017-01-30T18:45:00.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt12441478",
+          "plex": {
+            "guid": "5e91840e64e480004156d5ec",
+            "slug": "midnight-meridian-oak-harbor"
+          },
+          "slug": "midnight-meridian-oak-harbor-2021",
+          "tmdb": 683127,
+          "trakt": 527887
+        },
+        "year": 2021,
+        "title": "Midnight Meridian: Oak Harbor"
+      },
+      "rank": 24,
+      "id": 937855239,
+      "listed_at": "2023-11-27T18:21:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "movie",
+      "movie": {
+        "ids": {
+          "imdb": "tt6587046",
+          "plex": {
+            "guid": "5d77703d31d95e001f19c90e",
+            "slug": "falling-compass-rosefield"
+          },
+          "slug": "falling-compass-rosefield-2023",
+          "tmdb": 508883,
+          "trakt": 356368
+        },
+        "year": 2023,
+        "title": "Falling Compass: Rosefield"
+      },
+      "rank": 25,
+      "id": 937855354,
+      "listed_at": "2023-11-27T18:21:23.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

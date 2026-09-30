@@ -1,0 +1,574 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12099",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8263bbced4750651b3b4dd5f2873d487\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/pFgJs2sVaFMNZDX9mvdkSbVSqeH.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/the-cut-within",
+    "id": 84194,
+    "imdb_id": "tt1984153",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Cut Within",
+    "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+    "popularity": 3.2146,
+    "poster_path": "/3aLgB6FTQlNanER0RpckbKdwyh9.jpg",
+    "production_companies": [
+      {
+        "id": 30688,
+        "logo_path": null,
+        "name": "Vesper Hollow Films",
+        "origin_country": ""
+      },
+      {
+        "id": 5860,
+        "logo_path": null,
+        "name": "Vesper Hollow Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2012-09-12",
+    "revenue": 0,
+    "runtime": 81,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The wound is deeper than it looks.",
+    "title": "The Cut Within",
+    "video": false,
+    "vote_average": 6.2,
+    "vote_count": 626,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 81,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-cut-within",
+            "overview": "An isolated teenager fascinated by surgery retreats into increasingly violent fantasies while dreaming of becoming a doctor. At home, her need for control and recognition pushes an already strained family toward a breaking point.",
+            "runtime": 0,
+            "tagline": "The wound is deeper than it looks.",
+            "title": "The Cut Within"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nL0HK5BFE70XkFeHSshEIkOZRkD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h5egEmJQ79FZKbJDQKe2Y4MhYHy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gMx9DURzyZJxNBZtuNSgKcXxV77.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.969,
+          "height": 391,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s8tA0igyaCVGtiwLfVAqIriKfut.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1943
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1191,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3aLgB6FTQlNanER0RpckbKdwyh9.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 794
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8w4V8LorI0yg40NNPD6scEY7k4O.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dXxpaFjP80uWl2oSQwhbJiRCA7P.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vhWkYmhDg0q3JhWdNqufkJ7sUie.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.755,
+          "height": 1430,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/krgni2YBBhECz58pA2cJ4Ua7YTf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dDleHtaradc5JVEEFrDG8YPuD04.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/70jpDLp8VKfEbst999kP4EgeMEW.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1007
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i5PJFpAwYJ7tEfP0hUYi69BV93M.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zqGaDGbhzoaybIUhRyXYuOpuKXW.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jJRbpJc44mDmPwfUCouJLQ1Iwyw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1067
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k6q1kq5wewv2gArxDADfEAqTBJC.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.755,
+          "height": 1430,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7j5hpXlAeR6y06hQCoy6rIXyFMz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 1489,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/69Q73lk5Jxb5jPyzyV3HyxC71NQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

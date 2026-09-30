@@ -1,0 +1,622 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12050",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8f8849ad7a8fb06cc0dc8f4e0792ddec\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gM1kQRPwOVW1Eos5tVWqcYmHR5S.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://example.test/films/river-fields-night-shift",
+    "id": 1470130,
+    "imdb_id": "tt36647890",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "River Fields, Night Shift",
+    "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+    "popularity": 17.538,
+    "poster_path": "/72AoFPC5TY4DfJwXXS9rPwPeReD.jpg",
+    "production_companies": [
+      {
+        "id": 7662,
+        "logo_path": "/uGLpMN6r5MyFosNTgP9PKU48CHp.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 31787,
+        "logo_path": "/dWkJVibgXMBhPathe3rn7raMcta.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 153351,
+        "logo_path": "/dMusWUKSqpqXQOh0WiXHSmRBTci.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 138068,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2026-02-13",
+    "revenue": 1300011,
+    "runtime": 91,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The dead are not all resting.",
+    "title": "River Fields, Night Shift",
+    "video": false,
+    "vote_average": 5.239,
+    "vote_count": 190,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 91,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 92,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 91,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 91,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 91,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 91,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 91,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/river-fields-night-shift",
+            "overview": "Newly qualified embalmer Mara begins overnight work at a quiet mortuary, where each routine task reveals an impossible visitor.",
+            "runtime": 0,
+            "tagline": "The dead are not all resting.",
+            "title": "River Fields, Night Shift"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/53DEyMVLwNVtRiOKBgCyxWKndGK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qJVHFAWyfyZeHGnUqnT91rd9QzK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.789,
+          "height": 180,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sZ5Q6x8FJVuMEWj3iXcfchCtAzS.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 682
+        },
+        {
+          "aspect_ratio": 1.563,
+          "height": 1495,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qovmC5do1tLvcC8SAbWknrrQ9JH.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2336
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/72AoFPC5TY4DfJwXXS9rPwPeReD.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7k7hY1HqUYryPdRio0fuDMaIq4N.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5ZwWIp9yyfaXZMshqH5Fjrb9jCI.jpg",
+          "vote_average": 2.278,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2998,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u56elfbXDuoei7bqwHqCLf0qqPD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2842,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f3ZM8qyTeNE4p8yf2y7YOEqTZAx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1895
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2885,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vvxDxEChkSzR2RPDTa0zR4X11a0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1923
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1248,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1J8OvKva6G6tsk3ZGXeptU037z8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 1,
+          "width": 832
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qz92BWUsmlas8ja7QQrC3zbJI2s.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7gxVsn6dUEOS8CTOAZNIC6apZ28.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/PfFxZNRD1fJAIkZGJziaTwtSkw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oAEsSRlLZ60yMpi8PhL0EUlfHCb.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1768,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nETnc1pBIjYwsI8Wd2Krr7avtJG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1179
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1050,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kfauBtsKGf6GzHFerqFEbmDY2E6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 699
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eDZaML8hlfBwAUhrq85Gdn6SMUC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

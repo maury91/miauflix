@@ -1,0 +1,804 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16096",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e17f086d2a7ee116d5ca251c4bd0671c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/avwIERZtWiWa34qShf5biDzAVaF.jpg",
+    "belongs_to_collection": null,
+    "budget": 80000000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/the-comeback-cut",
+    "id": 1049471,
+    "imdb_id": "tt23724682",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Comeback Cut",
+    "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+    "popularity": 10.6149,
+    "poster_path": "/kSzcpfbTy2pXHGvrVU2WhQTo6oU.jpg",
+    "production_companies": [
+      {
+        "id": 194232,
+        "logo_path": "/oE7H93u8sy5vvW5EH3fpCp68vvB.png",
+        "name": "Westward Frame Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 169219,
+        "logo_path": "/uprteAU9Rxy87dvfTF4tQ2I6Rmm.png",
+        "name": "Westward Frame Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-04-06",
+    "revenue": 0,
+    "runtime": 84,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Fame fades. What you do next stays.",
+    "title": "The Comeback Cut",
+    "video": false,
+    "vote_average": 5.402,
+    "vote_count": 256,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 84,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 83,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 83,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 83,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 83,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 83,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "homepage": "https://example.test/films/the-comeback-cut",
+            "overview": "Former child star Ellis Rowe has spent his life performing for an audience, but a blackmail threat built around a private video forces him to face the people he hurt along the way. He sets out to make amends before the scandal defines him for good.",
+            "runtime": 0,
+            "tagline": "Fame fades. What you do next stays.",
+            "title": "The Comeback Cut"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eoZX6m74aJiIGLCcDqWup7mG6h2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/19RVlVe0kCdnYIC4Zqy4X5J3yqq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zEwcmDOv90aMok2ILORVexO8Nuv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r0WDxT7DPyebgyKQV0aRIx43qUe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.49,
+          "height": 388,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3joHPfzLAFMoUtKWLEZq5e6DQpi.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 966
+        },
+        {
+          "aspect_ratio": 2.584,
+          "height": 743,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bekY73vRk6ZnjEdx4OTjOicitXA.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 2.583,
+          "height": 1558,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/spx4tGYHU1k9x9hRO4IGKSQkKaK.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 4025
+        },
+        {
+          "aspect_ratio": 2.583,
+          "height": 1558,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lmksza28OnlAicgNY0mZfg9YrYD.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 4025
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kSzcpfbTy2pXHGvrVU2WhQTo6oU.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eDiJmaSEc27RNObYuGszee88asi.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8BNDEyjzZigtLBfgXgNgZBXWM35.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8js0c2SwZsZ6LpT1e1rrjscqVDi.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vMKn46fIAWFaSwQsx7cqFdhldsQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f3ggRkc3m4Dz8TH8Zt29HmD4fZZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o8LpfMVbrxW2Rdkf5i37TGqLI3k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jpPBa89tz1OuC5rpWMQbeNNaAmC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sp3ssYIrslevTRXRHwYj0v0lwsc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

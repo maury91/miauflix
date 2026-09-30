@@ -1,0 +1,427 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8297",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0262cdc5cfb5937bed716a4247a123bd\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3DW3xHM7FgdE8XzpODbEfvlR9qR.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10749,
+        "name": "Romance"
+      }
+    ],
+    "homepage": "https://example.test/films/blossoms-in-the-fog",
+    "id": 899,
+    "imdb_id": "tt0009968",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Blossoms in the Fog",
+    "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+    "popularity": 2.821,
+    "poster_path": "/njwFIUL76zaRmPemnrZVmmTSCjz.jpg",
+    "production_companies": [
+      {
+        "id": 4759,
+        "logo_path": null,
+        "name": "Limehouse Reverie Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "1919-05-13",
+    "revenue": 2400000,
+    "runtime": 88,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "No Language",
+        "iso_639_1": "xx",
+        "name": "No Language"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A fragile kindness in a hard-edged world.",
+    "title": "Blossoms in the Fog",
+    "video": false,
+    "vote_average": 6.9,
+    "vote_count": 251,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 88,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 90,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 90,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 91,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 90,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 67,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 90,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/blossoms-in-the-fog",
+            "overview": "In London's crowded riverside quarter, a delicate young woman endures the cruelty of her boxer father until a kind immigrant offers her a quiet refuge. Their fragile friendship blossoms in a world that gives tenderness little room to survive.",
+            "runtime": 0,
+            "tagline": "A fragile kindness in a hard-edged world.",
+            "title": "Blossoms in the Fog"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 5.331,
+          "height": 151,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/or1sFb4QHmN2IQunb50RaYV6jl4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 805
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/njwFIUL76zaRmPemnrZVmmTSCjz.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AmkyOxzEhTcVHNmRSMR41sLfXEA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1170,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5BSOIFbxwLILa8DE1jlhqG7Ravx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 780
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l9rHRp7Yb2PVy5Qd5wUR9coXZoy.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1170,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/HabvxUOu64bfVgadXjD6d2j5e2.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 780
+        }
+      ]
+    }
+  }
+}

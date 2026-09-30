@@ -1,0 +1,656 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22675",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e433565c0d03b0088bb74c273c0af8bb\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/tWdNZ3xuFBhJ2ZoQ9vShNGHTb85.jpg",
+    "created_by": [
+      {
+        "id": 1482514,
+        "credit_id": "5bb2a5e6925141427f000705",
+        "name": "Jordan Keene",
+        "original_name": "Jordan Keene",
+        "gender": 2,
+        "profile_path": "/lI6AoQnS9eLH5LjXL6GSy8VGPfv.jpg"
+      }
+    ],
+    "episode_run_time": [
+      7
+    ],
+    "first_air_date": "2018-10-01",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 10762,
+        "name": "Kids"
+      }
+    ],
+    "homepage": "https://example.test/series/amber-orchard-eastmere",
+    "id": 82728,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2024-04-21",
+    "last_episode_to_air": {
+      "id": 4215673,
+      "name": "Distant Harbor",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 7.2,
+      "vote_count": 8,
+      "air_date": "2024-04-21",
+      "episode_number": 49,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 7,
+      "season_number": 3,
+      "show_id": 82728,
+      "still_path": "/c71B3umVpuLCtUKaZssCc2XIjBB.jpg"
+    },
+    "name": "Amber Orchard: Eastmere",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2854,
+        "logo_path": "/5MebMTNo5FbHIS57vdi8ta77AMn.png",
+        "name": "Last Echo Network",
+        "origin_country": "AU"
+      }
+    ],
+    "number_of_episodes": 154,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "AU"
+    ],
+    "original_language": "en",
+    "original_name": "Amber Orchard: Eastmere",
+    "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 57.0533,
+    "poster_path": "/9p4pNoGcuyCfHcGWKNrTopqMWtq.jpg",
+    "production_companies": [
+      {
+        "id": 81576,
+        "logo_path": "/m1sQ0FG05KeveKGufbcJbsHUKYi.png",
+        "name": "Quiet Meridian Studios",
+        "origin_country": "AU"
+      },
+      {
+        "id": 1253,
+        "logo_path": "/pE2WJeUJBfoit4COoWSRslT9ioj.png",
+        "name": "Quiet Crown Studios",
+        "origin_country": "AU"
+      },
+      {
+        "id": 7584,
+        "logo_path": "/eGkfvvyf4fJTvBUR1xt1669IPA3.png",
+        "name": "Amber Orchard Studios",
+        "origin_country": "AU"
+      },
+      {
+        "id": 10950,
+        "logo_path": "/6TdE9m9KgV2az7vNI8n95rQiYr3.png",
+        "name": "Silver Station Studios",
+        "origin_country": "AU"
+      },
+      {
+        "id": 79173,
+        "logo_path": "/4hDXEoxuB8EJFq2LHshCzALaFhO.png",
+        "name": "Midnight Horizon Studios",
+        "origin_country": "GB"
+      },
+      {
+        "id": 3164,
+        "logo_path": "/h06QVxWESaOAfBwkgrWFdbkkccq.png",
+        "name": "Distant Echo Studios",
+        "origin_country": "GB"
+      },
+      {
+        "id": 221844,
+        "logo_path": null,
+        "name": "Blue Garden Studios",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "AU",
+        "name": "Australia"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2019-12-14",
+        "episode_count": 31,
+        "id": 138212,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/oXcJ7MlUvJWEEkS9BSlmez58ZP0.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2018-10-01",
+        "episode_count": 52,
+        "id": 110147,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/eVzZUBfHxCrlATbMokkBN8jMJkm.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2020-03-17",
+        "episode_count": 52,
+        "id": 143749,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/yWOni1fTBx43j6VQsJuSTKkSCIL.jpg",
+        "season_number": 2,
+        "vote_average": 6.6
+      },
+      {
+        "air_date": "2021-09-05",
+        "episode_count": 49,
+        "id": 209453,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/gfqtdkCGTOA1G1S0AZnnVPhNx8c.jpg",
+        "season_number": 3,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 545280,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 4,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.6,
+    "vote_count": 747,
+    "external_ids": {
+      "imdb_id": "tt7678620",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 353546,
+      "tvrage_id": null,
+      "wikidata_id": "Q39071378",
+      "facebook_id": "OfficialBlueyTV",
+      "instagram_id": "officialblueytv",
+      "twitter_id": "OfficialBlueyTV"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IS",
+          "iso_639_1": "is",
+          "name": "Íslenska",
+          "english_name": "Icelandic",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Amber Orchard: Eastmere",
+            "overview": "Amber Orchard: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/amber-orchard-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

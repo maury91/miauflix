@@ -116,3 +116,41 @@ describe('personal Trakt list page cache', () => {
     database.close();
   });
 });
+
+describe('popular community Trakt list pages', () => {
+  it('loads mixed movies and shows from the owner-scoped list endpoint', async () => {
+    const database = new Database(':memory:');
+    database.run(`CREATE TABLE list_pages (
+      subject_id TEXT NOT NULL, list_id TEXT NOT NULL, page INTEGER NOT NULL,
+      payload TEXT NOT NULL, fetched_at INTEGER NOT NULL,
+      PRIMARY KEY (subject_id, list_id, page)
+    )`);
+    let requestedPath = '';
+    const result = await listPage({
+      database,
+      listId: 'trakt-community-example-user-42',
+      page: 1,
+      association: () => null,
+      accessToken: async () => 'unused',
+      fetchPage: async path => {
+        requestedPath = path;
+        return {
+          items: [
+            { movie: { ids: { trakt: 1, tmdb: 10 } } },
+            { movie: { ids: { trakt: 1, tmdb: 10 } } },
+            { show: { ids: { trakt: 2, tmdb: 20 } } },
+          ],
+          totalItems: 3,
+          totalPages: 1,
+        };
+      },
+      seal: value => value,
+      open: value => value,
+    });
+    expect(requestedPath).toBe('/users/example-user/lists/42/items?page=1&limit=50');
+    expect(result.items.map(item => item.media.mediaType)).toEqual(['movie', 'tv']);
+    expect(result.items.map(item => item.media.ids.tmdb)).toEqual([10, 20]);
+    expect(result.totalItems).toBe(2);
+    database.close();
+  });
+});

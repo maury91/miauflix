@@ -1,0 +1,722 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "discover,popular,movie,resource:movie:458282,resource:movie:916057,resource:movie:777917,resource:movie:1020977,resource:movie:1075712,resource:movie:1057839,resource:movie:934134,resource:movie:1005789,resource:movie:1169847,resource:movie:763652,resource:movie:1048396,resource:movie:969826,resource:movie:1044265,resource:movie:1077273,resource:movie:1052083,resource:movie:315133,resource:movie:1005706,resource:movie:1136565,resource:movie:897563,resource:movie:972436,resource:movie:686060,resource:movie:1096313,resource:movie:832181,resource:movie:1049823,resource:movie:809985,resource:movie:897095,resource:movie:688185,resource:movie:977901,resource:movie:540330,resource:movie:992825,resource:movie:988284,resource:movie:1040684,resource:movie:1088230,resource:movie:965839,resource:movie:1112909,resource:movie:1156761,resource:movie:970531,resource:movie:1010850,resource:movie:1050468,resource:movie:787853,resource:movie:1044784,resource:movie:1075286,resource:movie:891793,resource:movie:1117821,resource:movie:1050053,resource:movie:1108471,resource:movie:755536,resource:movie:1117331,resource:movie:1005401,resource:movie:1362157",
+    "content-security-policy-report-only": "script-src 'unsafe-inline' 'unsafe-eval'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=1jphplWtqQwkwBgozAv4LrSDO67wX40o1iJnebCP4hg-1790350103.0364945-1.0.1.1-F_UEAHtwmyaOJqtfcLWkWKKJ3bQzOYHUAie9fx028P9h9_bNCKNOBctv4e.sroqvI47GHxrS8OsIqdvzR5WQ2ABhrh98_UYgdz2.9Z_JmwoAsW1OLJ5SAXYw2EsPWZCNRbbj9zeRKbqXxpNGVDFho1DXTVPAgqyh08.u..TJdxA; report-to cf-csp-endpoint",
+    "content-type": "application/json; charset=utf-8",
+    "reporting-endpoints": "cf-csp-endpoint=\"https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=1jphplWtqQwkwBgozAv4LrSDO67wX40o1iJnebCP4hg-1790350103.0364945-1.0.1.1-F_UEAHtwmyaOJqtfcLWkWKKJ3bQzOYHUAie9fx028P9h9_bNCKNOBctv4e.sroqvI47GHxrS8OsIqdvzR5WQ2ABhrh98_UYgdz2.9Z_JmwoAsW1OLJ5SAXYw2EsPWZCNRbbj9zeRKbqXxpNGVDFho1DXTVPAgqyh08.u..TJdxA\"",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "492",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "2",
+    "x-pagination-page-count": "10",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt10375624",
+        "plex": {
+          "guid": "5e1632fcef1040003f24861a",
+          "slug": "messages-meant-for-isabelle"
+        },
+        "slug": "messages-meant-for-isabelle-2026",
+        "tmdb": 614945,
+        "trakt": 458282
+      },
+      "year": 2026,
+      "title": "Messages Meant for Isabelle"
+    },
+    {
+      "ids": {
+        "imdb": "tt28014327",
+        "plex": {
+          "guid": "6488a8b8f542e5c273e5ae08",
+          "slug": "behind-the-lines"
+        },
+        "slug": "behind-the-lines-2026",
+        "tmdb": 1137844,
+        "trakt": 916057
+      },
+      "year": 2026,
+      "title": "Behind the Lines"
+    },
+    {
+      "ids": {
+        "imdb": "tt19847976",
+        "plex": {
+          "guid": "627b6faaef5508740b16ef7c",
+          "slug": "the-last-accord"
+        },
+        "slug": "the-last-accord-2025",
+        "tmdb": 967941,
+        "trakt": 777917
+      },
+      "year": 2025,
+      "title": "The Last Accord"
+    },
+    {
+      "ids": {
+        "imdb": "tt24950660",
+        "plex": {
+          "guid": "63a72f629cfe35576abf6d2f",
+          "slug": "one-week-to-forever"
+        },
+        "slug": "one-week-to-forever-2025",
+        "tmdb": 1259102,
+        "trakt": 1020977
+      },
+      "year": 2025,
+      "title": "One Week to Forever"
+    },
+    {
+      "ids": {
+        "imdb": "tt32890033",
+        "plex": {
+          "guid": "6693e558bb02d52ce0523254",
+          "slug": "monster-mayhem"
+        },
+        "slug": "monster-mayhem-2026",
+        "tmdb": 1315772,
+        "trakt": 1075712
+      },
+      "year": 2026,
+      "title": "Monster Mayhem"
+    },
+    {
+      "ids": {
+        "imdb": "tt27613895",
+        "plex": {
+          "guid": "644de0e194aaf9e3211bd751",
+          "slug": "little-hoof-big-league"
+        },
+        "slug": "little-hoof-big-league-2026",
+        "tmdb": 1297842,
+        "trakt": 1057839
+      },
+      "year": 2026,
+      "title": "Little Hoof, Big League"
+    },
+    {
+      "ids": {
+        "imdb": "tt27047903",
+        "plex": {
+          "guid": "640ada0a9a900f5602fb67de",
+          "slug": "the-mask-in-the-pines"
+        },
+        "slug": "the-mask-in-the-pines-2026",
+        "tmdb": 1159559,
+        "trakt": 934134
+      },
+      "year": 2026,
+      "title": "The Mask in the Pines"
+    },
+    {
+      "ids": {
+        "imdb": "tt4627382",
+        "plex": {
+          "guid": "5f40bfdf52f200004168e72e",
+          "slug": "the-toy-store-hideaway"
+        },
+        "slug": "the-toy-store-hideaway-2025",
+        "tmdb": 1242419,
+        "trakt": 1005789
+      },
+      "year": 2025,
+      "title": "The Toy Store Hideaway"
+    },
+    {
+      "ids": {
+        "imdb": "tt35672862",
+        "plex": {
+          "guid": "67a8bfbbc14f87b54f306104",
+          "slug": "room-17-at-blackthorn-inn"
+        },
+        "slug": "room-17-at-blackthorn-inn-2026",
+        "tmdb": 1430077,
+        "trakt": 1169847
+      },
+      "year": 2026,
+      "title": "Room 17 at Blackthorn Inn"
+    },
+    {
+      "ids": {
+        "imdb": "tt14173636",
+        "plex": {
+          "guid": "60448df6bd881e002cb9471e",
+          "slug": "dinner-upstairs"
+        },
+        "slug": "dinner-upstairs-2026",
+        "tmdb": 950028,
+        "trakt": 763652
+      },
+      "year": 2026,
+      "title": "Dinner Upstairs"
+    },
+    {
+      "ids": {
+        "imdb": "tt32338669",
+        "plex": {
+          "guid": "66405eced4e4bace15d4a05a",
+          "slug": "cargo-of-lies"
+        },
+        "slug": "cargo-of-lies-2026",
+        "tmdb": 1288445,
+        "trakt": 1048396
+      },
+      "year": 2026,
+      "title": "Cargo of Lies"
+    },
+    {
+      "ids": {
+        "imdb": "tt32278481",
+        "plex": {
+          "guid": "663a9668c5a010aaea7f7efc",
+          "slug": "the-vanishing-harbor"
+        },
+        "slug": "the-vanishing-harbor-2026",
+        "tmdb": 1202033,
+        "trakt": 969826
+      },
+      "year": 2026,
+      "title": "The Vanishing Harbor"
+    },
+    {
+      "ids": {
+        "imdb": "tt32268156",
+        "plex": {
+          "guid": "663538426239ea0710cc9256",
+          "slug": "sealed-inside"
+        },
+        "slug": "sealed-inside-2026",
+        "tmdb": 1284041,
+        "trakt": 1044265
+      },
+      "year": 2026,
+      "title": "Sealed Inside"
+    },
+    {
+      "ids": {
+        "imdb": "tt32897959",
+        "plex": {
+          "guid": "6694fe880e93ae4a502fba52",
+          "slug": "love-on-the-moor"
+        },
+        "slug": "love-on-the-moor-2026",
+        "tmdb": 1316092,
+        "trakt": 1077273
+      },
+      "year": 2026,
+      "title": "Love on the Moor"
+    },
+    {
+      "ids": {
+        "imdb": "tt31728330",
+        "plex": {
+          "guid": "65f5fd83e5a4d2133c1f760f",
+          "slug": "housekeeper-at-no-9"
+        },
+        "slug": "housekeeper-at-no-9-2026",
+        "tmdb": 1292695,
+        "trakt": 1052083
+      },
+      "year": 2026,
+      "title": "Housekeeper at No. 9"
+    },
+    {
+      "ids": {
+        "imdb": "tt4357198",
+        "plex": {
+          "guid": "5d776d4696b655001fe44936",
+          "slug": "the-inheritance-list"
+        },
+        "slug": "the-inheritance-list-2026",
+        "tmdb": 467905,
+        "trakt": 315133
+      },
+      "year": 2026,
+      "title": "The Inheritance List"
+    },
+    {
+      "ids": {
+        "imdb": "tt31195136",
+        "plex": {
+          "guid": "65cc295e16bb4db33e2d07f5",
+          "slug": "quiet-county"
+        },
+        "slug": "quiet-county-2026",
+        "tmdb": 1242332,
+        "trakt": 1005706
+      },
+      "year": 2026,
+      "title": "Quiet County"
+    },
+    {
+      "ids": {
+        "imdb": "tt34685692",
+        "plex": {
+          "guid": "673df95d0a12ec6df44cd658",
+          "slug": "cabin-for-two"
+        },
+        "slug": "cabin-for-two-2026",
+        "tmdb": 1390300,
+        "trakt": 1136565
+      },
+      "year": 2026,
+      "title": "Cabin for Two"
+    },
+    {
+      "ids": {
+        "imdb": "tt27552099",
+        "plex": {
+          "guid": "644591e573abe90e25abd2af",
+          "slug": "one-night-three-ways"
+        },
+        "slug": "one-night-three-ways-2026",
+        "tmdb": 1115544,
+        "trakt": 897563
+      },
+      "year": 2026,
+      "title": "One Night, Three Ways"
+    },
+    {
+      "ids": {
+        "imdb": "tt14142060",
+        "plex": {
+          "guid": "6040a2f86c9fc1002c865cfe",
+          "slug": "a-part-to-play"
+        },
+        "slug": "a-part-to-play-2025",
+        "tmdb": 1208348,
+        "trakt": 972436
+      },
+      "year": 2025,
+      "title": "A Part to Play"
+    },
+    {
+      "ids": {
+        "imdb": "tt14905854",
+        "plex": {
+          "guid": "60d59628083cff002cbde1e4",
+          "slug": "a-winter-of-loss"
+        },
+        "slug": "a-winter-of-loss-2025",
+        "tmdb": 858024,
+        "trakt": 686060
+      },
+      "year": 2025,
+      "title": "A Winter of Loss"
+    },
+    {
+      "ids": {
+        "imdb": "tt33296751",
+        "plex": {
+          "guid": "66d3f92a96f3a722ecbd8f01",
+          "slug": "the-safecracker-s-ear"
+        },
+        "slug": "the-safecracker-s-ear-2026",
+        "tmdb": 1340206,
+        "trakt": 1096313
+      },
+      "year": 2026,
+      "title": "The Safecracker's Ear"
+    },
+    {
+      "ids": {
+        "imdb": "tt22740896",
+        "plex": {
+          "guid": "63494545d109e4b804e15b4b",
+          "slug": "the-long-way-around"
+        },
+        "slug": "the-long-way-around-2026",
+        "tmdb": 1034716,
+        "trakt": 832181
+      },
+      "year": 2026,
+      "title": "The Long Way Around"
+    },
+    {
+      "ids": {
+        "imdb": "tt32376165",
+        "plex": {
+          "guid": "6643fb17b059625838476ab8",
+          "slug": "unknown-launch"
+        },
+        "slug": "unknown-launch-2025",
+        "tmdb": 1290159,
+        "trakt": 1049823
+      },
+      "year": 2025,
+      "title": "Unknown Launch"
+    },
+    {
+      "ids": {
+        "imdb": "tt29552248",
+        "plex": {
+          "guid": "6535c7bc554f8f85c88366ad",
+          "slug": "borrowed-wings"
+        },
+        "slug": "borrowed-wings-2026",
+        "tmdb": 1007757,
+        "trakt": 809985
+      },
+      "year": 2026,
+      "title": "Borrowed Wings"
+    },
+    {
+      "ids": {
+        "imdb": "tt27543578",
+        "plex": {
+          "guid": "6444698460085c97fa66013c",
+          "slug": "the-spare-halo"
+        },
+        "slug": "the-spare-halo-2025",
+        "tmdb": 1114967,
+        "trakt": 897095
+      },
+      "year": 2025,
+      "title": "The Spare Halo"
+    },
+    {
+      "ids": {
+        "imdb": "tt11561116",
+        "plex": {
+          "guid": "5f40987e1ae710004115f516",
+          "slug": "the-whispering-house"
+        },
+        "slug": "the-whispering-house-2026",
+        "tmdb": 860508,
+        "trakt": 688185
+      },
+      "year": 2026,
+      "title": "The Whispering House"
+    },
+    {
+      "ids": {
+        "imdb": "tt31170389",
+        "plex": {
+          "guid": "65c258d1c2bbf6a01e0af8a5",
+          "slug": "vows-in-the-dark"
+        },
+        "slug": "vows-in-the-dark-2026",
+        "tmdb": 1212763,
+        "trakt": 977901
+      },
+      "year": 2026,
+      "title": "Vows in the Dark"
+    },
+    {
+      "ids": {
+        "imdb": "tt8879928",
+        "plex": {
+          "guid": "5eb8f25aa2b0dd0040347ea9",
+          "slug": "cold-storage-spore-shift"
+        },
+        "slug": "cold-storage-spore-shift-2026",
+        "tmdb": 696393,
+        "trakt": 540330
+      },
+      "year": 2026,
+      "title": "Cold Storage: Spore Shift"
+    },
+    {
+      "ids": {
+        "imdb": "tt30274401",
+        "plex": {
+          "guid": "656f8c3b8690c21cd4de87e9",
+          "slug": "after-hours-at-the-arcade"
+        },
+        "slug": "after-hours-at-the-arcade-2025",
+        "tmdb": 1228246,
+        "trakt": 992825
+      },
+      "year": 2025,
+      "title": "After Hours at the Arcade"
+    },
+    {
+      "ids": {
+        "imdb": "tt31844586",
+        "plex": {
+          "guid": "65fe3fc25aa62f67c0f04cee",
+          "slug": "the-house-on-the-flatbed"
+        },
+        "slug": "the-house-on-the-flatbed-2025",
+        "tmdb": 1223601,
+        "trakt": 988284
+      },
+      "year": 2025,
+      "title": "The House on the Flatbed"
+    },
+    {
+      "ids": {
+        "imdb": "tt33311069",
+        "plex": {
+          "guid": "66d901a36abce217352f0f44",
+          "slug": "fury-road-to-nowhere"
+        },
+        "slug": "fury-road-to-nowhere-2026",
+        "tmdb": 1280738,
+        "trakt": 1040684
+      },
+      "year": 2026,
+      "title": "Fury Road to Nowhere"
+    },
+    {
+      "ids": {
+        "imdb": "tt33100314",
+        "plex": {
+          "guid": "66c0a54c068710b4e04fe0ab",
+          "slug": "the-octopus-knows"
+        },
+        "slug": "the-octopus-knows-2026",
+        "tmdb": 1330021,
+        "trakt": 1088230
+      },
+      "year": 2026,
+      "title": "The Octopus Knows"
+    },
+    {
+      "ids": {
+        "imdb": "tt29644189",
+        "plex": {
+          "guid": "653e690e2bab46fd13a2c851",
+          "slug": "the-number-on-the-wall"
+        },
+        "slug": "the-number-on-the-wall-2025",
+        "tmdb": 1197137,
+        "trakt": 965839
+      },
+      "year": 2025,
+      "title": "The Number on the Wall"
+    },
+    {
+      "ids": {
+        "imdb": "tt34276058",
+        "plex": {
+          "guid": "66fc51e2bd9e57786466e832",
+          "slug": "family-holiday-the-capital-mission"
+        },
+        "slug": "family-holiday-the-capital-mission-2025",
+        "tmdb": 1363123,
+        "trakt": 1112909
+      },
+      "year": 2025,
+      "title": "Family Holiday: The Capital Mission"
+    },
+    {
+      "ids": {
+        "imdb": "tt35309713",
+        "plex": {
+          "guid": "6780d7bbb235b8737148168a",
+          "slug": "the-people-s-avenger"
+        },
+        "slug": "the-people-s-avenger-2026",
+        "tmdb": 1413976,
+        "trakt": 1156761
+      },
+      "year": 2026,
+      "title": "The People's Avenger"
+    },
+    {
+      "ids": {
+        "imdb": "tt1756855",
+        "plex": {
+          "guid": "5d77707b81ba41001faf1629",
+          "slug": "coyote-county-v-meridian-supply"
+        },
+        "slug": "coyote-county-v-meridian-supply-2026",
+        "tmdb": 1204680,
+        "trakt": 970531
+      },
+      "year": 2026,
+      "title": "Coyote County v. Meridian Supply"
+    },
+    {
+      "ids": {
+        "imdb": "tt31425731",
+        "plex": {
+          "guid": "65d7b25153cfd710eac8ba76",
+          "slug": "dad-duty-under-fire"
+        },
+        "slug": "dad-duty-under-fire-2025",
+        "tmdb": 1248226,
+        "trakt": 1010850
+      },
+      "year": 2025,
+      "title": "Dad Duty: Under Fire"
+    },
+    {
+      "ids": {
+        "imdb": "tt7130300",
+        "plex": {
+          "guid": "5f40d07158b26e00426c19ce",
+          "slug": "overboard-at-midnight"
+        },
+        "slug": "overboard-at-midnight-2025",
+        "tmdb": 1290879,
+        "trakt": 1050468
+      },
+      "year": 2025,
+      "title": "Overboard at Midnight"
+    },
+    {
+      "ids": {
+        "imdb": "tt18259538",
+        "plex": {
+          "guid": "621895759fb119c33badc62d",
+          "slug": "the-wind-legacy"
+        },
+        "slug": "the-wind-legacy-2026",
+        "tmdb": 980431,
+        "trakt": 787853
+      },
+      "year": 2026,
+      "title": "The Wind Legacy"
+    },
+    {
+      "ids": {
+        "imdb": "tt32273171",
+        "plex": {
+          "guid": "66362377cafd6d1e64c0841d",
+          "slug": "the-outlaw-s-last-road"
+        },
+        "slug": "the-outlaw-s-last-road-2026",
+        "tmdb": 1284465,
+        "trakt": 1044784
+      },
+      "year": 2026,
+      "title": "The Outlaw's Last Road"
+    },
+    {
+      "ids": {
+        "imdb": "tt33028778",
+        "plex": {
+          "guid": "66a2dd2f4d97509f81ea9a2a",
+          "slug": "the-infected-chimp"
+        },
+        "slug": "the-infected-chimp-2026",
+        "tmdb": 1315303,
+        "trakt": 1075286
+      },
+      "year": 2026,
+      "title": "The Infected Chimp"
+    },
+    {
+      "ids": {
+        "imdb": "tt27419466",
+        "plex": {
+          "guid": "642d485ce8b269a4b9c8a4a8",
+          "slug": "beyond-the-blue-reef"
+        },
+        "slug": "beyond-the-blue-reef-2026",
+        "tmdb": 1108427,
+        "trakt": 891793
+      },
+      "year": 2026,
+      "title": "Beyond the Blue Reef"
+    },
+    {
+      "ids": {
+        "imdb": "tt34611082",
+        "plex": {
+          "guid": "67402d035ac3a69217e5618f",
+          "slug": "his-majesty-her-world"
+        },
+        "slug": "his-majesty-her-world-2026",
+        "tmdb": 1368881,
+        "trakt": 1117821
+      },
+      "year": 2026,
+      "title": "His Majesty, Her World"
+    },
+    {
+      "ids": {
+        "imdb": "tt32362890",
+        "plex": {
+          "guid": "6646bd77603bbcde0dc847cc",
+          "slug": "shark-tide"
+        },
+        "slug": "shark-tide-2026",
+        "tmdb": 1290417,
+        "trakt": 1050053
+      },
+      "year": 2026,
+      "title": "Shark Tide"
+    },
+    {
+      "ids": {
+        "imdb": "tt33397980",
+        "plex": {
+          "guid": "66ee181a903be48819e5469b",
+          "slug": "the-no-dating-clause"
+        },
+        "slug": "the-no-dating-clause-2026",
+        "tmdb": 1358005,
+        "trakt": 1108471
+      },
+      "year": 2026,
+      "title": "The No-Dating Clause"
+    },
+    {
+      "ids": {
+        "imdb": "tt18392014",
+        "plex": {
+          "guid": "62287ddb7f4b98f714a228dd",
+          "slug": "the-impossible-score"
+        },
+        "slug": "the-impossible-score-2025",
+        "tmdb": 941109,
+        "trakt": 755536
+      },
+      "year": 2025,
+      "title": "The Impossible Score"
+    },
+    {
+      "ids": {
+        "imdb": "tt33763941",
+        "plex": {
+          "guid": "670d289e793d5e29967babce",
+          "slug": "the-road-passenger"
+        },
+        "slug": "the-road-passenger-2026",
+        "tmdb": 1368314,
+        "trakt": 1117331
+      },
+      "year": 2026,
+      "title": "The Road Passenger"
+    },
+    {
+      "ids": {
+        "imdb": "tt29768334",
+        "plex": {
+          "guid": "6549b32b88546b813c42f424",
+          "slug": "timber-and-ash"
+        },
+        "slug": "timber-and-ash-2025",
+        "tmdb": 1241983,
+        "trakt": 1005401
+      },
+      "year": 2025,
+      "title": "Timber and Ash"
+    },
+    {
+      "ids": {
+        "imdb": "tt40792117",
+        "plex": {
+          "guid": "69c4507a7cfecf363d58861c",
+          "slug": "impact-the-case-of-lena-ortiz"
+        },
+        "slug": "impact-the-case-of-lena-ortiz-2026",
+        "tmdb": 1662317,
+        "trakt": 1362157
+      },
+      "year": 2026,
+      "title": "Impact: The Case of Lena Ortiz"
+    }
+  ]
+}

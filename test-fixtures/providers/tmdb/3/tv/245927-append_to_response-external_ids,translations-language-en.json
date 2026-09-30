@@ -1,0 +1,642 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22638",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a07283d5aa2310efcb3f98b37773216d\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5QsLvWh8J1mXl1W05wNJknMmhzR.jpg",
+    "created_by": [
+      {
+        "id": 15892,
+        "credit_id": "67369ace48e9d2cf01a89135",
+        "name": "Mara March",
+        "original_name": "Mara March",
+        "gender": 2,
+        "profile_path": "/grLBoLU2blYEoT8vjGFOiM8mw1D.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2025-01-26",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/films/eden-under-glass",
+    "id": 245927,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-03-30",
+    "last_episode_to_air": {
+      "id": 6745140,
+      "name": "Blue Archive",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 7.797,
+      "vote_count": 32,
+      "air_date": "2026-03-30",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "2PTV08",
+      "runtime": 53,
+      "season_number": 2,
+      "show_id": 245927,
+      "still_path": "/6V2EnynbNcRDqJ7X8l7ye9SJYZ6.jpg"
+    },
+    "name": "Eden Under Glass",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 453,
+        "logo_path": "/pqUTCleNUiTLAVlelGxUgWn1ELh.png",
+        "name": "Golden Bridge Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 16,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Eden Under Glass",
+    "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+    "popularity": 47.1097,
+    "poster_path": "/l8RqfhqEk04W5sSOjQ9zeWU1DyM.jpg",
+    "production_companies": [
+      {
+        "id": 236166,
+        "logo_path": "/8rFlu5iytnjsciYXZDw90ktllCI.png",
+        "name": "Silent Valley Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 41131,
+        "logo_path": null,
+        "name": "Northern Orchard Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-01-26",
+        "episode_count": 8,
+        "id": 378226,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/rkwqy7uE0ORdUxDFNeVq7vpJORN.jpg",
+        "season_number": 1,
+        "vote_average": 5.9
+      },
+      {
+        "air_date": "2026-02-23",
+        "episode_count": 8,
+        "id": 486538,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/ho9edfW4VTmxWaNKgBTG43nfymq.jpg",
+        "season_number": 2,
+        "vote_average": 6.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Paradise has a locked door.",
+    "type": "Scripted",
+    "vote_average": 7.566,
+    "vote_count": 551,
+    "external_ids": {
+      "imdb_id": "tt27444205",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 454565,
+      "tvrage_id": null,
+      "wikidata_id": "Q126126253",
+      "facebook_id": "ParadiseonHulu",
+      "instagram_id": "paradiseonhulu",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Eden Under Glass",
+            "overview": "After a catastrophe seals a small community inside a remote shelter, its residents discover that their promised sanctuary hides a conspiracy reaching far beyond its walls.",
+            "homepage": "https://example.test/films/eden-under-glass",
+            "tagline": "Paradise has a locked door."
+          }
+        }
+      ]
+    }
+  }
+}

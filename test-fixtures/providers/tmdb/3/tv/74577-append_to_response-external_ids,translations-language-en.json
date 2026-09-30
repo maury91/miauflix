@@ -1,0 +1,674 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14027",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ccfaf3f3c6b6a27e12aa3d2ce9564ab4\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/nfWhNM5VVd9a5bEGobs83TWTuLM.jpg",
+    "created_by": [
+      {
+        "id": 1674284,
+        "credit_id": "5c451c6d0e0a264965c63b6f",
+        "name": "Devon Young",
+        "original_name": "Devon Young",
+        "gender": 2,
+        "profile_path": "/lyDMiDgT9bMG5v15yARaNtXBJZm.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2017-10-24",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/series/golden-bridge-kingswell",
+    "id": 74577,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2019-11-07",
+    "last_episode_to_air": {
+      "id": 1971978,
+      "name": "Scarlet Lantern",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.3,
+      "vote_count": 43,
+      "air_date": "2019-11-07",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 19,
+      "season_number": 2,
+      "show_id": 74577,
+      "still_path": "/e9KZY45uOlUtVGO3Ca261jPayFN.jpg"
+    },
+    "name": "Golden Bridge: Kingswell",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 26,
+        "logo_path": "/7Ai64ZDaVbGDtm7f0QSZAKohjk4.png",
+        "name": "Quiet Bridge Network",
+        "origin_country": "GB"
+      },
+      {
+        "id": 1988,
+        "logo_path": "/4cseQpNaEvjS1EEgiOE8XdEl26t.png",
+        "name": "Silver Station Network",
+        "origin_country": "GB"
+      }
+    ],
+    "number_of_episodes": 16,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_name": "Golden Bridge: Kingswell",
+    "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 16.9901,
+    "poster_path": "/f1OV9xEJCZVYcYSDRr5xOD8NJw3.jpg",
+    "production_companies": [
+      {
+        "id": 34313,
+        "logo_path": null,
+        "name": "Falling Valley Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 15788,
+        "logo_path": "/haOHry5U7AMG3YOsPub4Az7OW2y.png",
+        "name": "Ivory Meridian Studios",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2014-06-04",
+        "episode_count": 10,
+        "id": 135095,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2017-10-24",
+        "episode_count": 8,
+        "id": 94165,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/3xzfmg9olP5XzrQrJgyku2nd6P0.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2019-11-04",
+        "episode_count": 8,
+        "id": 133793,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/e00rak9Xp3DSp42hm7EK3omnhQS.jpg",
+        "season_number": 2,
+        "vote_average": 7.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8,
+    "vote_count": 3684,
+    "external_ids": {
+      "imdb_id": "tt6257970",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 336522,
+      "tvrage_id": null,
+      "wikidata_id": "Q30636463",
+      "facebook_id": "TEOTFWNetflix",
+      "instagram_id": "teotfw",
+      "twitter_id": "TEOTFW"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "Golden Bridge: Kingswell",
+            "overview": "Golden Bridge: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/golden-bridge-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,624 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24893",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"4f35123e2a8c84a7c33dfb30159e37f4\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kmS3arkEsybCEw0ddWhDVQxCXf5.jpg",
+    "belongs_to_collection": null,
+    "budget": 14800000,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/ashes-of-our-house",
+    "id": 1380316,
+    "imdb_id": "tt34379307",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Ashes of Our House",
+    "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+    "popularity": 8.5079,
+    "poster_path": "/rCYQGHdoz7qwYsb6wXETJfUfDLX.jpg",
+    "production_companies": [
+      {
+        "id": 74251,
+        "logo_path": "/erf3CwR8em5JI4u8K1g1jOGrcnr.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 267168,
+        "logo_path": "/xAot4SSOIHiWQ2WEnVXYGR1lce9.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 197821,
+        "logo_path": "/7Di681ml6mBfrWPA8o34cgSdwoe.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 82474,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-05-14",
+    "revenue": 4857896,
+    "runtime": 100,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Blood keeps its own account.",
+    "title": "Ashes of Our House",
+    "video": false,
+    "vote_average": 5.9,
+    "vote_count": 135,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 100,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 100,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 99,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 100,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 100,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 100,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/ashes-of-our-house",
+            "overview": "Estranged sisters reunite to confront the family patriarch whose old violence shaped both their lives.",
+            "runtime": 0,
+            "tagline": "Blood keeps its own account.",
+            "title": "Ashes of Our House"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z7D92Edbp3hHYd9YrWQqUBxY7eO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yvUSxKodDwPWYx4eWGtoHM9CVO7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.435,
+          "height": 294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8cswdtEI76pLtq6gGBmxCODgwev.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1598
+        },
+        {
+          "aspect_ratio": 5.28,
+          "height": 311,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7NODyLruDXvb95YL8zyS8js4x5G.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1642
+        },
+        {
+          "aspect_ratio": 5.453,
+          "height": 782,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nQAfuBNI8XQojbgGrVDFe2MIqpX.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4264
+        },
+        {
+          "aspect_ratio": 5.453,
+          "height": 782,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oXrTkHJ2O9dmb7HuXV9xW5EgDgd.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4264
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rCYQGHdoz7qwYsb6wXETJfUfDLX.jpg",
+          "vote_average": 8.034,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h4WzpIjTiOXwUna2lvEvfsp8jDM.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b4n80ojWpHFitVQC1WBtfXiEBai.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5rY8gGfI2TnncJLkb8z0YpMhzSV.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sddvaQItcadusOxciWEqxH8y53x.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c3nN8XnbYfj2ZEBcNqqlTbtLiQy.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xja0wHIYdaJzZ5Fk2iyP3TDzkpk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4mYRr6qEGNvaPChpi12nmv4bHfK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ke9nmYliON6540iUcYscBQ8W78i.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rpss8YTZ1XHTOiDv8pHA7ADjlqM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}
