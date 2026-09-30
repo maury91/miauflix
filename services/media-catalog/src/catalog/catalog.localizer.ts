@@ -18,6 +18,11 @@ export class CatalogLocalizer {
     private readonly backdropFocus: BackdropFocusRepository
   ) {}
 
+  /**
+   * Builds movie details using stored translations with row text as fallback and cached backdrop
+   * focus, without starting image analysis. Fetches missing genre translations on a best-effort
+   * basis; other database reads and date conversion errors propagate.
+   */
   async localizeMovie(row: MovieRow, language: string): Promise<MovieDetail> {
     await this.ensureGenreTranslations(
       this.localization.genreIdsOf('movie', row.media_id),
@@ -49,6 +54,11 @@ export class CatalogLocalizer {
     };
   }
 
+  /**
+   * Builds show details and season summaries using stored translations with row text as fallback
+   * and cached backdrop focus, without starting image analysis. Fetches missing genre translations
+   * on a best-effort basis; other database reads, runtime JSON parsing, and date errors propagate.
+   */
   async localizeTVShow(row: TVShowRow, language: string): Promise<TVShowDetail> {
     await this.ensureGenreTranslations(this.localization.genreIdsOf('tv', row.media_id), language);
     const translation = this.translationFor('tv', row.media_id, language);
@@ -121,6 +131,10 @@ export class CatalogLocalizer {
     );
   }
 
+  /**
+   * Reads cached focus without analysis, returning null for unsupported backdrops or cache misses.
+   * Database errors propagate.
+   */
   private cachedBackdropFocus(backdrop: string) {
     const source = backdrop ? this.provider.getBackdropAnalysisSource(backdrop) : null;
     return source

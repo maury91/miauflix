@@ -88,6 +88,7 @@ export const mediaApi = createApi({
       BackdropFocusResponse,
       { mediaType: 'movie' | 'tv'; mediaId: number }
     >({
+      /** Requests backdrop focus for a catalog media ID, returning request failures as RTK Query errors. */
       async queryFn({ mediaType, mediaId }, api) {
         return {
           ...(await sessionRequest<BackdropFocusResponse>(

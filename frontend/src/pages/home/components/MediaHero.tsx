@@ -139,6 +139,11 @@ const Overview = styled.p`
   line-height: 1.5;
 `;
 
+/**
+ * Displays media details and crossfades loaded backdrops using supplied, cached, or requested focus.
+ * Analysis failure uses right-center positioning; image load failure clears the active backdrop.
+ * Null media renders an empty hero, and reduced-motion preferences disable the fade.
+ */
 export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const heroRef = useRef<HTMLElement>(null);

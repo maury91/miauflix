@@ -143,6 +143,11 @@ export class CatalogService {
     return genres;
   }
 
+  /**
+   * Returns cached or newly computed normalized backdrop focus for an already stored media ID.
+   * Does not hydrate missing media. Throws HttpError 404 for a missing row or 422 for an
+   * unsupported backdrop; database, retry-delay, download, and analysis errors propagate.
+   */
   async ensureBackdropFocus(mediaType: MediaType, mediaId: number): Promise<BackdropFocus> {
     const row =
       mediaType === 'movie' ? this.movies.getMovie(mediaId) : this.tvShows.getTVShow(mediaId);

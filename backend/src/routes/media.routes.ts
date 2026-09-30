@@ -13,6 +13,11 @@ const paramsSchema = z.object({
   mediaId: z.string().regex(/^\d+$/u),
 });
 
+/**
+ * Creates the authenticated, rate-limited backdrop analysis route for catalog media IDs.
+ * The handler rejects invalid IDs with 400 and forwards catalog and response validation errors
+ * to Hono's error handling.
+ */
 export const createMediaRoutes = ({
   auditLogService,
   catalogClient,

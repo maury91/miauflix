@@ -159,6 +159,10 @@ interface MediaDetailsProps {
 
 const formatYear = (value: string | null | undefined) => value?.slice(0, 4) ?? '';
 
+/**
+ * Loads movie or show details and exposes season/episode navigation through the forwarded ref.
+ * Requests missing backdrop focus, falling back to right-center positioning on analysis failure.
+ */
 export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(function MediaDetails(
   { media },
   forwardedRef

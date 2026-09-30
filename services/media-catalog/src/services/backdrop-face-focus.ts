@@ -21,9 +21,10 @@ export type BackdropFaceFocusDetector = (image: Buffer) => Promise<BackdropFocus
 const MIN_FACE_CONFIDENCE = 0.5;
 
 /**
- * Returns the center of the smallest rectangle containing every accepted face.
- * A single face naturally becomes its own center, while multiple faces are
- * kept together so a crop cannot silently discard one of them.
+ * Returns the center of the accepted faces' bounding rectangle, normalized to [0, 1].
+ * Boxes and image dimensions are in pixels. Boxes are clipped to the image; invalid or
+ * empty boxes and supplied scores below 0.5 or non-finite scores are ignored.
+ * Returns null for non-positive or non-finite image dimensions or no accepted faces.
  */
 export function getFaceGroupFocus(
   faces: readonly FaceBox[],
@@ -97,14 +98,21 @@ interface HumanConstructor {
 
 let humanPromise: Promise<HumanRuntime | null> | undefined;
 
+/** Converts a directory path to a file URL with a trailing slash for resolving assets. */
 function directoryUrl(directory: string): string {
   return pathToFileURL(directory.endsWith('/') ? directory : `${directory}/`).toString();
 }
 
+/** Resolves a bundled asset directory relative to this module, independent of the working directory. */
 function bundledDirectory(relativePath: string): string {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
+/**
+ * Loads the face detector from bundled assets or the configured model and WASM directories.
+ * Temporarily enables file URL reads through global fetch, restoring it after initialization.
+ * Initialization and model-loading failures return null; earlier configuration errors propagate.
+ */
 async function loadHuman(): Promise<HumanRuntime | null> {
   const modelDirectory =
     process.env.BACKDROP_FOCUS_MODEL_DIR ??
@@ -157,11 +165,13 @@ async function loadHuman(): Promise<HumanRuntime | null> {
   }
 }
 
+/** Shares one detector initialization, caching null on failure without retrying. */
 async function getHuman(): Promise<HumanRuntime | null> {
   humanPromise ??= loadHuman().catch(() => null);
   return humanPromise;
 }
 
+/** Reads a four-number finite box, or returns null; size and confidence filtering happen later. */
 function readFaceBox(face: HumanFace): FaceBox | null {
   if (!Array.isArray(face.box) || face.box.length !== 4) return null;
   const values = face.box.map(value => (typeof value === 'number' ? value : Number.NaN));
@@ -171,6 +181,11 @@ function readFaceBox(face: HumanFace): FaceBox | null {
   return { x, y, width, height, score };
 }
 
+/**
+ * Finds the normalized face-group center in the image bytes after applying image orientation.
+ * Returns null if detector initialization fails or no faces are accepted. Image decoding,
+ * tensor creation, and detection errors propagate; the detection tensor is disposed afterward.
+ */
 export async function detectBackdropFaceFocus(image: Buffer): Promise<BackdropFocus | null> {
   const human = await getHuman();
   if (!human) return null;

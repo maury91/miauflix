@@ -107,6 +107,11 @@ export class CatalogClientService implements ConfigurableService {
     });
   }
 
+  /**
+   * Requests cached or newly computed normalized backdrop focus using the catalog media ID.
+   * Rejects with ServiceNotConfiguredError when the catalog is not ready or returns 503.
+   * Network, timeout, other HTTP errors (including 404), and invalid response errors propagate.
+   */
   async ensureBackdropFocus(
     mediaType: 'movie' | 'tv',
     mediaId: number

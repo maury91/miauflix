@@ -37,6 +37,13 @@ export class BackdropFocusService {
     private readonly detectFaceFocus: BackdropFaceFocusDetector = detectBackdropFaceFocus
   ) {}
 
+  /**
+   * Returns cached focus or analyzes and persists it, sharing concurrent work for the same
+   * provider, image key, and algorithm version. Coordinates are normalized to [0, 1].
+   * Face detection failures or no faces fall back to a square smartcrop analysis.
+   * Rejects with backdrop_focus_temporarily_unavailable during the failure retry delay;
+   * download, image analysis, and database errors otherwise propagate.
+   */
   async ensure(source: ProviderBackdropSource, provider: string): Promise<BackdropFocus> {
     const key: BackdropFocusKey = { provider, imageKey: source.key };
     const cached = this.repository.get(key);
@@ -52,6 +59,11 @@ export class BackdropFocusService {
     return promise;
   }
 
+  /**
+   * Downloads and analyzes a backdrop, saving valid focus or recording a failure for retry.
+   * Rejects missing dimensions or invalid focus and propagates download and analysis errors.
+   * A database error while recording failure can replace the original error.
+   */
   private async compute(
     source: ProviderBackdropSource,
     key: BackdropFocusKey
@@ -87,6 +99,10 @@ export class BackdropFocusService {
     }
   }
 
+  /**
+   * Returns the preferred square crop's center, normalized by the source dimensions in pixels.
+   * Image processing and crop analysis errors propagate.
+   */
   private async computeSmartcrop(
     response: Buffer,
     image: Sharp,
@@ -124,6 +140,11 @@ export class BackdropFocusService {
     } satisfies BackdropFocus;
   }
 
+  /**
+   * Downloads at most 8 MiB of JPEG, PNG, or WebP bytes with a 15-second timeout and no redirects.
+   * Rejects unsuccessful HTTP responses, unsupported content types, missing bodies, and oversized
+   * images. Aborted downloads reject with image_download_timeout; other fetch/read errors propagate.
+   */
   private async download(url: string): Promise<Buffer> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), DOWNLOAD_TIMEOUT_MS);

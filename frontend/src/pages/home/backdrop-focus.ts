@@ -17,6 +17,13 @@ const clampUnit = (value: number) => Math.min(1, Math.max(0, value));
 const formatPosition = (x: number, y: number) =>
   `${(clampUnit(x) * 100).toFixed(2)}% ${(clampUnit(y) * 100).toFixed(2)}%`;
 
+/**
+ * Returns CSS background-position percentages for a normalized image focus point.
+ * Missing focus uses right center; missing or invalid dimensions use the focus directly.
+ * With positive finite dimensions in pixels, positions a cover image toward the normalized
+ * container target (default 0.57, 0.5), clamping to its edges and centering axes without overflow.
+ * Focus and target coordinates must not be NaN; out-of-range values are clamped to [0, 1].
+ */
 export function getBackdropPosition(
   focus: BackdropFocus | null | undefined,
   context?: BackdropPositionContext

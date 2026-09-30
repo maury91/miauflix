@@ -149,6 +149,10 @@ export class TmdbProvider implements CatalogProvider {
     return [...seasonNumbers];
   }
 
+  /**
+   * Derives a size-independent image key and w780 analysis URL from an HTTPS image.tmdb.org URL.
+   * Returns null for invalid URLs, other hosts or protocols, or unrecognized image paths.
+   */
   getBackdropAnalysisSource(backdrop: string): ProviderBackdropSource | null {
     try {
       const url = new URL(backdrop);

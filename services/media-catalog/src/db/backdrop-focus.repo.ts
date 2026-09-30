@@ -19,6 +19,10 @@ export class BackdropFocusRepository {
     return this.database.db;
   }
 
+  /**
+   * Returns stored focus for the current algorithm, or null for missing, failed, or incomplete rows.
+   * Database errors propagate.
+   */
   get(key: BackdropFocusKey): BackdropFocus | null {
     const row = this.db
       .select()
@@ -36,6 +40,10 @@ export class BackdropFocusRepository {
     return { x: row.focusX, y: row.focusY };
   }
 
+  /**
+   * Allows analysis when the current algorithm has no retry deadline or it has elapsed.
+   * Database errors propagate.
+   */
   shouldRetry(key: BackdropFocusKey): boolean {
     const row = this.db
       .select({ retryAfter: backdropFocus.retryAfter })
@@ -51,6 +59,10 @@ export class BackdropFocusRepository {
     return !row?.retryAfter || row.retryAfter <= Date.now();
   }
 
+  /**
+   * Stores focus for the current algorithm and clears any failure and retry deadline.
+   * Coordinates must already be normalized and validated; database errors propagate.
+   */
   saveSuccess(key: BackdropFocusKey, focus: BackdropFocus): void {
     this.db
       .insert(backdropFocus)
@@ -78,6 +90,10 @@ export class BackdropFocusRepository {
       .run();
   }
 
+  /**
+   * Records failure for the current algorithm, clears focus, and defers retries for one hour.
+   * Database errors propagate.
+   */
   saveFailure(key: BackdropFocusKey, errorCode: string): void {
     this.db
       .insert(backdropFocus)

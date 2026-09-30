@@ -5,6 +5,7 @@ import type { MediaDto, MovieDto, TVShowDto } from './list.types';
 /** Catalog detail joined with the local index id for list rendering. */
 export type SerializableMedia = { localId: number } & (MovieDetail | TVShowDetail);
 
+/** Converts catalog details to a list item, retaining both IDs and any cached backdrop focus. */
 export function serializeMedia(media: SerializableMedia): MediaDto {
   if (media.mediaType === 'movie') {
     const movie = media as MovieDetail & { localId: number };
