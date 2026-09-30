@@ -1,3 +1,4 @@
+import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import type { EpisodeRow, MovieRow, SeasonRow, TVShowRow } from '../db/catalog-db.types';
 import { LocalizationRepository } from '../db/localization.repo';
 import { TVShowRepository } from '../db/tv-show.repo';
@@ -13,7 +14,8 @@ export class CatalogLocalizer {
   constructor(
     private readonly localization: LocalizationRepository,
     private readonly tvShows: TVShowRepository,
-    private readonly provider: CatalogProvider
+    private readonly provider: CatalogProvider,
+    private readonly backdropFocus: BackdropFocusRepository
   ) {}
 
   async localizeMovie(row: MovieRow, language: string): Promise<MovieDetail> {
@@ -33,6 +35,7 @@ export class CatalogLocalizer {
       runtime: row.runtime,
       poster: row.poster,
       backdrop: row.backdrop,
+      backdropFocus: this.cachedBackdropFocus(row.backdrop),
       logo: row.logo,
       genres: this.localization.localizedGenreNames(
         'movie',
@@ -63,6 +66,7 @@ export class CatalogLocalizer {
       episodeRunTime: JSON.parse(row.episode_run_time) as number[],
       poster: row.poster,
       backdrop: row.backdrop,
+      backdropFocus: this.cachedBackdropFocus(row.backdrop),
       logo: '',
       genres: this.localization.localizedGenreNames('tv', row.media_id, language, DEFAULT_LANGUAGE),
       popularity: row.popularity,
@@ -115,6 +119,13 @@ export class CatalogLocalizer {
         .getTranslations(entityType, entityId)
         .find(row => row.language === language) ?? {}
     );
+  }
+
+  private cachedBackdropFocus(backdrop: string) {
+    const source = backdrop ? this.provider.getBackdropAnalysisSource(backdrop) : null;
+    return source
+      ? this.backdropFocus.get({ provider: this.provider.name, imageKey: source.key })
+      : null;
   }
 
   private seasonSummary(season: SeasonRow) {

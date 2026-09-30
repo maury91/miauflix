@@ -1,5 +1,10 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { MovieResponse, SeasonResponse, ShowResponse } from '@miauflix/backend';
+import type {
+  BackdropFocusResponse,
+  MovieResponse,
+  SeasonResponse,
+  ShowResponse,
+} from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
@@ -79,7 +84,31 @@ export const mediaApi = createApi({
         };
       },
     }),
+    ensureBackdropFocus: builder.mutation<
+      BackdropFocusResponse,
+      { mediaType: 'movie' | 'tv'; mediaId: number }
+    >({
+      async queryFn({ mediaType, mediaId }, api) {
+        return {
+          ...(await sessionRequest<BackdropFocusResponse>(
+            headers =>
+              backendClient.api.media[':mediaType'][':mediaId']['backdrop-focus'].$post(
+                { param: { mediaType, mediaId: String(mediaId) } },
+                { headers }
+              ),
+            api.getState,
+            api.dispatch,
+            'Failed to analyze backdrop focus'
+          )),
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetMovieQuery, useGetShowQuery, useGetSeasonQuery } = mediaApi;
+export const {
+  useGetMovieQuery,
+  useGetShowQuery,
+  useGetSeasonQuery,
+  useEnsureBackdropFocusMutation,
+} = mediaApi;

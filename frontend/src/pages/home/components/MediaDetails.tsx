@@ -1,4 +1,5 @@
 import {
+  useEnsureBackdropFocusMutation,
   useGetMovieQuery,
   useGetSeasonQuery,
   useGetShowQuery,
@@ -11,10 +12,11 @@ import { forwardRef } from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import { getBackdropPosition } from '../backdrop-focus';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
 import { getImageUrl, getMediaTitle } from '../media.utils';
 
-const Page = styled.main<{ $backdrop: string }>`
+const Page = styled.main<{ $backdrop: string; $position: string }>`
   position: absolute;
   inset: 0;
   z-index: 3;
@@ -29,7 +31,8 @@ const Page = styled.main<{ $backdrop: string }>`
       rgba(0, 0, 0, 0.14)
     ),
     linear-gradient(0deg, #000 0%, transparent 42%),
-    url(${({ $backdrop }) => $backdrop}) center right / cover no-repeat,
+    ${({ $backdrop, $position }) =>
+      `url(${JSON.stringify($backdrop)}) ${$position} / cover no-repeat`},
     #000;
   outline: none;
   scrollbar-width: none;
@@ -160,7 +163,11 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   { media },
   forwardedRef
 ) {
+  const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const pageRef = useRef<HTMLElement>(null);
+  const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState<
+    MediaDetailsProps['media']['backdropFocus']
+  >(media.backdropFocus);
   const [focusArea, setFocusArea] = useState<'season' | 'episodes'>('season');
   const [seasonOpen, setSeasonOpen] = useState(false);
   const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(0);
@@ -189,6 +196,28 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     setTemporarySeasonIndex(0);
     setSelectedEpisodeIndex(0);
   }, [media]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setResolvedBackdropFocus(media.backdropFocus);
+    if (media.backdropFocus || !media.backdrop) return;
+
+    void ensureBackdropFocus({
+      mediaType: media._type === 'movie' ? 'movie' : 'tv',
+      mediaId: media.mediaId,
+    })
+      .unwrap()
+      .then(result => {
+        if (!cancelled) setResolvedBackdropFocus(result.backdropFocus);
+      })
+      .catch(() => {
+        if (!cancelled) setResolvedBackdropFocus(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [ensureBackdropFocus, media]);
 
   useEffect(() => {
     setSelectedEpisodeIndex(0);
@@ -281,6 +310,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const isError = media._type === 'movie' ? movie.isError : show.isError;
   const title = current?.title ?? getMediaTitle(media);
   const backdrop = getImageUrl(current?.backdrop ?? media.backdrop, 'original');
+  const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
+  const backdropPosition = getBackdropPosition(backdropFocus);
   const metadata = useMemo(() => {
     if (!current) return '';
     if (current.type === 'movie') {
@@ -302,7 +333,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, [current]);
 
   return (
-    <Page ref={pageRef} tabIndex={-1} $backdrop={backdrop} aria-label={`${title} details`}>
+    <Page
+      ref={pageRef}
+      tabIndex={-1}
+      $backdrop={backdrop}
+      $position={backdropPosition}
+      aria-label={`${title} details`}
+    >
       <Content>
         {current?.logo ? (
           <Logo src={getImageUrl(current.logo)} alt={title} />

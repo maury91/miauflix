@@ -91,6 +91,11 @@ export interface ProviderGenre {
   name: string;
 }
 
+export interface ProviderBackdropSource {
+  key: string;
+  url: string;
+}
+
 export interface ProviderChangesPage {
   page: number;
   totalPages: number;
@@ -143,4 +148,7 @@ export interface CatalogProvider {
 
   /** Season numbers of a tv show touched by upstream changes. */
   seasonChanges(mediaId: number): Promise<number[]>;
+
+  /** Return the provider-owned low-resolution source used for backdrop analysis. */
+  getBackdropAnalysisSource(backdrop: string): ProviderBackdropSource | null;
 }

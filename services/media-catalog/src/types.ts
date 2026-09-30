@@ -1,4 +1,5 @@
 export type {
+  BackdropFocus,
   BatchResponse,
   EpisodeDetail,
   LocalizedGenre,
