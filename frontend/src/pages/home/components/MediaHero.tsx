@@ -217,6 +217,10 @@ export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
       try {
         imageSize = await imagePromise;
       } catch {
+        if (!cancelled && currentRequest === requestId.current) {
+          activeBackdropRef.current = null;
+          setActiveBackdrop(null);
+        }
         return;
       }
 
